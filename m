@@ -2,62 +2,81 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4184E10839
-	for <lists+linux-sctp@lfdr.de>; Wed,  1 May 2019 15:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5652A11884
+	for <lists+linux-sctp@lfdr.de>; Thu,  2 May 2019 13:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726010AbfEANTv (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 1 May 2019 09:19:51 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:60698 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725993AbfEANTv (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 1 May 2019 09:19:51 -0400
-Received: from localhost (adsl-173-228-226-134.prtc.net [173.228.226.134])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 0FFB6146D4904;
-        Wed,  1 May 2019 06:19:49 -0700 (PDT)
-Date:   Wed, 01 May 2019 09:19:48 -0400 (EDT)
-Message-Id: <20190501.091948.243588960568894414.davem@davemloft.net>
-To:     lucien.xin@gmail.com
-Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
-        marcelo.leitner@gmail.com, nhorman@tuxdriver.com
-Subject: Re: [PATCH net] sctp: avoid running the sctp state machine
- recursively
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <3a5d5e96521a5f53ed36ca85219294c34be7d0ef.1556518579.git.lucien.xin@gmail.com>
-References: <3a5d5e96521a5f53ed36ca85219294c34be7d0ef.1556518579.git.lucien.xin@gmail.com>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Wed, 01 May 2019 06:19:50 -0700 (PDT)
+        id S1726297AbfEBLwR (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 2 May 2019 07:52:17 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:43495 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726268AbfEBLwR (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 2 May 2019 07:52:17 -0400
+Received: by mail-qt1-f193.google.com with SMTP id g4so2008211qtq.10
+        for <linux-sctp@vger.kernel.org>; Thu, 02 May 2019 04:52:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=NDTlWMYwpn3eEERRscp0CbNpY4PUra93Sle87UupD6Y=;
+        b=nuV85I9WIVWT2rdC074XRCYJavDicVLYa13VjwRX2ODuwVAGq3UPqhPkYLRirasviq
+         mXqNaug34YLtIHrcbFe7RSdU1W7Nxv2afXbSG/x8ZvLe6uiU1uZSM+77+c65HjFcJ+Rn
+         XiWnFCiNJjMwgY3rx6Ui3CerdtuWjcjBnYYu+uzLVHTieEqzkR42rtCOxO9KUiKlMyPB
+         dBrwBgo7ZYcOkOGHviqZpH7yp9HakR35qAGVjCrRgukSGE/nq9dbe5QiqChVFz6t3InT
+         9PKUe2kBPyYHHdDsVNLVoXYkRoo5UejtuHAEMfuS1XQm91GzAkT6WpW5i8awz02Wi+ZR
+         ud+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=NDTlWMYwpn3eEERRscp0CbNpY4PUra93Sle87UupD6Y=;
+        b=FpNgwuiLN0Mt7S3h/BHCMAEt1xmzghbyqGenrGbdDzp2P9fzB424LKHpdLOmrJquQK
+         oubumPY3NQGBHL5uZRtO3s7T827r9isQpCSQHjmJRY3BlEELr+ArgNRy7cgA4A73p1s7
+         FbM+9efaO49nnMj51cVBpmXtZGTQs+9Q0KDehSr1Wd7oH0UpPpTgTBD5rVDXgPe2z/rd
+         G5cpC/HDoxLmZz4eAT0l8Ck1T8CuUG4zf51MhqVl0Y5K9qbPdOaHUTl2/EqCptClIgGg
+         XuMELpPrdtRRpWkqmdbB9NihTOljhyT/aclV0VYU0CB5IpYTAnypVp5ytwCILYUEGrm+
+         WBzg==
+X-Gm-Message-State: APjAAAVkAbnPsetZKEZdzpyTnXp44/MTLZgc7aM98zmWxnVYgMaECsgE
+        s8q805iyHXZuU5pc2mnw11vbdEJr50o=
+X-Google-Smtp-Source: APXvYqxhW/nHwJ7IqsERH5NZV6eZWE23xJ1MDz2cEjKYM2Zq8s91WqXND41K3XXEd6MJ+ZulDjDxaQ==
+X-Received: by 2002:ac8:2b94:: with SMTP id m20mr2744417qtm.108.1556797935937;
+        Thu, 02 May 2019 04:52:15 -0700 (PDT)
+Received: from localhost.localdomain ([2001:1284:f013:68ab:38f4:1276:793c:951a])
+        by smtp.gmail.com with ESMTPSA id i62sm13495654qkc.78.2019.05.02.04.52.14
+        for <linux-sctp@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 02 May 2019 04:52:14 -0700 (PDT)
+Received: by localhost.localdomain (Postfix, from userid 1000)
+        id 8AED7180CF7; Thu,  2 May 2019 08:52:12 -0300 (-03)
+Date:   Thu, 2 May 2019 08:52:12 -0300
+From:   Marcelo Ricado Leitner <marcelo.leitner@gmail.com>
+To:     linux-sctp@vger.kernel.org
+Subject: Re: [PATCH lksctp-tools] automake: fix include dir for the now
+ autogenerated header
+Message-ID: <20190502115212.GB15616@localhost.localdomain>
+References: <0b162bbbbbc8d057c751d749c193b158408328f1.1556634957.git.marcelo.leitner@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0b162bbbbbc8d057c751d749c193b158408328f1.1556634957.git.marcelo.leitner@gmail.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Xin Long <lucien.xin@gmail.com>
-Date: Mon, 29 Apr 2019 14:16:19 +0800
+On Tue, Apr 30, 2019 at 11:37:41AM -0300, Marcelo Ricardo Leitner wrote:
+> After 9607dd85e70a ("netinet/sctp.h: dynamically build based on system
+> setup") the header file is generated on the builddir and won't be
+> located in the srcdir anymore. This broke builds using different dirs
+> for building other than the src dir.
+> 
+> Fix it by telling automake to use the include dir based on top_builddir
+> instead.
+> 
+> Fixes #30
+> 
+> Fixes: 9607dd85e70a ("netinet/sctp.h: dynamically build based on system setup")
+> Reported-by: Alexander Gallego
+> Signed-off-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 
-> Ying triggered a call trace when doing an asconf testing:
- ...
-> As it shows, the first sctp_do_sm() running under atomic context (NET_RX
-> softirq) invoked sctp_primitive_ASCONF() that uses GFP_KERNEL flag later,
-> and this flag is supposed to be used in non-atomic context only. Besides,
-> sctp_do_sm() was called recursively, which is not expected.
-> 
-> Vlad tried to fix this recursive call in Commit c0786693404c ("sctp: Fix
-> oops when sending queued ASCONF chunks") by introducing a new command
-> SCTP_CMD_SEND_NEXT_ASCONF. But it didn't work as this command is still
-> used in the first sctp_do_sm() call, and sctp_primitive_ASCONF() will
-> be called in this command again.
-> 
-> To avoid calling sctp_do_sm() recursively, we send the next queued ASCONF
-> not by sctp_primitive_ASCONF(), but by sctp_sf_do_prm_asconf() in the 1st
-> sctp_do_sm() directly.
-> 
-> Reported-by: Ying Xu <yinxu@redhat.com>
-> Signed-off-by: Xin Long <lucien.xin@gmail.com>
-
-Applied and queued up for -stable.
+Applied
