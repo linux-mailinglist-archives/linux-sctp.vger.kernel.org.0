@@ -2,81 +2,85 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5652A11884
-	for <lists+linux-sctp@lfdr.de>; Thu,  2 May 2019 13:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31ED311A80
+	for <lists+linux-sctp@lfdr.de>; Thu,  2 May 2019 15:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726297AbfEBLwR (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 2 May 2019 07:52:17 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:43495 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726268AbfEBLwR (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 2 May 2019 07:52:17 -0400
-Received: by mail-qt1-f193.google.com with SMTP id g4so2008211qtq.10
-        for <linux-sctp@vger.kernel.org>; Thu, 02 May 2019 04:52:16 -0700 (PDT)
+        id S1726350AbfEBNs4 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 2 May 2019 09:48:56 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:43315 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726203AbfEBNs4 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 2 May 2019 09:48:56 -0400
+Received: by mail-qk1-f193.google.com with SMTP id p19so1436653qkm.10
+        for <linux-sctp@vger.kernel.org>; Thu, 02 May 2019 06:48:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=NDTlWMYwpn3eEERRscp0CbNpY4PUra93Sle87UupD6Y=;
-        b=nuV85I9WIVWT2rdC074XRCYJavDicVLYa13VjwRX2ODuwVAGq3UPqhPkYLRirasviq
-         mXqNaug34YLtIHrcbFe7RSdU1W7Nxv2afXbSG/x8ZvLe6uiU1uZSM+77+c65HjFcJ+Rn
-         XiWnFCiNJjMwgY3rx6Ui3CerdtuWjcjBnYYu+uzLVHTieEqzkR42rtCOxO9KUiKlMyPB
-         dBrwBgo7ZYcOkOGHviqZpH7yp9HakR35qAGVjCrRgukSGE/nq9dbe5QiqChVFz6t3InT
-         9PKUe2kBPyYHHdDsVNLVoXYkRoo5UejtuHAEMfuS1XQm91GzAkT6WpW5i8awz02Wi+ZR
-         ud+g==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kevjdMQKUmiSaSoSxO56Pe6/NEjsgKMfed3HBdPfVRE=;
+        b=YVuwt7dJf999L2UIOaY/r5zpYvcyDwmDHWmRpr1nE2XLlpdFAzvaZOdXsX+4oUsjD6
+         1sqOueSR4aIM7pJaNS441z+AU+wn+UVO2rbpXbszcq0B8BH0R2rI8bD261pLC/EghOSn
+         8qoUgCGPQQAgke6pdMHWNL+EoGQeEXBLQXkmreAlHp5r/6GBn1sfPvnTEKJEEmGxhJSo
+         xvYibXtdD1Keeof5ZLl2tDiX/Dp9ZifTUs8LOvaqNmsQUEAb5pr8mE+ZbNrCHkJNKehO
+         6xfPDgkZu8p8cLp1tMTKz0+SrbbZjunz0dml5VSbXO9u9+wqIOyvdNqyh4CKda9qzz9g
+         G+9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=NDTlWMYwpn3eEERRscp0CbNpY4PUra93Sle87UupD6Y=;
-        b=FpNgwuiLN0Mt7S3h/BHCMAEt1xmzghbyqGenrGbdDzp2P9fzB424LKHpdLOmrJquQK
-         oubumPY3NQGBHL5uZRtO3s7T827r9isQpCSQHjmJRY3BlEELr+ArgNRy7cgA4A73p1s7
-         FbM+9efaO49nnMj51cVBpmXtZGTQs+9Q0KDehSr1Wd7oH0UpPpTgTBD5rVDXgPe2z/rd
-         G5cpC/HDoxLmZz4eAT0l8Ck1T8CuUG4zf51MhqVl0Y5K9qbPdOaHUTl2/EqCptClIgGg
-         XuMELpPrdtRRpWkqmdbB9NihTOljhyT/aclV0VYU0CB5IpYTAnypVp5ytwCILYUEGrm+
-         WBzg==
-X-Gm-Message-State: APjAAAVkAbnPsetZKEZdzpyTnXp44/MTLZgc7aM98zmWxnVYgMaECsgE
-        s8q805iyHXZuU5pc2mnw11vbdEJr50o=
-X-Google-Smtp-Source: APXvYqxhW/nHwJ7IqsERH5NZV6eZWE23xJ1MDz2cEjKYM2Zq8s91WqXND41K3XXEd6MJ+ZulDjDxaQ==
-X-Received: by 2002:ac8:2b94:: with SMTP id m20mr2744417qtm.108.1556797935937;
-        Thu, 02 May 2019 04:52:15 -0700 (PDT)
-Received: from localhost.localdomain ([2001:1284:f013:68ab:38f4:1276:793c:951a])
-        by smtp.gmail.com with ESMTPSA id i62sm13495654qkc.78.2019.05.02.04.52.14
-        for <linux-sctp@vger.kernel.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kevjdMQKUmiSaSoSxO56Pe6/NEjsgKMfed3HBdPfVRE=;
+        b=Vcdx+nCNJ9BXfJL+RC9tz6aELw9nfoek+/wtqDRQH6IMUMzat2IpQ3nL/nc1ecBAcX
+         OWKUhWGV/yxP0CNhLDkUWjSwsdwoV//AFIHnqjuKcJdrKksCK69a6EBFQW+z89S1nE40
+         tualRslR4Vhd2shFPt8t6mgxfufwLWTIyHr2om9dr3+01iy27WTqfrUSnPRwhEoIdjN7
+         65ENvjkcLqggKKRSr4izBFRRDwYwuarSkIGAEMPGIobc893ICV7aOQb9alJKfIC5cOhJ
+         l+J4y+pHDt4FlCs2J+g8tJFp5ghYwg69ptsngXmse+AigJTj0IGAc5CG0LkLabd9A1Ix
+         z1CA==
+X-Gm-Message-State: APjAAAUePahRrW3ndUAHuExMVtgabzxmBovMM+HMcx0MX93j80Ekd6EA
+        ssk1nMDEg7grpGKKeAucKqY=
+X-Google-Smtp-Source: APXvYqx5f46Mz919hmj3QzHF87DbmgkcXRWsvKAbC332Rnax+8McqGdq1qFinCTc/xRoYEfmIrE6Cw==
+X-Received: by 2002:a37:4ad4:: with SMTP id x203mr2855071qka.21.1556804935209;
+        Thu, 02 May 2019 06:48:55 -0700 (PDT)
+Received: from localhost.localdomain ([168.181.49.3])
+        by smtp.gmail.com with ESMTPSA id p12sm7439935qta.57.2019.05.02.06.48.54
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 02 May 2019 04:52:14 -0700 (PDT)
+        Thu, 02 May 2019 06:48:54 -0700 (PDT)
 Received: by localhost.localdomain (Postfix, from userid 1000)
-        id 8AED7180CF7; Thu,  2 May 2019 08:52:12 -0300 (-03)
-Date:   Thu, 2 May 2019 08:52:12 -0300
-From:   Marcelo Ricado Leitner <marcelo.leitner@gmail.com>
+        id C61D2180CF7; Thu,  2 May 2019 10:48:51 -0300 (-03)
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 To:     linux-sctp@vger.kernel.org
-Subject: Re: [PATCH lksctp-tools] automake: fix include dir for the now
- autogenerated header
-Message-ID: <20190502115212.GB15616@localhost.localdomain>
-References: <0b162bbbbbc8d057c751d749c193b158408328f1.1556634957.git.marcelo.leitner@gmail.com>
+Cc:     Marcelo Ricado Leitner <marcelo.leitner@gmail.com>
+Subject: [PATCH lksctp-tools] travis: disable kernel retpoline
+Date:   Thu,  2 May 2019 10:48:48 -0300
+Message-Id: <6861d1450cb76484769a468b9e1f1c798a61e682.1556804893.git.marcelo.leitner@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0b162bbbbbc8d057c751d749c193b158408328f1.1556634957.git.marcelo.leitner@gmail.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+Content-Transfer-Encoding: 8bit
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Apr 30, 2019 at 11:37:41AM -0300, Marcelo Ricardo Leitner wrote:
-> After 9607dd85e70a ("netinet/sctp.h: dynamically build based on system
-> setup") the header file is generated on the builddir and won't be
-> located in the srcdir anymore. This broke builds using different dirs
-> for building other than the src dir.
-> 
-> Fix it by telling automake to use the include dir based on top_builddir
-> instead.
-> 
-> Fixes #30
-> 
-> Fixes: 9607dd85e70a ("netinet/sctp.h: dynamically build based on system setup")
-> Reported-by: Alexander Gallego
-> Signed-off-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Because Travis compilers doesn't support it and that breaks the build
+as is.
 
-Applied
+Signed-off-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+---
+ .travis/linux-build.sh | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/.travis/linux-build.sh b/.travis/linux-build.sh
+index 746f17252992f8f80a49fd9004bc9600cc97081e..c96bd11958816f0625b8ba95df6ec96b2b4124fe 100755
+--- a/.travis/linux-build.sh
++++ b/.travis/linux-build.sh
+@@ -30,6 +30,8 @@ function __prep_kernel()
+ {
+ 	make mrproper
+ 	make allmodconfig
++	sed -i 's/CONFIG_RETPOLINE=/# CONFIG_RETPOLINE is not set/' .config
++	make oldconfig
+ 	make -j $nproc modules_prepare
+ 	make -j $nproc headers_install
+ 	KERNEL_HEADERS=$(pwd)/usr/include
+-- 
+2.20.1
+
