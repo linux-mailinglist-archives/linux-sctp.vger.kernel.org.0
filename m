@@ -2,37 +2,65 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F084C2E2B0
-	for <lists+linux-sctp@lfdr.de>; Wed, 29 May 2019 18:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 251712E2E0
+	for <lists+linux-sctp@lfdr.de>; Wed, 29 May 2019 19:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726054AbfE2Q7m (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 29 May 2019 12:59:42 -0400
-Received: from charlotte.tuxdriver.com ([70.61.120.58]:50967 "EHLO
-        smtp.tuxdriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725948AbfE2Q7m (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 29 May 2019 12:59:42 -0400
-Received: from cpe-2606-a000-111b-405a-0-0-0-162e.dyn6.twc.com ([2606:a000:111b:405a::162e] helo=localhost)
-        by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
-        (Exim 4.63)
-        (envelope-from <nhorman@tuxdriver.com>)
-        id 1hW1vJ-0002nK-FP; Wed, 29 May 2019 12:59:39 -0400
-Date:   Wed, 29 May 2019 12:59:06 -0400
-From:   Neil Horman <nhorman@tuxdriver.com>
+        id S1726049AbfE2RKY (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 29 May 2019 13:10:24 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:40484 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725917AbfE2RKY (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 29 May 2019 13:10:24 -0400
+Received: by mail-qt1-f196.google.com with SMTP id a15so1414904qtn.7;
+        Wed, 29 May 2019 10:10:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=zfD8WmZ0XzzBzNqL39Ed+sckVejo0rN/aLAZyGa/Zj8=;
+        b=VV1v1jDsE46vmDSLvpN6+M86Q2Dd0xxP8oj/6kATq2i49hQDZDKdl3cthoSHwyjETc
+         Zlloyy1aw6bKirPGFYZXi8PpNTPees4l+wSh8q7ytMo7N+lUKn6a0YBQF8+3uqxt2SbD
+         uOmBpbXbg5ZVWexU8EdNTVHe75pmw6ka2DgIhNVNUZxk5wgVCUo3cpvYh6nr7MTqiFzs
+         +592lfHCNQe1s/6/swj9AuWPv9tCPuEp99/Vdh8zRR+ulfDTT+U87wJ5TTy/bhCkrdnk
+         nmPdutigYPVgd16iWmMSOdoAU+zTQWtULZuziQTPr6v3/sISugsrJZVm5WBny/ai5glq
+         Xexg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=zfD8WmZ0XzzBzNqL39Ed+sckVejo0rN/aLAZyGa/Zj8=;
+        b=MQioUxcDEEPlAhN2vrC84YgalD2aPBZsvmycGmZB9Z0JYr3/Kvt6JwWcaDNd9/8R+1
+         DeMcdqJfK90A0qaLqvyEwZPxOSTE2d83qsTdthxf5MsyJT5rHJIUeXSf0Wy51x5B2Uai
+         o9XEaeN8MwrAbVK3gSsWVgdQH9O1mXPECDIpF2kxbOS5d8uNB7wpmRaDW3iSXlrX9Lv9
+         qG0s94CV6AX5AVfyNKXfV5b8H9kOdE6CRQdBs/nNIPC/OKXdPrtmc/BOiR1SVgxJJuqd
+         P53NqrrXpP/JpxlcRdT8PA6bdL5wtoyqfn39C+j3iREFJ/Sh1wwYeY4ZiIzJD36wJtJI
+         VP2A==
+X-Gm-Message-State: APjAAAVraAAEt0jNLqoWUnvfliEBJrjJAqXPwtlsY6t8aXbIKWnjsTpD
+        2hvx1zW2ELMsCz45kUA4kE4=
+X-Google-Smtp-Source: APXvYqzfxOc2Yx7LtqSPMNlpBx5q6J/evYIEzwzFx/e+wtCBzsO6xrpytdPLd0xkZhY0fa6ap5dbLQ==
+X-Received: by 2002:a0c:9826:: with SMTP id c35mr87305154qvd.240.1559149823411;
+        Wed, 29 May 2019 10:10:23 -0700 (PDT)
+Received: from localhost.localdomain ([2001:1284:f016:d534:113c:6e5f:4426:2d54])
+        by smtp.gmail.com with ESMTPSA id z12sm3550qkl.66.2019.05.29.10.10.22
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 29 May 2019 10:10:22 -0700 (PDT)
+Received: by localhost.localdomain (Postfix, from userid 1000)
+        id 9B41CC1BD8; Wed, 29 May 2019 14:10:18 -0300 (-03)
+Date:   Wed, 29 May 2019 14:10:18 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 To:     Matteo Croce <mcroce@redhat.com>
 Cc:     linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
         Vlad Yasevich <vyasevich@gmail.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH net-next] sctp: deduplicate identical skb_checksum_ops
-Message-ID: <20190529165906.GD31099@hmswarspite.think-freely.org>
+Message-ID: <20190529171018.GA3713@localhost.localdomain>
 References: <20190529153941.12166-1-mcroce@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20190529153941.12166-1-mcroce@redhat.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Spam-Score: -2.9 (--)
-X-Spam-Status: No
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
@@ -62,70 +90,5 @@ On Wed, May 29, 2019 at 05:39:41PM +0200, Matteo Croce wrote:
 > 
 > Reviewed-by: Xin Long <lucien.xin@gmail.com>
 > Signed-off-by: Matteo Croce <mcroce@redhat.com>
-> ---
->  include/net/sctp/checksum.h | 12 +++++++-----
->  net/sctp/offload.c          |  7 +------
->  2 files changed, 8 insertions(+), 11 deletions(-)
-> 
-> diff --git a/include/net/sctp/checksum.h b/include/net/sctp/checksum.h
-> index 314699333bec..5a9bb09f32b6 100644
-> --- a/include/net/sctp/checksum.h
-> +++ b/include/net/sctp/checksum.h
-> @@ -43,19 +43,21 @@ static inline __wsum sctp_csum_combine(__wsum csum, __wsum csum2,
->  						   (__force __u32)csum2, len);
->  }
->  
-> +static const struct skb_checksum_ops sctp_csum_ops = {
-> +	.update  = sctp_csum_update,
-> +	.combine = sctp_csum_combine,
-> +};
-> +
->  static inline __le32 sctp_compute_cksum(const struct sk_buff *skb,
->  					unsigned int offset)
->  {
->  	struct sctphdr *sh = (struct sctphdr *)(skb->data + offset);
-> -	const struct skb_checksum_ops ops = {
-> -		.update  = sctp_csum_update,
-> -		.combine = sctp_csum_combine,
-> -	};
->  	__le32 old = sh->checksum;
->  	__wsum new;
->  
->  	sh->checksum = 0;
-> -	new = ~__skb_checksum(skb, offset, skb->len - offset, ~(__wsum)0, &ops);
-> +	new = ~__skb_checksum(skb, offset, skb->len - offset, ~(__wsum)0,
-> +			      &sctp_csum_ops);
->  	sh->checksum = old;
->  
->  	return cpu_to_le32((__force __u32)new);
-> diff --git a/net/sctp/offload.c b/net/sctp/offload.c
-> index edfcf16e704c..dac46dfadab5 100644
-> --- a/net/sctp/offload.c
-> +++ b/net/sctp/offload.c
-> @@ -103,11 +103,6 @@ static const struct net_offload sctp6_offload = {
->  	},
->  };
->  
-> -static const struct skb_checksum_ops crc32c_csum_ops = {
-> -	.update  = sctp_csum_update,
-> -	.combine = sctp_csum_combine,
-> -};
-> -
->  int __init sctp_offload_init(void)
->  {
->  	int ret;
-> @@ -120,7 +115,7 @@ int __init sctp_offload_init(void)
->  	if (ret)
->  		goto ipv4;
->  
-> -	crc32c_csum_stub = &crc32c_csum_ops;
-> +	crc32c_csum_stub = &sctp_csum_ops;
->  	return ret;
->  
->  ipv4:
-> -- 
-> 2.21.0
-> 
-> 
-Acked-by: Neil Horman <nhorman@tuxdriver.com>
 
+Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
