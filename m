@@ -2,93 +2,160 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 251712E2E0
-	for <lists+linux-sctp@lfdr.de>; Wed, 29 May 2019 19:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC312E502
+	for <lists+linux-sctp@lfdr.de>; Wed, 29 May 2019 21:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726049AbfE2RKY (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 29 May 2019 13:10:24 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:40484 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725917AbfE2RKY (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 29 May 2019 13:10:24 -0400
-Received: by mail-qt1-f196.google.com with SMTP id a15so1414904qtn.7;
-        Wed, 29 May 2019 10:10:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=zfD8WmZ0XzzBzNqL39Ed+sckVejo0rN/aLAZyGa/Zj8=;
-        b=VV1v1jDsE46vmDSLvpN6+M86Q2Dd0xxP8oj/6kATq2i49hQDZDKdl3cthoSHwyjETc
-         Zlloyy1aw6bKirPGFYZXi8PpNTPees4l+wSh8q7ytMo7N+lUKn6a0YBQF8+3uqxt2SbD
-         uOmBpbXbg5ZVWexU8EdNTVHe75pmw6ka2DgIhNVNUZxk5wgVCUo3cpvYh6nr7MTqiFzs
-         +592lfHCNQe1s/6/swj9AuWPv9tCPuEp99/Vdh8zRR+ulfDTT+U87wJ5TTy/bhCkrdnk
-         nmPdutigYPVgd16iWmMSOdoAU+zTQWtULZuziQTPr6v3/sISugsrJZVm5WBny/ai5glq
-         Xexg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zfD8WmZ0XzzBzNqL39Ed+sckVejo0rN/aLAZyGa/Zj8=;
-        b=MQioUxcDEEPlAhN2vrC84YgalD2aPBZsvmycGmZB9Z0JYr3/Kvt6JwWcaDNd9/8R+1
-         DeMcdqJfK90A0qaLqvyEwZPxOSTE2d83qsTdthxf5MsyJT5rHJIUeXSf0Wy51x5B2Uai
-         o9XEaeN8MwrAbVK3gSsWVgdQH9O1mXPECDIpF2kxbOS5d8uNB7wpmRaDW3iSXlrX9Lv9
-         qG0s94CV6AX5AVfyNKXfV5b8H9kOdE6CRQdBs/nNIPC/OKXdPrtmc/BOiR1SVgxJJuqd
-         P53NqrrXpP/JpxlcRdT8PA6bdL5wtoyqfn39C+j3iREFJ/Sh1wwYeY4ZiIzJD36wJtJI
-         VP2A==
-X-Gm-Message-State: APjAAAVraAAEt0jNLqoWUnvfliEBJrjJAqXPwtlsY6t8aXbIKWnjsTpD
-        2hvx1zW2ELMsCz45kUA4kE4=
-X-Google-Smtp-Source: APXvYqzfxOc2Yx7LtqSPMNlpBx5q6J/evYIEzwzFx/e+wtCBzsO6xrpytdPLd0xkZhY0fa6ap5dbLQ==
-X-Received: by 2002:a0c:9826:: with SMTP id c35mr87305154qvd.240.1559149823411;
-        Wed, 29 May 2019 10:10:23 -0700 (PDT)
-Received: from localhost.localdomain ([2001:1284:f016:d534:113c:6e5f:4426:2d54])
-        by smtp.gmail.com with ESMTPSA id z12sm3550qkl.66.2019.05.29.10.10.22
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 29 May 2019 10:10:22 -0700 (PDT)
-Received: by localhost.localdomain (Postfix, from userid 1000)
-        id 9B41CC1BD8; Wed, 29 May 2019 14:10:18 -0300 (-03)
-Date:   Wed, 29 May 2019 14:10:18 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Matteo Croce <mcroce@redhat.com>
-Cc:     linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] sctp: deduplicate identical skb_checksum_ops
-Message-ID: <20190529171018.GA3713@localhost.localdomain>
-References: <20190529153941.12166-1-mcroce@redhat.com>
+        id S1726024AbfE2THq (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 29 May 2019 15:07:46 -0400
+Received: from charlotte.tuxdriver.com ([70.61.120.58]:52057 "EHLO
+        smtp.tuxdriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725914AbfE2THq (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 29 May 2019 15:07:46 -0400
+Received: from cpe-2606-a000-111b-405a-0-0-0-162e.dyn6.twc.com ([2606:a000:111b:405a::162e] helo=localhost)
+        by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
+        (Exim 4.63)
+        (envelope-from <nhorman@tuxdriver.com>)
+        id 1hW3vE-0003to-IG; Wed, 29 May 2019 15:07:39 -0400
+Date:   Wed, 29 May 2019 15:07:09 -0400
+From:   Neil Horman <nhorman@tuxdriver.com>
+To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc:     syzbot <syzbot+f7e9153b037eac9b1df8@syzkaller.appspotmail.com>,
+        davem@davemloft.net, linux-kernel@vger.kernel.org,
+        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, vyasevich@gmail.com
+Subject: Re: memory leak in sctp_process_init
+Message-ID: <20190529190709.GE31099@hmswarspite.think-freely.org>
+References: <00000000000097abb90589e804fd@google.com>
+ <20190528013600.GM5506@localhost.localdomain>
+ <20190528111550.GA4658@hmswarspite.think-freely.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190529153941.12166-1-mcroce@redhat.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <20190528111550.GA4658@hmswarspite.think-freely.org>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-Spam-Score: -2.9 (--)
+X-Spam-Status: No
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, May 29, 2019 at 05:39:41PM +0200, Matteo Croce wrote:
-> The same skb_checksum_ops struct is defined twice in two different places,
-> leading to code duplication. Declare it as a global variable into a common
-> header instead of allocating it on the stack on each function call.
-> bloat-o-meter reports a slight code shrink.
+On Tue, May 28, 2019 at 07:15:50AM -0400, Neil Horman wrote:
+> On Mon, May 27, 2019 at 10:36:00PM -0300, Marcelo Ricardo Leitner wrote:
+> > On Mon, May 27, 2019 at 05:48:06PM -0700, syzbot wrote:
+> > > Hello,
+> > > 
+> > > syzbot found the following crash on:
+> > > 
+> > > HEAD commit:    9c7db500 Merge tag 'selinux-pr-20190521' of git://git.kern..
+> > > git tree:       upstream
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=10388530a00000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=61dd9e15a761691d
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=f7e9153b037eac9b1df8
+> > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10e32f8ca00000
+> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=177fa530a00000
+> > > 
+> > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > > Reported-by: syzbot+f7e9153b037eac9b1df8@syzkaller.appspotmail.com
+> > > 
+> > >  0 to HW filter on device batadv0
+> > > executing program
+> > > executing program
+> > > executing program
+> > > BUG: memory leak
+> > > unreferenced object 0xffff88810ef68400 (size 1024):
+> > >   comm "syz-executor273", pid 7046, jiffies 4294945598 (age 28.770s)
+> > >   hex dump (first 32 bytes):
+> > >     1d de 28 8d de 0b 1b e3 b5 c2 f9 68 fd 1a 97 25  ..(........h...%
+> > >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+> > >   backtrace:
+> > >     [<00000000a02cebbd>] kmemleak_alloc_recursive
+> > > include/linux/kmemleak.h:55 [inline]
+> > >     [<00000000a02cebbd>] slab_post_alloc_hook mm/slab.h:439 [inline]
+> > >     [<00000000a02cebbd>] slab_alloc mm/slab.c:3326 [inline]
+> > >     [<00000000a02cebbd>] __do_kmalloc mm/slab.c:3658 [inline]
+> > >     [<00000000a02cebbd>] __kmalloc_track_caller+0x15d/0x2c0 mm/slab.c:3675
+> > >     [<000000009e6245e6>] kmemdup+0x27/0x60 mm/util.c:119
+> > >     [<00000000dfdc5d2d>] kmemdup include/linux/string.h:432 [inline]
+> > >     [<00000000dfdc5d2d>] sctp_process_init+0xa7e/0xc20
+> > > net/sctp/sm_make_chunk.c:2437
+> > >     [<00000000b58b62f8>] sctp_cmd_process_init net/sctp/sm_sideeffect.c:682
+> > > [inline]
+> > >     [<00000000b58b62f8>] sctp_cmd_interpreter net/sctp/sm_sideeffect.c:1384
+> > > [inline]
+> > >     [<00000000b58b62f8>] sctp_side_effects net/sctp/sm_sideeffect.c:1194
+> > > [inline]
+> > >     [<00000000b58b62f8>] sctp_do_sm+0xbdc/0x1d60
+> > > net/sctp/sm_sideeffect.c:1165
+> > 
+> > Note that this is on the client side. It was handling the INIT_ACK
+> > chunk, from sctp_sf_do_5_1C_ack().
+> > 
+> > I'm not seeing anything else other than sctp_association_free()
+> > releasing this memory. This means 2 things:
+> > - Every time the cookie is retransmitted, it leaks. As shown by the
+> >   repetitive leaks here.
+> > - The cookie remains allocated throughout the association, which is
+> >   also not good as that's a 1k that we could have released back to the
+> >   system right after the handshake.
+> > 
+> >   Marcelo
+> > 
+> If we have an INIT chunk bundled with a COOKIE_ECHO chunk in the same packet,
+> this might occur.  Processing for each chunk (via sctp_cmd_process_init and
+> sctp_sf_do_5_1D_ce both call sctp_process_init, which would cause a second write
+> to asoc->peer.cookie, leaving the first write (set via kmemdup), to be orphaned
+> and leak.  Seems like we should set a flag to determine if we've already cloned
+> the cookie, and free the old one if its set.  If we wanted to do that on the
+> cheap, we might be able to get away with checking asoc->stream->[in|out]cnt for
+> being non-zero as an indicator if we've already cloned the cookie
 > 
-> add/remove: 1/1 grow/shrink: 0/10 up/down: 128/-1282 (-1154)
-> Function                                     old     new   delta
-> sctp_csum_ops                                  -     128    +128
-> crc32c_csum_ops                               16       -     -16
-> sctp_rcv                                    6616    6583     -33
-> sctp_packet_pack                            4542    4504     -38
-> nf_conntrack_sctp_packet                    4980    4926     -54
-> execute_masked_set_action                   6453    6389     -64
-> tcf_csum_sctp                                575     428    -147
-> sctp_gso_segment                            1292    1126    -166
-> sctp_csum_check                              579     412    -167
-> sctp_snat_handler                            957     772    -185
-> sctp_dnat_handler                           1321    1132    -189
-> l4proto_manip_pkt                           2536    2313    -223
-> Total: Before=359297613, After=359296459, chg -0.00%
+> Neil
 > 
-> Reviewed-by: Xin Long <lucien.xin@gmail.com>
-> Signed-off-by: Matteo Croce <mcroce@redhat.com>
+> 
 
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Completely untested, but can you give this patch a shot?
+
+
+diff --git a/include/net/sctp/structs.h b/include/net/sctp/structs.h
+index 0767701ef362..a5772d72eb87 100644
+--- a/include/net/sctp/structs.h
++++ b/include/net/sctp/structs.h
+@@ -1701,6 +1701,7 @@ struct sctp_association {
+ 		__u8    sack_needed:1,     /* Do we need to sack the peer? */
+ 			sack_generation:1,
+ 			zero_window_announced:1;
++			cookie_allocated:1
+ 		__u32	sack_cnt;
+ 
+ 		__u32   adaptation_ind;	 /* Adaptation Code point. */
+diff --git a/net/sctp/associola.c b/net/sctp/associola.c
+index 1999237ce481..b6e8fd7081b7 100644
+--- a/net/sctp/associola.c
++++ b/net/sctp/associola.c
+@@ -213,6 +213,7 @@ static struct sctp_association *sctp_association_init(
+ 	 */
+ 	asoc->peer.sack_needed = 1;
+ 	asoc->peer.sack_generation = 1;
++	asoc->cookie_allocated=0;
+ 
+ 	/* Assume that the peer will tell us if he recognizes ASCONF
+ 	 * as part of INIT exchange.
+diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
+index 92331e1195c1..e966a3cc78bf 100644
+--- a/net/sctp/sm_make_chunk.c
++++ b/net/sctp/sm_make_chunk.c
+@@ -2419,9 +2419,12 @@ int sctp_process_init(struct sctp_association *asoc, struct sctp_chunk *chunk,
+ 	/* Copy cookie in case we need to resend COOKIE-ECHO. */
+ 	cookie = asoc->peer.cookie;
+ 	if (cookie) {
++		if (asoc->peer.cookie_allocated)
++			kfree(cookie);
+ 		asoc->peer.cookie = kmemdup(cookie, asoc->peer.cookie_len, gfp);
+ 		if (!asoc->peer.cookie)
+ 			goto clean_up;
++		asoc->peer.cookie_allocated=1;
+ 	}
+ 
+ 	/* RFC 2960 7.2.1 The initial value of ssthresh MAY be arbitrarily
