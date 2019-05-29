@@ -2,102 +2,138 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9371E2CE9D
-	for <lists+linux-sctp@lfdr.de>; Tue, 28 May 2019 20:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6489E2E148
+	for <lists+linux-sctp@lfdr.de>; Wed, 29 May 2019 17:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728002AbfE1S2G (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 28 May 2019 14:28:06 -0400
-Received: from mail-it1-f199.google.com ([209.85.166.199]:56613 "EHLO
-        mail-it1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727201AbfE1S2G (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 28 May 2019 14:28:06 -0400
-Received: by mail-it1-f199.google.com with SMTP id l124so3017810itg.6
-        for <linux-sctp@vger.kernel.org>; Tue, 28 May 2019 11:28:05 -0700 (PDT)
+        id S1725914AbfE2Pjq (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 29 May 2019 11:39:46 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:35491 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725936AbfE2Pjp (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 29 May 2019 11:39:45 -0400
+Received: by mail-wm1-f66.google.com with SMTP id w9so1938533wmi.0
+        for <linux-sctp@vger.kernel.org>; Wed, 29 May 2019 08:39:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=wStfY5SxDIxZd91+yxT/nL82TSXTHhm/NMlB2xHEX/A=;
-        b=UJjMghgn2eTi2BsSnrSznG3OHNdHhm6ClH2/aYW8CBCwYLp4IayA+88AhSfnWeqMsZ
-         eFe4Sq3lXwxSO8GiN+gQieNW8UsYbDylseE3c6nQRBmWO63fNhRPR3KUdrx42Ec3isE9
-         alkbfWgohGL/xKUiilYwY0vZj2QzpOvBfJ27fCDQ9b+PGOc13VdB4Ngor6yIWvO0MKss
-         sFDRTBh37cWb5zKZFNFCAsp+cHWVjYkeDaFuZbetGeGPu+lKd3CIJq/syjt2hy0dwJCy
-         w5L3Zv1jIWg9D5LKMAjO9d4/wSaq7bPX2vTbbcSUzSe54+Oz7/D5Uglpaib8Bp3+LNQh
-         9kuA==
-X-Gm-Message-State: APjAAAUV6kWHMc2D9WiYnlbKkQG1fDEZYLs7nP9QaNC2jilf69GVSCGe
-        05lqThQLU45RDZBpKMaSO8vIOEODw7N7j/tBsJuZH6jTZOn2
-X-Google-Smtp-Source: APXvYqyXhAH/FRlDsdV97oRkUMOUekf3d8E19Vn9d1A4DEaa/dY9SeQWsHwrz1YafFdfImJuz4kIZNK3hQK9A4y2zGfX7MsNM/ts
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wA/ZRCMpAdjeog1co5RlW0FUMxyaCyOeXXfAXJGss50=;
+        b=ebcjFkvzCxgQ7c9flkTlnQYdhK8RWTsq3cCj+NqEuorOSRIGbmUfHql/ml+a1kqOKP
+         3HruBvq9hChcgp/AyqRLFCjkaw+NYZIWTWjaJrUZfYxruo63Fl2GLMqnZASPFt99f/Nh
+         aJlG9zg2nDNXFTH41fpAqOvzbSF1v58iBRRKkkSBQzf8jgcVIepZDTApdJqDKKAluXcB
+         wiuZZAOnuS2Zxr16MWjQsD+mbPBaF7TpzeGZMFBHGmZxxTJ0gpbNu9UmG1eXuOGm0626
+         dyv/XXj2QCmo859oFnHIt4YLccr1lFjloxs768A1u1d+Z5tsN1I/5qF9OqxhQVk6zyI8
+         rjLg==
+X-Gm-Message-State: APjAAAULkul6NmbbcaLOZwyHO90u25d+BMP9xXsr1H/u5OiSrCytlCtM
+        MkNtL6Zr9YMg8y3jEjmHNgHWNQ0nJ9I=
+X-Google-Smtp-Source: APXvYqwC4XJkSlH1vBwyBMcl2V4EaDp3bQES1Qhw9BlkRjb62OKPLc4S/uhGd3XVYDZ2W4pbF1MGIg==
+X-Received: by 2002:a1c:a002:: with SMTP id j2mr7184902wme.131.1559144383296;
+        Wed, 29 May 2019 08:39:43 -0700 (PDT)
+Received: from raver.teknoraver.net (net-93-144-152-91.cust.dsl.teletu.it. [93.144.152.91])
+        by smtp.gmail.com with ESMTPSA id d26sm4930371wmb.4.2019.05.29.08.39.42
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 29 May 2019 08:39:42 -0700 (PDT)
+From:   Matteo Croce <mcroce@redhat.com>
+To:     linux-sctp@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next] sctp: deduplicate identical skb_checksum_ops
+Date:   Wed, 29 May 2019 17:39:41 +0200
+Message-Id: <20190529153941.12166-1-mcroce@redhat.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-X-Received: by 2002:a24:1455:: with SMTP id 82mr4455130itg.59.1559068085434;
- Tue, 28 May 2019 11:28:05 -0700 (PDT)
-Date:   Tue, 28 May 2019 11:28:05 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000069c3140589f6d3b7@google.com>
-Subject: memory leak in sctp_get_port_local
-From:   syzbot <syzbot+079bf326b38072f849d9@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, linux-kernel@vger.kernel.org,
-        linux-sctp@vger.kernel.org, marcelo.leitner@gmail.com,
-        netdev@vger.kernel.org, nhorman@tuxdriver.com,
-        syzkaller-bugs@googlegroups.com, vyasevich@gmail.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Transfer-Encoding: 8bit
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello,
+The same skb_checksum_ops struct is defined twice in two different places,
+leading to code duplication. Declare it as a global variable into a common
+header instead of allocating it on the stack on each function call.
+bloat-o-meter reports a slight code shrink.
 
-syzbot found the following crash on:
+add/remove: 1/1 grow/shrink: 0/10 up/down: 128/-1282 (-1154)
+Function                                     old     new   delta
+sctp_csum_ops                                  -     128    +128
+crc32c_csum_ops                               16       -     -16
+sctp_rcv                                    6616    6583     -33
+sctp_packet_pack                            4542    4504     -38
+nf_conntrack_sctp_packet                    4980    4926     -54
+execute_masked_set_action                   6453    6389     -64
+tcf_csum_sctp                                575     428    -147
+sctp_gso_segment                            1292    1126    -166
+sctp_csum_check                              579     412    -167
+sctp_snat_handler                            957     772    -185
+sctp_dnat_handler                           1321    1132    -189
+l4proto_manip_pkt                           2536    2313    -223
+Total: Before=359297613, After=359296459, chg -0.00%
 
-HEAD commit:    cd6c84d8 Linux 5.2-rc2
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=101a184aa00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=64479170dcaf0e11
-dashboard link: https://syzkaller.appspot.com/bug?extid=079bf326b38072f849d9
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13b5dbbca00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1038444aa00000
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+079bf326b38072f849d9@syzkaller.appspotmail.com
-
-: Permanently added '10.128.0.127' (ECDSA) to the list of known hosts.
-executing program
-executing program
-BUG: memory leak
-unreferenced object 0xffff8881288ca380 (size 64):
-   comm "softirq", pid 0, jiffies 4294944468 (age 13.410s)
-   hex dump (first 32 bytes):
-     21 4e 00 00 00 00 00 00 00 00 00 00 00 00 00 00  !N..............
-     28 ae 85 23 81 88 ff ff 00 00 00 00 00 00 00 00  (..#............
-   backtrace:
-     [<0000000054ece54d>] kmemleak_alloc_recursive  
-include/linux/kmemleak.h:55 [inline]
-     [<0000000054ece54d>] slab_post_alloc_hook mm/slab.h:439 [inline]
-     [<0000000054ece54d>] slab_alloc mm/slab.c:3326 [inline]
-     [<0000000054ece54d>] kmem_cache_alloc+0x134/0x270 mm/slab.c:3488
-     [<00000000d992ea84>] sctp_bucket_create net/sctp/socket.c:8395 [inline]
-     [<00000000d992ea84>] sctp_get_port_local+0x189/0x5b0  
-net/sctp/socket.c:8142
-     [<0000000099206d90>] sctp_do_bind+0xcc/0x1e0 net/sctp/socket.c:402
-     [<00000000b8795757>] sctp_bind+0x44/0x70 net/sctp/socket.c:302
-     [<00000000672a44aa>] inet6_bind+0x40/0xb7 net/ipv6/af_inet6.c:445
-     [<0000000001400e1c>] __sys_bind+0x11c/0x140 net/socket.c:1659
-     [<00000000e69e8036>] __do_sys_bind net/socket.c:1670 [inline]
-     [<00000000e69e8036>] __se_sys_bind net/socket.c:1668 [inline]
-     [<00000000e69e8036>] __x64_sys_bind+0x1e/0x30 net/socket.c:1668
-     [<000000001644bb1f>] do_syscall_64+0x76/0x1a0  
-arch/x86/entry/common.c:301
-     [<00000000199a1ea2>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
-
-
-
+Reviewed-by: Xin Long <lucien.xin@gmail.com>
+Signed-off-by: Matteo Croce <mcroce@redhat.com>
 ---
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ include/net/sctp/checksum.h | 12 +++++++-----
+ net/sctp/offload.c          |  7 +------
+ 2 files changed, 8 insertions(+), 11 deletions(-)
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/include/net/sctp/checksum.h b/include/net/sctp/checksum.h
+index 314699333bec..5a9bb09f32b6 100644
+--- a/include/net/sctp/checksum.h
++++ b/include/net/sctp/checksum.h
+@@ -43,19 +43,21 @@ static inline __wsum sctp_csum_combine(__wsum csum, __wsum csum2,
+ 						   (__force __u32)csum2, len);
+ }
+ 
++static const struct skb_checksum_ops sctp_csum_ops = {
++	.update  = sctp_csum_update,
++	.combine = sctp_csum_combine,
++};
++
+ static inline __le32 sctp_compute_cksum(const struct sk_buff *skb,
+ 					unsigned int offset)
+ {
+ 	struct sctphdr *sh = (struct sctphdr *)(skb->data + offset);
+-	const struct skb_checksum_ops ops = {
+-		.update  = sctp_csum_update,
+-		.combine = sctp_csum_combine,
+-	};
+ 	__le32 old = sh->checksum;
+ 	__wsum new;
+ 
+ 	sh->checksum = 0;
+-	new = ~__skb_checksum(skb, offset, skb->len - offset, ~(__wsum)0, &ops);
++	new = ~__skb_checksum(skb, offset, skb->len - offset, ~(__wsum)0,
++			      &sctp_csum_ops);
+ 	sh->checksum = old;
+ 
+ 	return cpu_to_le32((__force __u32)new);
+diff --git a/net/sctp/offload.c b/net/sctp/offload.c
+index edfcf16e704c..dac46dfadab5 100644
+--- a/net/sctp/offload.c
++++ b/net/sctp/offload.c
+@@ -103,11 +103,6 @@ static const struct net_offload sctp6_offload = {
+ 	},
+ };
+ 
+-static const struct skb_checksum_ops crc32c_csum_ops = {
+-	.update  = sctp_csum_update,
+-	.combine = sctp_csum_combine,
+-};
+-
+ int __init sctp_offload_init(void)
+ {
+ 	int ret;
+@@ -120,7 +115,7 @@ int __init sctp_offload_init(void)
+ 	if (ret)
+ 		goto ipv4;
+ 
+-	crc32c_csum_stub = &crc32c_csum_ops;
++	crc32c_csum_stub = &sctp_csum_ops;
+ 	return ret;
+ 
+ ipv4:
+-- 
+2.21.0
+
