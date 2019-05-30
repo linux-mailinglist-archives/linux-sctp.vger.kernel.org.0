@@ -2,154 +2,66 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7B53030A
-	for <lists+linux-sctp@lfdr.de>; Thu, 30 May 2019 21:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 750C13042C
+	for <lists+linux-sctp@lfdr.de>; Thu, 30 May 2019 23:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726477AbfE3T5L (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 30 May 2019 15:57:11 -0400
-Received: from charlotte.tuxdriver.com ([70.61.120.58]:41370 "EHLO
-        smtp.tuxdriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725897AbfE3T5L (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 30 May 2019 15:57:11 -0400
-Received: from cpe-2606-a000-111b-405a-0-0-0-162e.dyn6.twc.com ([2606:a000:111b:405a::162e] helo=localhost)
-        by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
-        (Exim 4.63)
-        (envelope-from <nhorman@tuxdriver.com>)
-        id 1hWRAc-0002cj-39; Thu, 30 May 2019 15:57:04 -0400
-Date:   Thu, 30 May 2019 15:56:34 -0400
-From:   Neil Horman <nhorman@tuxdriver.com>
-To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     syzbot <syzbot+f7e9153b037eac9b1df8@syzkaller.appspotmail.com>,
-        davem@davemloft.net, linux-kernel@vger.kernel.org,
-        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, vyasevich@gmail.com
-Subject: Re: memory leak in sctp_process_init
-Message-ID: <20190530195634.GD1966@hmswarspite.think-freely.org>
-References: <00000000000097abb90589e804fd@google.com>
- <20190528013600.GM5506@localhost.localdomain>
- <20190528111550.GA4658@hmswarspite.think-freely.org>
- <20190529190709.GE31099@hmswarspite.think-freely.org>
- <20190529233757.GC3713@localhost.localdomain>
- <20190530142011.GC1966@hmswarspite.think-freely.org>
- <20190530151705.GD3713@localhost.localdomain>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190530151705.GD3713@localhost.localdomain>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Spam-Score: -2.9 (--)
-X-Spam-Status: No
+        id S1726715AbfE3Vxv (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 30 May 2019 17:53:51 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:60832 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726693AbfE3Vxu (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 30 May 2019 17:53:50 -0400
+Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 257FC14DB1D91;
+        Thu, 30 May 2019 14:36:05 -0700 (PDT)
+Date:   Thu, 30 May 2019 14:36:04 -0700 (PDT)
+Message-Id: <20190530.143604.925231544360388287.davem@davemloft.net>
+To:     mcroce@redhat.com
+Cc:     linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        vyasevich@gmail.com, nhorman@tuxdriver.com,
+        marcelo.leitner@gmail.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] sctp: deduplicate identical skb_checksum_ops
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20190529153941.12166-1-mcroce@redhat.com>
+References: <20190529153941.12166-1-mcroce@redhat.com>
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Thu, 30 May 2019 14:36:05 -0700 (PDT)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, May 30, 2019 at 12:17:05PM -0300, Marcelo Ricardo Leitner wrote:
-> On Thu, May 30, 2019 at 10:20:11AM -0400, Neil Horman wrote:
-> > On Wed, May 29, 2019 at 08:37:57PM -0300, Marcelo Ricardo Leitner wrote:
-> > > On Wed, May 29, 2019 at 03:07:09PM -0400, Neil Horman wrote:
-> > > > --- a/net/sctp/sm_make_chunk.c
-> > > > +++ b/net/sctp/sm_make_chunk.c
-> > > > @@ -2419,9 +2419,12 @@ int sctp_process_init(struct sctp_association *asoc, struct sctp_chunk *chunk,
-> > > >  	/* Copy cookie in case we need to resend COOKIE-ECHO. */
-> > > >  	cookie = asoc->peer.cookie;
-> > > >  	if (cookie) {
-> > > > +		if (asoc->peer.cookie_allocated)
-> > > > +			kfree(cookie);
-> > > >  		asoc->peer.cookie = kmemdup(cookie, asoc->peer.cookie_len, gfp);
-> > > >  		if (!asoc->peer.cookie)
-> > > >  			goto clean_up;
-> > > > +		asoc->peer.cookie_allocated=1;
-> > > >  	}
-> > > >  
-> > > >  	/* RFC 2960 7.2.1 The initial value of ssthresh MAY be arbitrarily
-> > > 
-> > > What if we kmemdup directly at sctp_process_param(), as it's done for
-> > > others already? Like SCTP_PARAM_RANDOM and SCTP_PARAM_HMAC_ALGO. I
-> > > don't see a reason for SCTP_PARAM_STATE_COOKIE to be different
-> > > here. This way it would be always allocated, and ready to be kfreed.
-> > > 
-> > > We still need to free it after the handshake, btw.
-> > > 
-> > >   Marcelo
-> > > 
-> > 
-> > Still untested, but something like this?
-> > 
-> 
-> Yes, just..
-> 
-> > 
-> > diff --git a/net/sctp/associola.c b/net/sctp/associola.c
-> > index d2c7d0d2abc1..718b9917844e 100644
-> > --- a/net/sctp/associola.c
-> > +++ b/net/sctp/associola.c
-> > @@ -393,6 +393,7 @@ void sctp_association_free(struct sctp_association *asoc)
-> >  	kfree(asoc->peer.peer_random);
-> >  	kfree(asoc->peer.peer_chunks);
-> >  	kfree(asoc->peer.peer_hmacs);
-> > +	kfree(asoc->peer.cookie);
-> 
-> this chunk is not needed because it is freed right above the first
-> kfree() in the context here.
-> 
-Ah, thanks, missed that.
+From: Matteo Croce <mcroce@redhat.com>
+Date: Wed, 29 May 2019 17:39:41 +0200
 
-> >  
-> >  	/* Release the transport structures. */
-> >  	list_for_each_safe(pos, temp, &asoc->peer.transport_addr_list) {
-> > diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
-> > index 72e74503f9fc..ff365f22a3c1 100644
-> > --- a/net/sctp/sm_make_chunk.c
-> > +++ b/net/sctp/sm_make_chunk.c
-> > @@ -2431,14 +2431,6 @@ int sctp_process_init(struct sctp_association *asoc, struct sctp_chunk *chunk,
-> >  	/* Peer Rwnd   : Current calculated value of the peer's rwnd.  */
-> >  	asoc->peer.rwnd = asoc->peer.i.a_rwnd;
-> >  
-> > -	/* Copy cookie in case we need to resend COOKIE-ECHO. */
-> > -	cookie = asoc->peer.cookie;
-> > -	if (cookie) {
-> > -		asoc->peer.cookie = kmemdup(cookie, asoc->peer.cookie_len, gfp);
-> > -		if (!asoc->peer.cookie)
-> > -			goto clean_up;
-> > -	}
-> > -
-> >  	/* RFC 2960 7.2.1 The initial value of ssthresh MAY be arbitrarily
-> >  	 * high (for example, implementations MAY use the size of the receiver
-> >  	 * advertised window).
-> > @@ -2607,7 +2599,9 @@ static int sctp_process_param(struct sctp_association *asoc,
-> >  	case SCTP_PARAM_STATE_COOKIE:
-> >  		asoc->peer.cookie_len =
-> >  			ntohs(param.p->length) - sizeof(struct sctp_paramhdr);
-> > -		asoc->peer.cookie = param.cookie->body;
-> > +		asoc->peer.cookie = kmemdup(param.cookie->body, asoc->peer.cookie_len, gfp);
-> > +		if (!asoc->peer.cookie)
-> > +			retval = 0;
-> >  		break;
-> >  
-> >  	case SCTP_PARAM_HEARTBEAT_INFO:
+> The same skb_checksum_ops struct is defined twice in two different places,
+> leading to code duplication. Declare it as a global variable into a common
+> header instead of allocating it on the stack on each function call.
+> bloat-o-meter reports a slight code shrink.
 > 
-> Plus:
+> add/remove: 1/1 grow/shrink: 0/10 up/down: 128/-1282 (-1154)
+> Function                                     old     new   delta
+> sctp_csum_ops                                  -     128    +128
+> crc32c_csum_ops                               16       -     -16
+> sctp_rcv                                    6616    6583     -33
+> sctp_packet_pack                            4542    4504     -38
+> nf_conntrack_sctp_packet                    4980    4926     -54
+> execute_masked_set_action                   6453    6389     -64
+> tcf_csum_sctp                                575     428    -147
+> sctp_gso_segment                            1292    1126    -166
+> sctp_csum_check                              579     412    -167
+> sctp_snat_handler                            957     772    -185
+> sctp_dnat_handler                           1321    1132    -189
+> l4proto_manip_pkt                           2536    2313    -223
+> Total: Before=359297613, After=359296459, chg -0.00%
 > 
-> --- a/net/sctp/sm_sideeffect.c
-> +++ b/net/sctp/sm_sideeffect.c
-> @@ -898,6 +898,11 @@ static void sctp_cmd_new_state(struct sctp_cmd_seq *cmds,
->  						asoc->rto_initial;
->  	}
->  
-> +	if (sctp_state(asoc, ESTABLISHED)) {
-> +		kfree(asoc->peer.cookie);
-> +		asoc->peer.cookie = NULL;
-> +	}
-> +
-Not sure I follow why this is needed.  It doesn't hurt anything of course, but
-if we're freeing in sctp_association_free, we don't need to duplicate the
-operation here, do we?
->  	if (sctp_state(asoc, ESTABLISHED) ||
->  	    sctp_state(asoc, CLOSED) ||
->  	    sctp_state(asoc, SHUTDOWN_RECEIVED)) {
-> 
-> Also untested, just sharing the idea.
-> 
->   Marcelo
-> 
+> Reviewed-by: Xin Long <lucien.xin@gmail.com>
+> Signed-off-by: Matteo Croce <mcroce@redhat.com>
+
+Applied.
