@@ -2,89 +2,140 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EA32F312A3
-	for <lists+linux-sctp@lfdr.de>; Fri, 31 May 2019 18:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA3931680
+	for <lists+linux-sctp@lfdr.de>; Fri, 31 May 2019 23:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726840AbfEaQoA (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 31 May 2019 12:44:00 -0400
-Received: from charlotte.tuxdriver.com ([70.61.120.58]:49748 "EHLO
-        smtp.tuxdriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726531AbfEaQn7 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 31 May 2019 12:43:59 -0400
-Received: from cpe-2606-a000-111b-405a-0-0-0-162e.dyn6.twc.com ([2606:a000:111b:405a::162e] helo=localhost)
-        by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
-        (Exim 4.63)
-        (envelope-from <nhorman@tuxdriver.com>)
-        id 1hWkd8-0003pv-Az; Fri, 31 May 2019 12:43:52 -0400
-Date:   Fri, 31 May 2019 12:43:19 -0400
-From:   Neil Horman <nhorman@tuxdriver.com>
-To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     syzbot <syzbot+f7e9153b037eac9b1df8@syzkaller.appspotmail.com>,
-        davem@davemloft.net, linux-kernel@vger.kernel.org,
-        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, vyasevich@gmail.com
-Subject: Re: memory leak in sctp_process_init
-Message-ID: <20190531164319.GB3828@hmswarspite.think-freely.org>
-References: <00000000000097abb90589e804fd@google.com>
- <20190528013600.GM5506@localhost.localdomain>
- <20190528111550.GA4658@hmswarspite.think-freely.org>
- <20190529190709.GE31099@hmswarspite.think-freely.org>
- <20190529233757.GC3713@localhost.localdomain>
- <20190530142011.GC1966@hmswarspite.think-freely.org>
- <20190530151705.GD3713@localhost.localdomain>
- <20190530195634.GD1966@hmswarspite.think-freely.org>
- <20190531124242.GE3713@localhost.localdomain>
+        id S1727605AbfEaVSH (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 31 May 2019 17:18:07 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:38461 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726719AbfEaVSH (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 31 May 2019 17:18:07 -0400
+Received: by mail-io1-f69.google.com with SMTP id w3so8682107iot.5
+        for <linux-sctp@vger.kernel.org>; Fri, 31 May 2019 14:18:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=9vJ5p7g65WszXpcgdHNrhcEVIXylvGJSGHu7KxUMRl0=;
+        b=lf9XqtfB+7frFuwmf3aYdwEczjpzqrT8DvjFmNKsns23v4YF26j34KOvQuphna2XGL
+         8oQOmOesZXHHEqJ4Lt2lOt99CaY8YF08D0Dx/wypqPEsg+0CxilGTQkRRnkfFkoZPsmb
+         xxHMXgwTHwVTgGM8UsES9sWA6gT1HnRF7dlHHcpfC7PjkAdigRQcx71Zvk1twGjmmWyA
+         WgMrSNTpiPhWWBpuYZp46vzLRwcfaCQGvf/iqnzZ3+qrtpvdnxwFldm8qs9s+a0i/T8e
+         yS+VfVxPYb8iH3wpNDhGj1xx6zSxZhbbo7nFeOB13pfw57jW3vqar4fiBfk8QYLDjSHh
+         ZYRw==
+X-Gm-Message-State: APjAAAVvcm3DNtThR+1VGJHN8T1pAogcYEtyjFkuW0lFzmVlvmlfjW+I
+        DEybV3obbHFn3fwEKdLJWcgmKaGfso/55wTbbqxrBSK4l8rw
+X-Google-Smtp-Source: APXvYqyQthWYZkYEzHAw27Fklkf9ijpz/D7EU/qN25ZeTvfoP8xszP9EdDcihQRxiZOU0u7xwOU77U09S102kJHodTHCUDVE0ATP
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190531124242.GE3713@localhost.localdomain>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Spam-Score: -2.9 (--)
-X-Spam-Status: No
+X-Received: by 2002:a05:660c:6c1:: with SMTP id z1mr9492253itk.126.1559337486489;
+ Fri, 31 May 2019 14:18:06 -0700 (PDT)
+Date:   Fri, 31 May 2019 14:18:06 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f7a443058a358cb4@google.com>
+Subject: memory leak in sctp_send_reset_streams
+From:   syzbot <syzbot+6ad9c3bd0a218a2ab41d@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        linux-sctp@vger.kernel.org, marcelo.leitner@gmail.com,
+        netdev@vger.kernel.org, nhorman@tuxdriver.com,
+        syzkaller-bugs@googlegroups.com, vyasevich@gmail.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Fri, May 31, 2019 at 09:42:42AM -0300, Marcelo Ricardo Leitner wrote:
-> On Thu, May 30, 2019 at 03:56:34PM -0400, Neil Horman wrote:
-> > On Thu, May 30, 2019 at 12:17:05PM -0300, Marcelo Ricardo Leitner wrote:
-> ...
-> > > --- a/net/sctp/sm_sideeffect.c
-> > > +++ b/net/sctp/sm_sideeffect.c
-> > > @@ -898,6 +898,11 @@ static void sctp_cmd_new_state(struct sctp_cmd_seq *cmds,
-> > >  						asoc->rto_initial;
-> > >  	}
-> > >  
-> > > +	if (sctp_state(asoc, ESTABLISHED)) {
-> > > +		kfree(asoc->peer.cookie);
-> > > +		asoc->peer.cookie = NULL;
-> > > +	}
-> > > +
-> > Not sure I follow why this is needed.  It doesn't hurt anything of course, but
-> > if we're freeing in sctp_association_free, we don't need to duplicate the
-> > operation here, do we?
-> 
-> This one would be to avoid storing the cookie throughout the entire
-> association lifetime, as the cookie is only needed during the
-> handshake.
-> While the free in sctp_association_free will handle the freeing in
-> case the association never enters established state.
-> 
+Hello,
 
-Ok, I see we do that with the peer_random and other allocated values as well
-when they are no longer needed, but ew, I hate freeing in multiple places like
-that.  I'll fix this up on monday, but I wonder if we can't consolidate that
-somehow
+syzbot found the following crash on:
 
-Neil
+HEAD commit:    036e3431 Merge git://git.kernel.org/pub/scm/linux/kernel/g..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=153cff12a00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8f0f63a62bb5b13c
+dashboard link: https://syzkaller.appspot.com/bug?extid=6ad9c3bd0a218a2ab41d
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12561c86a00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15b76fd8a00000
 
-> > >  	if (sctp_state(asoc, ESTABLISHED) ||
-> > >  	    sctp_state(asoc, CLOSED) ||
-> > >  	    sctp_state(asoc, SHUTDOWN_RECEIVED)) {
-> > > 
-> > > Also untested, just sharing the idea.
-> > > 
-> > >   Marcelo
-> > > 
-> 
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+6ad9c3bd0a218a2ab41d@syzkaller.appspotmail.com
+
+executing program
+executing program
+executing program
+executing program
+executing program
+BUG: memory leak
+unreferenced object 0xffff888123894820 (size 32):
+   comm "syz-executor045", pid 7267, jiffies 4294943559 (age 13.660s)
+   hex dump (first 32 bytes):
+     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+   backtrace:
+     [<00000000c7e71c69>] kmemleak_alloc_recursive  
+include/linux/kmemleak.h:55 [inline]
+     [<00000000c7e71c69>] slab_post_alloc_hook mm/slab.h:439 [inline]
+     [<00000000c7e71c69>] slab_alloc mm/slab.c:3326 [inline]
+     [<00000000c7e71c69>] __do_kmalloc mm/slab.c:3658 [inline]
+     [<00000000c7e71c69>] __kmalloc+0x161/0x2c0 mm/slab.c:3669
+     [<000000003250ed8e>] kmalloc_array include/linux/slab.h:670 [inline]
+     [<000000003250ed8e>] kcalloc include/linux/slab.h:681 [inline]
+     [<000000003250ed8e>] sctp_send_reset_streams+0x1ab/0x5a0  
+net/sctp/stream.c:302
+     [<00000000cd899c6e>] sctp_setsockopt_reset_streams  
+net/sctp/socket.c:4314 [inline]
+     [<00000000cd899c6e>] sctp_setsockopt net/sctp/socket.c:4765 [inline]
+     [<00000000cd899c6e>] sctp_setsockopt+0xc23/0x2bf0 net/sctp/socket.c:4608
+     [<00000000ff3a21a2>] sock_common_setsockopt+0x38/0x50  
+net/core/sock.c:3130
+     [<000000009eb87ae7>] __sys_setsockopt+0x98/0x120 net/socket.c:2078
+     [<00000000e0ede6ca>] __do_sys_setsockopt net/socket.c:2089 [inline]
+     [<00000000e0ede6ca>] __se_sys_setsockopt net/socket.c:2086 [inline]
+     [<00000000e0ede6ca>] __x64_sys_setsockopt+0x26/0x30 net/socket.c:2086
+     [<00000000c61155f5>] do_syscall_64+0x76/0x1a0  
+arch/x86/entry/common.c:301
+     [<00000000e540958c>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
+
+BUG: memory leak
+unreferenced object 0xffff888123894980 (size 32):
+   comm "syz-executor045", pid 7268, jiffies 4294944145 (age 7.800s)
+   hex dump (first 32 bytes):
+     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+   backtrace:
+     [<00000000c7e71c69>] kmemleak_alloc_recursive  
+include/linux/kmemleak.h:55 [inline]
+     [<00000000c7e71c69>] slab_post_alloc_hook mm/slab.h:439 [inline]
+     [<00000000c7e71c69>] slab_alloc mm/slab.c:3326 [inline]
+     [<00000000c7e71c69>] __do_kmalloc mm/slab.c:3658 [inline]
+     [<00000000c7e71c69>] __kmalloc+0x161/0x2c0 mm/slab.c:3669
+     [<000000003250ed8e>] kmalloc_array include/linux/slab.h:670 [inline]
+     [<000000003250ed8e>] kcalloc include/linux/slab.h:681 [inline]
+     [<000000003250ed8e>] sctp_send_reset_streams+0x1ab/0x5a0  
+net/sctp/stream.c:302
+     [<00000000cd899c6e>] sctp_setsockopt_reset_streams  
+net/sctp/socket.c:4314 [inline]
+     [<00000000cd899c6e>] sctp_setsockopt net/sctp/socket.c:4765 [inline]
+     [<00000000cd899c6e>] sctp_setsockopt+0xc23/0x2bf0 net/sctp/socket.c:4608
+     [<00000000ff3a21a2>] sock_common_setsockopt+0x38/0x50  
+net/core/sock.c:3130
+     [<000000009eb87ae7>] __sys_setsockopt+0x98/0x120 net/socket.c:2078
+     [<00000000e0ede6ca>] __do_sys_setsockopt net/socket.c:2089 [inline]
+     [<00000000e0ede6ca>] __se_sys_setsockopt net/socket.c:2086 [inline]
+     [<00000000e0ede6ca>] __x64_sys_setsockopt+0x26/0x30 net/socket.c:2086
+     [<00000000c61155f5>] do_syscall_64+0x76/0x1a0  
+arch/x86/entry/common.c:301
+     [<00000000e540958c>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
+
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
