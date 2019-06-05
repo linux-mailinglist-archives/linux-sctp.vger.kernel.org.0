@@ -2,59 +2,30 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F5435184
-	for <lists+linux-sctp@lfdr.de>; Tue,  4 Jun 2019 22:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89FDA35B2C
+	for <lists+linux-sctp@lfdr.de>; Wed,  5 Jun 2019 13:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726305AbfFDU7L (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 4 Jun 2019 16:59:11 -0400
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:45302 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726179AbfFDU7K (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 4 Jun 2019 16:59:10 -0400
-Received: by mail-qt1-f194.google.com with SMTP id j19so11807351qtr.12;
-        Tue, 04 Jun 2019 13:59:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=95VaE1yZ4HFrCDRjLl3wm2mqMtFb1b8GVww8N/pHq/Y=;
-        b=ZDyFWF8dI514ndd7WBMQROZxA01rOIaIkorX4/V++2AzWilB3owllgrxdNS1lxu3RF
-         VQ4nkPUQTK0mUr5HsKvQ8qiU7v721QgMSSZeK+blTM0RD2Y0uMrcyLdEuJKRVfGzV33l
-         RcUKKwVyhAYzrPHRuPbe43LBohAqVz8IZHqXe0LmTjD0Z7fcI9/XVReu3BEyAC09F29L
-         dqZM55OP9Mnkqovn750Y6RnOaLCOnRgR+XTu8/5M550yWJc4KHOPe3AJqa7l7i1AA6Zd
-         ZesJXjPzLEo5ppp8CUHFb/ovlESlaOTobix1jNdSt85fnXK4sD1t208cbcl5nIcfrk1+
-         j6wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=95VaE1yZ4HFrCDRjLl3wm2mqMtFb1b8GVww8N/pHq/Y=;
-        b=h8VPcAXW8lkT4b4jiBoPAEbxAMzOy+1+nc1oLmYCgjfEEzwqTdWk4X1nLAF58be+Fy
-         +n2D4Z8LbFc4y6j3OXCz+6iAVVFa/VvSTzfOs16c3TFVwXdKEDWlMyI4V5hUssUAeL8e
-         vbcGvryqx4Fn1K3sm8d+GpDyl5diTi5gUA5H+lCkSSCr4ef3CUe0VKM74mWFirLHQ6VI
-         bG866odmtfdo6JOa10RWQoP8yab7JG/lm5JeKFB0IzPeSN+/u+9QcIDRwgtBPzrxN026
-         ZtoilCokuiTx7fNjkLjoKc3gpZRMOezJ6Ra3MEYqL3TphwxjFHdU++k18zDlKj/mrsAQ
-         AlZw==
-X-Gm-Message-State: APjAAAUa7LNLNc0S7qdAOtE2DGEhZEwqKAlT2mUdqzYzXYcwlcQNi7M4
-        I0feLmZtpdZp2KYj6y9b/+E=
-X-Google-Smtp-Source: APXvYqwnUbEkVBq8nHXtHEFqTLNCA9f/PFJpgPYIeUCdaKLV+qS1DQeSwZpj+mpAFMNyJtwX1cVX8g==
-X-Received: by 2002:ad4:536b:: with SMTP id e11mr27110722qvv.163.1559681948613;
-        Tue, 04 Jun 2019 13:59:08 -0700 (PDT)
-Received: from localhost.localdomain ([168.181.49.32])
-        by smtp.gmail.com with ESMTPSA id i123sm10532781qkd.32.2019.06.04.13.59.07
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 04 Jun 2019 13:59:07 -0700 (PDT)
-Received: by localhost.localdomain (Postfix, from userid 1000)
-        id C5006C0879; Tue,  4 Jun 2019 17:59:04 -0300 (-03)
-Date:   Tue, 4 Jun 2019 17:59:04 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+        id S1727363AbfFELU4 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 5 Jun 2019 07:20:56 -0400
+Received: from charlotte.tuxdriver.com ([70.61.120.58]:56032 "EHLO
+        smtp.tuxdriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727330AbfFELU4 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 5 Jun 2019 07:20:56 -0400
+Received: from cpe-2606-a000-111b-405a-0-0-0-162e.dyn6.twc.com ([2606:a000:111b:405a::162e] helo=localhost)
+        by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
+        (Exim 4.63)
+        (envelope-from <nhorman@tuxdriver.com>)
+        id 1hYTyA-0007Jy-DZ; Wed, 05 Jun 2019 07:20:46 -0400
+Date:   Wed, 5 Jun 2019 07:20:10 -0400
+From:   Neil Horman <nhorman@tuxdriver.com>
 To:     Xin Long <lucien.xin@gmail.com>
-Cc:     Neil Horman <nhorman@tuxdriver.com>, linux-sctp@vger.kernel.org,
+Cc:     linux-sctp@vger.kernel.org,
         syzbot+f7e9153b037eac9b1df8@syzkaller.appspotmail.com,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         network dev <netdev@vger.kernel.org>
 Subject: Re: [PATCH V2] Fix memory leak in sctp_process_init
-Message-ID: <20190604205904.GA3778@localhost.localdomain>
+Message-ID: <20190605112010.GA554@hmswarspite.think-freely.org>
 References: <00000000000097abb90589e804fd@google.com>
  <20190603203259.21508-1-nhorman@tuxdriver.com>
  <CADvbK_c6Ym2pbKqGQD8WUmUPX_PtAa6RGde7AQwhRZzUr_emiw@mail.gmail.com>
@@ -62,7 +33,9 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <CADvbK_c6Ym2pbKqGQD8WUmUPX_PtAa6RGde7AQwhRZzUr_emiw@mail.gmail.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-Spam-Score: -2.9 (--)
+X-Spam-Status: No
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
@@ -141,22 +114,23 @@ On Wed, Jun 05, 2019 at 04:16:24AM +0800, Xin Long wrote:
 >    and T1 starts to retrans INIT, and later it will get INIT_ACK again
 >    to sctp_process_init() and memdup().
 > 
+ok, you may well be right as to the path that we take to get here, but the root
+cause is the same, multiple passes through sctp_process_init without freeing the
+previously memduped memory.  Thats why I would think my patch is fixing the
+issue, because now we're always duping the cookie memory and always freeing it
+when we transition to the ESTABLISHED state.
+
+As for the other variables (peer_[random|chunks|hmacs]), I'm not sure why we're
+not seeing leak reports of those variables.
+
+Neil
+
 > As on either above, asoc's never been to ESTABLISHED state,
 > asoc->peer.cookie can be not freed, and this patch won't work.
 > But yes, it's nice to have this patch, just not to fix this memleak.
 > 
 > I tracked the code, this memleak was triggered by case 2, so I think
 > you also need to add something like:
-
-Interesting, because as part of writing some scripts here to more
-easily work with syzkaller reports, I actually had the patch Neil
-posted being tested on Friday and with it applied the reproducer
-didn't catch any leaks anymore, while with it, it takes a while but
-the leaks were happening.
-
-(Will read the details you posted later, I'm just sharing this for
-now, sorry for the rushiness)
-
 > 
 > @@ -881,6 +893,18 @@ static void sctp_cmd_new_state(struct sctp_cmd_seq *cmds,
 >                                                 asoc->rto_initial;
