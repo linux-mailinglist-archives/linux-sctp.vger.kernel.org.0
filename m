@@ -2,93 +2,91 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 61DAD37EEC
-	for <lists+linux-sctp@lfdr.de>; Thu,  6 Jun 2019 22:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E39A2385AE
+	for <lists+linux-sctp@lfdr.de>; Fri,  7 Jun 2019 09:48:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726660AbfFFUmi (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 6 Jun 2019 16:42:38 -0400
-Received: from mout.kundenserver.de ([212.227.126.187]:39445 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726305AbfFFUmi (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 6 Jun 2019 16:42:38 -0400
-Received: from [192.168.1.110] ([77.9.2.22]) by mrelayeu.kundenserver.de
- (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MsI0I-1ggb6G29BC-00tjwj; Thu, 06 Jun 2019 22:41:38 +0200
-Subject: Re: [PATCH net-next] net: Drop unlikely before IS_ERR(_OR_NULL)
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        netdev@vger.kernel.org, linux-sctp@vger.kernel.org
-References: <20190605142428.84784-1-wangkefeng.wang@huawei.com>
- <20190605142428.84784-3-wangkefeng.wang@huawei.com>
- <20190605091319.000054e9@intel.com>
- <721a48ce-c09a-a35e-86ae-eac5eec26668@huawei.com>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Organization: metux IT consult
-Message-ID: <37cbb3d8-bec8-4dd7-ba1f-31a2919316ca@metux.net>
-Date:   Thu, 6 Jun 2019 22:41:32 +0200
-User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+        id S1727356AbfFGHsE (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 7 Jun 2019 03:48:04 -0400
+Received: from smtp1.iitb.ac.in ([103.21.127.13]:49822 "EHLO smtp1.iitb.ac.in"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727851AbfFGHsD (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Fri, 7 Jun 2019 03:48:03 -0400
+Received: from ldns2.iitb.ac.in (ldns2.iitb.ac.in [10.200.12.2])
+        by smtp1.iitb.ac.in (Postfix) with SMTP id 8C337105C895
+        for <linux-sctp@vger.kernel.org>; Fri,  7 Jun 2019 12:02:14 +0530 (IST)
+Received: (qmail 32253 invoked by uid 510); 7 Jun 2019 12:02:06 +0530
+X-Qmail-Scanner-Diagnostics: from 10.200.1.25 by ldns2 (envelope-from <rws@aero.iitb.ac.in>, uid 501) with qmail-scanner-2.11
+ spamassassin: 3.4.1. mhr: 1.0. {clamdscan: 0.100.0/25472} 
+ Clear:RC:1(10.200.1.25):SA:0(1.5/7.0):. Processed in 3.223095 secs; 07 Jun 2019 12:02:06 +0530
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on ldns2.iitb.ac.in
+X-Spam-Level: *
+X-Spam-Status: No, score=1.5 required=7.0 tests=BAYES_50,IITB_ORIG,
+        MISSING_HEADERS,PROPER_IITB_MSGID autolearn=disabled version=3.4.1
+X-Spam-Pyzor: Reported 1 times.
+X-Envelope-From: rws@aero.iitb.ac.in
+X-Qmail-Scanner-Mime-Attachments: |
+X-Qmail-Scanner-Zip-Files: |
+Received: from unknown (HELO ldns2.iitb.ac.in) (10.200.1.25)
+  by ldns2.iitb.ac.in with SMTP; 7 Jun 2019 12:02:03 +0530
+Received: from vayu.aero.iitb.ac.in (vayu.aero.iitb.ac.in [10.101.1.1])
+        by ldns2.iitb.ac.in (Postfix) with ESMTP id E507834194A;
+        Fri,  7 Jun 2019 12:01:54 +0530 (IST)
+Received: from localhost (localhost [127.0.0.1])
+        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id C66148902E548;
+        Fri,  7 Jun 2019 12:01:54 +0530 (IST)
+Received: from vayu.aero.iitb.ac.in ([127.0.0.1])
+        by localhost (vayu.aero.iitb.ac.in [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id Dsp2o8aWBuLF; Fri,  7 Jun 2019 12:01:54 +0530 (IST)
+Received: from localhost (localhost [127.0.0.1])
+        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id CBA298902E540;
+        Fri,  7 Jun 2019 12:01:53 +0530 (IST)
+X-Virus-Scanned: amavisd-new at aero.iitb.ac.in
+Received: from vayu.aero.iitb.ac.in ([127.0.0.1])
+        by localhost (vayu.aero.iitb.ac.in [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id XJzHEtFw4Nf5; Fri,  7 Jun 2019 12:01:53 +0530 (IST)
+Received: from vayu.aero.iitb.ac.in (vayu.aero.iitb.ac.in [10.101.1.1])
+        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id 752AD8902E537;
+        Fri,  7 Jun 2019 12:01:49 +0530 (IST)
+Date:   Fri, 7 Jun 2019 12:01:49 +0530 (IST)
+From:   Martins Henry <rws@aero.iitb.ac.in>
+Message-ID: <630023291.60470.1559889109394.JavaMail.zimbra@aero.iitb.ac.in>
+Subject: Thanks and I wait for your answer
 MIME-Version: 1.0
-In-Reply-To: <721a48ce-c09a-a35e-86ae-eac5eec26668@huawei.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:pagADH4vxjoMgAeXBVQOtnRLYCAOD23dxJjVP31ezD5G4gsXRJl
- IPf4GGUspGV0Wew2LBbkhWOLzwqu3s9hBmkUoCldow0jMrDx/paEta5YHx1nf47mJHGCLJ8
- xFo1DjfxZlDMqHsaif8SurlPSDbwKN9yuSabInMOGFhmSDh8v2hrEpCKJi0/K3/C8ojGqW8
- cOxFkanD02JRD2hw5YmPw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:yJg8HQSN4KI=:dWStSaB4teSzQlqTv/xoCO
- W35oNQGJLqSNaxNTV/GPRu8jAcUlli059kE5mTvvL9KLc5ZVLn43qrTGAAuxIZ11RRzcdCgHg
- P7c9aI+uAJ9cEFpZuzLzCJpcRIRYMWYTk5GIBYJr9L8R6yEQl4PLNrmqIroFTd/5M3HY3vqVs
- WfU7IlKOWpsqt1WFLW4x1RlH/yQ9ajmZ4qQ4wU5gbq7ujuK4/iMti414RZ2kk4q0k9TodkTyF
- RmSqSPhTMdzsQ6TOUC0oNPpwykMwMMm2qna8Kd7D8E4TqOOIJt/6yssuzaFGFZDT7A4tlZh9Q
- It+0ocQNTavPGosDFXmpyFGG8XQKDzr+BxLMYfK0D0OKXgkwJkrBmG5IbzOV4aSeWLZi/OuBC
- TsdAOCEL2yG9uWUVYTU8yt77QlsQJAXGBqf1nxiGtTOtA49YRimBIDbTTzLHoUtsZPF7/9v5u
- LRG9XyaRBk+U/CEVNh7oN37BOwqTwg0zdGKxN/r3ppLCkTaaZU0o0KK+p05+uyWP+UQ1uTU8R
- TKkhrY9UAGm546yIUohMOGpxm0V/PgIt0TVZ989OweSaJKbrpI2sBz+jM61xiv0XrYPxgZgQT
- R26NnndXHTKjw95zS9VepiFXfUOt6/U3kMd+be3lw5oEut2Wgh/aI9RZW+e0eEW9c0VibTnhK
- aStrqc6SH0/WbNJEI6qxWUhTUsQhkmuodoYQOpoyPMrMSd/UnqyZMTdmFiBIMYytOqulO3pD4
- Z9vDAb0PRY2vao2VwtU2zNvy5o/TvzHYbtiBPvqkN5Ij6b6RSfV3EHtE/D4=
+X-Originating-IP: [10.101.1.5]
+X-Mailer: Zimbra 8.8.12_GA_3803 (ZimbraWebClient - FF11 (Win)/8.8.12_GA_3794)
+Thread-Index: Z4di5DXkV78PrTTCqXhStc9XBmMYjg==
+Thread-Topic: Thanks and I wait for your answer
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On 06.06.19 03:39, Kefeng Wang wrote:
+Hello,
 
-Hi folks,
+I am Martin Henry, An American Citizen; I am the personal secretary to
+Mr. Donald Railton, the controller of a Lottery Company. Please I am
+having big problem now, I have a 6yrs old daughter who has leukemia, a
+disease of the blood, and she needs a bone marrow transplant or she
+will die.
 
-> There is no different in assembly output (only check the x86/arm64), and
-> the Enrico Weigelt have finished a cocci script to do this cleanup.
+Please I am only asking for your help and you will benefit from it
+also. As an insider with Lottery Firm, working as the personal
+secretary to the controller, I want you to send me your name to play,
+I have some numbers that are going to win, stored in his secret data
+system in the office. The Lottery is an online entry with credit card
+anywhere with a name and address. All I want you to do is to send your
+name to play it and I will send confirmation to you.
 
-I haven't compared the assembly output, just logically deduced from the
-macro. If I understand it correctly, the likely()/unlikely() macros
-just add a hint to the compiler, which branch it should optimize harder.
+I will play with my card on your name and the Prize will be shared
+equally between us. Immediately the results are released they will
+contact you for payment as the oversea winner. The lotto can be played
+with 9.00 dollars, or 50 dollars but the prize will be Millions.
+Remember that I am playing on your name with my card; I just want to
+front you for this, because I need this money to save the life of my
+little daughter.
 
-No idea what the compiler's actually doing, but I believe its things
-like optimized shortcut evaluation and avoiding jumps to likely
-branches.
-
->> I'm not sure in the end that the change is worth it, so would like you
->> to prove it is, unless davem overrides me. :-)
-
-Depends on what you count as worthy ;-)
-
-This patch just makes a source a bit more compact / easier to read.
-But shouldn't have any actual consequence on the generated binary.
-
-
---mtx
-
--- 
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+Thanks and I wait for your answer
+Martin Henry.
