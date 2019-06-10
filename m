@@ -2,35 +2,32 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C9AE63B3CA
-	for <lists+linux-sctp@lfdr.de>; Mon, 10 Jun 2019 13:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A2E3B996
+	for <lists+linux-sctp@lfdr.de>; Mon, 10 Jun 2019 18:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389508AbfFJLMY (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 10 Jun 2019 07:12:24 -0400
-Received: from charlotte.tuxdriver.com ([70.61.120.58]:41454 "EHLO
+        id S1728329AbfFJQfL (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 10 Jun 2019 12:35:11 -0400
+Received: from charlotte.tuxdriver.com ([70.61.120.58]:43792 "EHLO
         smtp.tuxdriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388848AbfFJLMY (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 10 Jun 2019 07:12:24 -0400
+        with ESMTP id S1728245AbfFJQfL (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 10 Jun 2019 12:35:11 -0400
 Received: from [107.15.85.130] (helo=localhost)
         by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
         (Exim 4.63)
         (envelope-from <nhorman@tuxdriver.com>)
-        id 1haIDn-0007I6-C9; Mon, 10 Jun 2019 07:12:17 -0400
-Date:   Mon, 10 Jun 2019 07:12:09 -0400
+        id 1haNGD-0001Qk-BG; Mon, 10 Jun 2019 12:35:08 -0400
 From:   Neil Horman <nhorman@tuxdriver.com>
-To:     Su Yanjun <suyj.fnst@cn.fujitsu.com>
-Cc:     vyasevich@gmail.com, marcelo.leitner@gmail.com,
-        davem@davemloft.net, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sctp: Add rcu lock to protect dst entry in
- sctp_transport_route
-Message-ID: <20190610111209.GA15599@hmswarspite.think-freely.org>
-References: <1560136800-17961-1-git-send-email-suyj.fnst@cn.fujitsu.com>
+To:     linux-sctp@vger.kernel.org
+Cc:     netdev@vger.kernel.org, Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH] Free cookie before we memdup a new one
+Date:   Mon, 10 Jun 2019 12:34:56 -0400
+Message-Id: <20190610163456.7778-1-nhorman@tuxdriver.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1560136800-17961-1-git-send-email-suyj.fnst@cn.fujitsu.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+Content-Transfer-Encoding: 8bit
 X-Spam-Score: -2.9 (--)
 X-Spam-Status: No
 Sender: linux-sctp-owner@vger.kernel.org
@@ -38,66 +35,35 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Mon, Jun 10, 2019 at 11:20:00AM +0800, Su Yanjun wrote:
-> syzbot found a crash in rt_cache_valid. Problem is that when more
-> threads release dst in sctp_transport_route, the route cache can
-> be freed.
-> 
-> As follows,
-> p1:
-> sctp_transport_route
->   dst_release
->   get_dst
-> 
-> p2:
-> sctp_transport_route
->   dst_release
->   get_dst
-> ...
-> 
-> If enough threads calling dst_release will cause dst->refcnt==0
-> then rcu softirq will reclaim the dst entry,get_dst then use
-> the freed memory.
-> 
-> This patch adds rcu lock to protect the dst_entry here.
-> 
-> Fixes: 6e91b578bf3f("sctp: re-use sctp_transport_pmtu in sctp_transport_route")
-> Signed-off-by: Su Yanjun <suyj.fnst@cn.fujitsu.com>
-> Reported-by: syzbot+a9e23ea2aa21044c2798@syzkaller.appspotmail.com
-> ---
->  net/sctp/transport.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/net/sctp/transport.c b/net/sctp/transport.c
-> index ad158d3..5ad7e20 100644
-> --- a/net/sctp/transport.c
-> +++ b/net/sctp/transport.c
-> @@ -308,8 +308,13 @@ void sctp_transport_route(struct sctp_transport *transport,
->  	struct sctp_association *asoc = transport->asoc;
->  	struct sctp_af *af = transport->af_specific;
->  
-> +	/* When dst entry is being released, route cache may be referred
-> +	 * again. Add rcu lock here to protect dst entry.
-> +	 */
-> +	rcu_read_lock();
->  	sctp_transport_dst_release(transport);
->  	af->get_dst(transport, saddr, &transport->fl, sctp_opt2sk(opt));
-> +	rcu_read_unlock();
->  
-What is the exact error that syzbot reported?  This doesn't seem like it fixes
-anything.  Based on what you've said above, we have multiple processes looking
-up and releasing routes in parallel (which IIRC should never happen, as only one
-process should traverse the sctp state machine for a given association at any
-one time).  Protecting the lookup/release operations with a read side rcu lock
-won't fix that.  
+Based on comments from Xin, even after fixes for our recent syzbot
+report of cookie memory leaks, its possible to get a resend of an INIT
+chunk which would lead to us leaking cookie memory.
 
-Neil
+To ensure that we don't leak cookie memory, free any previously
+allocated cookie first.
 
->  	if (saddr)
->  		memcpy(&transport->saddr, saddr, sizeof(union sctp_addr));
-> -- 
-> 2.7.4
-> 
-> 
-> 
-> 
+Signed-off-by: Neil Horman <nhorman@tuxdriver.com>
+CC: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+CC: Xin Long <lucien.xin@gmail.com>
+CC: "David S. Miller" <davem@davemloft.net>
+CC: netdev@vger.kernel.org
+---
+ net/sctp/sm_make_chunk.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
+index f17908f5c4f3..21f7faf032e5 100644
+--- a/net/sctp/sm_make_chunk.c
++++ b/net/sctp/sm_make_chunk.c
+@@ -2583,6 +2583,8 @@ static int sctp_process_param(struct sctp_association *asoc,
+ 	case SCTP_PARAM_STATE_COOKIE:
+ 		asoc->peer.cookie_len =
+ 			ntohs(param.p->length) - sizeof(struct sctp_paramhdr);
++		if (asoc->peer.cookie)
++			kfree(asoc->peer.cookie);
+ 		asoc->peer.cookie = kmemdup(param.cookie->body, asoc->peer.cookie_len, gfp);
+ 		if (!asoc->peer.cookie)
+ 			retval = 0;
+-- 
+2.20.1
+
