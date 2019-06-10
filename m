@@ -2,68 +2,52 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60A2E3B996
-	for <lists+linux-sctp@lfdr.de>; Mon, 10 Jun 2019 18:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EBB53B9B5
+	for <lists+linux-sctp@lfdr.de>; Mon, 10 Jun 2019 18:38:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728329AbfFJQfL (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 10 Jun 2019 12:35:11 -0400
-Received: from charlotte.tuxdriver.com ([70.61.120.58]:43792 "EHLO
-        smtp.tuxdriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728245AbfFJQfL (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 10 Jun 2019 12:35:11 -0400
-Received: from [107.15.85.130] (helo=localhost)
-        by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
-        (Exim 4.63)
-        (envelope-from <nhorman@tuxdriver.com>)
-        id 1haNGD-0001Qk-BG; Mon, 10 Jun 2019 12:35:08 -0400
-From:   Neil Horman <nhorman@tuxdriver.com>
-To:     linux-sctp@vger.kernel.org
-Cc:     netdev@vger.kernel.org, Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH] Free cookie before we memdup a new one
-Date:   Mon, 10 Jun 2019 12:34:56 -0400
-Message-Id: <20190610163456.7778-1-nhorman@tuxdriver.com>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -2.9 (--)
-X-Spam-Status: No
+        id S1728438AbfFJQiT (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 10 Jun 2019 12:38:19 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:58292 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728104AbfFJQiS (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 10 Jun 2019 12:38:18 -0400
+Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 80E7115064093;
+        Mon, 10 Jun 2019 09:38:17 -0700 (PDT)
+Date:   Mon, 10 Jun 2019 09:38:16 -0700 (PDT)
+Message-Id: <20190610.093816.262800300265390788.davem@davemloft.net>
+To:     nhorman@tuxdriver.com
+Cc:     linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        marcelo.leitner@gmail.com, lucien.xin@gmail.com
+Subject: Re: [PATCH] Free cookie before we memdup a new one
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20190610163456.7778-1-nhorman@tuxdriver.com>
+References: <20190610163456.7778-1-nhorman@tuxdriver.com>
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 10 Jun 2019 09:38:17 -0700 (PDT)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Based on comments from Xin, even after fixes for our recent syzbot
-report of cookie memory leaks, its possible to get a resend of an INIT
-chunk which would lead to us leaking cookie memory.
+From: Neil Horman <nhorman@tuxdriver.com>
+Date: Mon, 10 Jun 2019 12:34:56 -0400
 
-To ensure that we don't leak cookie memory, free any previously
-allocated cookie first.
+> Based on comments from Xin, even after fixes for our recent syzbot
+> report of cookie memory leaks, its possible to get a resend of an INIT
+> chunk which would lead to us leaking cookie memory.
+> 
+> To ensure that we don't leak cookie memory, free any previously
+> allocated cookie first.
+> 
+> Signed-off-by: Neil Horman <nhorman@tuxdriver.com>
 
-Signed-off-by: Neil Horman <nhorman@tuxdriver.com>
-CC: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-CC: Xin Long <lucien.xin@gmail.com>
-CC: "David S. Miller" <davem@davemloft.net>
-CC: netdev@vger.kernel.org
----
- net/sctp/sm_make_chunk.c | 2 ++
- 1 file changed, 2 insertions(+)
+Please post with an appropriate subsystem prefix in the Subject.
 
-diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
-index f17908f5c4f3..21f7faf032e5 100644
---- a/net/sctp/sm_make_chunk.c
-+++ b/net/sctp/sm_make_chunk.c
-@@ -2583,6 +2583,8 @@ static int sctp_process_param(struct sctp_association *asoc,
- 	case SCTP_PARAM_STATE_COOKIE:
- 		asoc->peer.cookie_len =
- 			ntohs(param.p->length) - sizeof(struct sctp_paramhdr);
-+		if (asoc->peer.cookie)
-+			kfree(asoc->peer.cookie);
- 		asoc->peer.cookie = kmemdup(param.cookie->body, asoc->peer.cookie_len, gfp);
- 		if (!asoc->peer.cookie)
- 			retval = 0;
--- 
-2.20.1
-
+Thank you.
