@@ -2,81 +2,112 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EE2041939
-	for <lists+linux-sctp@lfdr.de>; Wed, 12 Jun 2019 02:05:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E69F41991
+	for <lists+linux-sctp@lfdr.de>; Wed, 12 Jun 2019 02:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405568AbfFLAFV (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 11 Jun 2019 20:05:21 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:41495 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387864AbfFLAFV (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 11 Jun 2019 20:05:21 -0400
-Received: by mail-lj1-f193.google.com with SMTP id s21so13434812lji.8;
-        Tue, 11 Jun 2019 17:05:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=twnhTVYd7tn35O7vvlIa3XEgKYk2/zieh7kgQ5Ms1VY=;
-        b=iDBd+Nyh60vWHvSGtVHWVETugM2fnnm+FqmmiJZ56NZHl6V9Aty9AmjFW8CRdEnVVB
-         aGKuXc3BMI1WRmMN59ZmT1r6kVO7qzb4q1bDpYmpS/ZUrVuenxbQGoF2Qv4WS5P5xTYu
-         MgUGL2vvXlsZ04GvxKv4oWOnyz8mNGE24H+bdBFJTo0aHTJ0k0u+7bh9tcE9VNAMwAtH
-         iKtxqCy1DSmKDdJUUU93WbsyygyX8RtwvZ5Owd5cCDJ9ZU6yAlx8+gKU6PDNIGy1Yrds
-         5FOvUqOWwAWAd5bt0eEYz6DGK7Ot7sHrl6lNbuwYOmPXTEQ7T1WTuP7Qnyr0A/A07xpx
-         QkCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=twnhTVYd7tn35O7vvlIa3XEgKYk2/zieh7kgQ5Ms1VY=;
-        b=fqEU0XMyfNflfhQT79oxZghavXpJ1dAzYWSMm/qb4gmos8iA2TeNBJ0PUDAE/Hziuc
-         bcmkQUVGTodSXW4WmUcE9UbCbklB1P7Hfg+uvtOj6dEzEdotDAAFyArOd3ScHgIQNVs5
-         0JS9pIniFAgDhZ4tXvbDA5Wd7OJm5Til/+3lHBMc+FZ4Th9Uj7DK21wcJRIHCksoumid
-         oyUuStSybwP7edfVFrdhM6JvHk+DDVpdY1QTx93zhasPNw8m+Rv31ORF54nq/akB0sbh
-         SVkLKb03VXRyP+j7I9Yb4Iqiz7BHFYtNrpDNWePKx+aosKbJYg7P7LG1/Z8/MzWuKwy8
-         Zlbw==
-X-Gm-Message-State: APjAAAVdLDPQZSMGnTI0GPYm3j5E17tzyOWa4m4EfXM7tVCJe8oCX3/+
-        qfJ4ROah2uLK8s8qnMM5gMeTz+fyeeBSbUV9JBw=
-X-Google-Smtp-Source: APXvYqyO/Oi3PmoK5iJ0YzdPrMw5xZcqUF1R75rhMCOs6SLJy8NUkUXX4LUB1wFJr6ZxPQT0SJAlgxYZrwxAPMCixo8=
-X-Received: by 2002:a2e:298a:: with SMTP id p10mr12710225ljp.74.1560297918252;
- Tue, 11 Jun 2019 17:05:18 -0700 (PDT)
+        id S2391217AbfFLAi3 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 11 Jun 2019 20:38:29 -0400
+Received: from charlotte.tuxdriver.com ([70.61.120.58]:58993 "EHLO
+        smtp.tuxdriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388810AbfFLAi3 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 11 Jun 2019 20:38:29 -0400
+Received: from [107.15.85.130] (helo=localhost)
+        by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
+        (Exim 4.63)
+        (envelope-from <nhorman@tuxdriver.com>)
+        id 1harHT-0002wx-P8; Tue, 11 Jun 2019 20:38:26 -0400
+From:   Neil Horman <nhorman@tuxdriver.com>
+To:     linux-sctp@vger.kernel.org
+Cc:     netdev@vger.kernel.org, Neil Horman <nhorman@tuxdriver.com>,
+        syzbot+f7e9153b037eac9b1df8@syzkaller.appspotmail.com,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH v4 net] sctp: Free cookie before we memdup a new one
+Date:   Tue, 11 Jun 2019 20:38:14 -0400
+Message-Id: <20190612003814.7219-1-nhorman@tuxdriver.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190610163456.7778-1-nhorman@tuxdriver.com>
+References: <20190610163456.7778-1-nhorman@tuxdriver.com>
 MIME-Version: 1.0
-References: <20190611193836.2772-1-shyam.saini@amarulasolutions.com>
-In-Reply-To: <20190611193836.2772-1-shyam.saini@amarulasolutions.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 11 Jun 2019 17:05:06 -0700
-Message-ID: <CAADnVQKwvfuoyDEu+rB8=btOi33LdrUvk4EkQM86sDpDG61kew@mail.gmail.com>
-Subject: Re: [PATCH V2] include: linux: Regularise the use of FIELD_SIZEOF macro
-To:     Shyam Saini <shyam.saini@amarulasolutions.com>
-Cc:     Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Network Development <netdev@vger.kernel.org>,
-        linux-ext4@vger.kernel.org, devel@lists.orangefs.org,
-        linux-mm <linux-mm@kvack.org>, linux-sctp@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>, kvm@vger.kernel.org,
-        mayhs11saini@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -2.9 (--)
+X-Spam-Status: No
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Jun 11, 2019 at 5:00 PM Shyam Saini
-<shyam.saini@amarulasolutions.com> wrote:
->
-> Currently, there are 3 different macros, namely sizeof_field, SIZEOF_FIELD
-> and FIELD_SIZEOF which are used to calculate the size of a member of
-> structure, so to bring uniformity in entire kernel source tree lets use
-> FIELD_SIZEOF and replace all occurrences of other two macros with this.
->
-> For this purpose, redefine FIELD_SIZEOF in include/linux/stddef.h and
-> tools/testing/selftests/bpf/bpf_util.h and remove its defination from
-> include/linux/kernel.h
+Based on comments from Xin, even after fixes for our recent syzbot
+report of cookie memory leaks, its possible to get a resend of an INIT
+chunk which would lead to us leaking cookie memory.
 
-please dont. bpf_util.h is a user space header.
-Please leave it as-is.
+To ensure that we don't leak cookie memory, free any previously
+allocated cookie first.
+
+---
+Change notes
+v1->v2
+update subsystem tag in subject (davem)
+repeat kfree check for peer_random and peer_hmacs (xin)
+
+v2->v3
+net->sctp
+also free peer_chunks
+
+v3->v4
+fix subject tags
+
+Signed-off-by: Neil Horman <nhorman@tuxdriver.com>
+Reported-by: syzbot+f7e9153b037eac9b1df8@syzkaller.appspotmail.com
+CC: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+CC: Xin Long <lucien.xin@gmail.com>
+CC: "David S. Miller" <davem@davemloft.net>
+CC: netdev@vger.kernel.org
+---
+ net/sctp/sm_make_chunk.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
+index f17908f5c4f3..9b0e5b0d701a 100644
+--- a/net/sctp/sm_make_chunk.c
++++ b/net/sctp/sm_make_chunk.c
+@@ -2583,6 +2583,8 @@ static int sctp_process_param(struct sctp_association *asoc,
+ 	case SCTP_PARAM_STATE_COOKIE:
+ 		asoc->peer.cookie_len =
+ 			ntohs(param.p->length) - sizeof(struct sctp_paramhdr);
++		if (asoc->peer.cookie)
++			kfree(asoc->peer.cookie);
+ 		asoc->peer.cookie = kmemdup(param.cookie->body, asoc->peer.cookie_len, gfp);
+ 		if (!asoc->peer.cookie)
+ 			retval = 0;
+@@ -2647,6 +2649,8 @@ static int sctp_process_param(struct sctp_association *asoc,
+ 			goto fall_through;
+ 
+ 		/* Save peer's random parameter */
++		if (asoc->peer.peer_random)
++			kfree(asoc->peer.peer_random);
+ 		asoc->peer.peer_random = kmemdup(param.p,
+ 					    ntohs(param.p->length), gfp);
+ 		if (!asoc->peer.peer_random) {
+@@ -2660,6 +2664,8 @@ static int sctp_process_param(struct sctp_association *asoc,
+ 			goto fall_through;
+ 
+ 		/* Save peer's HMAC list */
++		if (asoc->peer.peer_hmacs)
++			kfree(asoc->peer.peer_hmacs);
+ 		asoc->peer.peer_hmacs = kmemdup(param.p,
+ 					    ntohs(param.p->length), gfp);
+ 		if (!asoc->peer.peer_hmacs) {
+@@ -2675,6 +2681,8 @@ static int sctp_process_param(struct sctp_association *asoc,
+ 		if (!ep->auth_enable)
+ 			goto fall_through;
+ 
++		if (asoc->peer.peer_chunks)
++			kfree(asoc->peer.peer_chunks);
+ 		asoc->peer.peer_chunks = kmemdup(param.p,
+ 					    ntohs(param.p->length), gfp);
+ 		if (!asoc->peer.peer_chunks)
+-- 
+2.20.1
+
