@@ -2,60 +2,68 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D2346BA7
-	for <lists+linux-sctp@lfdr.de>; Fri, 14 Jun 2019 23:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F76346DCC
+	for <lists+linux-sctp@lfdr.de>; Sat, 15 Jun 2019 04:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726397AbfFNVQ1 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 14 Jun 2019 17:16:27 -0400
-Received: from [89.32.41.185] ([89.32.41.185]:57007 "EHLO slot0.normalihy.ga"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S1726512AbfFNVQ0 (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Fri, 14 Jun 2019 17:16:26 -0400
-X-Greylist: delayed 1977 seconds by postgrey-1.27 at vger.kernel.org; Fri, 14 Jun 2019 17:16:25 EDT
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=normalihy.ga;
- h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Reply-To:Message-ID; i=slaoma@normalihy.ga;
- bh=LF69dDschg8kOsoWmykprZXCKM4=;
- b=mPzMSCuM46MstZXyO74RuXXmvKsxWiVtIvnjz7I33cG2PDO/nwuG7xHSzKhCPM/Du+olbXh2s+oI
-   w+ddwsc2kgo2aGWNmlDTfRux4Sv8KPuE9BZOPe9xNIz/UOwhPd6R/vLExDc11Loh/0FVhZZuLgYH
-   nyoZVitMkH8ik4melCaeaUBHHn/bjpdu3npuqw2AIdcj0zj/WzgCSTgezYCl++SmMrsMgMtNpIJk
-   mYuNL1lGSyGMhdqJaIxxzCRfvynVxHp7XbqwDSvRuqzoJQCmqtNwi6xBeZ9niBdmkl1QYs5e5M9S
-   Gl8FQRvL/Ch4R5D3l8UnBzH8DeNyxd5O75yMrw==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=normalihy.ga;
- b=wy3kKhptjGGC8wTUKSHGpmKiSbruPVSomCdaN3Jd1X0cTp+xovlS3xG6bdsr7EPnd3OmYr1JD7zh
-   frhScQ4ZfptMLE9VjZdPODT7podso2Cns8TFHY8RZRpjUeEd4f95KbBsUHC+1UadvU4MD3TGEbAc
-   G5PRs8AnoSbwkA5uaxqm6h4IC+bsbPMy+3SXmqP+sPB77YdaxICEuJbcqsPCVsCifODLvlGk/np+
-   cyyj4f3COaev3qijxiPDTA4okKm6S8Uu5QrtksbRVG+WwuBN4sZl1XYya9NRSAqrAvL3AbbR5Bj8
-   1WGRlCQXqGtdNynWar4n69xU5yRXxU9NJU8d/w==;
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: INQUIRY -AGRA POLANDS
-To:     Recipients <slaoma@normalihy.ga>
-From:   "Mrkt dept" <slaoma@normalihy.ga>
-Date:   Fri, 14 Jun 2019 13:34:10 -0700
-Reply-To: agra.poland@aol.com
-Message-ID: <0.0.2.4A1.1D522F079669334.0@slot0.normalihy.ga>
+        id S1725999AbfFOC2B (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 14 Jun 2019 22:28:01 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:57452 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725812AbfFOC2A (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 14 Jun 2019 22:28:00 -0400
+Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 32A7F1341A573;
+        Fri, 14 Jun 2019 19:28:00 -0700 (PDT)
+Date:   Fri, 14 Jun 2019 19:27:59 -0700 (PDT)
+Message-Id: <20190614.192759.352171429890636844.davem@davemloft.net>
+To:     nhorman@tuxdriver.com
+Cc:     linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        syzbot+f7e9153b037eac9b1df8@syzkaller.appspotmail.com,
+        marcelo.leitner@gmail.com, lucien.xin@gmail.com
+Subject: Re: [PATCH v5 net] sctp: Free cookie before we memdup a new one
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20190613103559.2603-1-nhorman@tuxdriver.com>
+References: <20190610163456.7778-1-nhorman@tuxdriver.com>
+        <20190613103559.2603-1-nhorman@tuxdriver.com>
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 14 Jun 2019 19:28:00 -0700 (PDT)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello Sir,
+From: Neil Horman <nhorman@tuxdriver.com>
+Date: Thu, 13 Jun 2019 06:35:59 -0400
 
-Greetings rom Agra Polands.
-we have been building our international business since 1997, dealing with a=
- wide range of luxury consumer goods in order to efficiently and effectivel=
-y satisfy all our customers=E2=80=99 demands.
+> Based on comments from Xin, even after fixes for our recent syzbot
+> report of cookie memory leaks, its possible to get a resend of an INIT
+> chunk which would lead to us leaking cookie memory.
+> 
+> To ensure that we don't leak cookie memory, free any previously
+> allocated cookie first.
+> 
+> Change notes
+> v1->v2
+> update subsystem tag in subject (davem)
+> repeat kfree check for peer_random and peer_hmacs (xin)
+> 
+> v2->v3
+> net->sctp
+> also free peer_chunks
+> 
+> v3->v4
+> fix subject tags
+> 
+> v4->v5
+> remove cut line
+> 
+> Signed-off-by: Neil Horman <nhorman@tuxdriver.com>
+> Reported-by: syzbot+f7e9153b037eac9b1df8@syzkaller.appspotmail.com
 
-Kindly confirm if you be able to supply us with our desired items.
-
-What is your Payment terms and Shipments?.
-
-Regards
-
-Riccardo Corbo
-International Buyer & Analyst
-Address:Via Trento, 7/F - Lomazzo (CO) - Italy VAT IT 12165160156 =
-
-agra.poland@aol.com
+Applied, thanks.
