@@ -2,91 +2,73 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4038247653
-	for <lists+linux-sctp@lfdr.de>; Sun, 16 Jun 2019 20:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 339A147AE1
+	for <lists+linux-sctp@lfdr.de>; Mon, 17 Jun 2019 09:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725947AbfFPSRZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Sun, 16 Jun 2019 14:17:25 -0400
-Received: from mail-n.franken.de ([193.175.24.27]:58610 "EHLO drew.franken.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725920AbfFPSRZ (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Sun, 16 Jun 2019 14:17:25 -0400
-X-Greylist: delayed 376 seconds by postgrey-1.27 at vger.kernel.org; Sun, 16 Jun 2019 14:17:24 EDT
-Received: from [IPv6:2a02:8109:1140:c3d:3d9d:31bf:dad0:3571] (unknown [IPv6:2a02:8109:1140:c3d:3d9d:31bf:dad0:3571])
-        (Authenticated sender: lurchi)
-        by drew.franken.de (Postfix) with ESMTPSA id 07407721E2828;
-        Sun, 16 Jun 2019 20:11:05 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: sctp_sendmsg does not accept flags
-From:   Michael Tuexen <michael.tuexen@lurchi.franken.de>
-In-Reply-To: <CAPkQJpRMFuF=hYyVNAcfzhkzaVAUwnsSfMW7KGffsa=c1tkirw@mail.gmail.com>
-Date:   Sun, 16 Jun 2019 20:11:05 +0200
-Cc:     Linux SCTP <linux-sctp@vger.kernel.org>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <FEC710C5-2407-422E-AF8C-A85483646EDE@lurchi.franken.de>
-References: <e863ee11-9e1f-71b9-1f61-b4b71d9f0945@elstel.org>
- <CAPkQJpRMFuF=hYyVNAcfzhkzaVAUwnsSfMW7KGffsa=c1tkirw@mail.gmail.com>
-To:     malc <mlashley@gmail.com>
-X-Mailer: Apple Mail (2.3445.104.11)
-X-Spam-Status: No, score=-2.9 required=5.0 tests=ALL_TRUSTED,BAYES_00
-        autolearn=disabled version=3.4.1
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on mail-n.franken.de
+        id S1726521AbfFQH2o (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 17 Jun 2019 03:28:44 -0400
+Received: from slot0.nejknio.cf ([89.32.41.233]:60113 "EHLO slot0.nejknio.cf"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726535AbfFQH2o (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Mon, 17 Jun 2019 03:28:44 -0400
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=nejknio.cf;
+ h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Reply-To:Message-ID; i=trade1@nejknio.cf;
+ bh=73Xs4LxjK+lP+h5mKCyFyWTpkoQ=;
+ b=SM9Wmu2ocpOM8zqsDxvTc9O+twv6evDOyPHPaGxeSFnOfpN+5wYfpc23LvP4I+4dkrYCyop3sIUM
+   k6k6fDXjboSr69AN3o+GoBmlEboGrTd/e3tqsOJMhNehJbuWyiBp+OqS8b5sL4MZA0NiGT/kE9sa
+   Wao5jg43BY0tMi4kloJbqTI8Fq3R0JCYXvW72RAb0qwdTGcyix5gy3rRreBlokZ4Bt8xOBuPT2Bu
+   ltVoEX6KAzeaGjmeYws4er0chlk/8ZGpXp4Pb2Jx5JRYQE0nLeT8OGeY9zw1w2bvZQF9UbVVwMsy
+   hcE3Cev0ONtM0PITGZ3aSD2HaCn+sW99JfXzLA==
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=nejknio.cf;
+ b=fKBMprocmu/QvqYlO1px6uDG2gRm/HhEt0HCxDQQ19BfRHzWGNFLFNKML9nebMUFMwXd3sSxmeoO
+   /A05Hdhw9fphczD1gu2pZxZUpu5jIZenoA6LCVazRfdnpLHG6NWqL6pq5woLqyPldgdyPKCZ2ML+
+   IUgSASOefLFaFAW9JJb5T2UQj/esU0IMKldYP6afIqNBLgknjHNQUQ7OZ2tNRgQNjw6wTAq4Jgit
+   bDGFMnB7icFRuVHPTTq5oIl3YFelhzHCoV4v4YUCV0Hip13hy1dLHa/pq8yi59emTWGLA/hYDm3i
+   X87gNCHEXmriJWhrCMEmcHkPxMjliWFMNute+A==;
+Content-Type: text/plain; charset="iso-8859-1"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: PRODUCT INQUIRY FOR EXPORT SHIPMENT
+To:     Recipients <trade1@nejknio.cf>
+From:   "Mark Maths" <trade1@nejknio.cf>
+Date:   Mon, 17 Jun 2019 10:09:12 +0300
+Reply-To: purchase_m.maths@aol.com
+Message-ID: <0.0.0.86D.1D524DB85C3C5B0.0@slot0.nejknio.cf>
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-> On 16. Jun 2019, at 19:56, malc <mlashley@gmail.com> wrote:
-> 
-> I think you want 'man 3 sctp_sendmsg' [1] and one of the flags
-> supported there... namely SCTP_UNORDERED. SCTP_ADDR_OVER, SCTP_ABORT,
-> SCTP_EOF
-> See also [2] which I'm guessing is relevant to what you're /trying/ to achieve.
-Using MSG_NOSIGNAL is definitely not what should be usedin this context,
-but the first question is:
-If the user provides an invalid flag, does this result in sctp_sendmsg() to
-return -1 and errno to be set to EINVAL?
-The more relevant question is:
-Assume sendmsg() returns -1. Shouldn't then no message be sent out?
-This send call is atomic.
-So I would expect
-* either no error is indicated and the message is accepted by the kernel
-* or an error is indicated and the message is not accepted by the kernel.
-Do we agree on this? Does the linux implementation follows this rule?
+Dear Sales team,
+ =
 
-Best regards
-Michael
-> 
-> Cheers,
-> malc.
-> 
-> [1] https://linux.die.net/man/3/sctp_sendmsg
-> [2] https://sourceforge.net/p/lksctp/mailman/message/11557899/
-> 
-> 
-> On Sun, Jun 16, 2019 at 2:40 PM Elmar Stellnberger <estellnb@elstel.org> wrote:
->> 
->>    While sctp_send works well at me, sctp_sendmsg gives me an EINVAL as
->> soon as I pass in some flags. Nonetheless it still sends the message in
->> spite of returning the EINVAL. That looks like an error to me. Please
->> investigate the issue.
->> 
->> while( len > 0 && ( ( ret = sctp_sendmsg( sid, bufp, len, NULL, 0, 0,
->> MSG_NOSIGNAL, (0), 1000, 0 ) ) >= 0 || ( ret==-1 && ( errno == EINTR ||
->> errno == ENOBUFS ) ) ) ) {  // returns EINVAL if flags are passed
->>     if( ret >= 0 ) { bufp += ret; len -= ret; } else if( errno ==
->> ENOBUFS ) { struct timespec ts; ts.tv_sec=0; ts.tv_nsec=10000;
->> nanosleep(&ts,NULL); } }
->> if( ret == -1 ) perror ("error sending request to stream #(0)");
->> 
->>   If you should be interested I can send the whole sctp test client
->> program.
->> 
->> 
->> 
->> 
->> 
->> 
+In furtherance to our market research, we have reviewed all your products t=
+ypes and we have finally interested in your product for our market here in =
 
+
+United State for your production. We introduce ourselves as Emilxa Tram SRL=
+, A general group of company located in the United State. =
+
+
+We are sourcing for new suppliers from your location =
+
+
+Kindly advice us if you accept new purchase orders, I will forward our PO f=
+or urgent order.
+
+Waiting for your response to send order. Reply to ( purchase_m.maths@aol.co=
+m)
+
+Best regards.
+Mark Maths
+Company Address:
+Emilxa Tram SRL Company Limited
+P.O. Box 978
+Road Town
+Tortola
+British Virgin Islands
+Contact information:
+Tel: +1 (284) 493 7235
+Email: purchase_m.maths@aol.com
+https://meridianbvi.com/contact-us/
