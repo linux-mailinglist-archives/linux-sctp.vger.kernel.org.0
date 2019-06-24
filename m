@@ -2,151 +2,102 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EBA650B87
-	for <lists+linux-sctp@lfdr.de>; Mon, 24 Jun 2019 15:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD64C51865
+	for <lists+linux-sctp@lfdr.de>; Mon, 24 Jun 2019 18:22:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728730AbfFXNLk (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 24 Jun 2019 09:11:40 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:42523 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727065AbfFXNLk (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 24 Jun 2019 09:11:40 -0400
-Received: by mail-wr1-f65.google.com with SMTP id x17so13836005wrl.9;
-        Mon, 24 Jun 2019 06:11:38 -0700 (PDT)
+        id S1729585AbfFXQV7 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 24 Jun 2019 12:21:59 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:45886 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732075AbfFXQVy (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 24 Jun 2019 12:21:54 -0400
+Received: by mail-pl1-f193.google.com with SMTP id bi6so7172648plb.12;
+        Mon, 24 Jun 2019 09:21:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=npt0LXugKTy+hAXtUpWeDiX4zCU8WFS28RZle6+ljmk=;
-        b=AlUMdKFkaAbuuNWDpspDhpDXIsefNdvWQeU2ySenv/4woxswMeXIzkgKRpDG8qfeg1
-         ZcVbi8IFJNDw6XZzeCHRn2VqWnVDN6YkwyQdkDC18yrZwLlgVoK0Go9YL2cAkPQBzV5e
-         RDk5OyEI7gYbeWAbWcJjAVanEbOtcES0QpVjiZ0Vi7y4ibE+2V5qwZ9It6TtHUH9YEwA
-         kYDJn3q35o4XWJ562xayC8Tsu0bJzqQn9/X1fvww6I743/Q2vtFF7bMRV9CuWQvxBtSS
-         LSqYgzYRMa5KAA3SMsXudxswpJqAMNQ4n+GGXSTpU2nkBk+Dz8u1Zrt9DEy5KqpnpnrX
-         HNBw==
+        h=from:to:cc:subject:date:message-id;
+        bh=0ZDk/tvhLrL6R7/cBntiQRLrBOZFWTr1y6joixwoFOI=;
+        b=IHTozgUNB1rwXN9rFfkcIkcSWGg/0Np+iLWfVIo+Lh81iKUOH4Oq9iposX+6vQnK9y
+         Lhc/nmCYeWJeHC/iwrmdPGIlvBpHrJbj7Ow9fR7GgnipFH8iyI9gbDu3xXKoSUvq6Op5
+         R7U8Q4ydGuQJBIwidQgsWygrcBcASX/TRllP49GQ3D2c232fuxxfvDwIta1ncysRuvae
+         +crVDCoC1X8rH5dNJ+0jqkw6Ek77JW58xt+chY5FpfnJVTttaN3OfEPZwcCxsjQvZ5PE
+         ccjFud/deekm/Ej8IwxQ5NoUUyKUfWhInhzQ4gObMlA5ynIgZR8KNNYrALdE86RFQ83S
+         gRnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=npt0LXugKTy+hAXtUpWeDiX4zCU8WFS28RZle6+ljmk=;
-        b=aFJRnLuF+S5tnCqKQ+u3HSofkEKpzlTUUnV259Ju3xP33s9KlKtTm7dNWAaH622Ku3
-         T1TIAiM6DYlbbLNciTA5W8lqaRg4x8pbFs8kMwjzEjBsAZ/eB++UDPq++2TmMVejy/oE
-         z0Fx/ZBrxq9xUwD6IXnEtiXfIeD5kYIgsQXbEOC0mmB19S5olrm/eSiddcD0MYdgW1S6
-         Ro4yUGv5XtQzc3EDrxkMJI2EFekYls2wQKqTjFGrNPJ2SN3BLSSCK/WOg8ghYoWeJgPr
-         6rn2Mn2b4gx404Meig5ePO/BPgMC8Hae+SRUO94Q47wRLL/az80FYKKqp2OiWIn2zmv2
-         fcLA==
-X-Gm-Message-State: APjAAAVpC2nRimOT+Onz8RQGe23w+bFTdZbDGR/y+xZiOyk+Z32ty3Ni
-        qBEKL/haP7+HOqUp0uQ8Litn5Hhwq+ywLTrflfrS2no+
-X-Google-Smtp-Source: APXvYqy1Y8YGwOQzqj7pKOAJDq1n7rwcOgvdN6WttWDlITIKxna9HmlE4pg5VUG3+w9B0qwfXyULF0PYyBQswmnngCA=
-X-Received: by 2002:adf:fe86:: with SMTP id l6mr1332207wrr.330.1561381897960;
- Mon, 24 Jun 2019 06:11:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <00000000000064c849058c0cbdc9@google.com>
-In-Reply-To: <00000000000064c849058c0cbdc9@google.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=0ZDk/tvhLrL6R7/cBntiQRLrBOZFWTr1y6joixwoFOI=;
+        b=Ith3xx3WgB+bqHvuu3D5AiAvcyKH8DLIotUUvrUhkn60ERSVqVGiEQupGvQ9cq7v+0
+         tGoyvbKGAI3qU0rlmJptjeTy227y6XHNO62EJTscVziIAC0vcBvtUE73D/GKka6404nF
+         MlGumWn8Fy7kuXnY/XlrKW134Qc/mBqvjIzmHN8BkTKv0yDm0lXF/eaEeuaE7v85xG2m
+         smk2e1fiOMxO+Stkks2WRtgyYgbHtNra7uqasAVIIb3XY4/ysLP4E+Kd0IgR2xQVq7HH
+         BMnwkgZe/ctrdRiVHjeQnkFTbiJqOQCUaurRJnfP3yQowXuY5b/60hIl6GaaVW7yJKun
+         KTKg==
+X-Gm-Message-State: APjAAAVLXgWcmMoS8yfCjEA/YqcnJ0bgEGtzLI4qHx+th+0FaWovQO/H
+        JfzSMlt0y5p2A/XTeW9NYU0BtAAH
+X-Google-Smtp-Source: APXvYqwoOHT/YbFl6Mw+iG5StGd3mLxGaRvPU/hx6chWU/O2FpZsj1esmU3cHKVqwSw3AqNuBfSamQ==
+X-Received: by 2002:a17:902:968c:: with SMTP id n12mr56321402plp.59.1561393313656;
+        Mon, 24 Jun 2019 09:21:53 -0700 (PDT)
+Received: from localhost ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id 22sm17480608pfu.179.2019.06.24.09.21.52
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 24 Jun 2019 09:21:53 -0700 (PDT)
 From:   Xin Long <lucien.xin@gmail.com>
-Date:   Mon, 24 Jun 2019 21:11:26 +0800
-Message-ID: <CADvbK_egxQekOXY2aZy_EkyLcEkR9N7Cgd+yd44xFGcCvk9Nog@mail.gmail.com>
-Subject: Re: memory leak in sctp_v4_create_accept_sk
-To:     syzbot <syzbot+afabda3890cc2f765041@syzkaller.appspotmail.com>
-Cc:     davem <davem@davemloft.net>, LKML <linux-kernel@vger.kernel.org>,
-        linux-sctp@vger.kernel.org,
+To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
+Cc:     davem@davemloft.net,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        network dev <netdev@vger.kernel.org>,
         Neil Horman <nhorman@tuxdriver.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Vlad Yasevich <vyasevich@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        syzkaller-bugs@googlegroups.com
+Subject: [PATCH net] sctp: change to hold sk after auth shkey is created successfully
+Date:   Tue, 25 Jun 2019 00:21:45 +0800
+Message-Id: <14de0d292dc2fe01ecadaba00feb925b337b558f.1561393305.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.1.0
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Mon, Jun 24, 2019 at 3:28 PM syzbot
-<syzbot+afabda3890cc2f765041@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    abf02e29 Merge tag 'pm-5.2-rc6' of git://git.kernel.org/pu..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=13470eb2a00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=56f1da14935c3cce
-> dashboard link: https://syzkaller.appspot.com/bug?extid=afabda3890cc2f765041
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15100a91a00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10c46026a00000
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+afabda3890cc2f765041@syzkaller.appspotmail.com
->
-> ffffffffda RBX: 00000000006fbc38 RCX: 0000000000446a79
-> BUG: memory leak
-> unreferenced object 0xffff888118137680 (size 1352):
->    comm "syz-executor360", pid 7164, jiffies 4294941839 (age 13.960s)
->    hex dump (first 32 bytes):
->      ac 14 ff aa 0a 80 01 1a 00 00 00 00 00 00 00 00  ................
->      02 00 07 40 00 00 00 00 00 00 00 00 00 00 00 00  ...@............
->    backtrace:
->      [<000000006c358063>] kmemleak_alloc_recursive
-> include/linux/kmemleak.h:43 [inline]
->      [<000000006c358063>] slab_post_alloc_hook mm/slab.h:439 [inline]
->      [<000000006c358063>] slab_alloc mm/slab.c:3326 [inline]
->      [<000000006c358063>] kmem_cache_alloc+0x134/0x270 mm/slab.c:3488
->      [<00000000f2fb26e7>] sk_prot_alloc+0x41/0x170 net/core/sock.c:1596
->      [<000000003c036edc>] sk_alloc+0x35/0x2f0 net/core/sock.c:1656
->      [<00000000c25725a4>] sctp_v4_create_accept_sk+0x32/0xb0
-> net/sctp/protocol.c:556
->      [<0000000049bd7e55>] sctp_accept+0x1df/0x290 net/sctp/socket.c:4913
->      [<00000000d287a63e>] inet_accept+0x4e/0x1d0 net/ipv4/af_inet.c:734
->      [<00000000acb0fc20>] __sys_accept4+0x12a/0x280 net/socket.c:1760
->      [<00000000bbdaf60b>] __do_sys_accept4 net/socket.c:1795 [inline]
->      [<00000000bbdaf60b>] __se_sys_accept4 net/socket.c:1792 [inline]
->      [<00000000bbdaf60b>] __x64_sys_accept4+0x22/0x30 net/socket.c:1792
->      [<000000006da547ee>] do_syscall_64+0x76/0x1a0
-> arch/x86/entry/common.c:301
->      [<00000000025f5c93>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
-The same issue as "memory leak in sctp_v6_create_accept_sk" one.
-Fix:
+Now in sctp_endpoint_init(), it holds the sk then creates auth
+shkey. But when the creation fails, it doesn't release the sk,
+which causes a sk defcnf leak,
+
+Here to fix it by only holding the sk when auth shkey is created
+successfully.
+
+Fixes: a29a5bd4f5c3 ("[SCTP]: Implement SCTP-AUTH initializations.")
+Reported-by: syzbot+afabda3890cc2f765041@syzkaller.appspotmail.com
+Reported-by: syzbot+276ca1c77a19977c0130@syzkaller.appspotmail.com
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+---
+ net/sctp/endpointola.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/net/sctp/endpointola.c b/net/sctp/endpointola.c
 index e358437..69cebb2 100644
 --- a/net/sctp/endpointola.c
 +++ b/net/sctp/endpointola.c
-@@ -118,10 +118,6 @@ static struct sctp_endpoint
-*sctp_endpoint_init(struct sctp_endpoint *ep,
-        /* Initialize the bind addr area */
-        sctp_bind_addr_init(&ep->base.bind_addr, 0);
-
--       /* Remember who we are attached to.  */
--       ep->base.sk = sk;
--       sock_hold(ep->base.sk);
+@@ -118,10 +118,6 @@ static struct sctp_endpoint *sctp_endpoint_init(struct sctp_endpoint *ep,
+ 	/* Initialize the bind addr area */
+ 	sctp_bind_addr_init(&ep->base.bind_addr, 0);
+ 
+-	/* Remember who we are attached to.  */
+-	ep->base.sk = sk;
+-	sock_hold(ep->base.sk);
 -
-        /* Create the lists of associations.  */
-        INIT_LIST_HEAD(&ep->asocs);
-
-@@ -154,6 +150,10 @@ static struct sctp_endpoint
-*sctp_endpoint_init(struct sctp_endpoint *ep,
-        ep->prsctp_enable = net->sctp.prsctp_enable;
-        ep->reconf_enable = net->sctp.reconf_enable;
-
-+       /* Remember who we are attached to.  */
-+       ep->base.sk = sk;
-+       sock_hold(ep->base.sk);
+ 	/* Create the lists of associations.  */
+ 	INIT_LIST_HEAD(&ep->asocs);
+ 
+@@ -154,6 +150,10 @@ static struct sctp_endpoint *sctp_endpoint_init(struct sctp_endpoint *ep,
+ 	ep->prsctp_enable = net->sctp.prsctp_enable;
+ 	ep->reconf_enable = net->sctp.reconf_enable;
+ 
++	/* Remember who we are attached to.  */
++	ep->base.sk = sk;
++	sock_hold(ep->base.sk);
 +
-        return ep;
-
+ 	return ep;
+ 
  nomem_shkey:
+-- 
+2.1.0
 
->
->
->
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this bug, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
