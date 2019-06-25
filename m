@@ -2,56 +2,57 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 155BB54F4A
-	for <lists+linux-sctp@lfdr.de>; Tue, 25 Jun 2019 14:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 699F2556CC
+	for <lists+linux-sctp@lfdr.de>; Tue, 25 Jun 2019 20:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731704AbfFYMtU (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 25 Jun 2019 08:49:20 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:34964 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731674AbfFYMtU (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 25 Jun 2019 08:49:20 -0400
-Received: by mail-wm1-f68.google.com with SMTP id c6so2868098wml.0;
-        Tue, 25 Jun 2019 05:49:18 -0700 (PDT)
+        id S1726712AbfFYSJV (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 25 Jun 2019 14:09:21 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:39213 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725921AbfFYSJU (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 25 Jun 2019 14:09:20 -0400
+Received: by mail-wr1-f66.google.com with SMTP id x4so18927195wrt.6;
+        Tue, 25 Jun 2019 11:09:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=4xUgT7aGCNMiM6+pJAlVCJdOnTAGvivpttC+lajH2Zk=;
-        b=RMxaRX3I/OLifYCmIHSU3kqJ4b168Vo8N0BFMol+hKTY5YTpZkBTumY1mFAzZmD+O4
-         P3C/8SdsZN8w4r1GdaHOyg8esQC10POUI0rK/YsnV1XEDZbE2jAhBKFSoWspCLnENx+O
-         JjeQB9G4Q+fX7ijFEMK7wctWvU87pg0egPw/wFITvDu/I7HvDuR2zzQDy4VuyevGFn+Q
-         Hlqywucr9eFmU96ieUVWKGBGKixuX9Dape1GLEUKrni5+dIPuvLyD9tQAf4PTe4kBdup
-         wJhbxdgOwXSzLI+jf7NaX4ey0s0yIzpQ3JtSzxGoi4SIe6jXcGorwXuxTRbzycIelR8a
-         fXAQ==
+        bh=ZecqvOpYjVE4Qmy3iXx46r1+0juBwCPcIwmCKG2SPQo=;
+        b=ec+kKmKZbzDX7Zfqdhmxrx2YsnL4UQMEAcBHEVXnDm9Oyg9TktxFuNuPzyhJoO/5AR
+         vtCvPowZ3sDh/R6kWqh72byj6M2c/oA7Nx+PHxC6gh04tc29HswFHyEo2h/qyv7rzsah
+         sFrTVdMifkYhbqGTcAaCT2yCKf4PIDA5ujIqxtsePpkCJrFBSH2AhVdmt2y6YDVpTSKk
+         31RezxlmomvcVpvRvpHBPJFeqij0pMlJ+lAxSwg2E5s/mv6jeK6NWQZvByqCeku/NO7Z
+         0UUQcmk+zGSaR6FSFYsnOTiJW6E3GFNye7NaylMoYs074POeeq66EWNxpatFiiF85l8V
+         YMPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4xUgT7aGCNMiM6+pJAlVCJdOnTAGvivpttC+lajH2Zk=;
-        b=jzkJqROruOaHumk2x+je3mjCQ1jKfx6zH5kiM+lR3WgIVK19I7qsEgRT0ZKfDmmFAN
-         DdW34WaUuXCfDy2aJbuabkuEGm9bnHlGbbaLHuHhexu4LpMG33Wz57KaQRukFq/BRuPX
-         QSjOt+UL9hA26WB0japPCVZCrLv327dsachmleQTeSS8GBiu1Kg7D2rbxkthBbcgPhHn
-         BZDcSbA8/TIhesltloX6P+dfi0oZJ1k8ScTso48IXvhEvkSndrkaZ3EfRQ40mBCiL0LH
-         qLjTd04gkaSS9QRJMFeXP1U/hTrz+wejgv0Mkr/jkTkMgsUFB/7lnhc2uAgU0BEBSzq+
-         S43A==
-X-Gm-Message-State: APjAAAUvdD6xYLFYeBJO0E4oZIR0BGSkZBmWYueil9Ll0mOO5DqVKa12
-        dEhpvitYasO9kcgWrnTkw6jSu0Kq+XBHRol+vE0=
-X-Google-Smtp-Source: APXvYqyK85BEt2usCU7nw683iQobdf3iUJnWwug9lnkrvy8wxZuZVoJRuIvq18hVNehfFJJUI7xcH4zBY28i/ubYmXg=
-X-Received: by 2002:a7b:cd15:: with SMTP id f21mr18613977wmj.99.1561466957977;
- Tue, 25 Jun 2019 05:49:17 -0700 (PDT)
+        bh=ZecqvOpYjVE4Qmy3iXx46r1+0juBwCPcIwmCKG2SPQo=;
+        b=EO6xEW9G3WlKp81iL4jI0EhgFqYSyVzppemhGbR6bf+yR88H5BeE4JHesFiK50HaSx
+         zZOHzwP/AiH8rUljiYzMvFVoVuGtdLetpXdY9ksBjLgUZ6GihpWqKq5xB03tRaepeYKW
+         qkbPWLPSHahWsTntKwweLUCyRKC8S7sV38kpiZlz3mXiyZBZ2g06akdzpAvqHj5kHca6
+         TMNx2b+FA9sw6W8/OQWeN2kvuiIaLAxMzi3fUVQ/jURFWXmeHEF7U1V/mTHBqFv2ZML3
+         QEyU17F25kzuhjUgJEda2UxvzCWdRQ0pQdl0sHy9tzbfExOyI+qDS6yvnHbPUtg7gnQj
+         Uyeg==
+X-Gm-Message-State: APjAAAUKX3ZMIpTx72gtRm09FczbzNXyuOaDi0WA4WEdcxRwZtTPFNgY
+        UM9XkoJBLJTGoOvrQIXCEVQ1EjmogyWIKZLCnvY=
+X-Google-Smtp-Source: APXvYqzhw69SkgOFk6LlkFmcnGAmxWjlPvy8XxMX2I7wJr8oGq7fwAAROAwIP+2Osw/KavN2yFmN1KPRvYp3fRiLe00=
+X-Received: by 2002:a5d:5386:: with SMTP id d6mr19819643wrv.207.1561486158264;
+ Tue, 25 Jun 2019 11:09:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <00000000000069c3140589f6d3b7@google.com>
-In-Reply-To: <00000000000069c3140589f6d3b7@google.com>
+References: <20190616153804.3604-1-hdanton@sina.com> <20190617134913.GL3436@localhost.localdomain>
+ <20190617144331.GE3500@localhost.localdomain>
+In-Reply-To: <20190617144331.GE3500@localhost.localdomain>
 From:   Xin Long <lucien.xin@gmail.com>
-Date:   Tue, 25 Jun 2019 20:49:06 +0800
-Message-ID: <CADvbK_efF3owbMbeQbRMOvMZY3mzevxR7nzEcAJgJrEEdAYrpQ@mail.gmail.com>
-Subject: Re: memory leak in sctp_get_port_local
-To:     syzbot <syzbot+079bf326b38072f849d9@syzkaller.appspotmail.com>
-Cc:     davem <davem@davemloft.net>, LKML <linux-kernel@vger.kernel.org>,
-        linux-sctp@vger.kernel.org,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        network dev <netdev@vger.kernel.org>,
+Date:   Wed, 26 Jun 2019 02:09:06 +0800
+Message-ID: <CADvbK_fWmRFs_wfcttH+1y6D_0zzZzKgpEOb64wYSGBA+1j86g@mail.gmail.com>
+Subject: Re: general protection fault in sctp_sched_prio_sched
+To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc:     Hillf Danton <hdanton@sina.com>,
+        syzbot <syzbot+c1a380d42b190ad1e559@syzkaller.appspotmail.com>,
+        davem <davem@davemloft.net>, LKML <linux-kernel@vger.kernel.org>,
+        linux-sctp@vger.kernel.org, network dev <netdev@vger.kernel.org>,
         Neil Horman <nhorman@tuxdriver.com>,
         syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
         Vlad Yasevich <vyasevich@gmail.com>
@@ -61,88 +62,114 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, May 29, 2019 at 2:28 AM syzbot
-<syzbot+079bf326b38072f849d9@syzkaller.appspotmail.com> wrote:
+On Mon, Jun 17, 2019 at 10:43 PM Marcelo Ricardo Leitner
+<marcelo.leitner@gmail.com> wrote:
 >
-> Hello,
+> On Mon, Jun 17, 2019 at 10:49:13AM -0300, Marcelo Ricardo Leitner wrote:
+> > Hi,
+> >
+> > On Sun, Jun 16, 2019 at 11:38:03PM +0800, Hillf Danton wrote:
+> > >
+> > > Hello Syzbot
+> > >
+> > > On Sat, 15 Jun 2019 16:36:06 -0700 (PDT) syzbot wrote:
+> > > > Hello,
+> > > >
+> > > > syzbot found the following crash on:
+> > > >
+> > ...
+> > > Check prio_head and bail out if it is not valid.
+> > >
+> > > Thanks
+> > > Hillf
+> > > ----->8---
+> > > ---
+> > > net/sctp/stream_sched_prio.c | 2 ++
+> > > 1 file changed, 2 insertions(+)
+> > >
+> > > diff --git a/net/sctp/stream_sched_prio.c b/net/sctp/stream_sched_prio.c
+> > > index 2245083..db25a43 100644
+> > > --- a/net/sctp/stream_sched_prio.c
+> > > +++ b/net/sctp/stream_sched_prio.c
+> > > @@ -135,6 +135,8 @@ static void sctp_sched_prio_sched(struct sctp_stream *stream,
+> > >     struct sctp_stream_priorities *prio, *prio_head;
+> > >
+> > >     prio_head = soute->prio_head;
+> > > +   if (!prio_head)
+> > > +           return;
+> > >
+> > >     /* Nothing to do if already scheduled */
+> > >     if (!list_empty(&soute->prio_list))
+> > > --
+> >
+> > Thanks but this is not a good fix for this. It will cause the stream
+> > to never be scheduled.
+> >
+> > The problem happens because of the fault injection that happened a bit
+> > before the crash, in here:
+> >
+> > int sctp_stream_init_ext(struct sctp_stream *stream, __u16 sid)
+> > {
+> >         struct sctp_stream_out_ext *soute;
+> >
+> >         soute = kzalloc(sizeof(*soute), GFP_KERNEL);
+> >         if (!soute)
+> >                 return -ENOMEM;
+> >         SCTP_SO(stream, sid)->ext = soute;  <---- [A]
+> >
+> >         return sctp_sched_init_sid(stream, sid, GFP_KERNEL);
+> >                       ^^^^^^^^^^^^---- [B] failed
+> > }
+> >
+> > This causes the 1st sendmsg to bail out with the error. When the 2nd
+> > one gets in, it will:
+> >
+> > sctp_sendmsg_to_asoc()
+> > {
+> > ...
+> >         if (unlikely(!SCTP_SO(&asoc->stream, sinfo->sinfo_stream)->ext)) {
+> >                                                                  ^^^^^--- [C]
+> >                 err = sctp_stream_init_ext(&asoc->stream, sinfo->sinfo_stream);
+> >                 if (err)
+> >                         goto err;
+> >         }
+> >
+> > [A] leaves ext initialized, despite the failed in [B]. Then in [C], it
+> > will not try to initialize again.
+> >
+> > We need to either uninitialize ->ext as error handling for [B], or
+> > improve the check on [C].
 >
-> syzbot found the following crash on:
+> The former one, please. This should be enough (untested):
 >
-> HEAD commit:    cd6c84d8 Linux 5.2-rc2
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=101a184aa00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=64479170dcaf0e11
-> dashboard link: https://syzkaller.appspot.com/bug?extid=079bf326b38072f849d9
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13b5dbbca00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1038444aa00000
+> diff --git a/net/sctp/stream.c b/net/sctp/stream.c
+> index 93ed07877337..25946604af85 100644
+> --- a/net/sctp/stream.c
+> +++ b/net/sctp/stream.c
+> @@ -153,13 +153,20 @@ int sctp_stream_init(struct sctp_stream *stream, __u16 outcnt, __u16 incnt,
+>  int sctp_stream_init_ext(struct sctp_stream *stream, __u16 sid)
+>  {
+>         struct sctp_stream_out_ext *soute;
+> +       int ret;
 >
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+079bf326b38072f849d9@syzkaller.appspotmail.com
+>         soute = kzalloc(sizeof(*soute), GFP_KERNEL);
+>         if (!soute)
+>                 return -ENOMEM;
+>         SCTP_SO(stream, sid)->ext = soute;
 >
-> : Permanently added '10.128.0.127' (ECDSA) to the list of known hosts.
-> executing program
-> executing program
-> BUG: memory leak
-> unreferenced object 0xffff8881288ca380 (size 64):
->    comm "softirq", pid 0, jiffies 4294944468 (age 13.410s)
->    hex dump (first 32 bytes):
->      21 4e 00 00 00 00 00 00 00 00 00 00 00 00 00 00  !N..............
->      28 ae 85 23 81 88 ff ff 00 00 00 00 00 00 00 00  (..#............
->    backtrace:
->      [<0000000054ece54d>] kmemleak_alloc_recursive
-> include/linux/kmemleak.h:55 [inline]
->      [<0000000054ece54d>] slab_post_alloc_hook mm/slab.h:439 [inline]
->      [<0000000054ece54d>] slab_alloc mm/slab.c:3326 [inline]
->      [<0000000054ece54d>] kmem_cache_alloc+0x134/0x270 mm/slab.c:3488
->      [<00000000d992ea84>] sctp_bucket_create net/sctp/socket.c:8395 [inline]
->      [<00000000d992ea84>] sctp_get_port_local+0x189/0x5b0
-> net/sctp/socket.c:8142
->      [<0000000099206d90>] sctp_do_bind+0xcc/0x1e0 net/sctp/socket.c:402
->      [<00000000b8795757>] sctp_bind+0x44/0x70 net/sctp/socket.c:302
->      [<00000000672a44aa>] inet6_bind+0x40/0xb7 net/ipv6/af_inet6.c:445
->      [<0000000001400e1c>] __sys_bind+0x11c/0x140 net/socket.c:1659
->      [<00000000e69e8036>] __do_sys_bind net/socket.c:1670 [inline]
->      [<00000000e69e8036>] __se_sys_bind net/socket.c:1668 [inline]
->      [<00000000e69e8036>] __x64_sys_bind+0x1e/0x30 net/socket.c:1668
->      [<000000001644bb1f>] do_syscall_64+0x76/0x1a0
-> arch/x86/entry/common.c:301
->      [<00000000199a1ea2>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> -       return sctp_sched_init_sid(stream, sid, GFP_KERNEL);
+> +       ret = sctp_sched_init_sid(stream, sid, GFP_KERNEL);
+> +       if (ret) {
+> +               kfree(SCTP_SO(stream, sid)->ext);
+> +               SCTP_SO(stream, sid)->ext = NULL;
+> +       }
+> +
+> +       return ret;
+>  }
 >
-will post a fix for this:
+>  void sctp_stream_free(struct sctp_stream *stream)
+>
 
-@@ -4816,6 +4816,7 @@ static int sctp_setsockopt(struct sock *sk, int
-level, int optname,
- static int sctp_connect(struct sock *sk, struct sockaddr *addr,
-                        int addr_len, int flags)
- {
-+       struct sctp_bind_addr *bp = &sctp_sk(sk)->ep->base.bind_addr;
-        struct inet_sock *inet = inet_sk(sk);
-        struct sctp_af *af;
-        int err = 0;
-@@ -4826,12 +4827,13 @@ static int sctp_connect(struct sock *sk,
-struct sockaddr *addr,
-                 addr, addr_len);
+Tested-by: Xin Long <lucien.xin@gmail.com>
 
-        /* We may need to bind the socket. */
--       if (!inet->inet_num) {
-+       if (!bp->port) {
-                if (sk->sk_prot->get_port(sk, 0)) {
-                        release_sock(sk);
-                        return -EAGAIN;
-                }
-                inet->inet_sport = htons(inet->inet_num);
-+               bp->port = inet->inet_sport;
-        }
-
->
->
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this bug, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+Hi, Marcelo, please feel free to move forward with this patch, :-)
