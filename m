@@ -2,174 +2,123 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 699F2556CC
-	for <lists+linux-sctp@lfdr.de>; Tue, 25 Jun 2019 20:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C735564A1
+	for <lists+linux-sctp@lfdr.de>; Wed, 26 Jun 2019 10:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726712AbfFYSJV (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 25 Jun 2019 14:09:21 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:39213 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725921AbfFYSJU (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 25 Jun 2019 14:09:20 -0400
-Received: by mail-wr1-f66.google.com with SMTP id x4so18927195wrt.6;
-        Tue, 25 Jun 2019 11:09:18 -0700 (PDT)
+        id S1725954AbfFZIbt (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 26 Jun 2019 04:31:49 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:46231 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725876AbfFZIbt (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 26 Jun 2019 04:31:49 -0400
+Received: by mail-pl1-f196.google.com with SMTP id e5so1020208pls.13;
+        Wed, 26 Jun 2019 01:31:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZecqvOpYjVE4Qmy3iXx46r1+0juBwCPcIwmCKG2SPQo=;
-        b=ec+kKmKZbzDX7Zfqdhmxrx2YsnL4UQMEAcBHEVXnDm9Oyg9TktxFuNuPzyhJoO/5AR
-         vtCvPowZ3sDh/R6kWqh72byj6M2c/oA7Nx+PHxC6gh04tc29HswFHyEo2h/qyv7rzsah
-         sFrTVdMifkYhbqGTcAaCT2yCKf4PIDA5ujIqxtsePpkCJrFBSH2AhVdmt2y6YDVpTSKk
-         31RezxlmomvcVpvRvpHBPJFeqij0pMlJ+lAxSwg2E5s/mv6jeK6NWQZvByqCeku/NO7Z
-         0UUQcmk+zGSaR6FSFYsnOTiJW6E3GFNye7NaylMoYs074POeeq66EWNxpatFiiF85l8V
-         YMPQ==
+        h=from:to:cc:subject:date:message-id;
+        bh=zdrESw8iHIgjHmeOWFycSHyaMdMBE1SNNEGcPhV8D1A=;
+        b=Xi4Bd96cy12wWlgGJ291hDlZv/V8QajY0PR0GoSThZSEzM4RFFZhIiYF0QSIKxaNTk
+         a7A7JNip4MNJ9DBOzCZDazrssnBpSpgMuAanWvPAOP7acG6IwGzzJySmC+5TY67bRmaM
+         nhj9PEsfGlPTPRkcpVge8nZQOvlEoMMoggm9UMNPKuClLoz2DmfmlEqkEe3xfH3UES24
+         ZyJ8538LYnzM2IsyTevk961jPtt6pENPdzyYvYUSiqR18TO7bfhdRcuvun2Ycj4xeE2r
+         HWnRAqMVL+NBpovGcYETTfrdbAa91BogjPvLVaNTe8Vssgoijgcc7mdvjcg/U5mXok8+
+         yKVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZecqvOpYjVE4Qmy3iXx46r1+0juBwCPcIwmCKG2SPQo=;
-        b=EO6xEW9G3WlKp81iL4jI0EhgFqYSyVzppemhGbR6bf+yR88H5BeE4JHesFiK50HaSx
-         zZOHzwP/AiH8rUljiYzMvFVoVuGtdLetpXdY9ksBjLgUZ6GihpWqKq5xB03tRaepeYKW
-         qkbPWLPSHahWsTntKwweLUCyRKC8S7sV38kpiZlz3mXiyZBZ2g06akdzpAvqHj5kHca6
-         TMNx2b+FA9sw6W8/OQWeN2kvuiIaLAxMzi3fUVQ/jURFWXmeHEF7U1V/mTHBqFv2ZML3
-         QEyU17F25kzuhjUgJEda2UxvzCWdRQ0pQdl0sHy9tzbfExOyI+qDS6yvnHbPUtg7gnQj
-         Uyeg==
-X-Gm-Message-State: APjAAAUKX3ZMIpTx72gtRm09FczbzNXyuOaDi0WA4WEdcxRwZtTPFNgY
-        UM9XkoJBLJTGoOvrQIXCEVQ1EjmogyWIKZLCnvY=
-X-Google-Smtp-Source: APXvYqzhw69SkgOFk6LlkFmcnGAmxWjlPvy8XxMX2I7wJr8oGq7fwAAROAwIP+2Osw/KavN2yFmN1KPRvYp3fRiLe00=
-X-Received: by 2002:a5d:5386:: with SMTP id d6mr19819643wrv.207.1561486158264;
- Tue, 25 Jun 2019 11:09:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190616153804.3604-1-hdanton@sina.com> <20190617134913.GL3436@localhost.localdomain>
- <20190617144331.GE3500@localhost.localdomain>
-In-Reply-To: <20190617144331.GE3500@localhost.localdomain>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=zdrESw8iHIgjHmeOWFycSHyaMdMBE1SNNEGcPhV8D1A=;
+        b=lky8Tvqw/OJyy96OLBWxspx9B66ykzyO2GeDR6d3ZHPeFT6IhDNbP+R+G/5dYvFPaJ
+         5DwE3nMJl5xa2N3DxnwoVzRlU2EdSCFtqSr5Co+aH50HzrmRw6QuAiu8DZV8TpcemFaZ
+         XMqXDllGF9HFF1dCXI59MgCB62JgtwsC9F74TMwygxirZT5DGQh0GcQcgSx9u85foXYJ
+         /9BjIXhcoWV4+g6HUUhuh0MOig4aGYOx8f5J/yddfxmKTAeSgKE/VJeOF6z5lcVCHvE+
+         WBdDzs3t6dIC7a9xStXu35EAGEGXWCJZhVp48ZzaoQHuQsskCtZy3AoMBUI8rN9hREiG
+         WNgA==
+X-Gm-Message-State: APjAAAV8UpzGUuD+/Dn4OFrB3QQd6sm7T9KyEw2pHpOV12Gr5aXAizVY
+        USpEMEicYsaxR4DmNUlr1h6LC9QU
+X-Google-Smtp-Source: APXvYqwGegYBbfgse3C9sKCGqkX8HINLf9J6ZFrs1aqmz0KIg4YcSe1TEl5okq8RHHC2EmGTyy/ixQ==
+X-Received: by 2002:a17:902:be0a:: with SMTP id r10mr3830691pls.51.1561537908280;
+        Wed, 26 Jun 2019 01:31:48 -0700 (PDT)
+Received: from localhost ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id f186sm18236813pfb.5.2019.06.26.01.31.46
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 26 Jun 2019 01:31:47 -0700 (PDT)
 From:   Xin Long <lucien.xin@gmail.com>
-Date:   Wed, 26 Jun 2019 02:09:06 +0800
-Message-ID: <CADvbK_fWmRFs_wfcttH+1y6D_0zzZzKgpEOb64wYSGBA+1j86g@mail.gmail.com>
-Subject: Re: general protection fault in sctp_sched_prio_sched
-To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     Hillf Danton <hdanton@sina.com>,
-        syzbot <syzbot+c1a380d42b190ad1e559@syzkaller.appspotmail.com>,
-        davem <davem@davemloft.net>, LKML <linux-kernel@vger.kernel.org>,
-        linux-sctp@vger.kernel.org, network dev <netdev@vger.kernel.org>,
+To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
+Cc:     davem@davemloft.net,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Vlad Yasevich <vyasevich@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        syzkaller-bugs@googlegroups.com
+Subject: [PATCH net] sctp: not bind the socket in sctp_connect
+Date:   Wed, 26 Jun 2019 16:31:39 +0800
+Message-Id: <35a0e4f6ca68185117c6e5517d8ac924cc2f9d05.1561537899.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.1.0
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Mon, Jun 17, 2019 at 10:43 PM Marcelo Ricardo Leitner
-<marcelo.leitner@gmail.com> wrote:
->
-> On Mon, Jun 17, 2019 at 10:49:13AM -0300, Marcelo Ricardo Leitner wrote:
-> > Hi,
-> >
-> > On Sun, Jun 16, 2019 at 11:38:03PM +0800, Hillf Danton wrote:
-> > >
-> > > Hello Syzbot
-> > >
-> > > On Sat, 15 Jun 2019 16:36:06 -0700 (PDT) syzbot wrote:
-> > > > Hello,
-> > > >
-> > > > syzbot found the following crash on:
-> > > >
-> > ...
-> > > Check prio_head and bail out if it is not valid.
-> > >
-> > > Thanks
-> > > Hillf
-> > > ----->8---
-> > > ---
-> > > net/sctp/stream_sched_prio.c | 2 ++
-> > > 1 file changed, 2 insertions(+)
-> > >
-> > > diff --git a/net/sctp/stream_sched_prio.c b/net/sctp/stream_sched_prio.c
-> > > index 2245083..db25a43 100644
-> > > --- a/net/sctp/stream_sched_prio.c
-> > > +++ b/net/sctp/stream_sched_prio.c
-> > > @@ -135,6 +135,8 @@ static void sctp_sched_prio_sched(struct sctp_stream *stream,
-> > >     struct sctp_stream_priorities *prio, *prio_head;
-> > >
-> > >     prio_head = soute->prio_head;
-> > > +   if (!prio_head)
-> > > +           return;
-> > >
-> > >     /* Nothing to do if already scheduled */
-> > >     if (!list_empty(&soute->prio_list))
-> > > --
-> >
-> > Thanks but this is not a good fix for this. It will cause the stream
-> > to never be scheduled.
-> >
-> > The problem happens because of the fault injection that happened a bit
-> > before the crash, in here:
-> >
-> > int sctp_stream_init_ext(struct sctp_stream *stream, __u16 sid)
-> > {
-> >         struct sctp_stream_out_ext *soute;
-> >
-> >         soute = kzalloc(sizeof(*soute), GFP_KERNEL);
-> >         if (!soute)
-> >                 return -ENOMEM;
-> >         SCTP_SO(stream, sid)->ext = soute;  <---- [A]
-> >
-> >         return sctp_sched_init_sid(stream, sid, GFP_KERNEL);
-> >                       ^^^^^^^^^^^^---- [B] failed
-> > }
-> >
-> > This causes the 1st sendmsg to bail out with the error. When the 2nd
-> > one gets in, it will:
-> >
-> > sctp_sendmsg_to_asoc()
-> > {
-> > ...
-> >         if (unlikely(!SCTP_SO(&asoc->stream, sinfo->sinfo_stream)->ext)) {
-> >                                                                  ^^^^^--- [C]
-> >                 err = sctp_stream_init_ext(&asoc->stream, sinfo->sinfo_stream);
-> >                 if (err)
-> >                         goto err;
-> >         }
-> >
-> > [A] leaves ext initialized, despite the failed in [B]. Then in [C], it
-> > will not try to initialize again.
-> >
-> > We need to either uninitialize ->ext as error handling for [B], or
-> > improve the check on [C].
->
-> The former one, please. This should be enough (untested):
->
-> diff --git a/net/sctp/stream.c b/net/sctp/stream.c
-> index 93ed07877337..25946604af85 100644
-> --- a/net/sctp/stream.c
-> +++ b/net/sctp/stream.c
-> @@ -153,13 +153,20 @@ int sctp_stream_init(struct sctp_stream *stream, __u16 outcnt, __u16 incnt,
->  int sctp_stream_init_ext(struct sctp_stream *stream, __u16 sid)
->  {
->         struct sctp_stream_out_ext *soute;
-> +       int ret;
->
->         soute = kzalloc(sizeof(*soute), GFP_KERNEL);
->         if (!soute)
->                 return -ENOMEM;
->         SCTP_SO(stream, sid)->ext = soute;
->
-> -       return sctp_sched_init_sid(stream, sid, GFP_KERNEL);
-> +       ret = sctp_sched_init_sid(stream, sid, GFP_KERNEL);
-> +       if (ret) {
-> +               kfree(SCTP_SO(stream, sid)->ext);
-> +               SCTP_SO(stream, sid)->ext = NULL;
-> +       }
-> +
-> +       return ret;
->  }
->
->  void sctp_stream_free(struct sctp_stream *stream)
->
+Now when sctp_connect() is called with a wrong sa_family, it binds
+to a port but doesn't set bp->port, then sctp_get_af_specific will
+return NULL and sctp_connect() returns -EINVAL.
 
-Tested-by: Xin Long <lucien.xin@gmail.com>
+Then if sctp_bind() is called to bind to another port, the last
+port it has bound will leak due to bp->port is NULL by then.
 
-Hi, Marcelo, please feel free to move forward with this patch, :-)
+sctp_connect() doesn't need to bind ports, as later __sctp_connect
+will do it if bp->port is NULL. So remove it from sctp_connect().
+While at it, remove the unnecessary sockaddr.sa_family len check
+as it's already done in sctp_inet_connect.
+
+Fixes: 644fbdeacf1d ("sctp: fix the issue that flags are ignored when using kernel_connect")
+Reported-by: syzbot+079bf326b38072f849d9@syzkaller.appspotmail.com
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+---
+ net/sctp/socket.c | 24 +++---------------------
+ 1 file changed, 3 insertions(+), 21 deletions(-)
+
+diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+index 39ea0a3..f33aa9e 100644
+--- a/net/sctp/socket.c
++++ b/net/sctp/socket.c
+@@ -4816,35 +4816,17 @@ static int sctp_setsockopt(struct sock *sk, int level, int optname,
+ static int sctp_connect(struct sock *sk, struct sockaddr *addr,
+ 			int addr_len, int flags)
+ {
+-	struct inet_sock *inet = inet_sk(sk);
+ 	struct sctp_af *af;
+-	int err = 0;
++	int err = -EINVAL;
+ 
+ 	lock_sock(sk);
+-
+ 	pr_debug("%s: sk:%p, sockaddr:%p, addr_len:%d\n", __func__, sk,
+ 		 addr, addr_len);
+ 
+-	/* We may need to bind the socket. */
+-	if (!inet->inet_num) {
+-		if (sk->sk_prot->get_port(sk, 0)) {
+-			release_sock(sk);
+-			return -EAGAIN;
+-		}
+-		inet->inet_sport = htons(inet->inet_num);
+-	}
+-
+ 	/* Validate addr_len before calling common connect/connectx routine. */
+-	af = addr_len < offsetofend(struct sockaddr, sa_family) ? NULL :
+-		sctp_get_af_specific(addr->sa_family);
+-	if (!af || addr_len < af->sockaddr_len) {
+-		err = -EINVAL;
+-	} else {
+-		/* Pass correct addr len to common routine (so it knows there
+-		 * is only one address being passed.
+-		 */
++	af = sctp_get_af_specific(addr->sa_family);
++	if (af && addr_len >= af->sockaddr_len)
+ 		err = __sctp_connect(sk, addr, af->sockaddr_len, flags, NULL);
+-	}
+ 
+ 	release_sock(sk);
+ 	return err;
+-- 
+2.1.0
+
