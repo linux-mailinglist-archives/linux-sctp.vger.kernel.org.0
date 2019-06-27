@@ -2,135 +2,116 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C795E58DFE
-	for <lists+linux-sctp@lfdr.de>; Fri, 28 Jun 2019 00:32:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A69E358E27
+	for <lists+linux-sctp@lfdr.de>; Fri, 28 Jun 2019 00:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726536AbfF0Wcl (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 27 Jun 2019 18:32:41 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:34634 "EHLO
+        id S1726596AbfF0WtD (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 27 Jun 2019 18:49:03 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:45251 "EHLO
         mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726445AbfF0Wcl (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 27 Jun 2019 18:32:41 -0400
-Received: by mail-qt1-f196.google.com with SMTP id m29so4309876qtu.1;
-        Thu, 27 Jun 2019 15:32:40 -0700 (PDT)
+        with ESMTP id S1726553AbfF0WtC (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 27 Jun 2019 18:49:02 -0400
+Received: by mail-qt1-f196.google.com with SMTP id j19so4275164qtr.12;
+        Thu, 27 Jun 2019 15:49:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=SUoGq6G5riyuNtCg/1PVUHtszoC+IVC1IorIgPy3qn0=;
-        b=D3NuZZn6NOfQEQYYO9YWglmDFXBRm4PBQz648NF2PAKqOggIkAjDEIGMl5FU45ou9q
-         UgdIGtde9tCNcMJlXk5l3kqDpp2v1yPRqeL/wZyzcB6UzTf9Qn63BDb5T2jtKObjjwot
-         lJyJondLUbepfltpPVMi1cqKg3VToHsBwjVZ+A/36BA4bKL3xhyrb4hL5xw6/QnsmHZW
-         ga/gHK2KBchJzL526jJaVc2raoAwpe00DAbqjMr4qEmea8pBYCE/qI1aq9LHK3CMUelw
-         Vxw2TPQypkmPleDjvm21hdt9dq4sxp9T522gaHEqi6hKU6EziHX/3jIbC0TxolXn/fZ7
-         iLMA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CBL7Iqg7TmTQjdm5GQzSJKEFJ96A3dOqtVJC/dibvRM=;
+        b=K5VBM5EzhOIIVp3ueIEhyEHlxH9OKb+ejx/+nlmBtk94ne8EVG04h+gPyVIMycDNVI
+         cXN1u2ut4GW9lvrTex8beNfLA6IPT118GBZuGdek5GYnmVuTG8D2hJXkrhsbgOeN7E5M
+         jyrh2Voza7+3KUFUzNTOTqISmZF3ktVHzwhzPYw0PW3J7c00BM2CBVAua5xynmXATN92
+         hMuswLl5koS2uenr07+0tVVbq6n7PKZnR/0c0ooq2+SJwMs2/JPpYgyhzF/Q13+g3Ylx
+         o17NzfNhv/3r/nW4AI2xnCZzwzSHvHeNS5jeTuTcJYElQ1mNOeI+58Iy/JqsAfNxqofD
+         ZQ1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=SUoGq6G5riyuNtCg/1PVUHtszoC+IVC1IorIgPy3qn0=;
-        b=XW1g5jMT9hfCeaARhbkPAgwwOSnl1zlyNn/4TYTkFxrENJTUsz6tGxH+UhIoaYnW/t
-         8g3dH/f20CLw5Bkw97LLqMr1OCGoFHUKYZPppZrAPQgvnMJbYDxkhvACRQnX5ZnJxXo4
-         tv+KQ2/lp18/SryRp9nn78Fo9a7fUqB5viEOkugGTanNjbsED1q6Urg7+18LTGOhAd+j
-         BFSXdeqsoZZkGm3AQrdVn9YtWpE9rFZOvblITTWLPmtflcmkHCUbdRw+54qprPlVCUgd
-         zG7j+BsvGDYzvdeolC/2gfkyp4OootkOrPcJ7DR9Q4tzREmMUzkP4f9QH6ES3bReBBGd
-         dilA==
-X-Gm-Message-State: APjAAAU5LqsQ8DV6qjLcOsAVlV52LyPmDvvAtim2NFM8Hd7aCxZ5gnAV
-        Ss3rS7r4WlTK4RQRE+RQdoY=
-X-Google-Smtp-Source: APXvYqzsvErsY4jPiohcWOGdIIily/IXJlA5CNsDhwwQf/5M3KFK4tiS44ZJCk8XepmSH2OLtu/QCw==
-X-Received: by 2002:a0c:8b54:: with SMTP id d20mr5362334qvc.1.1561674760179;
-        Thu, 27 Jun 2019 15:32:40 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CBL7Iqg7TmTQjdm5GQzSJKEFJ96A3dOqtVJC/dibvRM=;
+        b=DzuGxYbNCyBnzuzHP/yI/qbu/Y3EbvxiXdptaEFQQuJ4gi+pQU/uok0n+AWmbl9k+w
+         bSJ/k2wXNqEMejp81LnhmdW0F22QJLy/1YpMPayfLuM670sR82UnkJGUT2VVrJpor09+
+         lAqSz0Aao/d6yPOQkPSqDjiuP/Wz/5IHv84szontvRrRiRJj0yNsiCvxc9TDtgqDnVMW
+         EUiXi8kSxrOOOqs9ZMLVc+qesFBW9TaLNV5e5VnluQF/NQlHfCNQfD4opr5jT4HHxK2m
+         TBUBjX1HR5+l0Jt6s/oBDW/aBElq6sl9iyKWxaft9xvyVoAGueM1bTjgBp1/T1mYDNwg
+         Bbhw==
+X-Gm-Message-State: APjAAAXA+ejYaAwApcMYVF4ZvVAgq0SJI0y2Rpy3Ip5tSXF/Bz4IZxd0
+        bHbefdVmYRQ5sxv16AV2Xyc=
+X-Google-Smtp-Source: APXvYqw7rfpi2+0ancH0LkDPrQowsR9VX1tzNQadBi2CNPlrUB5KOXprL+MtCo7I2qd38XsumwkaTg==
+X-Received: by 2002:a0c:9214:: with SMTP id a20mr5416764qva.195.1561675741780;
+        Thu, 27 Jun 2019 15:49:01 -0700 (PDT)
 Received: from localhost.localdomain ([2001:1284:f013:1699:3b71:f1f7:949e:f780])
-        by smtp.gmail.com with ESMTPSA id k123sm206991qkf.13.2019.06.27.15.32.39
+        by smtp.gmail.com with ESMTPSA id m44sm230434qtm.54.2019.06.27.15.49.00
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 27 Jun 2019 15:32:39 -0700 (PDT)
+        Thu, 27 Jun 2019 15:49:01 -0700 (PDT)
 Received: by localhost.localdomain (Postfix, from userid 1000)
-        id CA7BBC3B91; Thu, 27 Jun 2019 19:32:36 -0300 (-03)
-Date:   Thu, 27 Jun 2019 19:32:36 -0300
+        id D0ECFC3B91; Thu, 27 Jun 2019 19:48:58 -0300 (-03)
 From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
-        davem@davemloft.net, Neil Horman <nhorman@tuxdriver.com>,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH net] sctp: not bind the socket in sctp_connect
-Message-ID: <20190627223236.GB2747@localhost.localdomain>
-References: <35a0e4f6ca68185117c6e5517d8ac924cc2f9d05.1561537899.git.lucien.xin@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     Xin Long <lucien.xin@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        linux-sctp@vger.kernel.org, Hillf Danton <hdanton@sina.com>
+Subject: [PATCH net] sctp: fix error handling on stream scheduler initialization
+Date:   Thu, 27 Jun 2019 19:48:10 -0300
+Message-Id: <bcbc85604e53843a731a79df620d5f92b194d085.1561675505.git.marcelo.leitner@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <35a0e4f6ca68185117c6e5517d8ac924cc2f9d05.1561537899.git.lucien.xin@gmail.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, Jun 26, 2019 at 04:31:39PM +0800, Xin Long wrote:
-> Now when sctp_connect() is called with a wrong sa_family, it binds
-> to a port but doesn't set bp->port, then sctp_get_af_specific will
-> return NULL and sctp_connect() returns -EINVAL.
-> 
-> Then if sctp_bind() is called to bind to another port, the last
-> port it has bound will leak due to bp->port is NULL by then.
-> 
-> sctp_connect() doesn't need to bind ports, as later __sctp_connect
-> will do it if bp->port is NULL. So remove it from sctp_connect().
-> While at it, remove the unnecessary sockaddr.sa_family len check
-> as it's already done in sctp_inet_connect.
-> 
-> Fixes: 644fbdeacf1d ("sctp: fix the issue that flags are ignored when using kernel_connect")
-> Reported-by: syzbot+079bf326b38072f849d9@syzkaller.appspotmail.com
-> Signed-off-by: Xin Long <lucien.xin@gmail.com>
+It allocates the extended area for outbound streams only on sendmsg
+calls, if they are not yet allocated.  When using the priority
+stream scheduler, this initialization may imply into a subsequent
+allocation, which may fail.  In this case, it was aborting the stream
+scheduler initialization but leaving the ->ext pointer (allocated) in
+there, thus in a partially initialized state.  On a subsequent call to
+sendmsg, it would notice the ->ext pointer in there, and trip on
+uninitialized stuff when trying to schedule the data chunk.
 
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+The fix is undo the ->ext initialization if the stream scheduler
+initialization fails and avoid the partially initialized state.
 
-> ---
->  net/sctp/socket.c | 24 +++---------------------
->  1 file changed, 3 insertions(+), 21 deletions(-)
-> 
-> diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-> index 39ea0a3..f33aa9e 100644
-> --- a/net/sctp/socket.c
-> +++ b/net/sctp/socket.c
-> @@ -4816,35 +4816,17 @@ static int sctp_setsockopt(struct sock *sk, int level, int optname,
->  static int sctp_connect(struct sock *sk, struct sockaddr *addr,
->  			int addr_len, int flags)
->  {
-> -	struct inet_sock *inet = inet_sk(sk);
->  	struct sctp_af *af;
-> -	int err = 0;
-> +	int err = -EINVAL;
->  
->  	lock_sock(sk);
-> -
->  	pr_debug("%s: sk:%p, sockaddr:%p, addr_len:%d\n", __func__, sk,
->  		 addr, addr_len);
->  
-> -	/* We may need to bind the socket. */
-> -	if (!inet->inet_num) {
-> -		if (sk->sk_prot->get_port(sk, 0)) {
-> -			release_sock(sk);
-> -			return -EAGAIN;
-> -		}
-> -		inet->inet_sport = htons(inet->inet_num);
-> -	}
-> -
->  	/* Validate addr_len before calling common connect/connectx routine. */
-> -	af = addr_len < offsetofend(struct sockaddr, sa_family) ? NULL :
-> -		sctp_get_af_specific(addr->sa_family);
-> -	if (!af || addr_len < af->sockaddr_len) {
-> -		err = -EINVAL;
-> -	} else {
-> -		/* Pass correct addr len to common routine (so it knows there
-> -		 * is only one address being passed.
-> -		 */
-> +	af = sctp_get_af_specific(addr->sa_family);
-> +	if (af && addr_len >= af->sockaddr_len)
->  		err = __sctp_connect(sk, addr, af->sockaddr_len, flags, NULL);
-> -	}
->  
->  	release_sock(sk);
->  	return err;
-> -- 
-> 2.1.0
-> 
+Although syzkaller bisected this to commit 4ff40b86262b ("sctp: set
+chunk transport correctly when it's a new asoc"), this bug was actually
+introduced on the commit I marked below.
+
+Reported-by: syzbot+c1a380d42b190ad1e559@syzkaller.appspotmail.com
+Fixes: 5bbbbe32a431 ("sctp: introduce stream scheduler foundations")
+Tested-by: Xin Long <lucien.xin@gmail.com>
+Signed-off-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+---
+ net/sctp/stream.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/net/sctp/stream.c b/net/sctp/stream.c
+index 93ed07877337eace4ef7f4775dda5868359ada37..25946604af85c09917e63e5c4a8d7d6fa2caebc4 100644
+--- a/net/sctp/stream.c
++++ b/net/sctp/stream.c
+@@ -153,13 +153,20 @@ int sctp_stream_init(struct sctp_stream *stream, __u16 outcnt, __u16 incnt,
+ int sctp_stream_init_ext(struct sctp_stream *stream, __u16 sid)
+ {
+ 	struct sctp_stream_out_ext *soute;
++	int ret;
+ 
+ 	soute = kzalloc(sizeof(*soute), GFP_KERNEL);
+ 	if (!soute)
+ 		return -ENOMEM;
+ 	SCTP_SO(stream, sid)->ext = soute;
+ 
+-	return sctp_sched_init_sid(stream, sid, GFP_KERNEL);
++	ret = sctp_sched_init_sid(stream, sid, GFP_KERNEL);
++	if (ret) {
++		kfree(SCTP_SO(stream, sid)->ext);
++		SCTP_SO(stream, sid)->ext = NULL;
++	}
++
++	return ret;
+ }
+ 
+ void sctp_stream_free(struct sctp_stream *stream)
+-- 
+2.21.0
+
