@@ -2,63 +2,28 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F0375C6E1
-	for <lists+linux-sctp@lfdr.de>; Tue,  2 Jul 2019 04:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C16705C85D
+	for <lists+linux-sctp@lfdr.de>; Tue,  2 Jul 2019 06:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726781AbfGBCCZ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 1 Jul 2019 22:02:25 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:53798 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726486AbfGBCCZ (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 1 Jul 2019 22:02:25 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::d71])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id F1C7914DE9788;
-        Mon,  1 Jul 2019 19:02:24 -0700 (PDT)
-Date:   Mon, 01 Jul 2019 19:02:24 -0700 (PDT)
-Message-Id: <20190701.190224.767132828354505683.davem@davemloft.net>
-To:     marcelo.leitner@gmail.com
-Cc:     netdev@vger.kernel.org, lucien.xin@gmail.com,
-        nhorman@tuxdriver.com, linux-sctp@vger.kernel.org, hdanton@sina.com
-Subject: Re: [PATCH net] sctp: fix error handling on stream scheduler
- initialization
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <bcbc85604e53843a731a79df620d5f92b194d085.1561675505.git.marcelo.leitner@gmail.com>
-References: <bcbc85604e53843a731a79df620d5f92b194d085.1561675505.git.marcelo.leitner@gmail.com>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 01 Jul 2019 19:02:25 -0700 (PDT)
+        id S1725780AbfGBEbN (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 2 Jul 2019 00:31:13 -0400
+Received: from [60.13.42.177] ([60.13.42.177]:41544 "EHLO
+        localhost.localdomain" rhost-flags-FAIL-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725648AbfGBEbN (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 2 Jul 2019 00:31:13 -0400
+X-Greylist: delayed 3273 seconds by postgrey-1.27 at vger.kernel.org; Tue, 02 Jul 2019 00:31:12 EDT
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+        by localhost.localdomain (Postfix) with SMTP id 6BC3A123E75D
+        for <linux-sctp@vger.kernel.org>; Tue,  2 Jul 2019 11:23:11 +0800 (CST)
+From:   linux-sctp@vger.kernel.org
+To:     linux-sctp@vger.kernel.org
+Reply-To: demexinruslan+Jd5op@gmail.com
+Subject: !!!Klientskie bazy. Email: prodawez@armyspy.com Uznajte podrobnee.
+Message-Id: <20190702032311.6BC3A123E75D@localhost.localdomain>
+Date:   Tue,  2 Jul 2019 11:23:11 +0800 (CST)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Date: Thu, 27 Jun 2019 19:48:10 -0300
-
-> It allocates the extended area for outbound streams only on sendmsg
-> calls, if they are not yet allocated.  When using the priority
-> stream scheduler, this initialization may imply into a subsequent
-> allocation, which may fail.  In this case, it was aborting the stream
-> scheduler initialization but leaving the ->ext pointer (allocated) in
-> there, thus in a partially initialized state.  On a subsequent call to
-> sendmsg, it would notice the ->ext pointer in there, and trip on
-> uninitialized stuff when trying to schedule the data chunk.
-> 
-> The fix is undo the ->ext initialization if the stream scheduler
-> initialization fails and avoid the partially initialized state.
-> 
-> Although syzkaller bisected this to commit 4ff40b86262b ("sctp: set
-> chunk transport correctly when it's a new asoc"), this bug was actually
-> introduced on the commit I marked below.
-> 
-> Reported-by: syzbot+c1a380d42b190ad1e559@syzkaller.appspotmail.com
-> Fixes: 5bbbbe32a431 ("sctp: introduce stream scheduler foundations")
-> Tested-by: Xin Long <lucien.xin@gmail.com>
-> Signed-off-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-
-Applied and queued up for -stable, thanks.
+!!!Klientskie bazy. Email: prodawez@armyspy.com Uznajte podrobnee.
