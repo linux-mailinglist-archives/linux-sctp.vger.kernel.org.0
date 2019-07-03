@@ -2,120 +2,89 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 464D25DA5C
-	for <lists+linux-sctp@lfdr.de>; Wed,  3 Jul 2019 03:10:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7614E5E1E9
+	for <lists+linux-sctp@lfdr.de>; Wed,  3 Jul 2019 12:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727152AbfGCBKC (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 2 Jul 2019 21:10:02 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:43265 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726329AbfGCBKC (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 2 Jul 2019 21:10:02 -0400
-Received: by mail-pf1-f193.google.com with SMTP id i189so309687pfg.10
-        for <linux-sctp@vger.kernel.org>; Tue, 02 Jul 2019 18:10:02 -0700 (PDT)
+        id S1727297AbfGCKU3 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 3 Jul 2019 06:20:29 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:45380 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726486AbfGCKU3 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 3 Jul 2019 06:20:29 -0400
+Received: by mail-pf1-f195.google.com with SMTP id r1so1018536pfq.12;
+        Wed, 03 Jul 2019 03:20:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=a6DSR9zMVNSIPOHutOGYYowzxyygnNjjAgHH6t/fH3Q=;
-        b=ZMFtd4fnwBhjqDgEcmMPYqwTfM3scvxup6E9ES0eTl1QBLbkm4L+EYQQqrUrDt7I0f
-         1W7i7K4qFAKEM9FkLZbBvOwEPA2KShqct0FnQuEtwjRtbN+49uyAwET1ta2fkPFntUdL
-         d1HKAJ/XrkEjycdCCsfgQI1lqoOc8poLOC7Ys=
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=JSXFORvWIxH8plnKtE8S95v6Fa7oKL7tWeFc2WXlLLA=;
+        b=J6wr78MMn1baGGtuSpzes/kCt3oYwuhVVgfMqUxJ7r5HHV8KV4AEIuA9Fvu9Em0pRd
+         kuf4YWI6eFiXnIqnZ8LZr0/z8LxbDOYrSSoDt5qV7Qas25g7FZmmfP/E6UtYaovO4zfx
+         QlKxKSydHi6yU7QLomzJx4QuHFVEjCjMym8hGEG28I7ZFUifKIbA/gqAabOtC24qFxQg
+         nm7mvOSqfCsS45EHUJt3qkbTgBEzr2XK3zxCgMIrXdDwDtxHBk8Y3XxUqqV9IpQFFaZN
+         GEVvdLEmvLiGQT2GMZQ6fjW4mwvLzvFX6/XJ2RSsKhY9DRIpQJyC1QQCKhf2tqn+gIyb
+         nr7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=a6DSR9zMVNSIPOHutOGYYowzxyygnNjjAgHH6t/fH3Q=;
-        b=CgXAis/dnXid2i/l/j78wn8fc9UeVAav1TYYKmd1C6lf12fK7Gp/OYkUhT3NNTgPem
-         vlnmCkL8mV4EYKT9NqtdDzJXQL1/eHBV/U07MqYvjSEXPhYDxsd3YK8C8GcQ0wPz4ZFE
-         GtrZpd6O/F0ITQcTuZO5NSIPLSVRn01hi8oleOcRiB7fainoVd7UKmVYv9PS5NrRmWGc
-         HQRN3D/8kw6s5ZfIZmzAELYW6t/VEnmHcult4nxnhewBzsYwgmphFPSbeOVAJa0YwZb8
-         3aTynzOqDhUfDQ6YZQfM41Li99TwivDaGXP6/OBGSK8ELqLsc+alsAyCCJhZPF1+rl/H
-         LcPA==
-X-Gm-Message-State: APjAAAXua+5+r1k0cyT9CxIh5ez3Zr8R3HdN8/lnGou6XkjshiHfSLJN
-        fquDo3xbnoCFenPBx4Ur1aebJA==
-X-Google-Smtp-Source: APXvYqxbnDf0epA4zxEVMf+KQtiS47h5ZVi4HVl0lxeY8pfHVzHmCshNhotvWTcEjEQC+XEnSbkkRg==
-X-Received: by 2002:a17:90a:b908:: with SMTP id p8mr7901348pjr.94.1562101447970;
-        Tue, 02 Jul 2019 14:04:07 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id g1sm52207pgg.27.2019.07.02.14.04.02
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 02 Jul 2019 14:04:03 -0700 (PDT)
-Date:   Tue, 2 Jul 2019 09:33:02 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Joe Perches <joe@perches.com>
-Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
-        Andreas Dilger <adilger@dilger.ca>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shyam Saini <shyam.saini@amarulasolutions.com>,
-        kernel-hardening@lists.openwall.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        netdev@vger.kernel.org, linux-ext4 <linux-ext4@vger.kernel.org>,
-        devel@lists.orangefs.org, linux-mm@kvack.org,
-        linux-sctp@vger.kernel.org, bpf@vger.kernel.org,
-        kvm@vger.kernel.org, mayhs11saini@gmail.com
-Subject: Re: [PATCH V2] include: linux: Regularise the use of FIELD_SIZEOF
- macro
-Message-ID: <201907020931.2170BAB@keescook>
-References: <20190611193836.2772-1-shyam.saini@amarulasolutions.com>
- <20190611134831.a60c11f4b691d14d04a87e29@linux-foundation.org>
- <6DCAE4F8-3BEC-45F2-A733-F4D15850B7F3@dilger.ca>
- <20190629142510.GA10629@avx2>
- <c3b83ba7f9b003dd4fb9cad885461ce93165dc04.camel@perches.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c3b83ba7f9b003dd4fb9cad885461ce93165dc04.camel@perches.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=JSXFORvWIxH8plnKtE8S95v6Fa7oKL7tWeFc2WXlLLA=;
+        b=aYIP04NK4g5voRxT3A4KUI8jr4QxjK3gU34sHkkZ6y7gR/kK8pk8pdrdzBCJGAbzV5
+         WzQG4xQJkhhxya9Nd/Debn2nZ73PyI/IEJ0wb2rSdC0eGEGBa0FZvPXY8BbPlM48srig
+         azATwNLHnR5X7sNaruFtVSFEwusInj6c4j5LOspAmDVvqG9Osi3w8EuzuovzSHBHNP+J
+         H/OilS+zvfLhpJQv5jXyGpWqMyWGL2e2DyN4Fs75CJiyXig1S/xj65yZY+ZmeR4fXEkW
+         rp60IZoTzPZc1hzjrqowrZD26bLKUybzGdLAUPiRJPwD1L+FH0hkXN6sh6tn4lvXmiSr
+         2prA==
+X-Gm-Message-State: APjAAAW44MN9S7qrl7nIR8JwWfAGr33QTQ2Z5WfUgko0FwOl0DWO6qms
+        9Y8axhnXANHFi1F8d7St6uC0O5hb
+X-Google-Smtp-Source: APXvYqyZHNWDpVk8sQFfJPda0eBRVozA+U5VSCYqSwYI1x5KQOcBsE0MnaN1CmUpu+zXB9TRAHRvvw==
+X-Received: by 2002:a17:90a:ac13:: with SMTP id o19mr11782452pjq.143.1562149228070;
+        Wed, 03 Jul 2019 03:20:28 -0700 (PDT)
+Received: from localhost ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id u5sm1705440pgp.19.2019.07.03.03.20.26
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 03 Jul 2019 03:20:27 -0700 (PDT)
+From:   Xin Long <lucien.xin@gmail.com>
+To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
+Cc:     davem@davemloft.net,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>
+Subject: [PATCH net] sctp: count data bundling sack chunk for outctrlchunks
+Date:   Wed,  3 Jul 2019 18:20:20 +0800
+Message-Id: <62e917e312bc582e96fa19b502561e37ca7f91a6.1562149220.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.1.0
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Sat, Jun 29, 2019 at 09:45:10AM -0700, Joe Perches wrote:
-> On Sat, 2019-06-29 at 17:25 +0300, Alexey Dobriyan wrote:
-> > On Tue, Jun 11, 2019 at 03:00:10PM -0600, Andreas Dilger wrote:
-> > > On Jun 11, 2019, at 2:48 PM, Andrew Morton <akpm@linux-foundation.org> wrote:
-> > > > On Wed, 12 Jun 2019 01:08:36 +0530 Shyam Saini <shyam.saini@amarulasolutions.com> wrote:
-> > > I did a check, and FIELD_SIZEOF() is used about 350x, while sizeof_field()
-> > > is about 30x, and SIZEOF_FIELD() is only about 5x.
-> > > 
-> > > That said, I'm much more in favour of "sizeof_field()" or "sizeof_member()"
-> > > than FIELD_SIZEOF().  Not only does that better match "offsetof()", with
-> > > which it is closely related, but is also closer to the original "sizeof()".
-> > > 
-> > > Since this is a rather trivial change, it can be split into a number of
-> > > patches to get approval/landing via subsystem maintainers, and there is no
-> > > huge urgency to remove the original macros until the users are gone.  It
-> > > would make sense to remove SIZEOF_FIELD() and sizeof_field() quickly so
-> > > they don't gain more users, and the remaining FIELD_SIZEOF() users can be
-> > > whittled away as the patches come through the maintainer trees.
-> > 
-> > The signature should be
-> > 
-> > 	sizeof_member(T, m)
-> > 
-> > it is proper English,
-> > it is lowercase, so is easier to type,
-> > it uses standard term (member, not field),
-> > it blends in with standard "sizeof" operator,
-> 
-> yes please.
-> 
-> Also, a simple script conversion applied
-> immediately after an rc1 might be easiest
-> rather than individual patches.
+Now all ctrl chunks are counted for asoc stats.octrlchunks and net
+SCTP_MIB_OUTCTRLCHUNKS either after queuing up or bundling, other
+than the chunk maked and bundled in sctp_packet_bundle_sack, which
+caused 'outctrlchunks' not consistent with 'inctrlchunks' in peer.
 
-This seems reasonable to me. I think the patch steps would be:
+This issue exists since very beginning, here to fix it by increasing
+both net SCTP_MIB_OUTCTRLCHUNKS and asoc stats.octrlchunks when sack
+chunk is maked and bundled in sctp_packet_bundle_sack.
 
-1) implement sizeof_member(T, m) as a stand-alone macro
-2) do a scripted replacement of all identical macros.
-3) remove all the identical macros.
+Reported-by: Ja Ram Jeon <jajeon@redhat.com>
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+---
+ net/sctp/output.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Step 2 can be a patch that includes the script used to do the
-replacement. That way Linus can choose to just run the script instead of
-taking the patch.
-
+diff --git a/net/sctp/output.c b/net/sctp/output.c
+index e0c2747..dbda7e7 100644
+--- a/net/sctp/output.c
++++ b/net/sctp/output.c
+@@ -282,6 +282,9 @@ static enum sctp_xmit sctp_packet_bundle_sack(struct sctp_packet *pkt,
+ 					sctp_chunk_free(sack);
+ 					goto out;
+ 				}
++				SCTP_INC_STATS(sock_net(asoc->base.sk),
++					       SCTP_MIB_OUTCTRLCHUNKS);
++				asoc->stats.octrlchunks++;
+ 				asoc->peer.sack_needed = 0;
+ 				if (del_timer(timer))
+ 					sctp_association_put(asoc);
 -- 
-Kees Cook
+2.1.0
+
