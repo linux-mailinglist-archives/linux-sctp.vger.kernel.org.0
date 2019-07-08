@@ -2,160 +2,101 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6707C626B7
-	for <lists+linux-sctp@lfdr.de>; Mon,  8 Jul 2019 18:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 216C5626C1
+	for <lists+linux-sctp@lfdr.de>; Mon,  8 Jul 2019 18:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391586AbfGHQ5u (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 8 Jul 2019 12:57:50 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:35364 "EHLO
+        id S2387527AbfGHQ7t (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 8 Jul 2019 12:59:49 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:46508 "EHLO
         mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391585AbfGHQ5u (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 8 Jul 2019 12:57:50 -0400
-Received: by mail-pl1-f193.google.com with SMTP id w24so8575878plp.2;
-        Mon, 08 Jul 2019 09:57:50 -0700 (PDT)
+        with ESMTP id S1726318AbfGHQ7t (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 8 Jul 2019 12:59:49 -0400
+Received: by mail-pl1-f193.google.com with SMTP id c2so7008852plz.13;
+        Mon, 08 Jul 2019 09:59:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=RAoKx9mz5JWp2hq7L9ozatzLp5ZOOuU3FDgxWeBPxPY=;
-        b=LQmRIBrJY8zJpWTk3WW0d1wmUgqNCZcHBB1O+3a/qRdkfXNha46FAXQsyqA/fjv0yy
-         6brqWThW0iN2Z2aOadDsM+ZP2Dbn72SOaOS5fg8VYbDXbpTuvYBnBp6fdekQNYkaibzS
-         zlACctbxyJbSFtAdT1k9jE8fGosnET0LfmuJYFL/3TLblfiQyxsW6WmJ8z5PEMcY7+Ma
-         1482yu7MisoJChrFwNORUv6UnEmZgle63OGNuay+RJUc4jfSZo9D3CVT9bBQ/xf0MnoW
-         RSObXman/7GcY39jd5Im5l6GM4a1kbGxdwzc5c4LgSgL+FomaQMYVXeOQj43zl5DnRQC
-         ZMaw==
+        h=from:to:cc:subject:date:message-id;
+        bh=M3r77HPoR75nODznb59FunQ4r0tjo8oLCP/b83AxrN8=;
+        b=KatOOtnQGpKUP1iSy6HoQEZiDXZESM2WHSTXHadmTzY1H8QGTiL9VVVFjI1tjvMiz1
+         2WO37JzpdM1TeYEXRYD9iSV/6nnOh6pZTrBhXKRpePJQ3m/5q0BYfhSMwlCv3JYiPjXG
+         7mNiRfaHf8xC7vH7XNrvcNy1oTCPIZgv4yuD+HmyFBaMdD9w93OGh0sjAhJUnZuEbGwZ
+         Jn/pKvY9l1Ovy0t2G61W/GtQsyvO/3UhMOtXgkKxp9XVwk2rQ4iDJbXlnIkTxy1IOPmk
+         1EUMAaoLpDgEBeqwADNX0iS21kdLUI/uIHMinQ9vIU84aiplU8V5xgmYaA7Q7Fr6KBg9
+         EzxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=RAoKx9mz5JWp2hq7L9ozatzLp5ZOOuU3FDgxWeBPxPY=;
-        b=Lq7KBi4byTGwRR+tguCgOm8IeV5WroXMEhMvJgHH7s+PHWQ4iKHKG8eeR2oiABhl/+
-         wNLYwOHt0RuNTd7IXWxGLqF7Ee/T/lyLCQ1o1qSSq/l4y4k+wmk7NATxW6uEEfRxDlh3
-         g6COpo5RT5E5dQV5X/v+ZceHnIiI8X2pzDi5bJXBIWUNyK91iPD48z8rlGDPVknWF2GB
-         uQ38tbwFsLWa6JLj21E2hiAXoleZIwpUukiWlqKHqcf4+/IWcdZJZ8Ert4iDRKmFuYtP
-         xMmO9pw6ret5kFsHOkT5NwGqXqKIsh4gyeQ/RAO1LzWwi71XKYtAg4pqCq8dDCNG+cdh
-         v6EA==
-X-Gm-Message-State: APjAAAVscOgiYC2/U7XaHa1ofsEbY6LqSZEaKLQiQk7Yr/ylf/nXDM8a
-        djFTE2T1SYjvslIZ1WQhAt8LhaSU
-X-Google-Smtp-Source: APXvYqycxnyqVdtSnefbWdOy/I5TI3BanY+9Kddp4TCrE4fVQya1pRGluKzq8QrodAtCtKABaLUr2w==
-X-Received: by 2002:a17:902:2aa8:: with SMTP id j37mr25185331plb.316.1562605069636;
-        Mon, 08 Jul 2019 09:57:49 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=M3r77HPoR75nODznb59FunQ4r0tjo8oLCP/b83AxrN8=;
+        b=Qx2baKIt5/b6IBrNhxqT/Qv6lR9ql+PUA8X8s5MZOwYY6aungbFkG/l/HARQ8E8hVg
+         ul6yFA+Ilp8M4HlvN7ESrNMigMZwHCxGvmO2J3Y2awjYlC20COXlhEt+Wvwq/xDZpO1V
+         MZ34nvZjO59fHf/WgPHVVO/KmvR0+S5Ei6UOcEHVXRwzc8z9jkaOSZkrITnPsU/iPfim
+         dYnBILkBCfMHBjOu0BHqNFd+Vilin1GDF135rTx4ly4HluhJxczpyKAQuc6wOXk64jvx
+         3iiNdmMxboD0eNPcX9UBuLoRpDQ1s3hJ7RqCZ9p17sBnu/gs4wg4TNLsQ49Bkp4nQVBg
+         qpXQ==
+X-Gm-Message-State: APjAAAVCKPzPq1+09eEo4bnrtx0v8DqXVTniNDvocGL7nSOHVeHl3WaQ
+        yzMlXNYKQWd4i1yelFbN64S9qx2B
+X-Google-Smtp-Source: APXvYqz31oFz+kNkpvekPG2+xOVZ5P8s1+SRRSrFsyqztXR7nq3WT3o6m4wy7Dl/FoR2BqV6E97ZsA==
+X-Received: by 2002:a17:902:9041:: with SMTP id w1mr26810654plz.132.1562605188327;
+        Mon, 08 Jul 2019 09:59:48 -0700 (PDT)
 Received: from localhost ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id x1sm103348pjo.4.2019.07.08.09.57.48
+        by smtp.gmail.com with ESMTPSA id n17sm18357948pfq.182.2019.07.08.09.59.47
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 08 Jul 2019 09:57:49 -0700 (PDT)
+        Mon, 08 Jul 2019 09:59:47 -0700 (PDT)
 From:   Xin Long <lucien.xin@gmail.com>
 To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
 Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>, davem@davemloft.net
-Subject: [PATCH net-next 4/4] sctp: rename sp strm_interleave to ep intl_enable
-Date:   Tue,  9 Jul 2019 00:57:07 +0800
-Message-Id: <9143b75d086dbec5aed55e4ba49d90c781f45c9a.1562604972.git.lucien.xin@gmail.com>
+Subject: [PATCH net-next] sctp: remove rcu_read_lock from sctp_bind_addr_state
+Date:   Tue,  9 Jul 2019 00:59:40 +0800
+Message-Id: <30ff9e8a45fa0c64d1c71bc13e217f3374f6120e.1562605180.git.lucien.xin@gmail.com>
 X-Mailer: git-send-email 2.1.0
-In-Reply-To: <acc7f14e1ddd65d0515074c030c63fd339261b46.1562604972.git.lucien.xin@gmail.com>
-References: <cover.1562604972.git.lucien.xin@gmail.com>
- <988dac46cfecb6ae4fa21e40bf16da6faf3da6ab.1562604972.git.lucien.xin@gmail.com>
- <40a905e7b9733c7bdca74af31ab86586fbb91cd0.1562604972.git.lucien.xin@gmail.com>
- <acc7f14e1ddd65d0515074c030c63fd339261b46.1562604972.git.lucien.xin@gmail.com>
-In-Reply-To: <cover.1562604972.git.lucien.xin@gmail.com>
-References: <cover.1562604972.git.lucien.xin@gmail.com>
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Like other endpoint features, strm_interleave should be moved to
-sctp_endpoint and renamed to intl_enable.
+sctp_bind_addr_state() is called either in packet rcv path or
+by sctp_copy_local_addr_list(), which are under rcu_read_lock.
+So there's no need to call it again in sctp_bind_addr_state().
 
 Signed-off-by: Xin Long <lucien.xin@gmail.com>
 ---
- include/net/sctp/structs.h | 2 +-
- net/sctp/sm_make_chunk.c   | 4 ++--
- net/sctp/socket.c          | 8 ++++----
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ net/sctp/bind_addr.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
-diff --git a/include/net/sctp/structs.h b/include/net/sctp/structs.h
-index c41b57b..ba5c4f6 100644
---- a/include/net/sctp/structs.h
-+++ b/include/net/sctp/structs.h
-@@ -219,7 +219,6 @@ struct sctp_sock {
- 		disable_fragments:1,
- 		v4mapped:1,
- 		frag_interleave:1,
--		strm_interleave:1,
- 		recvrcvinfo:1,
- 		recvnxtinfo:1,
- 		data_ready_signalled:1;
-@@ -1324,6 +1323,7 @@ struct sctp_endpoint {
- 	struct list_head endpoint_shared_keys;
- 	__u16 active_key_id;
- 	__u8  auth_enable:1,
-+	      intl_enable:1,
- 	      prsctp_enable:1,
- 	      reconf_enable:1;
+diff --git a/net/sctp/bind_addr.c b/net/sctp/bind_addr.c
+index f54333c..53bc615 100644
+--- a/net/sctp/bind_addr.c
++++ b/net/sctp/bind_addr.c
+@@ -393,24 +393,19 @@ int sctp_bind_addr_state(const struct sctp_bind_addr *bp,
+ {
+ 	struct sctp_sockaddr_entry *laddr;
+ 	struct sctp_af *af;
+-	int state = -1;
  
-diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
-index 31ab2c6..ed39396 100644
---- a/net/sctp/sm_make_chunk.c
-+++ b/net/sctp/sm_make_chunk.c
-@@ -269,7 +269,7 @@ struct sctp_chunk *sctp_make_init(const struct sctp_association *asoc,
- 	if (sp->adaptation_ind)
- 		chunksize += sizeof(aiparam);
+ 	af = sctp_get_af_specific(addr->sa.sa_family);
+ 	if (unlikely(!af))
+-		return state;
++		return -1;
  
--	if (sp->strm_interleave) {
-+	if (asoc->ep->intl_enable) {
- 		extensions[num_ext] = SCTP_CID_I_DATA;
- 		num_ext += 1;
+-	rcu_read_lock();
+ 	list_for_each_entry_rcu(laddr, &bp->address_list, list) {
+ 		if (!laddr->valid)
+ 			continue;
+-		if (af->cmp_addr(&laddr->a, addr)) {
+-			state = laddr->state;
+-			break;
+-		}
++		if (af->cmp_addr(&laddr->a, addr))
++			return laddr->state;
  	}
-@@ -2027,7 +2027,7 @@ static void sctp_process_ext_param(struct sctp_association *asoc,
- 				asoc->peer.asconf_capable = 1;
- 			break;
- 		case SCTP_CID_I_DATA:
--			if (sctp_sk(asoc->base.sk)->strm_interleave)
-+			if (asoc->ep->intl_enable)
- 				asoc->peer.intl_capable = 1;
- 			break;
- 		default:
-diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-index b679b61..0fc5b90 100644
---- a/net/sctp/socket.c
-+++ b/net/sctp/socket.c
-@@ -1913,7 +1913,7 @@ static int sctp_sendmsg_to_asoc(struct sctp_association *asoc,
- 		if (err)
- 			goto err;
+-	rcu_read_unlock();
  
--		if (sp->strm_interleave) {
-+		if (asoc->ep->intl_enable) {
- 			timeo = sock_sndtimeo(sk, 0);
- 			err = sctp_wait_for_connect(asoc, &timeo);
- 			if (err) {
-@@ -3581,7 +3581,7 @@ static int sctp_setsockopt_fragment_interleave(struct sock *sk,
- 	sctp_sk(sk)->frag_interleave = !!val;
- 
- 	if (!sctp_sk(sk)->frag_interleave)
--		sctp_sk(sk)->strm_interleave = 0;
-+		sctp_sk(sk)->ep->intl_enable = 0;
- 
- 	return 0;
+-	return state;
++	return -1;
  }
-@@ -4484,7 +4484,7 @@ static int sctp_setsockopt_interleaving_supported(struct sock *sk,
- 		goto out;
- 	}
  
--	sp->strm_interleave = !!params.assoc_value;
-+	sp->ep->intl_enable = !!params.assoc_value;
- 
- 	retval = 0;
- 
-@@ -7711,7 +7711,7 @@ static int sctp_getsockopt_interleaving_supported(struct sock *sk, int len,
- 	}
- 
- 	params.assoc_value = asoc ? asoc->peer.intl_capable
--				  : sctp_sk(sk)->strm_interleave;
-+				  : sctp_sk(sk)->ep->intl_enable;
- 
- 	if (put_user(len, optlen))
- 		goto out;
+ /* Find the first address in the bind address list that is not present in
 -- 
 2.1.0
 
