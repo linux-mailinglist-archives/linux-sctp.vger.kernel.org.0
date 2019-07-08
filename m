@@ -2,52 +2,76 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C56A261F01
-	for <lists+linux-sctp@lfdr.de>; Mon,  8 Jul 2019 14:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53AA6626AF
+	for <lists+linux-sctp@lfdr.de>; Mon,  8 Jul 2019 18:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730992AbfGHMyy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Mon, 8 Jul 2019 08:54:54 -0400
-Received: from mail-n.franken.de ([193.175.24.27]:58845 "EHLO drew.franken.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729038AbfGHMyy (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Mon, 8 Jul 2019 08:54:54 -0400
-Received: from [IPv6:2a02:c6a0:4015:12:f4a0:506f:aa54:cf8] (unknown [IPv6:2a02:c6a0:4015:12:f4a0:506f:aa54:cf8])
-        (Authenticated sender: lurchi)
-        by mail-n.franken.de (Postfix) with ESMTPSA id ED7A3721E281A;
-        Mon,  8 Jul 2019 14:54:50 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: Support for RFC 6951 (UDP encapsulation for SCTP)
-From:   Michael Tuexen <Michael.Tuexen@lurchi.franken.de>
-In-Reply-To: <044c9c5b-a7a2-effa-7a07-8bea5edcb9c3@patfab.net>
-Date:   Mon, 8 Jul 2019 14:54:50 +0200
-Cc:     linux-sctp@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <62EDF8B4-3E01-4657-8C67-506C1ADE931C@lurchi.franken.de>
-References: <044c9c5b-a7a2-effa-7a07-8bea5edcb9c3@patfab.net>
-To:     Patrick Schultz <Patrick@patfab.net>
-X-Mailer: Apple Mail (2.3445.104.11)
-X-Spam-Status: No, score=-2.9 required=5.0 tests=ALL_TRUSTED,BAYES_00
-        autolearn=disabled version=3.4.1
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on mail-n.franken.de
+        id S1730536AbfGHQ5R (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 8 Jul 2019 12:57:17 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:39186 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726318AbfGHQ5R (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 8 Jul 2019 12:57:17 -0400
+Received: by mail-pf1-f194.google.com with SMTP id j2so7895802pfe.6;
+        Mon, 08 Jul 2019 09:57:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=FGkuWWLfOtXU5HO+HxGwaAPhk1GNPOE5eh4/6gJ/Zio=;
+        b=Ufq7PnKs0kxuj4hKbVqDPwPyrh87hQb7GKPCr+4SYFtw9MXGljwQr8HCEvN5L3KC0P
+         z5RpPDh1hknSWb87r/ExZ2UXTJ5HAxB3TDcA4pyghp2MPvzmE+iB+vE0X6q0sxd9fgAs
+         mBrbNp1t/L9jrVecve8/mxD+qAjTMRH0tmV+ygd5MGVPsu3tCRx+e5iNfgB4Z0hjfM5J
+         qRIPpQTYkcSPbHImxxd2KGToDArFEYHhjaZE1TLObfh3j1et807gySlbi355vmALadud
+         yHI1BVptjWIm1774bZxaRZX7MSfb3QDo04vAO+aaHVCKcNV9BFjL24hsq1WhwFzWuL2I
+         63CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=FGkuWWLfOtXU5HO+HxGwaAPhk1GNPOE5eh4/6gJ/Zio=;
+        b=Y209WsuuurDGxAjPEQ3woqWPRiXpX70hqh1l0Awnn/7Njsgui2ss9guOmKSxxpBfcT
+         deYcx5mRzA/MqKlTqgwUhljKa2frM9YhOyoR6obJIu1RDHAKQ6aIo/vfqqgrW24S7KBM
+         BU7uT/j7n5zA20xwTABsR6b8gXF5nKDx7od1P8DBFyWZuP2o3I/r4KSzw9vxGAwVnzNf
+         cV2jmRsCqQRAXiF+MspcxzbVPbI2h0QkJV/h7T9+htGrMY8WQYJENJy3qOJxjG3GzG+z
+         WqBjA0jSXTGUEXn86am8ey5/6qWp8IrvOvomCqM3WmUW/GnOErESv4I8cFFZ89fb+H3i
+         QDww==
+X-Gm-Message-State: APjAAAUsuAUQqcBxYLM3RgkJII5qULd0QuyokE/MyerDLyaIIFqstFft
+        nFVooZeNQ37MP7DvaP/Mat5POqCq
+X-Google-Smtp-Source: APXvYqyf2RJWtFPMA+wB+7J/B40pIUp+Laex6gkhdZbHc4WhuELI8Dw6uoQ3ObLb6qeWtRqY480ObQ==
+X-Received: by 2002:a65:60cc:: with SMTP id r12mr26254524pgv.333.1562605036420;
+        Mon, 08 Jul 2019 09:57:16 -0700 (PDT)
+Received: from localhost ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id x14sm22027034pfq.158.2019.07.08.09.57.14
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 08 Jul 2019 09:57:15 -0700 (PDT)
+From:   Xin Long <lucien.xin@gmail.com>
+To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
+Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>, davem@davemloft.net
+Subject: [PATCH net-next 0/4] sctp: tidy up some ep and asoc feature flags
+Date:   Tue,  9 Jul 2019 00:57:03 +0800
+Message-Id: <cover.1562604972.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.1.0
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-> On 8. Jul 2019, at 01:21, Patrick Schultz <Patrick@patfab.net> wrote:
-> 
-> Hello all,
-> 
-> are there already plans to support UDP encapsulation in lksctp-tools according to RFC6951?
-Just for interop testing: FreeBSD supports this.
+This patchset is to remove some unnecessary feature flags from
+sctp_assocation and move some others to the right places.
 
-Best regards
-Michael
-> 
-> Best regards,
-> Patrick
-> 
-> 
+Xin Long (4):
+  sctp: remove reconf_enable from asoc
+  sctp: remove prsctp_enable from asoc
+  sctp: rename asoc intl_enable to asoc peer.intl_capable
+  sctp: rename sp strm_interleave to ep intl_enable
+
+ include/net/sctp/structs.h   | 37 ++++++++++++++++++-------------------
+ net/sctp/associola.c         |  2 --
+ net/sctp/sm_make_chunk.c     | 21 ++++++++++-----------
+ net/sctp/socket.c            | 19 ++++++++-----------
+ net/sctp/stream_interleave.c |  4 ++--
+ net/sctp/stream_sched.c      |  2 +-
+ 6 files changed, 39 insertions(+), 46 deletions(-)
+
+-- 
+2.1.0
 
