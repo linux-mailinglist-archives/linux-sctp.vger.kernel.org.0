@@ -2,109 +2,84 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 902A36A70B
-	for <lists+linux-sctp@lfdr.de>; Tue, 16 Jul 2019 13:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CFAC6B157
+	for <lists+linux-sctp@lfdr.de>; Tue, 16 Jul 2019 23:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387494AbfGPLKC (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 16 Jul 2019 07:10:02 -0400
-Received: from charlotte.tuxdriver.com ([70.61.120.58]:37697 "EHLO
-        smtp.tuxdriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733200AbfGPLKC (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 16 Jul 2019 07:10:02 -0400
-Received: from cpe-2606-a000-111b-405a-0-0-0-162e.dyn6.twc.com ([2606:a000:111b:405a::162e] helo=localhost)
-        by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
-        (Exim 4.63)
-        (envelope-from <nhorman@tuxdriver.com>)
-        id 1hnLL9-0007ym-9m; Tue, 16 Jul 2019 07:09:58 -0400
-Date:   Tue, 16 Jul 2019 07:09:17 -0400
-From:   Neil Horman <nhorman@tuxdriver.com>
-To:     Hariprasad Kelam <hariprasad.kelam@gmail.com>
-Cc:     Vlad Yasevich <vyasevich@gmail.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: sctp: fix warning "NULL check before some freeing
- functions is not needed"
-Message-ID: <20190716110917.GA1498@hmswarspite.think-freely.org>
-References: <20190716022002.GA19592@hari-Inspiron-1545>
+        id S1726555AbfGPVry (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 16 Jul 2019 17:47:54 -0400
+Received: from mail-qt1-f169.google.com ([209.85.160.169]:41682 "EHLO
+        mail-qt1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728235AbfGPVrx (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 16 Jul 2019 17:47:53 -0400
+Received: by mail-qt1-f169.google.com with SMTP id d17so21182945qtj.8
+        for <linux-sctp@vger.kernel.org>; Tue, 16 Jul 2019 14:47:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=rYIv3+f+Wpfnr6NMWCcYLn28y9wrn6a9ojz4c0/+KO0=;
+        b=F9QFNRkAj2AxjYTP3v86UzDM1ywEdAFCZVmWrPun7wyBJ/TR3zzJ3lz6DfpmqjzJ2N
+         KIJZkSz3rB2cjFNCPF281hvzaUvyn6/aYJPIMY5FVdRUlsGWzbQ9Y8TkcGLvgVJYq5yH
+         aiYyPVvmnAJpCUkxriMBcOZrdBT1lkRA0Qz4U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=rYIv3+f+Wpfnr6NMWCcYLn28y9wrn6a9ojz4c0/+KO0=;
+        b=L08HkvthxmWXdU2srevettCu2HB3zz2QK5Lfn3atF6fBTD5dnHiTWx5AsLktFM7rn6
+         wDVt5YBbeWRskC9qY/2nufiHQFpkon1Oz23wmOUFQlRdBCnM2dSHr7exOoCBfvEQ8yTt
+         a7mwYt2GtLatmfxYL7BzQ5QXQGQ4K+iWrKiIninHT5ljkLN1SIGH1lLsilYW/I8NzxHC
+         Ssz1u2/Vc2obv3pEfeAj2RUjIX/zSlZHEzJDpMJDlak3uLEFQo1jkr0JYX09kxORqsnV
+         spUVVbCXMxsoUYhL1WZUhEjuk/t86OihR0GqFj+Phb/g35imm5w8FmZXlM5dXjMYjru1
+         qnUg==
+X-Gm-Message-State: APjAAAW7AlPxOzH5idDis/EC1MbveFkLc5pF3+M6i1+iy0sV+2+TIIG9
+        RgcgJU+Q9R8cy5WdjsKzoufFPneRxzHGWQL1iGmMBQ==
+X-Google-Smtp-Source: APXvYqzk2ElYGbmGXakeEof2T6vw9TA+aJreKVj8sfbINfaag8CkplmHATB4jdl8o6M8mE9LH4hDIawBSFfrZ16WjbI=
+X-Received: by 2002:ac8:d8:: with SMTP id d24mr25266793qtg.284.1563313671878;
+ Tue, 16 Jul 2019 14:47:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190716022002.GA19592@hari-Inspiron-1545>
-User-Agent: Mutt/1.12.0 (2019-05-25)
-X-Spam-Score: -2.9 (--)
-X-Spam-Status: No
+From:   Marek Majkowski <marek@cloudflare.com>
+Date:   Tue, 16 Jul 2019 23:47:40 +0200
+Message-ID: <CAJPywTL5aKYB40FsAFYFEuhErhgQpYZP5Q_ipMG9pDxqipcEDg@mail.gmail.com>
+Subject: OOM triggered by SCTP
+To:     vyasevich@gmail.com, nhorman@tuxdriver.com,
+        marcelo.leitner@gmail.com, linux-sctp@vger.kernel.org
+Cc:     netdev@vger.kernel.org, kernel-team <kernel-team@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Jul 16, 2019 at 07:50:02AM +0530, Hariprasad Kelam wrote:
-> This patch removes NULL checks before calling kfree.
-> 
-> fixes below issues reported by coccicheck
-> net/sctp/sm_make_chunk.c:2586:3-8: WARNING: NULL check before some
-> freeing functions is not needed.
-> net/sctp/sm_make_chunk.c:2652:3-8: WARNING: NULL check before some
-> freeing functions is not needed.
-> net/sctp/sm_make_chunk.c:2667:3-8: WARNING: NULL check before some
-> freeing functions is not needed.
-> net/sctp/sm_make_chunk.c:2684:3-8: WARNING: NULL check before some
-> freeing functions is not needed.
-> 
-> Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
-> ---
->  net/sctp/sm_make_chunk.c | 12 ++++--------
->  1 file changed, 4 insertions(+), 8 deletions(-)
-> 
-> diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
-> index ed39396..36bd8a6e 100644
-> --- a/net/sctp/sm_make_chunk.c
-> +++ b/net/sctp/sm_make_chunk.c
-> @@ -2582,8 +2582,7 @@ static int sctp_process_param(struct sctp_association *asoc,
->  	case SCTP_PARAM_STATE_COOKIE:
->  		asoc->peer.cookie_len =
->  			ntohs(param.p->length) - sizeof(struct sctp_paramhdr);
-> -		if (asoc->peer.cookie)
-> -			kfree(asoc->peer.cookie);
-> +		kfree(asoc->peer.cookie);
->  		asoc->peer.cookie = kmemdup(param.cookie->body, asoc->peer.cookie_len, gfp);
->  		if (!asoc->peer.cookie)
->  			retval = 0;
-> @@ -2648,8 +2647,7 @@ static int sctp_process_param(struct sctp_association *asoc,
->  			goto fall_through;
->  
->  		/* Save peer's random parameter */
-> -		if (asoc->peer.peer_random)
-> -			kfree(asoc->peer.peer_random);
-> +		kfree(asoc->peer.peer_random);
->  		asoc->peer.peer_random = kmemdup(param.p,
->  					    ntohs(param.p->length), gfp);
->  		if (!asoc->peer.peer_random) {
-> @@ -2663,8 +2661,7 @@ static int sctp_process_param(struct sctp_association *asoc,
->  			goto fall_through;
->  
->  		/* Save peer's HMAC list */
-> -		if (asoc->peer.peer_hmacs)
-> -			kfree(asoc->peer.peer_hmacs);
-> +		kfree(asoc->peer.peer_hmacs);
->  		asoc->peer.peer_hmacs = kmemdup(param.p,
->  					    ntohs(param.p->length), gfp);
->  		if (!asoc->peer.peer_hmacs) {
-> @@ -2680,8 +2677,7 @@ static int sctp_process_param(struct sctp_association *asoc,
->  		if (!ep->auth_enable)
->  			goto fall_through;
->  
-> -		if (asoc->peer.peer_chunks)
-> -			kfree(asoc->peer.peer_chunks);
-> +		kfree(asoc->peer.peer_chunks);
->  		asoc->peer.peer_chunks = kmemdup(param.p,
->  					    ntohs(param.p->length), gfp);
->  		if (!asoc->peer.peer_chunks)
-> -- 
-> 2.7.4
-> 
-> 
+Morning,
 
-Acked-by: Neil Horman <nhorman@tuxdriver.com>
+My poor man's fuzzer found something interesting in SCTP. It seems
+like creating large number of SCTP sockets + some magic dance, upsets
+a memory subsystem related to SCTP. The sequence:
+
+ - create SCTP socket
+ - call setsockopts (SCTP_EVENTS)
+ - call bind(::1, port)
+ - call sendmsg(long buffer, MSG_CONFIRM, ::1, port)
+ - close SCTP socket
+ - repeat couple thousand times
+
+Full code:
+https://gist.github.com/majek/bd083dae769804d39134ce01f4f802bb#file-test_sctp-c
+
+I'm running it on virtme the simplest way:
+$ virtme-run --show-boot-console --rw --pwd --kimg bzImage --memory
+512M --script-sh ./test_sctp
+
+Originally I was running it inside net namespace, and just having a
+localhost interface is sufficient to trigger the problem.
+
+Kernel is 5.2.1 (with KASAN and such, but that shouldn't be a factor).
+In some tests I saw a message that might indicate something funny
+hitting neighbor table:
+
+neighbour: ndisc_cache: neighbor table overflow!
+
+I'm not addr-decoding the stack trace, since it seems unrelated to the
+root cause.
+
+Cheers,
+    Marek
