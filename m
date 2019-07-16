@@ -2,67 +2,39 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 174776A099
-	for <lists+linux-sctp@lfdr.de>; Tue, 16 Jul 2019 04:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 902A36A70B
+	for <lists+linux-sctp@lfdr.de>; Tue, 16 Jul 2019 13:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729404AbfGPCvE (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 15 Jul 2019 22:51:04 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:40274 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729302AbfGPCvE (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 15 Jul 2019 22:51:04 -0400
-Received: by mail-qt1-f196.google.com with SMTP id a15so17922796qtn.7;
-        Mon, 15 Jul 2019 19:51:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=yZErbROM2VVb2DYbhf1qvTfxE9tFHSJiTJU7iwnRqzU=;
-        b=qLDbyLF61NTuheT6jlkBiVZswXOTVaI8dY/Igg/2pduEO+8+WHB9eVULl+a+IOOABU
-         VM97thx/H0rZzv7o8hXQnPMLX52qyidcAdLj1i4BY1h047+h9ZwsVtMG1hg+TklTBNAc
-         kFatbrEym9mdhM4G55kAtH3oDKgWzBASRp4w8XCv4zvjHzmyS5mVDNczzVS1k3e/GQM+
-         +EQJxtlupEQFdFUriN3Evr55VWshQpjXNc1uRdtjSDTZ/P1s9f4+/32+2lNT8GT22dfY
-         kQNYTgD50QSqR3qegjBj1N2YcgGJx1t/s4H5sfBFYjWb1HaVeuFQV5xgbqpT8VMwYSKb
-         ePAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=yZErbROM2VVb2DYbhf1qvTfxE9tFHSJiTJU7iwnRqzU=;
-        b=Xhx+x61RhSSQ5V3Oo+z5kK211HIrIC58aShWjk9ka2LbAwjetDJPrqzUYWhRaTYNmI
-         FmqDJed4I+nkwl5JGRQSXPdaRFt0zNwGzQmbBHr94T/gdbBZILw4FbQcfYVLbRLcGf1w
-         PlcJdax9r9J6PNv5x0oQ/0qCcNMcsmtMHb29v1EUxglNfpopbLccpChz7KI3OZ+yHdt2
-         H8TWN2hsMSk3uP+4XMZql44UtA0OAaQ4Cqozw0TG29XTer4TQE2YAe4xAD7ae/+8rStz
-         ois7rLrKDL8B80ECPhkuGsXQaIhCJUbKeDz23YIXzCo3JgW91aSmKMh+6n0sm9m2cyOq
-         EzUQ==
-X-Gm-Message-State: APjAAAVmXJpdTWlTSzl/iaD2bbJDrXbYl+iR1RpxScnUuLI+Pt6T20/s
-        cWJCz/fEiOeHv+ll6czRMpM=
-X-Google-Smtp-Source: APXvYqzQxLuadhwcbe2BI8TLAbrM2BpX1wvqd/8nPogvoqpfbXk0peqo3jY9CxnuUsuhl9okTX6upg==
-X-Received: by 2002:ac8:2763:: with SMTP id h32mr21157340qth.350.1563245463548;
-        Mon, 15 Jul 2019 19:51:03 -0700 (PDT)
-Received: from localhost.localdomain ([2001:1284:f013:fb15:23ad:df80:c177:921b])
-        by smtp.gmail.com with ESMTPSA id q2sm8468473qkc.118.2019.07.15.19.51.02
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 15 Jul 2019 19:51:02 -0700 (PDT)
-Received: by localhost.localdomain (Postfix, from userid 1000)
-        id 3B189C18C6; Mon, 15 Jul 2019 23:51:00 -0300 (-03)
-Date:   Mon, 15 Jul 2019 23:51:00 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+        id S2387494AbfGPLKC (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 16 Jul 2019 07:10:02 -0400
+Received: from charlotte.tuxdriver.com ([70.61.120.58]:37697 "EHLO
+        smtp.tuxdriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733200AbfGPLKC (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 16 Jul 2019 07:10:02 -0400
+Received: from cpe-2606-a000-111b-405a-0-0-0-162e.dyn6.twc.com ([2606:a000:111b:405a::162e] helo=localhost)
+        by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
+        (Exim 4.63)
+        (envelope-from <nhorman@tuxdriver.com>)
+        id 1hnLL9-0007ym-9m; Tue, 16 Jul 2019 07:09:58 -0400
+Date:   Tue, 16 Jul 2019 07:09:17 -0400
+From:   Neil Horman <nhorman@tuxdriver.com>
 To:     Hariprasad Kelam <hariprasad.kelam@gmail.com>
 Cc:     Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] net: sctp: fix warning "NULL check before some freeing
  functions is not needed"
-Message-ID: <20190716025100.GM3390@localhost.localdomain>
+Message-ID: <20190716110917.GA1498@hmswarspite.think-freely.org>
 References: <20190716022002.GA19592@hari-Inspiron-1545>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20190716022002.GA19592@hari-Inspiron-1545>
 User-Agent: Mutt/1.12.0 (2019-05-25)
+X-Spam-Score: -2.9 (--)
+X-Spam-Status: No
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
@@ -82,9 +54,6 @@ On Tue, Jul 16, 2019 at 07:50:02AM +0530, Hariprasad Kelam wrote:
 > freeing functions is not needed.
 > 
 > Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
-
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-
 > ---
 >  net/sctp/sm_make_chunk.c | 12 ++++--------
 >  1 file changed, 4 insertions(+), 8 deletions(-)
@@ -136,3 +105,6 @@ Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 > -- 
 > 2.7.4
 > 
+> 
+
+Acked-by: Neil Horman <nhorman@tuxdriver.com>
