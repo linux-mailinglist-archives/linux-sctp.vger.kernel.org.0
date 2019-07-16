@@ -2,66 +2,129 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA262687C4
-	for <lists+linux-sctp@lfdr.de>; Mon, 15 Jul 2019 13:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 103116A086
+	for <lists+linux-sctp@lfdr.de>; Tue, 16 Jul 2019 04:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729674AbfGOLEV (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 15 Jul 2019 07:04:21 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:34551 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729917AbfGOLET (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 15 Jul 2019 07:04:19 -0400
-Received: by mail-oi1-f193.google.com with SMTP id l12so12312352oil.1
-        for <linux-sctp@vger.kernel.org>; Mon, 15 Jul 2019 04:04:18 -0700 (PDT)
+        id S2388239AbfGPCUK (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 15 Jul 2019 22:20:10 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:39080 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388235AbfGPCUJ (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 15 Jul 2019 22:20:09 -0400
+Received: by mail-pl1-f194.google.com with SMTP id b7so9268067pls.6;
+        Mon, 15 Jul 2019 19:20:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=at1U0zLzNGQlxAxn9clrRSHSPpGB2zlKGmciYViXmzQ=;
-        b=Iux65787KeJtZlk/UWQ8a71sdq3L+JuOBHwZwxVHUOu0Hal0brUmaUtWDT+1EakAhq
-         MtJF/vbEQagCDLqdjzXV0tE8x5YNwPsclB57z/jA+URpkAaidKGibNAiJ897B2Q2rv9p
-         uYOBtZylJRmtRio8wDP4GwRiBknU84/FmWsMFw620mFEJwR9vSM1QlmEIUdghWeLiQPg
-         3/o6A/ASY/U2XQTJeOVMsZoeyZcCfYvLw2Rbw2pE/fk67uX5NyEzWB6tv7TG5MeHZvc/
-         X3yp2nduS0Os162TiWKhkMGOmC5wMIt1cVEoe4V7hwUEXyYLehvgYaVidvFk20QbqjFn
-         kL9A==
+        h=date:from:to:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=VUDuI4pL0Ekx2N2uEollbqzuyx08xmpBeQ/1wJ8aM7M=;
+        b=AAoU6nnQFDoCdjNFvCT51oPpPU3tvRyghfvKLvPrC0RRjA5GA/joOKGMo0jwsKVIkA
+         t2KurV3wAKMmPI87DyaAxtuGG5d9TPdCqoPLZewJD+JJUsqcUMzFvXFV3EZz7QMDe73Q
+         uXKkRBlspKb8aw7jEc68AOA664+/tq2RiMfVFx68ll0Uly5wgLKLBOn2fKEl+IteNQUa
+         aCCbXHUDkmanmoQVucYK1rvTszxEOyV17oMK9GX6RepEpbmgtaM0iJsh5bu+9n0N2TzF
+         LkRJdRoAwBMpEOd8N4MJYwP245fkc9cD8HKW3y4De9d1E87iElvapvfmIcB0p8Ug9k78
+         T80Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=at1U0zLzNGQlxAxn9clrRSHSPpGB2zlKGmciYViXmzQ=;
-        b=kUpT68a3EIxNfGlwFTvncv4ksdtskxYqv4eihwB6pgNeXxc95cuUfx45wmQrEYv0Uw
-         dD5rahPy1q8W3c/Q72bfudLUqF7owjibUQp7eCtdIXiaCsZmtxVNxoA65bvxde8WwAYl
-         lrYOGP2cIyYptMHDnVpeN/caGaNW8kRE7i37VgqcNJdGsD4l7gJNG9WEGygHHCTyXW/j
-         1XCYdzVTl81cF2F3Yo+SlN40ACKDTQ/M7hCGFAPgI/osMekuglmj783oTcT+5uHK7HPO
-         bRQV6+R81nMsxieypE1afGN9X4xj1XJtwXMbv+gkoVRkmohLtucwfKLSYLRexMWmLOl+
-         vccA==
-X-Gm-Message-State: APjAAAUdinlSKkjL/563UdLLnITFFzRfB7qyKuWVeTCcrSK4tGVgd6yg
-        wcJH7R6hnggO1LmOOmdGgEQuxazv2BRafXueC2kiOtGVqUY=
-X-Google-Smtp-Source: APXvYqwI9SCHvCHLnvHckfwL+oW1shcNAvZVS/wk3iQ3LTmyEMELfYQBoBiEv/cUvggIHp2fQao9ul2L5mSBnKj2EDA=
-X-Received: by 2002:a63:ad07:: with SMTP id g7mr24480194pgf.405.1563188657092;
- Mon, 15 Jul 2019 04:04:17 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=VUDuI4pL0Ekx2N2uEollbqzuyx08xmpBeQ/1wJ8aM7M=;
+        b=YXkqFjBZbr6xA//JMSA0KNAJ/LyggrJ4/y0bgQjmtc8XMfmKil/QphzXXAPng21UX5
+         lhOKL0R0eLK1sJy9sT+074Xi+addLmQJtLiq+aooGRmEG1PPes3UlByC6LeRX71BIkUQ
+         UosEUOWjImcg7jBJi88hyVqIAMkYiAWu7jU7bYOYmUo+4AHEHRcugyT1w31wPDHX0WQe
+         AOsF2Ls8GCSESM52iRm9BaXKk6ixaEArP/XKHzWNXv9+A40fvF0iva/YsD2qbx9ASJni
+         rW3GaNORUTLO+ZyTl77aDBZyhHrcThWAfn7QsWerVPTWnZuA6otMgm+uc0yZteCcJBfj
+         sxSA==
+X-Gm-Message-State: APjAAAWXk17SUd7GfHQmJ5XU5yv2foubUzW4GQ5MDcFJe+8GOWqKTEax
+        Z9YkcelGhi9xJaoaYeM/nNP6Rsn8
+X-Google-Smtp-Source: APXvYqyaj/PtxUYGQWhs/mghaR/zwZbR00DCBWCEmjHu0u/6iHSmC4HSbOWjQhenRG98f5R/luQaMg==
+X-Received: by 2002:a17:902:ff11:: with SMTP id f17mr32632981plj.121.1563243609102;
+        Mon, 15 Jul 2019 19:20:09 -0700 (PDT)
+Received: from hari-Inspiron-1545 ([183.83.86.126])
+        by smtp.gmail.com with ESMTPSA id q24sm16908669pjp.14.2019.07.15.19.20.05
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 15 Jul 2019 19:20:08 -0700 (PDT)
+Date:   Tue, 16 Jul 2019 07:50:02 +0530
+From:   Hariprasad Kelam <hariprasad.kelam@gmail.com>
+To:     Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] net: sctp: fix warning "NULL check before some freeing
+ functions is not needed"
+Message-ID: <20190716022002.GA19592@hari-Inspiron-1545>
 MIME-Version: 1.0
-Received: by 2002:a17:90a:b78d:0:0:0:0 with HTTP; Mon, 15 Jul 2019 04:04:16
- -0700 (PDT)
-From:   Donald Douglas <ddouglasng@gmail.com>
-Date:   Mon, 15 Jul 2019 04:04:16 -0700
-Message-ID: <CALVR28EP4VMYZDqzau6uFTJmxHs6we+nYre3JstaZ5qSsvppFQ@mail.gmail.com>
-Subject: Kindly Respond
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello,
-I am Barr Fredrick Mbogo a business consultant i have a lucrative
-business to discuss with you from the Eastern part of Africa Uganda to
-be precise aimed at agreed percentage upon your acceptance of my hand
-in business and friendship. Kindly respond to me if you are interested
-to partner with me for an update. Very important.
+This patch removes NULL checks before calling kfree.
 
-Yours Sincerely,
-Donald Douglas,
-For,
-Barr Frederick Mbogo
-Legal Consultant.
-Reply to: barrfredmbogo@consultant.com
+fixes below issues reported by coccicheck
+net/sctp/sm_make_chunk.c:2586:3-8: WARNING: NULL check before some
+freeing functions is not needed.
+net/sctp/sm_make_chunk.c:2652:3-8: WARNING: NULL check before some
+freeing functions is not needed.
+net/sctp/sm_make_chunk.c:2667:3-8: WARNING: NULL check before some
+freeing functions is not needed.
+net/sctp/sm_make_chunk.c:2684:3-8: WARNING: NULL check before some
+freeing functions is not needed.
+
+Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
+---
+ net/sctp/sm_make_chunk.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
+
+diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
+index ed39396..36bd8a6e 100644
+--- a/net/sctp/sm_make_chunk.c
++++ b/net/sctp/sm_make_chunk.c
+@@ -2582,8 +2582,7 @@ static int sctp_process_param(struct sctp_association *asoc,
+ 	case SCTP_PARAM_STATE_COOKIE:
+ 		asoc->peer.cookie_len =
+ 			ntohs(param.p->length) - sizeof(struct sctp_paramhdr);
+-		if (asoc->peer.cookie)
+-			kfree(asoc->peer.cookie);
++		kfree(asoc->peer.cookie);
+ 		asoc->peer.cookie = kmemdup(param.cookie->body, asoc->peer.cookie_len, gfp);
+ 		if (!asoc->peer.cookie)
+ 			retval = 0;
+@@ -2648,8 +2647,7 @@ static int sctp_process_param(struct sctp_association *asoc,
+ 			goto fall_through;
+ 
+ 		/* Save peer's random parameter */
+-		if (asoc->peer.peer_random)
+-			kfree(asoc->peer.peer_random);
++		kfree(asoc->peer.peer_random);
+ 		asoc->peer.peer_random = kmemdup(param.p,
+ 					    ntohs(param.p->length), gfp);
+ 		if (!asoc->peer.peer_random) {
+@@ -2663,8 +2661,7 @@ static int sctp_process_param(struct sctp_association *asoc,
+ 			goto fall_through;
+ 
+ 		/* Save peer's HMAC list */
+-		if (asoc->peer.peer_hmacs)
+-			kfree(asoc->peer.peer_hmacs);
++		kfree(asoc->peer.peer_hmacs);
+ 		asoc->peer.peer_hmacs = kmemdup(param.p,
+ 					    ntohs(param.p->length), gfp);
+ 		if (!asoc->peer.peer_hmacs) {
+@@ -2680,8 +2677,7 @@ static int sctp_process_param(struct sctp_association *asoc,
+ 		if (!ep->auth_enable)
+ 			goto fall_through;
+ 
+-		if (asoc->peer.peer_chunks)
+-			kfree(asoc->peer.peer_chunks);
++		kfree(asoc->peer.peer_chunks);
+ 		asoc->peer.peer_chunks = kmemdup(param.p,
+ 					    ntohs(param.p->length), gfp);
+ 		if (!asoc->peer.peer_chunks)
+-- 
+2.7.4
+
