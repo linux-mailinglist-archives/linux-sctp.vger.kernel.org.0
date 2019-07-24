@@ -2,82 +2,286 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 51CE071B88
-	for <lists+linux-sctp@lfdr.de>; Tue, 23 Jul 2019 17:25:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB2B72495
+	for <lists+linux-sctp@lfdr.de>; Wed, 24 Jul 2019 04:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729908AbfGWPZD (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 23 Jul 2019 11:25:03 -0400
-Received: from charlotte.tuxdriver.com ([70.61.120.58]:41311 "EHLO
-        smtp.tuxdriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729840AbfGWPZC (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 23 Jul 2019 11:25:02 -0400
-Received: from [66.61.193.110] (helo=localhost)
-        by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
-        (Exim 4.63)
-        (envelope-from <nhorman@tuxdriver.com>)
-        id 1hpwet-00051C-Ry; Tue, 23 Jul 2019 11:24:58 -0400
-Date:   Tue, 23 Jul 2019 11:24:49 -0400
-From:   Neil Horman <nhorman@tuxdriver.com>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
+        id S2387445AbfGXC1T (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 23 Jul 2019 22:27:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41868 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726352AbfGXC1T (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Tue, 23 Jul 2019 22:27:19 -0400
+Received: from sol.localdomain (c-24-5-143-220.hsd1.ca.comcast.net [24.5.143.220])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1B68720665;
+        Wed, 24 Jul 2019 02:27:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1563935238;
+        bh=efp3Fljv+5rHd1kc5traUeCYwEMEZOD/YOiDOGROzwg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=H05HIPVMqB1ZmwlvbHwvc84/AT5ogQazZktWLTBvhDPsWIFcflE8nm9C8Pht07+7L
+         3PlQSe/7n3MJNvGDHjsM7pHmdANRuGUxrAw9zOTOfQ6NRCAkXPNOFTd2UbjQzBf7xc
+         CIoyedcSF5759p5Htnazp0Xo8xzD4VStB4sNhmvs=
+Date:   Tue, 23 Jul 2019 19:27:16 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        davem@davemloft.net
-Subject: Re: [PATCH net-next 1/4] sctp: check addr_size with sa_family_t size
- in __sctp_setsockopt_connectx
-Message-ID: <20190723152449.GB8419@localhost.localdomain>
-References: <cover.1563817029.git.lucien.xin@gmail.com>
- <c875aa0a5b2965636dc3da83398856627310b280.1563817029.git.lucien.xin@gmail.com>
+        "David S. Miller" <davem@davemloft.net>,
+        Xin Long <lucien.xin@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Reminder: 10 open syzbot bugs in "net/sctp" subsystem
+Message-ID: <20190724022716.GN643@sol.localdomain>
+Mail-Followup-To: linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Xin Long <lucien.xin@gmail.com>, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <c875aa0a5b2965636dc3da83398856627310b280.1563817029.git.lucien.xin@gmail.com>
-User-Agent: Mutt/1.12.0 (2019-05-25)
-X-Spam-Score: -2.9 (--)
-X-Spam-Status: No
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Jul 23, 2019 at 01:37:57AM +0800, Xin Long wrote:
-> Now __sctp_connect() is called by __sctp_setsockopt_connectx() and
-> sctp_inet_connect(), the latter has done addr_size check with size
-> of sa_family_t.
-> 
-> In the next patch to clean up __sctp_connect(), we will remove
-> addr_size check with size of sa_family_t from __sctp_connect()
-> for the 1st address.
-> 
-> So before doing that, __sctp_setsockopt_connectx() should do
-> this check first, as sctp_inet_connect() does.
-> 
-> Signed-off-by: Xin Long <lucien.xin@gmail.com>
-> ---
->  net/sctp/socket.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-> index aa80cda..5f92e4a 100644
-> --- a/net/sctp/socket.c
-> +++ b/net/sctp/socket.c
-> @@ -1311,7 +1311,7 @@ static int __sctp_setsockopt_connectx(struct sock *sk,
->  	pr_debug("%s: sk:%p addrs:%p addrs_size:%d\n",
->  		 __func__, sk, addrs, addrs_size);
->  
-> -	if (unlikely(addrs_size <= 0))
-> +	if (unlikely(addrs_size < sizeof(sa_family_t)))
-I don't think this is what you want to check for here.  sa_family_t is
-an unsigned short, and addrs_size is the number of bytes in the addrs
-array.  The addrs array should be at least the size of one struct
-sockaddr (16 bytes iirc), and, if larger, should be a multiple of
-sizeof(struct sockaddr)
+[This email was generated by a script.  Let me know if you have any suggestions
+to make it better, or if you want it re-generated with the latest status.]
 
-Neil
+Of the currently open syzbot reports against the upstream kernel, I've manually
+marked 10 of them as possibly being bugs in the "net/sctp" subsystem.  I've
+listed these reports below, sorted by an algorithm that tries to list first the
+reports most likely to be still valid, important, and actionable.
 
->  		return -EINVAL;
->  
->  	kaddrs = memdup_user(addrs, addrs_size);
-> -- 
-> 2.1.0
-> 
-> 
+Of these 10 bugs, 2 were seen in mainline in the last week.
+
+Of these 10 bugs, 1 was bisected to a commit from the following person:
+
+	Xin Long <lucien.xin@gmail.com>
+
+If you believe a bug is no longer valid, please close the syzbot report by
+sending a '#syz fix', '#syz dup', or '#syz invalid' command in reply to the
+original thread, as explained at https://goo.gl/tpsmEJ#status
+
+If you believe I misattributed a bug to the "net/sctp" subsystem, please let me
+know, and if possible forward the report to the correct people or mailing list.
+
+Here are the bugs:
+
+--------------------------------------------------------------------------------
+Title:              memory leak in sctp_send_reset_streams
+Last occurred:      2 days ago
+Reported:           53 days ago
+Branches:           Mainline
+Dashboard link:     https://syzkaller.appspot.com/bug?id=ecedaad28cb6bb86a08d6dcabd93ef76f875bfaf
+Original thread:    https://lkml.kernel.org/lkml/000000000000f7a443058a358cb4@google.com/T/#u
+
+This bug has a C reproducer.
+
+The original thread for this bug has received 2 replies; the last was 52 days
+ago.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+6ad9c3bd0a218a2ab41d@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lkml.kernel.org/r/000000000000f7a443058a358cb4@google.com
+
+--------------------------------------------------------------------------------
+Title:              memory leak in sctp_stream_init_ext
+Last occurred:      4 days ago
+Reported:           53 days ago
+Branches:           Mainline
+Dashboard link:     https://syzkaller.appspot.com/bug?id=bbfa653205516be2a33b51c381ef827c534ba596
+Original thread:    https://lkml.kernel.org/lkml/000000000000f122ab058a303d94@google.com/T/#u
+
+This bug has a C reproducer.
+
+The original thread for this bug has received 2 replies; the last was 49 days
+ago.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+7f3b6b106be8dcdcdeec@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lkml.kernel.org/r/000000000000f122ab058a303d94@google.com
+
+--------------------------------------------------------------------------------
+Title:              KASAN: use-after-free Read in __lock_sock
+Last occurred:      37 days ago
+Reported:           248 days ago
+Branches:           Mainline and others
+Dashboard link:     https://syzkaller.appspot.com/bug?id=27934d200d11e2fbae5c715bfefad252f41785fb
+Original thread:    https://lkml.kernel.org/lkml/000000000000b98a67057ad7158a@google.com/T/#u
+
+This bug has a syzkaller reproducer only.
+
+This bug was bisected to:
+
+	commit 8f840e47f190cbe61a96945c13e9551048d42cef
+	Author: Xin Long <lucien.xin@gmail.com>
+	Date:   Thu Apr 14 07:35:33 2016 +0000
+
+	  sctp: add the sctp_diag.c file
+
+The original thread for this bug received 6 replies; the last was 229 days ago.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+9276d76e83e3bcde6c99@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lkml.kernel.org/r/000000000000b98a67057ad7158a@google.com
+
+--------------------------------------------------------------------------------
+Title:              KASAN: use-after-free Read in ip6_hold_safe (3)
+Last occurred:      30 days ago
+Reported:           77 days ago
+Branches:           Mainline and others
+Dashboard link:     https://syzkaller.appspot.com/bug?id=b30a8ecdfbefe331ff4d3a0a601ae28d91a430e3
+Original thread:    https://lkml.kernel.org/lkml/000000000000eba333058848fcc1@google.com/T/#u
+
+Unfortunately, this bug does not have a reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+1de7f57dd018a516ae89@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lkml.kernel.org/r/000000000000eba333058848fcc1@google.com
+
+--------------------------------------------------------------------------------
+Title:              BUG: unable to handle kernel paging request in sctp_v6_get_dst
+Last occurred:      37 days ago
+Reported:           205 days ago
+Branches:           Mainline and others
+Dashboard link:     https://syzkaller.appspot.com/bug?id=b44ed5bb06a257ee2649272a08d7b68c184a7bfe
+Original thread:    https://lkml.kernel.org/lkml/000000000000aa968f057e372583@google.com/T/#u
+
+Unfortunately, this bug does not have a reproducer.
+
+No one replied to the original thread for this bug.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+ae70faffd84f05295f27@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lkml.kernel.org/r/000000000000aa968f057e372583@google.com
+
+--------------------------------------------------------------------------------
+Title:              KASAN: user-memory-access Read in ip6_hold_safe (3)
+Last occurred:      33 days ago
+Reported:           52 days ago
+Branches:           bpf-next, linux-next, and net-next
+Dashboard link:     https://syzkaller.appspot.com/bug?id=1707ac302b38aaceb5b3df470b198244fe0205d0
+Original thread:    https://lkml.kernel.org/lkml/000000000000a7776f058a3ce9db@google.com/T/#u
+
+Unfortunately, this bug does not have a reproducer.
+
+The original thread for this bug has received 3 replies; the last was 29 days
+ago.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+a5b6e01ec8116d046842@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lkml.kernel.org/r/000000000000a7776f058a3ce9db@google.com
+
+--------------------------------------------------------------------------------
+Title:              BUG: unable to handle kernel paging request in dst_release (2)
+Last occurred:      41 days ago
+Reported:           119 days ago
+Branches:           net and net-next
+Dashboard link:     https://syzkaller.appspot.com/bug?id=1457062b2884c65d9c089e0abee144e7a6de1006
+Original thread:    https://lkml.kernel.org/lkml/0000000000008cc65f0584fba1c4@google.com/T/#u
+
+Unfortunately, this bug does not have a reproducer.
+
+No one replied to the original thread for this bug.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+f7b46bf869b6ace2ea45@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lkml.kernel.org/r/0000000000008cc65f0584fba1c4@google.com
+
+--------------------------------------------------------------------------------
+Title:              general protection fault in sctp_v6_get_dst (2)
+Last occurred:      46 days ago
+Reported:           126 days ago
+Branches:           bpf-next, net, and net-next
+Dashboard link:     https://syzkaller.appspot.com/bug?id=f30835c913a031ac302f0124763139ec0eb4b5d3
+Original thread:    https://lkml.kernel.org/lkml/000000000000e8335605846f099f@google.com/T/#u
+
+Unfortunately, this bug does not have a reproducer.
+
+No one replied to the original thread for this bug.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+5aab5972d41ebaa03f25@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lkml.kernel.org/r/000000000000e8335605846f099f@google.com
+
+--------------------------------------------------------------------------------
+Title:              KASAN: slab-out-of-bounds Read in fib6_rule_action
+Last occurred:      99 days ago
+Reported:           91 days ago
+Branches:           net
+Dashboard link:     https://syzkaller.appspot.com/bug?id=9b73c38d6e1905753dad5374ca51271b6787a124
+Original thread:    https://lkml.kernel.org/lkml/0000000000001645670587350783@google.com/T/#u
+
+Unfortunately, this bug does not have a reproducer.
+
+No one replied to the original thread for this bug.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+3edc8b0bf48d614ae4ef@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lkml.kernel.org/r/0000000000001645670587350783@google.com
+
+--------------------------------------------------------------------------------
+Title:              general protection fault in reuseport_add_sock
+Last occurred:      158 days ago
+Reported:           157 days ago
+Branches:           net
+Dashboard link:     https://syzkaller.appspot.com/bug?id=aae414b4366f2bb8cb759da428861e6e81942046
+Original thread:    https://lkml.kernel.org/lkml/0000000000009e38f10581fd7499@google.com/T/#u
+
+Unfortunately, this bug does not have a reproducer.
+
+No one replied to the original thread for this bug.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+675ee297acac988852c1@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lkml.kernel.org/r/0000000000009e38f10581fd7499@google.com
+
