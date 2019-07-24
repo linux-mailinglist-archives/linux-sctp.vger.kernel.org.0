@@ -2,116 +2,160 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 556BB728F5
-	for <lists+linux-sctp@lfdr.de>; Wed, 24 Jul 2019 09:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B08BF72955
+	for <lists+linux-sctp@lfdr.de>; Wed, 24 Jul 2019 09:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726087AbfGXHVZ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 24 Jul 2019 03:21:25 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:34538 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725851AbfGXHVZ (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 24 Jul 2019 03:21:25 -0400
-Received: by mail-wr1-f68.google.com with SMTP id 31so45763210wrm.1;
-        Wed, 24 Jul 2019 00:21:23 -0700 (PDT)
+        id S1726000AbfGXH4z (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 24 Jul 2019 03:56:55 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:39353 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725776AbfGXH4y (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 24 Jul 2019 03:56:54 -0400
+Received: by mail-wr1-f65.google.com with SMTP id x4so45793315wrt.6;
+        Wed, 24 Jul 2019 00:56:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Nm3bCHJrt6Bj7/j5tsZ8s5l28Yo/EjdUqE850Jtwxxs=;
-        b=ryiIEjokkXOl9ZPl3NuqzVFUOxVwmO/GB9+yljRQG7E1lHWUkQdwbXEIxmPMCXveFd
-         e6UjTJZVyKKOATOoeTvXGxH4kXdXFXuAJ7BeqReAna38Iaz3S6om0hoTGkJq14NW0Qet
-         iWZXUbKDKNxXAZJt/aAgisOw2cLdl/DAeP59GCChkLC3iYl/UZ8UfLbGErZE8Tiu1Gjc
-         XxkfGXHrXJ2lYraTvYo0YX1MbkrI+f73s33f9gWSYgD14+QX6Dm76Rnt8P+Uj6S6TRyj
-         G30uyT4WhW14rcqSoFPgpMCGyl9UGoW8vzIpD1X8kqY4lkz6aZs+a8gxb7V1MyyAYolJ
-         SFvQ==
+        bh=CWKOul5zWyLvmCqcEFdL6klVQupyTa972P0CGXCFiyo=;
+        b=HsS7ZfMTiCjuA0EPZ+ReU3GePJSQredYd4jUYk6T9eSw5or0YFHI58qK19SCPg87Cd
+         PodmffNoAu+ZyZd1syzNTZY8cPf9Kwd6m1Rrk89eYTToMQKEd1tVqYL1qB1hT7+vSxHe
+         6sTtQFV6zUcoVdDxXJPA0B/j+w3wdIo1Z0fiEJYMd+4RUuw9UuT2+wQiE7RSp6CY0acs
+         I5nqdkcC3s1XAXW/JBwNdunWtqoz33q4kQCBmuIyE210csXY6q12TGvCVpL6b3kxAzEv
+         KCE7E4PDpBYsDiruIy5h9YSYQRWAQmAxj44EjELBDEdFb0DfB87iC22XMYntolXqDs7M
+         TwIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Nm3bCHJrt6Bj7/j5tsZ8s5l28Yo/EjdUqE850Jtwxxs=;
-        b=uYWMdvPCE0pnfn2WRtTyduIVvdjvXX/D7Ly4Ulud1jhtoDgZD6jT/HWw7gh4gOqCBD
-         QsZlhCRpNjaHqxwDqlZwyXL8jRRRrTfs0UpoAhpYgoKOR9GHdFoW4w8/DIkkTgkq+fgX
-         64rK7IPVHSRcNo4cW62YYuGARwPcwtbkJp1eJIrHckBV0RiamZX+x7tclXHZpNz7UrEc
-         zpyvolGGxAGnYu0Bfx2GWp1zCjASnEdvxvdzJfA+5ZGTHUimrWbu4cei45vCsHA+5UwO
-         s0mm/YzwcnY+8yTE81uW8WFb2XJNlPDANBO1Fzpd5KV36SKx2HjMdLLxvZBocvnRWOIU
-         I/MA==
-X-Gm-Message-State: APjAAAWcEL2R4kttwKOTJPBrWYe8kriTaaOvfBll3zTfCatXnTmCp/Ln
-        DXQUtdEyKgR7LDkrtHDk2OqKc3VZAyOTXsAmVSS5WMay
-X-Google-Smtp-Source: APXvYqzLcufz6oTE57Ecr9QsG8JbkwC6GPYoLXAuiiEcjz5DEILutLTTsNTIxUGoZkfCUCLdU+FUEqgDcAZFXFuLgsw=
-X-Received: by 2002:a5d:494d:: with SMTP id r13mr10790622wrs.152.1563952883202;
- Wed, 24 Jul 2019 00:21:23 -0700 (PDT)
+        bh=CWKOul5zWyLvmCqcEFdL6klVQupyTa972P0CGXCFiyo=;
+        b=C0/ig37m06vDEUJ4eb3bQHM7BZA5zPkH6TcAPrb24o1TR36XYKsmurPKWT0uNDs186
+         T/5emOx5AdJHrl5gOo0FmQlxsMv2egb0fNRwaFoINCrxvUaF04tU6YIf/tWH4IksOPHp
+         zJ114GXqBtBGJdw/eJb2Uh26jULU+tZMY+iASjIM3HWOoLwauh/LOPJRhojWylU3h1Ct
+         +9Vb3QUmZUwq5Q35N63dTDf7DVz1NwDmUwwnzvIfiXKfv1wc8w70no7lf8nNxG+8d1z6
+         78dd+C8qj+sjEGcFrvz8+o25cCMA7FK3MIL7N/Nd0LlwFomfPpITjNLut8/gYB+P3e9+
+         0zxQ==
+X-Gm-Message-State: APjAAAVbnLvEkg0h76SPoldugm/ml5PPibd1VRPEAvM/JxZgc32o0b9i
+        L5ZUvix9cvditibcn+8Vd5EgcbspICD7gWE5a74=
+X-Google-Smtp-Source: APXvYqz3HVcRTUHwTARLhdDsaaeCmGC91o6UnC25yshx3nImhY6HzZDxOBK6H7v1N346b+TEj1v4R0M50x7JySNR5bM=
+X-Received: by 2002:a5d:50d1:: with SMTP id f17mr34700608wrt.124.1563955012063;
+ Wed, 24 Jul 2019 00:56:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1563817029.git.lucien.xin@gmail.com> <c875aa0a5b2965636dc3da83398856627310b280.1563817029.git.lucien.xin@gmail.com>
- <20190723152449.GB8419@localhost.localdomain>
-In-Reply-To: <20190723152449.GB8419@localhost.localdomain>
+References: <20190602034429.6888-1-hdanton@sina.com> <20190602105133.GA16948@hmswarspite.think-freely.org>
+ <CADvbK_dUDjK3UAF49uo+DZv+QiuEsaMmZeqDwBJ0suRwu4yXJw@mail.gmail.com>
+In-Reply-To: <CADvbK_dUDjK3UAF49uo+DZv+QiuEsaMmZeqDwBJ0suRwu4yXJw@mail.gmail.com>
 From:   Xin Long <lucien.xin@gmail.com>
-Date:   Wed, 24 Jul 2019 15:21:12 +0800
-Message-ID: <CADvbK_eiS26aMZcPrj2oNvZh_42phWiY71M7=UNvjEeB-B9bDQ@mail.gmail.com>
-Subject: Re: [PATCH net-next 1/4] sctp: check addr_size with sa_family_t size
- in __sctp_setsockopt_connectx
+Date:   Wed, 24 Jul 2019 15:56:40 +0800
+Message-ID: <CADvbK_ddFyO2iz-QS3bHevHN7Q29VUS4joK3Kxam3Y4tEqHFKA@mail.gmail.com>
+Subject: Re: [PATCH] net: sctp: fix memory leak in sctp_send_reset_streams
 To:     Neil Horman <nhorman@tuxdriver.com>
-Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
+Cc:     Hillf Danton <hdanton@sina.com>, linux-sctp@vger.kernel.org,
+        network dev <netdev@vger.kernel.org>,
+        syzkaller <syzkaller@googlegroups.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        syzbot <syzbot+6ad9c3bd0a218a2ab41d@syzkaller.appspotmail.com>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        davem <davem@davemloft.net>
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Eric Dumazet <edumazet@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Jul 23, 2019 at 11:25 PM Neil Horman <nhorman@tuxdriver.com> wrote:
+On Sun, Jun 2, 2019 at 9:36 PM Xin Long <lucien.xin@gmail.com> wrote:
 >
-> On Tue, Jul 23, 2019 at 01:37:57AM +0800, Xin Long wrote:
-> > Now __sctp_connect() is called by __sctp_setsockopt_connectx() and
-> > sctp_inet_connect(), the latter has done addr_size check with size
-> > of sa_family_t.
+> On Sun, Jun 2, 2019 at 6:52 PM Neil Horman <nhorman@tuxdriver.com> wrote:
 > >
-> > In the next patch to clean up __sctp_connect(), we will remove
-> > addr_size check with size of sa_family_t from __sctp_connect()
-> > for the 1st address.
-> >
-> > So before doing that, __sctp_setsockopt_connectx() should do
-> > this check first, as sctp_inet_connect() does.
-> >
-> > Signed-off-by: Xin Long <lucien.xin@gmail.com>
-> > ---
-> >  net/sctp/socket.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-> > index aa80cda..5f92e4a 100644
-> > --- a/net/sctp/socket.c
-> > +++ b/net/sctp/socket.c
-> > @@ -1311,7 +1311,7 @@ static int __sctp_setsockopt_connectx(struct sock *sk,
-> >       pr_debug("%s: sk:%p addrs:%p addrs_size:%d\n",
-> >                __func__, sk, addrs, addrs_size);
-> >
-> > -     if (unlikely(addrs_size <= 0))
-> > +     if (unlikely(addrs_size < sizeof(sa_family_t)))
-> I don't think this is what you want to check for here.  sa_family_t is
-> an unsigned short, and addrs_size is the number of bytes in the addrs
-> array.  The addrs array should be at least the size of one struct
-> sockaddr (16 bytes iirc), and, if larger, should be a multiple of
-> sizeof(struct sockaddr)
-sizeof(struct sockaddr) is not the right value to check either.
-
-The proper check will be done later in __sctp_connect():
-
-        af = sctp_get_af_specific(daddr->sa.sa_family);
-        if (!af || af->sockaddr_len > addrs_size)
-                return -EINVAL;
-
-So the check 'addrs_size < sizeof(sa_family_t)' in this patch is
-just to make sure daddr->sa.sa_family is accessible. the same
-check is also done in sctp_inet_connect().
-
->
-> Neil
->
-> >               return -EINVAL;
-> >
-> >       kaddrs = memdup_user(addrs, addrs_size);
-> > --
-> > 2.1.0
-> >
-> >
+> > On Sun, Jun 02, 2019 at 11:44:29AM +0800, Hillf Danton wrote:
+> > >
+> > > syzbot found the following crash on:
+> > >
+> > > HEAD commit:    036e3431 Merge git://git.kernel.org/pub/scm/linux/kernel/g..
+> > > git tree:       upstream
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=153cff12a00000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=8f0f63a62bb5b13c
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=6ad9c3bd0a218a2ab41d
+> > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12561c86a00000
+> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15b76fd8a00000
+> > >
+> > > executing program
+> > > executing program
+> > > executing program
+> > > executing program
+> > > executing program
+> > > BUG: memory leak
+> > > unreferenced object 0xffff888123894820 (size 32):
+> > >   comm "syz-executor045", pid 7267, jiffies 4294943559 (age 13.660s)
+> > >   hex dump (first 32 bytes):
+> > >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+> > >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+> > >   backtrace:
+> > >     [<00000000c7e71c69>] kmemleak_alloc_recursive
+> > > include/linux/kmemleak.h:55 [inline]
+> > >     [<00000000c7e71c69>] slab_post_alloc_hook mm/slab.h:439 [inline]
+> > >     [<00000000c7e71c69>] slab_alloc mm/slab.c:3326 [inline]
+> > >     [<00000000c7e71c69>] __do_kmalloc mm/slab.c:3658 [inline]
+> > >     [<00000000c7e71c69>] __kmalloc+0x161/0x2c0 mm/slab.c:3669
+> > >     [<000000003250ed8e>] kmalloc_array include/linux/slab.h:670 [inline]
+> > >     [<000000003250ed8e>] kcalloc include/linux/slab.h:681 [inline]
+> > >     [<000000003250ed8e>] sctp_send_reset_streams+0x1ab/0x5a0 net/sctp/stream.c:302
+> > >     [<00000000cd899c6e>] sctp_setsockopt_reset_streams net/sctp/socket.c:4314 [inline]
+> > >     [<00000000cd899c6e>] sctp_setsockopt net/sctp/socket.c:4765 [inline]
+> > >     [<00000000cd899c6e>] sctp_setsockopt+0xc23/0x2bf0 net/sctp/socket.c:4608
+> > >     [<00000000ff3a21a2>] sock_common_setsockopt+0x38/0x50 net/core/sock.c:3130
+> > >     [<000000009eb87ae7>] __sys_setsockopt+0x98/0x120 net/socket.c:2078
+> > >     [<00000000e0ede6ca>] __do_sys_setsockopt net/socket.c:2089 [inline]
+> > >     [<00000000e0ede6ca>] __se_sys_setsockopt net/socket.c:2086 [inline]
+> > >     [<00000000e0ede6ca>] __x64_sys_setsockopt+0x26/0x30 net/socket.c:2086
+> > >     [<00000000c61155f5>] do_syscall_64+0x76/0x1a0 arch/x86/entry/common.c:301
+> > >     [<00000000e540958c>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> > >
+> > >
+> > > It was introduced in commit d570a59c5b5f ("sctp: only allow the out stream
+> > > reset when the stream outq is empty"), in orde to check stream outqs before
+> > > sending SCTP_STRRESET_IN_PROGRESS back to the peer of the stream. EAGAIN is
+> > > returned, however, without the nstr_list slab released, if any outq is found
+> > > to be non empty.
+> > >
+> > > Freeing the slab in question before bailing out fixes it.
+> > >
+> > > Fixes: d570a59c5b5f ("sctp: only allow the out stream reset when the stream outq is empty")
+> > > Reported-by: syzbot <syzbot+6ad9c3bd0a218a2ab41d@syzkaller.appspotmail.com>
+> > > Reported-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+> > > Tested-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+> > > Cc: Xin Long <lucien.xin@gmail.com>
+> > > Cc: Neil Horman <nhorman@tuxdriver.com>
+> > > Cc: Vlad Yasevich <vyasevich@gmail.com>
+> > > Cc: Eric Dumazet <edumazet@google.com>
+> > > Signed-off-by: Hillf Danton <hdanton@sina.com>
+> > > ---
+> > > net/sctp/stream.c | 1 +
+> > > 1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/net/sctp/stream.c b/net/sctp/stream.c
+> > > index 93ed078..d3e2f03 100644
+> > > --- a/net/sctp/stream.c
+> > > +++ b/net/sctp/stream.c
+> > > @@ -310,6 +310,7 @@ int sctp_send_reset_streams(struct sctp_association *asoc,
+> > >
+> > >       if (out && !sctp_stream_outq_is_empty(stream, str_nums, nstr_list)) {
+> > >               retval = -EAGAIN;
+> > > +             kfree(nstr_list);
+> > >               goto out;
+> > >       }
+> > >
+> > > --
+> > >
+> > >
+> > Acked-by: Neil Horman <nhorman@tuxdriver.com>
+> Reviewed-by: Xin Long <lucien.xin@gmail.com>
+This fix is not applied, pls resend it with:
+to = network dev <netdev@vger.kernel.org>
+cc = davem@davemloft.net
+to = linux-sctp@vger.kernel.org
+cc = Neil Horman <nhorman@tuxdriver.com>
+cc = Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
