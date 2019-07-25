@@ -2,246 +2,177 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA1B74320
-	for <lists+linux-sctp@lfdr.de>; Thu, 25 Jul 2019 04:12:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C6A7432F
+	for <lists+linux-sctp@lfdr.de>; Thu, 25 Jul 2019 04:19:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388949AbfGYCMs (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 24 Jul 2019 22:12:48 -0400
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:43798 "EHLO
+        id S1727005AbfGYCTb (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 24 Jul 2019 22:19:31 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:41448 "EHLO
         mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387963AbfGYCMs (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 24 Jul 2019 22:12:48 -0400
-Received: by mail-qk1-f193.google.com with SMTP id m14so9645187qka.10
-        for <linux-sctp@vger.kernel.org>; Wed, 24 Jul 2019 19:12:47 -0700 (PDT)
+        with ESMTP id S1726300AbfGYCTa (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 24 Jul 2019 22:19:30 -0400
+Received: by mail-qk1-f193.google.com with SMTP id v22so35324409qkj.8;
+        Wed, 24 Jul 2019 19:19:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=1O8NAYWvHR9DuGnkHE7NLjcMqFjIzljIAE32UQA9n48=;
-        b=aOF07qUNrS2+BNLVCauANUhVSjXDDUsauULqqPRULbA1aCVMRfTlpl2NGJ1pH218jG
-         Py010qR/bSh6Dyh4qJu8T+BjEZTmy7VZmdea1HAihepr3Nb4NlC+pjDjRp3E85473xxj
-         7UjlZ7TJnygtMSemtcM+caCJuh3lmPUrlZkKWbs/aojH4pmmbRV4+w+HZyUwCQZ6N24v
-         h8DamBQzEJ6iF/2qwpoMEXb9LLaFIDP7efUxYigyJzqPBYJe/GJR1eQBCrl9AqFN4Ats
-         l3/d8jZ6O3b5lVyF5tqub6c5U6rfT+PiqCNqlzAnNzVFE9Es/kdcE9VxRaqaKwrcWITA
-         mM6A==
+        bh=9G4+pN2cxWowXbZZyCIC7KTWC6wMDbOZ0AlFZhGnUI8=;
+        b=fWVsY04dwPKolHRiQDFH3qM6nyxzQm1Uu1thVE8OmyVh3qcrhyXGCxfJvuuHvpJ7+i
+         n3wXIPBdBn+zA/RZht+CGigyJLoLFS1ARPeBpgk5j+Y0WncXQMMDKYfKmzAz8balnoxC
+         rR+1ykTPoI8r5N2AZ3bW18e4P6qHvGPVcaoVLxwC01XDX2HV5fFOx5YekJGmE4LWYK7j
+         RfiKQs3w2PQ+1z+ZvwCxLlPqgFteTwi9WmLIZUZ55Iqd1nVmyxxteSp6pK5dq2N6r8aj
+         jfNBXNjCbgkIKR+0RLQyKxbZUKm/47KWDwaamODB4/E/G+Ga1FY1sd3hDDe2ji7XJgT6
+         Phsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=1O8NAYWvHR9DuGnkHE7NLjcMqFjIzljIAE32UQA9n48=;
-        b=aEzR6WJ0RtM7TuSbkm3atW7vYulEgFyiLEYl7R1zbzyvrlWG1N36am798Hi/KvMRw/
-         QvLcRieYPn83c+b3KcbUT016H3kfBv/uCLrvD33GktgCtgc22v/L6GPc1qxIID9mncrP
-         0XKgs4UgSMuoSvuYDShm1g8ozOqssjmGEX37jYA2Nc3HxUh3T0E3IK7larpYg7YqI1Y+
-         vX3qvWFzTaQlnchVez2i21yZVIYxLtvW4uz4WZaqfx6LOJklTRruwhJ8O8SfnO3GOheb
-         S1H6h9rEpmXMUn7V3KyjVHq0sWZIhNTmzXwJn81sG7j6Z6mfSiAlpC5+BNVJvrBLBWLZ
-         Fw0Q==
-X-Gm-Message-State: APjAAAXT0dd0Cj0uQFHTKLHPsm738qKXh77CuhA27QHvlb0MI9NMZ0ds
-        0SaPRprgqxFZMcBlWdBeKbA=
-X-Google-Smtp-Source: APXvYqyHS9WAiuDPi0cSS5aIGJMO0BAOfqPJ/6qwYYldKls95iZ3Uwc/Q8REMZ6FN8ezMaeOKzfh5A==
-X-Received: by 2002:ae9:ed4f:: with SMTP id c76mr56483552qkg.154.1564020767121;
-        Wed, 24 Jul 2019 19:12:47 -0700 (PDT)
-Received: from localhost.localdomain ([2001:1284:f013:2135:7c3d:d61c:7f11:969d])
-        by smtp.gmail.com with ESMTPSA id z19sm22385187qtu.43.2019.07.24.19.12.45
+        bh=9G4+pN2cxWowXbZZyCIC7KTWC6wMDbOZ0AlFZhGnUI8=;
+        b=muX+iYwH8suTfqCcZPzfh6eyWm2mLPSsojqtUrNDS7ho0y6s95/Hl7kKo8dd+Niy14
+         DgknbEu7bklwMdZ9CEmLmG171FlJ4kPIjAOw0+da3KoUfmMbSlvCQQd3DjqSe8JAFSjL
+         8POw9tgfwdKqVqvxyrZUs37jcfpWXamtI0xORonO8yLBj9yiGZc0WQePa1lU+M8x2cgV
+         oUDWKU47kihT6emOVg7iIhNtOxU+wPz23YFaNZ5X44LIvwEtfjZQGi4vzBDCW34p25Gv
+         E84gM1EqXIvAczPTK1pB+f9hQHc75LQ7Rs7lkdCrWk4ZiEcyrLV5BEkGE0xTMIAO5V7z
+         K3KQ==
+X-Gm-Message-State: APjAAAUvyga7R1MTivxO5quNV920zWQFqpf31QckBW2fvlv8zH6tOaVB
+        RIXiQuts2TJoRBSYCeO6DEc=
+X-Google-Smtp-Source: APXvYqwL6wLU8rld29cLRXAxZ3QTezr3U/j6A7GSc8wLZl/k5wE+5nLp+KnUGqQlKiObUg+x+MJmUA==
+X-Received: by 2002:a37:48d0:: with SMTP id v199mr55559570qka.318.1564021169541;
+        Wed, 24 Jul 2019 19:19:29 -0700 (PDT)
+Received: from localhost.localdomain ([168.181.49.45])
+        by smtp.gmail.com with ESMTPSA id h1sm23916466qkh.101.2019.07.24.19.19.28
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 24 Jul 2019 19:12:46 -0700 (PDT)
+        Wed, 24 Jul 2019 19:19:28 -0700 (PDT)
 Received: by localhost.localdomain (Postfix, from userid 1000)
-        id E1070C0AAD; Wed, 24 Jul 2019 23:12:43 -0300 (-03)
-Date:   Wed, 24 Jul 2019 23:12:43 -0300
+        id C3555C0AAD; Wed, 24 Jul 2019 23:19:25 -0300 (-03)
+Date:   Wed, 24 Jul 2019 23:19:25 -0300
 From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Ji Jianwen <jijianwen@gmail.com>
-Cc:     Neil Horman <nhorman@tuxdriver.com>, linux-sctp@vger.kernel.org,
-        Xin Long <lucien.xin@gmail.com>
-Subject: Re: [PATCH v2 lksctp-tools] testlib: improve test_bind function
-Message-ID: <20190725021243.GB4064@localhost.localdomain>
-References: <20190724103930.13727-1-jijianwen@gmail.com>
- <20190724113836.GB7212@hmswarspite.think-freely.org>
- <20190724124046.GE6204@localhost.localdomain>
- <CAGWhr0BONvwwVmSLAmbnOhQhxu-HPR-e3V6xfcvTmoOxHX73Tg@mail.gmail.com>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     Neil Horman <nhorman@tuxdriver.com>,
+        Hillf Danton <hdanton@sina.com>, linux-sctp@vger.kernel.org,
+        network dev <netdev@vger.kernel.org>,
+        syzkaller <syzkaller@googlegroups.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        syzbot <syzbot+6ad9c3bd0a218a2ab41d@syzkaller.appspotmail.com>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH] net: sctp: fix memory leak in sctp_send_reset_streams
+Message-ID: <20190725021925.GI6204@localhost.localdomain>
+References: <20190602034429.6888-1-hdanton@sina.com>
+ <20190602105133.GA16948@hmswarspite.think-freely.org>
+ <CADvbK_dUDjK3UAF49uo+DZv+QiuEsaMmZeqDwBJ0suRwu4yXJw@mail.gmail.com>
+ <CADvbK_ddFyO2iz-QS3bHevHN7Q29VUS4joK3Kxam3Y4tEqHFKA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGWhr0BONvwwVmSLAmbnOhQhxu-HPR-e3V6xfcvTmoOxHX73Tg@mail.gmail.com>
+In-Reply-To: <CADvbK_ddFyO2iz-QS3bHevHN7Q29VUS4joK3Kxam3Y4tEqHFKA@mail.gmail.com>
 User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, Jul 25, 2019 at 09:04:33AM +0800, Ji Jianwen wrote:
-> On Wed, Jul 24, 2019 at 8:40 PM Marcelo Ricardo Leitner
-> <marcelo.leitner@gmail.com> wrote:
+On Wed, Jul 24, 2019 at 03:56:40PM +0800, Xin Long wrote:
+> On Sun, Jun 2, 2019 at 9:36 PM Xin Long <lucien.xin@gmail.com> wrote:
 > >
-> > On Wed, Jul 24, 2019 at 07:38:36AM -0400, Neil Horman wrote:
-> > > On Wed, Jul 24, 2019 at 06:39:30PM +0800, Jianwen Ji wrote:
-> > > > Try to bind again if the errno is EADDRINUSE.
-> > > > Some tests failed to run sometimes, here is one snapshot:
+> > On Sun, Jun 2, 2019 at 6:52 PM Neil Horman <nhorman@tuxdriver.com> wrote:
+> > >
+> > > On Sun, Jun 02, 2019 at 11:44:29AM +0800, Hillf Danton wrote:
 > > > >
-> > > >    ...
+> > > > syzbot found the following crash on:
 > > > >
-> > > >    test_sockopt.c 25 PASS : setsockopt(SCTP_PEER_ADDR_PARAMS) - one-to-many style invalid hb demand
-> > > >    test_sockopt.c 26 BROK : bind: Address already in use
-> > > >    DUMP_CORE ../../src/testlib/sctputil.h: 145
+> > > > HEAD commit:    036e3431 Merge git://git.kernel.org/pub/scm/linux/kernel/g..
+> > > > git tree:       upstream
+> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=153cff12a00000
+> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=8f0f63a62bb5b13c
+> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=6ad9c3bd0a218a2ab41d
+> > > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12561c86a00000
+> > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15b76fd8a00000
 > > > >
-> > > >    ...
+> > > > executing program
+> > > > executing program
+> > > > executing program
+> > > > executing program
+> > > > executing program
+> > > > BUG: memory leak
+> > > > unreferenced object 0xffff888123894820 (size 32):
+> > > >   comm "syz-executor045", pid 7267, jiffies 4294943559 (age 13.660s)
+> > > >   hex dump (first 32 bytes):
+> > > >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+> > > >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+> > > >   backtrace:
+> > > >     [<00000000c7e71c69>] kmemleak_alloc_recursive
+> > > > include/linux/kmemleak.h:55 [inline]
+> > > >     [<00000000c7e71c69>] slab_post_alloc_hook mm/slab.h:439 [inline]
+> > > >     [<00000000c7e71c69>] slab_alloc mm/slab.c:3326 [inline]
+> > > >     [<00000000c7e71c69>] __do_kmalloc mm/slab.c:3658 [inline]
+> > > >     [<00000000c7e71c69>] __kmalloc+0x161/0x2c0 mm/slab.c:3669
+> > > >     [<000000003250ed8e>] kmalloc_array include/linux/slab.h:670 [inline]
+> > > >     [<000000003250ed8e>] kcalloc include/linux/slab.h:681 [inline]
+> > > >     [<000000003250ed8e>] sctp_send_reset_streams+0x1ab/0x5a0 net/sctp/stream.c:302
+> > > >     [<00000000cd899c6e>] sctp_setsockopt_reset_streams net/sctp/socket.c:4314 [inline]
+> > > >     [<00000000cd899c6e>] sctp_setsockopt net/sctp/socket.c:4765 [inline]
+> > > >     [<00000000cd899c6e>] sctp_setsockopt+0xc23/0x2bf0 net/sctp/socket.c:4608
+> > > >     [<00000000ff3a21a2>] sock_common_setsockopt+0x38/0x50 net/core/sock.c:3130
+> > > >     [<000000009eb87ae7>] __sys_setsockopt+0x98/0x120 net/socket.c:2078
+> > > >     [<00000000e0ede6ca>] __do_sys_setsockopt net/socket.c:2089 [inline]
+> > > >     [<00000000e0ede6ca>] __se_sys_setsockopt net/socket.c:2086 [inline]
+> > > >     [<00000000e0ede6ca>] __x64_sys_setsockopt+0x26/0x30 net/socket.c:2086
+> > > >     [<00000000c61155f5>] do_syscall_64+0x76/0x1a0 arch/x86/entry/common.c:301
+> > > >     [<00000000e540958c>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
 > > > >
-> > > >    test_1_to_1_sendmsg.c 10 PASS : sendmsg() on a closed association - EPIPE
-> > > >    test_1_to_1_sendmsg.c 11 BROK : bind: Address already in use
-> > > >    DUMP_CORE ../../src/testlib/sctputil.h: 145
 > > > >
-> > > > The reason is that it closed a socket and then created a new socket
-> > > > to bind the same socket address as before, which was not released
-> > > > yet.
+> > > > It was introduced in commit d570a59c5b5f ("sctp: only allow the out stream
+> > > > reset when the stream outq is empty"), in orde to check stream outqs before
+> > > > sending SCTP_STRRESET_IN_PROGRESS back to the peer of the stream. EAGAIN is
+> > > > returned, however, without the nstr_list slab released, if any outq is found
+> > > > to be non empty.
 > > > >
-> > > > Signed-off-by: Jianwen Ji <jijianwen@gmail.com>
+> > > > Freeing the slab in question before bailing out fixes it.
+> > > >
+> > > > Fixes: d570a59c5b5f ("sctp: only allow the out stream reset when the stream outq is empty")
+> > > > Reported-by: syzbot <syzbot+6ad9c3bd0a218a2ab41d@syzkaller.appspotmail.com>
+> > > > Reported-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+> > > > Tested-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+> > > > Cc: Xin Long <lucien.xin@gmail.com>
+> > > > Cc: Neil Horman <nhorman@tuxdriver.com>
+> > > > Cc: Vlad Yasevich <vyasevich@gmail.com>
+> > > > Cc: Eric Dumazet <edumazet@google.com>
+> > > > Signed-off-by: Hillf Danton <hdanton@sina.com>
 > > > > ---
-> > > >  src/testlib/sctputil.h | 24 +++++++++++++++++++++---
-> > > >  1 file changed, 21 insertions(+), 3 deletions(-)
+> > > > net/sctp/stream.c | 1 +
+> > > > 1 file changed, 1 insertion(+)
 > > > >
-> > > > diff --git a/src/testlib/sctputil.h b/src/testlib/sctputil.h
-> > > > index 9dbabd4..5b807c7 100644
-> > > > --- a/src/testlib/sctputil.h
-> > > > +++ b/src/testlib/sctputil.h
-> > > > @@ -54,6 +54,7 @@
-> > > >  #endif
+> > > > diff --git a/net/sctp/stream.c b/net/sctp/stream.c
+> > > > index 93ed078..d3e2f03 100644
+> > > > --- a/net/sctp/stream.c
+> > > > +++ b/net/sctp/stream.c
+> > > > @@ -310,6 +310,7 @@ int sctp_send_reset_streams(struct sctp_association *asoc,
 > > > >
-> > > >  #include <string.h>
-> > > > +#include <unistd.h>
-> > > >
-> > > >  typedef union {
-> > > >     struct sockaddr_in v4;
-> > > > @@ -72,6 +73,10 @@ typedef union {
-> > > >  #endif
-> > > >  #define SCTP_TESTPORT_2 (SCTP_TESTPORT_1+1)
-> > > >
-> > > > +#ifndef MAX_BIND_RETRYS
-> > > > +#define MAX_BIND_RETRYS 10
-> > > > +#endif
-> > > > +
-> > > >  #define SCTP_IP_BCAST      htonl(0xffffffff)
-> > > >  #define SCTP_IP_LOOPBACK  htonl(0x7f000001)
-> > > >
-> > > > @@ -140,9 +145,22 @@ static inline int test_socket(int domain, int type, int protocol)
-> > > >
-> > > >  static inline int test_bind(int sk, struct sockaddr *addr, socklen_t addrlen)
-> > > >  {
-> > > > -   int error = bind(sk, addr, addrlen);
-> > > > -        if (-1 == error)
-> > > > -                tst_brkm(TBROK, tst_exit, "bind: %s", strerror(errno));
-> > > > +   int error = 0, i = 0;
-> > > > +
-> > > > +   do {
-> > > > +           if (i > 0) sleep(1); /* sleep a while before new try... */
-> > > > +
-> > > > +           error = bind(sk, addr, addrlen);
-> > > > +           if (-1 == error && errno != EADDRINUSE) {
-> > > > +                   tst_brkm(TBROK, tst_exit, "bind: %s", strerror(errno));
-> > > > +           }
-> > > > +
-> > > > +           i++;
-> > > > +           if (i >= MAX_BIND_RETRYS) {
-> > > > +                   tst_brkm(TBROK, tst_exit, "bind: %s", strerror(errno));
-> > > > +           }
-> > > > +   } while (error < 0 && i < MAX_BIND_RETRYS);
-> > > > +
-> > > >     return error;
-> > > >  }
+> > > >       if (out && !sctp_stream_outq_is_empty(stream, str_nums, nstr_list)) {
+> > > >               retval = -EAGAIN;
+> > > > +             kfree(nstr_list);
+> > > >               goto out;
+> > > >       }
 > > > >
 > > > > --
-> > > > 2.14.5
 > > > >
 > > > >
-> > > I don't think this is really going to do much.  If a socket isnt released then
-> > > its not likely to be released in the amount of time it takes to iterate over
-> > > this loop 10 times, and theres no guarantee that it will in the future.  If we
-> > > want to ensure avoid EADDRINUSE, the second bind should probably just use
-> > > SCTP_TESTPORT_2, instead of reusing _1
-> >
-> > Agree. I'll go farther: if the test doesn't have a strict need on a
-> > specific port number, it should let the kernel assign one. That way it
-> > will also stress the port allocator.  Most of the tests can bind
-> > without specifying a port and then ask which port it got.
-> >
-> >   Marcelo
-> 
-> That would be great if we make test not depend on specific port number.
-> Please help look into it.
-> Take test_sockopt.c for example:
->  733
->  734         close(udp_svr_sk);
->  735         close(udp_clt_sk);
->  736
->  737
->  738         /* TEST #6: SCTP_DEFAULT_SEND_PARAM socket option. */
->  739         /* Create and bind 2 UDP-style sockets(udp_svr_sk, udp_clt_sk) and
->  740          * 2 TCP-style sockets. (tcp_svr_sk, tcp_clt_sk)
->  741          */
->  742         udp_svr_sk = test_socket(pf_class, SOCK_SEQPACKET, IPPROTO_SCTP);
->  743         udp_clt_sk = test_socket(pf_class, SOCK_SEQPACKET, IPPROTO_SCTP);
-> 
->                 ...
-> 
->  753         test_bind(udp_svr_sk, &udp_svr_loop.sa, sizeof(udp_svr_loop));
->  754         test_bind(udp_clt_sk, &udp_clt_loop.sa, sizeof(udp_clt_loop));
-> 
-> It closes 2 sockets at line 734 and 735, then next test item binds the
-> same socket addresses again at line 753 and 754.
+> > > Acked-by: Neil Horman <nhorman@tuxdriver.com>
+> > Reviewed-by: Xin Long <lucien.xin@gmail.com>
+> This fix is not applied, pls resend it with:
+> to = network dev <netdev@vger.kernel.org>
+> cc = davem@davemloft.net
+> to = linux-sctp@vger.kernel.org
+> cc = Neil Horman <nhorman@tuxdriver.com>
+> cc = Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 
-That's what it does now but does it have to be the same addresses?
+Good catch, thanks Xin. I don't know what happened but I never got
+this patch via netdev@, just the direct delivery. If it didn't reach
+netdev@, that explains it.
 
-> If run this program in a loop, the EADDRINUSE error will definitely
-> happen at some point.
->       while true; do
->            ./test_sockopt
->            [ $? -ne 0 ] && exit
->       done
-
-Yep.
-
-What about something like the below. In theory the getsockaddr result
-should be equivalent to what was passed to the function, and thus can
-be used by a subsequent call to connect().
-
-(The additional include breaks the build, btw)
-
-diff --git a/src/testlib/sctputil.h b/src/testlib/sctputil.h
-index 9dbabd4762e0..e18d5b55110b 100644
---- a/src/testlib/sctputil.h
-+++ b/src/testlib/sctputil.h
-@@ -54,6 +54,7 @@
- #endif
- 
- #include <string.h>
-+#include <arpa/inet.h>
- 
- typedef union {
- 	struct sockaddr_in v4;	
-@@ -146,6 +147,28 @@ static inline int test_bind(int sk, struct sockaddr *addr, socklen_t addrlen)
- 	return error;
- }
- 
-+static inline int test_bind_freeport(int sk, struct sockaddr *addr, socklen_t addrlen)
-+{
-+	struct sockaddr sa;
-+	int error;
-+
-+	if (sa.sa_family == AF_INET)
-+		((struct sockaddr_in *)addr)->sin_port = 0;
-+	else if (sa.sa_family == AF_INET6)
-+		((struct sockaddr_in6 *)addr)->sin6_port = 0;
-+
-+	error = test_bind(sk, addr, addrlen);
-+        if (-1 == error)
-+		return error;
-+
-+	addrlen = sizeof(sa);
-+	error = getsockname(sk, &sa, &addrlen);
-+	if (-1 == error)
-+                tst_brkm(TBROK, tst_exit, "getsockname: %s", strerror(errno));
-+
-+	return error;
-+}
-+
- static inline int test_bindx_add(int sk, struct sockaddr *addr, int count)
- {
- 	int error = sctp_bindx(sk, addr, count, SCTP_BINDX_ADD_ADDR);
-
+  Marcelo
