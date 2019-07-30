@@ -2,165 +2,113 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C0A7AC71
-	for <lists+linux-sctp@lfdr.de>; Tue, 30 Jul 2019 17:31:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71FC37B331
+	for <lists+linux-sctp@lfdr.de>; Tue, 30 Jul 2019 21:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731144AbfG3PbH (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 30 Jul 2019 11:31:07 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:42495 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731143AbfG3PbH (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 30 Jul 2019 11:31:07 -0400
-Received: by mail-qt1-f196.google.com with SMTP id h18so63463438qtm.9
-        for <linux-sctp@vger.kernel.org>; Tue, 30 Jul 2019 08:31:06 -0700 (PDT)
+        id S1727169AbfG3TYP (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 30 Jul 2019 15:24:15 -0400
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:45728 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725840AbfG3TYP (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 30 Jul 2019 15:24:15 -0400
+Received: by mail-qk1-f194.google.com with SMTP id s22so47464342qkj.12;
+        Tue, 30 Jul 2019 12:24:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lca.pw; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=icQ+mmUwHlGo5WrRaYExQwbod/Jz68i28SEVBs5MWe0=;
-        b=TQAcMC8JLFSx1a3GX3PlPg86q7cbX6i8+ue1vGOYJkg/B7hCQb/49FmaadO8+aGcSn
-         Brz9eeXm2C7YvtHtDee/XOQWV2gf2fi6RAn6CYVULtbVCzbBX6bmeT2plzcv6hfriDQR
-         Vwqg9HSubXdL+SlkhQALukz6KLaaYpuzPB4Y/PxcFQ3OCus7vk169BqPcBMg2VCa//HN
-         yh12pjChhhSdW7mgjIWXaVM1UCLbbRwqtC5HLX4lHzU4uEenTkXSy+im0m+pA6m54OW3
-         1CSZwl9XVSavEOxFcff2NEymzqiM5IkkdfJ/yPaXf00QfHOmjVOU68U1C5l+TmyHYRQt
-         7GSg==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=OhLVyjdTUvve/Y4PMA/hXjNnH3oXEzxOn7HC1gnatZA=;
+        b=GlbndsXxIjom3ykqpo8LnDNYTtbISpEltEU9d9aAqJTZ8tfluq9SzJh3ToGQYRnUhm
+         EYmgm6MUO9+/bags2mtIBdpNQPXfvFakMohkxbIsv+u9EUkqWzj0O0AW/Mi//mgWuBd+
+         Jo04uDa4RwZbbmVKR+dKmUujpV8cv5oQ5te5H67JlKG+/OHH+xDix4H55SEVRDWlGzY0
+         4i0tW9SETg8bIcXwIJuv1EmkwJ1ZM2/GACWYREbGqDBjnG8VE4cJaD/JTqoVht+GqC5U
+         aXK4nZvbChmQSgL6v9KRdgwjJqRbrKJwT2lgEoUBUrYZdO9jdUSOgCcIAGDtDgUIo3c3
+         Ng5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=icQ+mmUwHlGo5WrRaYExQwbod/Jz68i28SEVBs5MWe0=;
-        b=OnZXE1HYY22kfIsoAPxteFa6iPfjWUb4CkHS7WG6KJLRmC3fNbHbfp6h1x6JTtiTyv
-         7WLbA27Ph5k9nTUiLNuNGMJ/tE2/+sqlCvn1X9Nwwa78NUgDpkHg/QpK5fL55hcnvE/r
-         68Cyc/HI+7cInJXXjhj4hEZkh7kJQbGJsHMSanw71Owgl5cS8cUnqxeJ3FdDYKho1uEM
-         2U/dswXD9JheepqIslZwslRf38skJrv/t7iz2AlnHy1OJavc2c6wZ9DtGeLWQPXkPYzo
-         SUbrBpLP4fUFEqucMkKLocgPLO0lBxg3Q8qqHX9HXN98UwiPxeV3I5R6FLwuYCi/JLYt
-         zuGg==
-X-Gm-Message-State: APjAAAVc4+XfxNI413LYdW6NEvw2V0trVeRxVgMsekRKOa4kLpqHKPCE
-        z5UcEDB99FeSqqJSQdilGB9Pyg==
-X-Google-Smtp-Source: APXvYqxWizCQ2lrtrTlT130eyj++JM/rzivWzH05iPty1SPyO9/8wH9PnKozyoEe5P7CKlh+ezMbhA==
-X-Received: by 2002:a0c:8602:: with SMTP id p2mr84787456qva.111.1564500665583;
-        Tue, 30 Jul 2019 08:31:05 -0700 (PDT)
-Received: from qcai.nay.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id c5sm30023404qkb.41.2019.07.30.08.31.03
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Jul 2019 08:31:04 -0700 (PDT)
-From:   Qian Cai <cai@lca.pw>
-To:     davem@davemloft.net
-Cc:     vyasevich@gmail.com, nhorman@tuxdriver.com,
-        marcelo.leitner@gmail.com, David.Laight@ACULAB.COM,
-        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Qian Cai <cai@lca.pw>
-Subject: [PATCH v3] net/socket: fix GCC8+ Wpacked-not-aligned warnings
-Date:   Tue, 30 Jul 2019 11:30:33 -0400
-Message-Id: <1564500633-7419-1-git-send-email-cai@lca.pw>
-X-Mailer: git-send-email 1.8.3.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=OhLVyjdTUvve/Y4PMA/hXjNnH3oXEzxOn7HC1gnatZA=;
+        b=PL2qZE6LYsC9ATy7kSv33d31tZt3zCfthQhqSfW+Vk0A2NsUDa3IipnTf28Rlhsm2k
+         7mbAFV7CdfGoBXnWmsZXWyGBqSI9U683VshebhUPv+mlURTGOGZMxhOS0a7rRmhto/a8
+         pruvVYuOhnojhLWx+7XrtJKgMbWgb7w6TcOppBGKhmdOkvb1tc+qJQOnuZ1vELNFHBdb
+         W74fgub8ydVbPKkV0RdVSlNYX9WuT8901mOn8jbkjU77vVJ2YiA7NLCLYWzoGjWgMpkv
+         5Z3jHR+50J087HQgV+UNLKRKnEwfkUgEry0xdM+H0dvs9HbweHX75Irf57xsBZZ4VEAW
+         PPOQ==
+X-Gm-Message-State: APjAAAWZqce4QP2SmWZNMAHON5qvYsm5dX2nAGn/Fi8g+WxT8cLFi9f3
+        fPADzAHuBDAY96MnV/8hIFvWzbCJxlGZ0Q==
+X-Google-Smtp-Source: APXvYqwlfCtCaDKcSXrAT5/wVU8wzUGOeo4yHpeHBlKfk1K9dSPdhCRr03/K+KGK5aS51ejrcr3dkw==
+X-Received: by 2002:ae9:e10e:: with SMTP id g14mr75842138qkm.486.1564514654416;
+        Tue, 30 Jul 2019 12:24:14 -0700 (PDT)
+Received: from localhost.localdomain ([2001:1284:f016:a0af:c6c5:7c31:69b:3f23])
+        by smtp.gmail.com with ESMTPSA id l19sm37164135qtb.6.2019.07.30.12.24.13
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 30 Jul 2019 12:24:13 -0700 (PDT)
+Received: by localhost.localdomain (Postfix, from userid 1000)
+        id 6C97BC0AD9; Tue, 30 Jul 2019 16:24:11 -0300 (-03)
+Date:   Tue, 30 Jul 2019 16:24:11 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
+        Neil Horman <nhorman@tuxdriver.com>, davem@davemloft.net
+Subject: Re: [PATCHv2 net-next 1/5] sctp: only copy the available addr data
+ in sctp_transport_init
+Message-ID: <20190730192411.GR6204@localhost.localdomain>
+References: <cover.1564490276.git.lucien.xin@gmail.com>
+ <bb6e9856c2db0f24b91fb326fbe3c9c013f2459b.1564490276.git.lucien.xin@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bb6e9856c2db0f24b91fb326fbe3c9c013f2459b.1564490276.git.lucien.xin@gmail.com>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-There are a lot of those warnings with GCC8+ 64-bit,
+On Tue, Jul 30, 2019 at 08:38:19PM +0800, Xin Long wrote:
+> 'addr' passed to sctp_transport_init is not always a whole size
+> of union sctp_addr, like the path:
+> 
+>   sctp_sendmsg() ->
+>   sctp_sendmsg_new_asoc() ->
+>   sctp_assoc_add_peer() ->
+>   sctp_transport_new() -> sctp_transport_init()
+> 
+> In the next patches, we will also pass the address length of data
+> only to sctp_assoc_add_peer().
+> 
+> So sctp_transport_init() should copy the only available data from
+> addr to peer->ipaddr, instead of 'peer->ipaddr = *addr' which may
+> cause slab-out-of-bounds.
+> 
+> Signed-off-by: Xin Long <lucien.xin@gmail.com>
+> ---
+>  net/sctp/transport.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/net/sctp/transport.c b/net/sctp/transport.c
+> index e2f8e36..7235a60 100644
+> --- a/net/sctp/transport.c
+> +++ b/net/sctp/transport.c
+> @@ -43,8 +43,8 @@ static struct sctp_transport *sctp_transport_init(struct net *net,
+>  						  gfp_t gfp)
+>  {
+>  	/* Copy in the address.  */
+> -	peer->ipaddr = *addr;
+>  	peer->af_specific = sctp_get_af_specific(addr->sa.sa_family);
+> +	memcpy(&peer->ipaddr, addr, peer->af_specific->sockaddr_len);
 
-In file included from ./include/linux/sctp.h:42,
-                 from net/core/skbuff.c:47:
-./include/uapi/linux/sctp.h:395:1: warning: alignment 4 of 'struct
-sctp_paddr_change' is less than 8 [-Wpacked-not-aligned]
- } __attribute__((packed, aligned(4)));
- ^
-./include/uapi/linux/sctp.h:728:1: warning: alignment 4 of 'struct
-sctp_setpeerprim' is less than 8 [-Wpacked-not-aligned]
- } __attribute__((packed, aligned(4)));
- ^
-./include/uapi/linux/sctp.h:727:26: warning: 'sspp_addr' offset 4 in
-'struct sctp_setpeerprim' isn't aligned to 8 [-Wpacked-not-aligned]
-  struct sockaddr_storage sspp_addr;
-                          ^~~~~~~~~
-./include/uapi/linux/sctp.h:741:1: warning: alignment 4 of 'struct
-sctp_prim' is less than 8 [-Wpacked-not-aligned]
- } __attribute__((packed, aligned(4)));
- ^
-./include/uapi/linux/sctp.h:740:26: warning: 'ssp_addr' offset 4 in
-'struct sctp_prim' isn't aligned to 8 [-Wpacked-not-aligned]
-  struct sockaddr_storage ssp_addr;
-                          ^~~~~~~~
-./include/uapi/linux/sctp.h:792:1: warning: alignment 4 of 'struct
-sctp_paddrparams' is less than 8 [-Wpacked-not-aligned]
- } __attribute__((packed, aligned(4)));
- ^
-./include/uapi/linux/sctp.h:784:26: warning: 'spp_address' offset 4 in
-'struct sctp_paddrparams' isn't aligned to 8 [-Wpacked-not-aligned]
-  struct sockaddr_storage spp_address;
-                          ^~~~~~~~~~~
-./include/uapi/linux/sctp.h:905:1: warning: alignment 4 of 'struct
-sctp_paddrinfo' is less than 8 [-Wpacked-not-aligned]
- } __attribute__((packed, aligned(4)));
- ^
-./include/uapi/linux/sctp.h:899:26: warning: 'spinfo_address' offset 4
-in 'struct sctp_paddrinfo' isn't aligned to 8 [-Wpacked-not-aligned]
-  struct sockaddr_storage spinfo_address;
-                          ^~~~~~~~~~~~~~
+Just for the record, transports are allocated with kzalloc() and this
+shouldn't result in any remaining bytes of this buffer to be
+uninitialized.
 
-This is because the commit 20c9c825b12f ("[SCTP] Fix SCTP socket options
-to work with 32-bit apps on 64-bit kernels.") added "packed, aligned(4)"
-GCC attributes to some structures but one of the members, i.e, "struct
-sockaddr_storage" in those structures has the attribute,
-"aligned(__alignof__ (struct sockaddr *)" which is 8-byte on 64-bit
-systems, so the commit overwrites the designed alignments for
-"sockaddr_storage".
+That said, unrelated to the patch, memset below and other =0's are not
+necessary.
 
-To fix this, "struct sockaddr_storage" needs to be aligned to 4-byte as
-it is only used in those packed sctp structure which is part of UAPI,
-and "struct __kernel_sockaddr_storage" is used in some other
-places of UAPI that need not to change alignments in order to not
-breaking userspace.
-
-Use an implicit alignment for "struct __kernel_sockaddr_storage" so it
-can keep the same alignments as a member in both packed and un-packed
-structures without breaking UAPI.
-
-Suggested-by: David Laight <David.Laight@ACULAB.COM>
-Signed-off-by: Qian Cai <cai@lca.pw>
----
-
-v3: Add some comments and rearrange the public member first per David.
-v2: Use an implicit alignment for "struct __kernel_sockaddr_storage".
-
- include/uapi/linux/socket.h | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
-
-diff --git a/include/uapi/linux/socket.h b/include/uapi/linux/socket.h
-index 8eb96021709c..c3409c8ec0dd 100644
---- a/include/uapi/linux/socket.h
-+++ b/include/uapi/linux/socket.h
-@@ -6,17 +6,24 @@
-  * Desired design of maximum size and alignment (see RFC2553)
-  */
- #define _K_SS_MAXSIZE	128	/* Implementation specific max size */
--#define _K_SS_ALIGNSIZE	(__alignof__ (struct sockaddr *))
--				/* Implementation specific desired alignment */
- 
- typedef unsigned short __kernel_sa_family_t;
- 
-+/*
-+ * The definition uses anonymous union and struct in order to control the
-+ * default alignment.
-+ */
- struct __kernel_sockaddr_storage {
--	__kernel_sa_family_t	ss_family;		/* address family */
--	/* Following field(s) are implementation specific */
--	char		__data[_K_SS_MAXSIZE - sizeof(unsigned short)];
-+	union {
-+		struct {
-+			__kernel_sa_family_t	ss_family; /* address family */
-+			/* Following field(s) are implementation specific */
-+			char __data[_K_SS_MAXSIZE - sizeof(unsigned short)];
- 				/* space to achieve desired size, */
- 				/* _SS_MAXSIZE value minus size of ss_family */
--} __attribute__ ((aligned(_K_SS_ALIGNSIZE)));	/* force desired alignment */
-+		};
-+		void *__align; /* implementation specific desired alignment */
-+	};
-+};
- 
- #endif /* _UAPI_LINUX_SOCKET_H */
--- 
-1.8.3.1
-
+>  	memset(&peer->saddr, 0, sizeof(union sctp_addr));
+>  
+>  	peer->sack_generation = 0;
+> -- 
+> 2.1.0
+> 
