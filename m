@@ -2,95 +2,80 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 309907A396
-	for <lists+linux-sctp@lfdr.de>; Tue, 30 Jul 2019 11:02:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C9B7A8B5
+	for <lists+linux-sctp@lfdr.de>; Tue, 30 Jul 2019 14:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731246AbfG3JBt convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Tue, 30 Jul 2019 05:01:49 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:44601 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730281AbfG3JBs (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>);
-        Tue, 30 Jul 2019 05:01:48 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-78-fpdZrzpgOd2IFEr4Y9p-iw-1; Tue, 30 Jul 2019 10:01:43 +0100
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b::d117) by AcuMS.aculab.com
- (fd9f:af1c:a25b::d117) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Tue,
- 30 Jul 2019 10:01:43 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Tue, 30 Jul 2019 10:01:43 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Qian Cai' <cai@lca.pw>,
-        "davem@davemloft.net" <davem@davemloft.net>
-CC:     "vyasevich@gmail.com" <vyasevich@gmail.com>,
-        "nhorman@tuxdriver.com" <nhorman@tuxdriver.com>,
-        "marcelo.leitner@gmail.com" <marcelo.leitner@gmail.com>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] net/socket: fix GCC8+ Wpacked-not-aligned warnings
-Thread-Topic: [PATCH] net/socket: fix GCC8+ Wpacked-not-aligned warnings
-Thread-Index: AQHVRkudEsn++uUNgEOzf6EyOSA1VKbi3DOA
-Date:   Tue, 30 Jul 2019 09:01:43 +0000
-Message-ID: <91237fd501de4ab895305c4d5666d822@AcuMS.aculab.com>
-References: <1564431838-23051-1-git-send-email-cai@lca.pw>
-In-Reply-To: <1564431838-23051-1-git-send-email-cai@lca.pw>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-X-MC-Unique: fpdZrzpgOd2IFEr4Y9p-iw-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+        id S1729175AbfG3Mid (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 30 Jul 2019 08:38:33 -0400
+Received: from mail-pf1-f170.google.com ([209.85.210.170]:46635 "EHLO
+        mail-pf1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729088AbfG3Mid (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 30 Jul 2019 08:38:33 -0400
+Received: by mail-pf1-f170.google.com with SMTP id c3so6643432pfa.13;
+        Tue, 30 Jul 2019 05:38:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=5OIu5CEjdBAspysH0Ye7YYpeHBguHsHWqkMFFR0LEDc=;
+        b=HI4mbCHlZhXO8MuWJ81uDkdeH94aZ1SvZPlzEwhUvoWKbKSN9KmRQt4JW/xpfJDyA4
+         5tVv2vg1X3jAV7ubgR7/7qJDua8n0RAV8yNAq9aKnCjxDGMHiq9vKmxE0m1YZ7dmI1Ie
+         CeCcNgwshEVmTI43v6duiKcwcWzUMOAGsqNwUwiVunJwQ8NYw51Tsl2l9nEvyENodQ0p
+         JlBBH2v7dNdckNB07gTtZ2PyKI3jscUZQgIEqYSdyViX2oQIa3OKBuhIChWmju0QeSPw
+         Vl72igUgyp06d6MtOFlmKJ4gw7UWpuTRc0EirIuhlZ5Aaz/BtF/CuKe1URUMQGJBeJy4
+         Bazg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=5OIu5CEjdBAspysH0Ye7YYpeHBguHsHWqkMFFR0LEDc=;
+        b=DaJa+6dYnYsm3L8Zy86pILWokSqh20IUHvHoN0+vhNFK8YPA9JrrFNlcDne6iRYztr
+         a+Rrxf+C712INVl9p7R+iyXjLXWJBiEmd4ORDAddnqrQ1fUw8TRgY1kOJxDZwbaNRxTV
+         GXMOuxihqDff8N+tJf0AGwlnxTcy5m862Xyamba9at6l/CVmBHQIBEQPQqOm7V+tBRGn
+         LsfMOYEMfFnuEOcQLtIW89zVSF2oyt4qdyr0e+Y/0UKlytt5dFegCy91oNx8CyZpzsMj
+         UMJeBNZldL4Lm7S05iMxEVDaqhnAij+dFDYexWI0DUWNI2sDanZ5uUqtIfLFBlI9dRV8
+         sJJA==
+X-Gm-Message-State: APjAAAU03LJmxnb/pbbSDkH36pvhYvE6q6TDPEENHv+8U3OJ5vOpEKke
+        AXzKtXSi3eM+n8DhP1gphpbTO4qz
+X-Google-Smtp-Source: APXvYqxcFr1yYWUO3C1Cy3ha7pTWU71bHIV4kOdCIqbKwyevwk8JO606weXXn4SxenwGwPI89zNGBg==
+X-Received: by 2002:a63:3148:: with SMTP id x69mr22310079pgx.300.1564490312699;
+        Tue, 30 Jul 2019 05:38:32 -0700 (PDT)
+Received: from localhost ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id r2sm83153494pfl.67.2019.07.30.05.38.31
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 30 Jul 2019 05:38:31 -0700 (PDT)
+From:   Xin Long <lucien.xin@gmail.com>
+To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
+Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>, davem@davemloft.net
+Subject: [PATCHv2 net-next 0/5] sctp: clean up __sctp_connect function
+Date:   Tue, 30 Jul 2019 20:38:18 +0800
+Message-Id: <cover.1564490276.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.1.0
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Qian Cai
-> Sent: 29 July 2019 21:24
-..
-> To fix this, "struct sockaddr_storage" needs to be aligned to 4-byte as
-> it is only used in those packed sctp structure which is part of UAPI,
-> and "struct __kernel_sockaddr_storage" is used in some other
-> places of UAPI that need not to change alignments in order to not
-> breaking userspace.
-> 
-> One option is use typedef between "sockaddr_storage" and
-> "__kernel_sockaddr_storage" but it needs to change 35 or 370 lines of
-> codes. The other option is to duplicate this simple 2-field structure to
-> have a separate "struct sockaddr_storage" so it can use a different
-> alignment than "__kernel_sockaddr_storage". Also the structure seems
-> stable enough, so it will be low-maintenance to update two structures in
-> the future in case of changes.
+This patchset is to factor out some common code for
+sctp_sendmsg_new_asoc() and __sctp_connect() into 2
+new functioins.
 
-Does it all work if the 8 byte alignment is implicit, not explicit?
-For instance if unnamed union and struct are used eg:
+v1->v2:
+  - add the patch 1/5 to avoid a slab-out-of-bounds warning.
+  - add some code comment for the check change in patch 2/5.
+  - remove unused 'addrcnt' as Marcelo noticed in patch 3/5.
 
-struct sockaddr_storage {
-	union {
-		void * __ptr;  /* Force alignment */
-		struct {
-			__kernel_sa_family_t	ss_family;		/* address family */
-			/* Following field(s) are implementation specific */
-			char	__data[_K_SS_MAXSIZE - sizeof(unsigned short)];
-					/* space to achieve desired size, */
-					/* _SS_MAXSIZE value minus size of ss_family */
-		};
-	};
-};
+Xin Long (5):
+  sctp: only copy the available addr data in sctp_transport_init
+  sctp: check addr_size with sa_family_t size in
+    __sctp_setsockopt_connectx
+  sctp: clean up __sctp_connect
+  sctp: factor out sctp_connect_new_asoc
+  sctp: factor out sctp_connect_add_peer
 
-I suspect unnamed unions and structs have to be allowed by the compiler.
+ net/sctp/socket.c    | 376 ++++++++++++++++++++-------------------------------
+ net/sctp/transport.c |   2 +-
+ 2 files changed, 147 insertions(+), 231 deletions(-)
 
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+-- 
+2.1.0
 
