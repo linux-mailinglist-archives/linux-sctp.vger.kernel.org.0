@@ -2,34 +2,34 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CDF980335
-	for <lists+linux-sctp@lfdr.de>; Sat,  3 Aug 2019 01:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9BF680797
+	for <lists+linux-sctp@lfdr.de>; Sat,  3 Aug 2019 20:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389377AbfHBX0t (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 2 Aug 2019 19:26:49 -0400
-Received: from smtprelay0088.hostedemail.com ([216.40.44.88]:45777 "EHLO
+        id S1726403AbfHCSB0 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sat, 3 Aug 2019 14:01:26 -0400
+Received: from smtprelay0253.hostedemail.com ([216.40.44.253]:53387 "EHLO
         smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2389345AbfHBX0t (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 2 Aug 2019 19:26:49 -0400
+        by vger.kernel.org with ESMTP id S1728366AbfHCSB0 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sat, 3 Aug 2019 14:01:26 -0400
 Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay03.hostedemail.com (Postfix) with ESMTP id 98FC3837F24A;
-        Fri,  2 Aug 2019 23:26:47 +0000 (UTC)
+        by smtprelay08.hostedemail.com (Postfix) with ESMTP id A495B182CED2A;
+        Sat,  3 Aug 2019 18:01:24 +0000 (UTC)
 X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::,RULES_HIT:41:355:379:599:800:960:967:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2393:2525:2553:2559:2563:2682:2685:2828:2859:2933:2937:2939:2942:2945:2947:2951:2954:3022:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3868:3870:3871:3872:3873:3874:3934:3936:3938:3941:3944:3947:3950:3953:3956:3959:4250:4321:5007:6119:7576:8985:9025:9036:10004:10400:10848:10967:11232:11658:11914:12043:12297:12555:12740:12760:12895:13069:13311:13357:13439:14096:14097:14181:14659:14721:21080:21433:21611:21627:21740:30029:30054:30090:30091,0,RBL:23.242.196.136:@perches.com:.lbl8.mailshell.net-62.8.0.180 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:25,LUA_SUMMARY:none
-X-HE-Tag: deer92_3b20a69384253
-X-Filterd-Recvd-Size: 2168
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::,RULES_HIT:41:355:379:599:800:960:973:982:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2393:2553:2559:2562:2828:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3868:3870:3871:3872:3873:3874:4321:5007:7576:9036:10004:10400:10848:10967:11232:11658:11914:12297:12740:12760:12895:13069:13161:13229:13311:13357:13439:14096:14097:14181:14659:14721:21080:21611:21627:30054:30090:30091,0,RBL:23.242.196.136:@perches.com:.lbl8.mailshell.net-62.8.0.180 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:25,LUA_SUMMARY:none
+X-HE-Tag: place79_293e01dd82855
+X-Filterd-Recvd-Size: 2126
 Received: from XPS-9350.home (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
         (Authenticated sender: joe@perches.com)
-        by omf19.hostedemail.com (Postfix) with ESMTPA;
-        Fri,  2 Aug 2019 23:26:46 +0000 (UTC)
-Message-ID: <120880ae17b399cb5239522d8c229c717aaa81a5.camel@perches.com>
+        by omf14.hostedemail.com (Postfix) with ESMTPA;
+        Sat,  3 Aug 2019 18:01:23 +0000 (UTC)
+Message-ID: <8ea7002f65305ed82d2f09ea18cb237ee7e3a7a4.camel@perches.com>
 Subject: Re: [PATCH] net: sctp: Rename fallthrough label to unhandled
 From:   Joe Perches <joe@perches.com>
 To:     David Miller <davem@davemloft.net>
 Cc:     nhorman@tuxdriver.com, vyasevich@gmail.com,
         marcelo.leitner@gmail.com, linux-sctp@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 02 Aug 2019 16:26:44 -0700
+Date:   Sat, 03 Aug 2019 11:01:22 -0700
 In-Reply-To: <20190802.161932.1776993765494484851.davem@davemloft.net>
 References: <eac3fe457d553a2b366e1c1898d47ae8c048087c.camel@perches.com>
          <20190731121646.GD9823@hmswarspite.think-freely.org>
@@ -62,10 +62,11 @@ On Fri, 2019-08-02 at 16:19 -0700, David Miller wrote:
 > rediculous the problems it creates to pollute the global namespace like
 > that and yes also inconsistent with other shorthands for builtins.
 
-Please add that to the conversation on the RFC thread.
-https://lore.kernel.org/patchwork/patch/1108577/
+Rejected?
 
-In any case, fallthrough is not really a good label
-name for this use.
+I think that's inappropriate.
+
+As coded, it's nothing like a fallthrough and
+the rename to unhandled is more descriptive.
 
 
