@@ -2,70 +2,68 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6488079A
-	for <lists+linux-sctp@lfdr.de>; Sat,  3 Aug 2019 20:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5133380C2D
+	for <lists+linux-sctp@lfdr.de>; Sun,  4 Aug 2019 21:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728473AbfHCSDl (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sat, 3 Aug 2019 14:03:41 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:33612 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728366AbfHCSDl (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sat, 3 Aug 2019 14:03:41 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::d71])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 8A2B8153F53ED;
-        Sat,  3 Aug 2019 11:03:40 -0700 (PDT)
-Date:   Sat, 03 Aug 2019 11:03:39 -0700 (PDT)
-Message-Id: <20190803.110339.449734752227362483.davem@davemloft.net>
-To:     cai@lca.pw
-Cc:     vyasevich@gmail.com, nhorman@tuxdriver.com,
-        marcelo.leitner@gmail.com, David.Laight@ACULAB.COM,
+        id S1726520AbfHDT0p (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 4 Aug 2019 15:26:45 -0400
+Received: from charlotte.tuxdriver.com ([70.61.120.58]:46507 "EHLO
+        smtp.tuxdriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726392AbfHDT0p (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sun, 4 Aug 2019 15:26:45 -0400
+Received: from cpe-2606-a000-111b-6140-0-0-0-162e.dyn6.twc.com ([2606:a000:111b:6140::162e] helo=localhost)
+        by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
+        (Exim 4.63)
+        (envelope-from <nhorman@tuxdriver.com>)
+        id 1huM9P-0006RD-NH; Sun, 04 Aug 2019 15:26:41 -0400
+Date:   Sun, 4 Aug 2019 15:26:12 -0400
+From:   Neil Horman <nhorman@tuxdriver.com>
+To:     David Miller <davem@davemloft.net>
+Cc:     joe@perches.com, vyasevich@gmail.com, marcelo.leitner@gmail.com,
         linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] net/socket: fix GCC8+ Wpacked-not-aligned warnings
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <1564500633-7419-1-git-send-email-cai@lca.pw>
-References: <1564500633-7419-1-git-send-email-cai@lca.pw>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Sat, 03 Aug 2019 11:03:40 -0700 (PDT)
+Subject: Re: [PATCH] net: sctp: Rename fallthrough label to unhandled
+Message-ID: <20190804192612.GA17184@hmswarspite.think-freely.org>
+References: <eac3fe457d553a2b366e1c1898d47ae8c048087c.camel@perches.com>
+ <20190731121646.GD9823@hmswarspite.think-freely.org>
+ <a03a23728d3b468942a20b55f70babceaec587ee.camel@perches.com>
+ <20190802.161932.1776993765494484851.davem@davemloft.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190802.161932.1776993765494484851.davem@davemloft.net>
+User-Agent: Mutt/1.12.0 (2019-05-25)
+X-Spam-Score: -2.9 (--)
+X-Spam-Status: No
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Qian Cai <cai@lca.pw>
-Date: Tue, 30 Jul 2019 11:30:33 -0400
-
-> There are a lot of those warnings with GCC8+ 64-bit,
- ...
-> This is because the commit 20c9c825b12f ("[SCTP] Fix SCTP socket options
-> to work with 32-bit apps on 64-bit kernels.") added "packed, aligned(4)"
-> GCC attributes to some structures but one of the members, i.e, "struct
-> sockaddr_storage" in those structures has the attribute,
-> "aligned(__alignof__ (struct sockaddr *)" which is 8-byte on 64-bit
-> systems, so the commit overwrites the designed alignments for
-> "sockaddr_storage".
+On Fri, Aug 02, 2019 at 04:19:32PM -0700, David Miller wrote:
+> From: Joe Perches <joe@perches.com>
+> Date: Fri, 02 Aug 2019 10:47:34 -0700
 > 
-> To fix this, "struct sockaddr_storage" needs to be aligned to 4-byte as
-> it is only used in those packed sctp structure which is part of UAPI,
-> and "struct __kernel_sockaddr_storage" is used in some other
-> places of UAPI that need not to change alignments in order to not
-> breaking userspace.
+> > On Wed, 2019-07-31 at 08:16 -0400, Neil Horman wrote:
+> >> On Wed, Jul 31, 2019 at 04:32:43AM -0700, Joe Perches wrote:
+> >> > On Wed, 2019-07-31 at 07:19 -0400, Neil Horman wrote:
+> >> > > On Tue, Jul 30, 2019 at 10:04:37PM -0700, Joe Perches wrote:
+> >> > > > fallthrough may become a pseudo reserved keyword so this only use of
+> >> > > > fallthrough is better renamed to allow it.
+> > 
+> > Can you or any other maintainer apply this patch
+> > or ack it so David Miller can apply it?
 > 
-> Use an implicit alignment for "struct __kernel_sockaddr_storage" so it
-> can keep the same alignments as a member in both packed and un-packed
-> structures without breaking UAPI.
+> I, like others, don't like the lack of __ in the keyword.  It's kind of
+> rediculous the problems it creates to pollute the global namespace like
+> that and yes also inconsistent with other shorthands for builtins.
 > 
-> Suggested-by: David Laight <David.Laight@ACULAB.COM>
-> Signed-off-by: Qian Cai <cai@lca.pw>
+FWIW, I acked the sctp patch, because the use of the word fallthrough as a
+label, isn't that important to me, unhendled is just as good, so I'm ok with
+that change.
 
-Ok, this just changes how the alignment is declared from using the
-aligned attribute to using a union member which requires the same
-alignment.
+But, as I stated in the other thread, I agree, making a macro out of fallthrough
+without clearly naming it using a macro convention like __ is not something I'm
+ok with
+Neil
 
-Applied.
