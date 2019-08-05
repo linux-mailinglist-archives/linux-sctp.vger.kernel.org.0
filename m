@@ -2,68 +2,96 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5133380C2D
-	for <lists+linux-sctp@lfdr.de>; Sun,  4 Aug 2019 21:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7595A81867
+	for <lists+linux-sctp@lfdr.de>; Mon,  5 Aug 2019 13:49:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726520AbfHDT0p (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 4 Aug 2019 15:26:45 -0400
-Received: from charlotte.tuxdriver.com ([70.61.120.58]:46507 "EHLO
-        smtp.tuxdriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726392AbfHDT0p (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sun, 4 Aug 2019 15:26:45 -0400
-Received: from cpe-2606-a000-111b-6140-0-0-0-162e.dyn6.twc.com ([2606:a000:111b:6140::162e] helo=localhost)
-        by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
-        (Exim 4.63)
-        (envelope-from <nhorman@tuxdriver.com>)
-        id 1huM9P-0006RD-NH; Sun, 04 Aug 2019 15:26:41 -0400
-Date:   Sun, 4 Aug 2019 15:26:12 -0400
-From:   Neil Horman <nhorman@tuxdriver.com>
-To:     David Miller <davem@davemloft.net>
-Cc:     joe@perches.com, vyasevich@gmail.com, marcelo.leitner@gmail.com,
-        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: sctp: Rename fallthrough label to unhandled
-Message-ID: <20190804192612.GA17184@hmswarspite.think-freely.org>
-References: <eac3fe457d553a2b366e1c1898d47ae8c048087c.camel@perches.com>
- <20190731121646.GD9823@hmswarspite.think-freely.org>
- <a03a23728d3b468942a20b55f70babceaec587ee.camel@perches.com>
- <20190802.161932.1776993765494484851.davem@davemloft.net>
+        id S1727357AbfHELtR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Mon, 5 Aug 2019 07:49:17 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:23653 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727739AbfHELtR (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 5 Aug 2019 07:49:17 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-160-NQwNEFbuMJmxd-wtY4RQAg-1; Mon, 05 Aug 2019 12:49:13 +0100
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b::d117) by AcuMS.aculab.com
+ (fd9f:af1c:a25b::d117) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon,
+ 5 Aug 2019 12:49:12 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Mon, 5 Aug 2019 12:49:12 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Joe Perches' <joe@perches.com>,
+        Neil Horman <nhorman@tuxdriver.com>
+CC:     Vlad Yasevich <vyasevich@gmail.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] net: sctp: Rename fallthrough label to unhandled
+Thread-Topic: [PATCH] net: sctp: Rename fallthrough label to unhandled
+Thread-Index: AQHVSJCHKC4hvRwdKE+hlvEjJaGqZabsda0g
+Date:   Mon, 5 Aug 2019 11:49:12 +0000
+Message-ID: <40493bf4256c4b62b211e2e60fa7f8b8@AcuMS.aculab.com>
+References: <e0dd3af448e38e342c1ac6e7c0c802696eb77fd6.1564549413.git.joe@perches.com>
+         <20190731111932.GA9823@hmswarspite.think-freely.org>
+         <eac3fe457d553a2b366e1c1898d47ae8c048087c.camel@perches.com>
+         <20190731121646.GD9823@hmswarspite.think-freely.org>
+         <b93bbb17b407e27bb1dc196af84e4f289d9dfd93.camel@perches.com>
+         <20190731205804.GE9823@hmswarspite.think-freely.org>
+         <d68403ce9f7e8a68fff09d6b17e5d1327eb1e12d.camel@perches.com>
+         <20190801105051.GA11487@hmswarspite.think-freely.org>
+ <a9d003ddd0d59fb144db3ecda3453b3d9c0cb139.camel@perches.com>
+In-Reply-To: <a9d003ddd0d59fb144db3ecda3453b3d9c0cb139.camel@perches.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190802.161932.1776993765494484851.davem@davemloft.net>
-User-Agent: Mutt/1.12.0 (2019-05-25)
-X-Spam-Score: -2.9 (--)
-X-Spam-Status: No
+X-MC-Unique: NQwNEFbuMJmxd-wtY4RQAg-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Fri, Aug 02, 2019 at 04:19:32PM -0700, David Miller wrote:
-> From: Joe Perches <joe@perches.com>
-> Date: Fri, 02 Aug 2019 10:47:34 -0700
+From: Joe Perches
+> Sent: 01 August 2019 18:43
+> On Thu, 2019-08-01 at 06:50 -0400, Neil Horman wrote:
+> > On Wed, Jul 31, 2019 at 03:23:46PM -0700, Joe Perches wrote:
+> []
+> > You can say that if you want, but you made the point that your think the macro
+> > as you have written is more readable.  You example illustrates though that /*
+> > fallthrough */ is a pretty common comment, and not prefixing it makes it look
+> > like someone didn't add a comment that they meant to.  The __ prefix is standard
+> > practice for defining macros to attributes (212 instances of it by my count).  I
+> > don't mind rewriting the goto labels at all, but I think consistency is
+> > valuable.
 > 
-> > On Wed, 2019-07-31 at 08:16 -0400, Neil Horman wrote:
-> >> On Wed, Jul 31, 2019 at 04:32:43AM -0700, Joe Perches wrote:
-> >> > On Wed, 2019-07-31 at 07:19 -0400, Neil Horman wrote:
-> >> > > On Tue, Jul 30, 2019 at 10:04:37PM -0700, Joe Perches wrote:
-> >> > > > fallthrough may become a pseudo reserved keyword so this only use of
-> >> > > > fallthrough is better renamed to allow it.
-> > 
-> > Can you or any other maintainer apply this patch
-> > or ack it so David Miller can apply it?
+> Hey Neil.
 > 
-> I, like others, don't like the lack of __ in the keyword.  It's kind of
-> rediculous the problems it creates to pollute the global namespace like
-> that and yes also inconsistent with other shorthands for builtins.
+> Perhaps you want to make this argument on the RFC patch thread
+> that introduces the fallthrough pseudo-keyword.
 > 
-FWIW, I acked the sctp patch, because the use of the word fallthrough as a
-label, isn't that important to me, unhendled is just as good, so I'm ok with
-that change.
+> https://lore.kernel.org/patchwork/patch/1108577/
 
-But, as I stated in the other thread, I agree, making a macro out of fallthrough
-without clearly naming it using a macro convention like __ is not something I'm
-ok with
-Neil
+ISTM that the only place where you need something other than the
+traditional comment is inside a #define where (almost certainly)
+the comments have to get stripped too early.
+
+Adding a 'fallthough' as unknown C keyword sucks...
+
+
+	David
+
+ 
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
