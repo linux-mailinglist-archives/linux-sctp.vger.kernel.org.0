@@ -2,214 +2,87 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 149DB8742A
-	for <lists+linux-sctp@lfdr.de>; Fri,  9 Aug 2019 10:33:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F4189EB7
+	for <lists+linux-sctp@lfdr.de>; Mon, 12 Aug 2019 14:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405800AbfHIId0 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 9 Aug 2019 04:33:26 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:37092 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726059AbfHIId0 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 9 Aug 2019 04:33:26 -0400
-Received: by mail-wr1-f65.google.com with SMTP id b3so5053275wro.4;
-        Fri, 09 Aug 2019 01:33:23 -0700 (PDT)
+        id S1726463AbfHLMtV (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 12 Aug 2019 08:49:21 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:41653 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726219AbfHLMtV (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 12 Aug 2019 08:49:21 -0400
+Received: by mail-pf1-f196.google.com with SMTP id 196so2473073pfz.8;
+        Mon, 12 Aug 2019 05:49:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HRsFWJCGEg81aEIDlBzmTAhEZn5T+q9bOuC2TQ0ccOc=;
-        b=vhprXY5oe3sC3J0Yg4nK27TJkzyVahLpZSzOQtoVrUl7MijMNYfln7lCwsZBdGAHoL
-         QVTUz651AN9ouubzBead0CyeDvVZzqzo8sEhzQMbV9UE4mcdQ37GkEknm6s0DdtRwvyQ
-         VP3iyYsX4Yisr8VdajI0/EOyyTZUWOlBP0rfPkbJ4AymqpxlDEzV1dkPb1FzDBOOKycp
-         vdgREuUnbcIeXi2vHRcttpPYrI0ZDwx6BcvHvuNhBSBklQ5luv0ZDpOI2DgTOPigumcK
-         p+v8pFcr+DS3TFtAbwFnUvqBq1i8Y+KAJmKXed9ipE3GxlgedUcLumHYxSWsh2ARRVC+
-         156A==
+        h=from:to:cc:subject:date:message-id;
+        bh=wEbvzNsLC6y0503rph1qVfbXmE7y6KOKF1l8FURvlDQ=;
+        b=fFdkO6sL5obFm0xjRUyDod3iaIgtlVK7itJHHUPFlC940iXJlaxuLQzVSVeDpkRTdV
+         mQP6dvr20KUfxj2OldQRw3XKmrnHiSZUD8jwMHMwy9I3jIfciwnVtZ6BJlQI0uYqoJnl
+         eL5dONkxHSkLlM6XrPsveXNIqGn//Yt4BmdgSW2LmovJFijeq1d8aSDhB6JEpGzh7LRG
+         ZLr0xPFpI12rBYXY4EACQtCgSANgVuqF1kXK3izQc0HqykMgJOhE17e2d9Nrs9buItfw
+         fvilDXBkkJrgmP//10xDg/TF0X1IqZvv1stRx80RCo3LMcGfUFiM3MkvzjOk8Wxl5S+U
+         isag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HRsFWJCGEg81aEIDlBzmTAhEZn5T+q9bOuC2TQ0ccOc=;
-        b=iy5a2tv3WSHEztvqor1n/CgnE4RKdYfCp5nLStO0EstYI2uKv59WNTRsYlZEX0zPv2
-         PmklHDXfwg8L5zb6Xc67Q0H1zq8Inhw0KoXh62+4xyMUTRkEX6gTZDe5Ba6DxDPHotK+
-         NVd1mz3bG0aMwfFZjw7uP64G6YlzmSxvSVfwzTCsmwOarCR385245mGcn4KDNiHBR2rD
-         I5GSdRaJtNjsx5Ikq/IBGGLXY4VIrgD2qXlpP8jBXTj/bO7c3cK8mcHqH/ZYJcmyH8lX
-         UKb/GyzXZ0gTCKGM/woMYpj7i4wv99EBaEi2p8HHIkGoGxvf12Mp9xBeTIVIMBCAmPeA
-         nzIw==
-X-Gm-Message-State: APjAAAWBnTEgbap0zyBKBZaYAwian24MeY6uACJmBJBih+WXr8bwxdi2
-        uMdmze4/jFfOhcqF40J1ePSDTtO4AhpP49tBpkEbh6WIws0=
-X-Google-Smtp-Source: APXvYqxTnFm0PrXhSF/1W7K+W/Sofn9fBna7h+3iKBXURFL0sqXTaaElMBoHX0mQnCdGmD58vNgzbo+u2HuqmJiXlTY=
-X-Received: by 2002:a5d:490a:: with SMTP id x10mr18443111wrq.152.1565339602619;
- Fri, 09 Aug 2019 01:33:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <000000000000f93dd2058f9c4873@google.com>
-In-Reply-To: <000000000000f93dd2058f9c4873@google.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=wEbvzNsLC6y0503rph1qVfbXmE7y6KOKF1l8FURvlDQ=;
+        b=s9yjJ464Ax4HcyVhxu/W6Nl5n2NF1QPklkr47vPrOvcHNoq2mpS1XW5kBE+VqO7jET
+         0RcLSar43Ryz4iXrkLVP+X/cMVMl3fFpS0i5M5NbOOESYMyhubdOuwzSbcBZAExR9xWd
+         RvW5X6+9D/5v/gtI0n9vxeJP2oFkbWKjpw6Pwdr4i5DEmQPNftYlUH+a7k8tU3Ftbwe+
+         r9A4iDTjMrgrLBLaanNDOVdl37+i+zCpUjjyGAt5jlIkTIS/ZZKeIPPp43OU1RJDFoMU
+         TccqNxIiTgPZejQOLXgywZ8ZCTi7nomhQyh8u9tmn2b4eFGMxgLOiqSvfKt+uEOz/50Y
+         kqLA==
+X-Gm-Message-State: APjAAAXHkOb+Y4mWOOONWETGpx/c2RaTe7aShdIj2VYfdrLxfuyPPzA0
+        e0fD/66q2N2h/bPE3GmI2X0rtKaM3rw=
+X-Google-Smtp-Source: APXvYqwODWRf37e6S0APoidGG1svBSDB1bGBTFUwtOaglcL1lEB9iRxh/CC/DZY2LGR1dT513lhvUQ==
+X-Received: by 2002:a63:553:: with SMTP id 80mr30829037pgf.280.1565614160209;
+        Mon, 12 Aug 2019 05:49:20 -0700 (PDT)
+Received: from localhost ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id j187sm12054180pfg.178.2019.08.12.05.49.18
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 12 Aug 2019 05:49:19 -0700 (PDT)
 From:   Xin Long <lucien.xin@gmail.com>
-Date:   Fri, 9 Aug 2019 16:33:11 +0800
-Message-ID: <CADvbK_dqTGZKWNmapcbyYVfLjuwzjSaqs0PHv687AjAvtPo3Zw@mail.gmail.com>
-Subject: Re: memory leak in sctp_get_port_local (2)
-To:     syzbot <syzbot+2d7ecdf99f15689032b3@syzkaller.appspotmail.com>
-Cc:     davem <davem@davemloft.net>, LKML <linux-kernel@vger.kernel.org>,
-        linux-sctp@vger.kernel.org,
+To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
+Cc:     davem@davemloft.net,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        network dev <netdev@vger.kernel.org>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Vlad Yasevich <vyasevich@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Neil Horman <nhorman@tuxdriver.com>
+Subject: [PATCH net] sctp: fix the transport error_count check
+Date:   Mon, 12 Aug 2019 20:49:12 +0800
+Message-Id: <55b2fe3e5123958ccd7983e0892bc604aa717132.1565614152.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.1.0
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, Aug 8, 2019 at 11:01 PM syzbot
-<syzbot+2d7ecdf99f15689032b3@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    0eb0ce0a Merge tag 'spi-fix-v5.3-rc3' of git://git.kernel...
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1234588c600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=39113f5c48aea971
-> dashboard link: https://syzkaller.appspot.com/bug?extid=2d7ecdf99f15689032b3
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=160e1906600000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=140ab906600000
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+2d7ecdf99f15689032b3@syzkaller.appspotmail.com
->
-> executing program
-> executing program
-> executing program
-> executing program
-> executing program
-> BUG: memory leak
-> unreferenced object 0xffff88810fa4b380 (size 64):
->    comm "syz-executor900", pid 7117, jiffies 4294946947 (age 16.560s)
->    hex dump (first 32 bytes):
->      20 4e 00 00 89 e7 4c 8d 00 00 00 00 00 00 00 00   N....L.........
->      58 40 dd 16 82 88 ff ff 00 00 00 00 00 00 00 00  X@..............
->    backtrace:
->      [<00000000f1461735>] kmemleak_alloc_recursive
-> include/linux/kmemleak.h:43 [inline]
->      [<00000000f1461735>] slab_post_alloc_hook mm/slab.h:522 [inline]
->      [<00000000f1461735>] slab_alloc mm/slab.c:3319 [inline]
->      [<00000000f1461735>] kmem_cache_alloc+0x13f/0x2c0 mm/slab.c:3483
->      [<00000000ff3ccf22>] sctp_bucket_create net/sctp/socket.c:8374 [inline]
->      [<00000000ff3ccf22>] sctp_get_port_local+0x189/0x5b0
-> net/sctp/socket.c:8121
->      [<00000000eed41612>] sctp_do_bind+0xcc/0x1e0 net/sctp/socket.c:402
->      [<000000002bf65239>] sctp_bind+0x44/0x70 net/sctp/socket.c:302
->      [<00000000b1aaaf57>] inet_bind+0x40/0xc0 net/ipv4/af_inet.c:441
->      [<00000000db36b917>] __sys_bind+0x11c/0x140 net/socket.c:1647
->      [<00000000679cfe3c>] __do_sys_bind net/socket.c:1658 [inline]
->      [<00000000679cfe3c>] __se_sys_bind net/socket.c:1656 [inline]
->      [<00000000679cfe3c>] __x64_sys_bind+0x1e/0x30 net/socket.c:1656
->      [<000000002aac3ac2>] do_syscall_64+0x76/0x1a0
-> arch/x86/entry/common.c:296
->      [<000000000c38e074>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
->
-> BUG: memory leak
-> unreferenced object 0xffff88810fa4b380 (size 64):
->    comm "syz-executor900", pid 7117, jiffies 4294946947 (age 19.260s)
->    hex dump (first 32 bytes):
->      20 4e 00 00 89 e7 4c 8d 00 00 00 00 00 00 00 00   N....L.........
->      58 40 dd 16 82 88 ff ff 00 00 00 00 00 00 00 00  X@..............
->    backtrace:
->      [<00000000f1461735>] kmemleak_alloc_recursive
-> include/linux/kmemleak.h:43 [inline]
->      [<00000000f1461735>] slab_post_alloc_hook mm/slab.h:522 [inline]
->      [<00000000f1461735>] slab_alloc mm/slab.c:3319 [inline]
->      [<00000000f1461735>] kmem_cache_alloc+0x13f/0x2c0 mm/slab.c:3483
->      [<00000000ff3ccf22>] sctp_bucket_create net/sctp/socket.c:8374 [inline]
->      [<00000000ff3ccf22>] sctp_get_port_local+0x189/0x5b0
-> net/sctp/socket.c:8121
->      [<00000000eed41612>] sctp_do_bind+0xcc/0x1e0 net/sctp/socket.c:402
->      [<000000002bf65239>] sctp_bind+0x44/0x70 net/sctp/socket.c:302
->      [<00000000b1aaaf57>] inet_bind+0x40/0xc0 net/ipv4/af_inet.c:441
->      [<00000000db36b917>] __sys_bind+0x11c/0x140 net/socket.c:1647
->      [<00000000679cfe3c>] __do_sys_bind net/socket.c:1658 [inline]
->      [<00000000679cfe3c>] __se_sys_bind net/socket.c:1656 [inline]
->      [<00000000679cfe3c>] __x64_sys_bind+0x1e/0x30 net/socket.c:1656
->      [<000000002aac3ac2>] do_syscall_64+0x76/0x1a0
-> arch/x86/entry/common.c:296
->      [<000000000c38e074>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
->
-> BUG: memory leak
-> unreferenced object 0xffff88810fa4b380 (size 64):
->    comm "syz-executor900", pid 7117, jiffies 4294946947 (age 21.990s)
->    hex dump (first 32 bytes):
->      20 4e 00 00 89 e7 4c 8d 00 00 00 00 00 00 00 00   N....L.........
->      58 40 dd 16 82 88 ff ff 00 00 00 00 00 00 00 00  X@..............
->    backtrace:
->      [<00000000f1461735>] kmemleak_alloc_recursive
-> include/linux/kmemleak.h:43 [inline]
->      [<00000000f1461735>] slab_post_alloc_hook mm/slab.h:522 [inline]
->      [<00000000f1461735>] slab_alloc mm/slab.c:3319 [inline]
->      [<00000000f1461735>] kmem_cache_alloc+0x13f/0x2c0 mm/slab.c:3483
->      [<00000000ff3ccf22>] sctp_bucket_create net/sctp/socket.c:8374 [inline]
->      [<00000000ff3ccf22>] sctp_get_port_local+0x189/0x5b0
-> net/sctp/socket.c:8121
->      [<00000000eed41612>] sctp_do_bind+0xcc/0x1e0 net/sctp/socket.c:402
->      [<000000002bf65239>] sctp_bind+0x44/0x70 net/sctp/socket.c:302
->      [<00000000b1aaaf57>] inet_bind+0x40/0xc0 net/ipv4/af_inet.c:441
->      [<00000000db36b917>] __sys_bind+0x11c/0x140 net/socket.c:1647
->      [<00000000679cfe3c>] __do_sys_bind net/socket.c:1658 [inline]
->      [<00000000679cfe3c>] __se_sys_bind net/socket.c:1656 [inline]
->      [<00000000679cfe3c>] __x64_sys_bind+0x1e/0x30 net/socket.c:1656
->      [<000000002aac3ac2>] do_syscall_64+0x76/0x1a0
-> arch/x86/entry/common.c:296
->      [<000000000c38e074>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
->
-> BUG: memory leak
-> unreferenced object 0xffff88810fa4b380 (size 64):
->    comm "syz-executor900", pid 7117, jiffies 4294946947 (age 22.940s)
->    hex dump (first 32 bytes):
->      20 4e 00 00 89 e7 4c 8d 00 00 00 00 00 00 00 00   N....L.........
->      58 40 dd 16 82 88 ff ff 00 00 00 00 00 00 00 00  X@..............
->    backtrace:
->      [<00000000f1461735>] kmemleak_alloc_recursive
-> include/linux/kmemleak.h:43 [inline]
->      [<00000000f1461735>] slab_post_alloc_hook mm/slab.h:522 [inline]
->      [<00000000f1461735>] slab_alloc mm/slab.c:3319 [inline]
->      [<00000000f1461735>] kmem_cache_alloc+0x13f/0x2c0 mm/slab.c:3483
->      [<00000000ff3ccf22>] sctp_bucket_create net/sctp/socket.c:8374 [inline]
->      [<00000000ff3ccf22>] sctp_get_port_local+0x189/0x5b0
-> net/sctp/socket.c:8121
->      [<00000000eed41612>] sctp_do_bind+0xcc/0x1e0 net/sctp/socket.c:402
->      [<000000002bf65239>] sctp_bind+0x44/0x70 net/sctp/socket.c:302
->      [<00000000b1aaaf57>] inet_bind+0x40/0xc0 net/ipv4/af_inet.c:441
->      [<00000000db36b917>] __sys_bind+0x11c/0x140 net/socket.c:1647
->      [<00000000679cfe3c>] __do_sys_bind net/socket.c:1658 [inline]
->      [<00000000679cfe3c>] __se_sys_bind net/socket.c:1656 [inline]
->      [<00000000679cfe3c>] __x64_sys_bind+0x1e/0x30 net/socket.c:1656
->      [<000000002aac3ac2>] do_syscall_64+0x76/0x1a0
-> arch/x86/entry/common.c:296
->      [<000000000c38e074>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
->
-> executing program
-> executing program
-> executing program
-> executing program
-should be fixed by:
-commit 9b6c08878e23adb7cc84bdca94d8a944b03f099e
-Author: Xin Long <lucien.xin@gmail.com>
-Date:   Wed Jun 26 16:31:39 2019 +0800
+As the annotation says in sctp_do_8_2_transport_strike():
 
-    sctp: not bind the socket in sctp_connect
+  "If the transport error count is greater than the pf_retrans
+   threshold, and less than pathmaxrtx ..."
 
-was this commit included in the testing kernel?
+It should be transport->error_count checked with pathmaxrxt,
+instead of asoc->pf_retrans.
 
->
->
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this bug, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+Fixes: 5aa93bcf66f4 ("sctp: Implement quick failover draft from tsvwg")
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+---
+ net/sctp/sm_sideeffect.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/sctp/sm_sideeffect.c b/net/sctp/sm_sideeffect.c
+index a554d6d..1cf5bb5 100644
+--- a/net/sctp/sm_sideeffect.c
++++ b/net/sctp/sm_sideeffect.c
+@@ -546,7 +546,7 @@ static void sctp_do_8_2_transport_strike(struct sctp_cmd_seq *commands,
+ 	 */
+ 	if (net->sctp.pf_enable &&
+ 	   (transport->state == SCTP_ACTIVE) &&
+-	   (asoc->pf_retrans < transport->pathmaxrxt) &&
++	   (transport->error_count < transport->pathmaxrxt) &&
+ 	   (transport->error_count > asoc->pf_retrans)) {
+ 
+ 		sctp_assoc_control_transport(asoc, transport,
+-- 
+2.1.0
+
