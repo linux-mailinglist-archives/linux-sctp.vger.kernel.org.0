@@ -2,52 +2,52 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F218CF85
-	for <lists+linux-sctp@lfdr.de>; Wed, 14 Aug 2019 11:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B468E080
+	for <lists+linux-sctp@lfdr.de>; Thu, 15 Aug 2019 00:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726383AbfHNJ3e (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 14 Aug 2019 05:29:34 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:34810 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726157AbfHNJ3e (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 14 Aug 2019 05:29:34 -0400
-Received: by mail-oi1-f194.google.com with SMTP id l12so11297363oil.1
-        for <linux-sctp@vger.kernel.org>; Wed, 14 Aug 2019 02:29:33 -0700 (PDT)
+        id S1729092AbfHNWO3 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 14 Aug 2019 18:14:29 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:46988 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729736AbfHNWOV (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 14 Aug 2019 18:14:21 -0400
+Received: by mail-qt1-f195.google.com with SMTP id j15so320588qtl.13
+        for <linux-sctp@vger.kernel.org>; Wed, 14 Aug 2019 15:14:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=YtmRJhxESxnNXUHBCPVvI4eH+L8nMtyAXY8TvLJshAM=;
-        b=ZAL2oggrdHUd8C/m4ixRevx2XI/WBu+JeofFLBTEzHMiBl5Wn5QpLG8namvDpdSFu+
-         U6q265kEk/SjQbxVnM5WStWL/0mTIMXIlGEVtthb5RevQKC7DPBpnRPCQb1P8WYlwQ8N
-         zDR5qw1N6UFNEsl57gK8x+HPL/8XF0dI+9w51GrnV/AoyC1b6H4wKNkd+MgzrQ/Vaimm
-         e8h8MEljZM1Cs7MF6co6lYd7nkKEm7mRCZkVIlMi4qGWX6a0ZxtXPczWGht0NZM60WjG
-         hvGuqhNO9ErDqxMyeGUtXIgTp7p7tNdsZm7TanNN4N2OyPzmr1uf9gKMFL6Y6dAmYjg3
-         MBTQ==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=p6m83mGjllDiHyeRTSS1oVMHX5M/xE6ILn6PPhzsgs4=;
+        b=l5PC+4msT+R1VOq1FIInu61dIh2STHPN9aSBt/Y5M3n644FfA169IT6wzP+sfbruwG
+         5vHd8QNfmmF7FOlV1OW4+1ls9+argQAW0MZ9696kjqRFjMtNiRxkPVvom8CpuMz6+P3J
+         lvnykAE+N5ClLjt8+21Oenlj55mmWn47h6bOufTUj3iAyACG+cL0ImoQgj5m6u3w1/lr
+         fVPm9fs++0X3Li7mpOQ13No26+jYpH9OobXYps5GGnrfpp0Xq6qTsPtsJRMHzlRsuSi2
+         Q5RuPSHMeFGhG1MzboDTj+tp2IBpQDy9TN5wUYjWC528WeGARQxpLHz2F9meUvIkEvkQ
+         sSPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=YtmRJhxESxnNXUHBCPVvI4eH+L8nMtyAXY8TvLJshAM=;
-        b=R3em9VnmQ6jiRKZvk7YOpy9g3nQqSOXWFiYNEGqcfUyY/osUV+dpRmvRsoO0t6VE7S
-         Qj4C37iEYPWPrnpq7cyJakhTWMljGn74/F8Ac2iY/ggpk8KaEqN345pQFSrwVNNiTL10
-         cSQCyi3o9NCk0bHL2CQDhf5Iu8O7JIeIYjzdZdKqIBAJZPEYE0uf8VVZv5vpc9vE0ZtA
-         LpQzxHmwd+gtYitRcbZlZRJ59g99b3LlA3mMcyPTU1733xABT5u5a7jaeJT+BiqLrzq0
-         uFsFlHsGBHS2uKa/SiCr8VarpAOeeFCVMfqKVu8WiVHIQno6ratwJFVyTNFWgQCDElKm
-         PY2g==
-X-Gm-Message-State: APjAAAW0uOO6iRDSYil0gFbrDibB2pMxaDYH2c1wpkD/ppt/tjWmBOZL
-        EmSVRherNTYaDAehhpUZ8Vb78nOYV7kK9Rv4J7I=
-X-Google-Smtp-Source: APXvYqztgHMEmFelHJxZE7cCgiHW7f1XN5nOaz6jxrSZmHOcMntJYW1Qvo+v5yaMyGBhBRQQmFSSLP7U9KYShQ64w6o=
-X-Received: by 2002:a02:a703:: with SMTP id k3mr2338894jam.12.1565774973150;
- Wed, 14 Aug 2019 02:29:33 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=p6m83mGjllDiHyeRTSS1oVMHX5M/xE6ILn6PPhzsgs4=;
+        b=fyJHtHLVJPP5tS21092VUBkjpDrR4q1iQJIUSYHpCSCvkl1iLbzCd/YjfwZ16WJ4/4
+         v0c17sGAtytLs7Xl8PPBB+YHD4KEITCTjkrEGduTgcqC/vU+C+Ls52RezkZRHnjfRKZV
+         HWo7oJCpAf2Infi266FnSgDKNEeHZ5ucgxd5FNuacPKt7kEZRJOUql9C2cVnsooyRFQz
+         pKQSe/44MoTDamIGpKatieiDGZiS2XFh9wPYWesfavrBYaKK8fYyclkpZjm8nC2m1Ngk
+         oEARJj0E6kCFw9MnCStRBrLh2zYagkMOIN4iDhvRg79dStF+3R6uSnkOXH6eeyGgT4xJ
+         Q3VA==
+X-Gm-Message-State: APjAAAVJYl733WagTUkW+AFIwkxVpXiWuzhvY5Z15Jd+FkB+o1RwDNoE
+        oS6nb8kCeA7BacU5/2eUUzsZZ2MUuNKThuS0Fjg=
+X-Google-Smtp-Source: APXvYqwvEwq36YC/YcFdGthiFQqEswOUmu8y33AXL4ty34gsygcaTEjmhvj04/dFUfa1vFoE719aJcDSjuFoUwkSVes=
+X-Received: by 2002:aed:3826:: with SMTP id j35mr1333309qte.54.1565820860049;
+ Wed, 14 Aug 2019 15:14:20 -0700 (PDT)
 MIME-Version: 1.0
-Reply-To: diawaralassine226@aol.com
-Received: by 2002:a4f:f328:0:0:0:0:0 with HTTP; Wed, 14 Aug 2019 02:29:28
+Received: by 2002:aed:3544:0:0:0:0:0 with HTTP; Wed, 14 Aug 2019 15:14:19
  -0700 (PDT)
-From:   "Mr.Lassine Diawara" <mr.lassinediawara@gmail.com>
-Date:   Wed, 14 Aug 2019 02:29:28 -0700
-X-Google-Sender-Auth: Jkzo7Cqa66oPAidDuSqoPqVkViw
-Message-ID: <CAH-kjz26WdvYOfuG-56BZsjy9wSRyPbumTVfrXA8kYOqEDkbhQ@mail.gmail.com>
-Subject: VERRY VERRY URGENT
+Reply-To: Katerinejones19@gmail.com
+From:   "MS. MARYANNA B. THOMASON" <westernunion.benin982@gmail.com>
+Date:   Wed, 14 Aug 2019 23:14:19 +0100
+Message-ID: <CAP=nHB+U+By16HzeUHiDfPT5KNtemGam6gniZhL2s7_itZ3F8w@mail.gmail.com>
+Subject: TODAY, Wed, Aug 14, 2019 I AM READY FOR COMING TO YOUR ADDRESS WITH
+ THIS ATM CARD
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
@@ -55,68 +55,33 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-FROM MR.LASSINE DIAWARA
-AUDIT& ACCOUNT MANAGER
-BANK OF AFRICA (B.O.A)
-OUAGADOUGOU BURKINA FASO
-WEST AFRICA.
+ATTN DEAR PARCEL BENEFICIARY.
 
-Dear Friend,
+I AM CATHY JONES,DIPLOMATIC AGENT ASIGNED ON THE DELIVERY OF YOUR ATM
+CARD THROUGH MS. MARYANNA B. THOMASON, DHL MANAGEMENT DIRECTOR NEW
+YORK.
+TODAY, Wed, Aug 14, 2019 I AM READY FOR COMING TO YOUR ADDRESS WITH
+THIS ATM CARD, So before i deliver I want you to send me.
+official diplomatic agent delivery fee sum of $150.00 us
+ only. I am here at JFK Airport,Florida. USA
 
-With due respect, I have decided to contact you on a
-businesstransaction that will be beneficial to both of us. At the bank
-last account and auditing evaluation, my staffs came across an old
-account which was being maintained by a foreign client who we learn
-was among the deceased passengers of motor accident on November.2003,
-the deceased was unable to run this account since his death. The
-account has remained dormant without the knowledge of his family since
-it was put in a safe deposit account in the bank for future investment
-by the client.
+SEND THIS FEE BY WESTERN UNION OR MONEY WITH RECEIVER'S NAME AND ADDRESS BELOW.
 
-Since his demise, even the members of his family haven't applied for
-claims over this fund and it has been in the safe deposit account
-until I discovered that it cannot be claimed since our client is
-aforeign national and we are sure that he has no next of kin here to
-file claims over the money. As the director of the department, this
-discovery was brought to my office so as to decide what is to be
-done.I decided to seek ways through which to transfer this money out
-of the bank and out of the country too.
-
-The total amount in the account is 18.6 million with my positions as
-staffs of the bank, I am handicapped because I cannot operate foreign
-accounts and cannot lay bonafide claim over this money. The client was
-a foreign national and you will only be asked to act as his next of
-kin and I will supply you with all the necessary information and bank
-data to assist you in being able to transfer this money to any bank of
-your choice where this money could be transferred into.The total sum
-will be shared as follows: 50% for me, 50% for you and expenses
-incidental occur during the transfer will be incur by both of us. The
-transfer is risk free on both sides hence you are going to follow my
-instruction till the fund transfer to your account. Since I work in
-this bank that is why you should be confident in the success of this
-transaction because you will be updated with information as at when
-desired.
-
-I will wish you to keep this transaction secret and confidential as I
-am hoping to retire with my share of this money at the end of
-transaction which will be when this money is safety in your account. I
-will then come over to your country for sharing according to the
-previously agreed percentages. You might even have to advise me on
-possibilities of investment in your country or elsewhere of our
-choice. May God help you to help me to a restive retirement, Amen,And
-You have to contact me through my private e-mail at
-(diawaralassine226@aol.com )Please for further information and
-inquires feel free to contact me back immediately for more explanation
-and better understanding I want you to assure me your capability of
-handling this project with trust by providing me your following
-information details such as:
-
-(1)NAME..............
-(2)AGE:................
-(3)SEX:.....................
-(4)PHONE NUMBER:.................
-(5)OCCUPATION:.....................
-(6)YOUR COUNTRY:.....................
-
-Yours sincerely,
-Mr.Lassine Diawara
+RECEIVER'S NAME-----------------ERROL PRINGLE
+ADDRESS----------------3500 OLD DENTON RD APT 208; CARROLLTON, TEXAS 75007
+COUNTRY----------------USA
+AMOUNT--------------------$150.00 ONLY
+TEST QUESTION----------------WHO IS THE CREATOR
+ANSWER------------------GOD
+ meanwhile this $150.00 is required by the Custom Service,USA Homeland
+Security,for protection of your delivery, it will make the ATM CARD
+and funds worth $15.8MILLION US DOLLARS secure, Beleiev me, this is my
+word, remark my word,you will receive your delivery from me, Mrs.
+Cathy Jones once you send this only $150.00 today.
+I WAIT ON YOUR PAYMENT CONFIRMATION, ONCE I GOT YOUR PAYMENT, I WILL
+FINALLY ARRIVE TO YOUR NEAREST ADDRESS. today
+THANKS AND MAY GOD BLESS  YOU
+CATHY JONES,DIPLOMATIC AGENT
+EMAIL; katerinejones19@gmail.com
+CALL OR TEXT ME, DIPLOMATIC AGENT MS. CATHY JONES
+Phone Number; (408) 650-6103,
