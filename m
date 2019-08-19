@@ -2,125 +2,88 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8451891749
-	for <lists+linux-sctp@lfdr.de>; Sun, 18 Aug 2019 16:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAA65925C5
+	for <lists+linux-sctp@lfdr.de>; Mon, 19 Aug 2019 16:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726089AbfHRONh (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 18 Aug 2019 10:13:37 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:35572 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726115AbfHRONh (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sun, 18 Aug 2019 10:13:37 -0400
-Received: by mail-io1-f66.google.com with SMTP id i22so15426432ioh.2
-        for <linux-sctp@vger.kernel.org>; Sun, 18 Aug 2019 07:13:37 -0700 (PDT)
+        id S1727815AbfHSODA (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 19 Aug 2019 10:03:00 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:36306 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727644AbfHSOC7 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 19 Aug 2019 10:02:59 -0400
+Received: by mail-pf1-f196.google.com with SMTP id w2so1233720pfi.3;
+        Mon, 19 Aug 2019 07:02:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KaGRWCANB9CA0IL07BKaXhZJ03Mhrd5EdLm0P90aJ6E=;
-        b=tMZOd+U+SdcFRbmmTVkjpprdnQKI8xxNqqbKzQ2w5H9AMloaZQsI+4jW5hbmBYwcm3
-         82FUYnGRoyQgUc4Wf6c6/4GhUIMpnz6KJ5mZ52mhMALJo3BJnP/cVexV+r9RO5Vl0qhv
-         nMu+mPhhDGFL8IvtmTKKvGAlcjAgLwkOAnT7ZvpYvv1Xi1Nm1hiYLwEkJjy//Dfgj68H
-         6omJJo+2HOjD/QQwxFPXh5kCBcx3N64m/HFHx18Jl6GxSACYSbkPSx+pjSoF90IXwyrg
-         cRfFMZ8jypJn4CNBrHZMQEkjNq6dDtg/I8eRLZ0TjAWJWwwRcBw5A9kGXYIJxr/AFgdr
-         FKIw==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=Ki1QpfmbFT/OvNxdnhlaYXkdjqPbFttVETHX9PSqp9g=;
+        b=ZKuXtt3iCE/qMKFDbxNRR9FtYg3/48f3IDY7v7EFYOmmJNKYhzMKYe6WB2Znvmz363
+         sT43zm4SkT5fL+c6NFMr6rCDlzCIPK9HMTd4VaXg2mvCy+WX4nCyH6ODg2wQFyKFLdtB
+         Kr/aj8MrWKxUf83SJ0t6mMVbKM7+K/Gxx4+IDMr0Me0Tzlnq4Dv4uTlNvpHYavUh6MJV
+         PVilHmdlhfp6RPqqCMSoj8vRoNgW48c9NoK+oJMc5wPBI9FXInElRIFmx46CGuiDVA7F
+         Xlnlzcum8Dl8azk5XJH/DTzcbzc3DXqQoX0cm8vPzM4nQa1qExFP5u9PT8wNYyHQYza0
+         YVaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KaGRWCANB9CA0IL07BKaXhZJ03Mhrd5EdLm0P90aJ6E=;
-        b=CCyrbSWJmrbDDByFlDiP44RGg4HwQai7h0iw4RrBYJ1AgGNqXVdYG6w1NTNMAAVM+w
-         B9B95jcEUzQ29eEeQveygGnsO+syG+iOoAvAoWk/Js/w2ChHNo1P89sMBLNtua5QDJjP
-         oJZLFDVtBEf1P1RMhzpwFVLpJRF6Zka78JG/8uqjvGT+OKjnR2vU7buNcsAHDPRXI+wV
-         FdHPDKpoiLo2r7vqKYnnUSc5jHuTf0Dynj5vQMKHp0vwO787cQ5sp0e+h7hfZPrFjEdw
-         zCg1/yG4QQgmYvkve3BvxBFILxy4KybSR42A6V5JG62V9mE0mBwXJpOZDveQjSmjEsXd
-         aB+w==
-X-Gm-Message-State: APjAAAVHs54iW5sk21rMk6zM+w7U7OycCLz3X6eIHdFvKgmHUCUwwWhz
-        UDlegZO9EVcqjonDR2jJW+Bd3gRELkl0jxCbND6caQ==
-X-Google-Smtp-Source: APXvYqz4fkGLB/LkFeOg9nbk/c8PRDHSnZwG3zVuxd509YTZO4On0KSB63i+xCp5HnqWJ5t8HRIMsltoel8UfPrYp3s=
-X-Received: by 2002:a05:6638:45:: with SMTP id a5mr19186887jap.61.1566137616303;
- Sun, 18 Aug 2019 07:13:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <0000000000008182a50590404a02@google.com> <CADvbK_e+em+LiQOttfA9nckA4EPFuW_Q-cBmXx3S5pw5X+tQfw@mail.gmail.com>
-In-Reply-To: <CADvbK_e+em+LiQOttfA9nckA4EPFuW_Q-cBmXx3S5pw5X+tQfw@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Sun, 18 Aug 2019 07:13:22 -0700
-Message-ID: <CACT4Y+aNTHtbw1upruHtfrLZnUyKkZHU5_3fndmVV6D_zzJJbQ@mail.gmail.com>
-Subject: Re: kernel BUG at include/linux/skbuff.h:LINE! (2)
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     syzbot <syzbot+eb349eeee854e389c36d@syzkaller.appspotmail.com>,
-        davem <davem@davemloft.net>, LKML <linux-kernel@vger.kernel.org>,
-        linux-sctp@vger.kernel.org,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        network dev <netdev@vger.kernel.org>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Vlad Yasevich <vyasevich@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Ki1QpfmbFT/OvNxdnhlaYXkdjqPbFttVETHX9PSqp9g=;
+        b=Tt0JDGvP0xHQnEkWh8Mm+wOHtckQtLx1mGeQH6PRfVKvtCtwdhAnpOoJGMIKBlm4fL
+         nypeTsU0UgboPifAtDYFOjMO7Hk7/UBu0A/xQ1EkTUkyZHc78vF1Mv/RVlOxQK11jyAk
+         sSul/H0B/hgcapNjGuqxOR4qg0wLUnlQhH4kDnMo9YHxV4kbSQqhlJz2NkXYMw1XvGkU
+         Z79QXhuQY+WbNLB1h0zEE11ZDhJkzvUnR0OkLZRjhVYHwqkTcpLaV0RULns8xStnUGXM
+         d3xZeQDDflOrZFwL/YHs4DYHZ0i66ut9BeeMTBg8mbXIVHptyHzC6dg6RRQo0UIIbnxj
+         kZYQ==
+X-Gm-Message-State: APjAAAWBS/8LyJ64WO6e+jC8Wctlk/0f5ysgsz9Om7jEp2Q4nrOUBe/h
+        cghOhcSHLv4/fGPyqHYU71GFgbFS
+X-Google-Smtp-Source: APXvYqy4xL+oneCqfsBspgiW3tQy8DtLfkJ7u8rUHOjKWNB4M4/xqT/w6prahKm0oLyzm9BNUyedrw==
+X-Received: by 2002:aa7:914e:: with SMTP id 14mr24139869pfi.136.1566223378914;
+        Mon, 19 Aug 2019 07:02:58 -0700 (PDT)
+Received: from localhost ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id ev3sm17257853pjb.3.2019.08.19.07.02.57
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 19 Aug 2019 07:02:58 -0700 (PDT)
+From:   Xin Long <lucien.xin@gmail.com>
+To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
+Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>, davem@davemloft.net
+Subject: [PATCH net-next 0/8] sctp: support per endpoint auth and asconf flags
+Date:   Mon, 19 Aug 2019 22:02:42 +0800
+Message-Id: <cover.1566223325.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.1.0
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Sun, Aug 18, 2019 at 7:07 AM Xin Long <lucien.xin@gmail.com> wrote:
->
-> On Sat, Aug 17, 2019 at 2:38 AM syzbot
-> <syzbot+eb349eeee854e389c36d@syzkaller.appspotmail.com> wrote:
-> >
-> > Hello,
-> >
-> > syzbot found the following crash on:
-> >
-> > HEAD commit:    459c5fb4 Merge branch 'mscc-PTP-support'
-> > git tree:       net-next
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=13f2d33c600000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=d4cf1ffb87d590d7
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=eb349eeee854e389c36d
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=111849e2600000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1442c25a600000
-> >
-> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+eb349eeee854e389c36d@syzkaller.appspotmail.com
-> >
-> > ------------[ cut here ]------------
-> > kernel BUG at include/linux/skbuff.h:2225!
-> > invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> > CPU: 0 PID: 9030 Comm: syz-executor649 Not tainted 5.3.0-rc3+ #134
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> > Google 01/01/2011
-> > RIP: 0010:__skb_pull include/linux/skbuff.h:2225 [inline]
-> > RIP: 0010:__skb_pull include/linux/skbuff.h:2222 [inline]
-> > RIP: 0010:skb_pull_inline include/linux/skbuff.h:2231 [inline]
-> > RIP: 0010:skb_pull+0xea/0x110 net/core/skbuff.c:1902
-> > Code: 9d c8 00 00 00 49 89 dc 49 89 9d c8 00 00 00 e8 9c e5 dd fb 4c 89 e0
-> > 5b 41 5c 41 5d 41 5e 5d c3 45 31 e4 eb ea e8 86 e5 dd fb <0f> 0b e8 df 13
-> > 18 fc e9 44 ff ff ff e8 d5 13 18 fc eb 8a e8 ee 13
-> > RSP: 0018:ffff88808ac96e10 EFLAGS: 00010293
-> > RAX: ffff88809c546000 RBX: 0000000000000004 RCX: ffffffff8594a3a6
-> > RDX: 0000000000000000 RSI: ffffffff8594a3fa RDI: 0000000000000004
-> > RBP: ffff88808ac96e30 R08: ffff88809c546000 R09: fffffbfff14a8f4f
-> > R10: fffffbfff14a8f4e R11: ffffffff8a547a77 R12: 0000000095e28bcc
-> > R13: ffff88808ac97478 R14: 00000000ffff8880 R15: ffff88808ac97478
-> > FS:  0000555556549880(0000) GS:ffff8880ae800000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 0000000020000100 CR3: 0000000089c3c000 CR4: 00000000001406f0
-> > Call Trace:
-> >   sctp_inq_pop+0x2f1/0xd80 net/sctp/inqueue.c:202
-> >   sctp_endpoint_bh_rcv+0x184/0x8d0 net/sctp/endpointola.c:385
-> >   sctp_inq_push+0x1e4/0x280 net/sctp/inqueue.c:80
-> >   sctp_rcv+0x2807/0x3590 net/sctp/input.c:256
-> >   sctp6_rcv+0x17/0x30 net/sctp/ipv6.c:1049
-> >   ip6_protocol_deliver_rcu+0x2fe/0x1660 net/ipv6/ip6_input.c:397
-> >   ip6_input_finish+0x84/0x170 net/ipv6/ip6_input.c:438
-> >   NF_HOOK include/linux/netfilter.h:305 [inline]
-> >   NF_HOOK include/linux/netfilter.h:299 [inline]
-> >   ip6_input+0xe4/0x3f0 net/ipv6/ip6_input.c:447
-> >   dst_input include/net/dst.h:442 [inline]
-> >   ip6_sublist_rcv_finish+0x98/0x1e0 net/ipv6/ip6_input.c:84
-> Looks skb_list_del_init() should be called in ip6_sublist_rcv_finish,
-> as does in ip_sublist_rcv_finish().
+This patchset mostly does 3 things:
 
-This was recently introduced, right? Only in net-next and linux-next.
-Otherwise, is it a remote DoS? If so and if it's present in any
-releases, may need a CVE.
+  1. add per endpint asconf flag and use asconf flag properly
+     and add SCTP_ASCONF_SUPPORTED sockopt.
+  2. use auth flag properly and add SCTP_AUTH_SUPPORTED sockopt.
+  3. remove the 'global feature switch' to discard chunks.
+
+Xin Long (8):
+  sctp: add asconf_enable in struct sctp_endpoint
+  sctp: not set peer.asconf_capable in sctp_association_init
+  sctp: check asoc peer.asconf_capable before processing asconf
+  sctp: add SCTP_ASCONF_SUPPORTED sockopt
+  sctp: use ep and asoc auth_enable properly
+  sctp: add sctp_auth_init and sctp_auth_free
+  sctp: add SCTP_AUTH_SUPPORTED sockopt
+  sctp: remove net sctp.x_enable working as a global switch
+
+ include/net/sctp/auth.h    |   2 +
+ include/net/sctp/structs.h |   1 +
+ include/uapi/linux/sctp.h  |   2 +
+ net/sctp/associola.c       |   9 --
+ net/sctp/auth.c            | 101 ++++++++++++++++++--
+ net/sctp/endpointola.c     |  64 ++-----------
+ net/sctp/sm_make_chunk.c   |  18 ++--
+ net/sctp/sm_statefuns.c    |   6 +-
+ net/sctp/sm_statetable.c   |  28 +++---
+ net/sctp/socket.c          | 230 ++++++++++++++++++++++++++++++++++++++-------
+ 10 files changed, 325 insertions(+), 136 deletions(-)
+
+-- 
+2.1.0
+
