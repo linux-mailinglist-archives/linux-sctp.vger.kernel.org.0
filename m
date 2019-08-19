@@ -2,75 +2,74 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D315C926BF
-	for <lists+linux-sctp@lfdr.de>; Mon, 19 Aug 2019 16:30:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1319273A
+	for <lists+linux-sctp@lfdr.de>; Mon, 19 Aug 2019 16:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726677AbfHSOa5 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 19 Aug 2019 10:30:57 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:44969 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726373AbfHSOa5 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 19 Aug 2019 10:30:57 -0400
-Received: by mail-qt1-f195.google.com with SMTP id 44so2074320qtg.11;
-        Mon, 19 Aug 2019 07:30:56 -0700 (PDT)
+        id S1726242AbfHSOnR (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 19 Aug 2019 10:43:17 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:43325 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726211AbfHSOnQ (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 19 Aug 2019 10:43:16 -0400
+Received: by mail-wr1-f65.google.com with SMTP id y8so8987804wrn.10;
+        Mon, 19 Aug 2019 07:43:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=nCUsIESRdWPX9Vff6/n75+p5et6kLn7sYTxjvvWupHE=;
-        b=D992ETCQmK8y0i/OPoHvnji9TCiMV1ZhHAU4jecXFoVmIn5klyPgoBYxPmeHEPBUoj
-         20rEtJm5J6Ff5sCOM+XMswtGslnn4yJQuz2wgT51hqIYyKtGFQ5Ixj/bUwiVssG3jURr
-         xBtJRz87g4BWfVukvRkWkJNPUWRhiuo9niTSPwUMc1lAVw8dzvDOJEIEUrfE9hgV72l/
-         mXrSnayX76bXbqlEUpijleOY1MBO3vmlIDynCQ6Lm2Bj4hPVpr2ox62btLwIEGvtjhLl
-         fuowdenmFTM9wolu+G8DtyOUpv2vIrPGHPHKL8jUzEARlu0I7goaXcu/oDNebkOiHcBp
-         OVMw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jKjI6ZndqmMBsOtkkjCYvrMvrRJBMoNCPOLNG/SK2nY=;
+        b=LzH2Ofa8/UVZVx15f5N7dL61l7W1f/ftuHWPZu99y206sZFFR0bgJvRTb8TNVKo66r
+         +kNzaydBXpIy3QPJ740l7G7Lfrf9sikvl9wl2cFHs9jHGyy+4HvbsPKftpT8VKqcNT6S
+         tdUwhmgOUexJQybQgUIRfFdA+cRxU9EnGXlKI7OI5XJhTo5XSoWlTBzQo5SEiH17GMXL
+         BY/Qq64klJCYIHLde02gMkPH7hWz9dCYoA9c75gYnEfi9nG92Uvv8IhkJU+J9Axubblj
+         jBde3Db7V3Lo78bEfmUCEhI1EqgHTRhl+1neJgzygDUWj0MmBxdurSdmVubxbPLD5v5c
+         3SKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=nCUsIESRdWPX9Vff6/n75+p5et6kLn7sYTxjvvWupHE=;
-        b=PxiaKP1qOXFLFYM+9z2xRhwyMtbEmKqV4srbfriYIUsHmfGezqO6jqETY7BDBKkYTW
-         ff1iDorPfqqTxmtxiNZ2zEvxbY6JOefa/MnmHzh0ZD64BWQuoKFA5kztQ/e5dlXWoTSN
-         7vxvh8CpX5EpEzjhDwRfzT2MvD4XalXOsa9NHqhBhBUxWhgsL/ZCWFPj8Bh29RoXeTo9
-         RcJf8BfyfEOXiHntvBBngBz/Mo14XCrh/k9kKrgeLJcQcgdA5Rd2IviYfTh5/h/yT8CB
-         IHJDw5bztKbP+I3QBsvSmxid7Kjf4Bm5xrQAp6MQzriOW6qlt5WkujF7KnX0RWBU9lqc
-         STFQ==
-X-Gm-Message-State: APjAAAXo4zeEgTRPnFMfnGAP3OViG05X4h+sAPUa8RMGe+0p7i7mHPF/
-        6TUhpwsC3HAgDAgcgnzUODI=
-X-Google-Smtp-Source: APXvYqxFP07A0J2hwbA6OMYk9OM72x9EETDAzJ7GBBj86wMyJUghnV2dTo5kiMxbywVy1JYJglsTdQ==
-X-Received: by 2002:ac8:1203:: with SMTP id x3mr18664307qti.222.1566225055864;
-        Mon, 19 Aug 2019 07:30:55 -0700 (PDT)
-Received: from localhost.localdomain ([168.181.49.68])
-        by smtp.gmail.com with ESMTPSA id l11sm7243862qtr.11.2019.08.19.07.30.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Aug 2019 07:30:54 -0700 (PDT)
-Received: by localhost.localdomain (Postfix, from userid 1000)
-        id 727F6C1F09; Mon, 19 Aug 2019 11:30:52 -0300 (-03)
-Date:   Mon, 19 Aug 2019 11:30:52 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
-        Neil Horman <nhorman@tuxdriver.com>, davem@davemloft.net
-Subject: Re: [PATCH net-next 4/8] sctp: add SCTP_ASCONF_SUPPORTED sockopt
-Message-ID: <20190819143052.GC2870@localhost.localdomain>
-References: <cover.1566223325.git.lucien.xin@gmail.com>
- <f4fbfa28a7fd2ed85f0fc66ddcbd4249e6e7b487.1566223325.git.lucien.xin@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jKjI6ZndqmMBsOtkkjCYvrMvrRJBMoNCPOLNG/SK2nY=;
+        b=VXeJbwxjKydeL4m5Mre9wHaROkITr64iB3Bv86lLYt9Lm/UTuOZ5XljgCGGlxD570Q
+         Qi1ZfxPuKxxV8tqtPXAKmkpEO4pyBQ0rAvlvq8DFFAtWBhkm/vfG3Ng1Jw4eeTlQ5nre
+         YgnhYvnc58g1zNhnxDS3EDqPv8KKKVI2i6B/ZDr5xY2fDKJlawNVx+UsUxPS1vySQiwj
+         PdVuFNRr8m1YQkGKgjnSBzkIq3jY1kcHzNMTe2So7mkbdqb+GvdfwTyKYEWbMkvhknP/
+         2a6Cq5II79+wVDXcTMa6FE/ZHr5DnKjhuMAqgo07J25SCQkt4pmk4LI9QykW2JYTXLJF
+         Hwxw==
+X-Gm-Message-State: APjAAAViF9ZA+jcVuiw2XYqO1rjj4iWxn0EUQLXYqWQzb4RwuAdMPtG5
+        gFnVkAJa67eFrcfjmysVCSrNd3NzVYHhdsEulnLA3vkv
+X-Google-Smtp-Source: APXvYqzBK0PfIcBTtukPi/LWTeqPxQo7O3eXvNRE7ESdrjO0i7sCB4+dNNSLevYRhclp7rphPaO5UNcmIv+VWSe7LJE=
+X-Received: by 2002:adf:f90e:: with SMTP id b14mr26409029wrr.124.1566225794738;
+ Mon, 19 Aug 2019 07:43:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f4fbfa28a7fd2ed85f0fc66ddcbd4249e6e7b487.1566223325.git.lucien.xin@gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <cover.1566223325.git.lucien.xin@gmail.com> <f4fbfa28a7fd2ed85f0fc66ddcbd4249e6e7b487.1566223325.git.lucien.xin@gmail.com>
+ <20190819143052.GC2870@localhost.localdomain>
+In-Reply-To: <20190819143052.GC2870@localhost.localdomain>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Mon, 19 Aug 2019 22:43:03 +0800
+Message-ID: <CADvbK_dT6p7z0YUcEKakGr-+x+a7je_jNnGHOAnVs5mxtrSN1g@mail.gmail.com>
+Subject: Re: [PATCH net-next 4/8] sctp: add SCTP_ASCONF_SUPPORTED sockopt
+To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
+        Neil Horman <nhorman@tuxdriver.com>,
+        davem <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Mon, Aug 19, 2019 at 10:02:46PM +0800, Xin Long wrote:
-> SCTP_ASCONF_SUPPORTED sockopt is used to set enpoint's asconf
-> flag. With this feature, each endpoint will have its own flag
-> for its future asoc's asconf_capable, instead of netns asconf
-> flag.
-
-Is this backed by a RFC? If yes, it should be noted in the patch
-description.
-Quickly searching, I found only FreeBSD references.
+On Mon, Aug 19, 2019 at 10:30 PM Marcelo Ricardo Leitner
+<marcelo.leitner@gmail.com> wrote:
+>
+> On Mon, Aug 19, 2019 at 10:02:46PM +0800, Xin Long wrote:
+> > SCTP_ASCONF_SUPPORTED sockopt is used to set enpoint's asconf
+> > flag. With this feature, each endpoint will have its own flag
+> > for its future asoc's asconf_capable, instead of netns asconf
+> > flag.
+>
+> Is this backed by a RFC? If yes, it should be noted in the patch
+> description.
+> Quickly searching, I found only FreeBSD references.
+RFC doesn't define this sockopt clearly, unlike prsctp and reconfig,
+not sure why.
+but BSD supports it, so does some userland SCTP.
