@@ -2,91 +2,156 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A85CF993AB
-	for <lists+linux-sctp@lfdr.de>; Thu, 22 Aug 2019 14:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A039976F
+	for <lists+linux-sctp@lfdr.de>; Thu, 22 Aug 2019 16:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388610AbfHVMdS (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 22 Aug 2019 08:33:18 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:41181 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732778AbfHVMdS (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 22 Aug 2019 08:33:18 -0400
-Received: by mail-lf1-f67.google.com with SMTP id 62so4386302lfa.8
-        for <linux-sctp@vger.kernel.org>; Thu, 22 Aug 2019 05:33:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
-        b=nfhgajuufA7rWI/YoBLFz2MWYaw/EzcvL2MRwGBVBXpJ+tHWl2GL+cxwap1G98IxOg
-         Ob8ehEbbgRZ3WBc6H6INDo6rFKWg1dShWne+N7WlaDMjxzobTy9bfGotsqwkLgth0oBn
-         aFRE9bDH3zL9ejw2DLDEghsx62j9+IoAMKFY7exQ52raYsJyqYnlEmgXZQ9/smkmqgEX
-         EQAP508jHUPPlenbqzaW7zl1nbW0QVhHxOtJ6BjCBPObzqbvZUQubv/1ZBGu34QxLlzr
-         g5VyuWeEvTh0mpgHHzh7oUHX6eiZr48bFwQE9pIAipVx1Ls3pv2tH/0wsMuzyRz0o8Dy
-         fVYQ==
+        id S2388177AbfHVOxH (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 22 Aug 2019 10:53:07 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:55629 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388097AbfHVOxG (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 22 Aug 2019 10:53:06 -0400
+Received: by mail-io1-f69.google.com with SMTP id g23so6580800ioh.22
+        for <linux-sctp@vger.kernel.org>; Thu, 22 Aug 2019 07:53:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
-        b=da0LDGrLT30EO7l+TUYXKSZxpy7dWmSBdv2lXkDMvhTXnZCvpxfdWVBI2vj1ipoN2F
-         Xl+XQxfFEm/P+YO5TV865e52gE7SLNFHZUE3yci/3TgddKVHZYRg/5wBQ/pegdGvlWsd
-         VRPk783jhNHg9tacJgfYApL/Ftb4b3F7TYucIxp0HjBCnJx2WZGZrM6SD0QD++SJB/te
-         qh2LfzhvaT9wYdxm/4tkgCfCOjV93bRgFKZfT7PzXS+EqMuEjgtm343MIDIRqpWrt06g
-         LizjrKBz8dHca11x2Pi0Nc5LeQtjlZU3re9auGr0X4lN0vz+qSkDOR517LoFX5oYdI3d
-         30Vw==
-X-Gm-Message-State: APjAAAUrn+hdmFecQYH2ytvB/T4w/ZQ1Hj7XGGXotaYj4297tekmcWCN
-        FMbS0Xz9NIMMYVYb94wZkWtX9ErM3xkFji8SCdw=
-X-Google-Smtp-Source: APXvYqxAIR78YU+T6kxFuF/fM9DMLrbHL7/RRwQn0EMggjH+Xv1U3mJHoN258ezWnIEWlEwEkubNeP3e4OaNpSk81nY=
-X-Received: by 2002:ac2:54bc:: with SMTP id w28mr222870lfk.17.1566477196677;
- Thu, 22 Aug 2019 05:33:16 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=kfIi0OSou2Ekw5QLTdZ8VtZ0z3hqSfowleVJYnTSHhc=;
+        b=b7BXcoXsMjv2mIVi5LiTZy+pKWqS4b+bn4WU0MsRZ3nhwejRa5+EnIL0951g6pBZ6I
+         CzEgqO7TA7d6qjd9Oz4t8TpytJ5fhpztgwRRkXfk8TH50PlNBRz5k8w+P7K0hbpi/DdE
+         EQCATP5ydGf/NtVaJmTwQuG3jZa7F+2V5AJ3rb3DUxZAZU6LQHlxLoEiNfm9lyGauQxh
+         edKgux8UvH994ROgbpim8mVO8AgrDmek2/llj5N02aYiuyg0k7vheZZvKgDq3kvk4wIn
+         Jq9C7AMJMy+K4+uANNXKyyZogrS+6U7cpG5PSrbpVkB59jku6QGrwV8nAyeyxFG49OZA
+         wrwQ==
+X-Gm-Message-State: APjAAAXV+Meh+Ybz80+xnGpi/YQ6bmcvV1YqF3+ZnUX2jxdHtMIY0thp
+        pmpNrbGBIQuPN7fbsj9VLfpv2RsGVSk+CIGzLTL1QdRfAOXn
+X-Google-Smtp-Source: APXvYqw2pBMggwRHNC0lzjydaezprM8qkJSaYzg9R1+X41uK1S/e6CKOqbuqpYhbin1Rq+t39efQ14ItyMp4karQSg0YBWmMHNMl
 MIME-Version: 1.0
-Received: by 2002:ab3:6a0f:0:0:0:0:0 with HTTP; Thu, 22 Aug 2019 05:33:16
- -0700 (PDT)
-Reply-To: eku.lawfirm@gmail.com
-From:   "Law firm(Eku and Associates)" <ezeobodo1@gmail.com>
-Date:   Thu, 22 Aug 2019 12:33:16 +0000
-Message-ID: <CAN-_bTYkX9Q_V1vycr99xF0J=w6om=+jKr8KLhHqjcjhJ7XE6A@mail.gmail.com>
-Subject: MY $25,000,000.00 INVESTMENT PROPOSAL WITH YOU AND IN YOUR COUNTRY.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Received: by 2002:a5e:8e09:: with SMTP id a9mr69752ion.238.1566485585548;
+ Thu, 22 Aug 2019 07:53:05 -0700 (PDT)
+Date:   Thu, 22 Aug 2019 07:53:05 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000df5c7f0590b5d85d@google.com>
+Subject: general protection fault in sctp_inq_pop
+From:   syzbot <syzbot+4a0643a653ac375612d1@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        linux-sctp@vger.kernel.org, marcelo.leitner@gmail.com,
+        netdev@vger.kernel.org, nhorman@tuxdriver.com,
+        syzkaller-bugs@googlegroups.com, vyasevich@gmail.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
---=20
-Dear,
-With due respect this is not spam or Scam mail, because I have
-contacted you before and there was no response from you,I apologise if
-the contents of this mail are contrary to your moral ethics, which I
-feel may be of great disturbance to your person, but please treat this
-with absolute confidentiality, believing that this email reaches you
-in good faith. My contacting you is not a mistake or a coincidence
-because God can use any person known or unknown to accomplish great
-things.
-I am a lawyer and I have an investment business proposal to offer you.
-It is not official but should be considered as legal and confidential
-business. I have a customer's deposit of $US25 million dollars ready
-to be moved for investment if you can partner with us. We are ready to
-offer you 10% of this total amount as your compensation for supporting
-the transaction to completion. If you are interested to help me please
-reply me with your full details as stated below:
-(1) Your full names:
-(2) Your address:
-(3) Your occupation:
-(4) Your mobile telephone number:
-(5) Your nationality:
-(6) Your present location:
-(7) Your age:
-So that I will provide you more details on what to do and what is
-required for successful completion.
-Note: DO NOT REPLY ME IF YOU ARE NOT INTERESTED AND WITHOUT THE ABOVE
-MENTIONED DETAILS
+Hello,
 
-Sinc=C3=A8rement v=C3=B4tre,
-Avocat Etienne Eku Esq.(Lawfirm)
-Procureur principal. De Cabinet d=E2=80=99avocats de l=E2=80=99Afrique de l=
-=E2=80=99ouest.
-Skype:westafricalawfirm
+syzbot found the following crash on:
+
+HEAD commit:    20e79a0a net: hns: add phy_attached_info() to the hns driver
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=10d6dfba600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ce5e88233f2f83b0
+dashboard link: https://syzkaller.appspot.com/bug?extid=4a0643a653ac375612d1
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+
+Unfortunately, I don't have any reproducer for this crash yet.
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+4a0643a653ac375612d1@syzkaller.appspotmail.com
+
+kasan: CONFIG_KASAN_INLINE enabled
+kasan: GPF could be caused by NULL-ptr deref or user memory access
+general protection fault: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 15509 Comm: syz-executor.1 Not tainted 5.3.0-rc3+ #139
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+RIP: 0010:sctp_inq_pop+0x294/0xd80 net/sctp/inqueue.c:201
+Code: 89 f9 48 c1 e9 03 80 3c 01 00 0f 85 e3 08 00 00 49 8d 7d 02 4d 89 6c  
+24 60 48 b8 00 00 00 00 00 fc ff df 48 89 f9 48 c1 e9 03 <0f> b6 0c 01 48  
+89 f8 83 e0 07 83 c0 01 38 c8 7c 08 84 c9 0f 85 4b
+RSP: 0018:ffff888097d9ee40 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: ffff8880968405d8 RCX: 0000000000000001
+RDX: 0000000000005803 RSI: ffffffff86b236aa RDI: 000000000000000a
+RBP: ffff888097d9ee90 R08: ffff88808fd44240 R09: fffffbfff14a914f
+R10: fffffbfff14a914e R11: ffffffff8a548a77 R12: ffff888096840580
+R13: 0000000000000008 R14: 0000000000000000 R15: ffff888097d9f478
+FS:  00007f59f27b8700(0000) GS:ffff8880ae800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f40b77fd000 CR3: 0000000063e8e000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+  sctp_endpoint_bh_rcv+0x184/0x8d0 net/sctp/endpointola.c:385
+  sctp_inq_push+0x1e4/0x280 net/sctp/inqueue.c:80
+  sctp_rcv+0x2807/0x3590 net/sctp/input.c:256
+  sctp6_rcv+0x17/0x30 net/sctp/ipv6.c:1049
+  ip6_protocol_deliver_rcu+0x2fe/0x1660 net/ipv6/ip6_input.c:397
+  ip6_input_finish+0x84/0x170 net/ipv6/ip6_input.c:438
+  NF_HOOK include/linux/netfilter.h:305 [inline]
+  NF_HOOK include/linux/netfilter.h:299 [inline]
+  ip6_input+0xe4/0x3f0 net/ipv6/ip6_input.c:447
+  dst_input include/net/dst.h:442 [inline]
+  ip6_sublist_rcv_finish+0x98/0x1e0 net/ipv6/ip6_input.c:84
+  ip6_list_rcv_finish net/ipv6/ip6_input.c:118 [inline]
+  ip6_sublist_rcv+0x80c/0xcf0 net/ipv6/ip6_input.c:282
+  ipv6_list_rcv+0x373/0x4b0 net/ipv6/ip6_input.c:316
+  __netif_receive_skb_list_ptype net/core/dev.c:5049 [inline]
+  __netif_receive_skb_list_core+0x1a2/0x9d0 net/core/dev.c:5087
+  __netif_receive_skb_list net/core/dev.c:5149 [inline]
+  netif_receive_skb_list_internal+0x7eb/0xe60 net/core/dev.c:5244
+  gro_normal_list.part.0+0x1e/0xb0 net/core/dev.c:5757
+  gro_normal_list net/core/dev.c:5755 [inline]
+  gro_normal_one net/core/dev.c:5769 [inline]
+  napi_frags_finish net/core/dev.c:5782 [inline]
+  napi_gro_frags+0xa6a/0xea0 net/core/dev.c:5855
+  tun_get_user+0x2e98/0x3fa0 drivers/net/tun.c:1974
+  tun_chr_write_iter+0xbd/0x156 drivers/net/tun.c:2020
+  call_write_iter include/linux/fs.h:1870 [inline]
+  do_iter_readv_writev+0x5f8/0x8f0 fs/read_write.c:693
+  do_iter_write fs/read_write.c:970 [inline]
+  do_iter_write+0x184/0x610 fs/read_write.c:951
+  vfs_writev+0x1b3/0x2f0 fs/read_write.c:1015
+  do_writev+0x15b/0x330 fs/read_write.c:1058
+  __do_sys_writev fs/read_write.c:1131 [inline]
+  __se_sys_writev fs/read_write.c:1128 [inline]
+  __x64_sys_writev+0x75/0xb0 fs/read_write.c:1128
+  do_syscall_64+0xfd/0x6a0 arch/x86/entry/common.c:296
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x4596e1
+Code: 75 14 b8 14 00 00 00 0f 05 48 3d 01 f0 ff ff 0f 83 34 b9 fb ff c3 48  
+83 ec 08 e8 fa 2c 00 00 48 89 04 24 b8 14 00 00 00 0f 05 <48> 8b 3c 24 48  
+89 c2 e8 43 2d 00 00 48 89 d0 48 83 c4 08 48 3d 01
+RSP: 002b:00007f59f27b7ba0 EFLAGS: 00000293 ORIG_RAX: 0000000000000014
+RAX: ffffffffffffffda RBX: 000000000000010c RCX: 00000000004596e1
+RDX: 0000000000000001 RSI: 00007f59f27b7c00 RDI: 00000000000000f0
+RBP: 000000000075bf20 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000293 R12: 00007f59f27b86d4
+R13: 00000000004c8783 R14: 00000000004df5a0 R15: 00000000ffffffff
+Modules linked in:
+---[ end trace 4d09ea96a0c7705b ]---
+RIP: 0010:sctp_inq_pop+0x294/0xd80 net/sctp/inqueue.c:201
+Code: 89 f9 48 c1 e9 03 80 3c 01 00 0f 85 e3 08 00 00 49 8d 7d 02 4d 89 6c  
+24 60 48 b8 00 00 00 00 00 fc ff df 48 89 f9 48 c1 e9 03 <0f> b6 0c 01 48  
+89 f8 83 e0 07 83 c0 01 38 c8 7c 08 84 c9 0f 85 4b
+RSP: 0018:ffff888097d9ee40 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: ffff8880968405d8 RCX: 0000000000000001
+RDX: 0000000000005803 RSI: ffffffff86b236aa RDI: 000000000000000a
+RBP: ffff888097d9ee90 R08: ffff88808fd44240 R09: fffffbfff14a914f
+R10: fffffbfff14a914e R11: ffffffff8a548a77 R12: ffff888096840580
+R13: 0000000000000008 R14: 0000000000000000 R15: ffff888097d9f478
+FS:  00007f59f27b8700(0000) GS:ffff8880ae800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f40b77fd000 CR3: 0000000063e8e000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
