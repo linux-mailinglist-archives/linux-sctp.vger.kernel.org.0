@@ -2,57 +2,52 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A3589B847
-	for <lists+linux-sctp@lfdr.de>; Fri, 23 Aug 2019 23:42:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B74259BFA5
+	for <lists+linux-sctp@lfdr.de>; Sat, 24 Aug 2019 21:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436983AbfHWVmv (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 23 Aug 2019 17:42:51 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:38242 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436967AbfHWVmv (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 23 Aug 2019 17:42:51 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::d71])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 8E10B1543B407;
-        Fri, 23 Aug 2019 14:42:50 -0700 (PDT)
-Date:   Fri, 23 Aug 2019 14:42:50 -0700 (PDT)
-Message-Id: <20190823.144250.2063544404229146484.davem@davemloft.net>
-To:     lucien.xin@gmail.com
-Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
-        marcelo.leitner@gmail.com, nhorman@tuxdriver.com,
-        brouer@redhat.com, ecree@solarflare.com, dvyukov@google.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH net-next] net: ipv6: fix listify ip6_rcv_finish in case
- of forwarding
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <e355527b374f6ce70fcc286457f87592cd8f3dcc.1566559983.git.lucien.xin@gmail.com>
-References: <e355527b374f6ce70fcc286457f87592cd8f3dcc.1566559983.git.lucien.xin@gmail.com>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 23 Aug 2019 14:42:50 -0700 (PDT)
+        id S1727094AbfHXTAm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Sat, 24 Aug 2019 15:00:42 -0400
+Received: from smtp2.osep.mendoza.gov.ar ([200.16.135.145]:52982 "HELO
+        smtp2.osep.mendoza.gov.ar" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728023AbfHXTAl (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sat, 24 Aug 2019 15:00:41 -0400
+Received: (qmail 402 invoked from network); 24 Aug 2019 14:14:38 -0000
+Received: from unknown (HELO zimbra.servers.dg.intranet) (10.10.195.224)
+  by smtp2.osep.mendoza.gov.ar with SMTP; 24 Aug 2019 14:14:38 -0000
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.servers.dg.intranet (Postfix) with ESMTP id DB8B3CF7CC66;
+        Sat, 24 Aug 2019 11:14:37 -0300 (ART)
+Received: from zimbra.servers.dg.intranet ([127.0.0.1])
+        by localhost (zimbra.servers.dg.intranet [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id RViPrJdL95bg; Sat, 24 Aug 2019 11:14:37 -0300 (ART)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.servers.dg.intranet (Postfix) with ESMTP id 877BBCF7CC58;
+        Sat, 24 Aug 2019 11:14:37 -0300 (ART)
+X-Virus-Scanned: amavisd-new at osep.mendoza.gov.ar
+Received: from zimbra.servers.dg.intranet ([127.0.0.1])
+        by localhost (zimbra.servers.dg.intranet [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 9n2-6F1Dy9XD; Sat, 24 Aug 2019 11:14:37 -0300 (ART)
+Received: from zimbra.servers.dg.intranet (zimbra.servers.dg.intranet [10.10.195.224])
+        by zimbra.servers.dg.intranet (Postfix) with ESMTP id BAAEBCF7CC40;
+        Sat, 24 Aug 2019 11:14:36 -0300 (ART)
+Date:   Sat, 24 Aug 2019 11:14:36 -0300 (ART)
+From:   "Herr.Robert Jackson" <liliana.marinero@osep.mendoza.gov.ar>
+Reply-To: SKY GROUP FINANCIAL <skygroupfinancial0@gmail.com>
+Message-ID: <1268244548.24999093.1566656076742.JavaMail.zimbra@osep.mendoza.gov.ar>
+Subject: 
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [172.16.3.2]
+X-Mailer: Zimbra 8.6.0_GA_1153 (zclient/8.6.0_GA_1153)
+Thread-Topic: 
+Thread-Index: 9gdTMQJ8JBu8cvpzdFVmtKjzn0qahQ==
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Xin Long <lucien.xin@gmail.com>
-Date: Fri, 23 Aug 2019 19:33:03 +0800
 
-> We need a similar fix for ipv6 as Commit 0761680d5215 ("net: ipv4: fix
-> listify ip_rcv_finish in case of forwarding") does for ipv4.
-> 
-> This issue can be reprocuded by syzbot since Commit 323ebb61e32b ("net:
-> use listified RX for handling GRO_NORMAL skbs") on net-next. The call
-> trace was:
- ...
-> Fixes: d8269e2cbf90 ("net: ipv6: listify ipv6_rcv() and ip6_rcv_finish()")
-> Fixes: 323ebb61e32b ("net: use listified RX for handling GRO_NORMAL skbs")
-> Reported-by: syzbot+eb349eeee854e389c36d@syzkaller.appspotmail.com
-> Reported-by: syzbot+4a0643a653ac375612d1@syzkaller.appspotmail.com
-> Signed-off-by: Xin Long <lucien.xin@gmail.com>
 
-Applied, thanks.
+Wir sind zuverlässige, vertrauenswürdige Kreditgeber, leihen wir Unternehmen und Einzelpersonen zu einem niedrigen Zinssatz von 2%, Sind Sie auf der Suche nach einem Geschäftskredit, Privatkredite, Schuldenkonsolidierung, unbesicherte Kredite, Risikokapital, wenn ja Kontaktieren Sie uns jetzt für weitere Einzelheiten.
