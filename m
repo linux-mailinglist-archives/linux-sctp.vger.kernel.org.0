@@ -2,52 +2,77 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B74259BFA5
-	for <lists+linux-sctp@lfdr.de>; Sat, 24 Aug 2019 21:00:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E65E89CB84
+	for <lists+linux-sctp@lfdr.de>; Mon, 26 Aug 2019 10:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727094AbfHXTAm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Sat, 24 Aug 2019 15:00:42 -0400
-Received: from smtp2.osep.mendoza.gov.ar ([200.16.135.145]:52982 "HELO
-        smtp2.osep.mendoza.gov.ar" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728023AbfHXTAl (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sat, 24 Aug 2019 15:00:41 -0400
-Received: (qmail 402 invoked from network); 24 Aug 2019 14:14:38 -0000
-Received: from unknown (HELO zimbra.servers.dg.intranet) (10.10.195.224)
-  by smtp2.osep.mendoza.gov.ar with SMTP; 24 Aug 2019 14:14:38 -0000
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.servers.dg.intranet (Postfix) with ESMTP id DB8B3CF7CC66;
-        Sat, 24 Aug 2019 11:14:37 -0300 (ART)
-Received: from zimbra.servers.dg.intranet ([127.0.0.1])
-        by localhost (zimbra.servers.dg.intranet [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id RViPrJdL95bg; Sat, 24 Aug 2019 11:14:37 -0300 (ART)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.servers.dg.intranet (Postfix) with ESMTP id 877BBCF7CC58;
-        Sat, 24 Aug 2019 11:14:37 -0300 (ART)
-X-Virus-Scanned: amavisd-new at osep.mendoza.gov.ar
-Received: from zimbra.servers.dg.intranet ([127.0.0.1])
-        by localhost (zimbra.servers.dg.intranet [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 9n2-6F1Dy9XD; Sat, 24 Aug 2019 11:14:37 -0300 (ART)
-Received: from zimbra.servers.dg.intranet (zimbra.servers.dg.intranet [10.10.195.224])
-        by zimbra.servers.dg.intranet (Postfix) with ESMTP id BAAEBCF7CC40;
-        Sat, 24 Aug 2019 11:14:36 -0300 (ART)
-Date:   Sat, 24 Aug 2019 11:14:36 -0300 (ART)
-From:   "Herr.Robert Jackson" <liliana.marinero@osep.mendoza.gov.ar>
-Reply-To: SKY GROUP FINANCIAL <skygroupfinancial0@gmail.com>
-Message-ID: <1268244548.24999093.1566656076742.JavaMail.zimbra@osep.mendoza.gov.ar>
-Subject: 
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [172.16.3.2]
-X-Mailer: Zimbra 8.6.0_GA_1153 (zclient/8.6.0_GA_1153)
-Thread-Topic: 
-Thread-Index: 9gdTMQJ8JBu8cvpzdFVmtKjzn0qahQ==
-To:     unlisted-recipients:; (no To-header on input)
+        id S1729343AbfHZIaO (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 26 Aug 2019 04:30:14 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:37896 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729328AbfHZIaO (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 26 Aug 2019 04:30:14 -0400
+Received: by mail-pg1-f196.google.com with SMTP id e11so10157758pga.5;
+        Mon, 26 Aug 2019 01:30:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=TSnxaRUgg7zVb+c6LGqQf5Uz1TCb/aeYLpuotKE+sJs=;
+        b=etgwajZIBg5S5RyrvVCzkP2qMiTuuhPJW5IrXrdgqcSnbDqMebJYJN+0QGWYcrnwbA
+         aByTvpea8z9Fz7ZJvbdNKnaua2VCEFhBhB+6PaTNotG2soUqEaQ/WuRXi2uJPcow6Gti
+         0yy4PqDQlCbdAyC9ajFfxRhnt7+TusEQhXLU3L5e+l3+q5Lf4sfkiJA8fS7ZpGunYjoA
+         uyYfwfMoc0w7/djgrX3zwocaQ1jLeE8fp9FmovgYYt/bsYc6aU9PEbRPtswQHZ0D/TtG
+         1mb3BZ4L2pOLV3H+4zXhhiGRTwYx0oQOI96eXKNRLY9Hfry04DGETcgvIsdtdA2Yrnp2
+         NBdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=TSnxaRUgg7zVb+c6LGqQf5Uz1TCb/aeYLpuotKE+sJs=;
+        b=FPRCf6n3aU6w09d6uI7l+dYSQuD5hBLwZdnsBKhNBy7OjSZUr5dBIGaP2smb/ZuVbs
+         TQYvXMQtNvnNJ5/KDznB5gXTKu6FFwq0jrRuJHHTboh2ORHNIsWAtdu8OzCzcaw6JBMq
+         WnOj27bChqVjtHk9aB4e92XEx+yCFUNjSdOU6xRn2QgU/EtZY0InWEBTbBVZRyeB2dVH
+         E9nQwYpE5uajY7F37/GC+TlvBxCBbNowttMX6peHBOzXIAEhnTT15yPFC9TIvHFLjqaO
+         DcJ/zzzr+uePr9IS/ZOnnyCbiQc7jta0uHvID5P9lp3UMCsjWiGDmS7adNhRyTijtjyo
+         3ZJA==
+X-Gm-Message-State: APjAAAXowjcr0tKLlKU8yuRB5F2PSWn+82sbH8Dxa5QAxQf+dH8wRz/4
+        aFr9/yTOTjq6BKRKBMxiOmsOCDYaquA=
+X-Google-Smtp-Source: APXvYqwf3gZG4zqRt5BtBt1T7HLkiAqMaMIZ1P3i1JNMoSm4EvHulTtmURe55ObJVCvAKDGuNaH3Lg==
+X-Received: by 2002:a62:1808:: with SMTP id 8mr18918135pfy.177.1566808212879;
+        Mon, 26 Aug 2019 01:30:12 -0700 (PDT)
+Received: from localhost ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id q3sm14341794pfn.4.2019.08.26.01.30.11
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 26 Aug 2019 01:30:12 -0700 (PDT)
+From:   Xin Long <lucien.xin@gmail.com>
+To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
+Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>, davem@davemloft.net
+Subject: [PATCH net-next 0/3] sctp: add SCTP_ECN_SUPPORTED sockopt
+Date:   Mon, 26 Aug 2019 16:30:01 +0800
+Message-Id: <cover.1566807985.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.1.0
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
+This patchset is to make ecn flag per netns and endpoint and then
+add SCTP_ECN_SUPPORTED sockopt, as does for other feature flags.
 
+Xin Long (3):
+  sctp: make ecn flag per netns and endpoint
+  sctp: allow users to set netns ecn flag with sysctl
+  sctp: allow users to set ep ecn flag by sockopt
 
-Wir sind zuverlässige, vertrauenswürdige Kreditgeber, leihen wir Unternehmen und Einzelpersonen zu einem niedrigen Zinssatz von 2%, Sind Sie auf der Suche nach einem Geschäftskredit, Privatkredite, Schuldenkonsolidierung, unbesicherte Kredite, Risikokapital, wenn ja Kontaktieren Sie uns jetzt für weitere Einzelheiten.
+ include/net/netns/sctp.h   |  3 ++
+ include/net/sctp/structs.h |  3 +-
+ include/uapi/linux/sctp.h  |  1 +
+ net/sctp/endpointola.c     |  1 +
+ net/sctp/protocol.c        |  3 ++
+ net/sctp/sm_make_chunk.c   | 16 +++++++---
+ net/sctp/socket.c          | 73 ++++++++++++++++++++++++++++++++++++++++++++++
+ net/sctp/sysctl.c          |  7 +++++
+ 8 files changed, 102 insertions(+), 5 deletions(-)
+
+-- 
+2.1.0
+
