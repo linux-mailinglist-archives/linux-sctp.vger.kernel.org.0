@@ -2,54 +2,47 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE41F9F8F9
-	for <lists+linux-sctp@lfdr.de>; Wed, 28 Aug 2019 05:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC87A41F5
+	for <lists+linux-sctp@lfdr.de>; Sat, 31 Aug 2019 05:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726497AbfH1DzD (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 27 Aug 2019 23:55:03 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:54450 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726250AbfH1DzC (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 27 Aug 2019 23:55:02 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::d71])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 5923A153BA91E;
-        Tue, 27 Aug 2019 20:55:01 -0700 (PDT)
-Date:   Tue, 27 Aug 2019 20:55:00 -0700 (PDT)
-Message-Id: <20190827.205500.2094153294135948781.davem@davemloft.net>
-To:     nhorman@tuxdriver.com
-Cc:     lucien.xin@gmail.com, netdev@vger.kernel.org,
-        linux-sctp@vger.kernel.org, marcelo.leitner@gmail.com
-Subject: Re: [PATCH net-next 0/3] sctp: add SCTP_ECN_SUPPORTED sockopt
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20190826110221.GA7831@hmswarspite.think-freely.org>
-References: <cover.1566807985.git.lucien.xin@gmail.com>
-        <20190826110221.GA7831@hmswarspite.think-freely.org>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
+        id S1726968AbfHaDp2 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 30 Aug 2019 23:45:28 -0400
+Received: from de.agxlserv.eu ([89.163.224.118]:55212 "EHLO de.agxlserv.eu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726659AbfHaDp2 (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Fri, 30 Aug 2019 23:45:28 -0400
+X-Greylist: delayed 35544 seconds by postgrey-1.27 at vger.kernel.org; Fri, 30 Aug 2019 23:45:27 EDT
+Received: from [102.176.65.183] (helo=User)
+        by de.agxlserv.eu with esmtpa (Exim 4.92.1)
+        (envelope-from <hosting.newsblog@agxl.site>)
+        id 1i3nNQ-00065b-Uc; Fri, 30 Aug 2019 22:20:09 +0200
+Reply-To: <brianchapman1808@gmail.com>
+From:   "Brian Chapman" <hosting.newsblog@agxl.site>
+Subject: re: still waiting for your reply
+Date:   Fri, 30 Aug 2019 19:52:46 +0200
+MIME-Version: 1.0
+Content-Type: text/plain;
+        charset="Windows-1251"
 Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Tue, 27 Aug 2019 20:55:01 -0700 (PDT)
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-Antivirus: Avast (VPS 190830-2, 30/08/2019), Outbound message
+X-Antivirus-Status: Clean
+Message-ID: <GENERATED-WASMISSING-1i3nNQ-00065b-Uc@de.agxlserv.eu>
+X-ACL-Warn: Adding Message-ID header because it is missing!
+X-Authenticated-Id: hosting.newsblog@agxl.site
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Neil Horman <nhorman@tuxdriver.com>
-Date: Mon, 26 Aug 2019 07:02:21 -0400
+still waiting for your reply
+Brian
 
-> On Mon, Aug 26, 2019 at 04:30:01PM +0800, Xin Long wrote:
->> This patchset is to make ecn flag per netns and endpoint and then
->> add SCTP_ECN_SUPPORTED sockopt, as does for other feature flags.
->> 
->> Xin Long (3):
->>   sctp: make ecn flag per netns and endpoint
->>   sctp: allow users to set netns ecn flag with sysctl
->>   sctp: allow users to set ep ecn flag by sockopt
- ...
-> Series
-> Acked-by: Neil Horman <nhorman@tuxdriver.com>
+---
+This email has been checked for viruses by Avast antivirus software.
+https://www.avast.com/antivirus
 
-Series applied to net-next, thanks.
