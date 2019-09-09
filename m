@@ -2,92 +2,91 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D57BAD3F2
-	for <lists+linux-sctp@lfdr.de>; Mon,  9 Sep 2019 09:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80EA2AD448
+	for <lists+linux-sctp@lfdr.de>; Mon,  9 Sep 2019 09:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728575AbfIIHdi (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 9 Sep 2019 03:33:38 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:34280 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726988AbfIIHdi (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 9 Sep 2019 03:33:38 -0400
-Received: by mail-pf1-f193.google.com with SMTP id r12so8626619pfh.1;
-        Mon, 09 Sep 2019 00:33:37 -0700 (PDT)
+        id S1725996AbfIIH5C (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 9 Sep 2019 03:57:02 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:34152 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725875AbfIIH5B (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 9 Sep 2019 03:57:01 -0400
+Received: by mail-pf1-f195.google.com with SMTP id r12so8664976pfh.1;
+        Mon, 09 Sep 2019 00:56:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id;
-        bh=ZMqNl2zF+gfPD/uFd1o9AZb2n3DBBvN6MxUSv304vLM=;
-        b=rA7RvCX5uJfdiOk2lyyY/u0/xPIVaEWth+vY8AMas18zEXlAfvY5H/qM/mLDuzkum/
-         HW7Q+HpsJoCEEgyQAhM4AtUhlmN1ou2S9kMM5uS4Qh0+lun8iZdFLCxN7badjIxMG0VW
-         YaN0wI4yb6qmnkHOv61Hr7Ykn/WSbLzpVY8XPpXRNcpgwzMiAWJPDRyT6BnNqSBNiS5z
-         S7ISuqtzNzxd+SOlSQ8YXN0Magp9HyObGKUe+vY5wPIX9hibIQm36WR3izAW96AeuZMh
-         DepTJpvMsIAnr795QbhwMfwgpkQE97YETFLOWqwFa/EdVq6PQYOI9M3pzZe1HzPnxwLY
-         ISdg==
+        bh=YGGeCQtERmX90Lvsi+k1fVEQMKEHIDobHtMhw/gMGHE=;
+        b=JYXqHlNZ81B82PHnnlJqixzmmzhpv0Armh395148tWKPJMByuJDwL6Ahdh7OM6iuiu
+         1cYNwVS0YTBbFUtHsRJkhhYcH5oETVnhvLjlcqJT/pUbW4xes8CO6cHa2B3aYTKAK4tX
+         fVlZwh1+7anVKS6/ftVgPzKXtlfJVM0oeNUgksydbIkKWK8taargOa+QVbAtqJLdCLjm
+         EB8v1Aeq4HeOn7t1aGcf1c6SIVuDIaVq4JwmK2wroV+/5zbeacKxHra/4eoA3jAa26ap
+         fA2LY/gqSF8ad3fAgdvKjUmVMQA8+3/LNHAqSGo4I1axbEFB+TTwAouQ6JPIyeihLJdG
+         eU2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=ZMqNl2zF+gfPD/uFd1o9AZb2n3DBBvN6MxUSv304vLM=;
-        b=VlOl/e9mMzxmFA3Q3gOFeQymmX/wuPRA2b79nxncQYqcnrW5eSbaXZdas1eLDtONIz
-         Lr8FGxUtSdbjDQhmdArW9JIG1UiqSSzNdvQfI6U3sKug8KLt84avKM8OLLg7it34dayq
-         NtQBEaAG9KSahrLjS5kkun51kBJO3/9JzdGmbh0PC6SdOhRjzDQzt+aPLROA5O9Npf6Y
-         8vxBZ6aa1+FIYeDG8DYP8/tdxyz/rN9lT6Vsdr7MZPM3UkmDZWNy20bFK8pyOkigmRDH
-         rkgCnzROiMP5Bo9tGPphCIi0EwDCcB0iSshQxHkN66IwkJD0POlNE9BTMqTpcPK5h3UY
-         EbEw==
-X-Gm-Message-State: APjAAAXdYiBRx94zPozp5Chf8hNfrBBU+UltL5SpnzDQLoM1LYobQ35H
-        vtsq+soX67gaqPs7cZH0OsaoxHlGQGw=
-X-Google-Smtp-Source: APXvYqxoQXEfsLqkVwODnGB8toR5dritL9dhn48aXN5vhb5rgxtPC6+ujlrjK0QD+u1CPSTPzap0Bw==
-X-Received: by 2002:a63:2ec9:: with SMTP id u192mr19891995pgu.16.1568014416992;
-        Mon, 09 Sep 2019 00:33:36 -0700 (PDT)
+        bh=YGGeCQtERmX90Lvsi+k1fVEQMKEHIDobHtMhw/gMGHE=;
+        b=QxIEy+IBcLU41cOSqjr55uVwd9alYkLGhsi0t9GFwndM2N1RIGJx9NzAegZ10X3ryL
+         qX/XI9wv3OUNdYkR32dc2KqfZhkY4Llv2W4+/oz18YG2LLm78MN6cmVAcc4QSRemyW6w
+         lCzfeLEPnVnmiPzbViJsvOTnJkqjM2ZDKyGAoOnkYCgtsZijJB2wow5sEOemNLa3tc46
+         lNCADkNS3N3aeuGcpI/ukRi7vNZJ6RF0IcCtsGQX967lu020GtcKr0LB/i/f+yYfB2Jf
+         jGS1v0N7Zeif0k+udqB4Dmas5ryVXNYnTt5s/5NH8+dYDChML3INso2d23xCX8nPF7k0
+         xaLQ==
+X-Gm-Message-State: APjAAAUxdJ2GL9eh1kik3WXuLbHzS4xu1TN/Re7VuQkK9wJXq4SfP/03
+        53TW12/dwehd+8LTHVvXVS+28nl1qw8=
+X-Google-Smtp-Source: APXvYqw0Vn1p3kvXhalSTFAxpXIbydjlqAOpdjPVukB/MpBbgaLE85+2SzhlleGrm39lfn+ng1gChg==
+X-Received: by 2002:a17:90a:a4c3:: with SMTP id l3mr24271806pjw.46.1568015819248;
+        Mon, 09 Sep 2019 00:56:59 -0700 (PDT)
 Received: from localhost ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id a29sm24721403pfr.152.2019.09.09.00.33.35
+        by smtp.gmail.com with ESMTPSA id p5sm4026204pjr.2.2019.09.09.00.56.58
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 09 Sep 2019 00:33:36 -0700 (PDT)
+        Mon, 09 Sep 2019 00:56:58 -0700 (PDT)
 From:   Xin Long <lucien.xin@gmail.com>
 To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
-Cc:     davem@davemloft.net,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>
-Subject: [PATCH net] sctp: fix the missing put_user when dumping transport thresholds
-Date:   Mon,  9 Sep 2019 15:33:29 +0800
-Message-Id: <3fa4f7700c93f06530c80bc666d1696cb7c077de.1568014409.git.lucien.xin@gmail.com>
+Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>, davem@davemloft.net
+Subject: [PATCH net-next 0/5] sctp: update from rfc7829
+Date:   Mon,  9 Sep 2019 15:56:46 +0800
+Message-Id: <cover.1568015756.git.lucien.xin@gmail.com>
 X-Mailer: git-send-email 2.1.0
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-This issue causes SCTP_PEER_ADDR_THLDS sockopt not to be able to dump
-a transport thresholds info.
+SCTP-PF was implemented based on a Internet-Draft in 2012:
 
-Fix it by adding 'goto' put_user in sctp_getsockopt_paddr_thresholds.
+  https://tools.ietf.org/html/draft-nishida-tsvwg-sctp-failover-05
 
-Fixes: 8add543e369d ("sctp: add SCTP_FUTURE_ASSOC for SCTP_PEER_ADDR_THLDS sockopt")
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
----
- net/sctp/socket.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+It's been updated quite a few by rfc7829 in 2016.
 
-diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-index 9d1f83b..ad87518 100644
---- a/net/sctp/socket.c
-+++ b/net/sctp/socket.c
-@@ -7173,7 +7173,7 @@ static int sctp_getsockopt_paddr_thresholds(struct sock *sk,
- 		val.spt_pathmaxrxt = trans->pathmaxrxt;
- 		val.spt_pathpfthld = trans->pf_retrans;
- 
--		return 0;
-+		goto out;
- 	}
- 
- 	asoc = sctp_id2assoc(sk, val.spt_assoc_id);
-@@ -7191,6 +7191,7 @@ static int sctp_getsockopt_paddr_thresholds(struct sock *sk,
- 		val.spt_pathmaxrxt = sp->pathmaxrxt;
- 	}
- 
-+out:
- 	if (put_user(len, optlen) || copy_to_user(optval, &val, len))
- 		return -EFAULT;
- 
+This patchset adds the following features:
+
+  1. add SCTP_ADDR_POTENTIALLY_FAILED notification
+  2. add pf_expose per netns/sock/asoc
+  3. add SCTP_EXPOSE_POTENTIALLY_FAILED_STATE sockopt
+  4. add ps_retrans per netns/sock/asoc/transport
+     (Primary Path Switchover)
+  5. add spt_pathcpthld for SCTP_PEER_ADDR_THLDS sockopt
+
+Xin Long (5):
+  sctp: add SCTP_ADDR_POTENTIALLY_FAILED notification
+  sctp: add pf_expose per netns and sock and asoc
+  sctp: add SCTP_EXPOSE_POTENTIALLY_FAILED_STATE sockopt
+  sctp: add support for Primary Path Switchover
+  sctp: add spt_pathcpthld in struct sctp_paddrthlds
+
+ include/net/netns/sctp.h   | 13 ++++++
+ include/net/sctp/structs.h | 13 ++++--
+ include/uapi/linux/sctp.h  |  4 ++
+ net/sctp/associola.c       | 28 ++++++-------
+ net/sctp/protocol.c        |  6 +++
+ net/sctp/sm_sideeffect.c   |  5 +++
+ net/sctp/socket.c          | 99 +++++++++++++++++++++++++++++++++++++++++++++-
+ net/sctp/sysctl.c          | 16 ++++++++
+ 8 files changed, 165 insertions(+), 19 deletions(-)
+
 -- 
 2.1.0
 
