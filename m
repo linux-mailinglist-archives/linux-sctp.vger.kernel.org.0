@@ -2,92 +2,105 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC2EAF404
-	for <lists+linux-sctp@lfdr.de>; Wed, 11 Sep 2019 03:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CABDBAF781
+	for <lists+linux-sctp@lfdr.de>; Wed, 11 Sep 2019 10:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726341AbfIKBa4 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 10 Sep 2019 21:30:56 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:55550 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726224AbfIKBa4 (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Tue, 10 Sep 2019 21:30:56 -0400
-Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id A8175ACB86E4CABFD3C3;
-        Wed, 11 Sep 2019 09:30:53 +0800 (CST)
-Received: from [127.0.0.1] (10.177.96.96) by DGGEMS410-HUB.china.huawei.com
- (10.3.19.210) with Microsoft SMTP Server id 14.3.439.0; Wed, 11 Sep 2019
- 09:30:49 +0800
-Subject: Re: [PATCH net 1/2] sctp: remove redundant assignment when call
- sctp_get_port_local
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-CC:     <vyasevich@gmail.com>, <nhorman@tuxdriver.com>,
-        <marcelo.leitner@gmail.com>, <davem@davemloft.net>,
-        <linux-sctp@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>
-References: <20190910071343.18808-1-maowenan@huawei.com>
- <20190910071343.18808-2-maowenan@huawei.com> <20190910185710.GF15977@kadam>
- <20190910192207.GE20699@kadam>
-From:   maowenan <maowenan@huawei.com>
-Message-ID: <53556c87-a351-4314-cbd9-49a39d0b41aa@huawei.com>
-Date:   Wed, 11 Sep 2019 09:30:47 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.0
+        id S1727254AbfIKIOv (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 11 Sep 2019 04:14:51 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:38740 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726341AbfIKIOv (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 11 Sep 2019 04:14:51 -0400
+Received: by mail-wr1-f67.google.com with SMTP id l11so23395071wrx.5;
+        Wed, 11 Sep 2019 01:14:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AH0YtU6l75+7V9C/xcnLh0BF5eg2S/moPXsD0GowN0I=;
+        b=ncy+i7cxqdre3XCv4x7LuFuaklNs156XRzaLAmwJgCloDhwm3CaTjiOK1mMu2GFpOG
+         eCDWmSRkFe73j+GnfMxDTBX/VCBzBGHWKiBSx0D5gfw/w3dQ5uAxSUE+ByQsOC8aCwC/
+         KAnY6n5pGEkFVcuIDHkAlVTq+eWWgT00LVHA26qE35VR+zRff8a0XGoPJ8wZk4pBVPm0
+         /6zjfHJvTqhJNufsIyibIgmgGyNTy1uTTMxrdky2ioRPHvK1eVHg5ggLYr5V/7ozohbs
+         Fz4+q8QTiaVrm/21rq8KP7IOK+FoqnQRsOf625SpMmUV09yzCYD3givNndLlzUmaAOpq
+         MokA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AH0YtU6l75+7V9C/xcnLh0BF5eg2S/moPXsD0GowN0I=;
+        b=cAy3Qn06Ph5Rn67PRXnawC912GDf2ZsSXhR07VqxCWIH3lP4WKhN/Tz0gt3Sxdoy9Z
+         cIwHuPFuhtvsXegYtjy+ZU04nfSvB2ZHsVFp+B20a2TbJUmS1XOF23BXbab8AFcpaCX2
+         E+rpr4SgdrGK3vfJU8vwxESK+i93qFn0ndQ2pKTnuv63vlB7MsfSYnwKhPIV8ibk0Nwt
+         XuygLF2PHbCiSNioLbPprvpzapxOj+gyXuNJUc3iVLvs2Drc3482/0vD1gLnh3DaCWHc
+         bAmd9GE2Zdp29FO65nCYyemrQN+77g1eMNG9PA3tof5B4xF1pgORxc0pQlbs4kdHeY2b
+         StUg==
+X-Gm-Message-State: APjAAAUKA2DbTWQNSaZPYai68I2XShBNZUaZmGqvYLqtIeRn8uwfXHYK
+        PvNdaU0pQRhDkIPcJ7SEBv+oMnwA9xteInLN2Tk=
+X-Google-Smtp-Source: APXvYqy2U4kSNexdXP2g40hCPpi4PfaIq4zpdHunbAlREIOewM+u8/YO6dqcVlgOUHm+ThDgX09rkC34HKlKREBz+qU=
+X-Received: by 2002:adf:aa85:: with SMTP id h5mr2609325wrc.329.1568189689549;
+ Wed, 11 Sep 2019 01:14:49 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190910192207.GE20699@kadam>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.177.96.96]
-X-CFilter-Loop: Reflected
+References: <06a808c98b94e92b52276469e0257ef9f58923d0.1568015756.git.lucien.xin@gmail.com>
+ <cover.1568015756.git.lucien.xin@gmail.com> <604e6ac718c29aa5b1a8c4b164a126b82bc42a2f.1568015756.git.lucien.xin@gmail.com>
+ <20190910.192755.717621354475214603.davem@davemloft.net>
+In-Reply-To: <20190910.192755.717621354475214603.davem@davemloft.net>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Wed, 11 Sep 2019 16:14:38 +0800
+Message-ID: <CADvbK_doDp3oFX5SdSwkqmAf+vkMo9XtqK8hLykixqBZYUL2OQ@mail.gmail.com>
+Subject: Re: [PATCH net-next 5/5] sctp: add spt_pathcpthld in struct sctp_paddrthlds
+To:     David Miller <davem@davemloft.net>
+Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
+On Wed, Sep 11, 2019 at 1:27 AM David Miller <davem@davemloft.net> wrote:
+>
+> From: Xin Long <lucien.xin@gmail.com>
+> Date: Mon,  9 Sep 2019 15:56:51 +0800
+>
+> > diff --git a/include/uapi/linux/sctp.h b/include/uapi/linux/sctp.h
+> > index a15cc28..dfd81e1 100644
+> > --- a/include/uapi/linux/sctp.h
+> > +++ b/include/uapi/linux/sctp.h
+> > @@ -1069,6 +1069,7 @@ struct sctp_paddrthlds {
+> >       struct sockaddr_storage spt_address;
+> >       __u16 spt_pathmaxrxt;
+> >       __u16 spt_pathpfthld;
+> > +     __u16 spt_pathcpthld;
+> >  };
+> >
+> >  /*
+>
+> As pointed out you can't add things to this structure without breaking existing
+> binaries.
+we had the same problem when adding:
+spp_ipv6_flowlabel and spp_dscp into struct sctp_paddrparams. in:
 
+commit 0b0dce7a36fb9f1a9dd8245ea82d3a268c6943fe
+Author: Xin Long <lucien.xin@gmail.com>
+Date:   Mon Jul 2 18:21:13 2018 +0800
 
-On 2019/9/11 3:22, Dan Carpenter wrote:
-> On Tue, Sep 10, 2019 at 09:57:10PM +0300, Dan Carpenter wrote:
->> On Tue, Sep 10, 2019 at 03:13:42PM +0800, Mao Wenan wrote:
->>> There are more parentheses in if clause when call sctp_get_port_local
->>> in sctp_do_bind, and redundant assignment to 'ret'. This patch is to
->>> do cleanup.
->>>
->>> Signed-off-by: Mao Wenan <maowenan@huawei.com>
->>> ---
->>>  net/sctp/socket.c | 3 +--
->>>  1 file changed, 1 insertion(+), 2 deletions(-)
->>>
->>> diff --git a/net/sctp/socket.c b/net/sctp/socket.c
->>> index 9d1f83b10c0a..766b68b55ebe 100644
->>> --- a/net/sctp/socket.c
->>> +++ b/net/sctp/socket.c
->>> @@ -399,9 +399,8 @@ static int sctp_do_bind(struct sock *sk, union sctp_addr *addr, int len)
->>>  	 * detection.
->>>  	 */
->>>  	addr->v4.sin_port = htons(snum);
->>> -	if ((ret = sctp_get_port_local(sk, addr))) {
->>> +	if (sctp_get_port_local(sk, addr))
->>>  		return -EADDRINUSE;
->>
->> sctp_get_port_local() returns a long which is either 0,1 or a pointer
->> casted to long.  It's not documented what it means and neither of the
->> callers use the return since commit 62208f12451f ("net: sctp: simplify
->> sctp_get_port").
-> 
-> Actually it was commit 4e54064e0a13 ("sctp: Allow only 1 listening
-> socket with SO_REUSEADDR") from 11 years ago.  That patch fixed a bug,
-> because before the code assumed that a pointer casted to an int was the
-> same as a pointer casted to a long.
+    sctp: add spp_ipv6_flowlabel and spp_dscp for sctp_paddrparams
 
-commit 4e54064e0a13 treated non-zero return value as unexpected, so the current
-cleanup is ok?
+the solution was:
 
-> 
-> regards,
-> dan carpenter
-> 
-> 
-> .
-> 
+        if (optlen == sizeof(params)) {
+                if (copy_from_user(&params, optval, optlen))
+                        return -EFAULT;
+        } else if (optlen == ALIGN(offsetof(struct sctp_paddrparams,
+                                            spp_ipv6_flowlabel), 4)) {
+                if (copy_from_user(&params, optval, optlen))
+                        return -EFAULT;
+                if (params.spp_flags & (SPP_DSCP | SPP_IPV6_FLOWLABEL))
+                        return -EINVAL;
+        } else {
+                return -EINVAL;
+        }
 
+I will do the same for this patch. Thanks.
