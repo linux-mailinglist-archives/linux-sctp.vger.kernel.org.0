@@ -2,204 +2,118 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D808B02E8
-	for <lists+linux-sctp@lfdr.de>; Wed, 11 Sep 2019 19:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8125CB06AE
+	for <lists+linux-sctp@lfdr.de>; Thu, 12 Sep 2019 04:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729767AbfIKRrW (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 11 Sep 2019 13:47:22 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:34730 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729683AbfIKRrW (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 11 Sep 2019 13:47:22 -0400
-Received: by mail-wr1-f68.google.com with SMTP id a11so15806594wrx.1;
-        Wed, 11 Sep 2019 10:47:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=za5dLNsyd8cO0/LWjl+4GZ/KbGfFV7E0+6wSG+4LWkk=;
-        b=iiNPN2Ai9y+GirwE9t7qJoUI//aSPubMbgHAjaoyu311cDmcvJcleIdfrAIGcbFvn7
-         9/MF6u85fcNYE6uSjhTj+6VATv1d90FR/mr2dhFCrX5Pn4xQXjy6twcPxF/fhfExTa4K
-         LYQTecvTYjvIQ44/az3IzkKwj47aTFJfiUyVOk4/fFI+SIYKyPeMN2m6t7vUbqxgFGFh
-         mw3H/OO2fZUmf0tlf4wlmZ/Z7lhc/hz8rIt/6u/NXWEdMkS0wVUfEyponAar9XM7fyE0
-         4kivPefiGnyrahppnTKzWbxXJ1pxxBIwf+/U/gjUrF0LOUqruR0CseQsBVtRJqv1C8wt
-         MvqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=za5dLNsyd8cO0/LWjl+4GZ/KbGfFV7E0+6wSG+4LWkk=;
-        b=ShBE11xQvtwLP3sSab1pqKN22L9QbvuCoDsUrY0DNyDKgms9IeQmydGOmEJBKkvK1+
-         8zwf82B5wMMEYXUOMn5gowOdPDEHavLSKtjUKFVm4KfDof2fZPY00q4vCzLBiE8EUtR/
-         claAh5DEvFWkNgEmCHHrd8QEDDlZCjnl2trfbURIL5+WTSIvU9gUXcUNN32OeAW08C0i
-         DpKdfyrhpxpaCBxGTCtnHGxWa7ucJGCF16jwQKte3VfTI5WeP25Ubo/qcBTwmrizdKka
-         HXtlF4umQ3wjLlEVv3Lgf7D7P8yh14Oo6m/X1nvEC2svwWnT/y2JKfmwa4zJWMaLKAKX
-         vxng==
-X-Gm-Message-State: APjAAAWMZKN7//ylIQij0getmUYTva3hamjEHNK4T5a4mDZj9Cy4Xr52
-        zjm4syr2+jTpAOBh/RE5gcsvOvsq+EdvXuHNA8E=
-X-Google-Smtp-Source: APXvYqxkwdBPzuoHNJ68DYYOxhywTzPsN5U8p7jUqjtEsPzdTDNNUoI6UE3KyActllWj7Mhqsxo60XmSGPYce/3vITE=
-X-Received: by 2002:a5d:628f:: with SMTP id k15mr16507858wru.124.1568224039920;
- Wed, 11 Sep 2019 10:47:19 -0700 (PDT)
+        id S1728470AbfILCFz (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 11 Sep 2019 22:05:55 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:51442 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727329AbfILCFy (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Wed, 11 Sep 2019 22:05:54 -0400
+Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 4DE8C1757141C85581C3;
+        Thu, 12 Sep 2019 10:05:50 +0800 (CST)
+Received: from [127.0.0.1] (10.177.96.96) by DGGEMS411-HUB.china.huawei.com
+ (10.3.19.211) with Microsoft SMTP Server id 14.3.439.0; Thu, 12 Sep 2019
+ 10:05:49 +0800
+Subject: Re: [PATCH net 1/2] sctp: remove redundant assignment when call
+ sctp_get_port_local
+To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+CC:     <vyasevich@gmail.com>, <nhorman@tuxdriver.com>,
+        <davem@davemloft.net>, <linux-sctp@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>
+References: <20190910071343.18808-1-maowenan@huawei.com>
+ <20190910071343.18808-2-maowenan@huawei.com> <20190910185710.GF15977@kadam>
+ <20190910192207.GE20699@kadam>
+ <53556c87-a351-4314-cbd9-49a39d0b41aa@huawei.com>
+ <20190911083038.GF20699@kadam> <20190911143008.GD3499@localhost.localdomain>
+ <20190911143923.GE3499@localhost.localdomain>
+From:   maowenan <maowenan@huawei.com>
+Message-ID: <7a450679-40ca-8a84-4cba-7a16f22ea3c0@huawei.com>
+Date:   Thu, 12 Sep 2019 10:05:45 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.0
 MIME-Version: 1.0
-References: <cover.1568015756.git.lucien.xin@gmail.com> <604e6ac718c29aa5b1a8c4b164a126b82bc42a2f.1568015756.git.lucien.xin@gmail.com>
- <9fc7ca1598e641cda3914840a4416aab@AcuMS.aculab.com> <CADvbK_d_Emw0K2Uq4P9OanRBr52tNjMsAOiJNi0TGsuWt6+81A@mail.gmail.com>
- <1e5c3163e6c649b09137eeb62d193d87@AcuMS.aculab.com> <CADvbK_dcGXPmO+wwwCvcsoGYPv+sdpw2b0cGuen-QPuxNcEcpQ@mail.gmail.com>
- <CADvbK_dqNas+vwP2t3LqWyabNnzRDO=PZPe4p+zE-vQJTnfKpA@mail.gmail.com> <20190911125609.GC3499@localhost.localdomain>
-In-Reply-To: <20190911125609.GC3499@localhost.localdomain>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Thu, 12 Sep 2019 01:47:08 +0800
-Message-ID: <CADvbK_e=4Fo7dmM=4QTZHtNDtsrDVe_VtyG2NVqt_3r9z7R=PA@mail.gmail.com>
-Subject: Re: [PATCH net-next 5/5] sctp: add spt_pathcpthld in struct sctp_paddrthlds
-To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     David Laight <David.Laight@aculab.com>,
-        network dev <netdev@vger.kernel.org>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        "davem@davemloft.net" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190911143923.GE3499@localhost.localdomain>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.177.96.96]
+X-CFilter-Loop: Reflected
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, Sep 11, 2019 at 8:56 PM Marcelo Ricardo Leitner
-<marcelo.leitner@gmail.com> wrote:
->
-> On Wed, Sep 11, 2019 at 05:38:33PM +0800, Xin Long wrote:
-> > On Wed, Sep 11, 2019 at 5:21 PM Xin Long <lucien.xin@gmail.com> wrote:
-> > >
-> > > On Wed, Sep 11, 2019 at 5:03 PM David Laight <David.Laight@aculab.com> wrote:
-> > > >
-> > > > From: Xin Long [mailto:lucien.xin@gmail.com]
-> > > > > Sent: 11 September 2019 09:52
-> > > > > On Tue, Sep 10, 2019 at 9:19 PM David Laight <David.Laight@aculab.com> wrote:
-> > > > > >
-> > > > > > From: Xin Long
-> > > > > > > Sent: 09 September 2019 08:57
-> > > > > > > Section 7.2 of rfc7829: "Peer Address Thresholds (SCTP_PEER_ADDR_THLDS)
-> > > > > > > Socket Option" extends 'struct sctp_paddrthlds' with 'spt_pathcpthld'
-> > > > > > > added to allow a user to change ps_retrans per sock/asoc/transport, as
-> > > > > > > other 2 paddrthlds: pf_retrans, pathmaxrxt.
-> > > > > > >
-> > > > > > > Note that ps_retrans is not allowed to be greater than pf_retrans.
-> > > > > > >
-> > > > > > > Signed-off-by: Xin Long <lucien.xin@gmail.com>
-> > > > > > > ---
-> > > > > > >  include/uapi/linux/sctp.h |  1 +
-> > > > > > >  net/sctp/socket.c         | 10 ++++++++++
-> > > > > > >  2 files changed, 11 insertions(+)
-> > > > > > >
-> > > > > > > diff --git a/include/uapi/linux/sctp.h b/include/uapi/linux/sctp.h
-> > > > > > > index a15cc28..dfd81e1 100644
-> > > > > > > --- a/include/uapi/linux/sctp.h
-> > > > > > > +++ b/include/uapi/linux/sctp.h
-> > > > > > > @@ -1069,6 +1069,7 @@ struct sctp_paddrthlds {
-> > > > > > >       struct sockaddr_storage spt_address;
-> > > > > > >       __u16 spt_pathmaxrxt;
-> > > > > > >       __u16 spt_pathpfthld;
-> > > > > > > +     __u16 spt_pathcpthld;
-> > > > > > >  };
-> > > > > > >
-> > > > > > >  /*
-> > > > > > > diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-> > > > > > > index 5e2098b..5b9774d 100644
-> > > > > > > --- a/net/sctp/socket.c
-> > > > > > > +++ b/net/sctp/socket.c
-> > > > > > > @@ -3954,6 +3954,9 @@ static int sctp_setsockopt_paddr_thresholds(struct sock *sk,
-> > > > > >
-> > > > > > This code does:
-> > > > > >         if (optlen < sizeof(struct sctp_paddrthlds))
-> > > > > >                 return -EINVAL;
-> > > > > here will become:
-> > > > >
-> > > > >         if (optlen >= sizeof(struct sctp_paddrthlds)) {
-> > > > >                 optlen = sizeof(struct sctp_paddrthlds);
-> > > > >         } else if (optlen >= ALIGN(offsetof(struct sctp_paddrthlds,
-> > > > >                                             spt_pathcpthld), 4))
-> > > > >                 optlen = ALIGN(offsetof(struct sctp_paddrthlds,
-> > > > >                                         spt_pathcpthld), 4);
-> > > > >                 val.spt_pathcpthld = 0xffff;
-> > > > >         else {
-> > > > >                 return -EINVAL;
-> > > > >         }
-> > > >
-> > > > Hmmm...
-> > > > If the kernel has to default 'val.spt_pathcpthld = 0xffff'
-> > > > then recompiling an existing application with the new uapi
-> > > > header is going to lead to very unexpected behaviour.
-> > > >
-> > > > The best you can hope for is that the application memset the
-> > > > structure to zero.
-> > > > But more likely it is 'random' on-stack data.
-> > > 0xffff is a value to disable the feature 'Primary Path Switchover'.
-> > > you're right that user might set it to zero unexpectly with their
-> > > old application rebuilt.
-> > >
-> > > A safer way is to introduce "sysctl net.sctp.ps_retrans", it won't
-> > > matter if users set spt_pathcpthld properly when they're not aware
-> > > of this feature, like "sysctl net.sctp.pF_retrans". Looks better?
-> > Sorry for confusing,  "sysctl net.sctp.ps_retrans" is already there
-> > (its value is 0xffff by default),
-> > we just need to do this in sctp_setsockopt_paddr_thresholds():
-> >
-> >         if (copy_from_user(&val, (struct sctp_paddrthlds __user *)optval,
-> >                            optlen))
-> >                 return -EFAULT;
-> >
-> >         if (sock_net(sk)->sctp.ps_retrans == 0xffff)
-> >                 val.spt_pathcpthld = 0xffff;
->
-> I'm confused with the snippets, but if I got them right, this is after
-> dealing with proper len and could leave val.spt_pathcpthld
-> uninitialized if the application used the old format and sysctl is !=
-> 0xffff.
-right, how about this in sctp_setsockopt_paddr_thresholds():
-
-        offset = ALIGN(offsetof(struct sctp_paddrthlds, spt_pathcpthld), 4);
-        if (optlen < offset)
-                return -EINVAL;
-        if (optlen < sizeof(val) || sock_net(sk)->sctp.ps_retrans == 0xffff) {
-                optlen = offset;
-                val.spt_pathcpthld = 0xffff;
-        } else {
-                optlen = sizeof(val);
-        }
-
-        if (copy_from_user(&val, (struct sctp_paddrthlds __user *)optval,
-                           optlen))
-                return -EFAULT;
-
-        if (val.spt_pathpfthld > val.spt_pathcpthld)
-                return -EINVAL;
-
-Which means we will 'skip' spt_pathcpthld if (it's using old format) or
-(ps_retrans is disabled and it's using new format).
-Note that  ps_retrans < pf_retrans is not allowed in rfc7829.
-
-and in sctp_getsockopt_paddr_thresholds():
-
-        offset = ALIGN(offsetof(struct sctp_paddrthlds, spt_pathcpthld), 4);
-        if (len < offset)
-                return -EINVAL;
-        if (len < sizeof(val) || sock_net(sk)->sctp.ps_retrans == 0xffff)
-                len = offset;
-        else
-                len = sizeof(val);
-
-        if (copy_from_user(&val, (struct sctp_paddrthlds __user *)optval, len))
-                return -EFAULT;
 
 
->
-> >
-> >         if (val.spt_pathpfthld > val.spt_pathcpthld)
-> >                 return -EINVAL;
-> >
-> > >
-> > > >
-> > > >         David
-> > > >
-> > > > -
-> > > > Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> > > > Registration No: 1397386 (Wales)
-> >
+On 2019/9/11 22:39, Marcelo Ricardo Leitner wrote:
+> On Wed, Sep 11, 2019 at 11:30:08AM -0300, Marcelo Ricardo Leitner wrote:
+>> On Wed, Sep 11, 2019 at 11:30:38AM +0300, Dan Carpenter wrote:
+>>> On Wed, Sep 11, 2019 at 09:30:47AM +0800, maowenan wrote:
+>>>>
+>>>>
+>>>> On 2019/9/11 3:22, Dan Carpenter wrote:
+>>>>> On Tue, Sep 10, 2019 at 09:57:10PM +0300, Dan Carpenter wrote:
+>>>>>> On Tue, Sep 10, 2019 at 03:13:42PM +0800, Mao Wenan wrote:
+>>>>>>> There are more parentheses in if clause when call sctp_get_port_local
+>>>>>>> in sctp_do_bind, and redundant assignment to 'ret'. This patch is to
+>>>>>>> do cleanup.
+>>>>>>>
+>>>>>>> Signed-off-by: Mao Wenan <maowenan@huawei.com>
+>>>>>>> ---
+>>>>>>>  net/sctp/socket.c | 3 +--
+>>>>>>>  1 file changed, 1 insertion(+), 2 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+>>>>>>> index 9d1f83b10c0a..766b68b55ebe 100644
+>>>>>>> --- a/net/sctp/socket.c
+>>>>>>> +++ b/net/sctp/socket.c
+>>>>>>> @@ -399,9 +399,8 @@ static int sctp_do_bind(struct sock *sk, union sctp_addr *addr, int len)
+>>>>>>>  	 * detection.
+>>>>>>>  	 */
+>>>>>>>  	addr->v4.sin_port = htons(snum);
+>>>>>>> -	if ((ret = sctp_get_port_local(sk, addr))) {
+>>>>>>> +	if (sctp_get_port_local(sk, addr))
+>>>>>>>  		return -EADDRINUSE;
+>>>>>>
+>>>>>> sctp_get_port_local() returns a long which is either 0,1 or a pointer
+>>>>>> casted to long.  It's not documented what it means and neither of the
+>>>>>> callers use the return since commit 62208f12451f ("net: sctp: simplify
+>>>>>> sctp_get_port").
+>>>>>
+>>>>> Actually it was commit 4e54064e0a13 ("sctp: Allow only 1 listening
+>>>>> socket with SO_REUSEADDR") from 11 years ago.  That patch fixed a bug,
+>>>>> because before the code assumed that a pointer casted to an int was the
+>>>>> same as a pointer casted to a long.
+>>>>
+>>>> commit 4e54064e0a13 treated non-zero return value as unexpected, so the current
+>>>> cleanup is ok?
+>>>
+>>> Yeah.  It's fine, I was just confused why we weren't preserving the
+>>> error code and then I saw that we didn't return errors at all and got
+>>> confused.
+>>
+>> But please lets seize the moment and do the change Dean suggested.
+> 
+> *Dan*, sorry.
+> 
+>> This was the last place saving this return value somewhere. It makes
+>> sense to cleanup sctp_get_port_local() now and remove that masked
+>> pointer return.
+>>
+>> Then you may also cleanup:
+>> socket.c:       return !!sctp_get_port_local(sk, &addr);
+>> as it will be a direct map.
+
+Thanks Marcelo, shall I post a new individual patch for cleanup as your suggest?
+>>
+>>   Marcelo
+>>
+> 
+> .
+> 
+
