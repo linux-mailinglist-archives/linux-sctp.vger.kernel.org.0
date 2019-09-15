@@ -2,54 +2,35 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD4FB266F
-	for <lists+linux-sctp@lfdr.de>; Fri, 13 Sep 2019 22:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9AF2B2F50
+	for <lists+linux-sctp@lfdr.de>; Sun, 15 Sep 2019 11:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730930AbfIMUG7 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 13 Sep 2019 16:06:59 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:48710 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730185AbfIMUG7 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 13 Sep 2019 16:06:59 -0400
-Received: from localhost (93-63-141-166.ip28.fastwebnet.it [93.63.141.166])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id ED4C41539B17F;
-        Fri, 13 Sep 2019 13:06:56 -0700 (PDT)
-Date:   Fri, 13 Sep 2019 21:06:55 +0100 (WEST)
-Message-Id: <20190913.210655.1982553055937864765.davem@davemloft.net>
-To:     maowenan@huawei.com
-Cc:     vyasevich@gmail.com, nhorman@tuxdriver.com,
-        marcelo.leitner@gmail.com, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH v2 net 0/3] fix memory leak for sctp_do_bind
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20190912040219.67517-1-maowenan@huawei.com>
-References: <7a450679-40ca-8a84-4cba-7a16f22ea3c0@huawei.com>
-        <20190912040219.67517-1-maowenan@huawei.com>
-X-Mailer: Mew version 6.8 on Emacs 26.2
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 13 Sep 2019 13:06:58 -0700 (PDT)
+        id S1727403AbfIOJJj (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 15 Sep 2019 05:09:39 -0400
+Received: from [163.204.241.139] ([163.204.241.139]:36132 "EHLO
+        localhost.localdomain" rhost-flags-FAIL-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725773AbfIOJJj (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Sun, 15 Sep 2019 05:09:39 -0400
+X-Greylist: delayed 10522 seconds by postgrey-1.27 at vger.kernel.org; Sun, 15 Sep 2019 05:09:39 EDT
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+        by localhost.localdomain (Postfix) with SMTP id 9B72D11E6019
+        for <linux-sctp@vger.kernel.org>; Sun, 15 Sep 2019 14:05:09 +0800 (CST)
+From:   linux-sctp@vger.kernel.org
+Reply-To: prodawez@cuvox.de
+To:     linux-sctp@vger.kernel.org
+Subject: =?utf-8?B?0JfQtNGA0LDQstGB0YLQstGD0LnRgtC1ISDQktCw0YEg?=
+        =?utf-8?B?0LjQvdGC0LXRgNC10YHRg9GO0YIg0LrQu9C40LXQvdGC?=
+        =?utf-8?B?0YHQutC40LUg0LHQsNC30Ysg0LTQsNC90L3Ri9GFPw==?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8";
+Content-Transfer-Encoding: base64
+Message-Id: <20190915060509.9B72D11E6019@localhost.localdomain>
+Date:   Sun, 15 Sep 2019 14:05:09 +0800 (CST)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Mao Wenan <maowenan@huawei.com>
-Date: Thu, 12 Sep 2019 12:02:16 +0800
-
-> First two patches are to do cleanup, remove redundant assignment,
-> and change return type of sctp_get_port_local.
-> Third patch is to fix memory leak for sctp_do_bind if failed
-> to bind address.
-> 
-> ---
->  v2: add one patch to change return type of sctp_get_port_local.
-
-Series applied with Fixes: tag removed from patch #1.
-
-Thanks.
+0JfQtNGA0LDQstGB0YLQstGD0LnRgtC1ISDQktCw0YEg0LjQvdGC0LXRgNC10YHRg9GO0YIg0LrQ
+u9C40LXQvdGC0YHQutC40LUg0LHQsNC30Ysg0LTQsNC90L3Ri9GFPw0K
