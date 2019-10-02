@@ -2,75 +2,67 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1245C9030
-	for <lists+linux-sctp@lfdr.de>; Wed,  2 Oct 2019 19:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1D19C90C2
+	for <lists+linux-sctp@lfdr.de>; Wed,  2 Oct 2019 20:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728052AbfJBRs7 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 2 Oct 2019 13:48:59 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:38005 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727737AbfJBRs7 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 2 Oct 2019 13:48:59 -0400
-Received: by mail-qt1-f193.google.com with SMTP id j31so27496840qta.5;
-        Wed, 02 Oct 2019 10:48:58 -0700 (PDT)
+        id S1728921AbfJBSXK (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 2 Oct 2019 14:23:10 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:33909 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728806AbfJBSXI (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 2 Oct 2019 14:23:08 -0400
+Received: by mail-wm1-f67.google.com with SMTP id y135so5522133wmc.1;
+        Wed, 02 Oct 2019 11:23:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=cp3R+VTBVIz7B9NMAOiPgfLAmBefCSqpuqm+aCntVPU=;
-        b=WVeg8SYnaQdTxBTq3riXf56J9QpB4UrWJhM83u2mkul44qnwO1fIbYbUlEWV19bjwS
-         G/R6qqnfiGbgzkGOTN0q83irjs9CXThavEzqMv/OcxLsdsd/Z4dV8D8+yBEBdZBmJyh3
-         fkairqlLvUEYuhu5W9QXQmu90a16n5heTw6kUbViXg/PbZWSRRRbVW8at3OUrl6t0Ki2
-         6HacsRXSWmIYJodfKxCiAkge+STgzcMVK0CRSWqc0tfvgJZ/lOyNg0GRh7TUv6nxFHbg
-         iLmzmxGLu1Zc5RgYnPOlKqj2Sl4V27knZ4AtDucXfqqTWcoruMMEaUP0VPnK5GYT5cby
-         MKvA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FSUCt1LD5y9mlrWBYl2U48Y4AhIXh+tutDGzQFeAW+A=;
+        b=ABuZrmyFf6KFypYuZVS8OSgVfdTPFLiU97l3+pQOZ6fvOIYqo1SW3D17JEjpG3YIwq
+         mOLqb+1ldVk9PqFmSVRfCdmFRS79FSu2L8tK8WkVpXTFR8Rg2AmGtOrqeVjGjCS9opRZ
+         ztvO+UvlhINYZdD9T8lEEDYP3TIq+lVQphygG+AhsadTdi9lvyE8Ms7iXm+Ta/tU1/z0
+         lloa1ZO3bfhvY+R/Bboo/Gf9HG5+tAsP0/iIdybf55NXpi8kkdVBWdLAYHxqL08iP9RB
+         v84FU4cESSWXn7KAtT2tytrpJrLZsNTCxKY++xlfdebbkOp6+Mlhuasb3pAKj17QUIty
+         VSuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=cp3R+VTBVIz7B9NMAOiPgfLAmBefCSqpuqm+aCntVPU=;
-        b=cCb0PnFUI3djcmD3RSITZoioHsrQrnP9ppRPhwV/lSFOC/xeqY3Swhb5CYM3tbk306
-         17vSW9eO84UF+Sg0LC3h3H/B3FJ576fjzcvARfKL75wEmr7M3AxOVHVlhw7hnIyEvznV
-         BiZsdUZYZDDaNvKFehzNiX0wgkm7GeTAX+VUv8rARUh2IU7kNabtpreWjb22eZbO6NvO
-         swgXVd/2/BAWE7/aGN6nrUMoIV0vIyt0yT1xF/6m2mGPZyzH0sC8BR3rXhEP43YTj3dE
-         7A1Wx0RtsUCHWBFa3WbsRjFXyljcj+iALCj78DW41XAwW/dVui28XAGUfN/f4HTeTT/e
-         v3jQ==
-X-Gm-Message-State: APjAAAUaMGysEEvMp6S7ABHxBn4XakPL2fvPAqiFJ+7w38/F4ZbkdzeG
-        59sqwGp4SZYnX1SrU7PFTj0=
-X-Google-Smtp-Source: APXvYqz+jus6+wBvN46TETy/JSgARs+Tea+f2Hv6wxejgdrtf8gTvD+1h65Kblu3xlfWZcXyBlDChQ==
-X-Received: by 2002:a0c:aadb:: with SMTP id g27mr4192739qvb.149.1570038537587;
-        Wed, 02 Oct 2019 10:48:57 -0700 (PDT)
-Received: from localhost.localdomain ([2001:1284:f016:43d:1f86:9ada:9b75:29f5])
-        by smtp.gmail.com with ESMTPSA id 62sm10568468qki.130.2019.10.02.10.48.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Oct 2019 10:48:56 -0700 (PDT)
-Received: by localhost.localdomain (Postfix, from userid 1000)
-        id 6F3EFC07B9; Wed,  2 Oct 2019 14:48:54 -0300 (-03)
-Date:   Wed, 2 Oct 2019 14:48:54 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Xin Long <lucien.xin@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FSUCt1LD5y9mlrWBYl2U48Y4AhIXh+tutDGzQFeAW+A=;
+        b=LMChAyWfRPZfoJ3gGBe/J9dMrpJrzrrrLBWQ3ulIKxRq9VULa2Wv2GqwdvaCgrTuJK
+         anCYdsDbHJhFXiyBoEK39WLINvN5l2K+5VLzKDgrWAmDu4gMJpnRNHWhAwnhtdGoXraO
+         RBd1l9Gsww9gUVS9TQ3eT0mRRrtsVAbeR9QEl1Yc1Ky8XEJjUvyoVAEsIwNwgp0JeTJn
+         5xZVFMPcL2RLRgWyielhjbuKR/MX7yemJwrNR1oz61Ka5wBceZ7S8jv5jGbdM2qcw4wZ
+         UGvIhW3K4NZuIdQIGyFKpTdzP82I1GyfZIT0Qd7ZTmKAtpfncIn41QhKLmenZH4WV55n
+         XJmQ==
+X-Gm-Message-State: APjAAAVasS2nxzFfijONQUfvFcKbjJK+Qm4k4/v0peFi/V9KbKdWYPqN
+        m8vLPXrzYCkiXuozu+JN6fnFLSB1nC4X+b4Uz6s=
+X-Google-Smtp-Source: APXvYqyb4kIlEkWgIrBHdNYypTbVR2PCKC4qhzD9w41JftTz5VHlz7M9+uF0SWpgSiQFwQPIMjShgnV6hk2AQxomUMM=
+X-Received: by 2002:a1c:a74f:: with SMTP id q76mr4061260wme.16.1570040586400;
+ Wed, 02 Oct 2019 11:23:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <acd60f4797143dc6e9817b3dce38e1408caf65e5.1569849018.git.lucien.xin@gmail.com>
+ <20191002010356.GG3499@localhost.localdomain> <CADvbK_ctLG+vnhmWwN=cWmZV7FgZreVRmoU+23PExdk=goF8cQ@mail.gmail.com>
+ <20191002125511.GH3499@localhost.localdomain> <CADvbK_fD+yuCCUTf41n+3oVwVjLUdT8+-wfwppVL8ZmbJegTWA@mail.gmail.com>
+ <20191002174127.GL3431@localhost.localdomain>
+In-Reply-To: <20191002174127.GL3431@localhost.localdomain>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Thu, 3 Oct 2019 02:23:37 +0800
+Message-ID: <CADvbK_dgNB3Cgd8v+VP3iWKCr0-UkS6vUBxLOTTCi_SPcQj7-w@mail.gmail.com>
+Subject: Re: [PATCH net] sctp: set newsk sk_socket before processing listening
+ sk backlog
+To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
         davem <davem@davemloft.net>, Neil Horman <nhorman@tuxdriver.com>
-Subject: Re: [PATCH net] sctp: set newsk sk_socket before processing
- listening sk backlog
-Message-ID: <20191002174854.GI3499@localhost.localdomain>
-References: <acd60f4797143dc6e9817b3dce38e1408caf65e5.1569849018.git.lucien.xin@gmail.com>
- <20191002010356.GG3499@localhost.localdomain>
- <CADvbK_ctLG+vnhmWwN=cWmZV7FgZreVRmoU+23PExdk=goF8cQ@mail.gmail.com>
- <20191002125511.GH3499@localhost.localdomain>
- <CADvbK_fD+yuCCUTf41n+3oVwVjLUdT8+-wfwppVL8ZmbJegTWA@mail.gmail.com>
- <20191002174127.GL3431@localhost.localdomain>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191002174127.GL3431@localhost.localdomain>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, Oct 02, 2019 at 02:41:27PM -0300, Marcelo Ricardo Leitner wrote:
+On Thu, Oct 3, 2019 at 1:41 AM Marcelo Ricardo Leitner
+<marcelo.leitner@gmail.com> wrote:
+>
 > On Thu, Oct 03, 2019 at 01:26:46AM +0800, Xin Long wrote:
 > > On Wed, Oct 2, 2019 at 8:55 PM Marcelo Ricardo Leitner
 > > <marcelo.leitner@gmail.com> wrote:
@@ -155,31 +147,52 @@ On Wed, Oct 02, 2019 at 02:41:27PM -0300, Marcelo Ricardo Leitner wrote:
 > > > As newsk is hashed already and unlocked here to be locked again later
 > > > on inet_accept(), it could receive a packet in between (thus before
 > > > sock_graft() could have a chance to run), no?
-> > 
+> >
 > > You're right, it explains another call trace happened once in our testing.
-> > 
+> >
 > > The way to changing inet_accept() will also have to change all protocols'
 > > .accept(). Given that this issue is only triggered in a very small moment,
 > > can we just silently discard this asconf chunk if sk->sk_socket is NULL?
 > > and let peer's T4-timer retransmit it.
-> 
+>
 > No no. If the change doesn't hurt other protocols, we should try that
 > first.  Otherwise this adds overhead to the network and we could get a
 > bug report soon on "valid asconf being ignored".
-> 
+Thanks, I will give it a try tomorrow.
+
+>
 > If that doesn't pan out, maybe your initial suggestion is the way out.
 > More custom code but keeps the expected behavior.
-> 
-> > 
+okay
+
+>
+> >
 > > @@ -3709,6 +3709,9 @@ enum sctp_disposition sctp_sf_do_asconf(struct net *net,
 > >         struct sctp_addiphdr *hdr;
 > >         __u32 serial;
-> > 
+> >
 > > +       if (asoc->base.sk->sk_socket)
 > > +               return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
-
-What if we add this to sctp_backlog_rcv() instead?  As in, do not
-process the backlog if so.
-And force doing backlog on sctp_rcv() also.
-As we are sure that there will be a subsequent lock/unlock and that it
-will handle it, this could work.
+> > +
+> >
+> > Note we can't do this in sctp_process_asconf_param(), as an asconf_ack
+> > will be sent back.
+> >
+> > >
+> > > > +               *err = error;
+> > > > +
+> > > > +               return newsk;
+> > > >         }
+> > > >
+> > > >  out:
+> > > >         release_sock(sk);
+> > > >         *err = error;
+> > > > -       return newsk;
+> > > > +       return NULL;
+> > > >  }
+> > > >
+> > > > >
+> > > > > AFAICT TCP code would be fine with such change. Didn't check other
+> > > > > protocols.
+> > > > >
+> > > >
