@@ -2,29 +2,58 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65510C8854
-	for <lists+linux-sctp@lfdr.de>; Wed,  2 Oct 2019 14:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF5EC890F
+	for <lists+linux-sctp@lfdr.de>; Wed,  2 Oct 2019 14:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726921AbfJBMY6 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 2 Oct 2019 08:24:58 -0400
-Received: from charlotte.tuxdriver.com ([70.61.120.58]:50300 "EHLO
-        smtp.tuxdriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726178AbfJBMY6 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 2 Oct 2019 08:24:58 -0400
-Received: from cpe-2606-a000-111b-43ee-0-0-0-115f.dyn6.twc.com ([2606:a000:111b:43ee::115f] helo=localhost)
-        by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
-        (Exim 4.63)
-        (envelope-from <nhorman@tuxdriver.com>)
-        id 1iFdgU-00087H-6w; Wed, 02 Oct 2019 08:24:53 -0400
-Date:   Wed, 2 Oct 2019 08:24:40 -0400
-From:   Neil Horman <nhorman@tuxdriver.com>
+        id S1726377AbfJBMzQ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 2 Oct 2019 08:55:16 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:38028 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726087AbfJBMzQ (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 2 Oct 2019 08:55:16 -0400
+Received: by mail-qt1-f196.google.com with SMTP id j31so26167068qta.5;
+        Wed, 02 Oct 2019 05:55:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=xr6PKO42DHw7TYqPNZ2dvCZRTSafDsIRJWxUomGoTGU=;
+        b=S2zgY4dOLTdqsmX7zGgEHMvN814hW3hF0iRoqKgcizMMBj8N8EmCShGvO4+43kc5Ro
+         6Mlmr6SL9g2e6Wrnl5JFVFw+AEqm9wClYEHxAWsAXZGbANFYoKJp0MZeCjfgUrsvZ2RD
+         d5eWxttZYNKdHELjUp9DXOtej88OfCszVtk6v3b2U6yJ+MidlNGgntebSAnUGC/f6jqv
+         0klxsh/dJ9SFsLvxzUEIC2TC1q2oLqdRqoQhUtyvS8VqpCDL+IHIMTG2GcHxknnnapM/
+         BFIn4JRKccDRc+53XGHFl3sCZ+Tu7CJtXZV7pvhgjCfx7gyeH2647pzVZEVc3dnU2/W/
+         YimQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=xr6PKO42DHw7TYqPNZ2dvCZRTSafDsIRJWxUomGoTGU=;
+        b=d3L/uua8E59bklA8L3pKQsT1yGRW88nZwSa8kfXoBbKywrWcje0jj8jXfZ1krEX3KL
+         wE9NjKpkpY6gh6w44mcz8n7RnviE7Q128TstXyqFcIuc0KjrOj2tdnD4Ie8J9q8ETAub
+         IavUi3nhAFTIls6+ueua8rtON05X+lVO+bXekHkBh9ifAKdlLMufxgFYPuXCFe6dRJVY
+         BsLmZ+hHuvYM8KB8SnhfJdfhJgll/CqNo0nYqQ9dulwvrHhC3nac384p9TA/mAyEkOxA
+         njULIYK7kGBkDQioeCCzB5cpq1By5CSTFkeMqhZY7EL8mvc6U2cCeKB/N88GECcErp9z
+         DrUg==
+X-Gm-Message-State: APjAAAWhv+0Ato5SfDZD7yP+1MDPAXsVRWdcRkfFNS+/G0Lz5jxRY0DT
+        30fjexFJsfFbnq2QZS+LWkM=
+X-Google-Smtp-Source: APXvYqy+4hZtousV2+BnbHRNFuD+Pi+5XbaYbhbkY4dPCuiIsgUhBuLU+BnpdGh5FOAtCCGl0H8YOQ==
+X-Received: by 2002:a0c:cd89:: with SMTP id v9mr2800073qvm.205.1570020914847;
+        Wed, 02 Oct 2019 05:55:14 -0700 (PDT)
+Received: from localhost.localdomain ([2001:1284:f016:43d:1f86:9ada:9b75:29f5])
+        by smtp.gmail.com with ESMTPSA id c20sm7980818qkm.11.2019.10.02.05.55.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Oct 2019 05:55:14 -0700 (PDT)
+Received: by localhost.localdomain (Postfix, from userid 1000)
+        id 8C77DC085B; Wed,  2 Oct 2019 09:55:11 -0300 (-03)
+Date:   Wed, 2 Oct 2019 09:55:11 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 To:     Xin Long <lucien.xin@gmail.com>
-Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        network dev <netdev@vger.kernel.org>,
-        linux-sctp@vger.kernel.org, davem <davem@davemloft.net>
+Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
+        davem <davem@davemloft.net>, Neil Horman <nhorman@tuxdriver.com>
 Subject: Re: [PATCH net] sctp: set newsk sk_socket before processing
  listening sk backlog
-Message-ID: <20191002122440.GA24970@hmswarspite.think-freely.org>
+Message-ID: <20191002125511.GH3499@localhost.localdomain>
 References: <acd60f4797143dc6e9817b3dce38e1408caf65e5.1569849018.git.lucien.xin@gmail.com>
  <20191002010356.GG3499@localhost.localdomain>
  <CADvbK_ctLG+vnhmWwN=cWmZV7FgZreVRmoU+23PExdk=goF8cQ@mail.gmail.com>
@@ -33,8 +62,6 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <CADvbK_ctLG+vnhmWwN=cWmZV7FgZreVRmoU+23PExdk=goF8cQ@mail.gmail.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
-X-Spam-Score: -2.9 (--)
-X-Spam-Status: No
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
@@ -112,7 +139,15 @@ On Wed, Oct 02, 2019 at 04:23:52PM +0800, Xin Long wrote:
 > +       if (!error) {
 > +               lock_sock_nested(newsk, SINGLE_DEPTH_NESTING);
 > +               release_sock(sk);
+
+Interesting. It fixes the backlog processing, ok. Question:
+
 > +               release_sock(newsk);
+
+As newsk is hashed already and unlocked here to be locked again later
+on inet_accept(), it could receive a packet in between (thus before
+sock_graft() could have a chance to run), no?
+
 > +               *err = error;
 > +
 > +               return newsk;
@@ -125,15 +160,6 @@ On Wed, Oct 02, 2019 at 04:23:52PM +0800, Xin Long wrote:
 > +       return NULL;
 >  }
 > 
-I think this is far more concise, and I don't see a particular issue
-with the locking order (though I think you could reverse the order there
-if you needed to.  In fact if you did that, you could change the if
-(!error) to an if/else statement where the if set newsk = NULL, and the
-else clause just released newsk and set err *, then you would be able to
-maintain a common return point.
-
-Neil
-
 > >
 > > AFAICT TCP code would be fine with such change. Didn't check other
 > > protocols.
