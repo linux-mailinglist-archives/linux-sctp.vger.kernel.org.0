@@ -2,52 +2,22 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 91218CBA41
-	for <lists+linux-sctp@lfdr.de>; Fri,  4 Oct 2019 14:21:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A63CBA5D
+	for <lists+linux-sctp@lfdr.de>; Fri,  4 Oct 2019 14:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728356AbfJDMV0 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 4 Oct 2019 08:21:26 -0400
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:43645 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726024AbfJDMVZ (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 4 Oct 2019 08:21:25 -0400
-Received: by mail-qk1-f195.google.com with SMTP id h126so5543771qke.10;
-        Fri, 04 Oct 2019 05:21:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=oW2hdSxUwj6zigjCRdKN/adJRGkeCADTXcLhco9vW8o=;
-        b=Z6fi+61dZe9VPNhhV5llPcsEZfTg5MFF+0am3ZP4k17lvg0FUaM6fT+XxbhW+P7XWN
-         I7SVB5pRUvtzvobjePjSZRQ3SI+rNiNSxbrNeMRzVa0wxUHHV+IhrY5nqDu/hfy/kz7K
-         nWD3mUfnRnD7pl4ZsJDm+47cnf7f3ECTKo0f5R4urJ/6TFbgwByBQtGW4MXNPPgw6E7a
-         3onj92FRo9lKo2hx71nW7bLzmWxx+EsjcLlC1SndzhGocDFVCVGSlP7OG1NJwCGKHGKN
-         xhFZPGCw4Km9o9kR+44v67NjbtnsfZcihezQF4IuSd3QHVJL6JkucwzYgQ/ZJeKlv4gH
-         kOGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=oW2hdSxUwj6zigjCRdKN/adJRGkeCADTXcLhco9vW8o=;
-        b=QxyfFltjUOsN1ZMRyzXBkYEoslj5iL2zWowGB6WAOaE61H3F5jbVVbS6lmXlce/omN
-         T8vOVN96lGHGfepjyW0epjXp1er4yr1OSWujkcwlA1YP/7jU0tOF6J7X5QvotcDS7vAN
-         65giDdb6f5ZALlGjzqLESnNcTM4PoCExZ6C2K00BI5EYLTZYkFiOWGTpXiasAycM92TR
-         ZIXzFwy1uXTmMlpw/1lAatcZ6m9EaTytRob9AJIZOpMLaBP0tmRbfWH8Ax2EdLv9tnbc
-         sbHrFvgjL1x8bgsKXsdOHEb4RcukdQ1Wx4FkpQX18eVfT098QB2Rh7Z12Wup5KScyP2P
-         ShxQ==
-X-Gm-Message-State: APjAAAWG5D128XCZjAUNTcxqfutLgtrzFsdLf681DE6J42q99JBBwQ2r
-        rW0hOUJomVN4ngbivrhv2/Q=
-X-Google-Smtp-Source: APXvYqy9h9CTrfBdrghAbzD8MXmouTtoRCjXV6Lu5u3/Bq6O4VbODljNgBcCnnzGRkhrH0PW60ZRTQ==
-X-Received: by 2002:a37:6713:: with SMTP id b19mr9250779qkc.301.1570191683876;
-        Fri, 04 Oct 2019 05:21:23 -0700 (PDT)
-Received: from localhost.localdomain ([2001:1284:f016:43d:1f86:9ada:9b75:29f5])
-        by smtp.gmail.com with ESMTPSA id x55sm4262933qta.74.2019.10.04.05.21.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Oct 2019 05:21:23 -0700 (PDT)
-Received: by localhost.localdomain (Postfix, from userid 1000)
-        id A464AC07B9; Fri,  4 Oct 2019 09:21:20 -0300 (-03)
-Date:   Fri, 4 Oct 2019 09:21:20 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+        id S1730170AbfJDM1a (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 4 Oct 2019 08:27:30 -0400
+Received: from charlotte.tuxdriver.com ([70.61.120.58]:46962 "EHLO
+        smtp.tuxdriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729950AbfJDM13 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 4 Oct 2019 08:27:29 -0400
+Received: from cpe-2606-a000-111b-43ee-0-0-0-115f.dyn6.twc.com ([2606:a000:111b:43ee::115f] helo=localhost)
+        by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
+        (Exim 4.63)
+        (envelope-from <nhorman@tuxdriver.com>)
+        id 1iGMg0-0001aX-1z; Fri, 04 Oct 2019 08:27:22 -0400
+Date:   Fri, 4 Oct 2019 08:27:11 -0400
+From:   Neil Horman <nhorman@tuxdriver.com>
 To:     Eric Biggers <ebiggers@kernel.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         linux-sctp@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -56,9 +26,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         Kent Overstreet <kent.overstreet@gmail.com>,
         Vlad Yasevich <vyasevich@gmail.com>,
         Xin Long <lucien.xin@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 Subject: Re: [PATCH] lib/generic-radix-tree.c: add kmemleak annotations
-Message-ID: <20191004122120.GP3431@localhost.localdomain>
+Message-ID: <20191004122711.GA14248@hmswarspite.think-freely.org>
 References: <CACT4Y+aGjg_JTL-OPMSi1wS4=Zy4xFAizWW5fa8_KMOFpfMeXg@mail.gmail.com>
  <20191004065039.727564-1-ebiggers@kernel.org>
 MIME-Version: 1.0
@@ -66,6 +36,8 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20191004065039.727564-1-ebiggers@kernel.org>
 User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Spam-Score: -2.9 (--)
+X-Spam-Status: No
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
@@ -100,11 +72,6 @@ On Thu, Oct 03, 2019 at 11:50:39PM -0700, Eric Biggers wrote:
 > generic radix tree uses raw pages which aren't tracked by kmemleak.
 > 
 > Fix this by adding the kmemleak hooks to the generic radix tree code.
-
-Nice, thanks Eric.
-
-Reviewed-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-
 > 
 > Reported-by: syzbot+7f3b6b106be8dcdcdeec@syzkaller.appspotmail.com
 > Signed-off-by: Eric Biggers <ebiggers@google.com>
@@ -193,3 +160,6 @@ Reviewed-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 > -- 
 > 2.23.0
 > 
+> 
+Acked-by: Neil Horman <nhorman@tuxdriver.com>
+
