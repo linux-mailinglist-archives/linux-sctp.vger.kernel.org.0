@@ -2,42 +2,41 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A63CBA5D
-	for <lists+linux-sctp@lfdr.de>; Fri,  4 Oct 2019 14:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4918ACBDD3
+	for <lists+linux-sctp@lfdr.de>; Fri,  4 Oct 2019 16:48:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730170AbfJDM1a (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 4 Oct 2019 08:27:30 -0400
-Received: from charlotte.tuxdriver.com ([70.61.120.58]:46962 "EHLO
-        smtp.tuxdriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729950AbfJDM13 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 4 Oct 2019 08:27:29 -0400
-Received: from cpe-2606-a000-111b-43ee-0-0-0-115f.dyn6.twc.com ([2606:a000:111b:43ee::115f] helo=localhost)
-        by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
-        (Exim 4.63)
-        (envelope-from <nhorman@tuxdriver.com>)
-        id 1iGMg0-0001aX-1z; Fri, 04 Oct 2019 08:27:22 -0400
-Date:   Fri, 4 Oct 2019 08:27:11 -0400
-From:   Neil Horman <nhorman@tuxdriver.com>
+        id S2388936AbfJDOsp (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 4 Oct 2019 10:48:45 -0400
+Received: from foss.arm.com ([217.140.110.172]:47296 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388870AbfJDOsp (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Fri, 4 Oct 2019 10:48:45 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EDE8F1597;
+        Fri,  4 Oct 2019 07:48:44 -0700 (PDT)
+Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 779DC3F68E;
+        Fri,  4 Oct 2019 07:48:43 -0700 (PDT)
+Date:   Fri, 4 Oct 2019 15:48:41 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     Eric Biggers <ebiggers@kernel.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         linux-sctp@vger.kernel.org, linux-kernel@vger.kernel.org,
         syzkaller-bugs@googlegroups.com,
-        Catalin Marinas <catalin.marinas@arm.com>,
         Kent Overstreet <kent.overstreet@gmail.com>,
         Vlad Yasevich <vyasevich@gmail.com>,
         Xin Long <lucien.xin@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 Subject: Re: [PATCH] lib/generic-radix-tree.c: add kmemleak annotations
-Message-ID: <20191004122711.GA14248@hmswarspite.think-freely.org>
+Message-ID: <20191004144841.GI638@arrakis.emea.arm.com>
 References: <CACT4Y+aGjg_JTL-OPMSi1wS4=Zy4xFAizWW5fa8_KMOFpfMeXg@mail.gmail.com>
  <20191004065039.727564-1-ebiggers@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20191004065039.727564-1-ebiggers@kernel.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-Spam-Score: -2.9 (--)
-X-Spam-Status: No
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
@@ -75,91 +74,5 @@ On Thu, Oct 03, 2019 at 11:50:39PM -0700, Eric Biggers wrote:
 > 
 > Reported-by: syzbot+7f3b6b106be8dcdcdeec@syzkaller.appspotmail.com
 > Signed-off-by: Eric Biggers <ebiggers@google.com>
-> ---
->  lib/generic-radix-tree.c | 32 ++++++++++++++++++++++++++------
->  1 file changed, 26 insertions(+), 6 deletions(-)
-> 
-> diff --git a/lib/generic-radix-tree.c b/lib/generic-radix-tree.c
-> index ae25e2fa2187..f25eb111c051 100644
-> --- a/lib/generic-radix-tree.c
-> +++ b/lib/generic-radix-tree.c
-> @@ -2,6 +2,7 @@
->  #include <linux/export.h>
->  #include <linux/generic-radix-tree.h>
->  #include <linux/gfp.h>
-> +#include <linux/kmemleak.h>
->  
->  #define GENRADIX_ARY		(PAGE_SIZE / sizeof(struct genradix_node *))
->  #define GENRADIX_ARY_SHIFT	ilog2(GENRADIX_ARY)
-> @@ -75,6 +76,27 @@ void *__genradix_ptr(struct __genradix *radix, size_t offset)
->  }
->  EXPORT_SYMBOL(__genradix_ptr);
->  
-> +static inline struct genradix_node *genradix_alloc_node(gfp_t gfp_mask)
-> +{
-> +	struct genradix_node *node;
-> +
-> +	node = (struct genradix_node *)__get_free_page(gfp_mask|__GFP_ZERO);
-> +
-> +	/*
-> +	 * We're using pages (not slab allocations) directly for kernel data
-> +	 * structures, so we need to explicitly inform kmemleak of them in order
-> +	 * to avoid false positive memory leak reports.
-> +	 */
-> +	kmemleak_alloc(node, PAGE_SIZE, 1, gfp_mask);
-> +	return node;
-> +}
-> +
-> +static inline void genradix_free_node(struct genradix_node *node)
-> +{
-> +	kmemleak_free(node);
-> +	free_page((unsigned long)node);
-> +}
-> +
->  /*
->   * Returns pointer to the specified byte @offset within @radix, allocating it if
->   * necessary - newly allocated slots are always zeroed out:
-> @@ -97,8 +119,7 @@ void *__genradix_ptr_alloc(struct __genradix *radix, size_t offset,
->  			break;
->  
->  		if (!new_node) {
-> -			new_node = (void *)
-> -				__get_free_page(gfp_mask|__GFP_ZERO);
-> +			new_node = genradix_alloc_node(gfp_mask);
->  			if (!new_node)
->  				return NULL;
->  		}
-> @@ -121,8 +142,7 @@ void *__genradix_ptr_alloc(struct __genradix *radix, size_t offset,
->  		n = READ_ONCE(*p);
->  		if (!n) {
->  			if (!new_node) {
-> -				new_node = (void *)
-> -					__get_free_page(gfp_mask|__GFP_ZERO);
-> +				new_node = genradix_alloc_node(gfp_mask);
->  				if (!new_node)
->  					return NULL;
->  			}
-> @@ -133,7 +153,7 @@ void *__genradix_ptr_alloc(struct __genradix *radix, size_t offset,
->  	}
->  
->  	if (new_node)
-> -		free_page((unsigned long) new_node);
-> +		genradix_free_node(new_node);
->  
->  	return &n->data[offset];
->  }
-> @@ -191,7 +211,7 @@ static void genradix_free_recurse(struct genradix_node *n, unsigned level)
->  				genradix_free_recurse(n->children[i], level - 1);
->  	}
->  
-> -	free_page((unsigned long) n);
-> +	genradix_free_node(n);
->  }
->  
->  int __genradix_prealloc(struct __genradix *radix, size_t size,
-> -- 
-> 2.23.0
-> 
-> 
-Acked-by: Neil Horman <nhorman@tuxdriver.com>
 
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
