@@ -2,75 +2,217 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0633DC913E
-	for <lists+linux-sctp@lfdr.de>; Wed,  2 Oct 2019 20:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65976CB421
+	for <lists+linux-sctp@lfdr.de>; Fri,  4 Oct 2019 07:25:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726669AbfJBS6v convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Wed, 2 Oct 2019 14:58:51 -0400
-Received: from mga01.intel.com ([192.55.52.88]:4392 "EHLO mga01.intel.com"
+        id S1730445AbfJDFZI (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 4 Oct 2019 01:25:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35122 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726076AbfJBS6v (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Wed, 2 Oct 2019 14:58:51 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Oct 2019 11:58:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,249,1566889200"; 
-   d="scan'208";a="194963157"
-Received: from orsmsx107.amr.corp.intel.com ([10.22.240.5])
-  by orsmga003.jf.intel.com with ESMTP; 02 Oct 2019 11:58:50 -0700
-Received: from orsmsx125.amr.corp.intel.com (10.22.240.125) by
- ORSMSX107.amr.corp.intel.com (10.22.240.5) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Wed, 2 Oct 2019 11:58:50 -0700
-Received: from orsmsx102.amr.corp.intel.com ([169.254.3.63]) by
- ORSMSX125.amr.corp.intel.com ([169.254.3.216]) with mapi id 14.03.0439.000;
- Wed, 2 Oct 2019 11:58:50 -0700
-From:   "Young, James M" <james.m.young@intel.com>
-To:     "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>
-Subject: lksctp tools sourceforge page problem
-Thread-Topic: lksctp tools sourceforge page problem
-Thread-Index: AdV5U1UU0lI9oJfKQhWWRty61GbxmA==
-Date:   Wed, 2 Oct 2019 18:58:49 +0000
-Message-ID: <68C85B5FC2FE974B87244D7222BC927877F16831@ORSMSX102.amr.corp.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiYTJmYTAwYTctMWUxMy00ZTU4LWE0ODYtMzdlN2MwOWJlYmY0IiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoiTW1iMERGVTBlU0gyNHJDMU9cL2UzbzdySkZtbU1XNG5SdnVwMWxYRVZ2Q09FTEdRdzZscnRyWERnVmsrRlhPVHYifQ==
-x-ctpclassification: CTP_NT
-dlp-product: dlpe-windows
-dlp-version: 11.2.0.6
-dlp-reaction: no-action
-x-originating-ip: [10.22.254.138]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S1729363AbfJDFZI (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Fri, 4 Oct 2019 01:25:08 -0400
+Received: from sol.localdomain (c-24-5-143-220.hsd1.ca.comcast.net [24.5.143.220])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 990B720862;
+        Fri,  4 Oct 2019 05:25:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1570166706;
+        bh=6FUTl2wd4LpbSLZQyMIKxmp2L+pBEdUGKIyHdoMmuAQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JcaMrWxm5pYNFNB6tEBZh6bqrjnQZwzDT5iWbTJfEZRQjuu1AxYusnOUmtBKxjzrW
+         JyfRep6vnV1m8L78X4xrNATaXv7a/xcNNdtu32s3djvm3xrkVsuqT0EDFi8T3hNMbI
+         xw73rIG/L65LrP/jHzy2SbxcOO/hYV6wTyOtg9d0=
+Date:   Thu, 3 Oct 2019 22:25:05 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     syzbot <syzbot+2d7ecdf99f15689032b3@syzkaller.appspotmail.com>,
+        davem <davem@davemloft.net>, LKML <linux-kernel@vger.kernel.org>,
+        linux-sctp@vger.kernel.org,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        network dev <netdev@vger.kernel.org>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Vlad Yasevich <vyasevich@gmail.com>
+Subject: Re: memory leak in sctp_get_port_local (2)
+Message-ID: <20191004052505.GS667@sol.localdomain>
+Mail-Followup-To: Xin Long <lucien.xin@gmail.com>,
+        syzbot <syzbot+2d7ecdf99f15689032b3@syzkaller.appspotmail.com>,
+        davem <davem@davemloft.net>, LKML <linux-kernel@vger.kernel.org>,
+        linux-sctp@vger.kernel.org,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        network dev <netdev@vger.kernel.org>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Vlad Yasevich <vyasevich@gmail.com>
+References: <000000000000f93dd2058f9c4873@google.com>
+ <CADvbK_dqTGZKWNmapcbyYVfLjuwzjSaqs0PHv687AjAvtPo3Zw@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADvbK_dqTGZKWNmapcbyYVfLjuwzjSaqs0PHv687AjAvtPo3Zw@mail.gmail.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello, 
-I am sending this email to let someone know that the page at lksctp.sourceforge.net, which does not list a maintainer, has a URL for "library ABI (sic) information here" that points to a domain which seems legit by the URL but opened what appears to be a mixed-porn page (it was NSFW so I closed it quickly without gathering details) . I clicked that link on 9/26 so it may have gotten "fixed" in the past several days.  
+On Fri, Aug 09, 2019 at 04:33:11PM +0800, Xin Long wrote:
+> On Thu, Aug 8, 2019 at 11:01 PM syzbot
+> <syzbot+2d7ecdf99f15689032b3@syzkaller.appspotmail.com> wrote:
+> >
+> > Hello,
+> >
+> > syzbot found the following crash on:
+> >
+> > HEAD commit:    0eb0ce0a Merge tag 'spi-fix-v5.3-rc3' of git://git.kernel...
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=1234588c600000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=39113f5c48aea971
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=2d7ecdf99f15689032b3
+> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=160e1906600000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=140ab906600000
+> >
+> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > Reported-by: syzbot+2d7ecdf99f15689032b3@syzkaller.appspotmail.com
+> >
+> > executing program
+> > executing program
+> > executing program
+> > executing program
+> > executing program
+> > BUG: memory leak
+> > unreferenced object 0xffff88810fa4b380 (size 64):
+> >    comm "syz-executor900", pid 7117, jiffies 4294946947 (age 16.560s)
+> >    hex dump (first 32 bytes):
+> >      20 4e 00 00 89 e7 4c 8d 00 00 00 00 00 00 00 00   N....L.........
+> >      58 40 dd 16 82 88 ff ff 00 00 00 00 00 00 00 00  X@..............
+> >    backtrace:
+> >      [<00000000f1461735>] kmemleak_alloc_recursive
+> > include/linux/kmemleak.h:43 [inline]
+> >      [<00000000f1461735>] slab_post_alloc_hook mm/slab.h:522 [inline]
+> >      [<00000000f1461735>] slab_alloc mm/slab.c:3319 [inline]
+> >      [<00000000f1461735>] kmem_cache_alloc+0x13f/0x2c0 mm/slab.c:3483
+> >      [<00000000ff3ccf22>] sctp_bucket_create net/sctp/socket.c:8374 [inline]
+> >      [<00000000ff3ccf22>] sctp_get_port_local+0x189/0x5b0
+> > net/sctp/socket.c:8121
+> >      [<00000000eed41612>] sctp_do_bind+0xcc/0x1e0 net/sctp/socket.c:402
+> >      [<000000002bf65239>] sctp_bind+0x44/0x70 net/sctp/socket.c:302
+> >      [<00000000b1aaaf57>] inet_bind+0x40/0xc0 net/ipv4/af_inet.c:441
+> >      [<00000000db36b917>] __sys_bind+0x11c/0x140 net/socket.c:1647
+> >      [<00000000679cfe3c>] __do_sys_bind net/socket.c:1658 [inline]
+> >      [<00000000679cfe3c>] __se_sys_bind net/socket.c:1656 [inline]
+> >      [<00000000679cfe3c>] __x64_sys_bind+0x1e/0x30 net/socket.c:1656
+> >      [<000000002aac3ac2>] do_syscall_64+0x76/0x1a0
+> > arch/x86/entry/common.c:296
+> >      [<000000000c38e074>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> >
+> > BUG: memory leak
+> > unreferenced object 0xffff88810fa4b380 (size 64):
+> >    comm "syz-executor900", pid 7117, jiffies 4294946947 (age 19.260s)
+> >    hex dump (first 32 bytes):
+> >      20 4e 00 00 89 e7 4c 8d 00 00 00 00 00 00 00 00   N....L.........
+> >      58 40 dd 16 82 88 ff ff 00 00 00 00 00 00 00 00  X@..............
+> >    backtrace:
+> >      [<00000000f1461735>] kmemleak_alloc_recursive
+> > include/linux/kmemleak.h:43 [inline]
+> >      [<00000000f1461735>] slab_post_alloc_hook mm/slab.h:522 [inline]
+> >      [<00000000f1461735>] slab_alloc mm/slab.c:3319 [inline]
+> >      [<00000000f1461735>] kmem_cache_alloc+0x13f/0x2c0 mm/slab.c:3483
+> >      [<00000000ff3ccf22>] sctp_bucket_create net/sctp/socket.c:8374 [inline]
+> >      [<00000000ff3ccf22>] sctp_get_port_local+0x189/0x5b0
+> > net/sctp/socket.c:8121
+> >      [<00000000eed41612>] sctp_do_bind+0xcc/0x1e0 net/sctp/socket.c:402
+> >      [<000000002bf65239>] sctp_bind+0x44/0x70 net/sctp/socket.c:302
+> >      [<00000000b1aaaf57>] inet_bind+0x40/0xc0 net/ipv4/af_inet.c:441
+> >      [<00000000db36b917>] __sys_bind+0x11c/0x140 net/socket.c:1647
+> >      [<00000000679cfe3c>] __do_sys_bind net/socket.c:1658 [inline]
+> >      [<00000000679cfe3c>] __se_sys_bind net/socket.c:1656 [inline]
+> >      [<00000000679cfe3c>] __x64_sys_bind+0x1e/0x30 net/socket.c:1656
+> >      [<000000002aac3ac2>] do_syscall_64+0x76/0x1a0
+> > arch/x86/entry/common.c:296
+> >      [<000000000c38e074>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> >
+> > BUG: memory leak
+> > unreferenced object 0xffff88810fa4b380 (size 64):
+> >    comm "syz-executor900", pid 7117, jiffies 4294946947 (age 21.990s)
+> >    hex dump (first 32 bytes):
+> >      20 4e 00 00 89 e7 4c 8d 00 00 00 00 00 00 00 00   N....L.........
+> >      58 40 dd 16 82 88 ff ff 00 00 00 00 00 00 00 00  X@..............
+> >    backtrace:
+> >      [<00000000f1461735>] kmemleak_alloc_recursive
+> > include/linux/kmemleak.h:43 [inline]
+> >      [<00000000f1461735>] slab_post_alloc_hook mm/slab.h:522 [inline]
+> >      [<00000000f1461735>] slab_alloc mm/slab.c:3319 [inline]
+> >      [<00000000f1461735>] kmem_cache_alloc+0x13f/0x2c0 mm/slab.c:3483
+> >      [<00000000ff3ccf22>] sctp_bucket_create net/sctp/socket.c:8374 [inline]
+> >      [<00000000ff3ccf22>] sctp_get_port_local+0x189/0x5b0
+> > net/sctp/socket.c:8121
+> >      [<00000000eed41612>] sctp_do_bind+0xcc/0x1e0 net/sctp/socket.c:402
+> >      [<000000002bf65239>] sctp_bind+0x44/0x70 net/sctp/socket.c:302
+> >      [<00000000b1aaaf57>] inet_bind+0x40/0xc0 net/ipv4/af_inet.c:441
+> >      [<00000000db36b917>] __sys_bind+0x11c/0x140 net/socket.c:1647
+> >      [<00000000679cfe3c>] __do_sys_bind net/socket.c:1658 [inline]
+> >      [<00000000679cfe3c>] __se_sys_bind net/socket.c:1656 [inline]
+> >      [<00000000679cfe3c>] __x64_sys_bind+0x1e/0x30 net/socket.c:1656
+> >      [<000000002aac3ac2>] do_syscall_64+0x76/0x1a0
+> > arch/x86/entry/common.c:296
+> >      [<000000000c38e074>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> >
+> > BUG: memory leak
+> > unreferenced object 0xffff88810fa4b380 (size 64):
+> >    comm "syz-executor900", pid 7117, jiffies 4294946947 (age 22.940s)
+> >    hex dump (first 32 bytes):
+> >      20 4e 00 00 89 e7 4c 8d 00 00 00 00 00 00 00 00   N....L.........
+> >      58 40 dd 16 82 88 ff ff 00 00 00 00 00 00 00 00  X@..............
+> >    backtrace:
+> >      [<00000000f1461735>] kmemleak_alloc_recursive
+> > include/linux/kmemleak.h:43 [inline]
+> >      [<00000000f1461735>] slab_post_alloc_hook mm/slab.h:522 [inline]
+> >      [<00000000f1461735>] slab_alloc mm/slab.c:3319 [inline]
+> >      [<00000000f1461735>] kmem_cache_alloc+0x13f/0x2c0 mm/slab.c:3483
+> >      [<00000000ff3ccf22>] sctp_bucket_create net/sctp/socket.c:8374 [inline]
+> >      [<00000000ff3ccf22>] sctp_get_port_local+0x189/0x5b0
+> > net/sctp/socket.c:8121
+> >      [<00000000eed41612>] sctp_do_bind+0xcc/0x1e0 net/sctp/socket.c:402
+> >      [<000000002bf65239>] sctp_bind+0x44/0x70 net/sctp/socket.c:302
+> >      [<00000000b1aaaf57>] inet_bind+0x40/0xc0 net/ipv4/af_inet.c:441
+> >      [<00000000db36b917>] __sys_bind+0x11c/0x140 net/socket.c:1647
+> >      [<00000000679cfe3c>] __do_sys_bind net/socket.c:1658 [inline]
+> >      [<00000000679cfe3c>] __se_sys_bind net/socket.c:1656 [inline]
+> >      [<00000000679cfe3c>] __x64_sys_bind+0x1e/0x30 net/socket.c:1656
+> >      [<000000002aac3ac2>] do_syscall_64+0x76/0x1a0
+> > arch/x86/entry/common.c:296
+> >      [<000000000c38e074>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> >
+> > executing program
+> > executing program
+> > executing program
+> > executing program
+> should be fixed by:
+> commit 9b6c08878e23adb7cc84bdca94d8a944b03f099e
+> Author: Xin Long <lucien.xin@gmail.com>
+> Date:   Wed Jun 26 16:31:39 2019 +0800
+> 
+>     sctp: not bind the socket in sctp_connect
+> 
+> was this commit included in the testing kernel?
+> 
+> >
+> >
+> > ---
 
-The section in question is: 
-Download and Release Notes
-lksctp-tools-1.0.17 has been released.
+I'm marking this fixed by commit 29b99f54a8e6:
 
-It can be downloaded via Sourceforge here, or via Git:
-  git clone git://github.com/sctp/lksctp-tools.git [...]
-  git checkout lksctp-tools-1.0.17
+#syz fix: sctp: destroy bucket if failed to bind addr
 
-Older releases can be found here, library ABI information here. Linux kernel support for SCTP is distributed together with the Linux kernel source code.
+... as it fixed a memory leak of this same data structure.
 
-lksctp-tools are open source and released under the dual license GPL version 2.0, and LGPL version 2.1.
+However, syzbot is still hitting this in a different way, so it will get
+reported again.  If anyone wants to fix it before then, see the C reproducer
+here: https://syzkaller.appspot.com/text?tag=ReproC&x=156ab7f3600000
+It's from the "2019/10/03 02:51" crash listed at
+https://syzkaller.appspot.com/bug?id=2d2cb27d3b4e4db041c252f09c492868885e5607
 
-I removed all the hyperlinks and formatting in my snip but as of today the offending URL is linked to the "here" that follows "library ABI information" and points to the domain "upstream-tracker.org/versions/lksctp-tools.html" 
-
-Thanks, 
-
-Jim Young
-
-
-
+- Eric
