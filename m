@@ -2,35 +2,57 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BDA60CCB84
-	for <lists+linux-sctp@lfdr.de>; Sat,  5 Oct 2019 18:56:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0D70CEB78
+	for <lists+linux-sctp@lfdr.de>; Mon,  7 Oct 2019 20:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729352AbfJEQ4j (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sat, 5 Oct 2019 12:56:39 -0400
-Received: from smtprelay0113.hostedemail.com ([216.40.44.113]:55259 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729348AbfJEQ4j (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sat, 5 Oct 2019 12:56:39 -0400
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave05.hostedemail.com (Postfix) with ESMTP id 7EE181828AE3A;
-        Sat,  5 Oct 2019 16:46:56 +0000 (UTC)
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay08.hostedemail.com (Postfix) with ESMTP id 7E52E182CED28;
-        Sat,  5 Oct 2019 16:46:54 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::::::::::::::::::::::::::::::::::::::,RULES_HIT:41:355:379:541:800:960:973:988:989:1260:1345:1359:1437:1534:1541:1711:1730:1747:1777:1792:2393:2553:2559:2562:3138:3139:3140:3141:3142:3353:3865:3866:3867:3870:3871:3872:4250:5007:6261:6742:6743:9165:10004:10848:11026:11473:11658:11914:12048:12296:12297:12438:12555:12895:13069:13311:13357:14181:14384:14394:14721:21080:21451:21627:30034:30054:30090,0,RBL:47.151.152.152:@perches.com:.lbl8.mailshell.net-62.8.0.100 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:24,LUA_SUMMARY:none
-X-HE-Tag: flesh63_198d491a4e5f
-X-Filterd-Recvd-Size: 3579
-Received: from joe-laptop.perches.com (unknown [47.151.152.152])
-        (Authenticated sender: joe@perches.com)
-        by omf15.hostedemail.com (Postfix) with ESMTPA;
-        Sat,  5 Oct 2019 16:46:50 +0000 (UTC)
-From:   Joe Perches <joe@perches.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        id S1729289AbfJGSI7 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 7 Oct 2019 14:08:59 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:33445 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728031AbfJGSI6 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 7 Oct 2019 14:08:58 -0400
+Received: by mail-pl1-f196.google.com with SMTP id d22so7262392pls.0
+        for <linux-sctp@vger.kernel.org>; Mon, 07 Oct 2019 11:08:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JwC6F2GJvmhpWHGCr7xF/n4f6KLR7+2yf2OOH5GEsgU=;
+        b=uRm/bFYPsstoaYyKukSFhdRLDpzni7itu2EEZfLPwBlxu+qsX3FN7N7lVTsrFB6a6K
+         vt7+5nD3qCBr++/ITUQKwWu6K1dnnVKEt8by7hgTzUOMuW8aSJmqfpxVW8GC6fnd69ap
+         1pnD3I89VMIFfNvvpwCzdpEh/qO1Od6mzoyPAlHrefC1wGCje/aK5MwPIXZ6chgkFXhK
+         KsuQVX0urhlgK8mFNDKZcv7vS+scCHKzOFH+oTcfTWojqCVkR+D+/dCzZmS4njEVH2Bl
+         PtJO3eKNJwpLPfTs5A30TwFHfGYk+h+QE5LMOVXSkqZiGpYH1O9FH2LEOwp4700pX9OZ
+         2g4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JwC6F2GJvmhpWHGCr7xF/n4f6KLR7+2yf2OOH5GEsgU=;
+        b=QKsvBU+nefyw5eMA/AQD1IKwkPr/h6U6t2bKT1GVAwVcX8y1/T8aQu0bPXpVgn+j8a
+         RpEU/P6oFbGpPBqW1mw/SyYgqcZ5S7xjmg8T25IvNotv6YAAjW/R2KqkmNYfPNQBvTY7
+         0IiY1FZLeqwxIjO44cMfa0hDJjCF8NafvSrPUbNycix76sL0lbcc2zi5oqrEYwm4Rp29
+         rIXviQuVhgoBS6FsruzP7E5wmXeIsHw4bBSVRYl+vijqZEVvoXV84LOWRrqHDrgOhbjW
+         LjKS7pXlHptDVkVhbGXjtM2PA8Hsz27+unfrkXaXX08EEidkF2UBSM1auXmKSnbT/5Nj
+         vAWw==
+X-Gm-Message-State: APjAAAUxsDJoUAyPLYUIvw5zK8umApH1/PTjjhd3Nf/m5HPw/8TrbrzE
+        4jYcUPMI1ANrnk6Lf31VX0DOWvDR3pT2IWWiyxu1dw==
+X-Google-Smtp-Source: APXvYqzOl3JXsj4sTtvjvilp+o9GzSCOZkl0A9M3zcxvheER0viyb3/IMPpVI+XWTbKtuhaCp0QRNTl7H6IBggmcCXE=
+X-Received: by 2002:a17:902:7c08:: with SMTP id x8mr29403977pll.119.1570471736235;
+ Mon, 07 Oct 2019 11:08:56 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1570292505.git.joe@perches.com> <2e0111756153d81d77248bc8356bac78925923dc.1570292505.git.joe@perches.com>
+In-Reply-To: <2e0111756153d81d77248bc8356bac78925923dc.1570292505.git.joe@perches.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 7 Oct 2019 11:08:45 -0700
+Message-ID: <CAKwvOdmtfUfpGhKODa=UBtq7AKDaJa9cndf7fkjJw1R37SsR6A@mail.gmail.com>
+Subject: Re: [PATCH 1/4] net: sctp: Rename fallthrough label to unhandled
+To:     Joe Perches <joe@perches.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Vlad Yasevich <vyasevich@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
         Kees Cook <keescook@chromium.org>,
         Borislav Petkov <bp@alien8.de>,
         "H . Peter Anvin" <hpa@zytor.com>,
@@ -42,87 +64,96 @@ Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
         Namhyung Kim <namhyung@kernel.org>,
         Jiri Olsa <jolsa@redhat.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Shawn Landden <shawn@git.icu>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
+        Shawn Landden <shawn@git.icu>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         David Miller <davem@davemloft.net>,
-        clang-built-linux@googlegroups.com, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH 1/4] net: sctp: Rename fallthrough label to unhandled
-Date:   Sat,  5 Oct 2019 09:46:41 -0700
-Message-Id: <2e0111756153d81d77248bc8356bac78925923dc.1570292505.git.joe@perches.com>
-X-Mailer: git-send-email 2.15.0
-In-Reply-To: <cover.1570292505.git.joe@perches.com>
-References: <cover.1570292505.git.joe@perches.com>
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        linux-sctp@vger.kernel.org,
+        Network Development <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-fallthrough may become a pseudo reserved keyword so this only use of
-fallthrough is better renamed to allow it.
+On Sat, Oct 5, 2019 at 9:46 AM Joe Perches <joe@perches.com> wrote:
+>
+> fallthrough may become a pseudo reserved keyword so this only use of
+> fallthrough is better renamed to allow it.
+>
+> Signed-off-by: Joe Perches <joe@perches.com>
+> ---
+>  net/sctp/sm_make_chunk.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
+> index e41ed2e0ae7d..48d63956a68c 100644
+> --- a/net/sctp/sm_make_chunk.c
+> +++ b/net/sctp/sm_make_chunk.c
+> @@ -2155,7 +2155,7 @@ static enum sctp_ierror sctp_verify_param(struct net *net,
+>         case SCTP_PARAM_SET_PRIMARY:
+>                 if (ep->asconf_enable)
+>                         break;
+> -               goto fallthrough;
+> +               goto unhandled;
+>
+>         case SCTP_PARAM_HOST_NAME_ADDRESS:
+>                 /* Tell the peer, we won't support this param.  */
+> @@ -2166,11 +2166,11 @@ static enum sctp_ierror sctp_verify_param(struct net *net,
+>         case SCTP_PARAM_FWD_TSN_SUPPORT:
+>                 if (ep->prsctp_enable)
+>                         break;
+> -               goto fallthrough;
+> +               goto unhandled;
+>
+>         case SCTP_PARAM_RANDOM:
+>                 if (!ep->auth_enable)
+> -                       goto fallthrough;
+> +                       goto unhandled;
+>
+>                 /* SCTP-AUTH: Secion 6.1
+>                  * If the random number is not 32 byte long the association
+> @@ -2187,7 +2187,7 @@ static enum sctp_ierror sctp_verify_param(struct net *net,
+>
+>         case SCTP_PARAM_CHUNKS:
+>                 if (!ep->auth_enable)
+> -                       goto fallthrough;
+> +                       goto unhandled;
+>
+>                 /* SCTP-AUTH: Section 3.2
+>                  * The CHUNKS parameter MUST be included once in the INIT or
+> @@ -2203,7 +2203,7 @@ static enum sctp_ierror sctp_verify_param(struct net *net,
+>
+>         case SCTP_PARAM_HMAC_ALGO:
+>                 if (!ep->auth_enable)
+> -                       goto fallthrough;
+> +                       goto unhandled;
+>
+>                 hmacs = (struct sctp_hmac_algo_param *)param.p;
+>                 n_elt = (ntohs(param.p->length) -
+> @@ -2226,7 +2226,7 @@ static enum sctp_ierror sctp_verify_param(struct net *net,
+>                         retval = SCTP_IERROR_ABORT;
+>                 }
+>                 break;
+> -fallthrough:
+> +unhandled:
+>         default:
 
-Signed-off-by: Joe Perches <joe@perches.com>
----
- net/sctp/sm_make_chunk.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Interesting control flow (goto from one case to the default case, not
+sure "fallthrough" was ever the right word for that).  Thanks for the
+patch.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
-index e41ed2e0ae7d..48d63956a68c 100644
---- a/net/sctp/sm_make_chunk.c
-+++ b/net/sctp/sm_make_chunk.c
-@@ -2155,7 +2155,7 @@ static enum sctp_ierror sctp_verify_param(struct net *net,
- 	case SCTP_PARAM_SET_PRIMARY:
- 		if (ep->asconf_enable)
- 			break;
--		goto fallthrough;
-+		goto unhandled;
- 
- 	case SCTP_PARAM_HOST_NAME_ADDRESS:
- 		/* Tell the peer, we won't support this param.  */
-@@ -2166,11 +2166,11 @@ static enum sctp_ierror sctp_verify_param(struct net *net,
- 	case SCTP_PARAM_FWD_TSN_SUPPORT:
- 		if (ep->prsctp_enable)
- 			break;
--		goto fallthrough;
-+		goto unhandled;
- 
- 	case SCTP_PARAM_RANDOM:
- 		if (!ep->auth_enable)
--			goto fallthrough;
-+			goto unhandled;
- 
- 		/* SCTP-AUTH: Secion 6.1
- 		 * If the random number is not 32 byte long the association
-@@ -2187,7 +2187,7 @@ static enum sctp_ierror sctp_verify_param(struct net *net,
- 
- 	case SCTP_PARAM_CHUNKS:
- 		if (!ep->auth_enable)
--			goto fallthrough;
-+			goto unhandled;
- 
- 		/* SCTP-AUTH: Section 3.2
- 		 * The CHUNKS parameter MUST be included once in the INIT or
-@@ -2203,7 +2203,7 @@ static enum sctp_ierror sctp_verify_param(struct net *net,
- 
- 	case SCTP_PARAM_HMAC_ALGO:
- 		if (!ep->auth_enable)
--			goto fallthrough;
-+			goto unhandled;
- 
- 		hmacs = (struct sctp_hmac_algo_param *)param.p;
- 		n_elt = (ntohs(param.p->length) -
-@@ -2226,7 +2226,7 @@ static enum sctp_ierror sctp_verify_param(struct net *net,
- 			retval = SCTP_IERROR_ABORT;
- 		}
- 		break;
--fallthrough:
-+unhandled:
- 	default:
- 		pr_debug("%s: unrecognized param:%d for chunk:%d\n",
- 			 __func__, ntohs(param.p->type), cid);
+>                 pr_debug("%s: unrecognized param:%d for chunk:%d\n",
+>                          __func__, ntohs(param.p->type), cid);
+> --
+> 2.15.0
+>
+
+
 -- 
-2.15.0
-
+Thanks,
+~Nick Desaulniers
