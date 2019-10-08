@@ -2,73 +2,85 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB72CFADA
-	for <lists+linux-sctp@lfdr.de>; Tue,  8 Oct 2019 15:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE73CFD96
+	for <lists+linux-sctp@lfdr.de>; Tue,  8 Oct 2019 17:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731029AbfJHNDA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Tue, 8 Oct 2019 09:03:00 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:44702 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730249AbfJHNDA (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 8 Oct 2019 09:03:00 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-46-wxSGgauhNkmtrc5dkymLZQ-1; Tue, 08 Oct 2019 14:02:57 +0100
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Tue, 8 Oct 2019 14:02:57 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Tue, 8 Oct 2019 14:02:57 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Xin Long' <lucien.xin@gmail.com>,
-        network dev <netdev@vger.kernel.org>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>
-CC:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        id S1726416AbfJHP1l (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 8 Oct 2019 11:27:41 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:55740 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725966AbfJHP1l (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 8 Oct 2019 11:27:41 -0400
+Received: by mail-wm1-f67.google.com with SMTP id a6so3627659wma.5;
+        Tue, 08 Oct 2019 08:27:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3j5k4kFsYjl7lRvs5vk8aQPFH9UOzkMAmPJc4BnNYos=;
+        b=QCv1kBCO/2JYwY0e5a61IPH8d9kqLRcmUsN52DL+9b75fG0GaHn9FjmNLfJIlOiOyk
+         y8SmGPPOYRZYltLJHFObjvymyXPmBguZcac13Na2dLA9vq7aWNrHccB2CFAsBbk8RBZt
+         yo8oE7xlBl0+3qCyuimtNDTyZDNRvU9fWOqifyfFxYoobJhAE99WseueITlLnLGfXhMm
+         ZActn5GNS03NA4UO4TUTqQuTL0JLVGsBZSj6UyE3WziVtUp4b7XjXA63my6gvG6QnWfX
+         ofQn5Z8hXwBvDXPViHLiQiRiMI4B/C3RlEq7SiavoFr1zr9St9k01NSVFKSFT6jr4fi/
+         Rj2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3j5k4kFsYjl7lRvs5vk8aQPFH9UOzkMAmPJc4BnNYos=;
+        b=klZlmFQXvQ+KAq/iHtEnnprXQc7CegSCYMXYZdk9jr3kcH2SiGJ4Serx6Z+EXAGG0w
+         CmLpqeJVHwc10YS/8kF3JHhdYDX+zTFvq4g5/B9mind4tb7w4pVEUWy3JdmhOgwdQ1mG
+         rCr3HxwUeB0BVwKkbuvlNR+0vZZJhXJfKANfYMDHVN+Hx3SlUrepxx8Ge1p2UI98bvMU
+         tQOWbfAvCNxhjzAiFY3gtL/xobXXpgs1LdZO9tkyzT5n9wHJylb7g14kHqhrDI0Ka4lW
+         ioVrrq7dYilfAh50D1oXJ2Z0LqM7nhKnMkooGtJCa/5EztGjU6XxY0hWlbCQlQJPtCUc
+         65cw==
+X-Gm-Message-State: APjAAAUVOS/S8072Gc9rPPncvzj6OOon1oD6SryOP/ohQNU1Oltl0c/z
+        2r2xoY6k2sOU7Mo6KjGg6O/Y1E3dke0UUVGEOGO4pvRU
+X-Google-Smtp-Source: APXvYqxZfVYrdmQk32nanfKG7fxyR7ocxrUSQX6Fb0WtPxKfveIZD7LmnF6jo+c2+zGDAIM3Xa0DYCv2/1D28K9y0Es=
+X-Received: by 2002:a1c:968b:: with SMTP id y133mr4192972wmd.56.1570548459339;
+ Tue, 08 Oct 2019 08:27:39 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1570533716.git.lucien.xin@gmail.com> <066605f2269d5d92bc3fefebf33c6943579d8764.1570533716.git.lucien.xin@gmail.com>
+ <60a7f76bd5f743dd8d057b32a4456ebd@AcuMS.aculab.com>
+In-Reply-To: <60a7f76bd5f743dd8d057b32a4456ebd@AcuMS.aculab.com>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Tue, 8 Oct 2019 23:28:32 +0800
+Message-ID: <CADvbK_cFCuHAwxGAdY0BevrrAd6pQRP2tW_ej9mM3G4Aog3qpg@mail.gmail.com>
+Subject: Re: [PATCHv2 net-next 3/5] sctp: add SCTP_EXPOSE_POTENTIALLY_FAILED_STATE
+ sockopt
+To:     David Laight <David.Laight@aculab.com>
+Cc:     network dev <netdev@vger.kernel.org>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
         "davem@davemloft.net" <davem@davemloft.net>
-Subject: RE: [PATCHv2 net-next 3/5] sctp: add
- SCTP_EXPOSE_POTENTIALLY_FAILED_STATE sockopt
-Thread-Topic: [PATCHv2 net-next 3/5] sctp: add
- SCTP_EXPOSE_POTENTIALLY_FAILED_STATE sockopt
-Thread-Index: AQHVfcsgrQL6OT4GuU648eHSKFH716dQtSlA
-Date:   Tue, 8 Oct 2019 13:02:57 +0000
-Message-ID: <60a7f76bd5f743dd8d057b32a4456ebd@AcuMS.aculab.com>
-References: <cover.1570533716.git.lucien.xin@gmail.com>
- <066605f2269d5d92bc3fefebf33c6943579d8764.1570533716.git.lucien.xin@gmail.com>
-In-Reply-To: <066605f2269d5d92bc3fefebf33c6943579d8764.1570533716.git.lucien.xin@gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-X-MC-Unique: wxSGgauhNkmtrc5dkymLZQ-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Xin Long
-> Sent: 08 October 2019 12:25
-> 
-> This is a sockopt defined in section 7.3 of rfc7829: "Exposing
-> the Potentially Failed Path State", by which users can change
-> pf_expose per sock and asoc.
+On Tue, Oct 8, 2019 at 9:02 PM David Laight <David.Laight@aculab.com> wrote:
+>
+> From: Xin Long
+> > Sent: 08 October 2019 12:25
+> >
+> > This is a sockopt defined in section 7.3 of rfc7829: "Exposing
+> > the Potentially Failed Path State", by which users can change
+> > pf_expose per sock and asoc.
+>
+> If I read these patches correctly the default for this sockopt in 'enabled'.
+> Doesn't this mean that old application binaries will receive notifications
+> that they aren't expecting?
+>
+> I'd have thought that applications would be required to enable it.
+If we do that, sctp_getsockopt_peer_addr_info() in patch 2/5 breaks.
 
-If I read these patches correctly the default for this sockopt in 'enabled'.
-Doesn't this mean that old application binaries will receive notifications
-that they aren't expecting?
-
-I'd have thought that applications would be required to enable it.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+>
+>         David
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
+>
