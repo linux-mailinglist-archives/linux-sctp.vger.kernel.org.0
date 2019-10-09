@@ -2,130 +2,160 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C4D8D0192
-	for <lists+linux-sctp@lfdr.de>; Tue,  8 Oct 2019 21:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2962ED1295
+	for <lists+linux-sctp@lfdr.de>; Wed,  9 Oct 2019 17:28:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730921AbfJHTzY (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 8 Oct 2019 15:55:24 -0400
-Received: from mail-ed1-f44.google.com ([209.85.208.44]:39075 "EHLO
-        mail-ed1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730843AbfJHTzX (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 8 Oct 2019 15:55:23 -0400
-Received: by mail-ed1-f44.google.com with SMTP id a15so16827523edt.6
-        for <linux-sctp@vger.kernel.org>; Tue, 08 Oct 2019 12:55:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=d9t6Rq0RbZ7PXIZmIcLbP2JTBMFny2QBILsKgMXZe9M=;
-        b=aMQQgi7dIXVBnmVMSSMCLgb3oXTzeafbZdgWl2Y7dgh9d3yilS1+9yTnvWoS7+GzUk
-         LWbTYKnbDzuBJ3/U6U4a0Txwis4unkVKDohWYyBjnKYrTLghN7laSYeGp1/FcmznDyEO
-         GS9pgiMN+uT0qCjbihaa5wuvtHOM98vqOW8UVjJ7Cv+EprgLSNS8LJdhrjnJyNqQEN56
-         5sfOyU15h4kpoOXNgzNljIz5N8IZnpl4XHLYJYLCwvTOpHMRDfM3ywlgrk+4Qs+isMtv
-         bwWMXB9P8rpPXCaQx70qpw2S2sG0Q07XznOIe3PPQ9uFVdh7+iWMtRM+rtyrWFblwrYM
-         wXZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=d9t6Rq0RbZ7PXIZmIcLbP2JTBMFny2QBILsKgMXZe9M=;
-        b=XnNUCpkFyBPUj2fwv0jZrw2njFxFjBoyb2Hhns88hSL1/wYDz2ttLBYuvFr5fmz6CP
-         qaKHyYUq1mr6ZWD2lKaNFs9+aFSZbFX7kwG0Syn6JKwtiIA0ki6Crx8VjNiJvjC4M0y4
-         n7XVWCghgefySJtujSda76jNjf/zAGLApgH8EMFj4MOXd0vcQjkaNbxO41wwSLmLTEXp
-         Dd9J3AZBLGat8NM7RlRD5DuWvkdMbrahzF+dAlKFg7VPnIFYjyFXH3/FINUclTTQeAPC
-         esGO9AWjnLzpD7aXUz4fWs+uq8n3jxQYfe+2zLl2dmeZsoTj5orpF5Ab8e/m6o5sINfl
-         RDPQ==
-X-Gm-Message-State: APjAAAVI0mKUAOH+12GvYspZqBYUJAaRIMtWMLzGMFrpqvrUEbJhu4Qu
-        pSN20+IZqOZ2ON3orTPnW9Gnh85eFx5kGVL274A=
-X-Google-Smtp-Source: APXvYqxaZfvXk0/G1PfPN40JEbEfue6b7v2Lk/SQWmnUxoxmnZyxXwpPNC4UPIh9mJw4kQ9atMHeHG1Orcb22TWXOSk=
-X-Received: by 2002:a50:c306:: with SMTP id a6mr36339639edb.108.1570564517490;
- Tue, 08 Oct 2019 12:55:17 -0700 (PDT)
+        id S1731338AbfJIP2C (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 9 Oct 2019 11:28:02 -0400
+Received: from charlotte.tuxdriver.com ([70.61.120.58]:33116 "EHLO
+        smtp.tuxdriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731822AbfJIP2B (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 9 Oct 2019 11:28:01 -0400
+Received: from cpe-2606-a000-111b-43ee-0-0-0-115f.dyn6.twc.com ([2606:a000:111b:43ee::115f] helo=localhost)
+        by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
+        (Exim 4.63)
+        (envelope-from <nhorman@tuxdriver.com>)
+        id 1iIDsV-000651-EY; Wed, 09 Oct 2019 11:27:58 -0400
+Date:   Wed, 9 Oct 2019 11:27:46 -0400
+From:   Neil Horman <nhorman@tuxdriver.com>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
+        davem@davemloft.net,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        omosnace@redhat.com
+Subject: Re: [PATCH net] sctp: add chunks to sk_backlog when the newsk
+ sk_socket is not set
+Message-ID: <20191009152746.GA25555@hmswarspite.think-freely.org>
+References: <d8dd0065232e5c3629bf55e54e3a998110ec1aef.1570532963.git.lucien.xin@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a17:906:cc89:0:0:0:0 with HTTP; Tue, 8 Oct 2019 12:55:16
- -0700 (PDT)
-Reply-To: moneygram.1820@outlook.fr
-From:   MONEY GRAM <currency1000000@gmail.com>
-Date:   Tue, 8 Oct 2019 20:55:16 +0100
-Message-ID: <CAPqfnSEO==O6BEtBbcMMZfh3qcY4Bz0qndhCqbcLqZx4DCs44A@mail.gmail.com>
-Subject: HERE IS YOUR MONEY GRAM PAYMENT HAS BEEN SENT TO YOU HERE IS THE M.T.C.N:78393135
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d8dd0065232e5c3629bf55e54e3a998110ec1aef.1570532963.git.lucien.xin@gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Spam-Score: -2.9 (--)
+X-Spam-Status: No
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-HERE IS YOUR MONEY GRAM PAYMENT HAS BEEN SENT TO YOU HERE IS THE
-M.T.C.N:78393135
+On Tue, Oct 08, 2019 at 07:09:23PM +0800, Xin Long wrote:
+> This patch is to fix a NULL-ptr deref in selinux_socket_connect_helper:
+> 
+>   [...] kasan: GPF could be caused by NULL-ptr deref or user memory access
+>   [...] RIP: 0010:selinux_socket_connect_helper+0x94/0x460
+>   [...] Call Trace:
+>   [...]  selinux_sctp_bind_connect+0x16a/0x1d0
+>   [...]  security_sctp_bind_connect+0x58/0x90
+>   [...]  sctp_process_asconf+0xa52/0xfd0 [sctp]
+>   [...]  sctp_sf_do_asconf+0x785/0x980 [sctp]
+>   [...]  sctp_do_sm+0x175/0x5a0 [sctp]
+>   [...]  sctp_assoc_bh_rcv+0x285/0x5b0 [sctp]
+>   [...]  sctp_backlog_rcv+0x482/0x910 [sctp]
+>   [...]  __release_sock+0x11e/0x310
+>   [...]  release_sock+0x4f/0x180
+>   [...]  sctp_accept+0x3f9/0x5a0 [sctp]
+>   [...]  inet_accept+0xe7/0x720
+> 
+> It was caused by that the 'newsk' sk_socket was not set before going to
+> security sctp hook when processing asconf chunk with SCTP_PARAM_ADD_IP
+> or SCTP_PARAM_SET_PRIMARY:
+> 
+>   inet_accept()->
+>     sctp_accept():
+>       lock_sock():
+>           lock listening 'sk'
+>                                           do_softirq():
+>                                             sctp_rcv():  <-- [1]
+>                                                 asconf chunk arrives and
+>                                                 enqueued in 'sk' backlog
+>       sctp_sock_migrate():
+>           set asoc's sk to 'newsk'
+>       release_sock():
+>           sctp_backlog_rcv():
+>             lock 'newsk'
+>             sctp_process_asconf()  <-- [2]
+>             unlock 'newsk'
+>     sock_graft():
+>         set sk_socket  <-- [3]
+> 
+> As it shows, at [1] the asconf chunk would be put into the listening 'sk'
+> backlog, as accept() was holding its sock lock. Then at [2] asconf would
+> get processed with 'newsk' as asoc's sk had been set to 'newsk'. However,
+> 'newsk' sk_socket is not set until [3], while selinux_sctp_bind_connect()
+> would deref it, then kernel crashed.
+> 
+> Here to fix it by adding the chunk to sk_backlog until newsk sk_socket is
+> set when .accept() is done.
+> 
+> Note that sk->sk_socket can be NULL when the sock is closed, so SOCK_DEAD
+> flag is also needed to check in sctp_newsk_ready().
+> 
+> Thanks to Ondrej for reviewing the code.
+> 
+> Fixes: d452930fd3b9 ("selinux: Add SCTP support")
+> Reported-by: Ying Xu <yinxu@redhat.com>
+> Suggested-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+> Signed-off-by: Xin Long <lucien.xin@gmail.com>
+> ---
+>  include/net/sctp/sctp.h |  5 +++++
+>  net/sctp/input.c        | 12 +++++++++---
+>  2 files changed, 14 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/net/sctp/sctp.h b/include/net/sctp/sctp.h
+> index 5d60f13..3ab5c6b 100644
+> --- a/include/net/sctp/sctp.h
+> +++ b/include/net/sctp/sctp.h
+> @@ -610,4 +610,9 @@ static inline __u32 sctp_min_frag_point(struct sctp_sock *sp, __u16 datasize)
+>  	return sctp_mtu_payload(sp, SCTP_DEFAULT_MINSEGMENT, datasize);
+>  }
+>  
+> +static inline bool sctp_newsk_ready(const struct sock *sk)
+> +{
+> +	return sock_flag(sk, SOCK_DEAD) || sk->sk_socket;
+> +}
+> +
+>  #endif /* __net_sctp_h__ */
+> diff --git a/net/sctp/input.c b/net/sctp/input.c
+> index 5a070fb..f277137 100644
+> --- a/net/sctp/input.c
+> +++ b/net/sctp/input.c
+> @@ -243,7 +243,7 @@ int sctp_rcv(struct sk_buff *skb)
+>  		bh_lock_sock(sk);
+>  	}
+>  
+> -	if (sock_owned_by_user(sk)) {
+> +	if (sock_owned_by_user(sk) || !sctp_newsk_ready(sk)) {
+>  		if (sctp_add_backlog(sk, skb)) {
+>  			bh_unlock_sock(sk);
+>  			sctp_chunk_free(chunk);
+> @@ -321,7 +321,7 @@ int sctp_backlog_rcv(struct sock *sk, struct sk_buff *skb)
+>  		local_bh_disable();
+>  		bh_lock_sock(sk);
+>  
+> -		if (sock_owned_by_user(sk)) {
+> +		if (sock_owned_by_user(sk) || !sctp_newsk_ready(sk)) {
+>  			if (sk_add_backlog(sk, skb, sk->sk_rcvbuf))
+>  				sctp_chunk_free(chunk);
+>  			else
+> @@ -336,7 +336,13 @@ int sctp_backlog_rcv(struct sock *sk, struct sk_buff *skb)
+>  		if (backloged)
+>  			return 0;
+>  	} else {
+> -		sctp_inq_push(inqueue, chunk);
+> +		if (!sctp_newsk_ready(sk)) {
+> +			if (!sk_add_backlog(sk, skb, sk->sk_rcvbuf))
+> +				return 0;
+> +			sctp_chunk_free(chunk);
+> +		} else {
+> +			sctp_inq_push(inqueue, chunk);
+> +		}
+>  	}
+>  
+>  done:
+> -- 
+> 2.1.0
+> 
+> 
+Acked-by: Neil Horman <nhorman@tuxdriver.com>
 
-Attn: Beneficiary,
-
-This is to inform you that the America Embassy office was instructed
-to transfer your fund $980,000.00 U.S Dollars compensating all the
-SCAM VICTIMS and your email was found as one of the VICTIMS. by
-America security leading team and America representative officers so
-between today the 8th of October till 1ST Of December 2019 you will
-be receiving MONEY GRAM the sum of $6,000 dollars per day. However be informed
-that we have already sent the $6,000 dollars this morning to avoid
-cancellation of your payment, remain the total sum of $980,000.00.
-
-You have only six hours to call this office upon the receipt of this
-email the maximum amount you will be receiving per a day starting from
-today's $6,000 and the Money Transfer Control Number of today is
-below.
-
-NOTE; The sent $6,000 is on hold because of the instruction from IMF
-office, they asked us to place it on hold by requesting the (Clean
-Bill Record Certificate) which will cost you $25 in order to fulfill
-all the necessary obligation to avoid any hitches while sending you
-the payment through MONEY GRAM money transfer, the necessary
-obligation I mean here is to obtain the (Clean Bill Record
-Certificate)
-
-Below is the information of today track it in our
-
-websitehttps://moneygarm.com/asp/orderStatus.asp?country=global
-to see is available to pick up by the receiver, but if we didn't here
-from you soon we'll pickup it up from line for security reason to
-avoid hackers stealing the money online.
-
-Money Transfer Control Number M.T.C.N)::78393135
-SENDERS FIRST NAME: John
-SENDERS LAST NAME: Chun
-SENDERS COUNTRY...BENIN REPUBLIC
-TEXT QUESTION: A
-ANSWER: B
-AMOUNT: $6,000
-
-We need the below details from you, to enable us place the payment to
-your name and transfer the fund to you.
-
-(Full Receivers name)...................
-(You're Country)................................
-(Address)......................................
-(Phone NuMBER-...............................
-(You're Age)............................
-(OCCUPATION)..REAL ESTATE..................
-(A Copy of Your ID CARD).SEE ATTACHMENTS.............
-
-HOWEVER YOU HAVE TO PAY $25 FOR THE (Clean Bill Record Certificate)
-AND THAT IS ALL YOU HAVE TO DO ASAP.
-
-The payment will be sending to below information, such as:
-
-Receiver.............. ALAN UDE
-Country................Benin Republic
-Amount: ....................$25
-Question: .....................A
-Answer:................... B
-Sender...............Name:
-MTCN :..............
-
-According to the instruction and order we received from IMF the their
-requested $25 must be made directly to the above info's.
-
-Furthermore you are advised to call us as the instruction was passed
-that within 6hours without hearing from you, Count your payment
-canceled. Number to call is below listed manager director office of
-release order:
-DR.ALAN UDE
-Director MONEY GRAM-Benin
