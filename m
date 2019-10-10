@@ -2,77 +2,155 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E01E8D2ACF
-	for <lists+linux-sctp@lfdr.de>; Thu, 10 Oct 2019 15:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8C84D3271
+	for <lists+linux-sctp@lfdr.de>; Thu, 10 Oct 2019 22:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388307AbfJJNRp (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 10 Oct 2019 09:17:45 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:45829 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388311AbfJJNRp (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 10 Oct 2019 09:17:45 -0400
-Received: by mail-ot1-f68.google.com with SMTP id 41so4799854oti.12
-        for <linux-sctp@vger.kernel.org>; Thu, 10 Oct 2019 06:17:44 -0700 (PDT)
+        id S1726752AbfJJUeX (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 10 Oct 2019 16:34:23 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:39146 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726725AbfJJUeX (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 10 Oct 2019 16:34:23 -0400
+Received: by mail-pf1-f193.google.com with SMTP id v4so4635141pff.6
+        for <linux-sctp@vger.kernel.org>; Thu, 10 Oct 2019 13:34:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ub-ac-id.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=QTZIdVmjWEaVgfwGRupI4vAqJVGET3VIX90hz2R16m0=;
-        b=kbDD0ETnfb+9T5ky4afnuU19WL5B3TgSTtrvr8/78l52RfSJ/bD7cjcm8C45XsJ4wr
-         kY8zUv/ms1sLDr56E/0rqAcpldgbTirzVsO1TqrlTRt5AL5IhxusLfWbWkCQZqSDApog
-         xVZixZPZF5pv+wD9wYHHFszyBuRJ0Z0/71+2E/SGgHwnMzv66/86w9uplcX1z0grTv9p
-         1TYZ7MtIagYr+hnMPgyspL8CH18dkY1RexU6NSgr6L6/lGHi7jHNMmmGOoiBuh2azqNd
-         aWHFVXbx5cxjkbX5kJe7PAp4IU2wf06fogqa+YoO9ylF7jna+POCU+xNsHXT6R2wFQg9
-         YqYQ==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qLN+ZaDKXKKqy42TKsmx8NFeuacgz7hdpKcKP23ADmI=;
+        b=a8/BUQSRa5fAL7ua30472Y4U7kNqLVO+XHaBB/Rc2wmWKE9Xj04D00RKSoqyZUda8p
+         AoN69CT8wMJ2+8+9xP0hKg/fExhxNp8lM/hqppiZ2eSLtMQm6/uYroSxKlTzitdKEuQz
+         TwEci32h62j6hKZzmDlEOn92Ch+77FD0Fd8R4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=QTZIdVmjWEaVgfwGRupI4vAqJVGET3VIX90hz2R16m0=;
-        b=hPDpYsnN/30j4S1VFC5juyOizvbqZ9webWawOAFnRlBNTyoxj+pXy9i6pPyjvS+If1
-         xJKH1fgaLIDN1ypoxjtLQGOyylcBQ+9mf5lVgPm2pTbJ6IIrO/hJkGSV6mpsojXE5F+s
-         FbmqCLikirVis1M2Tw6jG/VkUXjDHR3bFkKF/PZY2/P5CjfdDkkAopFsVsHXPbr9f1Ey
-         9HqLJKhKJEsUmT5lfvDc/390g2fg/O3F1AYNruIlkU61eYN28gYDbFBZkhzGv4AKCD3y
-         ItKztXzd1K+OYWRpIcryP1yxQxkQJ4M2hC4wEH8nH3bzrZANSHN3hfPp1GotaoB50ktZ
-         leLg==
-X-Gm-Message-State: APjAAAXeWp8B4Z/v5FA/wv0PeHTpS4xvUMo7qznmV3d/gPw/XbsFFrGM
-        hvkYgCnH/0DtqMV4U2zwaMuVaK4mpy5Aa6uB+5IF
-X-Google-Smtp-Source: APXvYqwe5B6z/3dUuNDQtQ0n2oQYOsdY3HQR3dkIin1gqVhu0NNteov05tKzv4DhJBBR4bjK2RG7Phnj6WUHoBrkRYc=
-X-Received: by 2002:a05:6830:1103:: with SMTP id w3mr7909437otq.312.1570713462861;
- Thu, 10 Oct 2019 06:17:42 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qLN+ZaDKXKKqy42TKsmx8NFeuacgz7hdpKcKP23ADmI=;
+        b=UZkeOZoZ8Gq0/rCYlaTgkVZqYTY5tTR115Juytu0XQ1LWpWw4wZyLmKqde2bS0OUOS
+         EMHM6NOQLxZ6SrW1e/9sCXw/BWWW/XQMXlO3aw03CXTVjDGn1ANqlIcK2a/Ls6nyVvie
+         YEmrjl2WUWPbLMNMkUmb1aij4FAsOeddZSnq6OCv24Enh58Z8z2U/fvbzu2J7yAnZlNI
+         jiEj+iVlJQwq4Z66K6DV7heylTzUh5ugM/AnjyvwgcB1hoO48TTdpPQqkScWIU0UvQ3P
+         7CFws0SzLOSW72wNkcGS6cu0CEhNWSnCt+QuNt+ByYcMJ0coTMdCkgghIY+BMbju/7Cw
+         JJQA==
+X-Gm-Message-State: APjAAAXSzf/XEJhbCj2LLjsMd+3UjF06eAwyKxqL4Xqcc4DLKkr21u0o
+        4JPBgh989CBID2hDjhg3meyN1A==
+X-Google-Smtp-Source: APXvYqwEu3drJD2Rf13atiZCcuDu9mkLKlc6Z2P3wFQoHl4Ae6+HQ4EAmBu1c73yaqSQEBRghQ4ujA==
+X-Received: by 2002:a63:311:: with SMTP id 17mr12928079pgd.327.1570739662653;
+        Thu, 10 Oct 2019 13:34:22 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id o9sm5965017pfp.67.2019.10.10.13.34.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Oct 2019 13:34:21 -0700 (PDT)
+Date:   Thu, 10 Oct 2019 13:34:20 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Joe Perches <joe@perches.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Gustavo A . R . Silva" <gustavo@embeddedor.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Shawn Landden <shawn@git.icu>, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Miller <davem@davemloft.net>,
+        clang-built-linux@googlegroups.com, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 1/4] net: sctp: Rename fallthrough label to unhandled
+Message-ID: <201910101334.22271AB@keescook>
+References: <cover.1570292505.git.joe@perches.com>
+ <2e0111756153d81d77248bc8356bac78925923dc.1570292505.git.joe@perches.com>
 MIME-Version: 1.0
-Received: by 2002:a4a:3346:0:0:0:0:0 with HTTP; Thu, 10 Oct 2019 06:17:41
- -0700 (PDT)
-Reply-To: sunrisefundingltd50@gmail.com
-From:   Valentina Yurina <v_yurina@ub.ac.id>
-Date:   Thu, 10 Oct 2019 14:17:41 +0100
-Message-ID: <CAKoEkvu4vc5Yn9-hzxQ5dYmUL=oO69=GSP0FC7O+CGz9Jni8+Q@mail.gmail.com>
-Subject: Apply For Financial investment at a lower rate 2%
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2e0111756153d81d77248bc8356bac78925923dc.1570292505.git.joe@perches.com>
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
+On Sat, Oct 05, 2019 at 09:46:41AM -0700, Joe Perches wrote:
+> fallthrough may become a pseudo reserved keyword so this only use of
+> fallthrough is better renamed to allow it.
+> 
+> Signed-off-by: Joe Perches <joe@perches.com>
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+-Kees
+
+> ---
+>  net/sctp/sm_make_chunk.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
+> index e41ed2e0ae7d..48d63956a68c 100644
+> --- a/net/sctp/sm_make_chunk.c
+> +++ b/net/sctp/sm_make_chunk.c
+> @@ -2155,7 +2155,7 @@ static enum sctp_ierror sctp_verify_param(struct net *net,
+>  	case SCTP_PARAM_SET_PRIMARY:
+>  		if (ep->asconf_enable)
+>  			break;
+> -		goto fallthrough;
+> +		goto unhandled;
+>  
+>  	case SCTP_PARAM_HOST_NAME_ADDRESS:
+>  		/* Tell the peer, we won't support this param.  */
+> @@ -2166,11 +2166,11 @@ static enum sctp_ierror sctp_verify_param(struct net *net,
+>  	case SCTP_PARAM_FWD_TSN_SUPPORT:
+>  		if (ep->prsctp_enable)
+>  			break;
+> -		goto fallthrough;
+> +		goto unhandled;
+>  
+>  	case SCTP_PARAM_RANDOM:
+>  		if (!ep->auth_enable)
+> -			goto fallthrough;
+> +			goto unhandled;
+>  
+>  		/* SCTP-AUTH: Secion 6.1
+>  		 * If the random number is not 32 byte long the association
+> @@ -2187,7 +2187,7 @@ static enum sctp_ierror sctp_verify_param(struct net *net,
+>  
+>  	case SCTP_PARAM_CHUNKS:
+>  		if (!ep->auth_enable)
+> -			goto fallthrough;
+> +			goto unhandled;
+>  
+>  		/* SCTP-AUTH: Section 3.2
+>  		 * The CHUNKS parameter MUST be included once in the INIT or
+> @@ -2203,7 +2203,7 @@ static enum sctp_ierror sctp_verify_param(struct net *net,
+>  
+>  	case SCTP_PARAM_HMAC_ALGO:
+>  		if (!ep->auth_enable)
+> -			goto fallthrough;
+> +			goto unhandled;
+>  
+>  		hmacs = (struct sctp_hmac_algo_param *)param.p;
+>  		n_elt = (ntohs(param.p->length) -
+> @@ -2226,7 +2226,7 @@ static enum sctp_ierror sctp_verify_param(struct net *net,
+>  			retval = SCTP_IERROR_ABORT;
+>  		}
+>  		break;
+> -fallthrough:
+> +unhandled:
+>  	default:
+>  		pr_debug("%s: unrecognized param:%d for chunk:%d\n",
+>  			 __func__, ntohs(param.p->type), cid);
+> -- 
+> 2.15.0
+> 
+
 -- 
-Hello,
-
-We are private lenders based in UK.
-
-Do you need a loan (credit) as soon as possible. Are you in search of
-money to solve your personal needs or finance your business venture,
-then get Your desired loan today! Consult us at Sunrise Funding Ltd.
-
-* We offer personal loan & huge capital loan at 2% interest rate to
-the general public both locally and internationally.
-* Credit amount range from $5,000.00 -- $500,000.00 and above.
-* Special $10,000,000.00 Loan offer for huge project also available.
-* Loan period of 6 months -- 10 years.
-* Loan is granted 24 hours after approval and accredited, directly in
-hand or bank account.
-
-Please note that you are advised to contact us for more details via
-the following e-mail address below;
-
-EMAIL : sunrisefundingltd50@gmail.com
-FIRM : Sunrise Funding Ltd UK.
+Kees Cook
