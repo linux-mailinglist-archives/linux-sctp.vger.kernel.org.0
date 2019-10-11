@@ -2,131 +2,131 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E83CBD3F61
-	for <lists+linux-sctp@lfdr.de>; Fri, 11 Oct 2019 14:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DEAD44CE
+	for <lists+linux-sctp@lfdr.de>; Fri, 11 Oct 2019 17:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727672AbfJKMVi (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 11 Oct 2019 08:21:38 -0400
-Received: from charlotte.tuxdriver.com ([70.61.120.58]:53630 "EHLO
-        smtp.tuxdriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727198AbfJKMVi (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 11 Oct 2019 08:21:38 -0400
-Received: from cpe-2606-a000-111b-43ee-0-0-0-115f.dyn6.twc.com ([2606:a000:111b:43ee::115f] helo=localhost)
-        by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
-        (Exim 4.63)
-        (envelope-from <nhorman@tuxdriver.com>)
-        id 1iItuT-0005XC-6F; Fri, 11 Oct 2019 08:20:47 -0400
-Date:   Fri, 11 Oct 2019 08:20:37 -0400
-From:   Neil Horman <nhorman@tuxdriver.com>
-To:     Joe Perches <joe@perches.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Gustavo A . R . Silva" <gustavo@embeddedor.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Shawn Landden <shawn@git.icu>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Miller <davem@davemloft.net>,
-        clang-built-linux@googlegroups.com, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 1/4] net: sctp: Rename fallthrough label to unhandled
-Message-ID: <20191011122037.GA16269@hmswarspite.think-freely.org>
-References: <cover.1570292505.git.joe@perches.com>
- <2e0111756153d81d77248bc8356bac78925923dc.1570292505.git.joe@perches.com>
+        id S1726666AbfJKP6E (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 11 Oct 2019 11:58:04 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:56015 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726521AbfJKP6E (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 11 Oct 2019 11:58:04 -0400
+Received: by mail-wm1-f68.google.com with SMTP id a6so10937359wma.5;
+        Fri, 11 Oct 2019 08:58:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0f+AWbiCUqr+cF1B8DnOhTxug9gYQNFxCNQjY7BfECw=;
+        b=AU+jLQEmOpaHOx4G5VFQ2wexmRSC0sNm5BqBKnVvXIvGw1IFHv7xlkDIq9nVqlEx7Q
+         byUP0PlgpAa/eHEXr0vc3UdHar3diGUa3Hqwb1oq5IvlQur8CaLtFHivn97vS28I88/I
+         Uzv5wf8OGpY9wJWqshcvHGv7tb+vrk+NQODAmSTx4LzPkjXcYTHMoEbpwthXPnB8rU1I
+         Hc7/cZ/FShUFoAqIw4/kNzhKjrJO0roYo9+3qeUCzhF8LK/pfafR/TOQGZmCrGcFZNqD
+         riUf5y1N6NjfJ6HUevw/TqeHpc8cz/1905yv3I/iLtiolpSxUmSFHh01MGiCN5a+t1EY
+         1nCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0f+AWbiCUqr+cF1B8DnOhTxug9gYQNFxCNQjY7BfECw=;
+        b=tqR7krLoZPfRjbl44KXS7bGJZE7TJPCT85LMX10Usy+yBzQQJgs01FIvzL8jkPWn7D
+         d6POMSGF+W17QLO7cQpFZjZuQ2+RZdJ4dHDWQ113xZ0I1+ybc3IY8WYQSlUhD8GGSGWI
+         e97Q7C7dxR14/P/Dq2Dp165Pb5suTCCnVz1KQ0x8hd87PZ2k4OGBjfgwQISinp5ody1+
+         JokZW64/feX3Fxn5TxRA2f5FcR3d5DzfEttGKN706PaOb1c4m8xehxff6J3oyqhnBVgN
+         TvgVtf2WkkgwJYFaHfRn31ucSm9q9e85TtR/emF9tsX+mNjeHIcUhOXA8wLk5Gwf3Fln
+         x6KA==
+X-Gm-Message-State: APjAAAVo3a+av46uS7Pk8e+PDe2PQ1/96OHG8rtnT8w2wKWSE0i+M49x
+        VTvLruWT1tJFr/p869AnMkvmH9WhRYbDB4+4zok=
+X-Google-Smtp-Source: APXvYqypw05LzaEHTLHoieF38lBZdqRb+qpQv++bgupDiQDq4JAR17sGuGjbrR7C7q5OaRaCA8HaE+x0MsJyfXHHUXg=
+X-Received: by 2002:a7b:c3cf:: with SMTP id t15mr3690126wmj.85.1570809482473;
+ Fri, 11 Oct 2019 08:58:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2e0111756153d81d77248bc8356bac78925923dc.1570292505.git.joe@perches.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-Spam-Score: -2.9 (--)
-X-Spam-Status: No
+References: <cover.1570533716.git.lucien.xin@gmail.com> <066605f2269d5d92bc3fefebf33c6943579d8764.1570533716.git.lucien.xin@gmail.com>
+ <60a7f76bd5f743dd8d057b32a4456ebd@AcuMS.aculab.com> <CADvbK_cFCuHAwxGAdY0BevrrAd6pQRP2tW_ej9mM3G4Aog3qpg@mail.gmail.com>
+ <20191009161508.GB25555@hmswarspite.think-freely.org> <CADvbK_eJh0ghjrrqcx7mygEY94QsxxbV=om8BqWPEcXxUHFmHw@mail.gmail.com>
+ <20191010124045.GA29895@hmswarspite.think-freely.org>
+In-Reply-To: <20191010124045.GA29895@hmswarspite.think-freely.org>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Fri, 11 Oct 2019 23:57:58 +0800
+Message-ID: <CADvbK_d-djw00DBTmu7XCpxrfNvCF-xksWT9gV_VP_-zLv=NkA@mail.gmail.com>
+Subject: Re: [PATCHv2 net-next 3/5] sctp: add SCTP_EXPOSE_POTENTIALLY_FAILED_STATE
+ sockopt
+To:     Neil Horman <nhorman@tuxdriver.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        network dev <netdev@vger.kernel.org>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Sat, Oct 05, 2019 at 09:46:41AM -0700, Joe Perches wrote:
-> fallthrough may become a pseudo reserved keyword so this only use of
-> fallthrough is better renamed to allow it.
-> 
-> Signed-off-by: Joe Perches <joe@perches.com>
-> ---
->  net/sctp/sm_make_chunk.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
-> index e41ed2e0ae7d..48d63956a68c 100644
-> --- a/net/sctp/sm_make_chunk.c
-> +++ b/net/sctp/sm_make_chunk.c
-> @@ -2155,7 +2155,7 @@ static enum sctp_ierror sctp_verify_param(struct net *net,
->  	case SCTP_PARAM_SET_PRIMARY:
->  		if (ep->asconf_enable)
->  			break;
-> -		goto fallthrough;
-> +		goto unhandled;
->  
->  	case SCTP_PARAM_HOST_NAME_ADDRESS:
->  		/* Tell the peer, we won't support this param.  */
-> @@ -2166,11 +2166,11 @@ static enum sctp_ierror sctp_verify_param(struct net *net,
->  	case SCTP_PARAM_FWD_TSN_SUPPORT:
->  		if (ep->prsctp_enable)
->  			break;
-> -		goto fallthrough;
-> +		goto unhandled;
->  
->  	case SCTP_PARAM_RANDOM:
->  		if (!ep->auth_enable)
-> -			goto fallthrough;
-> +			goto unhandled;
->  
->  		/* SCTP-AUTH: Secion 6.1
->  		 * If the random number is not 32 byte long the association
-> @@ -2187,7 +2187,7 @@ static enum sctp_ierror sctp_verify_param(struct net *net,
->  
->  	case SCTP_PARAM_CHUNKS:
->  		if (!ep->auth_enable)
-> -			goto fallthrough;
-> +			goto unhandled;
->  
->  		/* SCTP-AUTH: Section 3.2
->  		 * The CHUNKS parameter MUST be included once in the INIT or
-> @@ -2203,7 +2203,7 @@ static enum sctp_ierror sctp_verify_param(struct net *net,
->  
->  	case SCTP_PARAM_HMAC_ALGO:
->  		if (!ep->auth_enable)
-> -			goto fallthrough;
-> +			goto unhandled;
->  
->  		hmacs = (struct sctp_hmac_algo_param *)param.p;
->  		n_elt = (ntohs(param.p->length) -
-> @@ -2226,7 +2226,7 @@ static enum sctp_ierror sctp_verify_param(struct net *net,
->  			retval = SCTP_IERROR_ABORT;
->  		}
->  		break;
-> -fallthrough:
-> +unhandled:
->  	default:
->  		pr_debug("%s: unrecognized param:%d for chunk:%d\n",
->  			 __func__, ntohs(param.p->type), cid);
-> -- 
-> 2.15.0
-> 
-> 
-I'm still not a fan of the pseudo keyword fallthrough, but I don't have
-a problem in renaming the label, so
+On Thu, Oct 10, 2019 at 8:40 PM Neil Horman <nhorman@tuxdriver.com> wrote:
+>
+> On Thu, Oct 10, 2019 at 05:28:34PM +0800, Xin Long wrote:
+> > On Thu, Oct 10, 2019 at 12:18 AM Neil Horman <nhorman@tuxdriver.com> wrote:
+> > >
+> > > On Tue, Oct 08, 2019 at 11:28:32PM +0800, Xin Long wrote:
+> > > > On Tue, Oct 8, 2019 at 9:02 PM David Laight <David.Laight@aculab.com> wrote:
+> > > > >
+> > > > > From: Xin Long
+> > > > > > Sent: 08 October 2019 12:25
+> > > > > >
+> > > > > > This is a sockopt defined in section 7.3 of rfc7829: "Exposing
+> > > > > > the Potentially Failed Path State", by which users can change
+> > > > > > pf_expose per sock and asoc.
+> > > > >
+> > > > > If I read these patches correctly the default for this sockopt in 'enabled'.
+> > > > > Doesn't this mean that old application binaries will receive notifications
+> > > > > that they aren't expecting?
+> > > > >
+> > > > > I'd have thought that applications would be required to enable it.
+> > > > If we do that, sctp_getsockopt_peer_addr_info() in patch 2/5 breaks.
+> > > >
+> > > I don't think we can safely do either of these things.  Older
+> > > applications still need to behave as they did prior to the introduction
+> > > of this notification, and we shouldn't allow unexpected notifications to
+> > > be sent.
+> > >
+> > > What if you added a check in get_peer_addr_info to only return -EACCESS
+> > > if pf_expose is 0 and the application isn't subscribed to the PF event?
+> > We can't subscribe to PF event only, but all the SCTP_PEER_ADDR_CHANGE
+> > events.
+> >
+> > Now I'm thinking both PF event and "return -EACCES" in get_peer_addr_info
+> > are new, we should give 'expose' a default value that would disable both.
+> > How do think if we set 'pf_expose = -1' by default. We send the pf event
+> > only if (asoc->pf_expose > 0) in sctp_assoc_control_transport().
+> >
+> And if pf_expose = 0, we send the event, and return -EACCESS if we call
+> the socket option and find a PF assoc?  If so, yes, I think that makes
+> sense.
+pf_expose:
+-1: compatible with old application (by default)
+0: not expose PF to user
+1: expose PF to user
 
-Acked-by: Neil Horman <nhorman@tuxdriver.com>
+So it should be:
+if pf_expose == -1:  not send event, not return -EACCESS
+if pf_expose == 0: not send event, return -EACCESS
+if pf_expose > 0: sent event, not return -EACCESS
 
+makes sense?
+
+>
+> Neil
+>
+> > >
+> > > Neil
+> > >
+> > > > >
+> > > > >         David
+> > > > >
+> > > > > -
+> > > > > Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> > > > > Registration No: 1397386 (Wales)
+> > > > >
+> > > >
+> >
