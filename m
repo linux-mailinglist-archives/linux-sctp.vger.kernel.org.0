@@ -2,53 +2,28 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C84D3271
-	for <lists+linux-sctp@lfdr.de>; Thu, 10 Oct 2019 22:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E83CBD3F61
+	for <lists+linux-sctp@lfdr.de>; Fri, 11 Oct 2019 14:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726752AbfJJUeX (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 10 Oct 2019 16:34:23 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:39146 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726725AbfJJUeX (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 10 Oct 2019 16:34:23 -0400
-Received: by mail-pf1-f193.google.com with SMTP id v4so4635141pff.6
-        for <linux-sctp@vger.kernel.org>; Thu, 10 Oct 2019 13:34:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qLN+ZaDKXKKqy42TKsmx8NFeuacgz7hdpKcKP23ADmI=;
-        b=a8/BUQSRa5fAL7ua30472Y4U7kNqLVO+XHaBB/Rc2wmWKE9Xj04D00RKSoqyZUda8p
-         AoN69CT8wMJ2+8+9xP0hKg/fExhxNp8lM/hqppiZ2eSLtMQm6/uYroSxKlTzitdKEuQz
-         TwEci32h62j6hKZzmDlEOn92Ch+77FD0Fd8R4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qLN+ZaDKXKKqy42TKsmx8NFeuacgz7hdpKcKP23ADmI=;
-        b=UZkeOZoZ8Gq0/rCYlaTgkVZqYTY5tTR115Juytu0XQ1LWpWw4wZyLmKqde2bS0OUOS
-         EMHM6NOQLxZ6SrW1e/9sCXw/BWWW/XQMXlO3aw03CXTVjDGn1ANqlIcK2a/Ls6nyVvie
-         YEmrjl2WUWPbLMNMkUmb1aij4FAsOeddZSnq6OCv24Enh58Z8z2U/fvbzu2J7yAnZlNI
-         jiEj+iVlJQwq4Z66K6DV7heylTzUh5ugM/AnjyvwgcB1hoO48TTdpPQqkScWIU0UvQ3P
-         7CFws0SzLOSW72wNkcGS6cu0CEhNWSnCt+QuNt+ByYcMJ0coTMdCkgghIY+BMbju/7Cw
-         JJQA==
-X-Gm-Message-State: APjAAAXSzf/XEJhbCj2LLjsMd+3UjF06eAwyKxqL4Xqcc4DLKkr21u0o
-        4JPBgh989CBID2hDjhg3meyN1A==
-X-Google-Smtp-Source: APXvYqwEu3drJD2Rf13atiZCcuDu9mkLKlc6Z2P3wFQoHl4Ae6+HQ4EAmBu1c73yaqSQEBRghQ4ujA==
-X-Received: by 2002:a63:311:: with SMTP id 17mr12928079pgd.327.1570739662653;
-        Thu, 10 Oct 2019 13:34:22 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o9sm5965017pfp.67.2019.10.10.13.34.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2019 13:34:21 -0700 (PDT)
-Date:   Thu, 10 Oct 2019 13:34:20 -0700
-From:   Kees Cook <keescook@chromium.org>
+        id S1727672AbfJKMVi (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 11 Oct 2019 08:21:38 -0400
+Received: from charlotte.tuxdriver.com ([70.61.120.58]:53630 "EHLO
+        smtp.tuxdriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727198AbfJKMVi (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 11 Oct 2019 08:21:38 -0400
+Received: from cpe-2606-a000-111b-43ee-0-0-0-115f.dyn6.twc.com ([2606:a000:111b:43ee::115f] helo=localhost)
+        by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
+        (Exim 4.63)
+        (envelope-from <nhorman@tuxdriver.com>)
+        id 1iItuT-0005XC-6F; Fri, 11 Oct 2019 08:20:47 -0400
+Date:   Fri, 11 Oct 2019 08:20:37 -0400
+From:   Neil Horman <nhorman@tuxdriver.com>
 To:     Joe Perches <joe@perches.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
         Borislav Petkov <bp@alien8.de>,
         "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -68,13 +43,16 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         clang-built-linux@googlegroups.com, linux-sctp@vger.kernel.org,
         netdev@vger.kernel.org
 Subject: Re: [PATCH 1/4] net: sctp: Rename fallthrough label to unhandled
-Message-ID: <201910101334.22271AB@keescook>
+Message-ID: <20191011122037.GA16269@hmswarspite.think-freely.org>
 References: <cover.1570292505.git.joe@perches.com>
  <2e0111756153d81d77248bc8356bac78925923dc.1570292505.git.joe@perches.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <2e0111756153d81d77248bc8356bac78925923dc.1570292505.git.joe@perches.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Spam-Score: -2.9 (--)
+X-Spam-Status: No
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
@@ -85,11 +63,6 @@ On Sat, Oct 05, 2019 at 09:46:41AM -0700, Joe Perches wrote:
 > fallthrough is better renamed to allow it.
 > 
 > Signed-off-by: Joe Perches <joe@perches.com>
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
--Kees
-
 > ---
 >  net/sctp/sm_make_chunk.c | 12 ++++++------
 >  1 file changed, 6 insertions(+), 6 deletions(-)
@@ -151,6 +124,9 @@ Reviewed-by: Kees Cook <keescook@chromium.org>
 > -- 
 > 2.15.0
 > 
+> 
+I'm still not a fan of the pseudo keyword fallthrough, but I don't have
+a problem in renaming the label, so
 
--- 
-Kees Cook
+Acked-by: Neil Horman <nhorman@tuxdriver.com>
+
