@@ -2,55 +2,34 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 92746D4A4C
-	for <lists+linux-sctp@lfdr.de>; Sat, 12 Oct 2019 00:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE74D4C0E
+	for <lists+linux-sctp@lfdr.de>; Sat, 12 Oct 2019 04:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729086AbfJKW0V (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 11 Oct 2019 18:26:21 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:46193 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729428AbfJKW0U (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 11 Oct 2019 18:26:20 -0400
-Received: by mail-lj1-f195.google.com with SMTP id d1so11217025ljl.13;
-        Fri, 11 Oct 2019 15:26:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xmHIYl25n4y/hTcfXXSO/nQ5G/kQTh9kEzA1dV2zubk=;
-        b=nqUsqy5Zv5ik/Zj2UcjOrzceCGDWgwxpQFiWSlsq61+ZupecTO4hNZvtjqbCdkPgXx
-         jSscEdEO8jLI/1BG2ec4/rPD2vaD3O0sK8zKqbadz4Jt/TNgYUWaPWdyrUIiDJLAKQhE
-         4leI/c1m4aOHU8lFwbAMt99/CgnanpbBC/MrdEkph6cXR0KO9E/tKzCbKJT5G2CFFU1g
-         2nQpP19/6JzY/IlC4YDP6UUo+HTUc/ecjKqST1CBxpj5MCHimyq/ijA2lQp/YKl07LKP
-         lT3UvJtw1DRs4yNs3aiDG8jLvFmKGKtn5nE4G8N1qecE4wXrgcIv4Nj6Ub4vCWOGhJhT
-         0sNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xmHIYl25n4y/hTcfXXSO/nQ5G/kQTh9kEzA1dV2zubk=;
-        b=Nve2vuNwtvsCAXRVRSTuYfyM2Elvu14W/t+K+ssDdfHQFdPmqaoNiwwNuvBVdhvedB
-         o25cUpRTWcoXQvLMIDZQlWz2GpDOtuslJCGtvq05vnoEJs+QFqcOvPtCqKdeGGo8WnD9
-         8Z+8VOq87zHcl0BAACBMgrfyBpJKvKTIkgb1STE6+CsoSrgY3aj3JPXSP05B3wyNUcRn
-         7m/YMnREkVCm8QK1BrL7sXcB0rIpBHWN+7UWflZlUDr4uyXCq6QYG9G+yw4edDhpZYcI
-         BYop76JrbhyOtU0fESO18NGchKaZlOdRPjUPD6jN9rK1x/J1iyXQUynmX8FjC32xVHCt
-         rwoA==
-X-Gm-Message-State: APjAAAV9L/VdPjX9KeMpO1+qITUrVbp+TpsGaunKSuN5QLfcmvNNjSsD
-        K1oaJgxA84csvUQDRy9telQ5uUMF8IQXONTOybQ=
-X-Google-Smtp-Source: APXvYqzhY4BBpDOb1XjrGtrPCztOkL7/vfw1DL4ZNsREHKyaPUxwViQwxlLovrTqj8EB0FcekvYwixhBodl7HEwIJ/c=
-X-Received: by 2002:a2e:8852:: with SMTP id z18mr10688944ljj.230.1570832777820;
- Fri, 11 Oct 2019 15:26:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1570292505.git.joe@perches.com> <CAHk-=whOF8heTGz5tfzYUBp_UQQzSWNJ_50M7-ECXkfFRDQWFA@mail.gmail.com>
- <CANiq72kDNT6iPxYYNzY_eb3ddWNUEzgg48pOenEBrJXynxsvoA@mail.gmail.com> <201910111506.45AE850D5@keescook>
-In-Reply-To: <201910111506.45AE850D5@keescook>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sat, 12 Oct 2019 00:26:06 +0200
-Message-ID: <CANiq72m9bHQZaOjcTr-266Bdy29HBVc8rOp2+szSnbywroNRhQ@mail.gmail.com>
+        id S1728691AbfJLCOl (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 11 Oct 2019 22:14:41 -0400
+Received: from smtprelay0195.hostedemail.com ([216.40.44.195]:38721 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728602AbfJLCOl (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Fri, 11 Oct 2019 22:14:41 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay03.hostedemail.com (Postfix) with ESMTP id C5D5C837F24C;
+        Sat, 12 Oct 2019 02:14:39 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::::::::::::::::::::::::::::::::::::::::::,RULES_HIT:41:355:379:599:800:960:973:982:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1538:1593:1594:1711:1714:1730:1747:1777:1792:2198:2199:2393:2553:2559:2562:2828:3138:3139:3140:3141:3142:3350:3622:3865:3867:3870:3872:3874:4321:5007:6742:6743:10004:10400:10848:11232:11658:11914:12297:12740:12760:12895:13069:13311:13357:13439:14181:14659:14721:21080:21433:21627:30054:30060:30090:30091,0,RBL:23.242.70.174:@perches.com:.lbl8.mailshell.net-62.8.0.180 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:24,LUA_SUMMARY:none
+X-HE-Tag: toad72_4533592a26929
+X-Filterd-Recvd-Size: 2596
+Received: from XPS-9350 (cpe-23-242-70-174.socal.res.rr.com [23.242.70.174])
+        (Authenticated sender: joe@perches.com)
+        by omf06.hostedemail.com (Postfix) with ESMTPA;
+        Sat, 12 Oct 2019 02:14:35 +0000 (UTC)
+Message-ID: <01e7fa29d34f210348355c4a507a714e086e7a30.camel@perches.com>
 Subject: Re: [PATCH 0/4] treewide: Add 'fallthrough' pseudo-keyword
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>, linux-sctp@vger.kernel.org,
+From:   Joe Perches <joe@perches.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-sctp@vger.kernel.org,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
         Borislav Petkov <bp@alien8.de>,
         "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -62,7 +41,7 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Jiri Olsa <jolsa@redhat.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Shawn Landden <shawn@git.icu>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Nathan Chancellor <natechancellor@gmail.com>,
         Nick Desaulniers <ndesaulniers@google.com>,
@@ -75,47 +54,31 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
         Netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Date:   Fri, 11 Oct 2019 19:14:33 -0700
+In-Reply-To: <CAHk-=wi1T1m-su8zK5LeESoz_Pgf1-4hnjr516NiDLNyb4USug@mail.gmail.com>
+References: <cover.1570292505.git.joe@perches.com>
+         <CAHk-=whOF8heTGz5tfzYUBp_UQQzSWNJ_50M7-ECXkfFRDQWFA@mail.gmail.com>
+         <9fe980f7e28242c2835ffae34914c5f68e8268a7.camel@perches.com>
+         <CAHk-=wi1T1m-su8zK5LeESoz_Pgf1-4hnjr516NiDLNyb4USug@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.32.1-2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Sat, Oct 12, 2019 at 12:08 AM Kees Cook <keescook@chromium.org> wrote:
->
-> On Fri, Oct 11, 2019 at 08:01:42PM +0200, Miguel Ojeda wrote:
-> > Hi Linus,
-> >
-> > On Fri, Oct 11, 2019 at 6:30 PM Linus Torvalds
-> > <torvalds@linux-foundation.org> wrote:
-> > >
-> > > On Sat, Oct 5, 2019 at 9:46 AM Joe Perches <joe@perches.com> wrote:
-> > > >
-> > > > Add 'fallthrough' pseudo-keyword to enable the removal of comments
-> > > > like '/* fallthrough */'.
-> > >
-> > > I applied patches 1-3 to my tree just to make it easier for people to
-> > > start doing this. Maybe some people want to do the conversion on their
-> > > own subsystem rather than with a global script, but even if not, this
-> > > looks better as a "prepare for the future" series and I feel that if
-> > > we're doing the "fallthrough" thing eventually, the sooner we do the
-> > > prepwork the better.
-> > >
-> > > I'm a tiny bit worried that the actual conversion is just going to
-> > > cause lots of pain for the stable people, but I'll not worry about it
-> > > _too_ much. If the stable people decide that it's too painful for them
-> > > to deal with the comment vs keyword model, they may want to backport
-> > > these three patches too.
-> >
-> > I was waiting for a v2 series to pick it up given we had some pending changes...
->
-> Hmpf, looks like it's in torvalds/master now. Miguel, most of the changes
-> were related to the commit log, IIRC, so that ship has sailed. :( Can the
-> stuff in Documentation/ be improved with a follow-up patch, perhaps?
+On Fri, 2019-10-11 at 10:46 -0700, Linus Torvalds wrote:
+> On Fri, Oct 11, 2019 at 10:43 AM Joe Perches <joe@perches.com> wrote:
+> > Shouldn't a conversion script be public somewhere?
+> 
+> I feel the ones that might want to do the conversion on their own are
+> the ones that don't necessarily trust the script.
+> 
+> But I don't even know if anybody does want to, I just feel it's an option.
 
-Linus seems to have applied some of the improvements to the commit
-messages, but not those to the content (not sure why, since they were
-also easy ones). But no worries, we will do those later :)
+What's the harm in keeping the script in the
+tree until it's no longer needed?
 
-Cheers,
-Miguel
+
