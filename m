@@ -2,92 +2,85 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1895D881A
-	for <lists+linux-sctp@lfdr.de>; Wed, 16 Oct 2019 07:26:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AFDBD8E2D
+	for <lists+linux-sctp@lfdr.de>; Wed, 16 Oct 2019 12:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726665AbfJPF0A (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 16 Oct 2019 01:26:00 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:44887 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726052AbfJPF0A (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 16 Oct 2019 01:26:00 -0400
-Received: by mail-wr1-f68.google.com with SMTP id z9so26353584wrl.11;
-        Tue, 15 Oct 2019 22:25:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=N+byasZmM9B/FD9y0KRLeljpyazRUDjLgTSoqqsy+F4=;
-        b=IubSdvTIESsiWVSkWNgBmBKVPztvHUiLVj/mdZVT1VWvDkREvp+BC6VvU8qCdOZx0X
-         nO4BeTzrKKNjmfgELnMtM1FSFbeO+bUQ03fpK0BKg3i3xhBGG+zvqRQcnSsIgvEq2DqV
-         Hr30ghTiZfvJwK1L+ItNYGQxk0mWPVawkQet8PEsmMV59wyYpo2bIqD9aK5aJ0lHJc0D
-         y+zq1ytYtPJc6sjMfcYQFBRriOG+9gtBYeQJWVDSH6hG1EG62zWYd8SVk9YyqKz69hKM
-         fcrvwSj7r05nrVSw4iNbvdVq2KCgH0cY05150fCUlfBi9DK98oGLenohgubD3nUop0v6
-         0qWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=N+byasZmM9B/FD9y0KRLeljpyazRUDjLgTSoqqsy+F4=;
-        b=JicdxQtH4LP6mbHEH/pVNt4cG8OMVfWm0CxBOL1oh41B82MTbP8jdArSDOGfZymBbs
-         ZPVmzp97Fs+5C0tEgyQa2X00xMBotVxjSV4v9AID1e6Wa4kdPeTTN3ooDNIVfrxlSMw5
-         RkyjtGh50JD0hF/JlkD5S50vtm9mc7KKvLJSsijy2FVNGgpVwBkbz60gP74To/NtBwpy
-         P6kxCTAqDem5VUfzI+3O8Qhzt8GJ+iUVuFjjz3vY6Gmaw1wLxDxmkRhNI8ROgNe8AVBF
-         AXYOVbcBPbdjJ5cO35VfA8C8gyom3AkVfXg9K6Dj2ympt9F9WhrK2Ek7pnbo2TlQJrGB
-         aiJQ==
-X-Gm-Message-State: APjAAAV+eVgAvB7/LSJojIK/P8MdSnCj1qsF8wPpMu6/+bWxdhwYJ8XW
-        e75Nz34H4aqwsiwXd+1dx+hg6BZU0GdJhavhsn8=
-X-Google-Smtp-Source: APXvYqxs637YLkEr1A5KWUgdBdVLpSA/fZdEv+hL2LEf+c57aMtN4NAPRU5JG2wAKF4yC9LKRLNtzXf8OHjRfYPiaHE=
-X-Received: by 2002:adf:c641:: with SMTP id u1mr878201wrg.361.1571203558007;
- Tue, 15 Oct 2019 22:25:58 -0700 (PDT)
+        id S2390135AbfJPKm1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Wed, 16 Oct 2019 06:42:27 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:21532 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727635AbfJPKm1 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Wed, 16 Oct 2019 06:42:27 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-48-M0QBxUsRPUeymtDmQ2xm0A-1; Wed, 16 Oct 2019 11:42:24 +0100
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Wed, 16 Oct 2019 11:42:23 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Wed, 16 Oct 2019 11:42:23 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'David Miller' <davem@davemloft.net>,
+        "lucien.xin@gmail.com" <lucien.xin@gmail.com>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        "marcelo.leitner@gmail.com" <marcelo.leitner@gmail.com>,
+        "nhorman@tuxdriver.com" <nhorman@tuxdriver.com>
+Subject: RE: [PATCHv3 net-next 0/5] sctp: update from rfc7829
+Thread-Topic: [PATCHv3 net-next 0/5] sctp: update from rfc7829
+Thread-Index: AQHVg7yU44xuaHxb70is56q5NyLqeqddFHmw
+Date:   Wed, 16 Oct 2019 10:42:23 +0000
+Message-ID: <1f6cf86fce074a9cbf7f8c2496cc7c84@AcuMS.aculab.com>
+References: <cover.1571033544.git.lucien.xin@gmail.com>
+ <20191015.175639.347136446069377956.davem@davemloft.net>
+In-Reply-To: <20191015.175639.347136446069377956.davem@davemloft.net>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <06beb8a9ceaec9224a507b58d3477da106c5f0cd.1571124278.git.lucien.xin@gmail.com>
- <20191015.203919.1387270193651224661.davem@davemloft.net>
-In-Reply-To: <20191015.203919.1387270193651224661.davem@davemloft.net>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Wed, 16 Oct 2019 13:26:12 +0800
-Message-ID: <CADvbK_cdOXdcMv5ptyKNVAq2Q55XWP=A7u9bZ5-aNjnKoNZnZg@mail.gmail.com>
-Subject: Re: [PATCH net] sctp: change sctp_prot .no_autobind with true
-To:     David Miller <davem@davemloft.net>
-Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>
-Content-Type: text/plain; charset="UTF-8"
+X-MC-Unique: M0QBxUsRPUeymtDmQ2xm0A-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, Oct 16, 2019 at 11:39 AM David Miller <davem@davemloft.net> wrote:
->
+From: David Miller
+> Sent: 16 October 2019 01:57
 > From: Xin Long <lucien.xin@gmail.com>
-> Date: Tue, 15 Oct 2019 15:24:38 +0800
->
-> > syzbot reported a memory leak:
+> Date: Mon, 14 Oct 2019 14:14:43 +0800
+> 
+> > SCTP-PF was implemented based on a Internet-Draft in 2012:
 > >
-> >   BUG: memory leak, unreferenced object 0xffff888120b3d380 (size 64):
-> >   backtrace:
->  ...
-> > It was caused by when sending msgs without binding a port, in the path:
-> > inet_sendmsg() -> inet_send_prepare() -> inet_autobind() ->
-> > .get_port/sctp_get_port(), sp->bind_hash will be set while bp->port is
-> > not. Later when binding another port by sctp_setsockopt_bindx(), a new
-> > bucket will be created as bp->port is not set.
+> >   https://tools.ietf.org/html/draft-nishida-tsvwg-sctp-failover-05
 > >
-> > sctp's autobind is supposed to call sctp_autobind() where it does all
-> > things including setting bp->port. Since sctp_autobind() is called in
-> > sctp_sendmsg() if the sk is not yet bound, it should have skipped the
-> > auto bind.
+> > It's been updated quite a few by rfc7829 in 2016.
 > >
-> > THis patch is to avoid calling inet_autobind() in inet_send_prepare()
-> > by changing sctp_prot .no_autobind with true, also remove the unused
-> > .get_port.
+> > This patchset adds the following features:
 > >
-> > Reported-by: syzbot+d44f7bbebdea49dbc84a@syzkaller.appspotmail.com
-> > Signed-off-by: Xin Long <lucien.xin@gmail.com>
->
-> Applied and queued up for -stable.
->
-> Xin, in the future please always provide a Fixes: even if it is the
-> initial kernel repository commit.
-Copy, thanks.
+> >   1. add SCTP_ADDR_POTENTIALLY_FAILED notification
+> >   2. add pf_expose per netns/sock/asoc
+> >   3. add SCTP_EXPOSE_POTENTIALLY_FAILED_STATE sockopt
+> >   4. add ps_retrans per netns/sock/asoc/transport
+> >      (Primary Path Switchover)
+> >   5. add spt_pathcpthld for SCTP_PEER_ADDR_THLDS sockopt
+> 
+> I would like to see some SCTP expert ACKs here.
+
+I'm only an SCTP user, but I think some of the API changes aren't right.
+I'm not going to try to grok the sctp code - it makes my brain hurt.
+(Even though I've written plenty of protocol stack code.)
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
