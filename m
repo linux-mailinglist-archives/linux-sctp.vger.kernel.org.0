@@ -2,78 +2,105 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEB4D99AA
-	for <lists+linux-sctp@lfdr.de>; Wed, 16 Oct 2019 21:04:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D80DA4DD
+	for <lists+linux-sctp@lfdr.de>; Thu, 17 Oct 2019 06:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436666AbfJPTEW (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 16 Oct 2019 15:04:22 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:53110 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436617AbfJPTEW (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 16 Oct 2019 15:04:22 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f00:1e2::d71])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 2155A142C0124;
-        Wed, 16 Oct 2019 12:04:22 -0700 (PDT)
-Date:   Wed, 16 Oct 2019 12:04:19 -0700 (PDT)
-Message-Id: <20191016.120419.1631440501656175018.davem@davemloft.net>
-To:     marcelo.leitner@gmail.com
-Cc:     lucien.xin@gmail.com, netdev@vger.kernel.org,
-        linux-sctp@vger.kernel.org, nhorman@tuxdriver.com,
-        david.laight@aculab.com
+        id S2392393AbfJQE4h (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 17 Oct 2019 00:56:37 -0400
+Received: from mail-wm1-f53.google.com ([209.85.128.53]:51546 "EHLO
+        mail-wm1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728755AbfJQE4h (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 17 Oct 2019 00:56:37 -0400
+Received: by mail-wm1-f53.google.com with SMTP id 7so1026985wme.1;
+        Wed, 16 Oct 2019 21:56:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WnTzL28wtsAQdjx0j65OJpA8iYPMyh5LuJ+Wzc9XBog=;
+        b=kA0/57buRdB8D8u2b2T29CksvUPa8A2CkAd8E5uCkraBO1YkS0u6losrhnp4r+vlqp
+         qmwSkjozQigeqkG3QwADKQP5RMy/5CxwBrBD/wIDa0nBN/GlCBUM/3mr3t8FDpKi96aj
+         jC8OaiNKCLd5AaFP2xl59loCU/kNqLDyapGMViaqW9M3mcGHE7JtwP09QoxK+GDt/App
+         SQsCWDROz3c8io+qhLTR6Y97Cz11OT+CLmNKnPjUA635QsXAOkZQm5c8xE1dNkF84cj3
+         eHtEEP1ivQhAh7s92XyzUG9MM/ciGD5EL8LeCunXWH9DqA3juAMn5ldXUwJq42TIAk0N
+         kcCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WnTzL28wtsAQdjx0j65OJpA8iYPMyh5LuJ+Wzc9XBog=;
+        b=YGmpOEH+6dUt89/YHcvoPOqJDByFfX7pSz4d7NPvxxuGvGPJKQhIy2SsBgt+XS5Sd7
+         JronMh6HARwtv59inTIYieAISDRKU/qK45Ll90mLU9KLqGPBMFNucGi/r/90LeRw6UZU
+         bcEyzE5J7WReeqXChNlq37w/qnxU+CINbI9Y6wtu3gkez0pWPHeLdhXb+lFeY1Nyqr5S
+         yxmHKmZY40vSpdDO9wkL6g4j+ZPHvQI9hvFiUWi7UYQnFr3jX8RF1WvveOBujGCKorfK
+         UidDT3xTK+mWaa4qan8EMjAhuBeDelU26C19o3kDuTRci1splSDNSUGcmK/Nyqwq9GcJ
+         PDWg==
+X-Gm-Message-State: APjAAAX6cq6bBFcAUY3h39vIJ2VYaxmJfcMMKHGFCRNwczhU8/fAyOaw
+        r/trmrUdC6uvhPz2vXYXqetyWjsNDj8EGafIjKg=
+X-Google-Smtp-Source: APXvYqxzxzi50yuRhRFw3az2dmpPmGDxB69NefTBrtQztX+1MgSpe1CVR0E2Qb0PZqk9yDzBLb87RyI5k7zM5qSxXTA=
+X-Received: by 2002:a1c:6308:: with SMTP id x8mr1028838wmb.140.1571288194643;
+ Wed, 16 Oct 2019 21:56:34 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1571033544.git.lucien.xin@gmail.com> <20191015.175639.347136446069377956.davem@davemloft.net>
+ <1f6cf86fce074a9cbf7f8c2496cc7c84@AcuMS.aculab.com>
+In-Reply-To: <1f6cf86fce074a9cbf7f8c2496cc7c84@AcuMS.aculab.com>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Thu, 17 Oct 2019 12:56:52 +0800
+Message-ID: <CADvbK_cBaydDVnmcKvUWwsbf+u_GgAumoq7wW7FQtFg_TZNiiw@mail.gmail.com>
 Subject: Re: [PATCHv3 net-next 0/5] sctp: update from rfc7829
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20191016183209.GA4250@localhost.localdomain>
-References: <cover.1571033544.git.lucien.xin@gmail.com>
-        <20191016.142534.1360443052637911866.davem@davemloft.net>
-        <20191016183209.GA4250@localhost.localdomain>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Wed, 16 Oct 2019 12:04:22 -0700 (PDT)
+To:     David Laight <David.Laight@aculab.com>
+Cc:     David Miller <davem@davemloft.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        "marcelo.leitner@gmail.com" <marcelo.leitner@gmail.com>,
+        "nhorman@tuxdriver.com" <nhorman@tuxdriver.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Date: Wed, 16 Oct 2019 15:32:09 -0300
+On Wed, Oct 16, 2019 at 6:42 PM David Laight <David.Laight@aculab.com> wrote:
+>
+> From: David Miller
+> > Sent: 16 October 2019 01:57
+> > From: Xin Long <lucien.xin@gmail.com>
+> > Date: Mon, 14 Oct 2019 14:14:43 +0800
+> >
+> > > SCTP-PF was implemented based on a Internet-Draft in 2012:
+> > >
+> > >   https://tools.ietf.org/html/draft-nishida-tsvwg-sctp-failover-05
+> > >
+> > > It's been updated quite a few by rfc7829 in 2016.
+> > >
+> > > This patchset adds the following features:
+> > >
+> > >   1. add SCTP_ADDR_POTENTIALLY_FAILED notification
+> > >   2. add pf_expose per netns/sock/asoc
+> > >   3. add SCTP_EXPOSE_POTENTIALLY_FAILED_STATE sockopt
+> > >   4. add ps_retrans per netns/sock/asoc/transport
+> > >      (Primary Path Switchover)
+> > >   5. add spt_pathcpthld for SCTP_PEER_ADDR_THLDS sockopt
+> >
+> > I would like to see some SCTP expert ACKs here.
+>
+> I'm only an SCTP user, but I think some of the API changes aren't right.
+Hi, David L.
 
-> On Wed, Oct 16, 2019 at 02:25:34PM -0400, David Miller wrote:
->> From: Xin Long <lucien.xin@gmail.com>
->> Date: Mon, 14 Oct 2019 14:14:43 +0800
->> 
->> > SCTP-PF was implemented based on a Internet-Draft in 2012:
->> > 
->> >   https://tools.ietf.org/html/draft-nishida-tsvwg-sctp-failover-05
->> > 
->> > It's been updated quite a few by rfc7829 in 2016.
->> > 
->> > This patchset adds the following features:
->> 
->> Sorry but I'm tossing these until an knowledgable SCTP person can
->> look at them.
-> 
-> Hi Dave,
-> 
-> Maybe the email didn't get through but Neil actually already acked it,
-> 2 days ago.
->   Message-ID: <20191014124249.GB11844@hmswarspite.think-freely.org>
-> 
-> I won't be able to review it :-(
+I think you must know quite a few user cases.
 
-All I saw was David Laight replying saying he thought the APIs weren't
-implemented correctly.
+Before I repost, can you pls give the exact places where the API
+changes may not be right as you've already done in v1 and v2, so
+that I can correct them.
 
-I have to admit that I'm really going to proceed carefully with SCTP
-API changes because there has been a lot of discussions in the past
-involving backwards-incompatible things happening.
+Thanks.
 
-I'm not saying that is happening here, but my confidence in SCTP API
-changes is very low.
-
-I want this to sit for a while and Xin can respin and resubmit in a
-day or two.
+> I'm not going to try to grok the sctp code - it makes my brain hurt.
+> (Even though I've written plenty of protocol stack code.)
+>
+>         David
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
+>
