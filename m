@@ -2,53 +2,74 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C0DDBA4F
-	for <lists+linux-sctp@lfdr.de>; Fri, 18 Oct 2019 01:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4DD6DBAAB
+	for <lists+linux-sctp@lfdr.de>; Fri, 18 Oct 2019 02:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2441728AbfJQXuZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Thu, 17 Oct 2019 19:50:25 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:43896 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2438680AbfJQXuZ (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 17 Oct 2019 19:50:25 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f00:1e2::d71])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 06E7B1433DE0F;
-        Thu, 17 Oct 2019 16:50:23 -0700 (PDT)
-Date:   Thu, 17 Oct 2019 16:50:23 -0700 (PDT)
-Message-Id: <20191017.165023.620180629772213473.davem@davemloft.net>
-To:     ecree@solarflare.com
-Cc:     lucien.xin@gmail.com, netdev@vger.kernel.org,
-        linux-sctp@vger.kernel.org, marcelo.leitner@gmail.com,
-        nhorman@tuxdriver.com, brouer@redhat.com, dvyukov@google.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: Stable request
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <fa2e9f70-05bd-bcac-e502-8bdb375163ce@solarflare.com>
-References: <20190823.144250.2063544404229146484.davem@davemloft.net>
-        <3bda6dee-7b8b-1f50-b4ea-47857ca97279@solarflare.com>
-        <fa2e9f70-05bd-bcac-e502-8bdb375163ce@solarflare.com>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Thu, 17 Oct 2019 16:50:24 -0700 (PDT)
+        id S2503953AbfJRAU2 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 17 Oct 2019 20:20:28 -0400
+Received: from zaovasilisa.ru ([88.200.194.99]:49001 "EHLO usrv.lan"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2503926AbfJRAU1 (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Thu, 17 Oct 2019 20:20:27 -0400
+X-Greylist: delayed 22562 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Oct 2019 20:20:19 EDT
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+        by usrv.lan (Postfix) with SMTP id E44FB186481;
+        Thu, 17 Oct 2019 17:04:03 +0400 (MSD)
+Received: from (HELO zlba) [49.155.13.191] by 127.0.0.1 id 08foBMeDLK33 for <linux-nvme@lists.infradead.org>; Thu, 17 Oct 2019 10:59:51 -0200
+Message-ID: <9$4n3z523f$d$rou@1wu6v8t.44r>
+From:   "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
+Reply-To: "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
+To:     linux-nvme@lists.infradead.org
+Subject: MOTHERLESS CHILDREN IN YOUR CITY !!
+Date:   Thu, 17 Oct 19 10:59:51 GMT
+X-Mailer: MIME-tools 5.503 (Entity 5.501)
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+        boundary="EFA7_FB09FAD2"
+X-Priority: 3
+X-MSMail-Priority: Normal
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Edward Cree <ecree@solarflare.com>
-Date: Wed, 16 Oct 2019 16:26:50 +0100
 
-> Hi, did this get missed or was my request improper in some way?
-> Our testing has been hitting this issue on distro kernels (Fedora, Debian,
->  Ubuntu), we'd like the fix to get everywhere it's needed and AIUI -stable
->  is the proper route for that.
-> For reference, the fix was committed as c7a42eb49212.
+--EFA7_FB09FAD2
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
 
-I've queued this up for my next set of -stable submissions.
+Dear Sir / Madam
 
-Thanks Ed.
+
+
+Since ever we left your country back to Canada , we have gotten Government=
+ approval and we have been busying planning for the less privilege Childre=
+n projects.
+
+We are planning to release first batch of the funds $2,990,000.00 within 1=
+4 days for building an estate for motherless children in your city.
+
+I want you to use my mother;s company name to register this charity projec=
+t in your country after receiving the project funds.
+
+It must be registered as { Bayraktar Group Homeless Children Ltd }.
+
+
+Can you handle and supervise this big project ?
+Can you manager all the workers as a senior supervisor ?
+We want to be sure you can handle it before we proceed with this project.
+
+
+Please call me if you want to hear from us + 1-917 580 4919.
+Please can you manage such project please Kindly reply for further details=
+.
+
+Your full names-----------
+
+
+
+Ekrem Bayraktar.
+Bayraktar Shipping Group
+
+--EFA7_FB09FAD2--
+
