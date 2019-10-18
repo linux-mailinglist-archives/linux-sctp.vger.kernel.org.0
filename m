@@ -2,25 +2,25 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78EF0DC8D4
-	for <lists+linux-sctp@lfdr.de>; Fri, 18 Oct 2019 17:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB7AFDC9FA
+	for <lists+linux-sctp@lfdr.de>; Fri, 18 Oct 2019 17:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731497AbfJRPeo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Fri, 18 Oct 2019 11:34:44 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:54397 "EHLO
+        id S2389479AbfJRP4x convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Fri, 18 Oct 2019 11:56:53 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:50785 "EHLO
         eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732916AbfJRPeo (ORCPT
+        by vger.kernel.org with ESMTP id S1728779AbfJRP4x (ORCPT
         <rfc822;linux-sctp@vger.kernel.org>);
-        Fri, 18 Oct 2019 11:34:44 -0400
+        Fri, 18 Oct 2019 11:56:53 -0400
 Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-167-cKzciky-MNq8KxeuKcqTzA-1; Fri, 18 Oct 2019 16:34:40 +0100
+ TLS) by relay.mimecast.com with ESMTP id uk-mta-3-mj2RpJsmO5m7JJzP7Fxiaw-1;
+ Fri, 18 Oct 2019 16:56:50 +0100
 Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
  AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Fri, 18 Oct 2019 16:34:39 +0100
+ Server (TLS) id 15.0.1347.2; Fri, 18 Oct 2019 16:56:49 +0100
 Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
  AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Fri, 18 Oct 2019 16:34:39 +0100
+ Fri, 18 Oct 2019 16:56:49 +0100
 From:   David Laight <David.Laight@ACULAB.COM>
 To:     'Xin Long' <lucien.xin@gmail.com>,
         network dev <netdev@vger.kernel.org>,
@@ -28,16 +28,16 @@ To:     'Xin Long' <lucien.xin@gmail.com>,
 CC:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
         "davem@davemloft.net" <davem@davemloft.net>
-Subject: RE: [PATCHv2 net-next 2/5] sctp: add pf_expose per netns and sock and
- asoc
-Thread-Topic: [PATCHv2 net-next 2/5] sctp: add pf_expose per netns and sock
- and asoc
-Thread-Index: AQHVfcscH+sPaksZF0uqjgObulWL8KdglgNw
-Date:   Fri, 18 Oct 2019 15:34:39 +0000
-Message-ID: <0779b5aeb9a84b4692b08be7478e0373@AcuMS.aculab.com>
-References: <cover.1570533716.git.lucien.xin@gmail.com>
- <8fcf707443f7218d3fb131b827c679f423c5ecaf.1570533716.git.lucien.xin@gmail.com>
-In-Reply-To: <8fcf707443f7218d3fb131b827c679f423c5ecaf.1570533716.git.lucien.xin@gmail.com>
+Subject: RE: [PATCHv3 net-next 1/5] sctp: add SCTP_ADDR_POTENTIALLY_FAILED
+ notification
+Thread-Topic: [PATCHv3 net-next 1/5] sctp: add SCTP_ADDR_POTENTIALLY_FAILED
+ notification
+Thread-Index: AQHVgla8fu139gUWN06qp6czSulnBKdgkqoQ
+Date:   Fri, 18 Oct 2019 15:56:49 +0000
+Message-ID: <fb115b1444764b3eacdf69ebd9cf9681@AcuMS.aculab.com>
+References: <cover.1571033544.git.lucien.xin@gmail.com>
+ <7d08b42f4c1480caa855776d92331fe9beed001d.1571033544.git.lucien.xin@gmail.com>
+In-Reply-To: <7d08b42f4c1480caa855776d92331fe9beed001d.1571033544.git.lucien.xin@gmail.com>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -45,7 +45,7 @@ X-MS-TNEF-Correlator:
 x-ms-exchange-transport-fromentityheader: Hosted
 x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-X-MC-Unique: cKzciky-MNq8KxeuKcqTzA-1
+X-MC-Unique: mj2RpJsmO5m7JJzP7Fxiaw-1
 X-Mimecast-Spam-Score: 0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8BIT
@@ -54,86 +54,102 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
+I've found v3 :-)
+But it isn't that much better than v2.
+
 From: Xin Long
-> Sent: 08 October 2019 12:25
-> As said in rfc7829, section 3, point 12:
+> Sent: 14 October 2019 07:15
+> SCTP Quick failover draft section 5.1, point 5 has been removed
+> from rfc7829. Instead, "the sender SHOULD (i) notify the Upper
+> Layer Protocol (ULP) about this state transition", as said in
+> section 3.2, point 8.
 > 
->   The SCTP stack SHOULD expose the PF state of its destination
->   addresses to the ULP as well as provide the means to notify the
->   ULP of state transitions of its destination addresses from
->   active to PF, and vice versa.  However, it is recommended that
->   an SCTP stack implementing SCTP-PF also allows for the ULP to be
->   kept ignorant of the PF state of its destinations and the
->   associated state transitions, thus allowing for retention of the
->   simpler state transition model of [RFC4960] in the ULP.
+> So this patch is to add SCTP_ADDR_POTENTIALLY_FAILED, defined
+> in section 7.1, "which is reported if the affected address
+> becomes PF". Also remove transport cwnd's update when moving
+> from PF back to ACTIVE , which is no longer in rfc7829 either.
 > 
-> Not only does it allow to expose the PF state to ULP, but also
-> allow to ignore sctp-pf to ULP.
+> v1->v2:
+>   - no change
+> v2->v3:
+>   - define SCTP_ADDR_PF SCTP_ADDR_POTENTIALLY_FAILED
 > 
-> So this patch is to add pf_expose per netns, sock and asoc. And in
-> sctp_assoc_control_transport(), ulp_notify will be set to false if
-> asoc->expose is not set.
+> Signed-off-by: Xin Long <lucien.xin@gmail.com>
+> ---
+>  include/uapi/linux/sctp.h |  2 ++
+>  net/sctp/associola.c      | 17 ++++-------------
+>  2 files changed, 6 insertions(+), 13 deletions(-)
 > 
-> It also allows a user to change pf_expose per netns by sysctl, and
-> pf_expose per sock and asoc will be initialized with it.
+> diff --git a/include/uapi/linux/sctp.h b/include/uapi/linux/sctp.h
+> index 6bce7f9..f4ab7bb 100644
+> --- a/include/uapi/linux/sctp.h
+> +++ b/include/uapi/linux/sctp.h
+> @@ -410,6 +410,8 @@ enum sctp_spc_state {
+>  	SCTP_ADDR_ADDED,
+>  	SCTP_ADDR_MADE_PRIM,
+>  	SCTP_ADDR_CONFIRMED,
+> +	SCTP_ADDR_POTENTIALLY_FAILED,
+> +#define SCTP_ADDR_PF	SCTP_ADDR_POTENTIALLY_FAILED
+>  };
 > 
-> Note that pf_expose also works for SCTP_GET_PEER_ADDR_INFO sockopt,
-> to not allow a user to query the state of a sctp-pf peer address
-> when pf_expose is not enabled, as said in section 7.3.
-...
-> index 08d14d8..a303011 100644
-> --- a/net/sctp/protocol.c
-> +++ b/net/sctp/protocol.c
-> @@ -1220,6 +1220,9 @@ static int __net_init sctp_defaults_init(struct net *net)
->  	/* Enable pf state by default */
->  	net->sctp.pf_enable = 1;
 > 
-> +	/* Enable pf state exposure by default */
-> +	net->sctp.pf_expose = 1;
-> +
+> diff --git a/net/sctp/associola.c b/net/sctp/associola.c
+> index 1ba893b..4f9efba 100644
+> --- a/net/sctp/associola.c
+> +++ b/net/sctp/associola.c
+> @@ -801,14 +801,6 @@ void sctp_assoc_control_transport(struct sctp_association *asoc,
+>  			spc_state = SCTP_ADDR_CONFIRMED;
+>  		else
+>  			spc_state = SCTP_ADDR_AVAILABLE;
+> -		/* Don't inform ULP about transition from PF to
+> -		 * active state and set cwnd to 1 MTU, see SCTP
+> -		 * Quick failover draft section 5.1, point 5
+> -		 */
+> -		if (transport->state == SCTP_PF) {
+> -			ulp_notify = false;
+> -			transport->cwnd = asoc->pathmtu;
+> -		}
 
-For compatibility with existing applications pf_expose MUST default to 0.
-I'm not even sure it makes sense to have a sysctl for it.
+This is wrong.
+If the old state is PF and the application hasn't exposed PF the event should be
+ignored.
 
-...
-> @@ -5521,8 +5522,15 @@ static int sctp_getsockopt_peer_addr_info(struct sock *sk, int len,
+>  		transport->state = SCTP_ACTIVE;
+>  		break;
 > 
->  	transport = sctp_addr_id2transport(sk, &pinfo.spinfo_address,
->  					   pinfo.spinfo_assoc_id);
-> -	if (!transport)
-> -		return -EINVAL;
-> +	if (!transport) {
-> +		retval = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	if (transport->state == SCTP_PF && !transport->asoc->pf_expose) {
-> +		retval = -EACCES;
-> +		goto out;
-> +	}
+> @@ -817,19 +809,18 @@ void sctp_assoc_control_transport(struct sctp_association *asoc,
+>  		 * to inactive state.  Also, release the cached route since
+>  		 * there may be a better route next time.
+>  		 */
+> -		if (transport->state != SCTP_UNCONFIRMED)
+> +		if (transport->state != SCTP_UNCONFIRMED) {
+>  			transport->state = SCTP_INACTIVE;
+> -		else {
+> +			spc_state = SCTP_ADDR_UNREACHABLE;
+> +		} else {
+>  			sctp_transport_dst_release(transport);
+>  			ulp_notify = false;
+>  		}
+> -
+> -		spc_state = SCTP_ADDR_UNREACHABLE;
+>  		break;
+> 
+>  	case SCTP_TRANSPORT_PF:
+>  		transport->state = SCTP_PF;
+> -		ulp_notify = false;
 
-Ugg...
-To avoid reporting the unexpected 'SCTP_PF' state you probable need
-to lie about the state (probably reporting 'working' - or whatever state
-it would be in if PF detection wasn't enabled.
+Again the event should be supressed if PF isn't exposed.
 
-...
-> --- a/net/sctp/sysctl.c
-> +++ b/net/sctp/sysctl.c
-> @@ -318,6 +318,13 @@ static struct ctl_table sctp_net_table[] = {
->  		.mode		= 0644,
->  		.proc_handler	= proc_dointvec,
->  	},
-> +	{
-> +		.procname	= "pf_expose",
-> +		.data		= &init_net.sctp.pf_expose,
-> +		.maxlen		= sizeof(int),
-> +		.mode		= 0644,
-> +		.proc_handler	= proc_dointvec,
-> +	},
+> +		spc_state = SCTP_ADDR_POTENTIALLY_FAILED;
+>  		break;
+> 
+>  	default:
+> --
+> 2.1.0
 
-Setting this will break existing applications.
-So I don't think the default should be settable.
+I also haven't spotted where the test that the application has actually enabled
+state transition events is in the code.
+I'd have thought it would be anything is built and allocated.
 
 	David
 
