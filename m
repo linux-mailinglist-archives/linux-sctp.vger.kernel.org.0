@@ -2,200 +2,143 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D939CE028D
-	for <lists+linux-sctp@lfdr.de>; Tue, 22 Oct 2019 13:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08193E02DD
+	for <lists+linux-sctp@lfdr.de>; Tue, 22 Oct 2019 13:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731907AbfJVLM6 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 22 Oct 2019 07:12:58 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:50646 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730450AbfJVLM5 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 22 Oct 2019 07:12:57 -0400
-Received: by mail-wm1-f68.google.com with SMTP id q13so6709160wmj.0;
-        Tue, 22 Oct 2019 04:12:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SMzoWL9AphNI7KM02mxmhPfWRC6wxhYzK4GYu+S5uwY=;
-        b=ZcWDaZ2H+n2YEiPwR/IDkZJq4uFG+ZHdMkuXXFTgio7b8/ZN0HPTP4nsqv632B0e81
-         6fFqJkkwBS7TbrLcQFzrWsNMnYZ+5mREZKdntCAx8vVGFOLOea4L8i+U+4AzjfYNhsI3
-         BnBCgyl+CoxDcsZVHNeUCKslA2L3zKWupw3hUG1b1ML2Xv2WFTeqnZOFVV1UOF/B2ez2
-         D29yscVjrU1tueAoVZy1hnok0AcWcq5B2+CZQG1uRtnR9TEUI4O5E9ehWRVIU2tcj+F1
-         qRLONRP0DJO7dbSatjiJVAK6Dp2wLES6n+4h+4mcczy8uS0NnfgmSOx2ylFTqv+l7X7f
-         zj6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SMzoWL9AphNI7KM02mxmhPfWRC6wxhYzK4GYu+S5uwY=;
-        b=LvY8DJ0dszhZIyJw5/EwjagCEPUWbmin9L5zi9yuI1ymUyXNVgj4juvFmJlHiV5nVt
-         9JjwEfz6KdvJzoHFKqhwd+Ksn01kZKzKLd1UhoCnsqrnEiIlxFD9HqLRbJjI/3afwIJG
-         mqQ4EX+wFh1HU8wsWqepuAphHrCWmo2mzfCgM110vJVHPyciUFEGeV+kjCgMLqD/PEJ2
-         BmP1Ty8uS0tfTBTZKx8gI4mxXasW1GMkTOOpGAGxxg7gXdwaFHmy9MOwdt+wlCCEMtvm
-         IXrVb/r6FFc7MyJXPj+Jo1bDHYbZjWkoxtkTHiXNlrpbZM5dMFx+Y8pUzQ1DGGCjmCEF
-         8aAQ==
-X-Gm-Message-State: APjAAAWkbk96hAprKqpMDVMvfBZmauUjxYsMLsknRPa0I2BCY0k8hxKI
-        k1/aTHK5qHXEsNtu1C0fhT0n7asJc4wzs4dRn/MAWwvG
-X-Google-Smtp-Source: APXvYqwzGWXk/AxeGIj8soVELpjgfwGzG4c+Mk7jQCAtzETPH7TAg88biB39pVxx+ESgoYdKZ00DqHNzgU4xtRP3yHc=
-X-Received: by 2002:a7b:c3cf:: with SMTP id t15mr2415366wmj.85.1571742774835;
- Tue, 22 Oct 2019 04:12:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1571033544.git.lucien.xin@gmail.com> <7d08b42f4c1480caa855776d92331fe9beed001d.1571033544.git.lucien.xin@gmail.com>
- <fb115b1444764b3eacdf69ebd9cf9681@AcuMS.aculab.com> <CADvbK_eQrXs4VC+OgsLibA-q2VkkdKXTK+meaRGbxJDK41aLKg@mail.gmail.com>
-In-Reply-To: <CADvbK_eQrXs4VC+OgsLibA-q2VkkdKXTK+meaRGbxJDK41aLKg@mail.gmail.com>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Tue, 22 Oct 2019 19:13:30 +0800
-Message-ID: <CADvbK_cYTNupYG4rLPcTz8J7HK5DajcW=UfqNT64-vJi+9yx4w@mail.gmail.com>
-Subject: Re: [PATCHv3 net-next 1/5] sctp: add SCTP_ADDR_POTENTIALLY_FAILED notification
-To:     David Laight <David.Laight@aculab.com>
-Cc:     network dev <netdev@vger.kernel.org>,
+        id S2388641AbfJVL3O (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 22 Oct 2019 07:29:14 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:36203 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387405AbfJVL3O (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Tue, 22 Oct 2019 07:29:14 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-117-_f82vo55O8-CWEJZlmMdXw-1; Tue, 22 Oct 2019 12:29:10 +0100
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Tue, 22 Oct 2019 12:29:10 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Tue, 22 Oct 2019 12:29:10 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Xin Long' <lucien.xin@gmail.com>
+CC:     network dev <netdev@vger.kernel.org>,
         "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
         "davem@davemloft.net" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
+Subject: RE: [PATCHv2 net-next 2/5] sctp: add pf_expose per netns and sock and
+ asoc
+Thread-Topic: [PATCHv2 net-next 2/5] sctp: add pf_expose per netns and sock
+ and asoc
+Thread-Index: AQHVfcscH+sPaksZF0uqjgObulWL8KdglgNwgAEQtgCABPO6YA==
+Date:   Tue, 22 Oct 2019 11:29:09 +0000
+Message-ID: <dbdb13bb2b584590b793e9a7e9b6de64@AcuMS.aculab.com>
+References: <cover.1570533716.git.lucien.xin@gmail.com>
+ <8fcf707443f7218d3fb131b827c679f423c5ecaf.1570533716.git.lucien.xin@gmail.com>
+ <0779b5aeb9a84b4692b08be7478e0373@AcuMS.aculab.com>
+ <CADvbK_dd9fSbntPqx13wUu7he3ke4UK1bVNPhfhhMzT=zkGPjg@mail.gmail.com>
+In-Reply-To: <CADvbK_dd9fSbntPqx13wUu7he3ke4UK1bVNPhfhhMzT=zkGPjg@mail.gmail.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+X-MC-Unique: _f82vo55O8-CWEJZlmMdXw-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hi, David L.
+DQpGcm9tOiBYaW4gTG9uZyA8bHVjaWVuLnhpbkBnbWFpbC5jb20+DQo+IFNlbnQ6IDE5IE9jdG9i
+ZXIgMjAxOSAwOTo0NQ0KPiBPbiBGcmksIE9jdCAxOCwgMjAxOSBhdCAxMTozNCBQTSBEYXZpZCBM
+YWlnaHQgPERhdmlkLkxhaWdodEBhY3VsYWIuY29tPiB3cm90ZToNCj4gPg0KPiA+IEZyb206IFhp
+biBMb25nDQo+ID4gPiBTZW50OiAwOCBPY3RvYmVyIDIwMTkgMTI6MjUNCj4gPiA+IEFzIHNhaWQg
+aW4gcmZjNzgyOSwgc2VjdGlvbiAzLCBwb2ludCAxMjoNCj4gPiA+DQo+ID4gPiAgIFRoZSBTQ1RQ
+IHN0YWNrIFNIT1VMRCBleHBvc2UgdGhlIFBGIHN0YXRlIG9mIGl0cyBkZXN0aW5hdGlvbg0KPiA+
+ID4gICBhZGRyZXNzZXMgdG8gdGhlIFVMUCBhcyB3ZWxsIGFzIHByb3ZpZGUgdGhlIG1lYW5zIHRv
+IG5vdGlmeSB0aGUNCj4gPiA+ICAgVUxQIG9mIHN0YXRlIHRyYW5zaXRpb25zIG9mIGl0cyBkZXN0
+aW5hdGlvbiBhZGRyZXNzZXMgZnJvbQ0KPiA+ID4gICBhY3RpdmUgdG8gUEYsIGFuZCB2aWNlIHZl
+cnNhLiAgSG93ZXZlciwgaXQgaXMgcmVjb21tZW5kZWQgdGhhdA0KPiA+ID4gICBhbiBTQ1RQIHN0
+YWNrIGltcGxlbWVudGluZyBTQ1RQLVBGIGFsc28gYWxsb3dzIGZvciB0aGUgVUxQIHRvIGJlDQo+
+ID4gPiAgIGtlcHQgaWdub3JhbnQgb2YgdGhlIFBGIHN0YXRlIG9mIGl0cyBkZXN0aW5hdGlvbnMg
+YW5kIHRoZQ0KPiA+ID4gICBhc3NvY2lhdGVkIHN0YXRlIHRyYW5zaXRpb25zLCB0aHVzIGFsbG93
+aW5nIGZvciByZXRlbnRpb24gb2YgdGhlDQo+ID4gPiAgIHNpbXBsZXIgc3RhdGUgdHJhbnNpdGlv
+biBtb2RlbCBvZiBbUkZDNDk2MF0gaW4gdGhlIFVMUC4NCj4gPiA+DQo+ID4gPiBOb3Qgb25seSBk
+b2VzIGl0IGFsbG93IHRvIGV4cG9zZSB0aGUgUEYgc3RhdGUgdG8gVUxQLCBidXQgYWxzbw0KPiA+
+ID4gYWxsb3cgdG8gaWdub3JlIHNjdHAtcGYgdG8gVUxQLg0KPiA+ID4NCj4gPiA+IFNvIHRoaXMg
+cGF0Y2ggaXMgdG8gYWRkIHBmX2V4cG9zZSBwZXIgbmV0bnMsIHNvY2sgYW5kIGFzb2MuIEFuZCBp
+bg0KPiA+ID4gc2N0cF9hc3NvY19jb250cm9sX3RyYW5zcG9ydCgpLCB1bHBfbm90aWZ5IHdpbGwg
+YmUgc2V0IHRvIGZhbHNlIGlmDQo+ID4gPiBhc29jLT5leHBvc2UgaXMgbm90IHNldC4NCj4gPiA+
+DQo+ID4gPiBJdCBhbHNvIGFsbG93cyBhIHVzZXIgdG8gY2hhbmdlIHBmX2V4cG9zZSBwZXIgbmV0
+bnMgYnkgc3lzY3RsLCBhbmQNCj4gPiA+IHBmX2V4cG9zZSBwZXIgc29jayBhbmQgYXNvYyB3aWxs
+IGJlIGluaXRpYWxpemVkIHdpdGggaXQuDQo+ID4gPg0KPiA+ID4gTm90ZSB0aGF0IHBmX2V4cG9z
+ZSBhbHNvIHdvcmtzIGZvciBTQ1RQX0dFVF9QRUVSX0FERFJfSU5GTyBzb2Nrb3B0LA0KPiA+ID4g
+dG8gbm90IGFsbG93IGEgdXNlciB0byBxdWVyeSB0aGUgc3RhdGUgb2YgYSBzY3RwLXBmIHBlZXIg
+YWRkcmVzcw0KPiA+ID4gd2hlbiBwZl9leHBvc2UgaXMgbm90IGVuYWJsZWQsIGFzIHNhaWQgaW4g
+c2VjdGlvbiA3LjMuDQo+ID4gLi4uDQo+ID4gPiBpbmRleCAwOGQxNGQ4Li5hMzAzMDExIDEwMDY0
+NA0KPiA+ID4gLS0tIGEvbmV0L3NjdHAvcHJvdG9jb2wuYw0KPiA+ID4gKysrIGIvbmV0L3NjdHAv
+cHJvdG9jb2wuYw0KPiA+ID4gQEAgLTEyMjAsNiArMTIyMCw5IEBAIHN0YXRpYyBpbnQgX19uZXRf
+aW5pdCBzY3RwX2RlZmF1bHRzX2luaXQoc3RydWN0IG5ldCAqbmV0KQ0KPiA+ID4gICAgICAgLyog
+RW5hYmxlIHBmIHN0YXRlIGJ5IGRlZmF1bHQgKi8NCj4gPiA+ICAgICAgIG5ldC0+c2N0cC5wZl9l
+bmFibGUgPSAxOw0KPiA+ID4NCj4gPiA+ICsgICAgIC8qIEVuYWJsZSBwZiBzdGF0ZSBleHBvc3Vy
+ZSBieSBkZWZhdWx0ICovDQo+ID4gPiArICAgICBuZXQtPnNjdHAucGZfZXhwb3NlID0gMTsNCj4g
+PiA+ICsNCj4gPg0KPiA+IEZvciBjb21wYXRpYmlsaXR5IHdpdGggZXhpc3RpbmcgYXBwbGljYXRp
+b25zIHBmX2V4cG9zZSBNVVNUIGRlZmF1bHQgdG8gMC4NCj4gPiBJJ20gbm90IGV2ZW4gc3VyZSBp
+dCBtYWtlcyBzZW5zZSB0byBoYXZlIGEgc3lzY3RsIGZvciBpdC4NCj4gWW91J3JlIHJlaXZld2lu
+ZyB2MiwgcGxzIGdvIGFuZCBjaGVjayB2MyB3aGVyZSBpdCdzOg0KPiANCj4gbmV0LT5zY3RwLnBm
+X2V4cG9zZSA9IFNDVFBfUEZfRVhQT1NFX1VOVVNFRA0KDQpJJ2xsIGRpZyBvdXQgdGhhdCB0cmkt
+c3RhdGUgbG9naWMgYWdhaW4gbGF0ZXIuDQoNCj4gPiAuLi4NCj4gPiA+IEBAIC01NTIxLDggKzU1
+MjIsMTUgQEAgc3RhdGljIGludCBzY3RwX2dldHNvY2tvcHRfcGVlcl9hZGRyX2luZm8oc3RydWN0
+IHNvY2sgKnNrLCBpbnQgbGVuLA0KPiA+ID4NCj4gPiA+ICAgICAgIHRyYW5zcG9ydCA9IHNjdHBf
+YWRkcl9pZDJ0cmFuc3BvcnQoc2ssICZwaW5mby5zcGluZm9fYWRkcmVzcywNCj4gPiA+ICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcGluZm8uc3BpbmZvX2Fzc29jX2lk
+KTsNCj4gPiA+IC0gICAgIGlmICghdHJhbnNwb3J0KQ0KPiA+ID4gLSAgICAgICAgICAgICByZXR1
+cm4gLUVJTlZBTDsNCj4gPiA+ICsgICAgIGlmICghdHJhbnNwb3J0KSB7DQo+ID4gPiArICAgICAg
+ICAgICAgIHJldHZhbCA9IC1FSU5WQUw7DQo+ID4gPiArICAgICAgICAgICAgIGdvdG8gb3V0Ow0K
+PiA+ID4gKyAgICAgfQ0KPiA+ID4gKw0KPiA+ID4gKyAgICAgaWYgKHRyYW5zcG9ydC0+c3RhdGUg
+PT0gU0NUUF9QRiAmJiAhdHJhbnNwb3J0LT5hc29jLT5wZl9leHBvc2UpIHsNCj4gPiA+ICsgICAg
+ICAgICAgICAgcmV0dmFsID0gLUVBQ0NFUzsNCj4gPiA+ICsgICAgICAgICAgICAgZ290byBvdXQ7
+DQo+ID4gPiArICAgICB9DQo+ID4NCj4gPiBVZ2cuLi4NCj4gPiBUbyBhdm9pZCByZXBvcnRpbmcg
+dGhlIHVuZXhwZWN0ZWQgJ1NDVFBfUEYnIHN0YXRlIHlvdSBwcm9iYWJsZSBuZWVkDQo+ID4gdG8g
+bGllIGFib3V0IHRoZSBzdGF0ZSAocHJvYmFibHkgcmVwb3J0aW5nICd3b3JraW5nJyAtIG9yIHdo
+YXRldmVyIHN0YXRlDQo+ID4gaXQgd291bGQgYmUgaW4gaWYgUEYgZGV0ZWN0aW9uIHdhc24ndCBl
+bmFibGVkLg0KPiByZXR1cm4gRUFDQ0VTIGlzIGZyb20gUkZDLiBzZWUgdjMgd2hlcmUgaXQncyBi
+ZWNvbWU6DQo+IA0KPiArICAgICAgIGlmICh0cmFuc3BvcnQtPnN0YXRlID09IFNDVFBfUEYgJiYN
+Cj4gKyAgICAgICAgICAgdHJhbnNwb3J0LT5hc29jLT5wZl9leHBvc2UgPT0gU0NUUF9QRl9FWFBP
+U0VfRElTQUJMRSkgew0KPiArICAgICAgICAgICAgICAgcmV0dmFsID0gLUVBQ0NFUzsNCj4gKyAg
+ICAgICAgICAgICAgIGdvdG8gb3V0Ow0KPiArICAgICAgIH0NCj4gDQo+IG5vIG1vcmUgY29tcGF0
+aWJpbGl0eSBpc3N1ZS4NCg0KSG1tbS4uLi4NCk5ldmVyIG1pbmQgd2hhdCB0aGUgUkZDIHNheXMg
+YWJvdXQgcmV0dXJuaW5nIEVBQ0NFU1MsIHRoYXQNCmlzIHN0aWxsIGFuIEFQSSBjaGFuZ2UuDQoN
+Cj4gPiA+IC0tLSBhL25ldC9zY3RwL3N5c2N0bC5jDQo+ID4gPiArKysgYi9uZXQvc2N0cC9zeXNj
+dGwuYw0KPiA+ID4gQEAgLTMxOCw2ICszMTgsMTMgQEAgc3RhdGljIHN0cnVjdCBjdGxfdGFibGUg
+c2N0cF9uZXRfdGFibGVbXSA9IHsNCj4gPiA+ICAgICAgICAgICAgICAgLm1vZGUgICAgICAgICAg
+ID0gMDY0NCwNCj4gPiA+ICAgICAgICAgICAgICAgLnByb2NfaGFuZGxlciAgID0gcHJvY19kb2lu
+dHZlYywNCj4gPiA+ICAgICAgIH0sDQo+ID4gPiArICAgICB7DQo+ID4gPiArICAgICAgICAgICAg
+IC5wcm9jbmFtZSAgICAgICA9ICJwZl9leHBvc2UiLA0KPiA+ID4gKyAgICAgICAgICAgICAuZGF0
+YSAgICAgICAgICAgPSAmaW5pdF9uZXQuc2N0cC5wZl9leHBvc2UsDQo+ID4gPiArICAgICAgICAg
+ICAgIC5tYXhsZW4gICAgICAgICA9IHNpemVvZihpbnQpLA0KPiA+ID4gKyAgICAgICAgICAgICAu
+bW9kZSAgICAgICAgICAgPSAwNjQ0LA0KPiA+ID4gKyAgICAgICAgICAgICAucHJvY19oYW5kbGVy
+ICAgPSBwcm9jX2RvaW50dmVjLA0KPiA+ID4gKyAgICAgfSwNCj4gPg0KPiA+IFNldHRpbmcgdGhp
+cyB3aWxsIGJyZWFrIGV4aXN0aW5nIGFwcGxpY2F0aW9ucy4NCj4gPiBTbyBJIGRvbid0IHRoaW5r
+IHRoZSBkZWZhdWx0IHNob3VsZCBiZSBzZXR0YWJsZS4NCj4gSWYgdGhlIHVzZXIgc2V0cyB0aGlz
+IG5ldyBzeXNjdGwsIGhlIG11c3QgaGF2ZSByZWFsaXplZCB3aGF0J3MgZ29pbmcgdG8gaGFwcGVu
+Lg0KPiBJIGRvbid0IHRoaW5rIHRoaXMgd2lsbCBjYXVzZSAiY29tcGF0aWJpbGl0eSBpc3N1ZSIu
+DQoNClRoZSBwcm9ibGVtIGlzIHRoYXQgc3VwcG9ydCBpcyBhcHBsaWNhdGlvbiBkZXBlbmRhbnQs
+IG5vdCBzeXN0ZW0gZGVwZW5kYW50Lg0KQWxsIGl0IHRha2VzIGlzIGEgZGlzdHJvIHRvIGRlY2lk
+ZSB0byBkZWZhdWx0IHRvIGVuYWJsaW5nIGl0IGFuZCBhbGwgb2xkIGFwcHMgYnJlYWsuDQoNCkdp
+dmVuIHRoZSBhcHBsaWNhdGlvbiBoYXMgdG8gZW5hYmxlIG90aGVyIHRoaW5ncyB0aGVyZSBpcyBu
+byByZWFzb24gbm90IHRvDQpyZXF1aXJlIHRoaXMgdG8gYmUgZW5hYmxlZCBieSBldmVyeSBhcHBs
+aWNhdGlvbiB0aGF0IHdhbnRzIHRvIHNlZSB0aGUgZXZlbnRzIChldGMpLg0KDQpOb3RlIHRoYXQg
+dGhpcyBpcyBkaWZmZXJlbnQgZnJvbSBkb2luZyB0aGUgcHJvdG9jb2wgcGFydCBvZiBQRiAtIHdo
+aWNoIGlzIGxpa2VseQ0KdG8gaGVscCBhcHBsaWNhdGlvbnMgd2hlbiB0aGUgJ3ByaW1hcnknIHBh
+dGggaXMgZG9kZ3kuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUs
+IEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJl
+Z2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
-I will repost if you don't have any other dissent.
-
-Thanks for your nice review.
-
-On Sat, Oct 19, 2019 at 4:55 PM Xin Long <lucien.xin@gmail.com> wrote:
->
-> On Fri, Oct 18, 2019 at 11:56 PM David Laight <David.Laight@aculab.com> wrote:
-> >
-> > I've found v3 :-)
-> ah okay. sorry.
->
-> > But it isn't that much better than v2.
-> >
-> > From: Xin Long
-> > > Sent: 14 October 2019 07:15
-> > > SCTP Quick failover draft section 5.1, point 5 has been removed
-> > > from rfc7829. Instead, "the sender SHOULD (i) notify the Upper
-> > > Layer Protocol (ULP) about this state transition", as said in
-> > > section 3.2, point 8.
-> > >
-> > > So this patch is to add SCTP_ADDR_POTENTIALLY_FAILED, defined
-> > > in section 7.1, "which is reported if the affected address
-> > > becomes PF". Also remove transport cwnd's update when moving
-> > > from PF back to ACTIVE , which is no longer in rfc7829 either.
-> > >
-> > > v1->v2:
-> > >   - no change
-> > > v2->v3:
-> > >   - define SCTP_ADDR_PF SCTP_ADDR_POTENTIALLY_FAILED
-> > >
-> > > Signed-off-by: Xin Long <lucien.xin@gmail.com>
-> > > ---
-> > >  include/uapi/linux/sctp.h |  2 ++
-> > >  net/sctp/associola.c      | 17 ++++-------------
-> > >  2 files changed, 6 insertions(+), 13 deletions(-)
-> > >
-> > > diff --git a/include/uapi/linux/sctp.h b/include/uapi/linux/sctp.h
-> > > index 6bce7f9..f4ab7bb 100644
-> > > --- a/include/uapi/linux/sctp.h
-> > > +++ b/include/uapi/linux/sctp.h
-> > > @@ -410,6 +410,8 @@ enum sctp_spc_state {
-> > >       SCTP_ADDR_ADDED,
-> > >       SCTP_ADDR_MADE_PRIM,
-> > >       SCTP_ADDR_CONFIRMED,
-> > > +     SCTP_ADDR_POTENTIALLY_FAILED,
-> > > +#define SCTP_ADDR_PF SCTP_ADDR_POTENTIALLY_FAILED
-> > >  };
-> > >
-> > >
-> > > diff --git a/net/sctp/associola.c b/net/sctp/associola.c
-> > > index 1ba893b..4f9efba 100644
-> > > --- a/net/sctp/associola.c
-> > > +++ b/net/sctp/associola.c
-> > > @@ -801,14 +801,6 @@ void sctp_assoc_control_transport(struct sctp_association *asoc,
-> > >                       spc_state = SCTP_ADDR_CONFIRMED;
-> > >               else
-> > >                       spc_state = SCTP_ADDR_AVAILABLE;
-> > > -             /* Don't inform ULP about transition from PF to
-> > > -              * active state and set cwnd to 1 MTU, see SCTP
-> > > -              * Quick failover draft section 5.1, point 5
-> > > -              */
-> > > -             if (transport->state == SCTP_PF) {
-> > > -                     ulp_notify = false;
-> > > -                     transport->cwnd = asoc->pathmtu;
-> > > -             }
-> >
-> > This is wrong.
-> > If the old state is PF and the application hasn't exposed PF the event should be
-> > ignored.
-> yeps, in Patch 2/5:
-> +               if (transport->state == SCTP_PF &&
-> +                   asoc->pf_expose != SCTP_PF_EXPOSE_ENABLE)
-> +                       ulp_notify = false;
-> +               else if (transport->state == SCTP_UNCONFIRMED &&
-> +                        error == SCTP_HEARTBEAT_SUCCESS)
->                         spc_state = SCTP_ADDR_CONFIRMED;
->                 else
->                         spc_state = SCTP_ADDR_AVAILABLE;
->
-> >
-> > >               transport->state = SCTP_ACTIVE;
-> > >               break;
-> > >
-> > > @@ -817,19 +809,18 @@ void sctp_assoc_control_transport(struct sctp_association *asoc,
-> > >                * to inactive state.  Also, release the cached route since
-> > >                * there may be a better route next time.
-> > >                */
-> > > -             if (transport->state != SCTP_UNCONFIRMED)
-> > > +             if (transport->state != SCTP_UNCONFIRMED) {
-> > >                       transport->state = SCTP_INACTIVE;
-> > > -             else {
-> > > +                     spc_state = SCTP_ADDR_UNREACHABLE;
-> > > +             } else {
-> > >                       sctp_transport_dst_release(transport);
-> > >                       ulp_notify = false;
-> > >               }
-> > > -
-> > > -             spc_state = SCTP_ADDR_UNREACHABLE;
-> > >               break;
-> > >
-> > >       case SCTP_TRANSPORT_PF:
-> > >               transport->state = SCTP_PF;
-> > > -             ulp_notify = false;
-> >
-> > Again the event should be supressed if PF isn't exposed.
-> it will be suppressed after Patch 2/5:
-> +               if (asoc->pf_expose != SCTP_PF_EXPOSE_ENABLE)
-> +                       ulp_notify = false;
-> +               else
-> +                       spc_state = SCTP_ADDR_POTENTIALLY_FAILED;
->                 break;
->
-> >
-> > > +             spc_state = SCTP_ADDR_POTENTIALLY_FAILED;
-> > >               break;
-> > >
-> > >       default:
-> > > --
-> > > 2.1.0
-> >
-> > I also haven't spotted where the test that the application has actually enabled
-> > state transition events is in the code.
-> all events will be created, but dropped in sctp_ulpq_tail_event() when trying
-> to deliver up:
->
->         /* Check if the user wishes to receive this event.  */
->         if (!sctp_ulpevent_is_enabled(event, ulpq->asoc->subscribe))
->                 goto out_free;
->
-> > I'd have thought it would be anything is built and allocated.
-> >
-> >         David
-> >
-> > -
-> > Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> > Registration No: 1397386 (Wales)
-> >
