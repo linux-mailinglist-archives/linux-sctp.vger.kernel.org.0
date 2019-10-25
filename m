@@ -2,171 +2,111 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E802EE4E31
-	for <lists+linux-sctp@lfdr.de>; Fri, 25 Oct 2019 16:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F0AE4F02
+	for <lists+linux-sctp@lfdr.de>; Fri, 25 Oct 2019 16:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505168AbfJYNz4 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 25 Oct 2019 09:55:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50058 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2505182AbfJYNz4 (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Fri, 25 Oct 2019 09:55:56 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C03AB222C9;
-        Fri, 25 Oct 2019 13:55:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572011754;
-        bh=rlocA8g38g9I8z4t3d/Svrv3R3ZY2CKk7/WiK2gEcvw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PCqDzIM9KKygW74BtKRotsK9mtY07fORKLLuSlE8r5cvktIycnd7OKvjBCT38Bh6A
-         AyE0/UeTZh4V3KpxHRJKCxkO/uui5aSeJCt7DG+PPTKdSE5/OS1duPjnGT3okSbm38
-         MWqaTWHKz3l/9BEFSSAM48OdeKtI/AahMo95DuFM=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Xin Long <lucien.xin@gmail.com>, Ying Xu <yinxu@redhat.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        id S2409348AbfJYO1C convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Fri, 25 Oct 2019 10:27:02 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:32049 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2405819AbfJYO1B (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Fri, 25 Oct 2019 10:27:01 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-104-MDmioYQANFSwXDQfj7A2ng-1; Fri, 25 Oct 2019 15:26:58 +0100
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Fri, 25 Oct 2019 15:26:58 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Fri, 25 Oct 2019 15:26:58 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Marcelo Ricardo Leitner' <marcelo.leitner@gmail.com>
+CC:     Xin Long <lucien.xin@gmail.com>,
+        network dev <netdev@vger.kernel.org>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
         Neil Horman <nhorman@tuxdriver.com>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Sasha Levin <sashal@kernel.org>, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 31/33] sctp: add chunks to sk_backlog when the newsk sk_socket is not set
-Date:   Fri, 25 Oct 2019 09:55:03 -0400
-Message-Id: <20191025135505.24762-31-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191025135505.24762-1-sashal@kernel.org>
-References: <20191025135505.24762-1-sashal@kernel.org>
+        "davem@davemloft.net" <davem@davemloft.net>
+Subject: RE: [PATCHv3 net-next 2/5] sctp: add pf_expose per netns and sock and
+ asoc
+Thread-Topic: [PATCHv3 net-next 2/5] sctp: add pf_expose per netns and sock
+ and asoc
+Thread-Index: AQHViuObUMLYfsY4SkimZzbsfLzKtKdrDrFAgAA5FoCAAB+qcA==
+Date:   Fri, 25 Oct 2019 14:26:57 +0000
+Message-ID: <715b91a4a86547eb874874eda125c2ba@AcuMS.aculab.com>
+References: <cover.1571033544.git.lucien.xin@gmail.com>
+ <f4c99c3d918c0d82f5d5c60abd6abcf381292f1f.1571033544.git.lucien.xin@gmail.com>
+ <20191025032337.GC4326@localhost.localdomain>
+ <995e44322af74c41bbff2c77338f83bf@AcuMS.aculab.com>
+ <20191025132151.GF4326@localhost.localdomain>
+In-Reply-To: <20191025132151.GF4326@localhost.localdomain>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+X-MC-Unique: MDmioYQANFSwXDQfj7A2ng-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Xin Long <lucien.xin@gmail.com>
+From: 'Marcelo Ricardo Leitner'
+> Sent: 25 October 2019 14:22
+> On Fri, Oct 25, 2019 at 09:00:45AM +0000, David Laight wrote:
+> > From: Marcelo Ricardo Leitner
+> > > Sent: 25 October 2019 04:24
+> > ...
+> > > > @@ -5521,8 +5522,16 @@ static int sctp_getsockopt_peer_addr_info(struct sock *sk, int len,
+> > > >
+> > > >  	transport = sctp_addr_id2transport(sk, &pinfo.spinfo_address,
+> > > >  					   pinfo.spinfo_assoc_id);
+> > > > -	if (!transport)
+> > > > -		return -EINVAL;
+> > > > +	if (!transport) {
+> > > > +		retval = -EINVAL;
+> > > > +		goto out;
+> > > > +	}
+> > > > +
+> > > > +	if (transport->state == SCTP_PF &&
+> > > > +	    transport->asoc->pf_expose == SCTP_PF_EXPOSE_DISABLE) {
+> > > > +		retval = -EACCES;
+> > > > +		goto out;
+> > > > +	}
+> > >
+> > > As is on v3, this is NOT an UAPI violation. The user has to explicitly
+> > > set the system or the socket into the disabled state in order to
+> > > trigger this new check.
+> >
+> > Only because the default isn't to be backwards compatible with the
+>                            ^^^^^
+> 
+> You meant "is", right? Then we're agreeing.
 
-[ Upstream commit 819be8108fded0b9e710bbbf81193e52f7bab2f7 ]
+No, I meant isn't.
+The application must see a backwards compatible interface unless
+the application itself requests something different.
+The sysadmin can't be allowed to change the API seen by old applications.
 
-This patch is to fix a NULL-ptr deref in selinux_socket_connect_helper:
+AFAICT if the protocol part of PF is enabled (which handles primary path
+failure better than the older version) and ' transport->state == SCTP_PF'
+is true then an old application binary will  get a completely unexpected -EACCESS
+rather than a valid state (out of the old valid states) if it requests 'peer addr_info'.
 
-  [...] kasan: GPF could be caused by NULL-ptr deref or user memory access
-  [...] RIP: 0010:selinux_socket_connect_helper+0x94/0x460
-  [...] Call Trace:
-  [...]  selinux_sctp_bind_connect+0x16a/0x1d0
-  [...]  security_sctp_bind_connect+0x58/0x90
-  [...]  sctp_process_asconf+0xa52/0xfd0 [sctp]
-  [...]  sctp_sf_do_asconf+0x785/0x980 [sctp]
-  [...]  sctp_do_sm+0x175/0x5a0 [sctp]
-  [...]  sctp_assoc_bh_rcv+0x285/0x5b0 [sctp]
-  [...]  sctp_backlog_rcv+0x482/0x910 [sctp]
-  [...]  __release_sock+0x11e/0x310
-  [...]  release_sock+0x4f/0x180
-  [...]  sctp_accept+0x3f9/0x5a0 [sctp]
-  [...]  inet_accept+0xe7/0x720
+You cannot assume that just because some sysctl is set (because someone
+building a distribution suddenly decided it was a 'good idea') that an
+application binary will not fall in a big heap due to an error condition
+that couldn't ever happen before.
 
-It was caused by that the 'newsk' sk_socket was not set before going to
-security sctp hook when processing asconf chunk with SCTP_PARAM_ADD_IP
-or SCTP_PARAM_SET_PRIMARY:
+	David
 
-  inet_accept()->
-    sctp_accept():
-      lock_sock():
-          lock listening 'sk'
-                                          do_softirq():
-                                            sctp_rcv():  <-- [1]
-                                                asconf chunk arrives and
-                                                enqueued in 'sk' backlog
-      sctp_sock_migrate():
-          set asoc's sk to 'newsk'
-      release_sock():
-          sctp_backlog_rcv():
-            lock 'newsk'
-            sctp_process_asconf()  <-- [2]
-            unlock 'newsk'
-    sock_graft():
-        set sk_socket  <-- [3]
-
-As it shows, at [1] the asconf chunk would be put into the listening 'sk'
-backlog, as accept() was holding its sock lock. Then at [2] asconf would
-get processed with 'newsk' as asoc's sk had been set to 'newsk'. However,
-'newsk' sk_socket is not set until [3], while selinux_sctp_bind_connect()
-would deref it, then kernel crashed.
-
-Here to fix it by adding the chunk to sk_backlog until newsk sk_socket is
-set when .accept() is done.
-
-Note that sk->sk_socket can be NULL when the sock is closed, so SOCK_DEAD
-flag is also needed to check in sctp_newsk_ready().
-
-Thanks to Ondrej for reviewing the code.
-
-Fixes: d452930fd3b9 ("selinux: Add SCTP support")
-Reported-by: Ying Xu <yinxu@redhat.com>
-Suggested-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Acked-by: Neil Horman <nhorman@tuxdriver.com>
-Signed-off-by: Jakub Kicinski <jakub.kicinski@netronome.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- include/net/sctp/sctp.h |  5 +++++
- net/sctp/input.c        | 12 +++++++++---
- 2 files changed, 14 insertions(+), 3 deletions(-)
-
-diff --git a/include/net/sctp/sctp.h b/include/net/sctp/sctp.h
-index 5d60f13d2347b..3ab5c6bbb90bd 100644
---- a/include/net/sctp/sctp.h
-+++ b/include/net/sctp/sctp.h
-@@ -610,4 +610,9 @@ static inline __u32 sctp_min_frag_point(struct sctp_sock *sp, __u16 datasize)
- 	return sctp_mtu_payload(sp, SCTP_DEFAULT_MINSEGMENT, datasize);
- }
- 
-+static inline bool sctp_newsk_ready(const struct sock *sk)
-+{
-+	return sock_flag(sk, SOCK_DEAD) || sk->sk_socket;
-+}
-+
- #endif /* __net_sctp_h__ */
-diff --git a/net/sctp/input.c b/net/sctp/input.c
-index 1008cdc44dd61..156e24ad54ea4 100644
---- a/net/sctp/input.c
-+++ b/net/sctp/input.c
-@@ -243,7 +243,7 @@ int sctp_rcv(struct sk_buff *skb)
- 		bh_lock_sock(sk);
- 	}
- 
--	if (sock_owned_by_user(sk)) {
-+	if (sock_owned_by_user(sk) || !sctp_newsk_ready(sk)) {
- 		if (sctp_add_backlog(sk, skb)) {
- 			bh_unlock_sock(sk);
- 			sctp_chunk_free(chunk);
-@@ -321,7 +321,7 @@ int sctp_backlog_rcv(struct sock *sk, struct sk_buff *skb)
- 		local_bh_disable();
- 		bh_lock_sock(sk);
- 
--		if (sock_owned_by_user(sk)) {
-+		if (sock_owned_by_user(sk) || !sctp_newsk_ready(sk)) {
- 			if (sk_add_backlog(sk, skb, sk->sk_rcvbuf))
- 				sctp_chunk_free(chunk);
- 			else
-@@ -336,7 +336,13 @@ int sctp_backlog_rcv(struct sock *sk, struct sk_buff *skb)
- 		if (backloged)
- 			return 0;
- 	} else {
--		sctp_inq_push(inqueue, chunk);
-+		if (!sctp_newsk_ready(sk)) {
-+			if (!sk_add_backlog(sk, skb, sk->sk_rcvbuf))
-+				return 0;
-+			sctp_chunk_free(chunk);
-+		} else {
-+			sctp_inq_push(inqueue, chunk);
-+		}
- 	}
- 
- done:
--- 
-2.20.1
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
