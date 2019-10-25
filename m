@@ -2,57 +2,110 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C73E4A34
-	for <lists+linux-sctp@lfdr.de>; Fri, 25 Oct 2019 13:45:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85757E4BF0
+	for <lists+linux-sctp@lfdr.de>; Fri, 25 Oct 2019 15:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502001AbfJYLp3 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 25 Oct 2019 07:45:29 -0400
-Received: from sonic307-1.consmr.mail.bf2.yahoo.com ([74.6.134.40]:42113 "EHLO
-        sonic307-1.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2501996AbfJYLp2 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>);
-        Fri, 25 Oct 2019 07:45:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1572003927; bh=IF5V/U/WurT+AiOPTJHR/xJXZxB3Za5bphIXo/fXWgU=; h=Date:From:Reply-To:Subject:From:Subject; b=FUS++uzcqwPISOj+2usBN0tdFXALcjNWwE9P3A3Py5p5rIh5pYSUyNE9H8UdVu5gFsfpGbQx3O/FZ7ibS+Kcwgegnye3ULlZPEB+mS4dGC2vfoRxSrcCZRX6w3X9qOgWJ5T4a9U1mosNJpzIypHSoFfX/GTVBOypl0A1KW3Blj79SVpMXOEP5Fl7hi3NktfZCs2rcKe6tg3miF1h/i8mveWJHaSlDVZ/+eMX/Y/3lCxUh2L31TuFAN9+oz3cf8K7i5jB4XFUpihweo9iMd13JaTl1DE1hE8oSHDkMe80FnLtx+9seg2zSzh99bt3aQmMrBeRNAJvfKWjYFNsXrAmyg==
-X-YMail-OSG: _V0yO.IVM1mUdlkmODf2LKaq67n5DTIRZWh42yxVKfeL35M5P4qR95RMM8zV2bH
- NUU3qJaE.tyeH03UScXal631DuezZCVaWMCQErVDe1EpLLDeiJruq_0f._qugRz3pb6QC9_Q0n9u
- bVAcumI2s3u3KLxQ3mOOMA0zEBYKToOCp8CSwUX693DXgaJY70S9PlE0M.3bqthL23VY7_p8.RBl
- I0G3Dd.HsDAjomKUXUY23atJ2v5mX1ztFl1wlrrIvWWXuxexuATLafewTNeEh_mzGY_aNQ2zRY4v
- S2sEAez_XEKShXCJRpeWGATFVpHW_TeYePi1k4kg5_3eHWB8FXwGgCjxK53c7v42vIiZypGb3LL9
- SVuh8KhGuL13WR5qUByXJ.rxCdcBTVRLcmfs8jndh4owmvWjAhdt1DtJtIj2pQ9hN8DPmx6D1.Hk
- WgdR_R4rjrhw.l_7oV4g_ereBmOx9AUF1o7gvRImGtdA_fIYPKb_RH3baw4pRrysNx2LMc3JejtK
- TIFXVEwqCBMhz7Sbw6TtBlek0McJucUWh06NWkNn1g48iomBezF7daicdQiVYuH.38kWhLbLGrbD
- 7Xb5qI7rvY3VvliGxMBv1kgerRqXFIeIKh7x0wEjp5HjFfW11flIGAhj.Ohgz0uxiwl.glstXB53
- oVhQgtDi9pUIiPPNhOKFr94ycl8LymCEYw8.M6PaVBaNtcxRER.0PMreZNFxI.MxDZ0fHa1IFi8a
- AxfMLFpvcAdEoSYsBK4RAEcD3B.l4Ncqo1fcsdF0wVyUb__va2yP14iz2pVUB_o6r.swmPatVF9g
- 5BjbPCziq5Dv3toGp.0_xaDlGn07ygVfiqv2BkTvw90TpDpYjP_riujIOzrkUKDL6YASfB.MT3nn
- YbUb8xkLjxUc6f8dFEG9v4dhLbGnVlPL3mqPz1BIqw9eraNzWAR3e6jMUE1Rs3oZNOeDw4suf1b5
- ARtoRpg8qcEkLrnNm0IYvMCt_0Ckk43ddSR2chCPWdBXqRcvwKOT5vRlD3GgeOyC.oPa8CVxypqO
- ._.bHPpxR1kmi3f0WZUNsxUbd14LPUxDh5k10Ezkw24tv70oILUwjaLBs3U0EKsT0KT9wZRayUAW
- eTu7JEQX2rZmR5cLAIxC_yTN.s531ZmOFBEJ8z1XyOrUryOX8APGF8bQ8EGVMVOH7zDFPFUt2bvx
- p_j6I6NplBgdsJ83Yngpl621v6DcyXog6Q0Yk9qnMByN6YapUM9cuEe8Q5U6FrEha9OHK7FmAgZ9
- v4kiIjKcQYvPsVAV6PtOvda913L0xiW8EsAiWgo.BJhfzey7swlrPlID6yp3ns7fWCPK1fYAreNl
- u9A--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.bf2.yahoo.com with HTTP; Fri, 25 Oct 2019 11:45:27 +0000
-Date:   Fri, 25 Oct 2019 11:45:26 +0000 (UTC)
-From:   Christopher Bernard <jenkins.lisa@frontier.com>
-Reply-To: chrisben697@gmail.com
-Message-ID: <1718113956.528056.1572003926257@mail.yahoo.com>
-Subject: hi
+        id S2394561AbfJYNV5 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 25 Oct 2019 09:21:57 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:41143 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729127AbfJYNV5 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 25 Oct 2019 09:21:57 -0400
+Received: by mail-qt1-f193.google.com with SMTP id o3so3151128qtj.8;
+        Fri, 25 Oct 2019 06:21:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=uaH6B4Hp8aE6bF/45st6S4B2vnyBOwa8Fxqndxsbz68=;
+        b=VjW0pdTwGMjJ95JHq/JMpOd4dp8RuAXCbtxatM/9ivmU88sRkknL/NH9RrD04hb5zU
+         VEmvQcV9CDfvGz28FBg7NRN7+uDe9yw3UmFpowFGYULlue0+rPm9dXxnoUxnZryVdW5A
+         LI6jHfLYahji8jqb+2y1afvBTiD5bLZam9Q4nvK5/xCH5vQDb/ddlgbWw/I9aeI8+2Uk
+         9plLMx6FYiMiu9cuIhUDETUlx87SrFuiPIThQEonEOH7j65A+UEIxuCmD4RIJfbARqfi
+         WuZ9U2CLNdsfUQzRE/JekcVSGo2Lx3+REVPw89K+aYugFIHx+f4OV/r76DIu/zyW+zAf
+         hjkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=uaH6B4Hp8aE6bF/45st6S4B2vnyBOwa8Fxqndxsbz68=;
+        b=W9mxXElYs+bYKEoB3O9lqr1HUHw5LPgyL+rq4yqCgKoFez+/X0q77wj8Em0QcCTaQq
+         AzmluZCXiBZNGaq3rB4NSfKOViEo/BquwVyRVlq9dC5IbHIjEPNu08mnxik+VA/haFPQ
+         bVAE9X/atTpt0BclOTqNM4Tcfx5mFSfl0KglWi+6iwCrNOay90w8HbEL/adyRktfD/FD
+         JVfGovfcexWixqRVHLqke4H7sZrbg1AwQVsBpekLQwREiHcVErzBc8i2edQi9gOs04nG
+         Q93QTqP/qM8O1w6IBiO7EcPQPHC++7t5OU75O91B/1bDe9FceJ9HMZwYsGc1YxAHWhC1
+         Gz3g==
+X-Gm-Message-State: APjAAAWDq1XA0ovftRjaAAxtF4xcE/DIVN77GtglNjDwMqCTdMajzCTL
+        vpEH5iLP+br088xUKLHy+wCe0iWREU0=
+X-Google-Smtp-Source: APXvYqyuLSojzMn8e3Ww+QWpph+9h7qQrp30jrEsAJfT0U1HvQfCunwpqmz7FFMT5sIls5KUq9md1w==
+X-Received: by 2002:ac8:1e83:: with SMTP id c3mr2965386qtm.294.1572009716281;
+        Fri, 25 Oct 2019 06:21:56 -0700 (PDT)
+Received: from localhost.localdomain ([168.181.48.193])
+        by smtp.gmail.com with ESMTPSA id j2sm1115160qki.15.2019.10.25.06.21.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Oct 2019 06:21:54 -0700 (PDT)
+Received: by localhost.localdomain (Postfix, from userid 1000)
+        id 720F9C0AD9; Fri, 25 Oct 2019 10:21:51 -0300 (-03)
+Date:   Fri, 25 Oct 2019 10:21:51 -0300
+From:   'Marcelo Ricardo Leitner' <marcelo.leitner@gmail.com>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Xin Long <lucien.xin@gmail.com>,
+        network dev <netdev@vger.kernel.org>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        "davem@davemloft.net" <davem@davemloft.net>
+Subject: Re: [PATCHv3 net-next 2/5] sctp: add pf_expose per netns and sock
+ and asoc
+Message-ID: <20191025132151.GF4326@localhost.localdomain>
+References: <cover.1571033544.git.lucien.xin@gmail.com>
+ <f4c99c3d918c0d82f5d5c60abd6abcf381292f1f.1571033544.git.lucien.xin@gmail.com>
+ <20191025032337.GC4326@localhost.localdomain>
+ <995e44322af74c41bbff2c77338f83bf@AcuMS.aculab.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <995e44322af74c41bbff2c77338f83bf@AcuMS.aculab.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
+On Fri, Oct 25, 2019 at 09:00:45AM +0000, David Laight wrote:
+> From: Marcelo Ricardo Leitner
+> > Sent: 25 October 2019 04:24
+> ...
+> > > @@ -5521,8 +5522,16 @@ static int sctp_getsockopt_peer_addr_info(struct sock *sk, int len,
+> > >
+> > >  	transport = sctp_addr_id2transport(sk, &pinfo.spinfo_address,
+> > >  					   pinfo.spinfo_assoc_id);
+> > > -	if (!transport)
+> > > -		return -EINVAL;
+> > > +	if (!transport) {
+> > > +		retval = -EINVAL;
+> > > +		goto out;
+> > > +	}
+> > > +
+> > > +	if (transport->state == SCTP_PF &&
+> > > +	    transport->asoc->pf_expose == SCTP_PF_EXPOSE_DISABLE) {
+> > > +		retval = -EACCES;
+> > > +		goto out;
+> > > +	}
+> > 
+> > As is on v3, this is NOT an UAPI violation. The user has to explicitly
+> > set the system or the socket into the disabled state in order to
+> > trigger this new check.
+> 
+> Only because the default isn't to be backwards compatible with the
+                           ^^^^^
 
+You meant "is", right? Then we're agreeing.
 
-Greetings,
+> old kernel and old applications.
+> 
+> An old application running on a system that has the protocol parts of
+> PF enabled mustn't see any PF events, states or obscure error returns.
 
-How are you doing Hope you are alright, I sent you message earlier but no response from you, did you read my proposal email message? Please, I await your feedback.
-
-Regards,
-
-Christopher Bernard.
+Yes. With the patchset, the application will only see the new error
+return if it (the app or the sysadmin) explicitly choose to be more
+compliant to the RFC. There's no harm in that.
