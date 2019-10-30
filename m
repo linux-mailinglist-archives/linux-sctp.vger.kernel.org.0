@@ -2,143 +2,114 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF7BEA375
-	for <lists+linux-sctp@lfdr.de>; Wed, 30 Oct 2019 19:35:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA2FEA3BD
+	for <lists+linux-sctp@lfdr.de>; Wed, 30 Oct 2019 20:03:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727180AbfJ3SfG (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 30 Oct 2019 14:35:06 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:39393 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728306AbfJ3SfG (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 30 Oct 2019 14:35:06 -0400
-Received: by mail-qt1-f196.google.com with SMTP id t8so4613920qtc.6;
-        Wed, 30 Oct 2019 11:35:05 -0700 (PDT)
+        id S1726699AbfJ3TDp (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 30 Oct 2019 15:03:45 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:40773 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726261AbfJ3TDp (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 30 Oct 2019 15:03:45 -0400
+Received: by mail-pf1-f195.google.com with SMTP id r4so2221283pfl.7;
+        Wed, 30 Oct 2019 12:03:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=JYycG46Owic+1nSINe2frGAFp05tmpnx09Umb+WfpyI=;
-        b=Ki2qz+RL5Lw2ZXCLeh5Umol0vBFU6HkirckbR6RgiAwUjmFfMHESMoF2hrMuXQWIIi
-         q0+8CRjlW4tFiK0DPnyDvE5mRrQ8WS8rFVkwT+qbSNDmi7sf/8B0jKUYRxBDvUsa+f7P
-         7vS0edaOyLek4QrMJrAKDdl04gF3JL1qQi8I0TKl7Eq6m8fjbTDcpYEN0HMUVsQkmqOJ
-         jDdzw0trnxbIWyLcnDkWR6rCTtIjw56dePIB/HUlHj8bs7Z2cQ/zfJkSxa0vzasbiJ9q
-         Gb5Ok1yeCXVug1s0uKDGIsx9LZqdfIEH0g0GD44uH+OuyFPiECiMKkokWJ2ZMVoDqGgz
-         jgEg==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ZNOGSfXr8+zRM3gw1fL95YFSKLrvQki0gAx0cCCVmnw=;
+        b=K7p2Q0z+EPicIlEOu4mRy+aFK7lPM3qKqoyibHjvwi0Z9ghwJEN/YEHh9dAWqMN4H1
+         5Gkum1Ig8hPyo+s0pydbsTxT74WHAdJjO18gj4y/B5XXwi7L4xKo51zFCNqpmJYPLxv6
+         A4MICxj/kT9lu1vFzrBandY56jjxwXm8pDmSAbCKM/VFaGscfPOniWbLzFLl8uBvlqoi
+         RJ+GXmbewQhhEwYSIkkRpwPxWcMD2E76OmH52D2oWq0mm7xg+gxjpk7glib4v3lR223Z
+         NrDb4kHtpMK+Yp8M/1DtTGJoqx/TtMc7RQLUKVoRtRyPI/ftU13B/pyV1JgihayRZTjb
+         L4qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=JYycG46Owic+1nSINe2frGAFp05tmpnx09Umb+WfpyI=;
-        b=XFEPj1g8dN62JBLLrUZLxlRm/oYcgw3jm13paW9Dh80xI18MyfvQSFq6NcgpRflfMH
-         RbJ1BOKPd3xrhQ+TmcPUFfUlV8KOSQsuCO0mPPzTGwy43EvnQW7tW5LLy505ruq3CBSO
-         aHQ+yE5UMReYG6jxtmJtJhFSGzuN7uSQ/MEmFjNufEbYa1OZpcE2Q7R4DzKNgB9oDH6M
-         SFGPA08D034rzqYPRZJSGFV/Sg9W7QvKM0VapBNd2zb59nf1e8Fd1Jsdfz2o7mDx9/Nq
-         jA12UG03tbn1e0kJmNz7eJavltGwP6CXat+Xzmp+SU5t83dsCWQLYRJbf227wkm0nBH4
-         ZMOw==
-X-Gm-Message-State: APjAAAUjX45+JN412iQWCSwCVx8flhCzsa47wRmxSPMynet6Rq2mJPKj
-        EzmPIku9AwmY/3N2r106bKYjFe+eRLs=
-X-Google-Smtp-Source: APXvYqxBgQN8qv2O88BSFeTnE9GFfH28S81Q4e9QR0BCcVc8h0IKy/CI0dCnXZE9br0fIJrb5XGeUA==
-X-Received: by 2002:ac8:5350:: with SMTP id d16mr1300872qto.319.1572460504419;
-        Wed, 30 Oct 2019 11:35:04 -0700 (PDT)
-Received: from localhost.localdomain ([2001:1284:f013:326e:3cb7:46e:7f5e:cff5])
-        by smtp.gmail.com with ESMTPSA id o3sm531523qkf.97.2019.10.30.11.35.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Oct 2019 11:35:03 -0700 (PDT)
-Received: by localhost.localdomain (Postfix, from userid 1000)
-        id 7B68DC0AD9; Wed, 30 Oct 2019 15:35:00 -0300 (-03)
-Date:   Wed, 30 Oct 2019 15:35:00 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Wei Zhao <wallyzhao@gmail.com>
-Cc:     vyasevich@gmail.com, nhorman@tuxdriver.com, davem@davemloft.net,
-        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wally.zhao@nokia-sbell.com
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ZNOGSfXr8+zRM3gw1fL95YFSKLrvQki0gAx0cCCVmnw=;
+        b=nzJr1b7NPSSEF+Xr5fny88ou1EM1TAenP0J0EJ1sutDIJsVNqpGb5GnBlZjfs6u58K
+         +/gFer/Ko9bqS+2aoC/4q7Pj1j3mH1MHHtlYKVAtArR6lJnO1t59kmW8gdXaZT7kRvB6
+         jmwB9L1B9cFPVvEPUM9XOAw7r330/Fj0r0zbX3Ei7XAb96hbEn7OcCmO4ieh1lh0REFZ
+         tkdCI6CyiKeAhf5TavNyWMQeM2G0OBJse708aXgeSi9igdwVEn3HBPeYg1ul0GAK3yE8
+         Yx6Fwyy5EaQmC5KzGFd285It6nacjZb4I1qmKP8uvyb2286XZsK6COjyUyeCnpyfe7+a
+         GQYg==
+X-Gm-Message-State: APjAAAV/GWTc+LtlgTjKiTbsGgIiRQZ/EJDIjyBanxGC1vvbfr54MwF/
+        2+f9jt9v1Q5PnbVcXoxXw0ccsiZ0
+X-Google-Smtp-Source: APXvYqwl5VpbxI+r1KoXrqGAugu6jPGfjRFB+TajhSLOkyTHFgkjVVsoIgEqAsPp5zGpWfGmeokA9A==
+X-Received: by 2002:a62:53:: with SMTP id 80mr988273pfa.192.1572462224545;
+        Wed, 30 Oct 2019 12:03:44 -0700 (PDT)
+Received: from ?IPv6:2620:15c:2c1:200:55c7:81e6:c7d8:94b? ([2620:15c:2c1:200:55c7:81e6:c7d8:94b])
+        by smtp.gmail.com with ESMTPSA id y1sm716981pfq.138.2019.10.30.12.03.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Oct 2019 12:03:43 -0700 (PDT)
 Subject: Re: [PATCH] sctp: set ooo_okay properly for Transmit Packet Steering
-Message-ID: <20191030183500.GH4250@localhost.localdomain>
+To:     Wally Zhao <wallyzhao@gmail.com>, vyasevich@gmail.com,
+        nhorman@tuxdriver.com, marcelo.leitner@gmail.com,
+        davem@davemloft.net, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     wally.zhao@nokia-sbell.com
 References: <1572451637-14085-1-git-send-email-wallyzhao@gmail.com>
- <20191030132420.GG4326@localhost.localdomain>
- <CAFRmqq42HqX5KctcNjwyZJ4jdknLSZ1EyBqHnJQQJx211mWopw@mail.gmail.com>
+From:   Eric Dumazet <eric.dumazet@gmail.com>
+Message-ID: <c2d0890f-8900-6838-69c4-6b72b2e58062@gmail.com>
+Date:   Wed, 30 Oct 2019 12:03:42 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFRmqq42HqX5KctcNjwyZJ4jdknLSZ1EyBqHnJQQJx211mWopw@mail.gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <1572451637-14085-1-git-send-email-wallyzhao@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, Oct 30, 2019 at 11:54:45PM +0800, Wei Zhao wrote:
-> On 10/30/19, Marcelo Ricardo Leitner <marcelo.leitner@gmail.com> wrote:
-> > On Wed, Oct 30, 2019 at 12:07:17PM -0400, Wally Zhao wrote:
-> >> Unlike tcp_transmit_skb,
-> >> sctp_packet_transmit does not set ooo_okay explicitly,
-> >> causing unwanted Tx queue switching when multiqueue is in use;
-> >
-> > It is initialized to 0 by __alloc_skb() via:
-> >         memset(skb, 0, offsetof(struct sk_buff, tail));
-> > and never set to 1 by anyone for SCTP.
-> >
-> > The patch description seems off. I don't see how the unwanted Tx queue
-> > switching can happen. IOW, it's not fixing it OOO packets, but
-> > improving it by allowing switching on the first packet. Am I missing
-> > something?
+
+
+On 10/30/19 9:07 AM, Wally Zhao wrote:
+> Unlike tcp_transmit_skb,
+> sctp_packet_transmit does not set ooo_okay explicitly,
+> causing unwanted Tx queue switching when multiqueue is in use;
+> Tx queue switching may cause out-of-order packets.
+> Change sctp_packet_transmit to allow Tx queue switching only for
+> the first in flight packet, to avoid unwanted Tx queue switching.
 > 
-> Thanks for pointing this out. You are right. This ooo_okay is default to false.
+
+While the patch seems fine, the changelog is quite confusing.
+
+When skb->ooo_olay is 0 (which is the default for freshly allocated skbs),
+the core networking stack will stick to whatever TX queue was chosen
+at the time the dst_entry was attached to the (connected) socket.
+
+This means no reorder can happen at all by default.
+
+By setting ooo_okay carefully (as you did in your patch), you allow
+core networking stack to _switch_ to another TX queue based on
+current CPU  (XPS selection)
+
+So even without your fix, SCTP should not experience out-of-order packets.
+
+> Signed-off-by: Wally Zhao <wallyzhao@gmail.com>
+> ---
+>  net/sctp/output.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> I was observing some Tx queue switching before when testing with
-> iperf3 (modified to be able to set window size, for higher throughput
-> with long RTT), so I thought ooo_okay was set to true somewhere else
-> after allocation. Just now I did the test again, it turns out that
-> iperf3 made a re-connect silently which caused the Tx queue change.
-
-Ah, okay.
-
+> diff --git a/net/sctp/output.c b/net/sctp/output.c
+> index dbda7e7..5ff75cc 100644
+> --- a/net/sctp/output.c
+> +++ b/net/sctp/output.c
+> @@ -626,6 +626,10 @@ int sctp_packet_transmit(struct sctp_packet *packet, gfp_t gfp)
+>  	/* neighbour should be confirmed on successful transmission or
+>  	 * positive error
+>  	 */
+> +
+> +	/* allow switch tx queue only for the first in flight pkt */
+> +	head->ooo_okay = asoc->outqueue.outstanding_bytes == 0;
+> +
+>  	if (tp->af_specific->sctp_xmit(head, tp) >= 0 &&
+>  	    tp->dst_pending_confirm)
+>  		tp->dst_pending_confirm = 0;
 > 
-> As for the improving purpose of this patch, that is not that critical
-> from my side, and the patch description is not correct for this
-> purpose. So I will give up this patch attempt. Thank you again for
-> your time on this.
-
-As you wish. If you don't have the time for it, ok, but the
-improvement is welcomed. With a more accurate description and using
-tp->flight_size instead, it should be good.
-
-Thanks,
-  Marcelo
-
-> 
-> >
-> >> Tx queue switching may cause out-of-order packets.
-> >> Change sctp_packet_transmit to allow Tx queue switching only for
-> >> the first in flight packet, to avoid unwanted Tx queue switching.
-> >>
-> >> Signed-off-by: Wally Zhao <wallyzhao@gmail.com>
-> >> ---
-> >>  net/sctp/output.c | 4 ++++
-> >>  1 file changed, 4 insertions(+)
-> >>
-> >> diff --git a/net/sctp/output.c b/net/sctp/output.c
-> >> index dbda7e7..5ff75cc 100644
-> >> --- a/net/sctp/output.c
-> >> +++ b/net/sctp/output.c
-> >> @@ -626,6 +626,10 @@ int sctp_packet_transmit(struct sctp_packet *packet,
-> >> gfp_t gfp)
-> >>  	/* neighbour should be confirmed on successful transmission or
-> >>  	 * positive error
-> >>  	 */
-> >> +
-> >> +	/* allow switch tx queue only for the first in flight pkt */
-> >> +	head->ooo_okay = asoc->outqueue.outstanding_bytes == 0;
-> >
-> > Considering we are talking about NIC queues here, we would have a
-> > better result with tp->flight_size instead. As in, we can switch
-> > queues if, for this transport, the queue is empty.
-> >
-> >> +
-> >>  	if (tp->af_specific->sctp_xmit(head, tp) >= 0 &&
-> >>  	    tp->dst_pending_confirm)
-> >>  		tp->dst_pending_confirm = 0;
-> >> --
-> >> 1.8.3.1
-> >>
-> >
