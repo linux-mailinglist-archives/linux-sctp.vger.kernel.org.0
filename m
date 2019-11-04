@@ -2,59 +2,83 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 564ABEDD1D
-	for <lists+linux-sctp@lfdr.de>; Mon,  4 Nov 2019 11:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CCDAEE0F0
+	for <lists+linux-sctp@lfdr.de>; Mon,  4 Nov 2019 14:25:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728497AbfKDK5Z (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 4 Nov 2019 05:57:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46394 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728481AbfKDK5Z (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Mon, 4 Nov 2019 05:57:25 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7E5D0222C2;
-        Mon,  4 Nov 2019 10:57:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572865045;
-        bh=tyErS5ayOQ1JPxQ7vqQgRlXP3j9QSDiomBqchoj4McI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wd890I2ORyZKygKH27IcPXwqUXEHmOr5GFFgqRtlLwsyGD46n+HZtCEHvVXIJQs+5
-         koeBlT4BbpL3f/htRGeAE5lGUGJush1A0bBh6fZL4avhCL4L/+Aj4yraL6UTY1C3Gl
-         Pcfpk56SG17SjhTqBurWHSl6IKcEep04XiiNqpxM=
-Date:   Mon, 4 Nov 2019 11:57:22 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     stable@vger.kernel.org, linux-sctp@vger.kernel.org,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>, sashal@kernel.org
-Subject: Re: [PATCH linux-4.14.y 0/2] sctp: fix a memory leak
-Message-ID: <20191104105722.GA1945210@kroah.com>
-References: <cover.1572844054.git.lucien.xin@gmail.com>
+        id S1727454AbfKDNZN (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 4 Nov 2019 08:25:13 -0500
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:33292 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727332AbfKDNZN (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 4 Nov 2019 08:25:13 -0500
+Received: by mail-qt1-f194.google.com with SMTP id y39so23906317qty.0;
+        Mon, 04 Nov 2019 05:25:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=DKdIIDMLF5QN6l/0M8nP34uwWbd87SXNqY0koiCvQwQ=;
+        b=nq/YeMXLeglOeQcEZQFkaG+fSMvfxip3W9YvwMRMWj4zIgxjKGo6a3t5NZ5iYPfG6F
+         h1V2nyKF3f8fZHZU8QICqnMecncDfNxQsGwCYFjHsfF714asOAHYlDiGiuMgwsN7RtDL
+         EpsQifi/nryaSXVlvXoA7eZNDiTELpitMBcDimKTuVrxBg54r8dgQcDuu/fcr7kjfOiO
+         cqTDFPTv+szVRT8RSCIAyrYW3GT0geuRSzq+TCQuxBNnpulgoDLssBvD7/kTbEcy9rdt
+         IadRrExN+ey1/Q47MRPfO+KjjrGtl8KchREcAeDVz5/mTFbkCnA4UmZ9BSjBztvQkKAe
+         dnCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=DKdIIDMLF5QN6l/0M8nP34uwWbd87SXNqY0koiCvQwQ=;
+        b=HJnXZjTyj87ErG7fFe5aDooxchJkj1I84GO0iNJpK0bK/uPyJRTpeDuJaGr923d2Ts
+         9Ss0asqNlteGz2vDSmV4d2VnWypLPpiWuqjocL4Vv4TPu8EplIMTRKG1/hK5+cSNhhZ8
+         oD2rfTpnPjQQ8VST4XhZAR1r1G5Utcpgx5PY2I3ZriXU4i+g/5CIIfy5jc7cxyD4NZJE
+         wZWG1IqqVuGr5O2nhNMoVpOqaEG3C5QV2Tm5/QcyLYAxNf5cOUODYXsmpRTCCaFRYObg
+         f3j/Ed8axhNb0P2tgJTUmJuNi21LW+dIWgd0UWv+YRztPgZvXiGVkf4OWMC2cSx7psau
+         NA1A==
+X-Gm-Message-State: APjAAAUUskIIG/sEFCxT6DboZhNOUgg4zjl+HSv00Wg86u4ZoNsnmIWJ
+        2gFfi61rlCuHywlzq/3+P9c=
+X-Google-Smtp-Source: APXvYqzmCpE1cXbKa+7oOSqluO7m5Rw1WPEyu+SjAQGUgdWquBeOGPMqq/aU3poYB+1xyXiqbzHL1g==
+X-Received: by 2002:ad4:5386:: with SMTP id i6mr15440858qvv.84.1572873912147;
+        Mon, 04 Nov 2019 05:25:12 -0800 (PST)
+Received: from localhost.localdomain ([2001:1284:f013:146d:7dd5:a83f:defc:1791])
+        by smtp.gmail.com with ESMTPSA id h186sm2546430qkf.64.2019.11.04.05.25.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Nov 2019 05:25:11 -0800 (PST)
+Received: by localhost.localdomain (Postfix, from userid 1000)
+        id DD7B9C16E7; Mon,  4 Nov 2019 10:25:08 -0300 (-03)
+Date:   Mon, 4 Nov 2019 10:25:08 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     kernel test robot <rong.a.chen@intel.com>
+Cc:     Wally Zhao <wallyzhao@gmail.com>, vyasevich@gmail.com,
+        nhorman@tuxdriver.com, davem@davemloft.net,
+        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, wally.zhao@nokia-sbell.com,
+        lkp@lists.01.org
+Subject: Re: [sctp] 327fecdaf3: BUG:kernel_NULL_pointer_dereference,address
+Message-ID: <20191104132508.GA53856@localhost.localdomain>
+References: <1572451637-14085-1-git-send-email-wallyzhao@gmail.com>
+ <20191104084635.GM29418@shao2-debian>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1572844054.git.lucien.xin@gmail.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <20191104084635.GM29418@shao2-debian>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Mon, Nov 04, 2019 at 01:16:24PM +0800, Xin Long wrote:
-> These 2 patches are missed in linux-4.14.y, it will cause crash
-> when commit 63dfb7938b13 ("sctp: change sctp_prot .no_autobind
-> with true") is backported only.
-> 
-> Conflicts:
->   - Context difference in Patch 1/2 due to the lack of
->     Commit c981f254cc82.
-> 
-> Xin Long (2):
->   sctp: fix the issue that flags are ignored when using kernel_connect
->   sctp: not bind the socket in sctp_connect
+On Mon, Nov 04, 2019 at 04:46:35PM +0800, kernel test robot wrote:
+> [   35.312661] BUG: kernel NULL pointer dereference, address: 00000000000005d8
+> [   35.316225] #PF: supervisor read access in kernel mode
+> [   35.319178] #PF: error_code(0x0000) - not-present page
+> [   35.322078] PGD 800000021b569067 P4D 800000021b569067 PUD 21b688067 PMD 0 
+> [   35.325629] Oops: 0000 [#1] SMP PTI
+> [   35.327965] CPU: 0 PID: 3148 Comm: trinity-c5 Not tainted 5.4.0-rc3-01107-g327fecdaf39ab #12
+> [   35.332863] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.10.2-1 04/01/2014
+> [   35.337932] RIP: 0010:sctp_packet_transmit+0x767/0x822
 
-Thanks for these, now queued up.
+Right, as asoc can be NULL by then. (per the check on it a few lines
+before the change here).
 
-greg k-h
+  Marcelo
