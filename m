@@ -2,74 +2,78 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FB10EC61B
-	for <lists+linux-sctp@lfdr.de>; Fri,  1 Nov 2019 16:56:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA471ED85D
+	for <lists+linux-sctp@lfdr.de>; Mon,  4 Nov 2019 06:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729318AbfKAP4L (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 1 Nov 2019 11:56:11 -0400
-Received: from mail-il1-f196.google.com ([209.85.166.196]:38122 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729330AbfKAP4L (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 1 Nov 2019 11:56:11 -0400
-Received: by mail-il1-f196.google.com with SMTP id y5so9071169ilb.5
-        for <linux-sctp@vger.kernel.org>; Fri, 01 Nov 2019 08:56:10 -0700 (PDT)
+        id S1727473AbfKDFQg (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 4 Nov 2019 00:16:36 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:33989 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725857AbfKDFQf (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 4 Nov 2019 00:16:35 -0500
+Received: by mail-pf1-f195.google.com with SMTP id x195so7875292pfd.1;
+        Sun, 03 Nov 2019 21:16:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=KqYLJklOErTzrVm5Bzbb6HQh9gI4PrbbORQE30GcC5Y=;
-        b=jkikiuxKNQxBjumG32R/xAOzBpTQzIQOGlQ9PlZMzROUxuROhIRW7LOTcmmKqgHbY3
-         GOAi1JnMWEnE/cHrGKrepuphWKFno/pbedjX9XbUWfuIb71+aWSjlL5ZBdl2tkqhPPKE
-         upGJ5iT/1C19qe7FISRldhXG8lpP7RchXgCPpOby1LewLJ9oB1SrBH33yMLjEi7ivjNF
-         o703S5ww1Ql1WeM1aVK41ldtWwBkirNy1eGYI9RnsPVvXaYfqhEH77U0dn8RQUxe2Nnp
-         f+7QOSjXXt7VdhDDkepSvRzDGCUBO3iHq8K6k3uKK4gkq+wr+4nHyD89dMwGRy4pl6Pa
-         lYoA==
+        h=from:to:cc:subject:date:message-id;
+        bh=QPVsSzauonGoSZqoD8d7kSBM/msp74JsZg4mWGaLQZg=;
+        b=l6YcaQbpRN0zbGoPl5zfSfMdLvkm51Ez8pCUOWEOq+RggHwECBLZwL0e6Og+dSvk6J
+         h7CNBMKs0lZXnDMFsI33r4EgJktOZ5ujMnErijHNCyRepE60WS8SJM5t8NSfsb7U0ffU
+         jJN1brEvKXB4TuLgAZsh85KrdRPXVBs5L5CoJSiTsDi61K2lTkiWF9dEqJTMbC7yO0l9
+         P61RjqsIYd4dzdV80tIRBhOjTGUDVrcIcAJAh2JNzIPvUEgMLdDbDSUJfbwhKig9s5es
+         GzSyWigioRUnivocmKvPU6pBpnEpiyTVNNY/WaXYY4WnyBDDgEtP+xp4zyaCSOUTJgaO
+         Y7zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=KqYLJklOErTzrVm5Bzbb6HQh9gI4PrbbORQE30GcC5Y=;
-        b=WL9ZDFM/QrmdEWRuBeBb1uNdQP3+B9LFk6yjEpagb1PuI7I+ONnYz5p2YeWnRdbHWZ
-         Y92oWwUyIH0bfUJ2WGDOxEATcVZWMiuJjrWTu3/f8UNsMSnHf5CN1SYVHc+diLt4haF1
-         X+w3KXmZN976BXvEFTtEWGIyMBA+a7ysaGBt8GquaRU/eUjUzQZcjrXVfP8lsXkzpuno
-         kiszN7OdRCzY5/9bte6nN54+Eih9rGHfZ9Vtm52xbuj5RDrl0R4dOWU9QlGGi+mv7fIF
-         v8OL32ZkI5B3fJ6eDeHND8noN+h8+D0YY0V6bPeyiyOn12k9enlkYy1YzU/lwLzISWA4
-         vfhQ==
-X-Gm-Message-State: APjAAAU6V5qpYKHlnPF6qfazKv6o13/URal5pAVmTx7K4k+xQ5w5yFzV
-        HKgVB1Ne7pWJnV8CRcBjDSCqljANEytbXQAMrA==
-X-Google-Smtp-Source: APXvYqykJV+0/JwFtVH+nsMp7ykNvWlhcV0rRy9Az9oSoBx/tmbFcQXrrs+n9sPNEOpMU4VQknLk5nY+7hLQNduMfzM=
-X-Received: by 2002:a92:9ac2:: with SMTP id c63mr13404416ill.8.1572623769676;
- Fri, 01 Nov 2019 08:56:09 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a02:7749:0:0:0:0:0 with HTTP; Fri, 1 Nov 2019 08:56:08 -0700 (PDT)
-Reply-To: moneygram.1820@outlook.fr
-From:   "Mary Coster, I.M.F director-Benin" 
-        <info.zennitbankplcnigerian@gmail.com>
-Date:   Fri, 1 Nov 2019 16:56:08 +0100
-Message-ID: <CABHzvrmbRd3tt-E2+9AO2XvrMQFKQcn+kao_7DN4rb=grxZAcA@mail.gmail.com>
-Subject: Contact Money Gram international service-Benin to receive your
- payment funds US$2.500,000 Million
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=QPVsSzauonGoSZqoD8d7kSBM/msp74JsZg4mWGaLQZg=;
+        b=AIu6EHcWMUpcfm1lA2XkJ7z+vq20VC81zyb14T0WrbAkbUtjp12i/AQQaZlUckVwnq
+         HZn0OmLKU38YCyLSw84cj0iGNHohXUqzYiXQ2M0S8qStepeSlSS52M6seE2lYrX4Jr67
+         vJHFp9z/kzaJi21uzrpCV/GJmCDxI21w4v1X1L7xSh/FMrwWddEMZuQaANzR50u7p8gJ
+         kQknXAffO+A7EjDXWhXTqYvJSPGmaW4+Yxu1yZDAGTMLzm6e7/UeIrQj6xMjdZr4pB/f
+         CGZPlZjrZa+2quYtJ/5Q6q9hhLAA9Mk6yb8thuch8ivLTCdBZmUrZGk89X4KPnp8iBo8
+         zDug==
+X-Gm-Message-State: APjAAAVedLgyBiFfRHsOWt/Dm/D9wEyXUuvVIKDG0QDwMPZeE1yMMKJX
+        2e9wD0fye+nwN5jRTxnHPY3RVBPV
+X-Google-Smtp-Source: APXvYqw4IjL0d/9Z3bAS0w2SV0klKewclAkubM0VLceRFUmMEr5td0bfEhinexjveugTPCN1l2d9aQ==
+X-Received: by 2002:a63:33ca:: with SMTP id z193mr13199472pgz.83.1572844593337;
+        Sun, 03 Nov 2019 21:16:33 -0800 (PST)
+Received: from localhost ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id y1sm15238065pfq.138.2019.11.03.21.16.31
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 03 Nov 2019 21:16:32 -0800 (PST)
+From:   Xin Long <lucien.xin@gmail.com>
+To:     stable@vger.kernel.org, linux-sctp@vger.kernel.org
+Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>, sashal@kernel.org,
+        gregkh@linuxfoundation.org
+Subject: [PATCH linux-4.14.y 0/2] sctp: fix a memory leak
+Date:   Mon,  4 Nov 2019 13:16:24 +0800
+Message-Id: <cover.1572844054.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.1.0
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Attn Dear,Funds Beneficiary.
-Contact Money Gram international service-Benin to receive your payment
-funds US$2.500,000 Million approved this morning through the UN
-payment settlement organization.
-Contact Person, Mr. John Dave.
-Official Director.Money Gram-Benin
-Email: moneygram.1820@outlook.fr
-Telephone +229 62619517
-Once you get intouch with Mr. John Dave, Money Gram Director, send to
-him your address including your phone numbers. He will be sending the
-transfer to you  $5000.00 USD daily until you received your complete
-payment $2.5m from the office.
-Note,I have paid the whole service fees for you but only small money
-you been required to send to this office is $23.00 only via Money Gram
-transfer.
-God bless
-Mary Coster, I.M.F director-Benin
-m.coster@aol.com
+These 2 patches are missed in linux-4.14.y, it will cause crash
+when commit 63dfb7938b13 ("sctp: change sctp_prot .no_autobind
+with true") is backported only.
+
+Conflicts:
+  - Context difference in Patch 1/2 due to the lack of
+    Commit c981f254cc82.
+
+Xin Long (2):
+  sctp: fix the issue that flags are ignored when using kernel_connect
+  sctp: not bind the socket in sctp_connect
+
+ include/net/sctp/sctp.h |  2 ++
+ net/sctp/ipv6.c         |  2 +-
+ net/sctp/protocol.c     |  2 +-
+ net/sctp/socket.c       | 55 ++++++++++++++++++++++++++-----------------------
+ 4 files changed, 33 insertions(+), 28 deletions(-)
+
+-- 
+2.1.0
+
