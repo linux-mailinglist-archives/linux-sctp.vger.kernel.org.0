@@ -2,108 +2,101 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34584F37AC
-	for <lists+linux-sctp@lfdr.de>; Thu,  7 Nov 2019 19:55:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 971B7F3FA9
+	for <lists+linux-sctp@lfdr.de>; Fri,  8 Nov 2019 06:20:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727321AbfKGSzK (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 7 Nov 2019 13:55:10 -0500
-Received: from mail-il1-f200.google.com ([209.85.166.200]:32791 "EHLO
-        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727031AbfKGSzK (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 7 Nov 2019 13:55:10 -0500
-Received: by mail-il1-f200.google.com with SMTP id z14so3630310ill.0
-        for <linux-sctp@vger.kernel.org>; Thu, 07 Nov 2019 10:55:09 -0800 (PST)
+        id S1730005AbfKHFUs (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 8 Nov 2019 00:20:48 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:33188 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726480AbfKHFUr (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 8 Nov 2019 00:20:47 -0500
+Received: by mail-pg1-f196.google.com with SMTP id h27so3337021pgn.0;
+        Thu, 07 Nov 2019 21:20:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=mRcwZXi+fTKaf/q3/3qnzbsEsLK//Y2roDv+tqox8g0=;
+        b=L5MEGmwPskvLT6Bw7U4jc1sp+VixT1Km9JHoBE1uderXv5+CCu7APG4vc2DR2THtMe
+         AcqulwQCpTKbf4f9JDGDh0WpnBPYE6BDhFFwMaQQVhwFYwBJ38XIVQicIOaP0SiJhM5M
+         asl+qNtonpjiZjDARecZc28gZefvJ3Yz+lFEbKSvBw6SZ6TUvx2MI9EcTPHGaSBMNPNv
+         NIvhrDU08wnKSGrjjBCfVjkani9nTDoqX+Op19qb3MMsKau5SyFURm6Kb397e9s4IrKb
+         KTG+iS4PDaCPKIvsFeqBJJBdB5NAdmZpgFHIwcKSZUsZcsXxkeeNAeCLd1y+tLkz7ebh
+         4CSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=ebPwios/a/BkGm6Az/riO5vBmQU4SCQIjm285Fi84Ok=;
-        b=ssXLnEWy6rfFVraBQUftL98AqWKQxL5TPUVBZE6x9itXcGwc7bu03BHog+wU4TzbMe
-         fn51tispxzuU904CbFqrEB5w5IhIo7JRTif54NWzbLKDgWrKWmDYlJn5gbGZyW9XU8P4
-         iVTMt8B1P/QlLnMWGhJ3Fqm/5lh5KBsoEeRUOWd4yqeNb0jyTZB15nPNqUqa2ana6Ilw
-         JYf+h9wVscU9WICo0zL3eH29gLx3jVxN+YLiXBeoxs+qulscxmndw0tc/+ItiVnQku2e
-         F2mz0RijcmE96k9oVxmMZp6hzdEBKN7az0XApDjpVOWYgqStRq6YCFilt8RrIQjoxFIP
-         4vWQ==
-X-Gm-Message-State: APjAAAWYYQF8Ipz3RtBVifsjYp9HILoAlGDMhsSimRp1OZOo1H4xGd7w
-        muG9sCIO/cYEIFMt2CG7p1X/t9NRX6iH5sNO4BKtAaeYScON
-X-Google-Smtp-Source: APXvYqzBDOsS8mZ6Itklvqdj/v5vZqjYnnpcPTCDdNcQNyvmaEezCkV7wemNSVu35PiJ/FVLAvrE/7UlYClNkml7HmY5onoPiX9g
-MIME-Version: 1.0
-X-Received: by 2002:a92:3ad4:: with SMTP id i81mr6080862ilf.18.1573152909497;
- Thu, 07 Nov 2019 10:55:09 -0800 (PST)
-Date:   Thu, 07 Nov 2019 10:55:09 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005927bf0596c634a2@google.com>
-Subject: KCSAN: data-race in sctp_assoc_migrate / sctp_hash_obj
-From:   syzbot <syzbot+e3b35fe7918ff0ee474e@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, elver@google.com,
-        linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
-        marcelo.leitner@gmail.com, netdev@vger.kernel.org,
-        nhorman@tuxdriver.com, syzkaller-bugs@googlegroups.com,
-        vyasevich@gmail.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=mRcwZXi+fTKaf/q3/3qnzbsEsLK//Y2roDv+tqox8g0=;
+        b=epphi2YljNT8D7p0fIOs+EnNfraYaD2bgML+3+f75ZIxnwvVeRkJLs6Bjcea+Acrpe
+         k8jq5ImK1Yhdkqg2alPUEgs7w5j1vwtTYo1AC5Iv8UwBRlQre8/a0imf5+0tLighJByl
+         MTDV29JOsObwNHVYVRwymljLovaq/Ehj3jQrYSVpRP9wpM8YLng/SP0gPmm1a9roblN7
+         zkPk1dc8ybrrC0SgoT7G5LB16/1qmfnGDxj95hpBVZn+tEd0cDQq4pIarpApcmh1FS0d
+         YYJBF0ZMkCNpN951UIVxZeYgKEGAQJXX1sS4FZdmTrDzcyHGgSd3fH2EnHBFKBZW6LlK
+         ZDOw==
+X-Gm-Message-State: APjAAAXJCLBsCNwVvkhqXqLaiYxIdNEZ2+NeHzrBXe/g+YLgLDY9u7V2
+        8oN25JwlDhJ66D/5E7jMEJ2M7y+a
+X-Google-Smtp-Source: APXvYqzHumEca+Ni47jDLp+Z2jhIFEduYSs0IhjclSZBE76Uk4PWQ6QceZw/NhF354UeiKA8VzQjNQ==
+X-Received: by 2002:a63:5960:: with SMTP id j32mr9583414pgm.281.1573190445370;
+        Thu, 07 Nov 2019 21:20:45 -0800 (PST)
+Received: from localhost ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id w62sm4887177pfb.15.2019.11.07.21.20.44
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 07 Nov 2019 21:20:44 -0800 (PST)
+From:   Xin Long <lucien.xin@gmail.com>
+To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
+Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>, davem@davemloft.net,
+        David Laight <david.laight@aculab.com>
+Subject: [PATCHv4 net-next 0/5] sctp: update from rfc7829
+Date:   Fri,  8 Nov 2019 13:20:31 +0800
+Message-Id: <cover.1573190212.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.1.0
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello,
+SCTP-PF was implemented based on a Internet-Draft in 2012:
 
-syzbot found the following crash on:
+  https://tools.ietf.org/html/draft-nishida-tsvwg-sctp-failover-05
 
-HEAD commit:    05f22368 x86, kcsan: Enable KCSAN for x86
-git tree:       https://github.com/google/ktsan.git kcsan
-console output: https://syzkaller.appspot.com/x/log.txt?x=1046796ce00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=87d111955f40591f
-dashboard link: https://syzkaller.appspot.com/bug?extid=e3b35fe7918ff0ee474e
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+It's been updated quite a few by rfc7829 in 2016.
 
-Unfortunately, I don't have any reproducer for this crash yet.
+This patchset adds the following features:
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+e3b35fe7918ff0ee474e@syzkaller.appspotmail.com
+  1. add SCTP_ADDR_POTENTIALLY_FAILED notification
+  2. add pf_expose per netns/sock/asoc
+  3. add SCTP_EXPOSE_POTENTIALLY_FAILED_STATE sockopt
+  4. add ps_retrans per netns/sock/asoc/transport
+     (Primary Path Switchover)
+  5. add spt_pathcpthld for SCTP_PEER_ADDR_THLDS sockopt
 
-==================================================================
-BUG: KCSAN: data-race in sctp_assoc_migrate / sctp_hash_obj
+v1->v2:
+  - See Patch 2/5 and Patch 5/5.
+v2->v3:
+  - See Patch 1/5, 2/5 and 3/5.
+v3->v4:
+  - See Patch 1/5, 2/5, 3/5 and 4/5.
 
-write to 0xffff8880b67c0020 of 8 bytes by task 18908 on cpu 1:
-  sctp_assoc_migrate+0x1a6/0x290 net/sctp/associola.c:1091
-  sctp_sock_migrate+0x8aa/0x9b0 net/sctp/socket.c:9465
-  sctp_accept+0x3c8/0x470 net/sctp/socket.c:4916
-  inet_accept+0x7f/0x360 net/ipv4/af_inet.c:734
-  __sys_accept4+0x224/0x430 net/socket.c:1754
-  __do_sys_accept net/socket.c:1795 [inline]
-  __se_sys_accept net/socket.c:1792 [inline]
-  __x64_sys_accept+0x4e/0x60 net/socket.c:1792
-  do_syscall_64+0xcc/0x370 arch/x86/entry/common.c:290
-  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+Xin Long (5):
+  sctp: add pf_expose per netns and sock and asoc
+  sctp: add SCTP_ADDR_POTENTIALLY_FAILED notification
+  sctp: add SCTP_EXPOSE_POTENTIALLY_FAILED_STATE sockopt
+  sctp: add support for Primary Path Switchover
+  sctp: add SCTP_PEER_ADDR_THLDS_V2 sockopt
 
-read to 0xffff8880b67c0020 of 8 bytes by task 12003 on cpu 0:
-  sctp_hash_obj+0x4f/0x2d0 net/sctp/input.c:894
-  rht_key_get_hash include/linux/rhashtable.h:133 [inline]
-  rht_key_hashfn include/linux/rhashtable.h:159 [inline]
-  rht_head_hashfn include/linux/rhashtable.h:174 [inline]
-  head_hashfn lib/rhashtable.c:41 [inline]
-  rhashtable_rehash_one lib/rhashtable.c:245 [inline]
-  rhashtable_rehash_chain lib/rhashtable.c:276 [inline]
-  rhashtable_rehash_table lib/rhashtable.c:316 [inline]
-  rht_deferred_worker+0x468/0xab0 lib/rhashtable.c:420
-  process_one_work+0x3d4/0x890 kernel/workqueue.c:2269
-  worker_thread+0xa0/0x800 kernel/workqueue.c:2415
-  kthread+0x1d4/0x200 drivers/block/aoe/aoecmd.c:1253
-  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:352
+ Documentation/networking/ip-sysctl.txt |  34 ++++++++
+ include/net/netns/sctp.h               |  14 ++++
+ include/net/sctp/constants.h           |  12 +++
+ include/net/sctp/structs.h             |  13 ++-
+ include/uapi/linux/sctp.h              |  15 ++++
+ net/sctp/associola.c                   |  36 ++++----
+ net/sctp/protocol.c                    |   6 ++
+ net/sctp/sm_sideeffect.c               |   5 ++
+ net/sctp/socket.c                      | 147 +++++++++++++++++++++++++++++----
+ net/sctp/sysctl.c                      |  22 ++++-
+ 10 files changed, 266 insertions(+), 38 deletions(-)
 
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 0 PID: 12003 Comm: kworker/0:6 Not tainted 5.4.0-rc3+ #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: events rht_deferred_worker
-==================================================================
+-- 
+2.1.0
 
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
