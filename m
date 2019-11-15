@@ -2,26 +2,25 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B13FD029
-	for <lists+linux-sctp@lfdr.de>; Thu, 14 Nov 2019 22:14:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C625DFD378
+	for <lists+linux-sctp@lfdr.de>; Fri, 15 Nov 2019 04:38:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726613AbfKNVO0 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 14 Nov 2019 16:14:26 -0500
-Received: from 13.224.195.113.adsl-pool.jx.chinaunicom.com ([113.195.224.13]:59174
-        "EHLO localhost.localdomain" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726592AbfKNVO0 (ORCPT
+        id S1726549AbfKODir (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 14 Nov 2019 22:38:47 -0500
+Received: from [129.146.181.251] ([129.146.181.251]:41904 "EHLO
+        issue-4015.localdomain" rhost-flags-FAIL-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726491AbfKODiq (ORCPT
         <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 14 Nov 2019 16:14:26 -0500
-X-Greylist: delayed 526 seconds by postgrey-1.27 at vger.kernel.org; Thu, 14 Nov 2019 16:14:25 EST
-Received: from 13.224.195.113.adsl-pool.jx.chinaunicom.com (localhost [IPv6:::1])
-        by localhost.localdomain (Postfix) with SMTP id 0A580107A8FD
-        for <linux-sctp@vger.kernel.org>; Fri, 15 Nov 2019 05:04:18 +0800 (CST)
+        Thu, 14 Nov 2019 22:38:46 -0500
+Received: from localhost (localhost [IPv6:::1])
+        by issue-4015.localdomain (Postfix) with SMTP id AC88863263A5
+        for <linux-sctp@vger.kernel.org>; Fri, 15 Nov 2019 03:19:00 +0000 (GMT)
 From:   linux-sctp@vger.kernel.org
 To:     linux-sctp@vger.kernel.org
 Reply-To: prodawez@teleworm.us
 Subject: Zdravstvujte! Vas interesujut bazy dannyh dlja prodazhi Vashih tovarov i uslug?
-Message-Id: <20191114210419.0A580107A8FD@localhost.localdomain>
-Date:   Fri, 15 Nov 2019 05:04:18 +0800 (CST)
+Message-Id: <20191115031900.AC88863263A5@issue-4015.localdomain>
+Date:   Fri, 15 Nov 2019 03:19:00 +0000 (GMT)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
