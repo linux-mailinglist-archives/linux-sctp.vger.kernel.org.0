@@ -2,129 +2,102 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C0C910084E
-	for <lists+linux-sctp@lfdr.de>; Mon, 18 Nov 2019 16:33:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7B17106143
+	for <lists+linux-sctp@lfdr.de>; Fri, 22 Nov 2019 06:55:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726939AbfKRPdr (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 18 Nov 2019 10:33:47 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:38839 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726654AbfKRPdq (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 18 Nov 2019 10:33:46 -0500
-Received: by mail-wr1-f65.google.com with SMTP id i12so20022379wro.5;
-        Mon, 18 Nov 2019 07:33:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MC6hbelJpY2ihrrZxRWmuxB6g8NUSOV+ALxeQ6r9VWQ=;
-        b=MBWGoonp2fPSzTPfLv5UodPdUBVdO9DNIjtTUdHD3x1++MPH69k+yr/Sj8x+Rswe1S
-         3nH7BWI4t7TRnYcqvFeN/KhOQx2ufrjKQN+trqtHG3gy5Tdisd+EMCHcvSjSYThPWZwa
-         GTTyaVnoxVqKu76XondIew0qvA/bQY3SeyOyth6Fa3dHA5T0ozIK6gVAugPdF0YkLDaT
-         Q1GP2ehRir+tny0fyRrD6lMsjonbKT9jfHcpMUqfb8qZrJ8OBBadRQhZHAT3wwxLt0xZ
-         rIZD/5oSRjubSmewpIN2UTf2VRfwE3ORB62jDn2tMRym/x0tviJvKoST2e3bQShGymkz
-         maWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MC6hbelJpY2ihrrZxRWmuxB6g8NUSOV+ALxeQ6r9VWQ=;
-        b=sp0BO9EXsyRlZ0hXY/Cwcz/SVblAC9BvjkDOieUxPxzv3cHDZBahPsAFc05ywdjokz
-         MLOdpiSdR06fglWhYHvd0U8gQEMCV7OP/Gkm17QNgItJJGCxCwv6ncmuxh1iIsNQu+mz
-         ISFIAKyh7WmE9oecL5MjRJWSp4LE1+0yXOslcpftpvWaDh/GWIJ7X3Wo8WsPuRdhCVjf
-         gvTNpFP9bvUFxPmBb/uz1upP0JtT80IXTuJskdNyQbuAl0Mgy0S3/TM54vjwRKR7UJYW
-         ZzwP5F4iWEfaDDifGz8DTtCR8Acu5URVwjmE0qGVENVROSYchMONEDOBlkdqT3gtCeZn
-         NpXA==
-X-Gm-Message-State: APjAAAWIJemLw9oGycBN1G+dUciktc+c1YcJZJIj2HPWhUeRPY7Yg0YK
-        /jN5hntj4pKz87ykgZ78mqnYOVx9s/4Bj+zqDEhEUG/s
-X-Google-Smtp-Source: APXvYqwMkQ61SZE/unmkSuy7n8X+6Fo7163ycOi1Eh3qM2kQnbY22m+fSOWQ7Y0wal0pClszXxLPGKpSxuONZWtrtfA=
-X-Received: by 2002:a5d:5224:: with SMTP id i4mr15741630wra.303.1574091223130;
- Mon, 18 Nov 2019 07:33:43 -0800 (PST)
-MIME-Version: 1.0
-References: <0000000000005927bf0596c634a2@google.com>
-In-Reply-To: <0000000000005927bf0596c634a2@google.com>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Mon, 18 Nov 2019 23:34:34 +0800
-Message-ID: <CADvbK_fAqKgt0JLT+Bcmsqoqc81ehZJ-g6StMB+G3+WKO68SUw@mail.gmail.com>
-Subject: Re: KCSAN: data-race in sctp_assoc_migrate / sctp_hash_obj
-To:     syzbot <syzbot+e3b35fe7918ff0ee474e@syzkaller.appspotmail.com>
-Cc:     davem <davem@davemloft.net>, elver@google.com,
-        LKML <linux-kernel@vger.kernel.org>, linux-sctp@vger.kernel.org,
+        id S1726933AbfKVFzN (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 22 Nov 2019 00:55:13 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58776 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728719AbfKVFwz (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Fri, 22 Nov 2019 00:52:55 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B474F2084B;
+        Fri, 22 Nov 2019 05:52:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1574401974;
+        bh=MbC18X3Sfxye5skgXLrpnqugMo/Tin2MGO7PyG9qQWs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=gDDuPMGZBFoU/I11kGhClA6V0XDWQ8G/EL9stjJyrsVe3M39uG3yKUFdN0i9nTBFB
+         7pl+wtHwx6A8JO2m0EHyIDmR/yR3beKMB8NnQcHLgxzcwNSDvDXSglzv5ahbEuWCqR
+         Ah2isa8xRb4NAxa0Hv1IN8K2vHajuRc4qrkLPcO8=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Maciej Kwiecien <maciej.kwiecien@nokia.com>,
+        Marcin Stojek <marcin.stojek@nokia.com>,
+        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        network dev <netdev@vger.kernel.org>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Vlad Yasevich <vyasevich@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 194/219] sctp: don't compare hb_timer expire date before starting it
+Date:   Fri, 22 Nov 2019 00:48:46 -0500
+Message-Id: <20191122054911.1750-187-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191122054911.1750-1-sashal@kernel.org>
+References: <20191122054911.1750-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Fri, Nov 8, 2019 at 2:56 AM syzbot
-<syzbot+e3b35fe7918ff0ee474e@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    05f22368 x86, kcsan: Enable KCSAN for x86
-> git tree:       https://github.com/google/ktsan.git kcsan
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1046796ce00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=87d111955f40591f
-> dashboard link: https://syzkaller.appspot.com/bug?extid=e3b35fe7918ff0ee474e
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
->
-> Unfortunately, I don't have any reproducer for this crash yet.
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+e3b35fe7918ff0ee474e@syzkaller.appspotmail.com
->
-> ==================================================================
-> BUG: KCSAN: data-race in sctp_assoc_migrate / sctp_hash_obj
-looks we need a better way to get netns in sctp_hash_obj(),
-I believe in sctp_hash_cmp(), too.
+From: Maciej Kwiecien <maciej.kwiecien@nokia.com>
 
->
-> write to 0xffff8880b67c0020 of 8 bytes by task 18908 on cpu 1:
->   sctp_assoc_migrate+0x1a6/0x290 net/sctp/associola.c:1091
->   sctp_sock_migrate+0x8aa/0x9b0 net/sctp/socket.c:9465
->   sctp_accept+0x3c8/0x470 net/sctp/socket.c:4916
->   inet_accept+0x7f/0x360 net/ipv4/af_inet.c:734
->   __sys_accept4+0x224/0x430 net/socket.c:1754
->   __do_sys_accept net/socket.c:1795 [inline]
->   __se_sys_accept net/socket.c:1792 [inline]
->   __x64_sys_accept+0x4e/0x60 net/socket.c:1792
->   do_syscall_64+0xcc/0x370 arch/x86/entry/common.c:290
->   entry_SYSCALL_64_after_hwframe+0x44/0xa9
->
-> read to 0xffff8880b67c0020 of 8 bytes by task 12003 on cpu 0:
->   sctp_hash_obj+0x4f/0x2d0 net/sctp/input.c:894
->   rht_key_get_hash include/linux/rhashtable.h:133 [inline]
->   rht_key_hashfn include/linux/rhashtable.h:159 [inline]
->   rht_head_hashfn include/linux/rhashtable.h:174 [inline]
->   head_hashfn lib/rhashtable.c:41 [inline]
->   rhashtable_rehash_one lib/rhashtable.c:245 [inline]
->   rhashtable_rehash_chain lib/rhashtable.c:276 [inline]
->   rhashtable_rehash_table lib/rhashtable.c:316 [inline]
->   rht_deferred_worker+0x468/0xab0 lib/rhashtable.c:420
->   process_one_work+0x3d4/0x890 kernel/workqueue.c:2269
->   worker_thread+0xa0/0x800 kernel/workqueue.c:2415
->   kthread+0x1d4/0x200 drivers/block/aoe/aoecmd.c:1253
->   ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:352
->
-> Reported by Kernel Concurrency Sanitizer on:
-> CPU: 0 PID: 12003 Comm: kworker/0:6 Not tainted 5.4.0-rc3+ #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> Google 01/01/2011
-> Workqueue: events rht_deferred_worker
-> ==================================================================
->
->
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+[ Upstream commit d1f20c03f48102e52eb98b8651d129b83134cae4 ]
+
+hb_timer might not start at all for a particular transport because its
+start is conditional. In a result a node is not sending heartbeats.
+
+Function sctp_transport_reset_hb_timer has two roles:
+    - initial start of hb_timer for a given transport,
+    - update expire date of hb_timer for a given transport.
+The function is optimized to update timer's expire only if it is before
+a new calculated one but this comparison is invalid for a timer which
+has not yet started. Such a timer has expire == 0 and if a new expire
+value is bigger than (MAX_JIFFIES / 2 + 2) then "time_before" macro will
+fail and timer will not start resulting in no heartbeat packets send by
+the node.
+
+This was found when association was initialized within first 5 mins
+after system boot due to jiffies init value which is near to MAX_JIFFIES.
+
+Test kernel version: 4.9.154 (ARCH=arm)
+hb_timer.expire = 0;                //initialized, not started timer
+new_expire = MAX_JIFFIES / 2 + 2;   //or more
+time_before(hb_timer.expire, new_expire) == false
+
+Fixes: ba6f5e33bdbb ("sctp: avoid refreshing heartbeat timer too often")
+Reported-by: Marcin Stojek <marcin.stojek@nokia.com>
+Tested-by: Marcin Stojek <marcin.stojek@nokia.com>
+Signed-off-by: Maciej Kwiecien <maciej.kwiecien@nokia.com>
+Reviewed-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ net/sctp/transport.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/net/sctp/transport.c b/net/sctp/transport.c
+index 033696e6f74fb..ad158d311ffae 100644
+--- a/net/sctp/transport.c
++++ b/net/sctp/transport.c
+@@ -207,7 +207,8 @@ void sctp_transport_reset_hb_timer(struct sctp_transport *transport)
+ 
+ 	/* When a data chunk is sent, reset the heartbeat interval.  */
+ 	expires = jiffies + sctp_transport_timeout(transport);
+-	if (time_before(transport->hb_timer.expires, expires) &&
++	if ((time_before(transport->hb_timer.expires, expires) ||
++	     !timer_pending(&transport->hb_timer)) &&
+ 	    !mod_timer(&transport->hb_timer,
+ 		       expires + prandom_u32_max(transport->rto)))
+ 		sctp_transport_hold(transport);
+-- 
+2.20.1
+
