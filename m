@@ -2,102 +2,72 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FF44106271
-	for <lists+linux-sctp@lfdr.de>; Fri, 22 Nov 2019 07:04:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41FE31069AD
+	for <lists+linux-sctp@lfdr.de>; Fri, 22 Nov 2019 11:12:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727135AbfKVGDs (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 22 Nov 2019 01:03:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41974 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727816AbfKVGDD (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Fri, 22 Nov 2019 01:03:03 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 56C362070B;
-        Fri, 22 Nov 2019 06:03:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574402583;
-        bh=Ok3I6A0cc8kL/J20hG8eQcCcmH4Ge5h24qRJu31z9wo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M9Q9WGCuX78UG2O0q1NNgrFtxAlNp4omUs0pkXi5CjCp9bRJliHVEGOYGZZPOd//w
-         24QhzBktReTfOhi3rqyRmKfaVAtU7oz6C9PMhza0zX3ePC1ajidIlIzdw0YLEcbP3T
-         T588s1jZtWEgfbU1cs5/JHWsfdkj7HoujGq5Tu78=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Maciej Kwiecien <maciej.kwiecien@nokia.com>,
-        Marcin Stojek <marcin.stojek@nokia.com>,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 84/91] sctp: don't compare hb_timer expire date before starting it
-Date:   Fri, 22 Nov 2019 01:01:22 -0500
-Message-Id: <20191122060129.4239-83-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191122060129.4239-1-sashal@kernel.org>
-References: <20191122060129.4239-1-sashal@kernel.org>
+        id S1726500AbfKVKMN (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 22 Nov 2019 05:12:13 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:41657 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726100AbfKVKMN (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 22 Nov 2019 05:12:13 -0500
+Received: by mail-ot1-f65.google.com with SMTP id 94so5691807oty.8
+        for <linux-sctp@vger.kernel.org>; Fri, 22 Nov 2019 02:12:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=mz5OqrqUSeG2Ec9nRC63vaTt1tA0ak8NabEWxjjWQY4=;
+        b=AluIUduYs1rJ7WD0W9TtPDxwaFZT6bVDB2XaNckmLpEgdbt3feSK8x2a58Q/0QSCeR
+         7nfLFtkX8sGz823MBj7K0gQPSdFlBnGEpbUMBdB7bkAk1Oslqtc6QXgR8kjLUiHK96Qk
+         CvSYRostw0h6k51/+FIZEGlqcw+QEeKt/CZHaRdIGbD8uYAvNsxKlYs8aKKp7XMBmQGV
+         Ugu+KO4qixNeeSPO0mfEKqCUAHoAkXaIsZVsvo79rhLLFnq9Aw2lLuCzC0z25H5K1sXa
+         PWl0RontwnyZWp1+IH3nnMD2r47jtkOo1sklSj2VUScuimZJagf+fj7YcgUl69EBUZ+F
+         Nkqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=mz5OqrqUSeG2Ec9nRC63vaTt1tA0ak8NabEWxjjWQY4=;
+        b=X0UIViosyjKo6du2dbsAHw+TNRlkZOBFyAw91wDBowYw9vSmAdeWQFeV3aURUAdsHG
+         qoib0rzaHmpz1UeLtvUDrK9/gfqqjcfQcqUECdg46DcQN4bF94HhDI2XGc8WUksA2dje
+         r5uTNpcd0I6TP1zYLbecVde65mH7ZGmq3E56yutaT70W8E4r8S+TRRirWMd7bWdkZS1v
+         RCaC81bQ77W/CiqZtWqwo3FYP3jijo/xLsTyb2guRXk6DRWZ+iftMKSFhh6eqM+MyxoD
+         iZC/vifgod929FC/PR7VwZhQiGiAoFMUotPF4wVAe/T9Zv8yYvrSdg+CbnNQvTlizzBE
+         KTrg==
+X-Gm-Message-State: APjAAAVhzLTVVu/3q/JA6o/AZjqHF2wIHe+bfimrM+fSNto8yK7ibFE3
+        SmnecZuNHIafQfMiu2TfxHmAt3iIxKKtK8IqVkMr8g==
+X-Google-Smtp-Source: APXvYqx4EjHJBOVCk0B0SzgffghnW5phrMeEsWmkOGlnyMTcegLPQeMlix6sAtJNsdmV/zWMCkXf8TQAFl6pWEpCSgA=
+X-Received: by 2002:a05:6830:1649:: with SMTP id h9mr10505040otr.281.1574417532691;
+ Fri, 22 Nov 2019 02:12:12 -0800 (PST)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a4a:97ec:0:0:0:0:0 with HTTP; Fri, 22 Nov 2019 02:12:12
+ -0800 (PST)
+Reply-To: pauwilliams37@gmail.com
+From:   Williams Paul <williamsetemba@gmail.com>
+Date:   Fri, 22 Nov 2019 10:12:12 +0000
+Message-ID: <CACPABGrYZao7vH+U+nqZG3aknC3uPDKsq-f2WmO9eM_LXUC0Tg@mail.gmail.com>
+Subject: SUPPLY!!
+To:     linux-sctp@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Maciej Kwiecien <maciej.kwiecien@nokia.com>
-
-[ Upstream commit d1f20c03f48102e52eb98b8651d129b83134cae4 ]
-
-hb_timer might not start at all for a particular transport because its
-start is conditional. In a result a node is not sending heartbeats.
-
-Function sctp_transport_reset_hb_timer has two roles:
-    - initial start of hb_timer for a given transport,
-    - update expire date of hb_timer for a given transport.
-The function is optimized to update timer's expire only if it is before
-a new calculated one but this comparison is invalid for a timer which
-has not yet started. Such a timer has expire == 0 and if a new expire
-value is bigger than (MAX_JIFFIES / 2 + 2) then "time_before" macro will
-fail and timer will not start resulting in no heartbeat packets send by
-the node.
-
-This was found when association was initialized within first 5 mins
-after system boot due to jiffies init value which is near to MAX_JIFFIES.
-
-Test kernel version: 4.9.154 (ARCH=arm)
-hb_timer.expire = 0;                //initialized, not started timer
-new_expire = MAX_JIFFIES / 2 + 2;   //or more
-time_before(hb_timer.expire, new_expire) == false
-
-Fixes: ba6f5e33bdbb ("sctp: avoid refreshing heartbeat timer too often")
-Reported-by: Marcin Stojek <marcin.stojek@nokia.com>
-Tested-by: Marcin Stojek <marcin.stojek@nokia.com>
-Signed-off-by: Maciej Kwiecien <maciej.kwiecien@nokia.com>
-Reviewed-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- net/sctp/transport.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/net/sctp/transport.c b/net/sctp/transport.c
-index 03d71cd97ec08..5c78942550e97 100644
---- a/net/sctp/transport.c
-+++ b/net/sctp/transport.c
-@@ -205,7 +205,8 @@ void sctp_transport_reset_hb_timer(struct sctp_transport *transport)
- 
- 	/* When a data chunk is sent, reset the heartbeat interval.  */
- 	expires = jiffies + sctp_transport_timeout(transport);
--	if (time_before(transport->hb_timer.expires, expires) &&
-+	if ((time_before(transport->hb_timer.expires, expires) ||
-+	     !timer_pending(&transport->hb_timer)) &&
- 	    !mod_timer(&transport->hb_timer,
- 		       expires + prandom_u32_max(transport->rto)))
- 		sctp_transport_hold(transport);
 -- 
-2.20.1
 
+
+Greetings,
+I have a very profitable business I would like your company to handle
+on partnership basis.
+There is this wealthy cattle farmer who needs a very important cattle
+vaccine being sold in Europe.
+We will get the vaccine at a price of USD 575 per carton and sell to
+the farmer at USD 1250 per carton.
+He needs more than 3500 cartons now.
+
+Can you get back to me for details.
+
+regards.
+
+Mr.  Williams
