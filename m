@@ -2,75 +2,91 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C8010B17C
-	for <lists+linux-sctp@lfdr.de>; Wed, 27 Nov 2019 15:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 548E410BE47
+	for <lists+linux-sctp@lfdr.de>; Wed, 27 Nov 2019 22:35:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726926AbfK0Ohe (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 27 Nov 2019 09:37:34 -0500
-Received: from mail-qv1-f47.google.com ([209.85.219.47]:36806 "EHLO
-        mail-qv1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726514AbfK0Ohe (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 27 Nov 2019 09:37:34 -0500
-Received: by mail-qv1-f47.google.com with SMTP id b18so490729qvy.3
-        for <linux-sctp@vger.kernel.org>; Wed, 27 Nov 2019 06:37:33 -0800 (PST)
+        id S1730412AbfK0Vec (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 27 Nov 2019 16:34:32 -0500
+Received: from mail-vs1-f66.google.com ([209.85.217.66]:34067 "EHLO
+        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729508AbfK0Uuw (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 27 Nov 2019 15:50:52 -0500
+Received: by mail-vs1-f66.google.com with SMTP id y23so16107588vso.1
+        for <linux-sctp@vger.kernel.org>; Wed, 27 Nov 2019 12:50:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=FZD8hxkpc0ARFxGcxdaWXF+Edar7kNxCOdiUGvFVHoc=;
-        b=HIGLUoBB6Bmbvmokt2niyhkoyLkTYzNQ1uFwExA0kbcuwUTXWIM1knPK9jBssRJ9Eh
-         fhnAcWf3x7rp61FsYK0YyFz1nkbzZq41Pwt/09r5fxDLdfWzlNzfqssIHo9kdTT/vAuP
-         0TNjcl5VQ0YNSRwDTxlRjkIgTTbrBKcy0spBU77WUVFxCs3J6NWsDGSDVsBSpIRdy1x9
-         wwHxNTLdnVuoMzW4ecp6LzwPBnn2YQg4gopmEviRziXcqBHDEYksYb0d0Pb+i2CiPucA
-         DJ/b2UQ2Q+sf98yVjdcT03Wk7ZEkZqLi7J73BvX0yRgI8ka1Q2pUlUo0VZ+F2wTePXzj
-         na3w==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=bxTp71gDx4DCd0a3JSpVLqspHuGuJwbEEArDGeB+Po8=;
+        b=nouOdgGJ3d1+MvP+Ag9r2o6g2+IPm3tn+z+ywoxoQkFIBBb9gRdvxsofgNQvn4UnYT
+         EQW44PcvEU1e4QPEt9hnJYJP93TVOlkZjChwmuN2Ms3pxGqc8vDVHTB1EIEj92cx6UyJ
+         Bg6cInyUZ/cfRrcunq8PDeKEiASSzIFdKCoiWXtL/YlF1HfVUzWt4h99n0VFRtN3BbSy
+         hoEmHY8wVraGA/UqYPLtV01yZfGEGc3+esaXpdZq7+uwJb9BOeBOVSPnX0mTNYaH/Xng
+         ArlPzVv1+Ped65fqNx8gDYsfn0CBnDgBLfhNJedffK/s4U868It4RyTiT/KVkGiEU9Ru
+         nj5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FZD8hxkpc0ARFxGcxdaWXF+Edar7kNxCOdiUGvFVHoc=;
-        b=q6nQnB8UviACZ72TVCyl6cH3+3jY/BQXIeCe2QDstUjiJYnSl3p7SB9KgLAgRahRMZ
-         0is+dY130I21ZWtTOB4fVcZLvYBQ2Ml8QUXmvH0mwdSbSZAYJbe/eonaV2QrEMFQB+S8
-         e5CV+09JD2iZgUBm+QoQaKig9iwAn6D+Blet6tAG0uhY/LsMeBwk/3QyXffXhGA6fx43
-         kl/cjSnEor6Gvttj4YlL7rPj+DC6LpWVKgoFpWuHkTXetxLCXoiabYUOhM1CIJ/+NCa/
-         L0CUZ+5leJK9vffrubJ2SN/E4XiOkUK2Hz9LKMSL++hf+Kgqcn/1sUfgzzlAQ0Xslm67
-         heGA==
-X-Gm-Message-State: APjAAAVCYE4xkosGZ0ilEQHRFJcU54OrWeuEP9ldSeK5B+p05cgNLE7A
-        suZewMkY1BETJeqBRTH7Wpc7A61qBLe/Vw==
-X-Google-Smtp-Source: APXvYqyyB+2hiSWWfNjHZWJ7Xq78552nqdKsUX/3GVGC1YqZ86QbYssi5ioEamtGftevY2Np4gktcw==
-X-Received: by 2002:ad4:4a14:: with SMTP id m20mr1998246qvz.100.1574865453247;
-        Wed, 27 Nov 2019 06:37:33 -0800 (PST)
-Received: from localhost.localdomain ([168.181.48.195])
-        by smtp.gmail.com with ESMTPSA id o2sm6884475qkf.68.2019.11.27.06.37.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Nov 2019 06:37:32 -0800 (PST)
-Received: by localhost.localdomain (Postfix, from userid 1000)
-        id B123DC510E; Wed, 27 Nov 2019 11:37:29 -0300 (-03)
-Date:   Wed, 27 Nov 2019 11:37:29 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>
-Subject: Re: sctp protocol violation state 2 chunkid 5
-Message-ID: <20191127143729.GB377783@localhost.localdomain>
-References: <431b0b65c3604076bb5ef633bcac8198@AcuMS.aculab.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=bxTp71gDx4DCd0a3JSpVLqspHuGuJwbEEArDGeB+Po8=;
+        b=k1HX2aESQPwkqpLpRYGhsS3s0OZMkahmg6DPI1FFnZoXgrK3qRuTpgyD3OxIuVXJ8C
+         rQwwZK0JFN6EhxyfByhuk8JO/skKBzKurxfH3bbqxQCSQ2F2EXtTjZBo022NHv7aMEYC
+         Is1Ju25Z7iWmtW1Fi10947ziYEDszldhFqkj4k5ubMrW1k2OD0o4fcMbHF+oSXQa8S4L
+         o0ZZgLxyYxD2zDEFIIOjrBLOOhZn2380xppMKDyMI9bnPbliICcsK0Hk4Jf6WbeFC9nY
+         zXn6vzh/STL7BUHkJaqZ13rBIX0ZYRtT7VK1Imyc9LRElOmpBNV8HEJQgLr4qAjDdQJg
+         NACA==
+X-Gm-Message-State: APjAAAWlnmb3dZ3yt8J2fRF1+4ukp1IAjXSl4cr6TIr7FdoXxltPUOOa
+        Vxgvd7CGeLqFjYtdWTkIA7023895Y3O8MuHFimdAZQ==
+X-Google-Smtp-Source: APXvYqxetDqes9znEtFlShqBOifcylBt1aw/fIhGH+yrmqF47dmU3GgGZnJ/1CzEh0gzLt0sEfge2Ya1weCZFrqELUg=
+X-Received: by 2002:a67:e9d6:: with SMTP id q22mr28168421vso.231.1574887850227;
+ Wed, 27 Nov 2019 12:50:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <431b0b65c3604076bb5ef633bcac8198@AcuMS.aculab.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <20191127001313.183170-1-zenczykowski@gmail.com> <20191127131407.GA377783@localhost.localdomain>
+In-Reply-To: <20191127131407.GA377783@localhost.localdomain>
+From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <zenczykowski@gmail.com>
+Date:   Wed, 27 Nov 2019 12:50:39 -0800
+Message-ID: <CANP3RGePJ+z1t8oq-QS1tcwEYWanPHPargKpHkZZGiT4jMa6xw@mail.gmail.com>
+Subject: Re: [PATCH] net: introduce ip_local_unbindable_ports sysctl
+To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Linux NetDev <netdev@vger.kernel.org>,
+        Sean Tranchetti <stranche@codeaurora.org>,
+        Subash Abhinov Kasiviswanathan <subashab@codeaurora.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Linux SCTP <linux-sctp@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Nov 26, 2019 at 10:24:10AM +0000, David Laight wrote:
-...
-> I can try to persuade them it is fixed in a later kernel, but getting them to
-> use anything newer than the RHEL 7.7 3.10 based kernel will be very hard.
-> 
-> Any ideas?
+On Wed, Nov 27, 2019 at 5:14 AM Marcelo Ricardo Leitner
+<marcelo.leitner@gmail.com> wrote:
+>
+> On Tue, Nov 26, 2019 at 04:13:13PM -0800, Maciej =C5=BBenczykowski wrote:
+> > From: Maciej =C5=BBenczykowski <maze@google.com>
+> >
+> > and associated inet_is_local_unbindable_port() helper function:
+> > use it to make explicitly binding to an unbindable port return
+> > -EPERM 'Operation not permitted'.
+> >
+> > Autobind doesn't honour this new sysctl since:
+> >   (a) you can simply set both if that's the behaviour you desire
+> >   (b) there could be a use for preventing explicit while allowing auto
+> >   (c) it's faster in the relatively critical path of doing port selecti=
+on
+> >       during connect() to only check one bitmap instead of both
+> ...
+> > If we *know* that certain ports are simply unusable, then it's better
+> > nothing even gets the opportunity to try to use them.  This way we at
+> > least get a quick failure, instead of some sort of timeout (or possibly
+> > even corruption of the data stream of the non-kernel based use case).
+>
+> This is doable with SELinux today, no?
 
-Other than asking them to also open a customer case with Red Hat, I'm
-afraid not. :-}
-
-  Marcelo
+Perhaps, but SELinux isn't used by many distros, including the servers
+where I have nics that steal some ports.  It's also much much
+more difficult, requiring a policy, compilers, etc... and it gets even
+more complex if you need to dynamically modify the set of ports,
+which requires extra tools and runtime permissions.
