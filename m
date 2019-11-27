@@ -2,333 +2,653 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D618E10A8A3
-	for <lists+linux-sctp@lfdr.de>; Wed, 27 Nov 2019 03:10:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A3510A939
+	for <lists+linux-sctp@lfdr.de>; Wed, 27 Nov 2019 04:48:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726618AbfK0CKn (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 26 Nov 2019 21:10:43 -0500
-Received: from a27-56.smtp-out.us-west-2.amazonses.com ([54.240.27.56]:39644
-        "EHLO a27-56.smtp-out.us-west-2.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725871AbfK0CKm (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>);
-        Tue, 26 Nov 2019 21:10:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=zsmsymrwgfyinv5wlfyidntwsjeeldzt; d=codeaurora.org; t=1574820641;
-        h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:Cc:Subject:In-Reply-To:References:Message-ID;
-        bh=wp6gAuMx9Q0mOxTUJ6h6NDdNvTlRVYtevVVkaQECXKs=;
-        b=c9iNCjr9RI6HBdejWSsVwrdP2s6nsPer7spFGpu0aaFKRclS3IQ0mz90RT6Xcc49
-        STVANgFerKmhtGRo+OLqmoqop155GVNyoRI279hUEQ8bOs9lbTkJT5/8y5WkI3d7ZRr
-        345PkDU/FtoRZnZYC/hwH72TXgrmq6MmPneKqg/k=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx; d=amazonses.com; t=1574820641;
-        h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:Cc:Subject:In-Reply-To:References:Message-ID:Feedback-ID;
-        bh=wp6gAuMx9Q0mOxTUJ6h6NDdNvTlRVYtevVVkaQECXKs=;
-        b=BegT5QHk1BbTqahrlri/Hnhx0fSf6ntq1lZVNNW5fY+VharDtBKc7wtcawEFTANG
-        iIwqDeilGIUsNlGCDwgw5AL6nXvJSRPkJPwf7pceZQcGIcP8+ul9Ih8W8OkW8uAZEzZ
-        nV+qHnFxhE4l9H/KC4R2VqvD+jeUNG8O0NSVQwUM=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.0
+        id S1726526AbfK0DsN (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 26 Nov 2019 22:48:13 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:53961 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726540AbfK0DsM (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 26 Nov 2019 22:48:12 -0500
+Received: by mail-wm1-f67.google.com with SMTP id u18so5487716wmc.3;
+        Tue, 26 Nov 2019 19:48:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3h+DpmhCSUk922666a//uOALAD2+HbjMGEqyTOs+YDo=;
+        b=kqLkeXPBx+4E2fff9UFpGO6c5Gt9qV5E61jlNWHIi4lw9G5aMNA8fcW8SUpUKgQEz7
+         csRGBnAIdkXU3/bM2+8r1FzkZvluh5tdivNxlPZfy5+WeyFAWQA3GTtNUPo0aSslDPfv
+         iAH1WtO3uq6m/JYdI4kMSnF9pu19eVVy3y4smgI/fHE9vDigbzWBVCA7TeHreToUSxg/
+         Vqku6f89Vh0LLVqv/jObadwTRDPVoPDhK9baxFVA33DPet6cttaj+UDgLCGlD8feuf/Y
+         MZCEJYtBGIcyCU9vaCCzrFFJYhgm66cUyv4stRBip7qGFy8nBM8wwSyDlRZpnmu+HWOb
+         A5kA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3h+DpmhCSUk922666a//uOALAD2+HbjMGEqyTOs+YDo=;
+        b=uFIn6oVtvQwoOmavux3l5HIlvpKf3vesDUBCgAprck0zU/ImdY1AczrUBkXvbr/Tyz
+         H2QBiQCQ5WtWL3QjP8X6Z02IZV4//5YKo5+GnamQLGM5VlOf/PvWdq/qIiPnARpOahBU
+         30R4rQhpgQpPD8R+2EKi8k4ZQdvN4WtX1TAV3mzQiySaKw/zxPL86hWi8a9nXBVAbkpy
+         Q9oYFPSqeQ3CSTPW15ci9AT7Qpx0aLbfcp/A9nXjKb8Znen18yEEwcBkZyb7dyF6AKv7
+         HTyS68nzZbfPbzsEsl/FD4DkT877TdMcHADaYRRf37jCj34j4s42pnuWfvPAsmM7f3Wo
+         RY/A==
+X-Gm-Message-State: APjAAAX0tpxKnPNUyAxs+7hqgK+hhoin7zxHJjj7QW4PybPWm+bpItGS
+        AzJsNcUiTHsybciI33hqitXtnpJtBQgOSe5PuLd3Wsua
+X-Google-Smtp-Source: APXvYqztje+fy0GVMsmKlxZWASr6QdQUBODMQ6026Jwee+rYb0VSw9s/2xsBtJ+7RCtFtl2Amtyudrq1faJjQP59YY4=
+X-Received: by 2002:a1c:20ce:: with SMTP id g197mr1860363wmg.99.1574826486807;
+ Tue, 26 Nov 2019 19:48:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Wed, 27 Nov 2019 02:10:41 +0000
-From:   subashab@codeaurora.org
-To:     =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <zenczykowski@gmail.com>
-Cc:     =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>,
-        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        Sean Tranchetti <stranche@codeaurora.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Linux SCTP <linux-sctp@vger.kernel.org>, lorenzo@google.com
-Subject: Re: [PATCH] net: introduce ip_local_unbindable_ports sysctl
-In-Reply-To: <20191127001313.183170-1-zenczykowski@gmail.com>
-References: <20191127001313.183170-1-zenczykowski@gmail.com>
-Message-ID: <0101016eaa9ffa53-f140ca8d-44de-42c2-ab16-b77d3c1cd88d-000000@us-west-2.amazonses.com>
-X-Sender: subashab@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
-X-SES-Outgoing: 2019.11.27-54.240.27.56
-Feedback-ID: 1.us-west-2.CZuq2qbDmUIuT3qdvXlRHZZCpfZqZ4GtG9v3VKgRyF0=:AmazonSES
+References: <836cbb3768d75ddcf2eabe5f2682a5486a5afe7e.1574654390.git.lucien.xin@gmail.com>
+ <20191125132440.GA14928@hmswarspite.think-freely.org> <CADvbK_e6qDC7OobXROnxyzjXAC1ZpfiVZ5LK+93paORYcdNj=A@mail.gmail.com>
+ <20191126140859.GA21200@hmswarspite.think-freely.org>
+In-Reply-To: <20191126140859.GA21200@hmswarspite.think-freely.org>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Wed, 27 Nov 2019 11:48:04 +0800
+Message-ID: <CADvbK_dcB69yCwhBNm4TZQ-izAU-JFO+1hNgtFp-xLkFge74-Q@mail.gmail.com>
+Subject: Re: [PATCH net] sctp: get netns from asoc and ep base
+To:     Neil Horman <nhorman@tuxdriver.com>
+Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
+        davem <davem@davemloft.net>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On 2019-11-26 17:13, Maciej Żenczykowski wrote:
-> From: Maciej Żenczykowski <maze@google.com>
-> 
-> and associated inet_is_local_unbindable_port() helper function:
-> use it to make explicitly binding to an unbindable port return
-> -EPERM 'Operation not permitted'.
-> 
-> Autobind doesn't honour this new sysctl since:
->   (a) you can simply set both if that's the behaviour you desire
->   (b) there could be a use for preventing explicit while allowing auto
->   (c) it's faster in the relatively critical path of doing port 
-> selection
->       during connect() to only check one bitmap instead of both
-> 
-> Various ports may have special use cases which are not suitable for
-> use by general userspace applications. Currently, ports specified in
-> ip_local_reserved_ports sysctl will not be returned only in case of
-> automatic port assignment, but nothing prevents you from explicitly
-> binding to them - even from an entirely unprivileged process.
-> 
-> In certain cases it is desirable to prevent the host from assigning the
-> ports even in case of explicit binds, even from superuser processes.
-> 
-> Example use cases might be:
->  - a port being stolen by the nic for remote serial console, remote
->    power management or some other sort of debugging functionality
->    (crash collection, gdb, direct access to some other microcontroller
->    on the nic or motherboard, remote management of the nic itself).
->  - a transparent proxy where packets are being redirected: in case
->    a socket matches this connection, packets from this application
->    would be incorrectly sent to one of the endpoints.
-> 
-> Initially I wanted to solve this problem via the simple one line:
-> 
-> static inline bool inet_port_requires_bind_service(struct net *net,
-> unsigned short port) {
-> -       return port < net->ipv4.sysctl_ip_prot_sock;
-> +       return port < net->ipv4.sysctl_ip_prot_sock ||
-> inet_is_local_reserved_port(net, port);
-> }
-> 
-> However, this doesn't work for two reasons:
->   (a) it changes userspace visible behaviour of the existing local
->       reserved ports sysctl, and there appears to be enough 
-> documentation
->       on the internet talking about setting it to make this a bad idea
->   (b) it doesn't prevent privileged apps from using these ports,
->       CAP_BIND_SERVICE is relatively likely to be available to, for 
-> example,
->       a recursive DNS server so it can listed on port 53, which also 
-> needs
->       to do src port randomization for outgoing queries due to security
->       reasons (and it thus does manual port binding).
-> 
-> If we *know* that certain ports are simply unusable, then it's better
-> nothing even gets the opportunity to try to use them.  This way we at
-> least get a quick failure, instead of some sort of timeout (or possibly
-> even corruption of the data stream of the non-kernel based use case).
-> 
-> Test:
->   vm:~# cat /proc/sys/net/ipv4/ip_local_unbindable_ports
-> 
->   vm:~# python -c 'import socket; s = socket.socket(socket.AF_INET6,
-> socket.SOCK_STREAM, 0); s.bind(("::", 3967))'
->   vm:~# python -c 'import socket; s = socket.socket(socket.AF_INET6,
-> socket.SOCK_DGRAM, 0); s.bind(("::", 3967))'
->   vm:~# echo 3967 > /proc/sys/net/ipv4/ip_local_unbindable_ports
->   vm:~# cat /proc/sys/net/ipv4/ip_local_unbindable_ports
->   3967
->   vm:~# python -c 'import socket; s = socket.socket(socket.AF_INET6,
-> socket.SOCK_STREAM, 0); s.bind(("::", 3967))'
->   socket.error: (1, 'Operation not permitted')
->   vm:~# python -c 'import socket; s = socket.socket(socket.AF_INET6,
-> socket.SOCK_DGRAM, 0); s.bind(("::", 3967))'
->   socket.error: (1, 'Operation not permitted')
-> 
-> Cc: Sean Tranchetti <stranche@codeaurora.org>
-> Cc: Subash Abhinov Kasiviswanathan <subashab@codeaurora.org>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Linux SCTP <linux-sctp@vger.kernel.org>
-> Signed-off-by: Maciej Żenczykowski <maze@google.com>
-> ---
->  Documentation/networking/ip-sysctl.txt | 13 +++++++++++++
->  include/net/ip.h                       | 12 ++++++++++++
->  include/net/netns/ipv4.h               |  1 +
->  net/ipv4/af_inet.c                     |  4 ++++
->  net/ipv4/sysctl_net_ipv4.c             | 18 ++++++++++++++++--
->  net/ipv6/af_inet6.c                    |  2 ++
->  net/sctp/socket.c                      |  5 +++++
->  7 files changed, 53 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/networking/ip-sysctl.txt
-> b/Documentation/networking/ip-sysctl.txt
-> index fd26788e8c96..7129646a18bd 100644
-> --- a/Documentation/networking/ip-sysctl.txt
-> +++ b/Documentation/networking/ip-sysctl.txt
-> @@ -940,6 +940,19 @@ ip_local_reserved_ports - list of comma separated 
-> ranges
-> 
->  	Default: Empty
-> 
-> +ip_local_unbindable_ports - list of comma separated ranges
-> +	Specify the ports which are not directly bind()able.
-> +
-> +	Usually you would use this to block the use of ports which
-> +	are invalid due to something outside of the control of the
-> +	kernel.  For example a port stolen by the nic for serial
-> +	console, remote power management or debugging.
-> +
-> +	There's a relatively high chance you will also want to list
-> +	these ports in 'ip_local_reserved_ports' to prevent autobinding.
-> +
-> +	Default: Empty
-> +
->  ip_unprivileged_port_start - INTEGER
->  	This is a per-namespace sysctl.  It defines the first
->  	unprivileged port in the network namespace.  Privileged ports
-> diff --git a/include/net/ip.h b/include/net/ip.h
-> index 02d68e346f67..14b99bf59ffc 100644
-> --- a/include/net/ip.h
-> +++ b/include/net/ip.h
-> @@ -346,6 +346,13 @@ static inline bool
-> inet_is_local_reserved_port(struct net *net, unsigned short p
->  	return test_bit(port, net->ipv4.sysctl_local_reserved_ports);
->  }
-> 
-> +static inline bool inet_is_local_unbindable_port(struct net *net,
-> unsigned short port)
-> +{
-> +	if (!net->ipv4.sysctl_local_unbindable_ports)
-> +		return false;
-> +	return test_bit(port, net->ipv4.sysctl_local_unbindable_ports);
-> +}
-> +
->  static inline bool sysctl_dev_name_is_allowed(const char *name)
->  {
->  	return strcmp(name, "default") != 0  && strcmp(name, "all") != 0;
-> @@ -362,6 +369,11 @@ static inline bool
-> inet_is_local_reserved_port(struct net *net, unsigned short p
->  	return false;
->  }
-> 
-> +static inline bool inet_is_local_unbindable_port(struct net *net,
-> unsigned short port)
-> +{
-> +	return false;
-> +}
-> +
->  static inline bool inet_port_requires_bind_service(struct net *net,
-> unsigned short port)
->  {
->  	return port < PROT_SOCK;
-> diff --git a/include/net/netns/ipv4.h b/include/net/netns/ipv4.h
-> index c0c0791b1912..6a235651925d 100644
-> --- a/include/net/netns/ipv4.h
-> +++ b/include/net/netns/ipv4.h
-> @@ -197,6 +197,7 @@ struct netns_ipv4 {
-> 
->  #ifdef CONFIG_SYSCTL
->  	unsigned long *sysctl_local_reserved_ports;
-> +	unsigned long *sysctl_local_unbindable_ports;
->  	int sysctl_ip_prot_sock;
->  #endif
-> 
-> diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-> index 2fe295432c24..b26046431612 100644
-> --- a/net/ipv4/af_inet.c
-> +++ b/net/ipv4/af_inet.c
-> @@ -494,6 +494,10 @@ int __inet_bind(struct sock *sk, struct sockaddr
-> *uaddr, int addr_len,
->  		goto out;
-> 
->  	snum = ntohs(addr->sin_port);
-> +	err = -EPERM;
-> +	if (snum && inet_is_local_unbindable_port(net, snum))
-> +		goto out;
-> +
->  	err = -EACCES;
->  	if (snum && inet_port_requires_bind_service(net, snum) &&
->  	    !ns_capable(net->user_ns, CAP_NET_BIND_SERVICE))
-> diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
-> index fcb2cd167f64..fd363b57a653 100644
-> --- a/net/ipv4/sysctl_net_ipv4.c
-> +++ b/net/ipv4/sysctl_net_ipv4.c
-> @@ -745,6 +745,13 @@ static struct ctl_table ipv4_net_table[] = {
->  		.mode		= 0644,
->  		.proc_handler	= proc_do_large_bitmap,
->  	},
-> +	{
-> +		.procname	= "ip_local_unbindable_ports",
-> +		.data		= &init_net.ipv4.sysctl_local_unbindable_ports,
-> +		.maxlen		= 65536,
-> +		.mode		= 0644,
-> +		.proc_handler	= proc_do_large_bitmap,
-> +	},
->  	{
->  		.procname	= "ip_no_pmtu_disc",
->  		.data		= &init_net.ipv4.sysctl_ip_no_pmtu_disc,
-> @@ -1353,11 +1360,17 @@ static __net_init int
-> ipv4_sysctl_init_net(struct net *net)
-> 
->  	net->ipv4.sysctl_local_reserved_ports = kzalloc(65536 / 8, 
-> GFP_KERNEL);
->  	if (!net->ipv4.sysctl_local_reserved_ports)
-> -		goto err_ports;
-> +		goto err_reserved_ports;
-> +
-> +	net->ipv4.sysctl_local_unbindable_ports = kzalloc(65536 / 8, 
-> GFP_KERNEL);
-> +	if (!net->ipv4.sysctl_local_unbindable_ports)
-> +		goto err_unbindable_ports;
-> 
->  	return 0;
-> 
-> -err_ports:
-> +err_unbindable_ports:
-> +	kfree(net->ipv4.sysctl_local_reserved_ports);
-> +err_reserved_ports:
->  	unregister_net_sysctl_table(net->ipv4.ipv4_hdr);
->  err_reg:
->  	if (!net_eq(net, &init_net))
-> @@ -1370,6 +1383,7 @@ static __net_exit void
-> ipv4_sysctl_exit_net(struct net *net)
->  {
->  	struct ctl_table *table;
-> 
-> +	kfree(net->ipv4.sysctl_local_unbindable_ports);
->  	kfree(net->ipv4.sysctl_local_reserved_ports);
->  	table = net->ipv4.ipv4_hdr->ctl_table_arg;
->  	unregister_net_sysctl_table(net->ipv4.ipv4_hdr);
-> diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
-> index 60e2ff91a5b3..3c83e3200543 100644
-> --- a/net/ipv6/af_inet6.c
-> +++ b/net/ipv6/af_inet6.c
-> @@ -292,6 +292,8 @@ static int __inet6_bind(struct sock *sk, struct
-> sockaddr *uaddr, int addr_len,
->  		return -EINVAL;
-> 
->  	snum = ntohs(addr->sin6_port);
-> +	if (snum && inet_is_local_unbindable_port(net, snum))
-> +		return -EPERM;
->  	if (snum && inet_port_requires_bind_service(net, snum) &&
->  	    !ns_capable(net->user_ns, CAP_NET_BIND_SERVICE))
->  		return -EACCES;
-> diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-> index 0b485952a71c..d1c93542419d 100644
-> --- a/net/sctp/socket.c
-> +++ b/net/sctp/socket.c
-> @@ -384,6 +384,9 @@ static int sctp_do_bind(struct sock *sk, union
-> sctp_addr *addr, int len)
->  		}
->  	}
-> 
-> +	if (snum && inet_is_local_unbindable_port(net, snum))
-> +		return -EPERM;
-> +
->  	if (snum && inet_port_requires_bind_service(net, snum) &&
->  	    !ns_capable(net->user_ns, CAP_NET_BIND_SERVICE))
->  		return -EACCES;
-> @@ -1061,6 +1064,8 @@ static int sctp_connect_new_asoc(struct 
-> sctp_endpoint *ep,
->  		if (sctp_autobind(sk))
->  			return -EAGAIN;
->  	} else {
-> +		if (inet_is_local_unbindable_port(net, ep->base.bind_addr.port))
-> +			return -EPERM;
->  		if (inet_port_requires_bind_service(net, ep->base.bind_addr.port) &&
->  		    !ns_capable(net->user_ns, CAP_NET_BIND_SERVICE))
->  			return -EACCES;
+On Tue, Nov 26, 2019 at 10:09 PM Neil Horman <nhorman@tuxdriver.com> wrote:
+>
+> On Tue, Nov 26, 2019 at 04:27:20PM +0800, Xin Long wrote:
+> > On Mon, Nov 25, 2019 at 9:24 PM Neil Horman <nhorman@tuxdriver.com> wrote:
+> > >
+> > > On Mon, Nov 25, 2019 at 11:59:50AM +0800, Xin Long wrote:
+> > > > Commit 312434617cb1 ("sctp: cache netns in sctp_ep_common") set netns
+> > > > in asoc and ep base since they're created, and it will never change.
+> > > > It's a better way to get netns from asoc and ep base, comparing to
+> > > > calling sock_net().
+> > > >
+> > > > This patch is to replace them.
+> > > >
+> > > I don't see anything expressly wrong with this, but I'm not sure I see it as
+> > > better either.  It makes things more consistent with commit 312434617cb1, sure,
+> > > but both sock_net, and its called read_pnet are both static inline functions, so
+> > > it should reduce to the same thing.
+> > >
+> > > In fact, I think it may be better to ammend the fix from 312434617cb1, to,
+> > > instead of caching the net structure in the ep_common struct, instead, update
+> > > sctp_assoc_migrate so that the new value base.sk is atomically exchanged before
+> > > any calls to sock_put/sock_hold are made, so that the rhashtable lookup is
+> > > consistent.  That would allow us to consistently use sock_net the way other
+> > > protocols do
+> > why is "before any calls to sock_put/sock_hold are made"?
+> >
+> It was my understanding that the problem in commit 312434617cb1 was that the
+> rhashtable lookup that ended in sctp_hash_obj was running in parallel with
+> sctp_assoc_migrate, and the result was that the socket pointer in the hash table
+> was getting freed on a sock_put while it was being accessed by the
+> rehash_operation
+>
+> But as I look closer, thats not actually whats happening (I don't think), it
+> appears that KCSAN is just reporting that a read and write operation is
+> happening in parallel between the two, which could potentially lead to a
+> corruption.
+I think so, that's why we need memory barriers to eliminate this warning.
 
-Thanks Maciej.
-This works fine for me (seeing some minor merge conflicts on net-next 
-but applies
-fine on net).
+>
+>
+> > I was thinking to use rcu_assign_pointer() and rcu_dereference() for base.sk,
+> > but looks troublesome to replace all places.
+> > do you think it would work for atomic exchange? or you have some better idea?
+> >
+> I'm not sure.  I get that rcu is going to be cumbersome here, since
+> sctp_assoc_migrate is the only location we seem to be writing the value of
+> base.sk while its present in the hash table, and we don't want to annotate all
+> the other read sites with rcu tags.  However, we don't really want to use
+> cmpxchg either, since we just want to read it on one side and write it in the
+> other.
+right.
 
-Reviewed-by: Subash Abhinov Kasiviswanathan <subashab@codeaurora.org>
+>
+> It seems, like given the rhashtable api, the expectation is that, for a given
+> element in the hashtable, if that element changes, we would want to replace the
+> element with a new copy using rhashtable_replace_fast, which follows all the
+> internal locking protocols of the hashtable and allows for a quick update
+> safely, but we don't really want to do that, we just want to replace a field in
+> a structure thats pointed to by the transport structs which are whats really in
+> the hash table.
+Exactly, we don't even really need transport->asoc.base.sk, as you know,
+what we care is transport->asoc.base.net, which would never change once
+created.
+
+>
+> I wonder if there isn't a need here for an addition to the rhashtable api.
+> Something like rhashtable_lock(struct rhashtable *ht) and
+> rhashtable_unlock(struct rhashtable *ht), which respectively would just lock and
+> unlock the ht->mutex.  Since the rht_deferred_worker isn't exposed in any way
+> via the api, it seems like there is no way to really know when its safe to
+> update those pointers, because we never know if the rhashtable workers are
+> running in parallel with us.  If we had api access to the ht->mutex, we could
+> block the forward progress of any async workers in the hash table, which would
+> allow us to safely update any member pointers.  And then we wouldn't need to
+> cache the net struct.
+That would work, but:
+
+1. ht->mutex is used to protect hashtable itself, and acquired only when
+   hashtable size is changing, NOT even when inserting elements. It does
+   not sound good to protect t->asoc->base.sk changing.
+
+2. As the node in rhashtbable, transport's keys should be kept invariable
+   after created, including t->asoc->base.bind_addr.port, t->ipaddr, and
+   t->asoc->base.sk->net.  t->asoc->base.sk is not invariable, but netns
+   is, all we should do it to have a proper way to get netns, like:
+   t->asoc->base.net.
+
+3. caching netns looks clearer and easier than using ht->mutex in sctp.
+
+>
+> What do you think?
+>
+> Neil
+>
+> >
+> > >
+> > > Neil
+> > >
+> > > > Suggested-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+> > > > Signed-off-by: Xin Long <lucien.xin@gmail.com>
+> > > > ---
+> > > >  net/sctp/associola.c         | 10 +++++-----
+> > > >  net/sctp/chunk.c             |  2 +-
+> > > >  net/sctp/endpointola.c       |  6 +++---
+> > > >  net/sctp/input.c             |  5 ++---
+> > > >  net/sctp/output.c            |  2 +-
+> > > >  net/sctp/outqueue.c          |  6 +++---
+> > > >  net/sctp/sm_make_chunk.c     |  7 +++----
+> > > >  net/sctp/sm_sideeffect.c     | 16 ++++++----------
+> > > >  net/sctp/sm_statefuns.c      |  2 +-
+> > > >  net/sctp/socket.c            | 12 +++++-------
+> > > >  net/sctp/stream.c            |  3 +--
+> > > >  net/sctp/stream_interleave.c | 23 ++++++++++-------------
+> > > >  net/sctp/transport.c         |  2 +-
+> > > >  net/sctp/ulpqueue.c          | 15 +++++++--------
+> > > >  14 files changed, 49 insertions(+), 62 deletions(-)
+> > > >
+> > > > diff --git a/net/sctp/associola.c b/net/sctp/associola.c
+> > > > index 41839b8..a725f53 100644
+> > > > --- a/net/sctp/associola.c
+> > > > +++ b/net/sctp/associola.c
+> > > > @@ -579,7 +579,6 @@ struct sctp_transport *sctp_assoc_add_peer(struct sctp_association *asoc,
+> > > >                                          const gfp_t gfp,
+> > > >                                          const int peer_state)
+> > > >  {
+> > > > -     struct net *net = sock_net(asoc->base.sk);
+> > > >       struct sctp_transport *peer;
+> > > >       struct sctp_sock *sp;
+> > > >       unsigned short port;
+> > > > @@ -609,7 +608,7 @@ struct sctp_transport *sctp_assoc_add_peer(struct sctp_association *asoc,
+> > > >               return peer;
+> > > >       }
+> > > >
+> > > > -     peer = sctp_transport_new(net, addr, gfp);
+> > > > +     peer = sctp_transport_new(asoc->base.net, addr, gfp);
+> > > >       if (!peer)
+> > > >               return NULL;
+> > > >
+> > > > @@ -978,7 +977,7 @@ static void sctp_assoc_bh_rcv(struct work_struct *work)
+> > > >       struct sctp_association *asoc =
+> > > >               container_of(work, struct sctp_association,
+> > > >                            base.inqueue.immediate);
+> > > > -     struct net *net = sock_net(asoc->base.sk);
+> > > > +     struct net *net = asoc->base.net;
+> > > >       union sctp_subtype subtype;
+> > > >       struct sctp_endpoint *ep;
+> > > >       struct sctp_chunk *chunk;
+> > > > @@ -1446,7 +1445,8 @@ void sctp_assoc_sync_pmtu(struct sctp_association *asoc)
+> > > >  /* Should we send a SACK to update our peer? */
+> > > >  static inline bool sctp_peer_needs_update(struct sctp_association *asoc)
+> > > >  {
+> > > > -     struct net *net = sock_net(asoc->base.sk);
+> > > > +     struct net *net = asoc->base.net;
+> > > > +
+> > > >       switch (asoc->state) {
+> > > >       case SCTP_STATE_ESTABLISHED:
+> > > >       case SCTP_STATE_SHUTDOWN_PENDING:
+> > > > @@ -1580,7 +1580,7 @@ int sctp_assoc_set_bind_addr_from_ep(struct sctp_association *asoc,
+> > > >       if (asoc->peer.ipv6_address)
+> > > >               flags |= SCTP_ADDR6_PEERSUPP;
+> > > >
+> > > > -     return sctp_bind_addr_copy(sock_net(asoc->base.sk),
+> > > > +     return sctp_bind_addr_copy(asoc->base.net,
+> > > >                                  &asoc->base.bind_addr,
+> > > >                                  &asoc->ep->base.bind_addr,
+> > > >                                  scope, gfp, flags);
+> > > > diff --git a/net/sctp/chunk.c b/net/sctp/chunk.c
+> > > > index cc0405c..064675b 100644
+> > > > --- a/net/sctp/chunk.c
+> > > > +++ b/net/sctp/chunk.c
+> > > > @@ -227,7 +227,7 @@ struct sctp_datamsg *sctp_datamsg_from_user(struct sctp_association *asoc,
+> > > >       if (msg_len >= first_len) {
+> > > >               msg->can_delay = 0;
+> > > >               if (msg_len > first_len)
+> > > > -                     SCTP_INC_STATS(sock_net(asoc->base.sk),
+> > > > +                     SCTP_INC_STATS(asoc->base.net,
+> > > >                                      SCTP_MIB_FRAGUSRMSGS);
+> > > >       } else {
+> > > >               /* Which may be the only one... */
+> > > > diff --git a/net/sctp/endpointola.c b/net/sctp/endpointola.c
+> > > > index 3067deb..6e7e0d3 100644
+> > > > --- a/net/sctp/endpointola.c
+> > > > +++ b/net/sctp/endpointola.c
+> > > > @@ -244,7 +244,7 @@ struct sctp_endpoint *sctp_endpoint_is_match(struct sctp_endpoint *ep,
+> > > >       struct sctp_endpoint *retval = NULL;
+> > > >
+> > > >       if ((htons(ep->base.bind_addr.port) == laddr->v4.sin_port) &&
+> > > > -         net_eq(sock_net(ep->base.sk), net)) {
+> > > > +         net_eq(ep->base.net, net)) {
+> > > >               if (sctp_bind_addr_match(&ep->base.bind_addr, laddr,
+> > > >                                        sctp_sk(ep->base.sk)))
+> > > >                       retval = ep;
+> > > > @@ -292,8 +292,8 @@ bool sctp_endpoint_is_peeled_off(struct sctp_endpoint *ep,
+> > > >                                const union sctp_addr *paddr)
+> > > >  {
+> > > >       struct sctp_sockaddr_entry *addr;
+> > > > +     struct net *net = ep->base.net;
+> > > >       struct sctp_bind_addr *bp;
+> > > > -     struct net *net = sock_net(ep->base.sk);
+> > > >
+> > > >       bp = &ep->base.bind_addr;
+> > > >       /* This function is called with the socket lock held,
+> > > > @@ -384,7 +384,7 @@ static void sctp_endpoint_bh_rcv(struct work_struct *work)
+> > > >               if (asoc && sctp_chunk_is_data(chunk))
+> > > >                       asoc->peer.last_data_from = chunk->transport;
+> > > >               else {
+> > > > -                     SCTP_INC_STATS(sock_net(ep->base.sk), SCTP_MIB_INCTRLCHUNKS);
+> > > > +                     SCTP_INC_STATS(ep->base.net, SCTP_MIB_INCTRLCHUNKS);
+> > > >                       if (asoc)
+> > > >                               asoc->stats.ictrlchunks++;
+> > > >               }
+> > > > diff --git a/net/sctp/input.c b/net/sctp/input.c
+> > > > index 4d2bcfc..efaaefc 100644
+> > > > --- a/net/sctp/input.c
+> > > > +++ b/net/sctp/input.c
+> > > > @@ -937,7 +937,7 @@ int sctp_hash_transport(struct sctp_transport *t)
+> > > >       if (t->asoc->temp)
+> > > >               return 0;
+> > > >
+> > > > -     arg.net   = sock_net(t->asoc->base.sk);
+> > > > +     arg.net   = t->asoc->base.net;
+> > > >       arg.paddr = &t->ipaddr;
+> > > >       arg.lport = htons(t->asoc->base.bind_addr.port);
+> > > >
+> > > > @@ -1004,12 +1004,11 @@ struct sctp_transport *sctp_epaddr_lookup_transport(
+> > > >                               const struct sctp_endpoint *ep,
+> > > >                               const union sctp_addr *paddr)
+> > > >  {
+> > > > -     struct net *net = sock_net(ep->base.sk);
+> > > >       struct rhlist_head *tmp, *list;
+> > > >       struct sctp_transport *t;
+> > > >       struct sctp_hash_cmp_arg arg = {
+> > > >               .paddr = paddr,
+> > > > -             .net   = net,
+> > > > +             .net   = ep->base.net,
+> > > >               .lport = htons(ep->base.bind_addr.port),
+> > > >       };
+> > > >
+> > > > diff --git a/net/sctp/output.c b/net/sctp/output.c
+> > > > index dbda7e7..1441eaf 100644
+> > > > --- a/net/sctp/output.c
+> > > > +++ b/net/sctp/output.c
+> > > > @@ -282,7 +282,7 @@ static enum sctp_xmit sctp_packet_bundle_sack(struct sctp_packet *pkt,
+> > > >                                       sctp_chunk_free(sack);
+> > > >                                       goto out;
+> > > >                               }
+> > > > -                             SCTP_INC_STATS(sock_net(asoc->base.sk),
+> > > > +                             SCTP_INC_STATS(asoc->base.net,
+> > > >                                              SCTP_MIB_OUTCTRLCHUNKS);
+> > > >                               asoc->stats.octrlchunks++;
+> > > >                               asoc->peer.sack_needed = 0;
+> > > > diff --git a/net/sctp/outqueue.c b/net/sctp/outqueue.c
+> > > > index 0dab62b..a031d11 100644
+> > > > --- a/net/sctp/outqueue.c
+> > > > +++ b/net/sctp/outqueue.c
+> > > > @@ -279,7 +279,7 @@ void sctp_outq_free(struct sctp_outq *q)
+> > > >  /* Put a new chunk in an sctp_outq.  */
+> > > >  void sctp_outq_tail(struct sctp_outq *q, struct sctp_chunk *chunk, gfp_t gfp)
+> > > >  {
+> > > > -     struct net *net = sock_net(q->asoc->base.sk);
+> > > > +     struct net *net = q->asoc->base.net;
+> > > >
+> > > >       pr_debug("%s: outq:%p, chunk:%p[%s]\n", __func__, q, chunk,
+> > > >                chunk && chunk->chunk_hdr ?
+> > > > @@ -533,7 +533,7 @@ void sctp_retransmit_mark(struct sctp_outq *q,
+> > > >  void sctp_retransmit(struct sctp_outq *q, struct sctp_transport *transport,
+> > > >                    enum sctp_retransmit_reason reason)
+> > > >  {
+> > > > -     struct net *net = sock_net(q->asoc->base.sk);
+> > > > +     struct net *net = q->asoc->base.net;
+> > > >
+> > > >       switch (reason) {
+> > > >       case SCTP_RTXR_T3_RTX:
+> > > > @@ -1884,6 +1884,6 @@ void sctp_generate_fwdtsn(struct sctp_outq *q, __u32 ctsn)
+> > > >
+> > > >       if (ftsn_chunk) {
+> > > >               list_add_tail(&ftsn_chunk->list, &q->control_chunk_list);
+> > > > -             SCTP_INC_STATS(sock_net(asoc->base.sk), SCTP_MIB_OUTCTRLCHUNKS);
+> > > > +             SCTP_INC_STATS(asoc->base.net, SCTP_MIB_OUTCTRLCHUNKS);
+> > > >       }
+> > > >  }
+> > > > diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
+> > > > index 48d6395..09050c1 100644
+> > > > --- a/net/sctp/sm_make_chunk.c
+> > > > +++ b/net/sctp/sm_make_chunk.c
+> > > > @@ -2307,7 +2307,6 @@ int sctp_process_init(struct sctp_association *asoc, struct sctp_chunk *chunk,
+> > > >                     const union sctp_addr *peer_addr,
+> > > >                     struct sctp_init_chunk *peer_init, gfp_t gfp)
+> > > >  {
+> > > > -     struct net *net = sock_net(asoc->base.sk);
+> > > >       struct sctp_transport *transport;
+> > > >       struct list_head *pos, *temp;
+> > > >       union sctp_params param;
+> > > > @@ -2363,8 +2362,8 @@ int sctp_process_init(struct sctp_association *asoc, struct sctp_chunk *chunk,
+> > > >        * also give us an option to silently ignore the packet, which
+> > > >        * is what we'll do here.
+> > > >        */
+> > > > -     if (!net->sctp.addip_noauth &&
+> > > > -          (asoc->peer.asconf_capable && !asoc->peer.auth_capable)) {
+> > > > +     if (!asoc->base.net->sctp.addip_noauth &&
+> > > > +         (asoc->peer.asconf_capable && !asoc->peer.auth_capable)) {
+> > > >               asoc->peer.addip_disabled_mask |= (SCTP_PARAM_ADD_IP |
+> > > >                                                 SCTP_PARAM_DEL_IP |
+> > > >                                                 SCTP_PARAM_SET_PRIMARY);
+> > > > @@ -2491,9 +2490,9 @@ static int sctp_process_param(struct sctp_association *asoc,
+> > > >                             const union sctp_addr *peer_addr,
+> > > >                             gfp_t gfp)
+> > > >  {
+> > > > -     struct net *net = sock_net(asoc->base.sk);
+> > > >       struct sctp_endpoint *ep = asoc->ep;
+> > > >       union sctp_addr_param *addr_param;
+> > > > +     struct net *net = asoc->base.net;
+> > > >       struct sctp_transport *t;
+> > > >       enum sctp_scope scope;
+> > > >       union sctp_addr addr;
+> > > > diff --git a/net/sctp/sm_sideeffect.c b/net/sctp/sm_sideeffect.c
+> > > > index e52b212..20b0281 100644
+> > > > --- a/net/sctp/sm_sideeffect.c
+> > > > +++ b/net/sctp/sm_sideeffect.c
+> > > > @@ -516,8 +516,6 @@ static void sctp_do_8_2_transport_strike(struct sctp_cmd_seq *commands,
+> > > >                                        struct sctp_transport *transport,
+> > > >                                        int is_hb)
+> > > >  {
+> > > > -     struct net *net = sock_net(asoc->base.sk);
+> > > > -
+> > > >       /* The check for association's overall error counter exceeding the
+> > > >        * threshold is done in the state function.
+> > > >        */
+> > > > @@ -544,10 +542,10 @@ static void sctp_do_8_2_transport_strike(struct sctp_cmd_seq *commands,
+> > > >        * is SCTP_ACTIVE, then mark this transport as Partially Failed,
+> > > >        * see SCTP Quick Failover Draft, section 5.1
+> > > >        */
+> > > > -     if (net->sctp.pf_enable &&
+> > > > -        (transport->state == SCTP_ACTIVE) &&
+> > > > -        (transport->error_count < transport->pathmaxrxt) &&
+> > > > -        (transport->error_count > transport->pf_retrans)) {
+> > > > +     if (asoc->base.net->sctp.pf_enable &&
+> > > > +         transport->state == SCTP_ACTIVE &&
+> > > > +         transport->error_count < transport->pathmaxrxt &&
+> > > > +         transport->error_count > transport->pf_retrans) {
+> > > >
+> > > >               sctp_assoc_control_transport(asoc, transport,
+> > > >                                            SCTP_TRANSPORT_PF,
+> > > > @@ -793,10 +791,8 @@ static int sctp_cmd_process_sack(struct sctp_cmd_seq *cmds,
+> > > >       int err = 0;
+> > > >
+> > > >       if (sctp_outq_sack(&asoc->outqueue, chunk)) {
+> > > > -             struct net *net = sock_net(asoc->base.sk);
+> > > > -
+> > > >               /* There are no more TSNs awaiting SACK.  */
+> > > > -             err = sctp_do_sm(net, SCTP_EVENT_T_OTHER,
+> > > > +             err = sctp_do_sm(asoc->base.net, SCTP_EVENT_T_OTHER,
+> > > >                                SCTP_ST_OTHER(SCTP_EVENT_NO_PENDING_TSN),
+> > > >                                asoc->state, asoc->ep, asoc, NULL,
+> > > >                                GFP_ATOMIC);
+> > > > @@ -829,7 +825,7 @@ static void sctp_cmd_assoc_update(struct sctp_cmd_seq *cmds,
+> > > >                                 struct sctp_association *asoc,
+> > > >                                 struct sctp_association *new)
+> > > >  {
+> > > > -     struct net *net = sock_net(asoc->base.sk);
+> > > > +     struct net *net = asoc->base.net;
+> > > >       struct sctp_chunk *abort;
+> > > >
+> > > >       if (!sctp_assoc_update(asoc, new))
+> > > > diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
+> > > > index 4ab8208..42558fa 100644
+> > > > --- a/net/sctp/sm_statefuns.c
+> > > > +++ b/net/sctp/sm_statefuns.c
+> > > > @@ -1320,7 +1320,7 @@ static int sctp_sf_check_restart_addrs(const struct sctp_association *new_asoc,
+> > > >                                      struct sctp_chunk *init,
+> > > >                                      struct sctp_cmd_seq *commands)
+> > > >  {
+> > > > -     struct net *net = sock_net(new_asoc->base.sk);
+> > > > +     struct net *net = new_asoc->base.net;
+> > > >       struct sctp_transport *new_addr;
+> > > >       int ret = 1;
+> > > >
+> > > > diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+> > > > index ffd3262..5e0efbc 100644
+> > > > --- a/net/sctp/socket.c
+> > > > +++ b/net/sctp/socket.c
+> > > > @@ -436,8 +436,7 @@ static int sctp_do_bind(struct sock *sk, union sctp_addr *addr, int len)
+> > > >  static int sctp_send_asconf(struct sctp_association *asoc,
+> > > >                           struct sctp_chunk *chunk)
+> > > >  {
+> > > > -     struct net      *net = sock_net(asoc->base.sk);
+> > > > -     int             retval = 0;
+> > > > +     int retval = 0;
+> > > >
+> > > >       /* If there is an outstanding ASCONF chunk, queue it for later
+> > > >        * transmission.
+> > > > @@ -449,7 +448,7 @@ static int sctp_send_asconf(struct sctp_association *asoc,
+> > > >
+> > > >       /* Hold the chunk until an ASCONF_ACK is received. */
+> > > >       sctp_chunk_hold(chunk);
+> > > > -     retval = sctp_primitive_ASCONF(net, asoc, chunk);
+> > > > +     retval = sctp_primitive_ASCONF(asoc->base.net, asoc, chunk);
+> > > >       if (retval)
+> > > >               sctp_chunk_free(chunk);
+> > > >       else
+> > > > @@ -2428,9 +2427,8 @@ static int sctp_apply_peer_addr_params(struct sctp_paddrparams *params,
+> > > >       int error;
+> > > >
+> > > >       if (params->spp_flags & SPP_HB_DEMAND && trans) {
+> > > > -             struct net *net = sock_net(trans->asoc->base.sk);
+> > > > -
+> > > > -             error = sctp_primitive_REQUESTHEARTBEAT(net, trans->asoc, trans);
+> > > > +             error = sctp_primitive_REQUESTHEARTBEAT(trans->asoc->base.net,
+> > > > +                                                     trans->asoc, trans);
+> > > >               if (error)
+> > > >                       return error;
+> > > >       }
+> > > > @@ -5308,7 +5306,7 @@ struct sctp_transport *sctp_transport_get_next(struct net *net,
+> > > >               if (!sctp_transport_hold(t))
+> > > >                       continue;
+> > > >
+> > > > -             if (net_eq(sock_net(t->asoc->base.sk), net) &&
+> > > > +             if (net_eq(t->asoc->base.net, net) &&
+> > > >                   t->asoc->peer.primary_path == t)
+> > > >                       break;
+> > > >
+> > > > diff --git a/net/sctp/stream.c b/net/sctp/stream.c
+> > > > index e83cdaa..df60b5e 100644
+> > > > --- a/net/sctp/stream.c
+> > > > +++ b/net/sctp/stream.c
+> > > > @@ -218,10 +218,9 @@ void sctp_stream_update(struct sctp_stream *stream, struct sctp_stream *new)
+> > > >  static int sctp_send_reconf(struct sctp_association *asoc,
+> > > >                           struct sctp_chunk *chunk)
+> > > >  {
+> > > > -     struct net *net = sock_net(asoc->base.sk);
+> > > >       int retval = 0;
+> > > >
+> > > > -     retval = sctp_primitive_RECONF(net, asoc, chunk);
+> > > > +     retval = sctp_primitive_RECONF(asoc->base.net, asoc, chunk);
+> > > >       if (retval)
+> > > >               sctp_chunk_free(chunk);
+> > > >
+> > > > diff --git a/net/sctp/stream_interleave.c b/net/sctp/stream_interleave.c
+> > > > index 40c40be..6b13f73 100644
+> > > > --- a/net/sctp/stream_interleave.c
+> > > > +++ b/net/sctp/stream_interleave.c
+> > > > @@ -241,9 +241,8 @@ static struct sctp_ulpevent *sctp_intl_retrieve_partial(
+> > > >       if (!first_frag)
+> > > >               return NULL;
+> > > >
+> > > > -     retval = sctp_make_reassembled_event(sock_net(ulpq->asoc->base.sk),
+> > > > -                                          &ulpq->reasm, first_frag,
+> > > > -                                          last_frag);
+> > > > +     retval = sctp_make_reassembled_event(ulpq->asoc->base.net, &ulpq->reasm,
+> > > > +                                          first_frag, last_frag);
+> > > >       if (retval) {
+> > > >               sin->fsn = next_fsn;
+> > > >               if (is_last) {
+> > > > @@ -326,7 +325,7 @@ static struct sctp_ulpevent *sctp_intl_retrieve_reassembled(
+> > > >
+> > > >       pd_point = sctp_sk(asoc->base.sk)->pd_point;
+> > > >       if (pd_point && pd_point <= pd_len) {
+> > > > -             retval = sctp_make_reassembled_event(sock_net(asoc->base.sk),
+> > > > +             retval = sctp_make_reassembled_event(asoc->base.net,
+> > > >                                                    &ulpq->reasm,
+> > > >                                                    pd_first, pd_last);
+> > > >               if (retval) {
+> > > > @@ -337,8 +336,7 @@ static struct sctp_ulpevent *sctp_intl_retrieve_reassembled(
+> > > >       goto out;
+> > > >
+> > > >  found:
+> > > > -     retval = sctp_make_reassembled_event(sock_net(asoc->base.sk),
+> > > > -                                          &ulpq->reasm,
+> > > > +     retval = sctp_make_reassembled_event(asoc->base.net, &ulpq->reasm,
+> > > >                                            first_frag, pos);
+> > > >       if (retval)
+> > > >               retval->msg_flags |= MSG_EOR;
+> > > > @@ -630,7 +628,7 @@ static struct sctp_ulpevent *sctp_intl_retrieve_partial_uo(
+> > > >       if (!first_frag)
+> > > >               return NULL;
+> > > >
+> > > > -     retval = sctp_make_reassembled_event(sock_net(ulpq->asoc->base.sk),
+> > > > +     retval = sctp_make_reassembled_event(ulpq->asoc->base.net,
+> > > >                                            &ulpq->reasm_uo, first_frag,
+> > > >                                            last_frag);
+> > > >       if (retval) {
+> > > > @@ -716,7 +714,7 @@ static struct sctp_ulpevent *sctp_intl_retrieve_reassembled_uo(
+> > > >
+> > > >       pd_point = sctp_sk(asoc->base.sk)->pd_point;
+> > > >       if (pd_point && pd_point <= pd_len) {
+> > > > -             retval = sctp_make_reassembled_event(sock_net(asoc->base.sk),
+> > > > +             retval = sctp_make_reassembled_event(asoc->base.net,
+> > > >                                                    &ulpq->reasm_uo,
+> > > >                                                    pd_first, pd_last);
+> > > >               if (retval) {
+> > > > @@ -727,8 +725,7 @@ static struct sctp_ulpevent *sctp_intl_retrieve_reassembled_uo(
+> > > >       goto out;
+> > > >
+> > > >  found:
+> > > > -     retval = sctp_make_reassembled_event(sock_net(asoc->base.sk),
+> > > > -                                          &ulpq->reasm_uo,
+> > > > +     retval = sctp_make_reassembled_event(asoc->base.net, &ulpq->reasm_uo,
+> > > >                                            first_frag, pos);
+> > > >       if (retval)
+> > > >               retval->msg_flags |= MSG_EOR;
+> > > > @@ -814,7 +811,7 @@ static struct sctp_ulpevent *sctp_intl_retrieve_first_uo(struct sctp_ulpq *ulpq)
+> > > >               return NULL;
+> > > >
+> > > >  out:
+> > > > -     retval = sctp_make_reassembled_event(sock_net(ulpq->asoc->base.sk),
+> > > > +     retval = sctp_make_reassembled_event(ulpq->asoc->base.net,
+> > > >                                            &ulpq->reasm_uo, first_frag,
+> > > >                                            last_frag);
+> > > >       if (retval) {
+> > > > @@ -921,7 +918,7 @@ static struct sctp_ulpevent *sctp_intl_retrieve_first(struct sctp_ulpq *ulpq)
+> > > >               return NULL;
+> > > >
+> > > >  out:
+> > > > -     retval = sctp_make_reassembled_event(sock_net(ulpq->asoc->base.sk),
+> > > > +     retval = sctp_make_reassembled_event(ulpq->asoc->base.net,
+> > > >                                            &ulpq->reasm, first_frag,
+> > > >                                            last_frag);
+> > > >       if (retval) {
+> > > > @@ -1159,7 +1156,7 @@ static void sctp_generate_iftsn(struct sctp_outq *q, __u32 ctsn)
+> > > >
+> > > >       if (ftsn_chunk) {
+> > > >               list_add_tail(&ftsn_chunk->list, &q->control_chunk_list);
+> > > > -             SCTP_INC_STATS(sock_net(asoc->base.sk), SCTP_MIB_OUTCTRLCHUNKS);
+> > > > +             SCTP_INC_STATS(asoc->base.net, SCTP_MIB_OUTCTRLCHUNKS);
+> > > >       }
+> > > >  }
+> > > >
+> > > > diff --git a/net/sctp/transport.c b/net/sctp/transport.c
+> > > > index 7235a60..f4de064 100644
+> > > > --- a/net/sctp/transport.c
+> > > > +++ b/net/sctp/transport.c
+> > > > @@ -334,7 +334,7 @@ void sctp_transport_update_rto(struct sctp_transport *tp, __u32 rtt)
+> > > >               pr_debug("%s: rto_pending not set on transport %p!\n", __func__, tp);
+> > > >
+> > > >       if (tp->rttvar || tp->srtt) {
+> > > > -             struct net *net = sock_net(tp->asoc->base.sk);
+> > > > +             struct net *net = tp->asoc->base.net;
+> > > >               /* 6.3.1 C3) When a new RTT measurement R' is made, set
+> > > >                * RTTVAR <- (1 - RTO.Beta) * RTTVAR + RTO.Beta * |SRTT - R'|
+> > > >                * SRTT <- (1 - RTO.Alpha) * SRTT + RTO.Alpha * R'
+> > > > diff --git a/net/sctp/ulpqueue.c b/net/sctp/ulpqueue.c
+> > > > index b6536b7..1c6c640 100644
+> > > > --- a/net/sctp/ulpqueue.c
+> > > > +++ b/net/sctp/ulpqueue.c
+> > > > @@ -486,10 +486,9 @@ static struct sctp_ulpevent *sctp_ulpq_retrieve_reassembled(struct sctp_ulpq *ul
+> > > >               cevent = sctp_skb2event(pd_first);
+> > > >               pd_point = sctp_sk(asoc->base.sk)->pd_point;
+> > > >               if (pd_point && pd_point <= pd_len) {
+> > > > -                     retval = sctp_make_reassembled_event(sock_net(asoc->base.sk),
+> > > > +                     retval = sctp_make_reassembled_event(asoc->base.net,
+> > > >                                                            &ulpq->reasm,
+> > > > -                                                          pd_first,
+> > > > -                                                          pd_last);
+> > > > +                                                          pd_first, pd_last);
+> > > >                       if (retval)
+> > > >                               sctp_ulpq_set_pd(ulpq);
+> > > >               }
+> > > > @@ -497,7 +496,7 @@ static struct sctp_ulpevent *sctp_ulpq_retrieve_reassembled(struct sctp_ulpq *ul
+> > > >  done:
+> > > >       return retval;
+> > > >  found:
+> > > > -     retval = sctp_make_reassembled_event(sock_net(ulpq->asoc->base.sk),
+> > > > +     retval = sctp_make_reassembled_event(ulpq->asoc->base.net,
+> > > >                                            &ulpq->reasm, first_frag, pos);
+> > > >       if (retval)
+> > > >               retval->msg_flags |= MSG_EOR;
+> > > > @@ -563,8 +562,8 @@ static struct sctp_ulpevent *sctp_ulpq_retrieve_partial(struct sctp_ulpq *ulpq)
+> > > >        * further.
+> > > >        */
+> > > >  done:
+> > > > -     retval = sctp_make_reassembled_event(sock_net(ulpq->asoc->base.sk),
+> > > > -                                     &ulpq->reasm, first_frag, last_frag);
+> > > > +     retval = sctp_make_reassembled_event(ulpq->asoc->base.net, &ulpq->reasm,
+> > > > +                                          first_frag, last_frag);
+> > > >       if (retval && is_last)
+> > > >               retval->msg_flags |= MSG_EOR;
+> > > >
+> > > > @@ -664,8 +663,8 @@ static struct sctp_ulpevent *sctp_ulpq_retrieve_first(struct sctp_ulpq *ulpq)
+> > > >        * further.
+> > > >        */
+> > > >  done:
+> > > > -     retval = sctp_make_reassembled_event(sock_net(ulpq->asoc->base.sk),
+> > > > -                                     &ulpq->reasm, first_frag, last_frag);
+> > > > +     retval = sctp_make_reassembled_event(ulpq->asoc->base.net, &ulpq->reasm,
+> > > > +                                          first_frag, last_frag);
+> > > >       return retval;
+> > > >  }
+> > > >
+> > > > --
+> > > > 2.1.0
+> > > >
+> > > >
+> >
