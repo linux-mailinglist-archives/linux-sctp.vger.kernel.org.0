@@ -2,72 +2,94 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6BE010DDE1
-	for <lists+linux-sctp@lfdr.de>; Sat, 30 Nov 2019 15:50:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D29F010DE26
+	for <lists+linux-sctp@lfdr.de>; Sat, 30 Nov 2019 16:38:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725985AbfK3OuC (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sat, 30 Nov 2019 09:50:02 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:36683 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725957AbfK3OuB (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sat, 30 Nov 2019 09:50:01 -0500
-Received: by mail-io1-f69.google.com with SMTP id 202so10037444iou.3
-        for <linux-sctp@vger.kernel.org>; Sat, 30 Nov 2019 06:50:01 -0800 (PST)
+        id S1727027AbfK3PiK (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sat, 30 Nov 2019 10:38:10 -0500
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:36161 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725985AbfK3PiK (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sat, 30 Nov 2019 10:38:10 -0500
+Received: by mail-qk1-f194.google.com with SMTP id v19so8687870qkv.3
+        for <linux-sctp@vger.kernel.org>; Sat, 30 Nov 2019 07:38:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oWJ16jxU4+iwSnWuytlpM5skSBZCFvJ07mOrWCdI8wc=;
+        b=Z0do+C6MX4UQUlXCJKKERLJS6qUjfvq9gStNXTZVBtJmE44YwC6lBYp1wp7nj4VVAF
+         h8Sr6i5gBvJ95H9Pier1R1Eqwkms5h8b40JjnLAJ2EJfmkch3gE/BfruftJym/5Ewqcv
+         v/bo5Hn7+WBUwHQHqmGModZzg/lEQLFnv/AH8aY6vKjQdZNmfCv1leg0jH/n9uuyEcTy
+         HQNGkvg+C1ZV1nEt0gMq7mc9J8VC4PQRWI57hoZsmf8e6Dvjy0Wzb0MBGqoexGuNL7io
+         39yg03NEPzERgNel4dOZvjz7I6irnsrA8hmpElXkXWe4oNks/sQypLZPYIta1B5liIsF
+         /hDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=jII87kLhfoGRXBIl4TNhBeD/bYyBWSNWa+TtrCAMKnM=;
-        b=O/H+4uZO1+U5N8ENAzHQCkg1DzrFarBjkcZaVB6gZuoLV5GX1NItpmTsK+vgq/HCEn
-         mam+FZuBfM+UNRHV0H+ehWkJlDotnGF3EIX0Vz5I3GV07/k1hVdLinh0+3vFHPuKcDQ4
-         v0r5YjuVQCPgU11y4qCW6EFsgtDvgbEePDBMCdeGVguEUufvVWcNyjeh30yCz/bvTnE/
-         7Hytq/UJxdSHvgA1MNdPT8d4/ans9kGCFjrAuX3jWOaasjYWzu+G1bIEAgwjmXYkJOv2
-         YceYbK3mxe8CylvwULjjrNZg1Y6g1jsS5OCNv/HrwfOiCyfR5bMrIAGRgQQdrTPlme1b
-         Pkww==
-X-Gm-Message-State: APjAAAWXMNBY4IbxfowRK/+dj8uq0RQ78yteFXWzS0T7DBdYqTvKo5r4
-        3VLyElxDc3N0fnZEt7F31z0DE59/r6djKxF7BlHM87jmOQeD
-X-Google-Smtp-Source: APXvYqzUupElDR1SDA77br+UIp2Mr5RrWPkK2noS9cYjk6kGU0lH4u9b3aZAbIjVILLbVLabmwApKQam8lGumAvU4U75q4v173bg
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oWJ16jxU4+iwSnWuytlpM5skSBZCFvJ07mOrWCdI8wc=;
+        b=ZRMczPtuksL07ic//8z2ILRryFZB7UvK03KUhXWwV3YpVLlkitdOaqGOHpCaRLnzom
+         p2SWDQsyhBrqcO+qzCbPJbS7297cLwN2hcwJ0K2E9grKlgvpX8JLDaYTRgF/L12zRSMO
+         LShr89HphErF/vgggL0wOWE7WqGd55L3+xDa8scqTPLGt6urI5ca3QDZNUymQ9bhltD8
+         bZ4wLGdbl3RGweUrblc/HYdwstw7VLoLaGgwBPYaNpglA5Vw5YejebNAHPsa++fk74Aw
+         91Ad8LAkEWGoR93wdB3MoQkms55bvdy9ta9C2DxRImPuJXp6dtn1RcSnkcVLio1lMH/a
+         CKvg==
+X-Gm-Message-State: APjAAAVr3VSEPvatWpANawgS9REGg7WcCvbq8DmSlFxIdZbQ4IIR0yBC
+        7F7aI8Rx/X8xlzh7QauiCusxFEP4SRSO5Z3K6BGUZg9BZrU=
+X-Google-Smtp-Source: APXvYqyEw2xrZSw3JJwFJXLe27gK/0Ir6IeNXiYibz7PYq6PHaf/95WNzEkN7e7PnCW0Db8qMicOZezd1ddMCtfYpBY=
+X-Received: by 2002:a37:bdc3:: with SMTP id n186mr6568797qkf.407.1575128287383;
+ Sat, 30 Nov 2019 07:38:07 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a92:5bdd:: with SMTP id c90mr2923790ilg.78.1575125401177;
- Sat, 30 Nov 2019 06:50:01 -0800 (PST)
-Date:   Sat, 30 Nov 2019 06:50:01 -0800
-In-Reply-To: <001a114372a6074e6505642b7f72@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000039751059891760e@google.com>
+References: <001a114372a6074e6505642b7f72@google.com> <000000000000039751059891760e@google.com>
+In-Reply-To: <000000000000039751059891760e@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Sat, 30 Nov 2019 16:37:56 +0100
+Message-ID: <CACT4Y+Yrg8JxWABi4CJgBG7GpBSCmT0DHr_eZhQA-ikLH-X5Yw@mail.gmail.com>
 Subject: Re: kernel BUG at net/core/skbuff.c:LINE! (3)
-From:   syzbot <syzbot+b2bf2652983d23734c5c@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, dvyukov@google.com, kuznet@ms2.inr.ac.ru,
-        linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
-        lucien.xin@gmail.com, mvohra@vmware.com, netdev@vger.kernel.org,
-        nhorman@tuxdriver.com, syzkaller-bugs@googlegroups.com,
-        u9012063@gmail.com, vyasevich@gmail.com,
-        websitedesignservices4u@gmail.com, yoshfuji@linux-ipv6.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+To:     syzbot <syzbot+b2bf2652983d23734c5c@syzkaller.appspotmail.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        LKML <linux-kernel@vger.kernel.org>, linux-sctp@vger.kernel.org,
+        Xin Long <lucien.xin@gmail.com>, mvohra@vmware.com,
+        netdev <netdev@vger.kernel.org>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        William Tu <u9012063@gmail.com>,
+        Vladislav Yasevich <vyasevich@gmail.com>,
+        websitedesignservices4u@gmail.com,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-syzbot has bisected this bug to:
+On Sat, Nov 30, 2019 at 3:50 PM syzbot
+<syzbot+b2bf2652983d23734c5c@syzkaller.appspotmail.com> wrote:
+>
+> syzbot has bisected this bug to:
+>
+> commit 84e54fe0a5eaed696dee4019c396f8396f5a908b
+> Author: William Tu <u9012063@gmail.com>
+> Date:   Tue Aug 22 16:40:28 2017 +0000
+>
+>      gre: introduce native tunnel support for ERSPAN
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=158a2f86e00000
+> start commit:   f9f1e414 Merge tag 'for-linus-4.16-rc1-tag' of git://git.k..
+> git tree:       upstream
+> final crash:    https://syzkaller.appspot.com/x/report.txt?x=178a2f86e00000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=138a2f86e00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=34a80ee1ac29767b
+> dashboard link: https://syzkaller.appspot.com/bug?extid=b2bf2652983d23734c5c
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=147bfebd800000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13d8d543800000
+>
+> Reported-by: syzbot+b2bf2652983d23734c5c@syzkaller.appspotmail.com
+> Fixes: 84e54fe0a5ea ("gre: introduce native tunnel support for ERSPAN")
+>
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
-commit 84e54fe0a5eaed696dee4019c396f8396f5a908b
-Author: William Tu <u9012063@gmail.com>
-Date:   Tue Aug 22 16:40:28 2017 +0000
-
-     gre: introduce native tunnel support for ERSPAN
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=158a2f86e00000
-start commit:   f9f1e414 Merge tag 'for-linus-4.16-rc1-tag' of git://git.k..
-git tree:       upstream
-final crash:    https://syzkaller.appspot.com/x/report.txt?x=178a2f86e00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=138a2f86e00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=34a80ee1ac29767b
-dashboard link: https://syzkaller.appspot.com/bug?extid=b2bf2652983d23734c5c
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=147bfebd800000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13d8d543800000
-
-Reported-by: syzbot+b2bf2652983d23734c5c@syzkaller.appspotmail.com
-Fixes: 84e54fe0a5ea ("gre: introduce native tunnel support for ERSPAN")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Humm... the repro contains syz_emit_ethernet, wonder if it's
+remote-triggerable...
