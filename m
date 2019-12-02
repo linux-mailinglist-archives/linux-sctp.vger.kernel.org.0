@@ -2,89 +2,109 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB41A10E328
-	for <lists+linux-sctp@lfdr.de>; Sun,  1 Dec 2019 19:31:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F2B10EF60
+	for <lists+linux-sctp@lfdr.de>; Mon,  2 Dec 2019 19:39:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727318AbfLASb6 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 1 Dec 2019 13:31:58 -0500
-Received: from mtax.cdmx.gob.mx ([187.141.35.197]:8986 "EHLO mtax.cdmx.gob.mx"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727167AbfLASb6 (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Sun, 1 Dec 2019 13:31:58 -0500
-X-Greylist: delayed 7185 seconds by postgrey-1.27 at vger.kernel.org; Sun, 01 Dec 2019 13:31:57 EST
-X-NAI-Header: Modified by McAfee Email Gateway (4500)
+        id S1727417AbfLBSjR (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 2 Dec 2019 13:39:17 -0500
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:35695 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727464AbfLBSjR (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 2 Dec 2019 13:39:17 -0500
+Received: by mail-qk1-f196.google.com with SMTP id v23so581661qkg.2;
+        Mon, 02 Dec 2019 10:39:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cdmx.gob.mx; s=72359050-3965-11E6-920A-0192F7A2F08E;
-        t=1575217665; h=DKIM-Filter:X-Virus-Scanned:
-         Content-Type:MIME-Version:Content-Transfer-Encoding:
-         Content-Description:Subject:To:From:Date:Message-Id:
-         X-AnalysisOut:X-AnalysisOut:X-AnalysisOut:
-         X-AnalysisOut:X-AnalysisOut:X-SAAS-TrackingID:
-         X-NAI-Spam-Flag:X-NAI-Spam-Threshold:X-NAI-Spam-Score:
-         X-NAI-Spam-Rules:X-NAI-Spam-Version; bh=M
-        8rWdUYQ57RAYAgTWJQ4Rsch0kO0UXllaAVDzocOs4
-        8=; b=fHpLGXkUgUThzMQtHssFPnR/Q82DCQNE/7bhl71nVaRU
-        8lcmFfxgCuDov7d54LhPyOKOBtQ0BCGyd+LMWZYZHOj/dJukjK
-        zPSk9fLTmab499KbvZIFFWbREDe8Q/M6rPH1XNLuCZg8kvN8kX
-        OQenEuoLyftvQa0aX6lYYcP1ye0=
-Received: from cdmx.gob.mx (correo.cdmx.gob.mx [10.250.108.150]) by mtax.cdmx.gob.mx with smtp
-        (TLS: TLSv1/SSLv3,256bits,ECDHE-RSA-AES256-GCM-SHA384)
-         id 217f_6644_77367250_e349_4ab1_b9e3_f3ee0b177bec;
-        Sun, 01 Dec 2019 10:27:44 -0600
-Received: from localhost (localhost [127.0.0.1])
-        by cdmx.gob.mx (Postfix) with ESMTP id 3AD761E2F8D;
-        Sun,  1 Dec 2019 10:18:55 -0600 (CST)
-Received: from cdmx.gob.mx ([127.0.0.1])
-        by localhost (cdmx.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id CDAcGb7Mlz7c; Sun,  1 Dec 2019 10:18:55 -0600 (CST)
-Received: from localhost (localhost [127.0.0.1])
-        by cdmx.gob.mx (Postfix) with ESMTP id 469041E2C6C;
-        Sun,  1 Dec 2019 10:14:16 -0600 (CST)
-DKIM-Filter: OpenDKIM Filter v2.9.2 cdmx.gob.mx 469041E2C6C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cdmx.gob.mx;
-        s=72359050-3965-11E6-920A-0192F7A2F08E; t=1575216856;
-        bh=M8rWdUYQ57RAYAgTWJQ4Rsch0kO0UXllaAVDzocOs48=;
-        h=Content-Type:MIME-Version:Content-Transfer-Encoding:Subject:To:
-         From:Date:Message-Id;
-        b=l+8Zqyawml1vvg0MfLpxx9j05fWHJ0bJiH86937NA6mzf5ytxHWvmA3EDtJCHs7eL
-         FWTSh5w5Sgld3/1DpykqnfVeZMtLJ4TQJQ623ssynhq74+AJsHEXRuV523E4Mrc6ZB
-         ws8J+1l4fgeRisefY++xGY2knfmC9wtaWAnkx2PY=
-X-Virus-Scanned: amavisd-new at cdmx.gob.mx
-Received: from cdmx.gob.mx ([127.0.0.1])
-        by localhost (cdmx.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id NJfxkjrYHNTs; Sun,  1 Dec 2019 10:14:16 -0600 (CST)
-Received: from [192.168.0.104] (unknown [188.125.168.160])
-        by cdmx.gob.mx (Postfix) with ESMTPSA id 3EE491E2B9E;
-        Sun,  1 Dec 2019 10:05:14 -0600 (CST)
-Content-Type: text/plain; charset="iso-8859-1"
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=7AahTmyRrRRUN9KLoDWPPdZMRiFouQHG/IidjTUKsJw=;
+        b=Td5CxMCoPWDKuaDcEdMjcqTN0vf3CAF/Zjqj8fxFjZLzpY1VfH/+PukGoU53giP3Nu
+         Axn00akXjCoU+4PHFyaJNcocM2XKHkRogTkMArVSVGOjOCEkGNGQ0vK6vSd4cPD/iV97
+         bIm2uaxupDqAxFX1DfZafGOXYodXggYv3NwimWlgAlUi8pWJ7wEigTdS1nihZmk/lBE2
+         srrTy1AQvRMl5ht7rNzVI7aoWCn9KnTSZ0I2Kit/609gTCkq+ZX+53LgL3ntkFrn77o+
+         UxK6/bcf7vGEEwsbxqKRfZUU8mCWbAWb0Es7s0yTs5Ja9/z+c+BNrlqV0VlWddRwuJYu
+         ZaVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=7AahTmyRrRRUN9KLoDWPPdZMRiFouQHG/IidjTUKsJw=;
+        b=m+GO8hUrrMUQ9UpWRo9ME0qjPmX5iEEY9YWULEUAQa5QFw9la5B2jn2KoHdCaDaUIv
+         K6fLVGGNJLnTiZzs1bmKq/JkMs48A2ozK3exIRnKkOeM721t26eQy05dxIg6GqSE/Ytz
+         Mlma181nOpIn3vCVQKBx72mZEbjkLgvwte4THPsXU7uKbZMp5HqDkAgASq9aqEu0u/Xb
+         vjbwIq4jkbITGbVVCeppFO93gkz7pv7Ec49/7urZiM5DGPHJrRehh1duYKwwFgDMVqQ8
+         8S6EKgkN5xO8qu0z8GCYsR66xbSZwpd814/2VHItqZ6mFQKS2SqgCujjyYNk3M/q03O3
+         FNZA==
+X-Gm-Message-State: APjAAAVRxX6mYRTb4K8g1rXS7sxqu51/Q0xyeuestyxbFmjq/pfzVwUX
+        XhPKfCrCYXv/CveyvmrkCnM=
+X-Google-Smtp-Source: APXvYqwMjunymDtO2f1xnW0eImKIiMUw5EZDJyLFOcySm5duaoG775SJvqdzcK/t1TJ/MGuAXydO/Q==
+X-Received: by 2002:a37:658f:: with SMTP id z137mr273840qkb.234.1575311956265;
+        Mon, 02 Dec 2019 10:39:16 -0800 (PST)
+Received: from localhost.localdomain ([168.181.48.195])
+        by smtp.gmail.com with ESMTPSA id b6sm194111qtp.5.2019.12.02.10.39.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Dec 2019 10:39:15 -0800 (PST)
+Received: by localhost.localdomain (Postfix, from userid 1000)
+        id C47FAC1B68; Mon,  2 Dec 2019 15:39:12 -0300 (-03)
+Date:   Mon, 2 Dec 2019 15:39:12 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     syzbot <syzbot+b2bf2652983d23734c5c@syzkaller.appspotmail.com>,
+        David Miller <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        LKML <linux-kernel@vger.kernel.org>, linux-sctp@vger.kernel.org,
+        Xin Long <lucien.xin@gmail.com>, mvohra@vmware.com,
+        netdev <netdev@vger.kernel.org>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        William Tu <u9012063@gmail.com>,
+        Vladislav Yasevich <vyasevich@gmail.com>,
+        websitedesignservices4u@gmail.com,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+Subject: Re: kernel BUG at net/core/skbuff.c:LINE! (3)
+Message-ID: <20191202183912.GC377783@localhost.localdomain>
+References: <001a114372a6074e6505642b7f72@google.com>
+ <000000000000039751059891760e@google.com>
+ <CACT4Y+Yrg8JxWABi4CJgBG7GpBSCmT0DHr_eZhQA-ikLH-X5Yw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Congratulations
-To:     Recipients <aac-styfe@cdmx.gob.mx>
-From:   "Bishop Johnr" <aac-styfe@cdmx.gob.mx>
-Date:   Sun, 01 Dec 2019 17:05:06 +0100
-Message-Id: <20191201160515.3EE491E2B9E@cdmx.gob.mx>
-X-AnalysisOut: [v=2.2 cv=cLaQihWN c=1 sm=1 tr=0 p=6K-Ig8iNAUou4E5wYCEA:9 p]
-X-AnalysisOut: [=zRI05YRXt28A:10 a=T6zFoIZ12MK39YzkfxrL7A==:117 a=9152RP8M]
-X-AnalysisOut: [6GQqDhC/mI/QXQ==:17 a=8nJEP1OIZ-IA:10 a=pxVhFHJ0LMsA:10 a=]
-X-AnalysisOut: [pGLkceISAAAA:8 a=wPNLvfGTeEIA:10 a=M8O0W8wq6qAA:10 a=Ygvjr]
-X-AnalysisOut: [iKHvHXA2FhpO6d-:22]
-X-SAAS-TrackingID: ff9e3ed5.0.90879936.00-2382.152484114.s12p02m012.mxlogic.net
-X-NAI-Spam-Flag: NO
-X-NAI-Spam-Threshold: 3
-X-NAI-Spam-Score: -5000
-X-NAI-Spam-Rules: 1 Rules triggered
-        WHITELISTED=-5000
-X-NAI-Spam-Version: 2.3.0.9418 : core <6686> : inlines <7165> : streams
- <1840193> : uri <2949750>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACT4Y+Yrg8JxWABi4CJgBG7GpBSCmT0DHr_eZhQA-ikLH-X5Yw@mail.gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Money was donated to you by Mr and Mrs Allen and Violet Large, just contact=
- them with this email for more information =
+On Sat, Nov 30, 2019 at 04:37:56PM +0100, Dmitry Vyukov wrote:
+> On Sat, Nov 30, 2019 at 3:50 PM syzbot
+> <syzbot+b2bf2652983d23734c5c@syzkaller.appspotmail.com> wrote:
+> >
+> > syzbot has bisected this bug to:
+> >
+> > commit 84e54fe0a5eaed696dee4019c396f8396f5a908b
+> > Author: William Tu <u9012063@gmail.com>
+> > Date:   Tue Aug 22 16:40:28 2017 +0000
+> >
+> >      gre: introduce native tunnel support for ERSPAN
+> >
+> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=158a2f86e00000
+> > start commit:   f9f1e414 Merge tag 'for-linus-4.16-rc1-tag' of git://git.k..
+> > git tree:       upstream
+> > final crash:    https://syzkaller.appspot.com/x/report.txt?x=178a2f86e00000
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=138a2f86e00000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=34a80ee1ac29767b
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=b2bf2652983d23734c5c
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=147bfebd800000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13d8d543800000
+> >
+> > Reported-by: syzbot+b2bf2652983d23734c5c@syzkaller.appspotmail.com
+> > Fixes: 84e54fe0a5ea ("gre: introduce native tunnel support for ERSPAN")
+> >
+> > For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> 
+> Humm... the repro contains syz_emit_ethernet, wonder if it's
+> remote-triggerable...
 
-
-EMail: allenandvioletlargeaward@gmail.com
+The call trace is still from the tx path. Packet never left the system
+in this case.
