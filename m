@@ -2,110 +2,98 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E62112B50
-	for <lists+linux-sctp@lfdr.de>; Wed,  4 Dec 2019 13:22:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D5E1134EB
+	for <lists+linux-sctp@lfdr.de>; Wed,  4 Dec 2019 19:28:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727781AbfLDMWX (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 4 Dec 2019 07:22:23 -0500
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:45042 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727816AbfLDMWS (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 4 Dec 2019 07:22:18 -0500
-Received: by mail-ed1-f66.google.com with SMTP id cm12so6418833edb.11
-        for <linux-sctp@vger.kernel.org>; Wed, 04 Dec 2019 04:22:17 -0800 (PST)
+        id S1728942AbfLDS1J (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 4 Dec 2019 13:27:09 -0500
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:38556 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728926AbfLDS1I (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 4 Dec 2019 13:27:08 -0500
+Received: by mail-qt1-f193.google.com with SMTP id 14so755859qtf.5;
+        Wed, 04 Dec 2019 10:27:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
-        b=itksFv5A2JLOzo6XVqVzXmSzWKIpGqZTNHrb4xFvrqPmHJ7WwaeLkksg0/ZJSVtv31
-         pzvXZ3OHhHMsql2Vo9oheJQHErj5CDGd5ZvPVjxDn+I4JgVPrQl1nkJy5Nb7wvQoUvM+
-         46lpgbsOy0h7DJvRAy1OQQg0Oi/exT7Imiyfeu4Gtmu6VGYFysEjNlBfvwObnE6M1THW
-         GbhC/d5DVONSKdw6y/qH20L4wjeyxlxCBE+xa1i44NzWc0HgEODgSNCM/bGDvmjdXP55
-         pwYVn13D99Hhzzv+p4qHdhRZEM3zwIJF+S9QDszHcSxOoAqtygRSNU+xVzjWpE9QCD88
-         4SHA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=rRv+rhzCfuGo++iU2PWMbxJtQJH0iLaP0UrU4w3CxNE=;
+        b=Ac1tXdmsBCtajajEJA4vlvGErEJ0vRZ6ndVyEEaMDrDdGqhrfVzLnzbdSwpV0eO2D1
+         v/KYC8iohhIlOxuJz2YVC2fBGWOmEXvK6CzjOcEeqscDHUiaji4shP9NfBBBy6uJDExt
+         UJhwwXdTIauV9neI//48hcMI49IIpntEcHzPTH4mkoQzFn7JEL93Q72pFAJn9/h1IBjj
+         LGesVGxiJLArzH9/AfeN6pQBb+yNAkA9ZI7X3ti4HkE6NVdIaudOv/5r+pf81Ui9SjUW
+         wUlwDCAzXQstSBePCPFMo20y2cg5uJBnRDs5TP0wTcPA6M9u7L3RJiH6uQl0ZLzvbS9T
+         Qqlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
-        b=Y0sKfXn6D2YDIntLKWXQzNOzL0goHsWjR5SXjrISLNMzAv4Sdkt+i3b58v1DO1QHkD
-         rmGS/XsG4ruYXufaUjwWINxn1razc7Cs5T5yaSO01OsdqfSmywFUpG+xzqvbmopudpH7
-         iatPyy/EOdBmepbIPkrtmcczwKVHdf0pNvZ0GaOJtjvWFK6p1Zmdd5MmaT4ivwoBvQtt
-         X3TcR+lQov7R2YMVHbe+7t16bkRYU/RYMWWqnPgSawF6Fx3dGun3JIeY2HphSiFhyRfW
-         uawKyCX8lyBmjpGogpgrYRyoyF4kSxXTfopgejes37wHpiX+SJmKLSUTmnVQM0JRoEv7
-         Xy/g==
-X-Gm-Message-State: APjAAAUw1/kRZZfSGZrmb9L5f7r9dyoYfhywiwCdtmafcAxhnMrsqlnV
-        1keatT3cRWjTP9GPBf7Mv6iqfnQGmP4kXvB1oqI=
-X-Google-Smtp-Source: APXvYqwlH4d/NgUk6+TTgeshJl/W0Z846j+vPwdmJMmvDKA5s5alEIOymc5OFboGvVzTvSBGNMpJNF0KpHbTN+gxpY4=
-X-Received: by 2002:aa7:d84b:: with SMTP id f11mr3689948eds.96.1575462136339;
- Wed, 04 Dec 2019 04:22:16 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=rRv+rhzCfuGo++iU2PWMbxJtQJH0iLaP0UrU4w3CxNE=;
+        b=rWY5H9om4L2pZA3XLiLa4Zh0Vt/3VQ7+sZb2AqVBG/mPNXjOZEhcacf+RpxLN72CpI
+         wxZJbOKzYe7QesZOWyHGjbc/bYXArgTeeEprQCrMR5/pIXpze9cYSa13G6DeU/Lnyi5b
+         MbISJgA3U8OOtOxCofotZC0upt8vtIarYF8W96/vrAv/qfY9QEsiGCbTqsNV+evaK0Uz
+         hHoQKLLaFno5iqQpUs6HjHI2OvPP9flyPAn/CGa3hKb0BKHgU41wxvvJkxszQf52XwFY
+         OmW7cCHJq7tOp0zkW7mYcmosRrqno4Oc6e5dm9yzxnKef30Vypnm1/1A5C3K7ADuTXn0
+         IBqA==
+X-Gm-Message-State: APjAAAWjuLF1Y64lRtHkmdbJlrQuuWFh+EDnGkOYZyMfAxMbTnY6tPv0
+        wSfJSEcJe5poKYKxljvn6dA=
+X-Google-Smtp-Source: APXvYqwvOr5+lvRpVjUWa75G4U3wtt6BZ7VAdjo63IVeH/Hs3f6PYd9m2mq3+4pXf30bM7guaM5mXQ==
+X-Received: by 2002:ac8:22c4:: with SMTP id g4mr4076060qta.45.1575484026971;
+        Wed, 04 Dec 2019 10:27:06 -0800 (PST)
+Received: from localhost.localdomain ([177.220.176.179])
+        by smtp.gmail.com with ESMTPSA id c6sm4086905qka.111.2019.12.04.10.27.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Dec 2019 10:27:05 -0800 (PST)
+Received: by localhost.localdomain (Postfix, from userid 1000)
+        id 24F79C39A2; Wed,  4 Dec 2019 15:27:03 -0300 (-03)
+Date:   Wed, 4 Dec 2019 15:27:03 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Maciej =?utf-8?Q?=C5=BBenczykowski?= <zenczykowski@gmail.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Linux NetDev <netdev@vger.kernel.org>,
+        Sean Tranchetti <stranche@codeaurora.org>,
+        Subash Abhinov Kasiviswanathan <subashab@codeaurora.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Linux SCTP <linux-sctp@vger.kernel.org>
+Subject: Re: [PATCH] net: introduce ip_local_unbindable_ports sysctl
+Message-ID: <20191204182703.GA5057@localhost.localdomain>
+References: <20191127001313.183170-1-zenczykowski@gmail.com>
+ <20191127131407.GA377783@localhost.localdomain>
+ <CANP3RGePJ+z1t8oq-QS1tcwEYWanPHPargKpHkZZGiT4jMa6xw@mail.gmail.com>
+ <20191127230001.GO388551@localhost.localdomain>
+ <CAHo-OowLw93a8P=RR=2jXQS92d118L3bNmBrUfPSBP4CDq_Ctg@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6402:22dc:0:0:0:0 with HTTP; Wed, 4 Dec 2019 04:22:15
- -0800 (PST)
-Reply-To: moneygram.1820@outlook.fr
-From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" <eco.bank1204@gmail.com>
-Date:   Wed, 4 Dec 2019 13:22:15 +0100
-Message-ID: <CAOE+jABwsq4QTifFZJGuzmZ8p9kMY_tMmS5N39hvEALE6d=OJw@mail.gmail.com>
-Subject: God has remembered your prayers I have already sent you Money Gram
- payment of $5000.00 today, MG 1029-8096
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHo-OowLw93a8P=RR=2jXQS92d118L3bNmBrUfPSBP4CDq_Ctg@mail.gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Attn, dear Beneficiary.
+On Fri, Nov 29, 2019 at 09:00:19PM +0100, Maciej Żenczykowski wrote:
+...
+> I'm of the opinion that SELinux and other security policy modules
+> should be reserved for things related to system wide security policy.
+> Not for things that are more along the lines of 'functionality'.
 
-God has remembered your prayers
-I have already sent you Money Gram payment of $5000.00 today, MG 1029-8096
-This is because we have finally concluded to effect your transfer
-funds of $4.8,000.000usd
-through MONEY GRAM International Fund transfer Service
-Each payment will be sending to you by $5000.00 daily until the
-($4.8,000.000usd) is completely transferred
-we have this morning sent  MONEY GRAM payment of $5,000.00 in your name today
-So contact the MONEY GRAM Agent to pick up this first payment of $5000 now
+Makes sense.
 
-Contact person Mrs. Alan Ude
-Dir. MONEY GRAM Service,Benin
-Phone number: +229 98856728
-E-mail: moneygram.1820@outlook.fr
+> 
+> Also selinux has 'permissive' mode which causes the system to ignore
+> all selinux access controls (in favour of just logging) and this is
+> what is commonly used during development (because it's such a pain to
+> work with).
 
-Ask him to give you the complete mtcn, sender name, question and
-answer to enable you
-pick up the $5000.00 sent today,
-Also you are instructed to re-confirm your information's
-to Mrs.Alan Ude as listed below to avoid wrong transactions.
+Agree, this would be a big problem.
+IOW, "you don't have permission to access to this" != "you just can't use this, no
+matter what"
 
-(1Your Full name:............................................
-(2 Phone number.....................................................
-(3 Contact address:.....................................
-(4 Age:..................................................................
-(5 Country..............................................
-(6) Sex .................................................................
-(7) your occupation...........................................
+FWIW, I rest my case :-)
 
-(8)Passport/By Attach or Drivers License Number:
-Contact Mrs. Alan Ude for your MONEY GRAM payment of $4.8,000.000usd
-Note please: I have paid service fees for you but the only money you
-are required
-to send to Mrs. Alan Ude is $90.00 only Transfer fee before you can
-pick up your transfer today.
-
-Send it to via Money Gram
-Receiver's Name-----Alan Ude
-Country----------Benin
-Address-----------Cotonou
-Quest--------Honest
-Ans-----------Trust
-
-I done all my best for you to receive your transfer now ok.
-We need your urgent reply
-Best Regards
-Rev.Dr Emmanuel Okoye
-CEO Ecobank-benin
-
-If we did not receive it urgent from you today,
-I will go ahead and release you funds to Mrs. Lyndia Ppaulson as your
-representative.
+Thanks,
+Marcelo
