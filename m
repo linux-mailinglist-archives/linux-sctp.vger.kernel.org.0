@@ -2,98 +2,158 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D5E1134EB
-	for <lists+linux-sctp@lfdr.de>; Wed,  4 Dec 2019 19:28:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E936B113EDA
+	for <lists+linux-sctp@lfdr.de>; Thu,  5 Dec 2019 10:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728942AbfLDS1J (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 4 Dec 2019 13:27:09 -0500
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:38556 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728926AbfLDS1I (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 4 Dec 2019 13:27:08 -0500
-Received: by mail-qt1-f193.google.com with SMTP id 14so755859qtf.5;
-        Wed, 04 Dec 2019 10:27:07 -0800 (PST)
+        id S1729044AbfLEJ5N (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 5 Dec 2019 04:57:13 -0500
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:33879 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729041AbfLEJ5N (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 5 Dec 2019 04:57:13 -0500
+Received: by mail-qt1-f194.google.com with SMTP id 5so3011028qtz.1
+        for <linux-sctp@vger.kernel.org>; Thu, 05 Dec 2019 01:57:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=rRv+rhzCfuGo++iU2PWMbxJtQJH0iLaP0UrU4w3CxNE=;
-        b=Ac1tXdmsBCtajajEJA4vlvGErEJ0vRZ6ndVyEEaMDrDdGqhrfVzLnzbdSwpV0eO2D1
-         v/KYC8iohhIlOxuJz2YVC2fBGWOmEXvK6CzjOcEeqscDHUiaji4shP9NfBBBy6uJDExt
-         UJhwwXdTIauV9neI//48hcMI49IIpntEcHzPTH4mkoQzFn7JEL93Q72pFAJn9/h1IBjj
-         LGesVGxiJLArzH9/AfeN6pQBb+yNAkA9ZI7X3ti4HkE6NVdIaudOv/5r+pf81Ui9SjUW
-         wUlwDCAzXQstSBePCPFMo20y2cg5uJBnRDs5TP0wTcPA6M9u7L3RJiH6uQl0ZLzvbS9T
-         Qqlg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=KG5xtqT4t5f7FDQwmMOMrWU1aEwYeGsS2vmaU6DS0WQ=;
+        b=oW2MsCZmFlrhn1W9sZqq7lB8Waj7LUo+3jh2ZdWC/6GMsah6z5HUBAYL5osjeZFoRr
+         kKrbmG741zCUeCi693YOBRsVQnpObNr1Vh8MT+dSVK7YzAX5ICoOJ0BF8YGOn15JOtbN
+         JMXsQ50SvpTvxPgS6Q36UUgOmKCT/I6cJiMLkR46gjDo05SNAQg8r+5ZLbesKAm7Luk2
+         qLy3Mdlc9UtuvmoIIG6wjUXyVVPVhzN1YnGTPHQHZmzt1b8OGmANyCaK09SVqYjBh1aU
+         kURuHa2ch37NRBUhFcvu2njYOJChT3K45oGhRu70/ySvWmLqRoWnkRy73iD+hBj9q86E
+         f/vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=rRv+rhzCfuGo++iU2PWMbxJtQJH0iLaP0UrU4w3CxNE=;
-        b=rWY5H9om4L2pZA3XLiLa4Zh0Vt/3VQ7+sZb2AqVBG/mPNXjOZEhcacf+RpxLN72CpI
-         wxZJbOKzYe7QesZOWyHGjbc/bYXArgTeeEprQCrMR5/pIXpze9cYSa13G6DeU/Lnyi5b
-         MbISJgA3U8OOtOxCofotZC0upt8vtIarYF8W96/vrAv/qfY9QEsiGCbTqsNV+evaK0Uz
-         hHoQKLLaFno5iqQpUs6HjHI2OvPP9flyPAn/CGa3hKb0BKHgU41wxvvJkxszQf52XwFY
-         OmW7cCHJq7tOp0zkW7mYcmosRrqno4Oc6e5dm9yzxnKef30Vypnm1/1A5C3K7ADuTXn0
-         IBqA==
-X-Gm-Message-State: APjAAAWjuLF1Y64lRtHkmdbJlrQuuWFh+EDnGkOYZyMfAxMbTnY6tPv0
-        wSfJSEcJe5poKYKxljvn6dA=
-X-Google-Smtp-Source: APXvYqwvOr5+lvRpVjUWa75G4U3wtt6BZ7VAdjo63IVeH/Hs3f6PYd9m2mq3+4pXf30bM7guaM5mXQ==
-X-Received: by 2002:ac8:22c4:: with SMTP id g4mr4076060qta.45.1575484026971;
-        Wed, 04 Dec 2019 10:27:06 -0800 (PST)
-Received: from localhost.localdomain ([177.220.176.179])
-        by smtp.gmail.com with ESMTPSA id c6sm4086905qka.111.2019.12.04.10.27.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Dec 2019 10:27:05 -0800 (PST)
-Received: by localhost.localdomain (Postfix, from userid 1000)
-        id 24F79C39A2; Wed,  4 Dec 2019 15:27:03 -0300 (-03)
-Date:   Wed, 4 Dec 2019 15:27:03 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Maciej =?utf-8?Q?=C5=BBenczykowski?= <zenczykowski@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Linux NetDev <netdev@vger.kernel.org>,
-        Sean Tranchetti <stranche@codeaurora.org>,
-        Subash Abhinov Kasiviswanathan <subashab@codeaurora.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Linux SCTP <linux-sctp@vger.kernel.org>
-Subject: Re: [PATCH] net: introduce ip_local_unbindable_ports sysctl
-Message-ID: <20191204182703.GA5057@localhost.localdomain>
-References: <20191127001313.183170-1-zenczykowski@gmail.com>
- <20191127131407.GA377783@localhost.localdomain>
- <CANP3RGePJ+z1t8oq-QS1tcwEYWanPHPargKpHkZZGiT4jMa6xw@mail.gmail.com>
- <20191127230001.GO388551@localhost.localdomain>
- <CAHo-OowLw93a8P=RR=2jXQS92d118L3bNmBrUfPSBP4CDq_Ctg@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=KG5xtqT4t5f7FDQwmMOMrWU1aEwYeGsS2vmaU6DS0WQ=;
+        b=hV3BKXnnvmJQNOkq8GwSexq0Hut/zC0F94tK087vzBIQ6iNBke+f/vOjOijP+oHQTP
+         ynOJdqnW6d0Rw1xxd6zZctl1lNUm4pK/ziLWSY10sxBvgjV0OD/+/qjG0ojdKpMIgD6b
+         m8kaQMGVl71KgV/Kjg7rjViRMGzdboVKq6ZkQzCp1xLs7KwxkSLmbcaL9ldbuI/ZGkm9
+         by2/rgywJjstQSReu+IgoS+l8HlQPFRQbV9p5ug5pXquLnv7XLN9eBDzV4DNx5pD4492
+         WPNtQtMr7OEoWkVftuddf6TsD5OzBvBGGyQfv3cysH17Pl6xvayRaF0ZmiDbU0n0Ohjt
+         jw8g==
+X-Gm-Message-State: APjAAAW1zphZL74M3G09oVB4PxZEZRky6laVnIuES5wDC/EM4vuX/C40
+        DFxzXsgf+eaLWKm6askOhmoS1SNITCl7S8vPKoTUiDsp
+X-Google-Smtp-Source: APXvYqw8SzyCzNtHyjsbO2QUxNcopaFbQxIYSROt/9M2NbQtMnzzKpeGsQa+RliyddkTOOsNaaFP/QcA+BTpx88Ahg8=
+X-Received: by 2002:ac8:1084:: with SMTP id a4mr6795143qtj.114.1575539831656;
+ Thu, 05 Dec 2019 01:57:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHo-OowLw93a8P=RR=2jXQS92d118L3bNmBrUfPSBP4CDq_Ctg@mail.gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <20191203082233.5c1525be@hermes.lan> <e9c3d8bd-f2f4-3bbc-50ed-ef578915525a@gmail.com>
+ <CAJ4YZb7RVTjFXi8RDa4QjPzom87H8=SHFr8+DFyN56LoaypCjA@mail.gmail.com>
+In-Reply-To: <CAJ4YZb7RVTjFXi8RDa4QjPzom87H8=SHFr8+DFyN56LoaypCjA@mail.gmail.com>
+From:   =?UTF-8?B?0JXQstCz0LXQvdC40Lkg0KTQvtC60LjQvQ==?= 
+        <evgenij.fokin@gmail.com>
+Date:   Thu, 5 Dec 2019 12:57:00 +0300
+Message-ID: <CAJ4YZb6yzbLLb6FTvf49mr-Em_ZQtq5Q+uAm35tpn0T1GrNpEw@mail.gmail.com>
+Subject: Re: Fw: [Bug 205753] New: Incorrect SCTP DATA dispatching
+To:     linux-sctp@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Fri, Nov 29, 2019 at 09:00:19PM +0100, Maciej Żenczykowski wrote:
-...
-> I'm of the opinion that SELinux and other security policy modules
-> should be reserved for things related to system wide security policy.
-> Not for things that are more along the lines of 'functionality'.
+Hello Linux SCTP team,
 
-Makes sense.
+Unfortunately some of you have not received the previous email.
+I've got response from linux-sctp@vger.kernel.org:
+550 5.7.1 Content-Policy reject msg: The message contains HTML
+subpart, therefore we consider it SPAM or Outlook Virus. TEXT/PLAIN is
+accepted.! BF:<U 0.5>; S1727912AbfLDQJ4
+I do not know where HTML subpart is. I wrote email with gmal WEB
+service. Maybe the problem was with attached file.
 
-> 
-> Also selinux has 'permissive' mode which causes the system to ignore
-> all selinux access controls (in favour of just logging) and this is
-> what is commonly used during development (because it's such a pain to
-> work with).
+The file debian9_sctp_test_to_sctp_test.pcapng can be found here:
+https://bugzilla.kernel.org/show_bug.cgi?id=205753
 
-Agree, this would be a big problem.
-IOW, "you don't have permission to access to this" != "you just can't use this, no
-matter what"
+If you know how to prevent this sending error in future please let me know.
 
-FWIW, I rest my case :-)
+I am trying to resend the original message to linux-sctp@vger.kernel.org.
+The original message:
 
-Thanks,
-Marcelo
+>
+> Hi Vasil,
+>
+> The issue when I have 1 second without traffic can periodically reproduces under Debian 10.
+> I tried to reproduce it with Debian 9 but everything works fine with the same equipment.
+>
+> Ok. DATA in frame 56 may be dropped because of buffer is full.
+> In this case I want to understand why a_rwnd decries rapidly between frames 53-55.
+>
+> Also I try to understand why a_rwnd is stable enough when the same server side works under Debian 9.
+> Please look at debian9_sctp_test_to_sctp_test.pcapng.
+>
+> Best Regards,
+> Evgeny
+>
+> On Tue, 3 Dec 2019 at 21:54, Vasil Velichkov <vvvelichkov@gmail.com> wrote:
+>>
+>> Hi Evgeni,
+>>
+>> On 03/12/2019 18.22, Stephen Hemminger wrote:
+>> > All networking bugzilla bugs go to me. This one is new and  SCTP related
+>> >
+>> > Begin forwarded message:
+>> >
+>> > Date: Tue, 03 Dec 2019 13:32:39 +0000
+>> > From: bugzilla-daemon@bugzilla.kernel.org
+>> > To: stephen@networkplumber.org
+>> > Subject: [Bug 205753] New: Incorrect SCTP DATA dispatching
+>> >
+>> >
+>> > https://bugzilla.kernel.org/show_bug.cgi?id=205753
+>> >
+>> >             Bug ID: 205753
+>> >            Summary: Incorrect SCTP DATA dispatching
+>> >            Product: Networking
+>> >            Version: 2.5
+>> >     Kernel Version: 4.19.67
+>> >           Hardware: Intel
+>> >                 OS: Linux
+>> >               Tree: Mainline
+>> >             Status: NEW
+>> >           Severity: normal
+>> >           Priority: P1
+>> >          Component: Other
+>> >           Assignee: stephen@networkplumber.org
+>> >           Reporter: evgenij.fokin@gmail.com
+>> >         Regression: No
+>> >
+>> > I think that root cause in skipped messages.
+>> >
+>> > For example, frame 56 in your debian10_sctp_test_to_sctp_test.pcapng shows that
+>> > the data message with sctp.data_tsn == 919935042 was received on server
+>> > interface but it was acked in frame 78 only.
+>> >
+>> > It happens periodically with high-load traffic. The server can capture DATA on
+>> > network interface but SCTP level does not receive it.
+>>
+>> In my opinion the reason that a SACK for frame 56 is not returned is that the receive buffer is full
+>>
+>> $ tshark -r debian10_sctp_test_to_sctp_test.pcapng -Y "sctp.sack_a_rwnd" -T fields -e frame.number -e sctp.sack_a_rwnd
+>> 4       106495
+>> 7       106423
+>> ...
+>> 49      105662
+>> 53      105591
+>> 55      0
+>> 57      0
+>> 58      13500
+>>
+>> > Reproduction scenario:
+>> > system1: /usr/bin/sctp_test -H local-addr -P local-port -l
+>> > system2: /usr/bin/sctp_test -H local-addr -P local-port -h remote-addr -p remote-port -s -x 1000
+>>
+>> I'm not sure whether the sctp_test is the best tool for stress/load tests.
+>>
+>> You may try increasing the buffer size (-m 212992) on the server side, see also https://github.com/sctp/lksctp-tools/blob/master/src/apps/sctp_test.c#L1117-L1123
+>>
+>> Monitor the buffers sizes and sctp's snmp stats when testing
+>>
+>> cat /proc/net/sctp/assocs
+>> cat /proc/net/sctp/snmp
+>>
+>> Regards,
+>> Vasil
