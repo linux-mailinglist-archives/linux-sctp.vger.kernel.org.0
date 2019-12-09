@@ -2,61 +2,65 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0918C1173CD
-	for <lists+linux-sctp@lfdr.de>; Mon,  9 Dec 2019 19:14:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E2331173E5
+	for <lists+linux-sctp@lfdr.de>; Mon,  9 Dec 2019 19:17:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726484AbfLISOF (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 9 Dec 2019 13:14:05 -0500
-Received: from shards.monkeyblade.net ([23.128.96.9]:33718 "EHLO
+        id S1726379AbfLISRj (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 9 Dec 2019 13:17:39 -0500
+Received: from shards.monkeyblade.net ([23.128.96.9]:33748 "EHLO
         shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726335AbfLISOF (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 9 Dec 2019 13:14:05 -0500
+        with ESMTP id S1726532AbfLISRj (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 9 Dec 2019 13:17:39 -0500
 Received: from localhost (unknown [IPv6:2601:601:9f00:1c3::3d5])
         (using TLSv1 with cipher AES256-SHA (256/256 bits))
         (Client did not present a certificate)
         (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 376051543A16A;
-        Mon,  9 Dec 2019 10:14:04 -0800 (PST)
-Date:   Mon, 09 Dec 2019 10:14:03 -0800 (PST)
-Message-Id: <20191209.101403.781347318798443818.davem@davemloft.net>
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id C39391543A7A7;
+        Mon,  9 Dec 2019 10:17:38 -0800 (PST)
+Date:   Mon, 09 Dec 2019 10:17:38 -0800 (PST)
+Message-Id: <20191209.101738.1448001980997003591.davem@davemloft.net>
 To:     lucien.xin@gmail.com
 Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
         marcelo.leitner@gmail.com, nhorman@tuxdriver.com
-Subject: Re: [PATCHv2 net] sctp: get netns from asoc and ep base
+Subject: Re: [PATCH net] sctp: fully initialize v4 addr in some functions
 From:   David Miller <davem@davemloft.net>
-In-Reply-To: <76df0e4ae335e3869475d133ce201cc93361ce0c.1575870318.git.lucien.xin@gmail.com>
-References: <76df0e4ae335e3869475d133ce201cc93361ce0c.1575870318.git.lucien.xin@gmail.com>
+In-Reply-To: <dfabc15c8718ae26d93f4ed1b023baee81eb5c34.1575870354.git.lucien.xin@gmail.com>
+References: <dfabc15c8718ae26d93f4ed1b023baee81eb5c34.1575870354.git.lucien.xin@gmail.com>
 X-Mailer: Mew version 6.8 on Emacs 26.1
 Mime-Version: 1.0
 Content-Type: Text/Plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 09 Dec 2019 10:14:04 -0800 (PST)
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 09 Dec 2019 10:17:39 -0800 (PST)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
 From: Xin Long <lucien.xin@gmail.com>
-Date: Mon,  9 Dec 2019 13:45:18 +0800
+Date: Mon,  9 Dec 2019 13:45:54 +0800
 
-> Commit 312434617cb1 ("sctp: cache netns in sctp_ep_common") set netns
-> in asoc and ep base since they're created, and it will never change.
-> It's a better way to get netns from asoc and ep base, comparing to
-> calling sock_net().
+> Syzbot found a crash:
+ ...
+> The issue was caused by transport->ipaddr set with uninit addr param, which
+> was passed by:
 > 
-> This patch is to replace them.
+>   sctp_transport_init net/sctp/transport.c:47 [inline]
+>   sctp_transport_new+0x248/0xa00 net/sctp/transport.c:100
+>   sctp_assoc_add_peer+0x5ba/0x2030 net/sctp/associola.c:611
+>   sctp_process_param net/sctp/sm_make_chunk.c:2524 [inline]
 > 
-> v1->v2:
->   - no change.
+> where 'addr' is set by sctp_v4_from_addr_param(), and it doesn't initialize
+> the padding of addr->v4.
 > 
-> Suggested-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+> Later when calling sctp_make_heartbeat(), hbinfo.daddr(=transport->ipaddr)
+> will become the part of skb, and the issue occurs.
+> 
+> This patch is to fix it by initializing the padding of addr->v4 in
+> sctp_v4_from_addr_param(), as well as other functions that do the similar
+> thing, and these functions shouldn't trust that the caller initializes the
+> memory, as Marcelo suggested.
+> 
+> Reported-by: syzbot+6dcbfea81cd3d4dd0b02@syzkaller.appspotmail.com
 > Signed-off-by: Xin Long <lucien.xin@gmail.com>
-> Acked-by: Neil Horman <nhorman@tuxdriver.com>
 
-This looks like a cleanup rather than a bug fix, so net-next right?
-
-Otherwise we need a Fixes: tag here and a better explanation in the
-commit message about what problem this fixes.  Are the netns's wrong
-sometimes without this conversion for example?
-
-Thanks.
+Applied and queued up for -stable, thanks.
