@@ -2,91 +2,165 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 753C0118EB2
-	for <lists+linux-sctp@lfdr.de>; Tue, 10 Dec 2019 18:12:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C327118F08
+	for <lists+linux-sctp@lfdr.de>; Tue, 10 Dec 2019 18:31:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727568AbfLJRMr (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 10 Dec 2019 12:12:47 -0500
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:44203 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727525AbfLJRMr (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 10 Dec 2019 12:12:47 -0500
-Received: by mail-pj1-f65.google.com with SMTP id w5so7641653pjh.11
-        for <linux-sctp@vger.kernel.org>; Tue, 10 Dec 2019 09:12:46 -0800 (PST)
+        id S1727598AbfLJRbQ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 10 Dec 2019 12:31:16 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:33971 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727595AbfLJRbQ (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 10 Dec 2019 12:31:16 -0500
+Received: by mail-pg1-f194.google.com with SMTP id r11so9237418pgf.1
+        for <linux-sctp@vger.kernel.org>; Tue, 10 Dec 2019 09:31:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=date:from:to:cc:subject:message-id:in-reply-to:references
          :organization:mime-version:content-transfer-encoding;
-        bh=ZD+wd55MbpiKBwOs4hW8gl6L+aU37IccOqDX3dd5NyE=;
-        b=BZ92BIwWtDXhF4F+dgkNcGmqzQ0hi5vM6sId4W+ibp5wp0KptxFiuPyTYn3qC6NsbD
-         alWP4GdCyylPdtkSfbJuR0i22bYHwBQHZCG9lK0ow+LTh9KrD6/L1olF8qp//GZlkd6T
-         DVK9+HLGig4PTtTS0hXmThBTpl5A0aJrxentxtFoSBu3Mvmjyc5+6yBmg9UsUo6WKplh
-         Gat1l7XuudmE6JYj0QuQPj3mmeWtKrm1CNB4n4/evBMIWnhBW+qgHm4LsFe6B2L30lG0
-         HSn3noJi+HSib2xpP7rz1RwD4Q80gMjHHPmaCnOvyZbWs7r2mDlSr0q75PGkpXnYbj4j
-         lMyw==
+        bh=J7eD26mFIlQahOsKyXk+aSeIwPjhMzK6P1OiNJx0ExI=;
+        b=bSIab2f4FVE6XLbfo7AYMYu9i+Nj45cDMdNIDoeMra9jfB8z/ClzUlL4gseBRg3QLM
+         ZEynPUMUTN1o6+EsAq8qnENQMLvRCdFh0eoQp5pzcDpheEwYuxCTeRXIWD7HWiBCcVvy
+         SVGZUVMEDv7MpZ0T03svN5glx7fx7fmoiOPT18BSd2B4GH4/LNtNea2f8ZgdfuhWHUtT
+         2FNzJqoRB1M+bu7+16SQSc8IqrUBYC5ULP0aIsRgahk6XDXgRioy2qKu7CcWSXg7M08O
+         QkPhQot0Lu5cfz88PlG+CMaLOCGbl2TzqkEL0yYK82QzKreRYlNHqaTdReDEHZ2MLv2j
+         Pgdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
          :references:organization:mime-version:content-transfer-encoding;
-        bh=ZD+wd55MbpiKBwOs4hW8gl6L+aU37IccOqDX3dd5NyE=;
-        b=cFQ8ZpQ7cPakte4N3F4x6vkuScchmapz0MpqP5/ul6KCL3oBqnW9a/VgGG2VS6ojKj
-         /DvHdQlNNn4QDoE24pfJm7k0y48x41KBHZqd6xKwfkN1q34blcMMcZfmYornJmOJ5NhV
-         mqwp1VambFFjlc2SjaoAmfwpjFy23vQqKbzndORxDsDWpzF+60pjOjrbaDz+tO9vdpdl
-         GDJ1V+W4IlhQIRpkvPPG+VItXDJeGX5M/61WvM2LOLdl1fMna3ByJvs+cZelOeM6Kfe0
-         5yuMmhgei6YuqV+VJ2qFo84bbsGnprvT81EoVVmm3jZHDuJ+05ijbccp4ItoefMt+n+m
-         QDUw==
-X-Gm-Message-State: APjAAAXl3Mg0He+Qu5wMjT3qNwvi1+OMmcqMvcNxQFnPOdFvrSQ6Xfg8
-        jYGadb7382rp1PlETyT4ZUC7og==
-X-Google-Smtp-Source: APXvYqyF6W66BMTxnAytzEXlBaKoQ91qch57tqY3e1dFG1KP9NPaSBofk8zYXzxZZf4hUrHOYFO4NQ==
-X-Received: by 2002:a17:90a:a416:: with SMTP id y22mr6670085pjp.114.1575997966443;
-        Tue, 10 Dec 2019 09:12:46 -0800 (PST)
+        bh=J7eD26mFIlQahOsKyXk+aSeIwPjhMzK6P1OiNJx0ExI=;
+        b=QBbrnpeJ35TDIOskEkOjqE4BS68jdjaCCh8J6LmSa4LCaYGbrwy1ABnFoU01dG3NUo
+         oddPO2x07x6fi5tXSl39LE72EhZfqNp9dd86mNfWXQg+brc6qvbRDZxfQI3M5+xw17/R
+         /0qH11jGb4/hlZvnBMhAK37HmtyaycuxsPxAWh1umLSEofkbwSGaCnhxIePp1VFVhyyx
+         nsI4u19qli/qpFvtsQEcS2jFKPmAdRwJHjhhB30xKIzUQekhZAj2OY4wrBWrowl8Z3vj
+         +eqC3Hj1NU+y7eoy12sTi1odTPDbfDWdu+shKN5XNYVRzCvpkfEjZwYf/Ckjj05iE9s4
+         jTuw==
+X-Gm-Message-State: APjAAAWlYdJieONQfEh9HbDHVM4OnBjAUSXK8d+7qEdMNFJOpmLGbxAW
+        mLfO7Ks03nirDymuVvSc9RUeZg==
+X-Google-Smtp-Source: APXvYqy+kQLqyeUYQhiA8k8C9HrBqehNSjFCKUoZ4jUrzygwOhI0FW6fEcG2hvsPNn56/YdQZJk6/g==
+X-Received: by 2002:a62:7590:: with SMTP id q138mr35504583pfc.241.1575999075344;
+        Tue, 10 Dec 2019 09:31:15 -0800 (PST)
 Received: from cakuba.netronome.com ([2601:646:8e00:e18::3])
-        by smtp.gmail.com with ESMTPSA id z4sm4077112pfn.42.2019.12.10.09.12.45
+        by smtp.gmail.com with ESMTPSA id i16sm4113991pfo.12.2019.12.10.09.31.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Dec 2019 09:12:46 -0800 (PST)
-Date:   Tue, 10 Dec 2019 09:12:41 -0800
+        Tue, 10 Dec 2019 09:31:15 -0800 (PST)
+Date:   Tue, 10 Dec 2019 09:31:11 -0800
 From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     subashab@codeaurora.org
-Cc:     Maciej =?UTF-8?B?xbtlbmN6eWtvd3NraQ==?= <zenczykowski@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
+To:     Maciej =?UTF-8?B?xbtlbmN6eWtvd3NraQ==?= <zenczykowski@gmail.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
         Linux Network Development Mailing List 
         <netdev@vger.kernel.org>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         Sean Tranchetti <stranche@codeaurora.org>,
         Eric Dumazet <edumazet@google.com>,
-        Linux SCTP <linux-sctp@vger.kernel.org>
+        Linux SCTP <linux-sctp@vger.kernel.org>,
+        Subash Abhinov Kasiviswanathan <subashab@codeaurora.org>
 Subject: Re: [PATCH v2] net: introduce ip_local_unbindable_ports sysctl
-Message-ID: <20191210091241.0c6df09e@cakuba.netronome.com>
-In-Reply-To: <0101016eee9bf9b5-f5615781-f0a6-41c4-8e9d-ed694eccf07c-000000@us-west-2.amazonses.com>
+Message-ID: <20191210093111.7f1ad05d@cakuba.netronome.com>
+In-Reply-To: <CAHo-OowHek4i9Pzxn96u8U5sTH8keQmi-yMCY-OBS7CE74OGNQ@mail.gmail.com>
 References: <CAHo-OowKQPQj9UhjCND5SmTOergBXMHtEctJA_T0SKLO5yebSg@mail.gmail.com>
         <20191209224530.156283-1-zenczykowski@gmail.com>
         <20191209154216.7e19e0c0@cakuba.netronome.com>
         <CANP3RGe8zqa2V-PBjvACAJa2Hrd8z7BXUkks0KCrAtyeDjbsYw@mail.gmail.com>
         <20191209161835.7c455fc0@cakuba.netronome.com>
-        <0101016eee9bf9b5-f5615781-f0a6-41c4-8e9d-ed694eccf07c-000000@us-west-2.amazonses.com>
+        <CAHo-OowHek4i9Pzxn96u8U5sTH8keQmi-yMCY-OBS7CE74OGNQ@mail.gmail.com>
 Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, 10 Dec 2019 07:00:29 +0000, subashab@codeaurora.org wrote:
+On Tue, 10 Dec 2019 12:46:29 +0100, Maciej =C5=BBenczykowski wrote:
 > > Okay, that's what I was suspecting.  It'd be great if the real
-> > motivation for a patch was spelled out in the commit message :/
-> > 
+> > motivation for a patch was spelled out in the commit message :/ =20
+>=20
+> It is, but the commit message is already extremely long.
+
+Long, yet it doesn't mention the _real_ reason for the patch.
+
+> At some point essays and discussions belong in email and not in the
+> commit message.
+
+Ugh just admit you didn't mention the primary use case in the commit
+log, and we can move on.
+
+> Here's another use case:
+>=20
+> A network where firewall policy or network behaviour blocks all
+> traffic using specific ports.
+>=20
+> I've seen generic firewalls that unconditionally drop all BGP or SMTP
+> port traffic, or all traffic on ports 5060/5061 (regardless of
+> direction) or on 25/53/80/123/443/853/3128/8000/8080/8088/8888
+> (usually due to some ill guided security policies against sip or open
+> proxies or xxx). If you happen to use port XXXX as your source port
+> your connection just hangs (packets are blackholed).
+>=20
+> Sure you can argue the network is broken, but in the real world you
+> often can't fix it... Go try and convince your ISP that they should
+> only drop inbound connections to port 8000, but not outgoing
+> connections from port 8000 - you'll go crazy before you find someone
+> who even understands what you're talking about - and even if you find
+> such a person, they'll probably be too busy to change things - and
+> even though it might be a 1 letter change (port -> dport) - it still
+> might take months of testing and rollout before it's fully deployed.
+>=20
+> I've seen networks where specific ports are automatically classified
+> as super high priority (network control) so you don't want anything
+> using these ports without very good reason (common for BGP for
+> example, or for encap schemes).
+>=20
+> Or a specific port number being reserved by GUE or other udp encap
+> schemes and thus unsafe to use for generic traffic (because the
+> network or even the kernel itself might for example auto decapsulate
+> it [via tc ebpf for example], or parse the interior of the packet for
+> flowhashing purposes...).
+>=20
+> [I'll take this opportunity to point out that due to poor flow hashing
+> behaviour GRE is basically unusable at scale (not to mention poorly
+> extensible), and thus GUE and other UDP encap schemes are taking over]
+>=20
+> Or you might want to forward udp port 4500 from your external IP to a
+> dedicated ipsec box or some hardware offload engine... etc.
+
+It's networking you can concoct a scenario to justify anything.
+
 > > So some SoCs which run non-vanilla kernels require hacks to steal
 > > ports from the networking stack for use by proprietary firmware.
-> > 
-> > I don't see how merging this patch benefits the community.
-> 
-> This is just a transparent proxy scenario though.
-> We block the specific ports so that there is no unrelated traffic
-> belonging to host proxied here incorrectly.
+> > I don't see how merging this patch benefits the community. =20
+>=20
+> I think you're failing to account for the fact that the majority of
+> Linux users are Android users - there's around 2.5 billion Android
+> phones in the wild... - but perhaps you don't consider your users (or
+> Android?) to be part of your community?
 
-It's a form of one, agreed, although let's be honest - someone reading
-the transparent proxy use case in the commit message will not think of
-a complex AP scenario, but rather of a locally configured transparent
-proxy with IPtables or sockets or such.
+I don't consider users of non-vanilla kernels to necessarily be a
+reason to merge patches upstream, no. They carry literally millions=20
+of lines of patches out of tree, let them carry this patch, too.
+If I can't boot a vanilla kernel on those devices, and clearly there is
+no intent by the device manufacturers for me to ever will, why would I
+care? Some companies care about upstream, and those should be rewarded
+by us taking some of the maintenance off their hands. Some don't:
+https://www.youtube.com/watch?v=3D_36yNWw_07g (link to Linus+nVidia video)=
+=20
+even tho they sell majority of SoCs for 2.5 billion devices.
+
+> btw. Chrome OS is also Linux based (and if a quick google search is to
+> be believed, about 1/7th of the linux desktop/laptop share), but since
+> it supports running Android apps, it needs to have all Android
+> specific generic kernel changes...
+>=20
+> The reason Android runs non-vanilla kernels is *because* patches like
+> this - that make Linux work in the real world - are missing from
+> vanilla Linux
+> (I can think of a few other networking patches off the top of my head
+> where we've been unable to upstream them for no particularly good
+> reason).
+
+The way to get those patches upstream is to have a honest discussion
+about the use case so people can validate the design. Not by sending
+a patch with a 5 page commit message which fails to clearly state the
+motivation for the feature :/
