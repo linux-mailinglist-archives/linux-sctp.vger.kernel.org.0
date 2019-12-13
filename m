@@ -2,46 +2,112 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F122411B45E
-	for <lists+linux-sctp@lfdr.de>; Wed, 11 Dec 2019 16:47:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE58411DB00
+	for <lists+linux-sctp@lfdr.de>; Fri, 13 Dec 2019 01:16:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733291AbfLKPrJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Wed, 11 Dec 2019 10:47:09 -0500
-Received: from mailout02.3bbmail.com ([110.164.252.195]:60721 "EHLO
-        mailout03.3bb.co.th" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729599AbfLKPrI (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 11 Dec 2019 10:47:08 -0500
-X-Greylist: delayed 1684 seconds by postgrey-1.27 at vger.kernel.org; Wed, 11 Dec 2019 10:47:06 EST
-Authentication-Results: 3bb.co.th;
-        spf=fail smtp.mailfrom=infoccfoundation@amazon.com
-Received: from appserv (mx-ll-110.164.149-9.static.3bb.co.th [110.164.149.9] (may be forged))
-        by mailout03.3bb.co.th (8.16.0.27/8.16.0.27) with ESMTP id xBBFFKZN021602;
-        Wed, 11 Dec 2019 22:15:20 +0700
-Message-ID: <41453-2201912311151530668@appserv>
-To:     "a" <skyteamsbiz@gmail.com>
-Reply-To: "CCULVERT FOUNDATION" <skyteamsbiz@gmail.com>
-From:   "CCULVERT FOUNDATION" <infoccfoundation@amazon.com>
-Subject: Mein letzter Wunsch.
-Date:   Wed, 11 Dec 2019 22:15:30 +0700
+        id S1731420AbfLMAQR (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 12 Dec 2019 19:16:17 -0500
+Received: from mail-io1-f68.google.com ([209.85.166.68]:36206 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731419AbfLMAQR (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 12 Dec 2019 19:16:17 -0500
+Received: by mail-io1-f68.google.com with SMTP id a22so589845ios.3
+        for <linux-sctp@vger.kernel.org>; Thu, 12 Dec 2019 16:16:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Fhx/o/Pv1jKO2VN20lZS4U3D0OWihtm5CE7vV8mMIQI=;
+        b=BYQ3mPdXtaWu+GYbSo2EbcO4eeMH+Fb3l3klt2gfIT2IkPen3VBvtrBTo6BruzEDl6
+         mifIROamB8UEziu9ZaB2wu7AjiYkoJaAOK/SXSVIzx0Qu8cQC9ePMinYTs2uh1SRWxmY
+         YDDhI/bwZX2p757KzmVIVPRfs80dZfV2ys3dxHQrPEFg1L5v778fGNs9XlVShSOHZQM8
+         CJ0Zz1RmIESneN0s2zrADn5LZGtvOuL1/X0EW2gB+/UHY+/cT6BzAtu6PGgZ/s494SJz
+         mEKthYXBwdT2dMlPK5FVMROXYTrt04vlJucGDpBvOz3S73bh5OM0pCO6lbTynammQ/H6
+         EFbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Fhx/o/Pv1jKO2VN20lZS4U3D0OWihtm5CE7vV8mMIQI=;
+        b=k0oHgnZeHUnqeXBSCOKecIs0wHw8N9QKnYiAmANAYzQc3nh9gmgncEUQVchtxMKwq8
+         s2cT7m/4viTGEKpHiGH2BFctpaKoYvI+7JrPqYKUSfYVXvJkxgnHSQCUOxlIjdKRb7jY
+         bNvBftvwZAnrthTv0zGtNoJloNtztI5+4FCrw0fGiF0yOuG3qshZgHsGNrGE0kyLgEV8
+         kP9+Dk4D1DTtV2V26Wlspj4kiaJvsKRFF0T00z5v+tcfqLCU01joKfsrUIAqhHGsQxbM
+         pVvF35Iuj8+lfQyUQglokScI5TNA9eTF4xmpFxVGWinnW6+51EyvaGmQkok7LDS+bv+i
+         Lj2Q==
+X-Gm-Message-State: APjAAAWAURfGPOJJfXmlKlJwxroj3SPEdKLH+6SSqcvCR5O9ANB2VJc5
+        T69RfnsVxIIOsZ+6XeydUZIVb+egXBVfiUlYQ9EjUw==
+X-Google-Smtp-Source: APXvYqzKGGPDRDFfatMrOymOR3BopDiiGJG/yGfUw3OfUsYXTKNwWRjXmEc0wjrYlA+7NwB3IfpEu5heBfA6RXN7epc=
+X-Received: by 2002:a6b:3105:: with SMTP id j5mr5744700ioa.170.1576196176419;
+ Thu, 12 Dec 2019 16:16:16 -0800 (PST)
 MIME-Version: 1.0
-Content-type: text/plain; charset=windows-874
-Content-Transfer-Encoding: 8BIT
-X-Proofpoint-SPF-Result: fail
-X-Proofpoint-SPF-Record: v=spf1 include:spf1.amazon.com include:spf2.amazon.com
- include:amazonses.com -all
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-11-25_06:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=40 suspectscore=1 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=304
- adultscore=0 classifier=spam adjust=40 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-1911260048
+References: <CAHo-OowKQPQj9UhjCND5SmTOergBXMHtEctJA_T0SKLO5yebSg@mail.gmail.com>
+ <20191209224530.156283-1-zenczykowski@gmail.com> <20191209154216.7e19e0c0@cakuba.netronome.com>
+ <CANP3RGe8zqa2V-PBjvACAJa2Hrd8z7BXUkks0KCrAtyeDjbsYw@mail.gmail.com>
+ <20191209161835.7c455fc0@cakuba.netronome.com> <CAHo-OowHek4i9Pzxn96u8U5sTH8keQmi-yMCY-OBS7CE74OGNQ@mail.gmail.com>
+ <20191210093111.7f1ad05d@cakuba.netronome.com>
+In-Reply-To: <20191210093111.7f1ad05d@cakuba.netronome.com>
+From:   Lorenzo Colitti <lorenzo@google.com>
+Date:   Fri, 13 Dec 2019 09:16:03 +0900
+Message-ID: <CAKD1Yr05=sRDTefSP6bmb-VvvDLe9=xUtAF0q3+rn8=U9UjPcA@mail.gmail.com>
+Subject: Re: [PATCH v2] net: introduce ip_local_unbindable_ports sysctl
+To:     Jakub Kicinski <jakub.kicinski@netronome.com>
+Cc:     =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <zenczykowski@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Linux Network Development Mailing List 
+        <netdev@vger.kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Sean Tranchetti <stranche@codeaurora.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Linux SCTP <linux-sctp@vger.kernel.org>,
+        Subash Abhinov Kasiviswanathan <subashab@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Wenn Sie sich für die Finanzierung der STIFTUNG interessieren, schreiben Sie bitte heute über meinen Anwalt zurück
-Grüße,
-Mrs. Cindy Culvert.
-skyteamsbiz@gmail.com
+On Wed, Dec 11, 2019 at 2:31 AM Jakub Kicinski
+<jakub.kicinski@netronome.com> wrote:
+> I don't consider users of non-vanilla kernels to necessarily be a
+> reason to merge patches upstream, no. They carry literally millions
+> of lines of patches out of tree, let them carry this patch, too.
+> If I can't boot a vanilla kernel on those devices, and clearly there is
+> no intent by the device manufacturers for me to ever will, why would I
+> care?
 
+That's *not* the intent.
+https://arstechnica.com/gadgets/2019/11/google-outlines-plans-for-mainline-linux-kernel-support-in-android/
+
+> > The reason Android runs non-vanilla kernels is *because* patches like
+> > this - that make Linux work in the real world - are missing from
+> > vanilla Linux
+
+That's exactly the point here. Saying, "Android will never use
+mainline, so why should mainline take their patches" is a
+self-fulfilling prophecy. Obviously, if mainline never takes Android
+patches, then yes, Android will never be able to use mainline. We do
+have an Android tree we can take this patch into. But we don't want to
+take it without at least attempting to get it into mainline first.
+
+The use case here is pretty simple. There are many CPUs in a mobile
+phone. The baseband processor ("modem") implements much of the
+functionality required by cellular networks, so if you want cellular
+voice or data, it needs to be able to talk to the network. For many
+reasons (architectural, power conservation, security), the modem needs
+to be able to talk directly to the cellular network. This includes,
+for example, SIP/RTP media streams that go directly to the audio
+hardware, IKE traffic that is sent directly by the modem because only
+the modem has the keys, etc. Normally this happens directly on the
+cellular interface and Linux/Android is unaware of it. But, when using
+wifi calling (which is an IPsec tunnel over wifi to an endpoint inside
+the cellular network), the device only has one IPv4 address, and the
+baseband processor and the application processor (the CPU that runs
+Linux/Android) have to share it. This means that some ports have to be
+reserved so that the baseband processor can depend on using them. NAT
+cannot be used because the 3GPP standards require protocols that are
+not very NAT-friendly, and because the modem needs to be able to
+accept unsolicited inbound traffic.
+
+Other than "commit message doesn't have a use case", are there
+technical concerns with this patch?
