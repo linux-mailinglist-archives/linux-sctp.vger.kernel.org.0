@@ -2,85 +2,134 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE53911DB1B
-	for <lists+linux-sctp@lfdr.de>; Fri, 13 Dec 2019 01:25:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58E5211DB3E
+	for <lists+linux-sctp@lfdr.de>; Fri, 13 Dec 2019 01:48:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731358AbfLMAZz (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 12 Dec 2019 19:25:55 -0500
-Received: from mail-io1-f66.google.com ([209.85.166.66]:46141 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731330AbfLMAZy (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 12 Dec 2019 19:25:54 -0500
-Received: by mail-io1-f66.google.com with SMTP id t26so551981ioi.13
-        for <linux-sctp@vger.kernel.org>; Thu, 12 Dec 2019 16:25:54 -0800 (PST)
+        id S1731299AbfLMAr4 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 12 Dec 2019 19:47:56 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:45792 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731217AbfLMArz (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 12 Dec 2019 19:47:55 -0500
+Received: by mail-pl1-f195.google.com with SMTP id bc8so444822plb.12
+        for <linux-sctp@vger.kernel.org>; Thu, 12 Dec 2019 16:47:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zvYy2WCR9QMih3XiDnl+CR4jwAqudFX5LXJtq32Rx7I=;
-        b=MsYVZdbG+RCmTxrz/vGccnxf3cb33OCJMcoxSfC4knIfUdbMXDNTc+dQ6ChQeThBn8
-         5EI6Nu1BwKxTn0OgXCUVtCRFkPE+j6bkFLfmMcZQzPdsPB7V5oQfI7+ir+k7WW5IvqXA
-         UG96iEM3WAbfHtvjtAGNzfz6Sq+PSPGS8ALvuzaB6hYWmWMEVONFlpFH6K7pIkr3d1o+
-         5QuoEYIQS3LzRBMtyRjIAw0ovDPuexZjo+TlvYj5ZgLBCTaT932sPEclPiIvzkD7ZMNH
-         lj1T+eoOAMx0KVh7OS0Lcav2SeANmIfSMFWNAfm4HquzSOqIB4s+wrTMXXDRLz6qQeWe
-         nEJA==
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=/srjZamlK0XdjV6gngN9qkrUYf2VoDzqjSrtkd9BtCk=;
+        b=Hd7QYr/mTZh0/hcO2hIy2NNQ6aTo0senYGetU0aVA2edRh0EoaVE8dvBwhsQX3LUxg
+         eTL01a27R4AZPIqd4vHNOmfYZspqoXR45WYQV7+K23+e1n7nWJdsEAkZbW0qRg+Df9Ln
+         MMZ02BL3tYhJEM5vMKXEf9Y2Ma15dBp4vU20aqqegH8wGBWSylGht2PV300Kbt4TIM9w
+         9DWLDT4c7dajGovIvKK0Cl7vQgGjaOg91xXW46IMfj4k3GUOKkMFC/GojSNX/16jlkiG
+         luTsMknn4d2jHRUDZxfjkCLMuwG5gN08bQh9r/YMaTXxYwWTyLdqpZ/Tan6A+WAvwbLH
+         FnEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zvYy2WCR9QMih3XiDnl+CR4jwAqudFX5LXJtq32Rx7I=;
-        b=oUi0t3Pk6h3OVW0yzsvf7Jizg4uiNBoRANZyUAQStf7qJ2fijJfbIJIi9YvfZG5AeC
-         Pkeq5dSlw0nuRuAzlVIAIDwDxiJu+zR1yUlxGecnIsfGWXs6zT8FPq7UYAp51tjrfmw4
-         FHLqCgiTZ/ifDK8iSFw7E8hcCVuTf6b2wLiZWud3KHqadrCAQGke8kSlr8GGTUwUTZx3
-         hYx+y2mU7Y7TYe+gpymuKTV9q5iqd7iIKqqLCChcp1NGuXz07MBntx+Or3+RKlCfJph4
-         tEA7aoOz8IEfFOGfgzMlW4pP0fEHe/ydWclSRIA/di9YJTLq0+XgQ58r/EhgvBmq7CMM
-         OE8Q==
-X-Gm-Message-State: APjAAAWD50msBFZ0TuwPCpZH19zVi8vQOHymrDodqISLkZ0zDUELsrLY
-        t1BMRcbZ/qZER1d2O5ZwEtg22CfpMzoWd5470MwvoA==
-X-Google-Smtp-Source: APXvYqzC7z4GICLVjYssHFdixy2m6rtK2W8nOKJiEhbMcitjomj08k+CVwXV93sSXDJ0dWCVXWqimaxLzkSQua3zB10=
-X-Received: by 2002:a05:6638:76c:: with SMTP id y12mr10675739jad.95.1576196753710;
- Thu, 12 Dec 2019 16:25:53 -0800 (PST)
-MIME-Version: 1.0
-References: <20191127001313.183170-1-zenczykowski@gmail.com>
- <20191127131407.GA377783@localhost.localdomain> <CANP3RGePJ+z1t8oq-QS1tcwEYWanPHPargKpHkZZGiT4jMa6xw@mail.gmail.com>
- <20191127230001.GO388551@localhost.localdomain>
-In-Reply-To: <20191127230001.GO388551@localhost.localdomain>
-From:   Lorenzo Colitti <lorenzo@google.com>
-Date:   Fri, 13 Dec 2019 09:25:42 +0900
-Message-ID: <CAKD1Yr1jAv4ouHKu+wA-_basvzY3tN==QMq9u+4fmvpOHLBh1Q@mail.gmail.com>
-Subject: Re: [PATCH] net: introduce ip_local_unbindable_ports sysctl
-To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <zenczykowski@gmail.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=/srjZamlK0XdjV6gngN9qkrUYf2VoDzqjSrtkd9BtCk=;
+        b=eiYYAq54/+ePVoiZhT+UIB5RawePLh8qPOX8l+AKLAF3f+FkNCNxpKbx9/+tJ7S09w
+         s9eA5+rX5APTV5ss3ZkOqaeEOH4rjDIQUBEqqbs83R9n078EEsWF2IUjAs9NnhfISZoP
+         SmDbOW7LPFkXEYGfeAtoNMyuz1lskqrQxyM9zCfjx6WfUMEIAEiNXrGajBDhArUuiiRB
+         MiY1smaVSWPJQlISlzVjbsgIz/Da5d3Lz3p8p/nnLsbuCPXa2vz6Mxm4qKYhgBrN//XV
+         WOCeY84UxEoYCQdpoR6JxHmytotC9RNB3v+W4SKK0kJee+GsD1D652cGjYBtDtZTIfAD
+         aQmQ==
+X-Gm-Message-State: APjAAAUOEQkm6ER81EhvVRUo040eXiMrvEu79XuCx0M7zHg9DR+IbXVq
+        rp6LS06yD8nwqmR3m+9d4kEHoA==
+X-Google-Smtp-Source: APXvYqxKyxm/ZSddvXwXmsGN7FXwGfLCZBI+f/+8WTd2PIyNqjhsYMAk9qeohsAbPZ7iTAWZuKqlbQ==
+X-Received: by 2002:a17:90a:fa95:: with SMTP id cu21mr13643010pjb.129.1576198074840;
+        Thu, 12 Dec 2019 16:47:54 -0800 (PST)
+Received: from cakuba.netronome.com ([66.60.152.14])
+        by smtp.gmail.com with ESMTPSA id i127sm8688757pfc.55.2019.12.12.16.47.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Dec 2019 16:47:54 -0800 (PST)
+Date:   Thu, 12 Dec 2019 16:47:49 -0800
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     Lorenzo Colitti <lorenzo@google.com>
+Cc:     Maciej =?UTF-8?B?xbtlbmN6eWtvd3NraQ==?= <zenczykowski@gmail.com>,
         "David S . Miller" <davem@davemloft.net>,
-        Linux NetDev <netdev@vger.kernel.org>,
+        Linux Network Development Mailing List 
+        <netdev@vger.kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         Sean Tranchetti <stranche@codeaurora.org>,
-        Subash Abhinov Kasiviswanathan <subashab@codeaurora.org>,
         Eric Dumazet <edumazet@google.com>,
-        Linux SCTP <linux-sctp@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux SCTP <linux-sctp@vger.kernel.org>,
+        Subash Abhinov Kasiviswanathan <subashab@codeaurora.org>
+Subject: Re: [PATCH v2] net: introduce ip_local_unbindable_ports sysctl
+Message-ID: <20191212164749.4e4c8a4c@cakuba.netronome.com>
+In-Reply-To: <CAKD1Yr05=sRDTefSP6bmb-VvvDLe9=xUtAF0q3+rn8=U9UjPcA@mail.gmail.com>
+References: <CAHo-OowKQPQj9UhjCND5SmTOergBXMHtEctJA_T0SKLO5yebSg@mail.gmail.com>
+        <20191209224530.156283-1-zenczykowski@gmail.com>
+        <20191209154216.7e19e0c0@cakuba.netronome.com>
+        <CANP3RGe8zqa2V-PBjvACAJa2Hrd8z7BXUkks0KCrAtyeDjbsYw@mail.gmail.com>
+        <20191209161835.7c455fc0@cakuba.netronome.com>
+        <CAHo-OowHek4i9Pzxn96u8U5sTH8keQmi-yMCY-OBS7CE74OGNQ@mail.gmail.com>
+        <20191210093111.7f1ad05d@cakuba.netronome.com>
+        <CAKD1Yr05=sRDTefSP6bmb-VvvDLe9=xUtAF0q3+rn8=U9UjPcA@mail.gmail.com>
+Organization: Netronome Systems, Ltd.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, Nov 28, 2019 at 8:00 AM Marcelo Ricardo Leitner
-<marcelo.leitner@gmail.com> wrote:
-> I'm no SELinux expert, but my /etc/ssh/sshd_config has this nice handy
-> comment:
-> # If you want to change the port on a SELinux system, you have to tell
-> # SELinux about this change.
-> # semanage port -a -t ssh_port_t -p tcp #PORTNUMBER
->
-> The kernel has no specific knowledge of 'ssh_port_t' and all I need to
-> do to allow such port, is run the command above. No compiler, etc.
-> The distribution would have to have a policy, say,
-> 'unbindable_ports_t', and it could work similarly, I suppose, but I
-> have no knowledge on this part.
+On Fri, 13 Dec 2019 09:16:03 +0900, Lorenzo Colitti wrote:
+> On Wed, Dec 11, 2019 at 2:31 AM Jakub Kicinski wrote:
+> > I don't consider users of non-vanilla kernels to necessarily be a
+> > reason to merge patches upstream, no. They carry literally millions
+> > of lines of patches out of tree, let them carry this patch, too.
+> > If I can't boot a vanilla kernel on those devices, and clearly there is
+> > no intent by the device manufacturers for me to ever will, why would I
+> > care?  
+> 
+> That's *not* the intent.
+> https://arstechnica.com/gadgets/2019/11/google-outlines-plans-for-mainline-linux-kernel-support-in-android/
+> 
+> > > The reason Android runs non-vanilla kernels is *because* patches like
+> > > this - that make Linux work in the real world - are missing from
+> > > vanilla Linux  
+> 
+> That's exactly the point here. Saying, "Android will never use
+> mainline, so why should mainline take their patches" is a
+> self-fulfilling prophecy. Obviously, if mainline never takes Android
+> patches, then yes, Android will never be able to use mainline. We do
+> have an Android tree we can take this patch into. But we don't want to
+> take it without at least attempting to get it into mainline first.
+> 
+> The use case here is pretty simple. There are many CPUs in a mobile
+> phone. The baseband processor ("modem") implements much of the
+> functionality required by cellular networks, so if you want cellular
+> voice or data, it needs to be able to talk to the network. For many
+> reasons (architectural, power conservation, security), the modem needs
+> to be able to talk directly to the cellular network. This includes,
+> for example, SIP/RTP media streams that go directly to the audio
+> hardware, IKE traffic that is sent directly by the modem because only
+> the modem has the keys, etc. Normally this happens directly on the
+> cellular interface and Linux/Android is unaware of it. But, when using
+> wifi calling (which is an IPsec tunnel over wifi to an endpoint inside
+> the cellular network), the device only has one IPv4 address, and the
+> baseband processor and the application processor (the CPU that runs
+> Linux/Android) have to share it. This means that some ports have to be
+> reserved so that the baseband processor can depend on using them. NAT
+> cannot be used because the 3GPP standards require protocols that are
+> not very NAT-friendly, and because the modem needs to be able to
+> accept unsolicited inbound traffic.
+> 
+> Other than "commit message doesn't have a use case", are there
+> technical concerns with this patch?
 
-For security reasons, Android does not allow reloading selinux policy
-after boot. I'm not a selinux expert either, but semanage-port(8) has:
+Maybe a minor question or two, but the main complaint is the commit
+message.
 
-       -N, --noreload
-              Do not reload policy after commit
+How are the ports which get reserved communicated between the baseband
+and the AP? Is this part of the standard? Is the driver that talks to
+the base band in the user space and it knows which ports to reserve
+statically? Or does the modem dynamically request ports to
+reserve/inform the host of ports in use?
 
-which suggests that it works by reloading the policy.
+Should the sysfs interface make sure there are not existing sockets
+using requested ports which would stop working? If we may need it one
+day better add it now..
