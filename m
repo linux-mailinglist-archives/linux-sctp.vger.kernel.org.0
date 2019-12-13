@@ -2,108 +2,295 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F85611DBF6
-	for <lists+linux-sctp@lfdr.de>; Fri, 13 Dec 2019 03:05:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 944DB11E301
+	for <lists+linux-sctp@lfdr.de>; Fri, 13 Dec 2019 12:49:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731878AbfLMCFD (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 12 Dec 2019 21:05:03 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:35651 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731864AbfLMCFD (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 12 Dec 2019 21:05:03 -0500
-Received: by mail-pg1-f194.google.com with SMTP id l24so744482pgk.2
-        for <linux-sctp@vger.kernel.org>; Thu, 12 Dec 2019 18:05:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :organization:mime-version:content-transfer-encoding;
-        bh=XFE2WEqPww9hrPNTlokFg1ydsJkJIBHmKFrj5jVK8wg=;
-        b=LKyCIPEJOLjuL9eQqy/wHrbHSOXbMz4oMIAxi0+piXyWSjiZXwsDQkhHbSd5dtq5G+
-         Z0JAEL2XD8/1tCjZ4aof81Ib4dc7JyZpLEZCQ+G4jvHQJgUkCRf4RqHyIwhymTAAzMTZ
-         PAm4fj0fcSpdf12R8RdaXgXWONgog2zq9H9vDsOIwRA5JcyEEV5qdHRXPAXC6CDct6Y1
-         DMJE/RyFeYJr2JNyiQ9sdF/ycEdYWqX82DM2Y9DtLQKjrMxGoiItuuBBJF0PF6M3y1Sv
-         sSn/VJ9nFQHh7jrKQzviNHD5qU2PQ9XsFPCs5nviG0dL1FD2ky7SZ9LCQYzr/R7yuFVg
-         3/Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=XFE2WEqPww9hrPNTlokFg1ydsJkJIBHmKFrj5jVK8wg=;
-        b=dwSwxX/Nks7sCprneoKOaLrcdL/9h+iS4IPHksb30y7TS8dWSLXdq5+RVoCUzM2gAo
-         Drkvgg7CHQUkpSc+lXDOdQnEFdZ1p5BZQ8YNDmX22ulDnhNbE0vCdBYkRWe+wNubxlAO
-         P7L9aNDHxk55186yTNwQZ7XW82ohjIL4HIXfy29XcawNYbEh7QvB/LhRbVrDbnAhceEB
-         +FqGsc3eqSQ07b+FI/9IhC5Ln1Rxj/Y69+5q2Zct//zbkHhx78B54Gf3ulWnSPU4WtcB
-         wkiznvkeevtq1TNyzW1miCPaYe2cC1InrpI3r+PWfziqKluMRy1tnQ7dcyiBuMI0zHjl
-         fBoQ==
-X-Gm-Message-State: APjAAAUjmADDC8/IOiG6PGacYZ4sPY3XlL74xHpAhTrAqokoVmHuV9Ls
-        pjaofY3SxgnQMuGUD1tXAPQptw==
-X-Google-Smtp-Source: APXvYqxejyDVM4mfG2SLpJhjeTv7BcxPUUI/HLA766KLgOJAt/nt7lz82x7KBEJgyGkHLEIFiSrSEA==
-X-Received: by 2002:a63:d041:: with SMTP id s1mr14379047pgi.363.1576202702817;
-        Thu, 12 Dec 2019 18:05:02 -0800 (PST)
-Received: from cakuba.netronome.com (c-73-202-202-92.hsd1.ca.comcast.net. [73.202.202.92])
-        by smtp.gmail.com with ESMTPSA id p186sm8734108pfp.56.2019.12.12.18.05.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Dec 2019 18:05:02 -0800 (PST)
-Date:   Thu, 12 Dec 2019 18:04:59 -0800
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     subashab@codeaurora.org
-Cc:     Lorenzo Colitti <lorenzo@google.com>,
-        Maciej =?UTF-8?B?xbtlbmN6eWtv?= =?UTF-8?B?d3NraQ==?= 
-        <zenczykowski@gmail.com>, "David S . Miller" <davem@davemloft.net>,
-        Linux Network Development Mailing List 
-        <netdev@vger.kernel.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        id S1726750AbfLMLtw (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 13 Dec 2019 06:49:52 -0500
+Received: from charlotte.tuxdriver.com ([70.61.120.58]:46578 "EHLO
+        smtp.tuxdriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725980AbfLMLtv (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 13 Dec 2019 06:49:51 -0500
+Received: from 2606-a000-111b-43ee-0000-0000-0000-115f.inf6.spectrum.com ([2606:a000:111b:43ee::115f] helo=localhost)
+        by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
+        (Exim 4.63)
+        (envelope-from <nhorman@tuxdriver.com>)
+        id 1ifjRv-0005xK-4N; Fri, 13 Dec 2019 06:49:44 -0500
+Date:   Fri, 13 Dec 2019 06:49:34 -0500
+From:   Neil Horman <nhorman@tuxdriver.com>
+To:     Maciej =?utf-8?Q?=C5=BBenczykowski?= <zenczykowski@gmail.com>
+Cc:     Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>,
+        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
         Sean Tranchetti <stranche@codeaurora.org>,
+        Subash Abhinov Kasiviswanathan <subashab@codeaurora.org>,
         Eric Dumazet <edumazet@google.com>,
         Linux SCTP <linux-sctp@vger.kernel.org>
-Subject: Re: [PATCH v2] net: introduce ip_local_unbindable_ports sysctl
-Message-ID: <20191212180459.687adf9c@cakuba.netronome.com>
-In-Reply-To: <2e7ceea704ee71383d3f19d1de63dff4@codeaurora.org>
-References: <CAHo-OowKQPQj9UhjCND5SmTOergBXMHtEctJA_T0SKLO5yebSg@mail.gmail.com>
-        <20191209224530.156283-1-zenczykowski@gmail.com>
-        <20191209154216.7e19e0c0@cakuba.netronome.com>
-        <CANP3RGe8zqa2V-PBjvACAJa2Hrd8z7BXUkks0KCrAtyeDjbsYw@mail.gmail.com>
-        <20191209161835.7c455fc0@cakuba.netronome.com>
-        <CAHo-OowHek4i9Pzxn96u8U5sTH8keQmi-yMCY-OBS7CE74OGNQ@mail.gmail.com>
-        <20191210093111.7f1ad05d@cakuba.netronome.com>
-        <CAKD1Yr05=sRDTefSP6bmb-VvvDLe9=xUtAF0q3+rn8=U9UjPcA@mail.gmail.com>
-        <20191212164749.4e4c8a4c@cakuba.netronome.com>
-        <CAKD1Yr1V4S3cxvTaBs6pReEZ_3LPobnxdroY+vE3-injHyGt2A@mail.gmail.com>
-        <2e7ceea704ee71383d3f19d1de63dff4@codeaurora.org>
-Organization: Netronome Systems, Ltd.
+Subject: Re: [PATCH] net: introduce ip_local_unbindable_ports sysctl
+Message-ID: <20191213114934.GB5449@hmswarspite.think-freely.org>
+References: <20191127001313.183170-1-zenczykowski@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191127001313.183170-1-zenczykowski@gmail.com>
+X-Spam-Score: -2.9 (--)
+X-Spam-Status: No
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, 12 Dec 2019 18:53:19 -0700, subashab@codeaurora.org wrote:
-> On 2019-12-12 17:57, Lorenzo Colitti wrote:
-> > On Fri, Dec 13, 2019 at 9:47 AM Jakub Kicinski wrote:  
-> >> How are the ports which get reserved communicated between the baseband
-> >> and the AP? Is this part of the standard? Is the driver that talks to
-> >> the base band in the user space and it knows which ports to reserve
-> >> statically? Or does the modem dynamically request ports to
-> >> reserve/inform the host of ports in use?  
-> > 
-> > I'm not an expert in that part of the system, but my understanding is
-> > that the primary way this is used is to pre-allocate a block of ports
-> > to be used by the modem on boot, before other applications can bind to
-> > ports. Subash, do you have more details?  
+On Tue, Nov 26, 2019 at 04:13:13PM -0800, Maciej Żenczykowski wrote:
+> From: Maciej Żenczykowski <maze@google.com>
 > 
-> AFAIK these ports are randomly picked and not from a standard.
-> Userspace gets this information through qrtr during boot.
+> and associated inet_is_local_unbindable_port() helper function:
+> use it to make explicitly binding to an unbindable port return
+> -EPERM 'Operation not permitted'.
 > 
-> Atleast in our case, there cannot be any existing user of these ports
-> since these ports are blocked prior to mobile connection establishment.
+> Autobind doesn't honour this new sysctl since:
+>   (a) you can simply set both if that's the behaviour you desire
+>   (b) there could be a use for preventing explicit while allowing auto
+>   (c) it's faster in the relatively critical path of doing port selection
+>       during connect() to only check one bitmap instead of both
+> 
+> Various ports may have special use cases which are not suitable for
+> use by general userspace applications. Currently, ports specified in
+> ip_local_reserved_ports sysctl will not be returned only in case of
+> automatic port assignment, but nothing prevents you from explicitly
+> binding to them - even from an entirely unprivileged process.
+> 
+> In certain cases it is desirable to prevent the host from assigning the
+> ports even in case of explicit binds, even from superuser processes.
+> 
+> Example use cases might be:
+>  - a port being stolen by the nic for remote serial console, remote
+>    power management or some other sort of debugging functionality
+>    (crash collection, gdb, direct access to some other microcontroller
+>    on the nic or motherboard, remote management of the nic itself).
+>  - a transparent proxy where packets are being redirected: in case
+>    a socket matches this connection, packets from this application
+>    would be incorrectly sent to one of the endpoints.
+> 
+> Initially I wanted to solve this problem via the simple one line:
+> 
+> static inline bool inet_port_requires_bind_service(struct net *net, unsigned short port) {
+> -       return port < net->ipv4.sysctl_ip_prot_sock;
+> +       return port < net->ipv4.sysctl_ip_prot_sock || inet_is_local_reserved_port(net, port);
+> }
+> 
+> However, this doesn't work for two reasons:
+>   (a) it changes userspace visible behaviour of the existing local
+>       reserved ports sysctl, and there appears to be enough documentation
+>       on the internet talking about setting it to make this a bad idea
+>   (b) it doesn't prevent privileged apps from using these ports,
+>       CAP_BIND_SERVICE is relatively likely to be available to, for example,
+>       a recursive DNS server so it can listed on port 53, which also needs
+>       to do src port randomization for outgoing queries due to security
+>       reasons (and it thus does manual port binding).
+> 
+> If we *know* that certain ports are simply unusable, then it's better
+> nothing even gets the opportunity to try to use them.  This way we at
+> least get a quick failure, instead of some sort of timeout (or possibly
+> even corruption of the data stream of the non-kernel based use case).
+> 
+> Test:
+>   vm:~# cat /proc/sys/net/ipv4/ip_local_unbindable_ports
+> 
+>   vm:~# python -c 'import socket; s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0); s.bind(("::", 3967))'
+>   vm:~# python -c 'import socket; s = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM, 0); s.bind(("::", 3967))'
+>   vm:~# echo 3967 > /proc/sys/net/ipv4/ip_local_unbindable_ports
+>   vm:~# cat /proc/sys/net/ipv4/ip_local_unbindable_ports
+>   3967
+>   vm:~# python -c 'import socket; s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0); s.bind(("::", 3967))'
+>   socket.error: (1, 'Operation not permitted')
+>   vm:~# python -c 'import socket; s = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM, 0); s.bind(("::", 3967))'
+>   socket.error: (1, 'Operation not permitted')
+> 
+> Cc: Sean Tranchetti <stranche@codeaurora.org>
+> Cc: Subash Abhinov Kasiviswanathan <subashab@codeaurora.org>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Linux SCTP <linux-sctp@vger.kernel.org>
+> Signed-off-by: Maciej Żenczykowski <maze@google.com>
+> ---
+>  Documentation/networking/ip-sysctl.txt | 13 +++++++++++++
+>  include/net/ip.h                       | 12 ++++++++++++
+>  include/net/netns/ipv4.h               |  1 +
+>  net/ipv4/af_inet.c                     |  4 ++++
+>  net/ipv4/sysctl_net_ipv4.c             | 18 ++++++++++++++++--
+>  net/ipv6/af_inet6.c                    |  2 ++
+>  net/sctp/socket.c                      |  5 +++++
+>  7 files changed, 53 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/networking/ip-sysctl.txt b/Documentation/networking/ip-sysctl.txt
+> index fd26788e8c96..7129646a18bd 100644
+> --- a/Documentation/networking/ip-sysctl.txt
+> +++ b/Documentation/networking/ip-sysctl.txt
+> @@ -940,6 +940,19 @@ ip_local_reserved_ports - list of comma separated ranges
+>  
+>  	Default: Empty
+>  
+> +ip_local_unbindable_ports - list of comma separated ranges
+> +	Specify the ports which are not directly bind()able.
+> +
+> +	Usually you would use this to block the use of ports which
+> +	are invalid due to something outside of the control of the
+> +	kernel.  For example a port stolen by the nic for serial
+> +	console, remote power management or debugging.
+> +
+> +	There's a relatively high chance you will also want to list
+> +	these ports in 'ip_local_reserved_ports' to prevent autobinding.
+> +
+> +	Default: Empty
+> +
+>  ip_unprivileged_port_start - INTEGER
+>  	This is a per-namespace sysctl.  It defines the first
+>  	unprivileged port in the network namespace.  Privileged ports
+> diff --git a/include/net/ip.h b/include/net/ip.h
+> index 02d68e346f67..14b99bf59ffc 100644
+> --- a/include/net/ip.h
+> +++ b/include/net/ip.h
+> @@ -346,6 +346,13 @@ static inline bool inet_is_local_reserved_port(struct net *net, unsigned short p
+>  	return test_bit(port, net->ipv4.sysctl_local_reserved_ports);
+>  }
+>  
+> +static inline bool inet_is_local_unbindable_port(struct net *net, unsigned short port)
+> +{
+> +	if (!net->ipv4.sysctl_local_unbindable_ports)
+> +		return false;
+> +	return test_bit(port, net->ipv4.sysctl_local_unbindable_ports);
+> +}
+> +
+>  static inline bool sysctl_dev_name_is_allowed(const char *name)
+>  {
+>  	return strcmp(name, "default") != 0  && strcmp(name, "all") != 0;
+> @@ -362,6 +369,11 @@ static inline bool inet_is_local_reserved_port(struct net *net, unsigned short p
+>  	return false;
+>  }
+>  
+> +static inline bool inet_is_local_unbindable_port(struct net *net, unsigned short port)
+> +{
+> +	return false;
+> +}
+> +
+>  static inline bool inet_port_requires_bind_service(struct net *net, unsigned short port)
+>  {
+>  	return port < PROT_SOCK;
+> diff --git a/include/net/netns/ipv4.h b/include/net/netns/ipv4.h
+> index c0c0791b1912..6a235651925d 100644
+> --- a/include/net/netns/ipv4.h
+> +++ b/include/net/netns/ipv4.h
+> @@ -197,6 +197,7 @@ struct netns_ipv4 {
+>  
+>  #ifdef CONFIG_SYSCTL
+>  	unsigned long *sysctl_local_reserved_ports;
+> +	unsigned long *sysctl_local_unbindable_ports;
+>  	int sysctl_ip_prot_sock;
+>  #endif
+>  
+> diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+> index 2fe295432c24..b26046431612 100644
+> --- a/net/ipv4/af_inet.c
+> +++ b/net/ipv4/af_inet.c
+> @@ -494,6 +494,10 @@ int __inet_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
+>  		goto out;
+>  
+>  	snum = ntohs(addr->sin_port);
+> +	err = -EPERM;
+> +	if (snum && inet_is_local_unbindable_port(net, snum))
+> +		goto out;
+> +
+>  	err = -EACCES;
+>  	if (snum && inet_port_requires_bind_service(net, snum) &&
+>  	    !ns_capable(net->user_ns, CAP_NET_BIND_SERVICE))
+> diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
+> index fcb2cd167f64..fd363b57a653 100644
+> --- a/net/ipv4/sysctl_net_ipv4.c
+> +++ b/net/ipv4/sysctl_net_ipv4.c
+> @@ -745,6 +745,13 @@ static struct ctl_table ipv4_net_table[] = {
+>  		.mode		= 0644,
+>  		.proc_handler	= proc_do_large_bitmap,
+>  	},
+> +	{
+> +		.procname	= "ip_local_unbindable_ports",
+> +		.data		= &init_net.ipv4.sysctl_local_unbindable_ports,
+> +		.maxlen		= 65536,
+> +		.mode		= 0644,
+> +		.proc_handler	= proc_do_large_bitmap,
+> +	},
+>  	{
+>  		.procname	= "ip_no_pmtu_disc",
+>  		.data		= &init_net.ipv4.sysctl_ip_no_pmtu_disc,
+> @@ -1353,11 +1360,17 @@ static __net_init int ipv4_sysctl_init_net(struct net *net)
+>  
+>  	net->ipv4.sysctl_local_reserved_ports = kzalloc(65536 / 8, GFP_KERNEL);
+>  	if (!net->ipv4.sysctl_local_reserved_ports)
+> -		goto err_ports;
+> +		goto err_reserved_ports;
+> +
+> +	net->ipv4.sysctl_local_unbindable_ports = kzalloc(65536 / 8, GFP_KERNEL);
+> +	if (!net->ipv4.sysctl_local_unbindable_ports)
+> +		goto err_unbindable_ports;
+>  
+>  	return 0;
+>  
+> -err_ports:
+> +err_unbindable_ports:
+> +	kfree(net->ipv4.sysctl_local_reserved_ports);
+> +err_reserved_ports:
+>  	unregister_net_sysctl_table(net->ipv4.ipv4_hdr);
+>  err_reg:
+>  	if (!net_eq(net, &init_net))
+> @@ -1370,6 +1383,7 @@ static __net_exit void ipv4_sysctl_exit_net(struct net *net)
+>  {
+>  	struct ctl_table *table;
+>  
+> +	kfree(net->ipv4.sysctl_local_unbindable_ports);
+>  	kfree(net->ipv4.sysctl_local_reserved_ports);
+>  	table = net->ipv4.ipv4_hdr->ctl_table_arg;
+>  	unregister_net_sysctl_table(net->ipv4.ipv4_hdr);
+> diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
+> index 60e2ff91a5b3..3c83e3200543 100644
+> --- a/net/ipv6/af_inet6.c
+> +++ b/net/ipv6/af_inet6.c
+> @@ -292,6 +292,8 @@ static int __inet6_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
+>  		return -EINVAL;
+>  
+>  	snum = ntohs(addr->sin6_port);
+> +	if (snum && inet_is_local_unbindable_port(net, snum))
+> +		return -EPERM;
+>  	if (snum && inet_port_requires_bind_service(net, snum) &&
+>  	    !ns_capable(net->user_ns, CAP_NET_BIND_SERVICE))
+>  		return -EACCES;
+> diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+> index 0b485952a71c..d1c93542419d 100644
+> --- a/net/sctp/socket.c
+> +++ b/net/sctp/socket.c
+> @@ -384,6 +384,9 @@ static int sctp_do_bind(struct sock *sk, union sctp_addr *addr, int len)
+>  		}
+>  	}
+>  
+> +	if (snum && inet_is_local_unbindable_port(net, snum))
+> +		return -EPERM;
+> +
+>  	if (snum && inet_port_requires_bind_service(net, snum) &&
+>  	    !ns_capable(net->user_ns, CAP_NET_BIND_SERVICE))
+>  		return -EACCES;
+> @@ -1061,6 +1064,8 @@ static int sctp_connect_new_asoc(struct sctp_endpoint *ep,
+>  		if (sctp_autobind(sk))
+>  			return -EAGAIN;
+>  	} else {
+> +		if (inet_is_local_unbindable_port(net, ep->base.bind_addr.port))
+> +			return -EPERM;
+>  		if (inet_port_requires_bind_service(net, ep->base.bind_addr.port) &&
+>  		    !ns_capable(net->user_ns, CAP_NET_BIND_SERVICE))
+>  			return -EACCES;
+> -- 
+> 2.24.0.432.g9d3f5f5b63-goog
+> 
+> 
 
-Not even a listening socket?
+Just out of curiosity, why are the portreserve and portrelease utilities not a
+solution to this use case?
 
-> We could call SOCK_DIAG_DESTROY on these ports from userspace as a
-> precaution as applications would gracefully handle the socket errors.
+Neil
 
-Right, or kernel could walk them, since presumably every application
-using this functionality should do it, anyway? But no strong feeling 
-on this if nobody else feels this is needed.
