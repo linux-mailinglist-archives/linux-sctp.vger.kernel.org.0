@@ -2,94 +2,71 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2336D124B2E
-	for <lists+linux-sctp@lfdr.de>; Wed, 18 Dec 2019 16:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D11125DC5
+	for <lists+linux-sctp@lfdr.de>; Thu, 19 Dec 2019 10:35:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727414AbfLRPOJ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 18 Dec 2019 10:14:09 -0500
-Received: from mail-io1-f67.google.com ([209.85.166.67]:45275 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727311AbfLRPOE (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 18 Dec 2019 10:14:04 -0500
-Received: by mail-io1-f67.google.com with SMTP id i11so2307093ioi.12
-        for <linux-sctp@vger.kernel.org>; Wed, 18 Dec 2019 07:14:04 -0800 (PST)
+        id S1726779AbfLSJf0 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 19 Dec 2019 04:35:26 -0500
+Received: from mail-il1-f196.google.com ([209.85.166.196]:40858 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726777AbfLSJf0 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 19 Dec 2019 04:35:26 -0500
+Received: by mail-il1-f196.google.com with SMTP id c4so4303127ilo.7
+        for <linux-sctp@vger.kernel.org>; Thu, 19 Dec 2019 01:35:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=R9l9mbjTMtC+3agOxuj88vgGSGUSi1shzIvbtHPQHDA=;
-        b=RfaUJbE64AqObBUWyZFAX00yFzfv+PMQBeMlfEbyOTSSIZSlP9dNPzblRe9C4/Xp5G
-         OOrfzjlEIPRCszaxaclLviha/Gl6J+8MNE2wJIlQr3g8uWJn+m5NNx6dyOIWXJDzHKAu
-         CFfw6ayoPSChbR+RAE0+B68G/pEf5o1uZqam8GCW/DM3JVJn1rrKg09G5nyaA4x8K46C
-         DidFmOGbhUnnebgzWtKvL2IYqcm0dJ4hRYsroJX5h4wZl5ygcdMBOrPylnEG0iZgtaC4
-         tctA6UVKTV1ZO7eaOpJeM3zJ9lY8Otzi6Az77Sm1wv6CYLTS/yvcKPbBaIHIL7wY9gk+
-         23sQ==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=a2DXLhWG+1I/sxJa6YFBWn4bUqJF9bmSM3jLRi/c7dc=;
+        b=TRVX4Lc8Y8ErxPbU6eqBYH6CyQy+QfNXWoP+LLwz0l1EvzGtkuSE2oF7wGtG6hkGcu
+         KJFIaAtCUTin8SM+ymwrscIObOxEDQaUA5ficzV/EJiwK9hs6DEpMG5QSDBg5hvdwtxt
+         lsOwh05wUG56husmLOH5Jwygk1fBcnrM8r08iBc4MvjoTswR9u+3Q/E7kADToRzUcbCF
+         jbcrCR5TgBFdWjYrxP18tic69Ck+5+jggbCGc3gqrtFUuVJfQzfsIjG0qwnJT0AL//Om
+         Q5ytQHbplugQ7gkUXICfJ0Cq3FLeXnB0/tDw6Qa2CZFYrHHNnovJjCZt/1zOy7LS9Yeh
+         6keQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=R9l9mbjTMtC+3agOxuj88vgGSGUSi1shzIvbtHPQHDA=;
-        b=GqDj+Zd2s7umFVOZHUZKte+dBov4hOMO+4hUvmOQ+vicmS5nkASF/XNwdRe/jIATwB
-         0EnceP6BRmlBJ77rp0ZUZmPPgo6KVKDo32vWjetwUsO2fzp3pO2/IJN05D3kVSDZVVnq
-         I03NNGlDHZIG8DQKnRDMCxG5TkEOwSf83Spq4na3HwRmOI/6R8Tz2DLl9qLBlSvFWGGZ
-         7u86E83oUN+ySxFWc402G9NlwMHUl/fCySgPQs3Z7RSTHStazBGkXVwW7CYK/7CiJleZ
-         bHz2M46WDctzQL3fmn/cHD4ovuTX/6VqeuaqYKExuEyTLQnA0RYrVMDIvnisHAhaY3Uc
-         olfw==
-X-Gm-Message-State: APjAAAUoJoK+cX4lhK9rn8NeJF1tXsvD3jcIFdK6kbXeWocNtbRNAF8J
-        7B1In6nBcVhKBX/DLi07Db3VEEJSSNmh+8mI/g==
-X-Google-Smtp-Source: APXvYqyIz9CrpHcrXivylieLEiE1VxRyGUw+E9DXz6VIYz+kYlOCef915g/qsmML8+OoqrwbsBK3G0eW6o6RBALrF/E=
-X-Received: by 2002:a05:6638:950:: with SMTP id f16mr2789501jad.107.1576682043767;
- Wed, 18 Dec 2019 07:14:03 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=a2DXLhWG+1I/sxJa6YFBWn4bUqJF9bmSM3jLRi/c7dc=;
+        b=NFl4KVxOFvq7NXjf5G6sPm7vJ0JwpYATdKvvDu8RBnj6aTcqGHip/Bz7JPNWeumcAy
+         MzKleSldXlxwT1dyROp6D0GzIfVJbWBXg9+47oe2sKECji5hLRygqDI54a9L3RF6L0RH
+         eVTDE6vSh499USNOZ0/KrGHiCU/a4JF4B61MIr6vZo/5a5EH7e3STXzjiWzL5J0gLq9u
+         1GQheunlYbZ3hArPg1H9HYlw59ua7wnz/VbWf/+XqtgbIhmK4QrE4F4pUaDhX4VJQGek
+         QelFZtIzARTfp0yrYmdabCh16VDgwEG13UfOcgSJQIbjvYauGHejhT+NNhNMLXHUxKIv
+         Qilg==
+X-Gm-Message-State: APjAAAWZKbe07FbK42fPCa0p29kL8pcKKe+qykxfq/HXtGNacJCN1Wim
+        RmABgrAPfQ4Ofuctwq+YEPI0VNq1xtmnJjiYlHDIfg==
+X-Google-Smtp-Source: APXvYqxu+jMjNle+ACBvO1nRDbDvShivY/r2tlBkdLEsMASv7gZt8FOunyItaOXZPAMs744KqWkrYdN0Lr/vbe9IxY8=
+X-Received: by 2002:a92:ca82:: with SMTP id t2mr6256940ilo.242.1576748125586;
+ Thu, 19 Dec 2019 01:35:25 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a02:6603:0:0:0:0:0 with HTTP; Wed, 18 Dec 2019 07:14:03
- -0800 (PST)
-Reply-To: dhl.expresscourier102156@outlook.fr
-From:   "MS. MARYANNA B. THOMASON" <info.zennitbankplcnigerian@gmail.com>
-Date:   Wed, 18 Dec 2019 16:14:03 +0100
-Message-ID: <CABHzvr=Pq7-TqhY8TPvFCsr+5-DhDQy=XOg-TM13qqbFWeemfQ@mail.gmail.com>
-Subject: =?UTF-8?Q?Urgent_delivery_Notification_of_your_ATM_MASTER_CARD?=
-        =?UTF-8?Q?_Amount=2C=2415=2E800=E2=80=99000=E2=80=9900=2C?=
-To:     undisclosed-recipients:;
+References: <20191127001313.183170-1-zenczykowski@gmail.com> <20191213114934.GB5449@hmswarspite.think-freely.org>
+In-Reply-To: <20191213114934.GB5449@hmswarspite.think-freely.org>
+From:   Lorenzo Colitti <lorenzo@google.com>
+Date:   Thu, 19 Dec 2019 18:35:13 +0900
+Message-ID: <CAKD1Yr1m-bqpeZxMRVs84WvvjRE3zp8kJVx57OXf342r2gzVyw@mail.gmail.com>
+Subject: Re: [PATCH] net: introduce ip_local_unbindable_ports sysctl
+To:     Neil Horman <nhorman@tuxdriver.com>
+Cc:     =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <zenczykowski@gmail.com>,
+        =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Linux NetDev <netdev@vger.kernel.org>,
+        Sean Tranchetti <stranche@codeaurora.org>,
+        Subash Abhinov Kasiviswanathan <subashab@codeaurora.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Linux SCTP <linux-sctp@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Attn Dear.
+On Fri, 13 Dec 2019, 20:49 Neil Horman, <nhorman@tuxdriver.com> wrote:
+> Just out of curiosity, why are the portreserve and portrelease utilities not a
+> solution to this use case?
 
-Urgent delivery Notification of your ATM MASTER CARD, Dhl-Benin is
-ready for delivery of your ATM Master card worth $15.800=E2=80=99000=E2=80=
-=9900, as
-approved this morning, Date, 18/12/2019. Through the Intruction from
-INTERNATIONAL MONETARY FUNDS, I.M.F official Directors.
-
-REGISTRATION NO :EG58945
-PARCEL NUMBER: 140479
-Delivery Schuleded now,
-Finally all we required from you is your ATM Card Proccessing Delivery
-fees $19.00 only which you must send to this DHL service to enable us
-dispatch the parcel to your destination today.
-
-Here is our receiving payment details.
-You are advised to send it Via Money Gram Service.
-
-Receiver's Name--------Alan Ude
-Country-------Benin Republic.
-City/ Address--------Cotonou
-Test Question--------In God
-Answer-------We Trust
-Amount------------$US19.00 only
-Mtcn-------------
-Sender's Name-------
-
-Your delivery  ATM card worth $15.800=E2=80=99000=E2=80=9900,
-Is Due for delivery to your address today upon confirmation of
-required fee from you asap.
-
-Call us on this phone number for any inquiry. +229 62819378
-Awaiting your urgent response.
-
-MS. MARYANNA B. THOMASON, Shipment director, DHL Express
-Courier Company-Benin
+As I understand it, those utilities keep the ports reserved by binding
+to them so that no other process can. This doesn't work for Android
+because there are conformance tests that probe the device from the
+network and check that there are no open ports.
