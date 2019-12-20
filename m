@@ -2,116 +2,163 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB4312807D
-	for <lists+linux-sctp@lfdr.de>; Fri, 20 Dec 2019 17:18:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEBEF1281CF
+	for <lists+linux-sctp@lfdr.de>; Fri, 20 Dec 2019 19:03:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727388AbfLTQSB (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 20 Dec 2019 11:18:01 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:34869 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727233AbfLTQSB (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 20 Dec 2019 11:18:01 -0500
-Received: by mail-pf1-f194.google.com with SMTP id i23so48001pfo.2;
-        Fri, 20 Dec 2019 08:18:01 -0800 (PST)
+        id S1727394AbfLTSDv (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 20 Dec 2019 13:03:51 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:45240 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727391AbfLTSDv (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 20 Dec 2019 13:03:51 -0500
+Received: by mail-pg1-f194.google.com with SMTP id b9so5288770pgk.12;
+        Fri, 20 Dec 2019 10:03:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=AqkgzktUk7nsSLM/WAVDti6Aflq7wK5MTqZ2lh/ZIII=;
-        b=E3ngOCH4+SL4XA6LQr2XXpt8CEw4OsC4BwMvz9V8vqB5U0z/6UcKklx8sLc3sNExMH
-         GtjEP/t5weYM3zN14IHA0HihpqxCQiCcV5EnrSAvF+bEY76fBzVfvA76S3oFuKmJNcdb
-         PvVRhU+6qwKESf5lbvPshTzNIYhPy8q9pTm3K6+fLc4eyB/0AHNRExDii8osHS5mOMb+
-         BnkClbcg83CJVP1rHwok/Lnpxt0Pjzlbz9N3P4dsDkLnY9Qo64dzAMDqgmRZEEsBjnBH
-         y9tljtfFWwaXZ3ZEwC7wiEMtXSkqRGgiDugBa9zbttpoiGsJIQ0LVXoPaPI68sTZCbJM
-         kY2g==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FAEvr8klz2XDkzltwC8mw+zAPjrSB24j/93vCNbDxvw=;
+        b=Dextb+QY7pv8zH/1Yb/fwMsFL0ffNyb5CwyHy2WWf/BYVwp3WYfDVdBojSxCrP+DLp
+         6OulupzbVeqBFHtDcds4xY8JZscl4JxXmVTRCwiZvR3V6tVcd+drvLm/uqboDJWF9BjH
+         LULBLh8Xhb2Jz376JVPRBKgJ036ZcTkEC1F198Vj9pjC3b42OM+2aXvU0IQ/PzfrfgYC
+         MNpaUoHcTAG01JsqgqY6HHKkRPmWnh04Y2qRnPzLG+y0plLC4ckBXNL3xvzKVK4La5E6
+         7/pfk1t8pxNm6YNy5A5D8G1MrDlRYC7e99EzC0N0UqtaID1MEF3wYamR9ggtizg+Lasu
+         aAgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=AqkgzktUk7nsSLM/WAVDti6Aflq7wK5MTqZ2lh/ZIII=;
-        b=B6I5yCdYUm/rh9nE+3rXbLHTlyBM30unM1bhyXFRlT9otREaeGwJ1wOCijqCUUM/Ts
-         UgWcYkFQoUiZwKUKlscGK7ga6zmrQffov8iQIvpju7mByz8AjziwCB0x0aTNrtZIfNzn
-         SbtERQE1AvQpk9/W7k9GD8oItEqgmpiyGevUiaR+qD6Xq/HrDeUqmaOSXMQTVuxXpkMv
-         z0nKRK+5zSqDRb01po8whc8TLJlQEckkF7IJ0Vs3czLJByROF8l3ploduqRn62YyA1J9
-         BVy1X9YJJPD0RIBi0ylRh4z9FQ2HoM7F3wv80xKkF3IvrW04ylyEFzYO780M58PkKf9S
-         6QAw==
-X-Gm-Message-State: APjAAAUdwrhXmnCZ5o0mixmmcA2f8SiGVMgeOQQyIqnWiHebyCosCch6
-        ekuem27HIShVK1torR2BzRg=
-X-Google-Smtp-Source: APXvYqy4SOv1qzQ7lBfnjpE+QlCZbQ3RDwk1EnvAKPtPfBtw8osJz0TIReDLfMZ96mFI3Fd4XiFcQw==
-X-Received: by 2002:a62:cec3:: with SMTP id y186mr16642630pfg.129.1576858680592;
-        Fri, 20 Dec 2019 08:18:00 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FAEvr8klz2XDkzltwC8mw+zAPjrSB24j/93vCNbDxvw=;
+        b=Pgthyxae5KDkvJ3cRLCbe8vYOB0LV11i0rfkSrkrHyre1cQuBGRQrBGP3Y8n96IX6h
+         SJDAn08/LTExrhy/V1KXZqTPmudMR8tYeQwnrDeB8AOc07soQ6+uQ8kBev/jLABDSa65
+         xZBGV8dwXd3cL8iVeZVakLHDqvaHkyjiduy2KfrKIHV7QJvEWoUpZz+tX4AwitXqAh4V
+         QnPopAegY+51QGu3D4BklqNuRtW8np/evZ3Lo8zDzcXf9oguvTCATaXY4N3CEPa/ymOZ
+         /B4UQL/pUSLrkKWdC51b30sgacC9IlzGrXbcIR5OR1h0pj8SVVK/o9uiRD6Z7kwlO4sC
+         j/hw==
+X-Gm-Message-State: APjAAAVFSU8WpUmOtt4qcuCU6hPQX08kCSYXkoR+S5oelPQK1hLQa9+4
+        effPkTjakLMNovELLuUWl2Ul0PVRXeE=
+X-Google-Smtp-Source: APXvYqz8+1UwgAt4RmU4j7QYjfpI/cy9IUCOHH3KG02F9jIZio8vCJRDA6JcbTcfPsSUMVnjMg1NGg==
+X-Received: by 2002:aa7:8b17:: with SMTP id f23mr17825121pfd.197.1576865030820;
+        Fri, 20 Dec 2019 10:03:50 -0800 (PST)
 Received: from localhost.localdomain ([2001:1284:f013:b9c8:9c5e:a64b:e068:9fbd])
-        by smtp.gmail.com with ESMTPSA id k60sm11472356pjh.22.2019.12.20.08.17.59
+        by smtp.gmail.com with ESMTPSA id d26sm11845840pgv.66.2019.12.20.10.03.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Dec 2019 08:17:59 -0800 (PST)
+        Fri, 20 Dec 2019 10:03:50 -0800 (PST)
 Received: by localhost.localdomain (Postfix, from userid 1000)
-        id E8497C161F; Fri, 20 Dec 2019 13:17:56 -0300 (-03)
-Date:   Fri, 20 Dec 2019 13:17:56 -0300
+        id DF9EDC161F; Fri, 20 Dec 2019 15:03:46 -0300 (-03)
 From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Kevin Kou <qdkevin.kou@gmail.com>
-Cc:     vyasevich@gmail.com, nhorman@tuxdriver.com, davem@davemloft.net,
-        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sctp: do trace_sctp_probe after SACK validation and check
-Message-ID: <20191220161756.GE5058@localhost.localdomain>
-References: <20191220044703.88-1-qdkevin.kou@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     Neil Horman <nhorman@tuxdriver.com>, linux-sctp@vger.kernel.org,
+        Xin Long <lucien.xin@gmail.com>,
+        syzbot <syzbot+9a1bc632e78a1a98488b@syzkaller.appspotmail.com>,
+        syzkaller-bugs@googlegroups.com
+Subject: [PATCH net] sctp: fix err handling of stream initialization
+Date:   Fri, 20 Dec 2019 15:03:44 -0300
+Message-Id: <d41d8475f8485f571152b3f3716d7f474b5c0e79.1576864893.git.marcelo.leitner@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191220044703.88-1-qdkevin.kou@gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Fri, Dec 20, 2019 at 04:47:03AM +0000, Kevin Kou wrote:
-> The function sctp_sf_eat_sack_6_2 now performs
-> the Verification Tag validation, Chunk length validation, Bogu check,
-> and also the detection of out-of-order SACK based on the RFC2960
-> Section 6.2 at the beginning, and finally performs the further
-> processing of SACK. The trace_sctp_probe now triggered before
-> the above necessary validation and check.
-> 
-> This patch is to do the trace_sctp_probe after the necessary check
-> and validation to SACK.
-> 
-> Signed-off-by: Kevin Kou <qdkevin.kou@gmail.com>
-> ---
->  net/sctp/sm_statefuns.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
-> index 42558fa..b4a54df 100644
-> --- a/net/sctp/sm_statefuns.c
-> +++ b/net/sctp/sm_statefuns.c
-> @@ -3281,7 +3281,6 @@ enum sctp_disposition sctp_sf_eat_sack_6_2(struct net *net,
->  	struct sctp_sackhdr *sackh;
->  	__u32 ctsn;
->  
-> -	trace_sctp_probe(ep, asoc, chunk);
->  
->  	if (!sctp_vtag_verify(chunk, asoc))
->  		return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
-> @@ -3319,6 +3318,8 @@ enum sctp_disposition sctp_sf_eat_sack_6_2(struct net *net,
->  	if (!TSN_lt(ctsn, asoc->next_tsn))
->  		return sctp_sf_violation_ctsn(net, ep, asoc, type, arg, commands);
->  
-> +	trace_sctp_probe(ep, asoc, chunk);
-> +
+The fix on 951c6db954a1 fixed the issued reported there but introduced
+another. When the allocation fails within sctp_stream_init() it is
+okay/necessary to free the genradix. But it is also called when adding
+new streams, from sctp_send_add_streams() and
+sctp_process_strreset_addstrm_in() and in those situations it cannot
+just free the genradix because by then it is a fully operational
+association.
 
-Moving it here will be after the check against ctsn_ack_point, which
-could cause duplicated SACKs to be missed from the log.
+The fix here then is to only free the genradix in sctp_stream_init()
+and on those other call sites  move on with what it already had and let
+the subsequent error handling to handle it.
 
-Yes, from the sender-side CC we don't care about it (yet), but it
-helps to spot probably avoidable retransmissions.
+Tested with the reproducers from this report and the previous one,
+with lksctp-tools and sctp-tests.
 
-I think this is cleaning up the noise too much. I can agree with
-moving it to after the chunk sanity tests, though.
+Reported-by: syzbot+9a1bc632e78a1a98488b@syzkaller.appspotmail.com
+Fixes: 951c6db954a1 ("sctp: fix memleak on err handling of stream initialization")
+Signed-off-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+---
+ net/sctp/stream.c | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
->  	/* Return this SACK for further processing.  */
->  	sctp_add_cmd_sf(commands, SCTP_CMD_PROCESS_SACK, SCTP_CHUNK(chunk));
->  
-> -- 
-> 1.8.3.1
-> 
+diff --git a/net/sctp/stream.c b/net/sctp/stream.c
+index 6a30392068a04bfcefcb14c3d7f13fc092d59cd3..c1a100d2fed39c2d831487e05fcbf5e8d507d470 100644
+--- a/net/sctp/stream.c
++++ b/net/sctp/stream.c
+@@ -84,10 +84,8 @@ static int sctp_stream_alloc_out(struct sctp_stream *stream, __u16 outcnt,
+ 		return 0;
+ 
+ 	ret = genradix_prealloc(&stream->out, outcnt, gfp);
+-	if (ret) {
+-		genradix_free(&stream->out);
++	if (ret)
+ 		return ret;
+-	}
+ 
+ 	stream->outcnt = outcnt;
+ 	return 0;
+@@ -102,10 +100,8 @@ static int sctp_stream_alloc_in(struct sctp_stream *stream, __u16 incnt,
+ 		return 0;
+ 
+ 	ret = genradix_prealloc(&stream->in, incnt, gfp);
+-	if (ret) {
+-		genradix_free(&stream->in);
++	if (ret)
+ 		return ret;
+-	}
+ 
+ 	stream->incnt = incnt;
+ 	return 0;
+@@ -123,7 +119,7 @@ int sctp_stream_init(struct sctp_stream *stream, __u16 outcnt, __u16 incnt,
+ 	 * a new one with new outcnt to save memory if needed.
+ 	 */
+ 	if (outcnt == stream->outcnt)
+-		goto in;
++		goto handle_in;
+ 
+ 	/* Filter out chunks queued on streams that won't exist anymore */
+ 	sched->unsched_all(stream);
+@@ -132,24 +128,28 @@ int sctp_stream_init(struct sctp_stream *stream, __u16 outcnt, __u16 incnt,
+ 
+ 	ret = sctp_stream_alloc_out(stream, outcnt, gfp);
+ 	if (ret)
+-		goto out;
++		goto out_err;
+ 
+ 	for (i = 0; i < stream->outcnt; i++)
+ 		SCTP_SO(stream, i)->state = SCTP_STREAM_OPEN;
+ 
+-in:
++handle_in:
+ 	sctp_stream_interleave_init(stream);
+ 	if (!incnt)
+ 		goto out;
+ 
+ 	ret = sctp_stream_alloc_in(stream, incnt, gfp);
+-	if (ret) {
+-		sched->free(stream);
+-		genradix_free(&stream->out);
+-		stream->outcnt = 0;
+-		goto out;
+-	}
++	if (ret)
++		goto in_err;
++
++	goto out;
+ 
++in_err:
++	sched->free(stream);
++	genradix_free(&stream->in);
++out_err:
++	genradix_free(&stream->out);
++	stream->outcnt = 0;
+ out:
+ 	return ret;
+ }
+-- 
+2.23.0
+
