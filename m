@@ -2,79 +2,94 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B39127B11
-	for <lists+linux-sctp@lfdr.de>; Fri, 20 Dec 2019 13:32:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE84F127F45
+	for <lists+linux-sctp@lfdr.de>; Fri, 20 Dec 2019 16:28:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727341AbfLTMcV (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 20 Dec 2019 07:32:21 -0500
-Received: from charlotte.tuxdriver.com ([70.61.120.58]:57384 "EHLO
-        smtp.tuxdriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727301AbfLTMcV (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 20 Dec 2019 07:32:21 -0500
-Received: from 2606-a000-111b-43ee-0000-0000-0000-115f.inf6.spectrum.com ([2606:a000:111b:43ee::115f] helo=localhost)
-        by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
-        (Exim 4.63)
-        (envelope-from <nhorman@tuxdriver.com>)
-        id 1iiHRt-00077n-5i; Fri, 20 Dec 2019 07:32:15 -0500
-Date:   Fri, 20 Dec 2019 07:32:03 -0500
-From:   Neil Horman <nhorman@tuxdriver.com>
-To:     Kevin Kou <qdkevin.kou@gmail.com>
-Cc:     vyasevich@gmail.com, marcelo.leitner@gmail.com,
-        davem@davemloft.net, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sctp: do trace_sctp_probe after SACK validation and check
-Message-ID: <20191220123203.GA5616@hmswarspite.think-freely.org>
-References: <20191220044703.88-1-qdkevin.kou@gmail.com>
+        id S1727516AbfLTP2P (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 20 Dec 2019 10:28:15 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:53744 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727395AbfLTP2P (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 20 Dec 2019 10:28:15 -0500
+Received: by mail-pj1-f67.google.com with SMTP id n96so4250751pjc.3;
+        Fri, 20 Dec 2019 07:28:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=GZPCEvTkQBcE0MkWf0wsjsT/U2bWse2KUq7jRUE3VSc=;
+        b=sTBffexju1W2lYD4Nzsim/64ZnYR8BCtM/yzwIWySePc8qD1ZaDo537POMdRGfJtc5
+         uQoau9wJxX1jJ0hT6gmVPT1uexYZB6irL1/mRepbdy4i9EQNFN2NhaLJCzT/KbnhPYb9
+         hC72KGNGP6qV9wVzqcwN2t059a2z+XKzJ4xof+PrSdGjjSkSeuElWwFq2edOJWKhmNI4
+         pzbSTqAhGVORWmDdzs7Fym/z4sCMidom6d6+wwNCBT9s5tPn0NGTL5dBFLIHOa/pjhoW
+         DXiSnQPKiM79BUvG6rqjoMaRTgsR1tAjsGqTKg6D3jeVO5OiXFHVsOL/IFZd9qyI7Wkv
+         lccQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=GZPCEvTkQBcE0MkWf0wsjsT/U2bWse2KUq7jRUE3VSc=;
+        b=ScPLDmAqBxuQ1E+xyLopBrh4Ae0nEP51k9J+NC4lskHDkgQYJnmvHpbWjuXRLcAfAw
+         qf0byziQPGHbY6KMD/eEBhYHvQHQ7m+2RvzC1wtyXbfNzrWKET5whbTdQyhy9Nd3TU/V
+         5e+c1hdOSgzsMcYp48uFoxBtoCkv95L1Mr4jyJcsS8/vJo4TOPJlLlwpKNXs9D2yvoCl
+         N6OlSy8MRi4F87ahO9dF1g1WOFuSoYjvI9z8WgZzqcGY8u8S+q1LQ240WmeClg7UEKuZ
+         p/5ac8Ya+AyS+PHT/zlHRZtDwBRfp8yZkCr6Cuf9tXM2XXKOx15ldIIq2t9jz1ecy49+
+         J2Og==
+X-Gm-Message-State: APjAAAUHeMi+ZP27bquLDXufNHRMYrCcVieEEHY8rwkXoeG0JjnrBl1s
+        D93zrl/ZhtrQOFbh4/bPweTjpdfAdf7NoA==
+X-Google-Smtp-Source: APXvYqwN583GT21VCNYIdu4eOGCxYptUDhCM7V0OyVU+QMsL1dpSQO5jno4LZj6NxqwbLl5ZCLDT0g==
+X-Received: by 2002:a17:902:124:: with SMTP id 33mr15019308plb.115.1576855694327;
+        Fri, 20 Dec 2019 07:28:14 -0800 (PST)
+Received: from localhost.localdomain ([2001:1284:f013:b9c8:9c5e:a64b:e068:9fbd])
+        by smtp.gmail.com with ESMTPSA id p185sm13678019pfg.61.2019.12.20.07.28.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Dec 2019 07:28:13 -0800 (PST)
+Received: by localhost.localdomain (Postfix, from userid 1000)
+        id B62CEC161F; Fri, 20 Dec 2019 12:28:10 -0300 (-03)
+Date:   Fri, 20 Dec 2019 12:28:10 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     syzbot <syzbot+9a1bc632e78a1a98488b@syzkaller.appspotmail.com>
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        linux-sctp@vger.kernel.org, lucien.xin@gmail.com,
+        netdev@vger.kernel.org, nhorman@tuxdriver.com,
+        syzkaller-bugs@googlegroups.com, vyasevich@gmail.com
+Subject: Re: general protection fault in sctp_stream_free (2)
+Message-ID: <20191220152810.GI4444@localhost.localdomain>
+References: <0000000000001b6443059a1a815d@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191220044703.88-1-qdkevin.kou@gmail.com>
-X-Spam-Score: -2.9 (--)
-X-Spam-Status: No
+In-Reply-To: <0000000000001b6443059a1a815d@google.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Fri, Dec 20, 2019 at 04:47:03AM +0000, Kevin Kou wrote:
-> The function sctp_sf_eat_sack_6_2 now performs
-> the Verification Tag validation, Chunk length validation, Bogu check,
-> and also the detection of out-of-order SACK based on the RFC2960
-> Section 6.2 at the beginning, and finally performs the further
-> processing of SACK. The trace_sctp_probe now triggered before
-> the above necessary validation and check.
+On Thu, Dec 19, 2019 at 07:45:09PM -0800, syzbot wrote:
+> Hello,
 > 
-> This patch is to do the trace_sctp_probe after the necessary check
-> and validation to SACK.
+> syzbot found the following crash on:
 > 
-> Signed-off-by: Kevin Kou <qdkevin.kou@gmail.com>
-> ---
->  net/sctp/sm_statefuns.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> HEAD commit:    6fa9a115 Merge branch 'stmmac-fixes'
+> git tree:       net
+> console output: https://syzkaller.appspot.com/x/log.txt?x=10c4fe99e00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=216dca5e1758db87
+> dashboard link: https://syzkaller.appspot.com/bug?extid=9a1bc632e78a1a98488b
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=178ada71e00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=144f23a6e00000
 > 
-> diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
-> index 42558fa..b4a54df 100644
-> --- a/net/sctp/sm_statefuns.c
-> +++ b/net/sctp/sm_statefuns.c
-> @@ -3281,7 +3281,6 @@ enum sctp_disposition sctp_sf_eat_sack_6_2(struct net *net,
->  	struct sctp_sackhdr *sackh;
->  	__u32 ctsn;
->  
-> -	trace_sctp_probe(ep, asoc, chunk);
->  
->  	if (!sctp_vtag_verify(chunk, asoc))
->  		return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
-> @@ -3319,6 +3318,8 @@ enum sctp_disposition sctp_sf_eat_sack_6_2(struct net *net,
->  	if (!TSN_lt(ctsn, asoc->next_tsn))
->  		return sctp_sf_violation_ctsn(net, ep, asoc, type, arg, commands);
->  
-> +	trace_sctp_probe(ep, asoc, chunk);
-> +
->  	/* Return this SACK for further processing.  */
->  	sctp_add_cmd_sf(commands, SCTP_CMD_PROCESS_SACK, SCTP_CHUNK(chunk));
->  
-> -- 
-> 1.8.3.1
+> The bug was bisected to:
 > 
+> commit 951c6db954a1adefab492f6da805decacabbd1a7
+> Author: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+> Date:   Tue Dec 17 01:01:16 2019 +0000
 > 
-Acked-by: Neil Horman <nhorman@tuxdriver.com>
+>     sctp: fix memleak on err handling of stream initialization
+
+Ouch... this wasn't a good fix.
+When called from sctp_stream_init(), it is doing the right thing.
+But when called from sctp_send_add_streams(), it can't free the
+genradix. Ditto from sctp_process_strreset_addstrm_in().
+
