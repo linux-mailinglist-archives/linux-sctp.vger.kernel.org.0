@@ -2,180 +2,169 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6B912961B
-	for <lists+linux-sctp@lfdr.de>; Mon, 23 Dec 2019 13:51:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C67129671
+	for <lists+linux-sctp@lfdr.de>; Mon, 23 Dec 2019 14:26:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726709AbfLWMvO (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 23 Dec 2019 07:51:14 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:43416 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726680AbfLWMvN (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 23 Dec 2019 07:51:13 -0500
-Received: by mail-pl1-f194.google.com with SMTP id p27so7156122pli.10;
-        Mon, 23 Dec 2019 04:51:13 -0800 (PST)
+        id S1726680AbfLWN0Q (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 23 Dec 2019 08:26:16 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:37181 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726676AbfLWN0Q (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 23 Dec 2019 08:26:16 -0500
+Received: by mail-pg1-f193.google.com with SMTP id q127so8833182pga.4;
+        Mon, 23 Dec 2019 05:26:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=BDrakKfjDi3WQg7svO46nFeOsEVCfLTsGK9tRf9Bdsg=;
-        b=frWCb9gW6bRSEk7PZvfkeuLfy1ZU9C3+TbVucys73Qa5kFPyLAVrbdT4zxfb5zPPed
-         EQdpXFlysWTP4NPkC6+xPaYhVjpBHvj27AwSyW5Pse93H+S4Jteqv1sFeq4jUVleOMpA
-         tY9aZqoERjTqBSTg6++IlicJACFTAiYA7SLmlmcx1NGXYXu0udA1ypBZQKtQRATTrIH9
-         gJ5rO2D89uTnpvMYixjsNnts/AmyR+UJ6xL2vByl417fF9xsNHrHAyfZijt1oZwAIzJV
-         dQtGEzwMepdlHNRaI4gRAAqBujjINT1bWmHQzvs+m5DWRakaL8oDODT1QMehuaHGzuVQ
-         wppA==
+        bh=BmTQDyGLMu6c7YjIBdeFAFkvuYWoq3WAP/yZHqx1jsU=;
+        b=kjy/qPKWfSWtPxQiG9QWf2tn7CtSzuSpAYtbq3TCjWEkEEfvz8a2li1q3lyOm802Z+
+         /gBYKtwg19uBILPjAcIGHtLtJ1HLXUzlWBb2IIyKBTukYIx3vBSvhg8PyHSXbyHvantr
+         tXRkAYsR182ftW9gClv7R+1saw9ERS/CnFG1bEtwKxoRcrzJYde44gzF79rYiK5Pqqc3
+         z5KMO4FhRtHYXsmaldgBsHwxwUVJ9aZbpgBXAMskMNog31B6mOGxlOpKc0aZdtU6F1B7
+         nsbx0546s5beyv8pxeWS1KBhJU/IvlShvQHazTfTFwzBlYgKlUASlDdFH0UIj2/UTxrT
+         CKoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=BDrakKfjDi3WQg7svO46nFeOsEVCfLTsGK9tRf9Bdsg=;
-        b=eTbyYcezRQPKB0Lcy94Zo/z/WlR1rfARPGnKzIC9qoG7d+zwVxCfd285qMyhsR5Ean
-         hQWtaRih6pJe6K3LWS44qau571sDZABFg48hULe8JJqrLl0GsfD8ryFORHpWfYmWPWqT
-         NPsqvfPMbrBJemBc/pZDXLbEMXZRJ/pTwa38Yea/k1C8AYCUDDKaMLXp/niNLRD0Bb2m
-         omdYx9j9xazdezDBss575DrBJLENaFXZryYiUea+n+6IOitObkpNSV/GTOjPFtE0TGr9
-         aw0AuuZ9cOAFBR2yQGP1EXQj1+g3Exj3syI9PwohOveOtTLZiOOAfv6cKPFNikY2fLT8
-         9G5g==
-X-Gm-Message-State: APjAAAW0k3/9MHQH/Gkqvcaq5Vwr5Qon5E3tL589+YSwL39xEJr1rDbD
-        HareF/LZe7wAphRNHa0Z4sg=
-X-Google-Smtp-Source: APXvYqzh9qqH16ZJGV1USVM9xH19Nh8MswnQuCqQqdflmUWB5ep7NYci9ly9B5eHfXR0iHKYadWlrg==
-X-Received: by 2002:a17:902:b709:: with SMTP id d9mr30610916pls.235.1577105472849;
-        Mon, 23 Dec 2019 04:51:12 -0800 (PST)
-Received: from localhost.localdomain ([168.181.48.206])
-        by smtp.gmail.com with ESMTPSA id bo19sm7721910pjb.25.2019.12.23.04.51.11
+        bh=BmTQDyGLMu6c7YjIBdeFAFkvuYWoq3WAP/yZHqx1jsU=;
+        b=ByI3enPeL+PWY/lZhOtSlgNZc8R96SIe6veJtGEUvb3jeDt/nylMuwvrmh/5ILIYOz
+         ZycMfLyoZbfY6ck6uf59qe//T+5iZXRScO7U4nAK5nPN+eNk1WHOuX9l5/5VGFgsz/Ii
+         ck4K5T/pDKd1ehzkfxmCAIno/YdqJqQlKSEFFfTI/rvVUVTDmSo5pZ5ysVq0HTVr3K/B
+         ohEYOAN98PWE0WqWqg2QfKsWJN7IhPhlY42PricuM7hRFeHEVHXlcL5IUqrvhZ5C3rqO
+         ZzyqYh/NWGriX/aQVvadEvqsPSOxB87Ah/btb3vgLZ8MwoGzO1YANhAbWuCiLx18+nMQ
+         JQjA==
+X-Gm-Message-State: APjAAAWWK5F0qCisTiZ+soGZ2xIcj55pztwx2Kd/ExY1m+7GHRYxF43U
+        GzpDlOFmJgqZz2tDxFsxdFM=
+X-Google-Smtp-Source: APXvYqxKmiGYNGKsGHVnJcPmCLsTTs/UrFLIl6033SjKaidMV1lZ0/ZndYxz3GthsWDZvxNW+2nfHg==
+X-Received: by 2002:a62:1552:: with SMTP id 79mr31998009pfv.156.1577107575168;
+        Mon, 23 Dec 2019 05:26:15 -0800 (PST)
+Received: from localhost.localdomain ([2001:1284:f013:d619:5b44:72e4:9760:c602])
+        by smtp.gmail.com with ESMTPSA id b185sm7866001pfa.102.2019.12.23.05.26.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Dec 2019 04:51:12 -0800 (PST)
+        Mon, 23 Dec 2019 05:26:14 -0800 (PST)
 Received: by localhost.localdomain (Postfix, from userid 1000)
-        id B6E3EC16F2; Mon, 23 Dec 2019 09:51:08 -0300 (-03)
-Date:   Mon, 23 Dec 2019 09:51:08 -0300
+        id 613B0C16F2; Mon, 23 Dec 2019 10:26:11 -0300 (-03)
+Date:   Mon, 23 Dec 2019 10:26:11 -0300
 From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Neil Horman <nhorman@tuxdriver.com>
-Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
-        Xin Long <lucien.xin@gmail.com>,
-        syzbot <syzbot+9a1bc632e78a1a98488b@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH net] sctp: fix err handling of stream initialization
-Message-ID: <20191223125108.GK4444@localhost.localdomain>
-References: <d41d8475f8485f571152b3f3716d7f474b5c0e79.1576864893.git.marcelo.leitner@gmail.com>
- <20191223124609.GA30462@hmswarspite.think-freely.org>
+To:     Kevin Kou <qdkevin.kou@gmail.com>
+Cc:     vyasevich@gmail.com, nhorman@tuxdriver.com, davem@davemloft.net,
+        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sctp: do trace_sctp_probe after SACK validation and check
+Message-ID: <20191223132611.GF5058@localhost.localdomain>
+References: <20191220044703.88-1-qdkevin.kou@gmail.com>
+ <20191220161756.GE5058@localhost.localdomain>
+ <1ec267f2-1172-32c0-baee-0d4ebcbfb380@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191223124609.GA30462@hmswarspite.think-freely.org>
+In-Reply-To: <1ec267f2-1172-32c0-baee-0d4ebcbfb380@gmail.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Mon, Dec 23, 2019 at 07:46:09AM -0500, Neil Horman wrote:
-> On Fri, Dec 20, 2019 at 03:03:44PM -0300, Marcelo Ricardo Leitner wrote:
-> > The fix on 951c6db954a1 fixed the issued reported there but introduced
-> > another. When the allocation fails within sctp_stream_init() it is
-> > okay/necessary to free the genradix. But it is also called when adding
-> > new streams, from sctp_send_add_streams() and
-> > sctp_process_strreset_addstrm_in() and in those situations it cannot
-> > just free the genradix because by then it is a fully operational
-> > association.
+On Sun, Dec 22, 2019 at 12:22:24PM +0800, Kevin Kou wrote:
+> On 2019/12/21 0:17, Marcelo Ricardo Leitner wrote:
+> > On Fri, Dec 20, 2019 at 04:47:03AM +0000, Kevin Kou wrote:
+> > > The function sctp_sf_eat_sack_6_2 now performs
+> > > the Verification Tag validation, Chunk length validation, Bogu check,
+> > > and also the detection of out-of-order SACK based on the RFC2960
+> > > Section 6.2 at the beginning, and finally performs the further
+> > > processing of SACK. The trace_sctp_probe now triggered before
+> > > the above necessary validation and check.
+> > > 
+> > > This patch is to do the trace_sctp_probe after the necessary check
+> > > and validation to SACK.
+> > > 
+> > > Signed-off-by: Kevin Kou <qdkevin.kou@gmail.com>
+> > > ---
+> > >   net/sctp/sm_statefuns.c | 3 ++-
+> > >   1 file changed, 2 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
+> > > index 42558fa..b4a54df 100644
+> > > --- a/net/sctp/sm_statefuns.c
+> > > +++ b/net/sctp/sm_statefuns.c
+> > > @@ -3281,7 +3281,6 @@ enum sctp_disposition sctp_sf_eat_sack_6_2(struct net *net,
+> > >   	struct sctp_sackhdr *sackh;
+> > >   	__u32 ctsn;
+> > > -	trace_sctp_probe(ep, asoc, chunk);
+> > >   	if (!sctp_vtag_verify(chunk, asoc))
+> > >   		return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
+> > > @@ -3319,6 +3318,8 @@ enum sctp_disposition sctp_sf_eat_sack_6_2(struct net *net,
+> > >   	if (!TSN_lt(ctsn, asoc->next_tsn))
+> > >   		return sctp_sf_violation_ctsn(net, ep, asoc, type, arg, commands);
+> > > +	trace_sctp_probe(ep, asoc, chunk);
+> > > +
 > > 
-> > The fix here then is to only free the genradix in sctp_stream_init()
-> > and on those other call sites  move on with what it already had and let
-> > the subsequent error handling to handle it.
-> > 
-> > Tested with the reproducers from this report and the previous one,
-> > with lksctp-tools and sctp-tests.
-> > 
-> > Reported-by: syzbot+9a1bc632e78a1a98488b@syzkaller.appspotmail.com
-> > Fixes: 951c6db954a1 ("sctp: fix memleak on err handling of stream initialization")
-> > Signed-off-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-> > ---
-> >  net/sctp/stream.c | 30 +++++++++++++++---------------
-> >  1 file changed, 15 insertions(+), 15 deletions(-)
-> > 
-> > diff --git a/net/sctp/stream.c b/net/sctp/stream.c
-> > index 6a30392068a04bfcefcb14c3d7f13fc092d59cd3..c1a100d2fed39c2d831487e05fcbf5e8d507d470 100644
-> > --- a/net/sctp/stream.c
-> > +++ b/net/sctp/stream.c
-> > @@ -84,10 +84,8 @@ static int sctp_stream_alloc_out(struct sctp_stream *stream, __u16 outcnt,
-> >  		return 0;
-> >  
-> >  	ret = genradix_prealloc(&stream->out, outcnt, gfp);
-> > -	if (ret) {
-> > -		genradix_free(&stream->out);
-> > +	if (ret)
-> >  		return ret;
-> > -	}
-> >  
-> >  	stream->outcnt = outcnt;
-> >  	return 0;
-> > @@ -102,10 +100,8 @@ static int sctp_stream_alloc_in(struct sctp_stream *stream, __u16 incnt,
-> >  		return 0;
-> >  
-> >  	ret = genradix_prealloc(&stream->in, incnt, gfp);
-> > -	if (ret) {
-> > -		genradix_free(&stream->in);
-> > +	if (ret)
-> >  		return ret;
-> > -	}
-> >  
-> >  	stream->incnt = incnt;
-> >  	return 0;
-> > @@ -123,7 +119,7 @@ int sctp_stream_init(struct sctp_stream *stream, __u16 outcnt, __u16 incnt,
-> >  	 * a new one with new outcnt to save memory if needed.
-> >  	 */
-> >  	if (outcnt == stream->outcnt)
-> > -		goto in;
-> > +		goto handle_in;
-> >  
-> >  	/* Filter out chunks queued on streams that won't exist anymore */
-> >  	sched->unsched_all(stream);
-> > @@ -132,24 +128,28 @@ int sctp_stream_init(struct sctp_stream *stream, __u16 outcnt, __u16 incnt,
-> >  
-> >  	ret = sctp_stream_alloc_out(stream, outcnt, gfp);
-> >  	if (ret)
-> > -		goto out;
-> > +		goto out_err;
-> >  
-> >  	for (i = 0; i < stream->outcnt; i++)
-> >  		SCTP_SO(stream, i)->state = SCTP_STREAM_OPEN;
-> >  
-> > -in:
-> > +handle_in:
-> >  	sctp_stream_interleave_init(stream);
-> >  	if (!incnt)
-> >  		goto out;
-> >  
-> >  	ret = sctp_stream_alloc_in(stream, incnt, gfp);
-> > -	if (ret) {
-> > -		sched->free(stream);
-> > -		genradix_free(&stream->out);
-> > -		stream->outcnt = 0;
-> > -		goto out;
-> > -	}
-> > +	if (ret)
-> > +		goto in_err;
-> > +
-> > +	goto out;
-> >  
-> > +in_err:
-> > +	sched->free(stream);
-> > +	genradix_free(&stream->in);
-> > +out_err:
-> > +	genradix_free(&stream->out);
-> Isn't this effectively a double free in the fall through case?
-
-Hm, if you got you right, the line 3 lines above is freeing '->in' and
-the right above one, '->out', so no.
-No other calls to genradix_free() are left in this function, too.
-
-  Marcelo
-
-> Neil
+> > Moving it here will be after the check against ctsn_ack_point, which
+> > could cause duplicated SACKs to be missed from the log.
 > 
-> > +	stream->outcnt = 0;
-> >  out:
-> >  	return ret;
-> >  }
-> > -- 
-> > 2.23.0
+> 
+> As this SCTP trace used to trace the changes of SCTP association state in
+> response to incoming packets(SACK). It is used for debugging SCTP congestion
+> control algorithms, so according to the code in include/trace/events/sctp.h,
+> the trace event mainly focus on congestion related information, and there is
+> no SACK Chunk related information printed. So it is hard to point out
+> whether the SACK is duplicate one or not based on this trace event.
+
+I see. Yet, it's quite odd to do debugging of congestion control
+algorithms without knowing how many TSNs/bytes are being acked by this
+ack, but let's keep that aside for now.
+
+I still can't agree with filtering out based the out-of-order SACK check
+(the TSN_lt(ctsn, asoc->ctsn_ack_point) check. That is valuable to
+congestion control debugging, because it will likely mean that the
+sender is working with fewer acks than it would like/expect.
+
+If you need to filter out them and have a "clean" list of what got in,
+then the fix it needs lies in adding support for logging the ctsn in
+the trace point itself (similarly to the pr_debug in there) and filter
+it on post-processing of the logs.
+
+I don't know how much of UAPI cover probe points. Hopefully we can add
+that information without having to create new probe points.
+
+PS: You can invert the check in
+        if (!TSN_lt(ctsn, asoc->next_tsn))
+to
+        if (TSN_lte(asoc->next_tsn, ctsn))
+and move it above, so it is done before the out-of-order check, and
+the trace point in between them.
+
+> 
+> include/trace/events/sctp.h
+> 1. TRACE_EVENT(sctp_probe,
+> 
+> TP_printk("asoc=%#llx mark=%#x bind_port=%d peer_port=%d pathmtu=%d "
+> 		  "rwnd=%u unack_data=%d",
+> 		  __entry->asoc, __entry->mark, __entry->bind_port,
+> 		  __entry->peer_port, __entry->pathmtu, __entry->rwnd,
+> 		  __entry->unack_data)
+> 
+> 2. TRACE_EVENT(sctp_probe_path,
+> 
+> TP_printk("asoc=%#llx%s ipaddr=%pISpc state=%u cwnd=%u ssthresh=%u "
+> 		  "flight_size=%u partial_bytes_acked=%u pathmtu=%u",
+> 		  __entry->asoc, __entry->primary ? "(*)" : "",
+> 		  __entry->ipaddr, __entry->state, __entry->cwnd,
+> 		  __entry->ssthresh, __entry->flight_size,
+> 		  __entry->partial_bytes_acked, __entry->pathmtu)
+> 
 > > 
+> > Yes, from the sender-side CC we don't care about it (yet), but it
+> > helps to spot probably avoidable retransmissions.
 > > 
+> > I think this is cleaning up the noise too much. I can agree with
+> > moving it to after the chunk sanity tests, though.
+> > 
+> > >   	/* Return this SACK for further processing.  */
+> > >   	sctp_add_cmd_sf(commands, SCTP_CMD_PROCESS_SACK, SCTP_CHUNK(chunk));
+> > > -- 
+> > > 1.8.3.1
+> > > 
+> 
