@@ -2,110 +2,110 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BF73A12AEB9
-	for <lists+linux-sctp@lfdr.de>; Thu, 26 Dec 2019 22:09:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52F4A12AF87
+	for <lists+linux-sctp@lfdr.de>; Fri, 27 Dec 2019 00:09:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726442AbfLZVJK (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 26 Dec 2019 16:09:10 -0500
-Received: from charlotte.tuxdriver.com ([70.61.120.58]:56734 "EHLO
-        smtp.tuxdriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726105AbfLZVJJ (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 26 Dec 2019 16:09:09 -0500
-Received: from 2606-a000-111b-43ee-0000-0000-0000-115f.inf6.spectrum.com ([2606:a000:111b:43ee::115f] helo=localhost)
-        by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
-        (Exim 4.63)
-        (envelope-from <nhorman@tuxdriver.com>)
-        id 1ikaNS-00069z-7I; Thu, 26 Dec 2019 16:09:06 -0500
-Date:   Thu, 26 Dec 2019 16:09:01 -0500
-From:   Neil Horman <nhorman@tuxdriver.com>
-To:     Kevin Kou <qdkevin.kou@gmail.com>
-Cc:     linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-        vyasevich@gmail.com, marcelo.leitner@gmail.com, davem@davemloft.net
-Subject: Re: [PATCHv3 net-next] sctp: do trace_sctp_probe after SACK
- validation and check
-Message-ID: <20191226210901.GA1891@hmswarspite.think-freely.org>
-References: <20191225082725.1251-1-qdkevin.kou@gmail.com>
+        id S1726855AbfLZXJS (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 26 Dec 2019 18:09:18 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:45015 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726806AbfLZXJS (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 26 Dec 2019 18:09:18 -0500
+Received: by mail-pf1-f193.google.com with SMTP id 195so12983510pfw.11;
+        Thu, 26 Dec 2019 15:09:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:cc:references:reply-to:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=sWE7GNf9+nrChKRRJ4/kK18J2sSUWt8kAqGPEiWQLKE=;
+        b=ZnG2Ezgcv32wvAPlLLqz8J4hHp5822iBYqm03oZloMEhMrijuK0Hx/83Prqj/BMNfC
+         rPjdUM2Tf+Q4eaHAJY7o/qpuL6V7zSbOQgUGOvZsMH15XY8+zaz/lRKvNTU9xG97pAlp
+         TDBu4McPh7O2UJGzxex4acMjFIcOEYiPSLuFeHapfyK/3PwmrzVqOkNENJ7ebFwyS2Ix
+         /YxSjz5hikKyh6Ye3iYX+wjKnx+dkGEcxbYnjgSCPr06GRarFuMp2nxfEjouShhYfult
+         eSMkCzoZ5LGBPq4L3K8K7Z6VgohoYuUR10HKgxZ3FGlMt7028lP+iXlVJWIsQZlzegcT
+         nDJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:cc:references:reply-to:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=sWE7GNf9+nrChKRRJ4/kK18J2sSUWt8kAqGPEiWQLKE=;
+        b=PJedQ1vbuMUhMeiKMc3mwSdlYGoI4YvV0FCpUJMnHwDobulOf9Rhzt5yWBN5PB+hlA
+         rXU+1YyWiIB6PZ37DHxBSdX3ERD5WeDB4EWBLnH4VtxXxnABJgrGyI7p+L5REfaMk2st
+         B91mRY0eA83OzLxErohCVbHlo4NqIX8DQs/jR7mPqfdW5wx/Zsq7yt1ZWwiF/GekIiOJ
+         E1EcX6qYaE5llgktChCtYo4DwlCZhJPurRF1eWHkGGyc3KrCMz5cb12H4qlZ5iblCZ1K
+         Xp8sYutldllUzw8/zQf7qY3pVqm3V9FHkAq+Rwyrq8IR5dJJa1zylNb9ZYECVAEHEQNB
+         ufcg==
+X-Gm-Message-State: APjAAAUfqfsIfmo0lUkW2B3PUAESDaBk1BckTIzVOHwIZXPwug/2Y7WC
+        vxl2oUWP4D15Rswcb6/wjFDTNCxP8mk=
+X-Google-Smtp-Source: APXvYqzplSP6Qo+lnLYgHHX/3pjnIZrgDCDB7Bsk4Z8DoNDyu+4Y/0Xx1og7SL1u7pHmdow2iFekGg==
+X-Received: by 2002:a63:1c5e:: with SMTP id c30mr52244612pgm.30.1577401757798;
+        Thu, 26 Dec 2019 15:09:17 -0800 (PST)
+Received: from ?IPv6:2408:8215:b21:57c1:740a:4f15:ce01:1643? ([2408:8215:b21:57c1:740a:4f15:ce01:1643])
+        by smtp.gmail.com with ESMTPSA id l127sm35376601pgl.48.2019.12.26.15.09.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Dec 2019 15:09:17 -0800 (PST)
+Subject: Re: [PATCH net-next] sctp: move trace_sctp_probe_path into
+ sctp_outq_sack
+Cc:     netdev@vger.kernel.org, nhorman@tuxdriver.com,
+        marcelo.leitner@gmail.com, linux-sctp@vger.kernel.org
+References: <20191226122917.431-1-qdkevin.kou@gmail.com>
+Reply-To: davem@davemloft.net
+From:   Kevin Kou <qdkevin.kou@gmail.com>
+Message-ID: <43c9d517-aea4-1c6d-540b-8ffda6f04109@gmail.com>
+Date:   Fri, 27 Dec 2019 07:09:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:72.0) Gecko/20100101
+ Thunderbird/72.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191225082725.1251-1-qdkevin.kou@gmail.com>
-X-Spam-Score: -2.9 (--)
-X-Spam-Status: No
+In-Reply-To: <20191226122917.431-1-qdkevin.kou@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, Dec 25, 2019 at 08:27:25AM +0000, Kevin Kou wrote:
-> The function sctp_sf_eat_sack_6_2 now performs the Verification
-> Tag validation, Chunk length validation, Bogu check, and also
-> the detection of out-of-order SACK based on the RFC2960
-> Section 6.2 at the beginning, and finally performs the further
-> processing of SACK. The trace_sctp_probe now triggered before
-> the above necessary validation and check.
-> 
-> this patch is to do the trace_sctp_probe after the chunk sanity
-> tests, but keep doing trace if the SACK received is out of order,
-> for the out-of-order SACK is valuable to congestion control
-> debugging.
-> 
-> v1->v2:
->  - keep doing SCTP trace if the SACK is out of order as Marcelo's
->    suggestion.
-> v2->v3:
->  - regenerate the patch as v2 generated on top of v1, and add
->    'net-next' tag to the new one as Marcelo's comments.
-> 
-> Signed-off-by: Kevin Kou <qdkevin.kou@gmail.com>
-> ---
->  net/sctp/sm_statefuns.c | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
-> index 42558fa..748e3b1 100644
-> --- a/net/sctp/sm_statefuns.c
-> +++ b/net/sctp/sm_statefuns.c
-> @@ -3281,8 +3281,6 @@ enum sctp_disposition sctp_sf_eat_sack_6_2(struct net *net,
->  	struct sctp_sackhdr *sackh;
->  	__u32 ctsn;
->  
-> -	trace_sctp_probe(ep, asoc, chunk);
-> -
->  	if (!sctp_vtag_verify(chunk, asoc))
->  		return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
->  
-> @@ -3299,6 +3297,15 @@ enum sctp_disposition sctp_sf_eat_sack_6_2(struct net *net,
->  	chunk->subh.sack_hdr = sackh;
->  	ctsn = ntohl(sackh->cum_tsn_ack);
->  
-> +	/* If Cumulative TSN Ack beyond the max tsn currently
-> +	 * send, terminating the association and respond to the
-> +	 * sender with an ABORT.
-> +	 */
-> +	if (TSN_lte(asoc->next_tsn, ctsn))
-> +		return sctp_sf_violation_ctsn(net, ep, asoc, type, arg, commands);
-> +
-> +	trace_sctp_probe(ep, asoc, chunk);
-> +
->  	/* i) If Cumulative TSN Ack is less than the Cumulative TSN
->  	 *     Ack Point, then drop the SACK.  Since Cumulative TSN
->  	 *     Ack is monotonically increasing, a SACK whose
-> @@ -3312,13 +3319,6 @@ enum sctp_disposition sctp_sf_eat_sack_6_2(struct net *net,
->  		return SCTP_DISPOSITION_DISCARD;
->  	}
->  
-> -	/* If Cumulative TSN Ack beyond the max tsn currently
-> -	 * send, terminating the association and respond to the
-> -	 * sender with an ABORT.
-> -	 */
-> -	if (!TSN_lt(ctsn, asoc->next_tsn))
-> -		return sctp_sf_violation_ctsn(net, ep, asoc, type, arg, commands);
-> -
->  	/* Return this SACK for further processing.  */
->  	sctp_add_cmd_sf(commands, SCTP_CMD_PROCESS_SACK, SCTP_CHUNK(chunk));
->  
-> -- 
-> 1.8.3.1
-> 
-> 
-Acked-by: Neil Horman <nhorman@tuxdriver.com>
+
+
+ >From: Kevin Kou <qdkevin.kou@xxxxxxxxx>
+ >Date: Thu, 26 Dec 2019 12:29:17 +0000
+ >
+ >> This patch is to remove trace_sctp_probe_path from the TP_fast_assign
+ >> part of TRACE_EVENT(sctp_probe) to avoid the nest of entry function,
+ >> and trigger sctp_probe_path_trace in sctp_outq_sack.
+ > ...
+ >
+ >Applied, but why did you remove the trace enabled check, just out of
+ >curiosity?
+
+Actually, the check in trace_sctp_probe_path_enabled also done in
+trace_sctp_probe_path according to the Macro definition, both check
+if (static_key_false(&__tracepoint_##name.key)).
+
+
+
+include/linux/tracepoint.h
+#define __DECLARE_TRACE(name, proto, args, cond, data_proto, data_args) \
+	extern struct tracepoint __tracepoint_##name;			\
+	static inline void trace_##name(proto)				\
+	{								\
+		if (static_key_false(&__tracepoint_##name.key))		\
+			__DO_TRACE(&__tracepoint_##name,		\
+				TP_PROTO(data_proto),			\
+				TP_ARGS(data_args),			\
+				TP_CONDITION(cond), 0);			\
+		if (IS_ENABLED(CONFIG_LOCKDEP) && (cond)) {		\
+			rcu_read_lock_sched_notrace();			\
+			rcu_dereference_sched(__tracepoint_##name.funcs);\
+			rcu_read_unlock_sched_notrace();		\
+		}							\
+	}
+			
+			
+	static inline bool						\
+	trace_##name##_enabled(void)					\
+	{								\
+		return static_key_false(&__tracepoint_##name.key);	\
+	}
