@@ -2,114 +2,64 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 299C812B4DD
-	for <lists+linux-sctp@lfdr.de>; Fri, 27 Dec 2019 14:33:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC1712BBFF
+	for <lists+linux-sctp@lfdr.de>; Sat, 28 Dec 2019 01:36:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726175AbfL0NdM (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 27 Dec 2019 08:33:12 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:36668 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726053AbfL0NdM (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 27 Dec 2019 08:33:12 -0500
-Received: by mail-pg1-f196.google.com with SMTP id k3so14471952pgc.3;
-        Fri, 27 Dec 2019 05:33:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=QxA5SqsTWD1yfXg383i8MCZPV5Ex7TFJ83DrMqrjveY=;
-        b=UYCFkY6T8wghVkfhz+CA+wHqte2EnNWSJfMRMQKq5dSynYy6ej7gcmNX0KgFfrDsA6
-         D6z+YN2Vem4i9goKXZzS7rVuBj93y8Y0YxDq7Oyzajskkn7PHx8V0gu+KV7ihOXL9aRr
-         oelGh+pTTDxtuCHTVevPoFijufquUKwUEaV/KJBLyFDF9VDYh7ENoImtyRQqzK5y4zpe
-         8xWqh2EloqmFXwcASAENTIqL0vc2LQAjnEY57K9DaB6xmLTFXuYy4gRwusKgBwBEdhx6
-         b5CliJR+MWYlE/00YdCM8ULM8Ql5EzGwuaAbMxePHJOO/a64joFv94jfROe1xhwj5QH/
-         6u3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=QxA5SqsTWD1yfXg383i8MCZPV5Ex7TFJ83DrMqrjveY=;
-        b=oFL/0guKgEEeRPBtDQtiFpsDK+1oK4bfUy0Dmpzhl4wcwT9DU9NEgsPbgccUF/3EFO
-         iGJ/FtIKbGTrJdmc2baQjehVKhSQAntWMB6A6S2HgJ78uxwbeE82taCy/Tsb+UQem57C
-         Uen+788uLdecReH7L32Bokf88x34ucJlkWi8zWWiWJR6Vdh9dWrkUxQgYY2ov5n1LAl0
-         Fof2zbgswwP4/joXYej/s2lLan1EcUawSeJPoS310MJJ/9qnMRdk8ymbM186xGlhmKMm
-         gq75hFbj8JYcbYW/24YkeamfnDcI57xhRSQsGONURxBWWjAB8AtnPj/I+biKRwc0a6vz
-         2rqw==
-X-Gm-Message-State: APjAAAVpzRmsZ2YcIOS0xEy+W8BFx6LhSx7S6kOZxjzOSl7QAlXrT1PM
-        ELn2CKXrxoVnPl6UBKXGerzPH8X6Na0=
-X-Google-Smtp-Source: APXvYqxOszwT2fHt3U4ZbhFCmgxg3mhpRMXk+pDzi3VPq2fwF4n06CTbaOX5j1Sb2VwScoEmPf1dzA==
-X-Received: by 2002:aa7:98d0:: with SMTP id e16mr52807072pfm.77.1577453591240;
-        Fri, 27 Dec 2019 05:33:11 -0800 (PST)
-Received: from localhost.localdomain ([168.181.48.206])
-        by smtp.gmail.com with ESMTPSA id b8sm41685594pfr.64.2019.12.27.05.33.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Dec 2019 05:33:10 -0800 (PST)
-Received: by localhost.localdomain (Postfix, from userid 1000)
-        id 93596C0D74; Fri, 27 Dec 2019 10:33:07 -0300 (-03)
-Date:   Fri, 27 Dec 2019 10:33:07 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Kevin Kou <qdkevin.kou@gmail.com>
+        id S1725860AbfL1AgP (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 27 Dec 2019 19:36:15 -0500
+Received: from shards.monkeyblade.net ([23.128.96.9]:53788 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725306AbfL1AgP (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 27 Dec 2019 19:36:15 -0500
+Received: from localhost (unknown [IPv6:2601:601:9f00:1c3::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 65713154D18C7;
+        Fri, 27 Dec 2019 16:36:14 -0800 (PST)
+Date:   Fri, 27 Dec 2019 16:36:13 -0800 (PST)
+Message-Id: <20191227.163613.94954890256147556.davem@davemloft.net>
+To:     qdkevin.kou@gmail.com
 Cc:     linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-        nhorman@tuxdriver.com, davem@davemloft.net
-Subject: Re: [PATCH net-next] sctp: add enabled check for path tracepoint
- loop.
-Message-ID: <20191227133307.GP4444@localhost.localdomain>
-References: <20191227131116.375-1-qdkevin.kou@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191227131116.375-1-qdkevin.kou@gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+        vyasevich@gmail.com, nhorman@tuxdriver.com,
+        marcelo.leitner@gmail.com
+Subject: Re: [PATCHv3 net-next] sctp: do trace_sctp_probe after SACK
+ validation and check
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20191225082725.1251-1-qdkevin.kou@gmail.com>
+References: <20191225082725.1251-1-qdkevin.kou@gmail.com>
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 27 Dec 2019 16:36:14 -0800 (PST)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Fri, Dec 27, 2019 at 01:11:16PM +0000, Kevin Kou wrote:
-> sctp_outq_sack is the main function handles SACK, it is called very
-> frequently. As the commit "move trace_sctp_probe_path into sctp_outq_sack"
-> added below code to this function, sctp tracepoint is disabled most of time,
-> but the loop of transport list will be always called even though the
-> tracepoint is disabled, this is unnecessary.
+From: Kevin Kou <qdkevin.kou@gmail.com>
+Date: Wed, 25 Dec 2019 08:27:25 +0000
+
+> The function sctp_sf_eat_sack_6_2 now performs the Verification
+> Tag validation, Chunk length validation, Bogu check, and also
+> the detection of out-of-order SACK based on the RFC2960
+> Section 6.2 at the beginning, and finally performs the further
+> processing of SACK. The trace_sctp_probe now triggered before
+> the above necessary validation and check.
 > 
-> +	/* SCTP path tracepoint for congestion control debugging. */
-> +	list_for_each_entry(transport, transport_list, transports) {
-> +		trace_sctp_probe_path(transport, asoc);
-> +	}
+> this patch is to do the trace_sctp_probe after the chunk sanity
+> tests, but keep doing trace if the SACK received is out of order,
+> for the out-of-order SACK is valuable to congestion control
+> debugging.
 > 
-> This patch is to add tracepoint enabled check at outside of the loop of
-> transport list, and avoid traversing the loop when trace is disabled,
-> it is a small optimization.
+> v1->v2:
+>  - keep doing SCTP trace if the SACK is out of order as Marcelo's
+>    suggestion.
+> v2->v3:
+>  - regenerate the patch as v2 generated on top of v1, and add
+>    'net-next' tag to the new one as Marcelo's comments.
 > 
 > Signed-off-by: Kevin Kou <qdkevin.kou@gmail.com>
 
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-
-Thanks Kevin.
-
-Btw, I'm out for PTOs for the next 2 weeks. Probably won't be
-reviewing patches during that.
-
-> ---
->  net/sctp/outqueue.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/net/sctp/outqueue.c b/net/sctp/outqueue.c
-> index adceb22..83ddcfe 100644
-> --- a/net/sctp/outqueue.c
-> +++ b/net/sctp/outqueue.c
-> @@ -1240,8 +1240,9 @@ int sctp_outq_sack(struct sctp_outq *q, struct sctp_chunk *chunk)
->  	transport_list = &asoc->peer.transport_addr_list;
->  
->  	/* SCTP path tracepoint for congestion control debugging. */
-> -	list_for_each_entry(transport, transport_list, transports) {
-> -		trace_sctp_probe_path(transport, asoc);
-> +	if (trace_sctp_probe_path_enabled()) {
-> +		list_for_each_entry(transport, transport_list, transports)
-> +			trace_sctp_probe_path(transport, asoc);
->  	}
->  
->  	sack_ctsn = ntohl(sack->cum_tsn_ack);
-> -- 
-> 1.8.3.1
-> 
+Applied.
