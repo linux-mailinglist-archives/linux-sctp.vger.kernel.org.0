@@ -2,72 +2,171 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82163138B53
-	for <lists+linux-sctp@lfdr.de>; Mon, 13 Jan 2020 06:52:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F352513F2C1
+	for <lists+linux-sctp@lfdr.de>; Thu, 16 Jan 2020 19:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733208AbgAMFwg (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 13 Jan 2020 00:52:36 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:44009 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733196AbgAMFw0 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 13 Jan 2020 00:52:26 -0500
-Received: by mail-oi1-f196.google.com with SMTP id p125so7171982oif.10
-        for <linux-sctp@vger.kernel.org>; Sun, 12 Jan 2020 21:52:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Rjbe3pVeMfYVPdmVklZ4b2stSqI32LIYp+bn/8NyJvk=;
-        b=El5YZgtDEXJCHEtZrRB1ujEJT5GnrR9nqQvx3oNXkD1KXWKAy5lE4fahagwXmNRBuY
-         Z373bCStdjZZAvrcMmyjZhqXNYKD7qS8gpQ1uKt4Zm/CJYofbOmd6y2KCfdaIf8lu4gx
-         e04Qq2Wd5k0QzXhgODgXLh9+BTAbr7mIJG1kvrHD2cB5892G2QaMtoQjZ8YbwAsn/v/R
-         qN1ulSwy8kLJzDOOwwvDkEa6g0paOaNUUW6lO8NcaOsOsQMTh2eV34LXY/bnRxfyDcL+
-         OFIAYoYpyWTxvo4nB11oXa8J2BNLiFXnr18VfN4DCPOmpXqWPT8f/9GzmZX8VWLxs4VK
-         s+8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Rjbe3pVeMfYVPdmVklZ4b2stSqI32LIYp+bn/8NyJvk=;
-        b=lXUroQMz4oKCOmxvo0l4MDLaa+CKg0Jf0fFpa2Yhm2DoBEjxZNFmsW1eXazb2vy24k
-         SQ/XEVhcVuPag0NHEdYld+A8bqSxDvNXb8EXyyrQ0d1jVNqdqB+kBf0AGJfqeS8CpH4O
-         10vho281SxXvLdIq5hkShn9Juv5+vF8mtqblgR9/9P+j0Tybt68fiRcvnsD0MNko81tI
-         RW2CW8w87SD9C13PD7gFmYMQcaHUQshgtv9UcJ0i55ciLd2WtL0av589LcFoLkKHjrsM
-         PPLAzfEh6Y6exYLJcot0WGKTaqSdjgwktXU+1n1LEmu6+0nxGw6uq7F88ncEfbLANwB5
-         A4/A==
-X-Gm-Message-State: APjAAAU5Vkl5wQeWLUeLlnE9arwuTQZS1oQg+A/rMcNd3CYqXmF0m9Vd
-        sDXa1WEu0r90OXZ1fJnBJ4RolUAjYDHCxPf1d38=
-X-Google-Smtp-Source: APXvYqy7JhGBt0ZjJ/1t4CT74GIhTuvbOMnCynReBbsGRcTAfZPwoiLBCe9XiPA9xaK1JAPmy14eucUMWI9DLkbKsUo=
-X-Received: by 2002:a54:4713:: with SMTP id k19mr11513430oik.113.1578894745174;
- Sun, 12 Jan 2020 21:52:25 -0800 (PST)
+        id S2389511AbgAPRMq (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 16 Jan 2020 12:12:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56096 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390560AbgAPRMq (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:12:46 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C9823246A5;
+        Thu, 16 Jan 2020 17:12:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579194765;
+        bh=sfdtezAZn8Ir6ruYN4QRauIXgF7EqzfCgZEnkclNeDc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=W9vV3NCmM3HR0yAehrn3lgacCYkGNXGxSk4QNKTwsZ4DWVDZ7Zg90Z3bKPxY3mzZd
+         ABnTg2b1v0sq3vSm5vYzZfW6dAqmwwoQV7kC4wYygHCX0XmzSFfS2JnuN0GWqmWAXj
+         DuOSD0vyP32f7wkwQkEfLS8qaF8SzoXuVQ1L6CGo=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Xin Long <lucien.xin@gmail.com>, Ying Xu <yinxu@redhat.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Sasha Levin <sashal@kernel.org>, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 585/671] sctp: add chunks to sk_backlog when the newsk sk_socket is not set
+Date:   Thu, 16 Jan 2020 12:03:43 -0500
+Message-Id: <20200116170509.12787-322-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
+References: <20200116170509.12787-1-sashal@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a4a:41cb:0:0:0:0:0 with HTTP; Sun, 12 Jan 2020 21:52:24
- -0800 (PST)
-Reply-To: rickschaech@gmail.com
-From:   Rick Schaech <cathben72@gmail.com>
-Date:   Mon, 13 Jan 2020 01:52:24 -0400
-Message-ID: <CAEcBxO=TAnFn5LzizHa22hUC0Db5FuiZJF28m=yX3_9m--jRqg@mail.gmail.com>
-Subject: I wait for your swift response,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Dear, I'm Mr Rick Schaech, I am the General Account Auditor, Though i
-know we have not meet each other before but sometimes in life God have
-a reason of bringing two people from two different countries together
-as business partners or life partners.
+From: Xin Long <lucien.xin@gmail.com>
 
-My dear friend, I have the sum of 15.7 Million USD i wish to put in
-your name due to the death of my late client who died several years
-ago as his next of kin column still remain blank. Though the internet
-medium is highly abuse these days but am assuring you that this
-transaction is legitimate and I am contacting you that we may have a
-deal, note for your cooperation and collaboration 40% of the sum will
-be for you while the other 60% will be for me as well. I wait for your
-swift response for more details. please forward your response to my
-personal E-mail: rickschaech@gmail.com
+[ Upstream commit 819be8108fded0b9e710bbbf81193e52f7bab2f7 ]
 
-Yours sincerely,
-Rick Schaech.
+This patch is to fix a NULL-ptr deref in selinux_socket_connect_helper:
+
+  [...] kasan: GPF could be caused by NULL-ptr deref or user memory access
+  [...] RIP: 0010:selinux_socket_connect_helper+0x94/0x460
+  [...] Call Trace:
+  [...]  selinux_sctp_bind_connect+0x16a/0x1d0
+  [...]  security_sctp_bind_connect+0x58/0x90
+  [...]  sctp_process_asconf+0xa52/0xfd0 [sctp]
+  [...]  sctp_sf_do_asconf+0x785/0x980 [sctp]
+  [...]  sctp_do_sm+0x175/0x5a0 [sctp]
+  [...]  sctp_assoc_bh_rcv+0x285/0x5b0 [sctp]
+  [...]  sctp_backlog_rcv+0x482/0x910 [sctp]
+  [...]  __release_sock+0x11e/0x310
+  [...]  release_sock+0x4f/0x180
+  [...]  sctp_accept+0x3f9/0x5a0 [sctp]
+  [...]  inet_accept+0xe7/0x720
+
+It was caused by that the 'newsk' sk_socket was not set before going to
+security sctp hook when processing asconf chunk with SCTP_PARAM_ADD_IP
+or SCTP_PARAM_SET_PRIMARY:
+
+  inet_accept()->
+    sctp_accept():
+      lock_sock():
+          lock listening 'sk'
+                                          do_softirq():
+                                            sctp_rcv():  <-- [1]
+                                                asconf chunk arrives and
+                                                enqueued in 'sk' backlog
+      sctp_sock_migrate():
+          set asoc's sk to 'newsk'
+      release_sock():
+          sctp_backlog_rcv():
+            lock 'newsk'
+            sctp_process_asconf()  <-- [2]
+            unlock 'newsk'
+    sock_graft():
+        set sk_socket  <-- [3]
+
+As it shows, at [1] the asconf chunk would be put into the listening 'sk'
+backlog, as accept() was holding its sock lock. Then at [2] asconf would
+get processed with 'newsk' as asoc's sk had been set to 'newsk'. However,
+'newsk' sk_socket is not set until [3], while selinux_sctp_bind_connect()
+would deref it, then kernel crashed.
+
+Here to fix it by adding the chunk to sk_backlog until newsk sk_socket is
+set when .accept() is done.
+
+Note that sk->sk_socket can be NULL when the sock is closed, so SOCK_DEAD
+flag is also needed to check in sctp_newsk_ready().
+
+Thanks to Ondrej for reviewing the code.
+
+Fixes: d452930fd3b9 ("selinux: Add SCTP support")
+Reported-by: Ying Xu <yinxu@redhat.com>
+Suggested-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Acked-by: Neil Horman <nhorman@tuxdriver.com>
+Signed-off-by: Jakub Kicinski <jakub.kicinski@netronome.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ include/net/sctp/sctp.h |  5 +++++
+ net/sctp/input.c        | 12 +++++++++---
+ 2 files changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/include/net/sctp/sctp.h b/include/net/sctp/sctp.h
+index 2abbc15824af..2c6570e6fcfe 100644
+--- a/include/net/sctp/sctp.h
++++ b/include/net/sctp/sctp.h
+@@ -625,4 +625,9 @@ static inline __u32 sctp_min_frag_point(struct sctp_sock *sp, __u16 datasize)
+ 	return sctp_mtu_payload(sp, SCTP_DEFAULT_MINSEGMENT, datasize);
+ }
+ 
++static inline bool sctp_newsk_ready(const struct sock *sk)
++{
++	return sock_flag(sk, SOCK_DEAD) || sk->sk_socket;
++}
++
+ #endif /* __net_sctp_h__ */
+diff --git a/net/sctp/input.c b/net/sctp/input.c
+index bfe29158afcc..f64d882c8698 100644
+--- a/net/sctp/input.c
++++ b/net/sctp/input.c
+@@ -255,7 +255,7 @@ int sctp_rcv(struct sk_buff *skb)
+ 		bh_lock_sock(sk);
+ 	}
+ 
+-	if (sock_owned_by_user(sk)) {
++	if (sock_owned_by_user(sk) || !sctp_newsk_ready(sk)) {
+ 		if (sctp_add_backlog(sk, skb)) {
+ 			bh_unlock_sock(sk);
+ 			sctp_chunk_free(chunk);
+@@ -333,7 +333,7 @@ int sctp_backlog_rcv(struct sock *sk, struct sk_buff *skb)
+ 		local_bh_disable();
+ 		bh_lock_sock(sk);
+ 
+-		if (sock_owned_by_user(sk)) {
++		if (sock_owned_by_user(sk) || !sctp_newsk_ready(sk)) {
+ 			if (sk_add_backlog(sk, skb, sk->sk_rcvbuf))
+ 				sctp_chunk_free(chunk);
+ 			else
+@@ -348,7 +348,13 @@ int sctp_backlog_rcv(struct sock *sk, struct sk_buff *skb)
+ 		if (backloged)
+ 			return 0;
+ 	} else {
+-		sctp_inq_push(inqueue, chunk);
++		if (!sctp_newsk_ready(sk)) {
++			if (!sk_add_backlog(sk, skb, sk->sk_rcvbuf))
++				return 0;
++			sctp_chunk_free(chunk);
++		} else {
++			sctp_inq_push(inqueue, chunk);
++		}
+ 	}
+ 
+ done:
+-- 
+2.20.1
+
