@@ -2,50 +2,51 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B000156001
-	for <lists+linux-sctp@lfdr.de>; Fri,  7 Feb 2020 21:44:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC45157439
+	for <lists+linux-sctp@lfdr.de>; Mon, 10 Feb 2020 13:11:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727499AbgBGUoJ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 7 Feb 2020 15:44:09 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:45613 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727131AbgBGUoJ (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 7 Feb 2020 15:44:09 -0500
-Received: by mail-ot1-f66.google.com with SMTP id 59so562186otp.12
-        for <linux-sctp@vger.kernel.org>; Fri, 07 Feb 2020 12:44:09 -0800 (PST)
+        id S1727061AbgBJMLC (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 10 Feb 2020 07:11:02 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:34920 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727003AbgBJMLC (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 10 Feb 2020 07:11:02 -0500
+Received: by mail-wr1-f67.google.com with SMTP id w12so7387920wrt.2
+        for <linux-sctp@vger.kernel.org>; Mon, 10 Feb 2020 04:11:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=8cDRXBFOpE9J1p6S5H+HXSQg9q3m7pUJ3iUuQ5MPcDc=;
-        b=WJgFJ9PR0yBQ+ciD08Pby60OVZzn3dTgtieZ17slfRQssKmPnwQmAwZPgDIpR6heck
-         dDY9m0nAiR73dL1CtCDLlqWI9lV6barO9i6phYUUcmMyI9lhyUunotwwGjtLNjZZXHps
-         B+ZJy7kS8IDHqb+LatDXLkBcGkPTiMku+kX9Fb92ZmFsnK1n3liOHkc4TmrSz2VBzqpm
-         gOXxQUuwBna/l8aq9nu864h1RGE/T5vMQdJwoV4IagKfmqrsTX7n4WpDLnLJobosvK0X
-         9Z7fBUirFx02ZREq+PBFhuGxFcksAi/eOnsjoHpvtfcuXe3k+tw0qtyYWnKvHtkX+Drl
-         CMWw==
+        bh=mrjbcYIstFUYdIKT7W4vXIKRiqhKmb5C1fAHjTQNfVo=;
+        b=mC1ZqE43inpzRuA3RQ315VOCdWHyo04HgMzT2jOC5H94PrmNUmEwcmr1WpDRSGQvo4
+         uNAklQecMY8PiYubg5ZkBC4LeAEC+bG1bYh0I4BfSInvf93BATTLT+6mYFg1uBrsu0F8
+         z6J30xDk3qQwLwdCuQOB1Ojm4BfJNyTm5OFQxbRvJ9yzZjg9BaN5loalvTIFLpvcbjHS
+         ogNybmaBsqYDaA1J8NrQYR/l6qe5qutzfYCeeczaTS9hQLQ5vdb1LmUGS7/+FGEl5XQS
+         Tk3XyKhdcIoETpFoWLpS0gSJ4aLKHz/IUqmIWZpIEgmB+02PTRXMvGa+kl2/KaeLgCcm
+         lOMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
          :subject:to;
-        bh=8cDRXBFOpE9J1p6S5H+HXSQg9q3m7pUJ3iUuQ5MPcDc=;
-        b=b+KQRqZFF9gNZ0TiEKHQJ7RuT7/tknhlwuUhRtvws74TtSEKRe10155o//umb/Josg
-         6H8T3ELXHDvU/zlhssolWUcdkWoTawhi3iHan8p47PWMNHESSQ63zT1B8kmL1z8Mld/i
-         0x3iSNkou6cvZ9Qt7TYZALQR51tvJvFnS64qefLYBCA4GS2827nLhH1KLIbZAFfB6JtH
-         tJdrmIkgGWGr+V5NBDgyxdN9QXzcxdi8+5FCybljtcRQ86slXWVysJn5vglPlsfk7n44
-         CAgz7QIMrGagZV4PwD8iT1aSDP1YmnCon0DzNk+WyGpzMbGRjetXpbJ8LDYORglNC2sb
-         Ijag==
-X-Gm-Message-State: APjAAAUrv9vv5uAryoS3+OZHvQ+w8U7pt9QtAwwe2h+7QUAq1SyJsOwy
-        M6RrK4F8IfZrlR3UabklJAb5/65n3rNqSerafJE=
-X-Google-Smtp-Source: APXvYqxZ0BHxezvYatUCwR5ujJY2IO6fZCUlpHww8WEnDHAAAY+0VvtiMdEe6JnWZWwDRH8AP8uVvx3q0Y+IviYPdhQ=
-X-Received: by 2002:a9d:7305:: with SMTP id e5mr948882otk.64.1581108248790;
- Fri, 07 Feb 2020 12:44:08 -0800 (PST)
+        bh=mrjbcYIstFUYdIKT7W4vXIKRiqhKmb5C1fAHjTQNfVo=;
+        b=Pc+qa6tM0vWEnsAqY7o9DqvatazGmGv90CK9w2tb/bVNnthoR4ASOf9iXffnqtu6mU
+         TQWZtaGavti9auqd9uoxHA5YWU6sDKju1/Vs0FdwCxeuDSf6/CXyUIkCaoWReNBwP/GB
+         AzteWaohWm8fM+b0ecpr2K8FONziyQSBM9vmFMQHECi8rY7MkoVoxmrTo4sQ1GPloAMV
+         32xVGGQG9f3s2DKSeQW8V8+xY2JZHOq989rIOwO7GHrXryV1WaCo639TuJ+7bP/3ktO+
+         b6F5Tqma7KVrD/LHVCwRiQnfgDhk+oEebp1y/CZYH5PcetlB/yKeThumKWMLEm91BpT7
+         Xogw==
+X-Gm-Message-State: APjAAAVHU46pqwFrWhG/YVhGZQ2zdKB0FexRcaLz+fQzNv14Vz364Mi6
+        LjBtZX/DxnMKefZdSqkyIPMrKSwThgfn0Xvos2A=
+X-Google-Smtp-Source: APXvYqyjKWojNajhUCyhEnHMPQhT2pR8XdrNa7+5hKGZGitF8PRB11gWNMqkDoDw9o1jShFApEObZlqySTgN3r9/jXk=
+X-Received: by 2002:adf:f8c4:: with SMTP id f4mr1572457wrq.243.1581336660253;
+ Mon, 10 Feb 2020 04:11:00 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a4a:d508:0:0:0:0:0 with HTTP; Fri, 7 Feb 2020 12:44:08 -0800 (PST)
-Reply-To: auch197722@gmail.com
-From:   "Mr. Theophilus Odadudu" <cristinamedina0010@gmail.com>
-Date:   Fri, 7 Feb 2020 15:44:08 -0500
-Message-ID: <CAPNvSTj-8q7w5QPmnH26+_3xCKjEWyE+9xcb8QyQs9Xie+iYgg@mail.gmail.com>
-Subject: LETTER OF INQUIRY
+Received: by 2002:a1c:a710:0:0:0:0:0 with HTTP; Mon, 10 Feb 2020 04:10:59
+ -0800 (PST)
+Reply-To: msjilmike101@gmail.com
+From:   Jillrita Mike <spa.rosa.mrs@gmail.com>
+Date:   Mon, 10 Feb 2020 13:10:59 +0100
+Message-ID: <CAPFFY3fH3MX+ZY+f1P9bEY=BzngQKUrRopngpQhPUYN9F4kLoA@mail.gmail.com>
+Subject: Dear Friend.
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
@@ -53,20 +54,22 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Good Day,
+Dear Friend.
 
-I work as a clerk in a Bank here in Nigeria, I have a very
-confidential Business Proposition for you. There is a said amount of
-money floating in the bank unclaimed, belonging to the bank Foreign
-customer who die with his family in the Ethiopian Airline crash of
-March 11, 2019.
+ My  name is Jillrita Mike Riddering,  I am sending this brief letter
+to solicit your support and partnership to transfer $5.5 million US
+Dollars. This money belongs to my late father Mike Riddering,my father
+and my mother were among those that were killed on 2016 terrorist
+attack at Splendid Hotel Ouagadougou Burkina Faso, my mother did not
+die instantly but she later gave up at the hospital. we are from USA
+but
+reside in Burkina Faso, my father is An American missionary,
+before my father died with my mother at Splendid hotel,
 
-I seek your good collaboration to move the fund for our benefit. we
-have agreed that 40% be yours once you help claim.
-
-Do get back to with 1) Your Full Name: (2) Residential Address: (3)
-Phone, Mobile  (4) Scan Copy of Your ID. to apply for claims of the
-funds.
-
-Regards
-Theophilus Odadudu
+Check out the web; (https://www.bbc.com/news/world-africa-35332792)
+for more understanding, I shall send you more information and
+the bank details  when I receive positive response from you to follow up.
+contact my E-mail;
+msjilmike101@gmail.com
+Thanks
+Jillrita Mike
