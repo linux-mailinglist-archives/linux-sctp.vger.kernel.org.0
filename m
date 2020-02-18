@@ -2,168 +2,138 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B88B7161FC4
-	for <lists+linux-sctp@lfdr.de>; Tue, 18 Feb 2020 05:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F178B161FD6
+	for <lists+linux-sctp@lfdr.de>; Tue, 18 Feb 2020 05:38:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726327AbgBRESo (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 17 Feb 2020 23:18:44 -0500
-Received: from mail-qv1-f67.google.com ([209.85.219.67]:46004 "EHLO
-        mail-qv1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726289AbgBRESn (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 17 Feb 2020 23:18:43 -0500
-Received: by mail-qv1-f67.google.com with SMTP id l14so8550987qvu.12;
-        Mon, 17 Feb 2020 20:18:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rrl2PGiVKhiS3+BWSYzKqXLa18ZV5zl04M5paHTNB9w=;
-        b=VN165w2rOIwUpLADVTNCGoUNRpIT460bdknzHNDWEjIyo6Zb2Aic5q9XEN9hxLF/kD
-         ElpwQ0iMrt4fY0cvAeDHEQcMmosGbtMboL7IkvZxvbCtHPaJUr5HtXnY1YFYblK7+G/H
-         +uJH7LFL9W/mAZPN3ERlieloSJ9re046dKgOtUlVowPg9XVoPItmAJ9h8w894y93xad2
-         tidudO0viF0uTe/51xwqRWlzwQHj9exP5QGv/UXxYESV0v4jnveLmVENlmByNJ0kocbh
-         /E4AiJfKMcL8HH5FsOPD353XwRMPlFR2cbqtZOl3+KPs0CzsuYtcW/tQOjaG1SlH93ie
-         4MBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rrl2PGiVKhiS3+BWSYzKqXLa18ZV5zl04M5paHTNB9w=;
-        b=lW+plZenF5vxtUmHfO5d4YgV4veX+BCyjS2WAYYcx/bmXTV9ZP8vIvoGd2QP0hsUnu
-         Hao0a1M0ci5Shr8/66pSqppMTQsR7SF2EYVwmb+WK3jS6dJ+24K8w0YgT6ieOlOsrs1L
-         NZ2homqhvB3izMiaJ+YoLmwoBvuYD55m3QaJPRcqHEpTtBXyPTo9zyYAUgN1yr74gH0Q
-         ABAnfsRUBQC+RUz1Sw1Sd4mAAuUDVik2/DMfLo2f7Da7b27HEkh6gp5QVnICwnt0ocJo
-         nMtJyEZOgoiGyXRaMCDeeFQ7gtbAIF3/gQ+Cye5Fr5C7bElhEpFDxBe1vbFWK8Auos6F
-         ErOQ==
-X-Gm-Message-State: APjAAAXu2LqGGhuPO+VWFrom9qOD9o1kxDxsacA/1dqJ8po8W8id5YvX
-        yxWG/UVpc35oTwLcX/xYyBA=
-X-Google-Smtp-Source: APXvYqyCfGp0PYo9Yhgnqnbv0dVtKt4qlsVl3vjv4wjcYHNLaPFjso4D+5mstpBxxHMkNoiBVod4Kw==
-X-Received: by 2002:a0c:e2cf:: with SMTP id t15mr15437971qvl.127.1581999522385;
-        Mon, 17 Feb 2020 20:18:42 -0800 (PST)
-Received: from localhost.localdomain ([2001:1284:f013:d58:b2a5:6cad:97fb:fa6f])
-        by smtp.gmail.com with ESMTPSA id k37sm1277690qtf.70.2020.02.17.20.18.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Feb 2020 20:18:41 -0800 (PST)
-Received: by localhost.localdomain (Postfix, from userid 1000)
-        id 5F35FC0DD6; Tue, 18 Feb 2020 01:18:39 -0300 (-03)
-Date:   Tue, 18 Feb 2020 01:18:39 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
-        davem@davemloft.net, Neil Horman <nhorman@tuxdriver.com>,
-        Hangbin Liu <liuhangbin@gmail.com>
-Subject: Re: [PATCHv2 net] sctp: move the format error check out of
- __sctp_sf_do_9_1_abort
-Message-ID: <20200218041839.GC2547@localhost.localdomain>
-References: <7f0002ee4446436104eb72bcfa9a4cf417570f7e.1581998873.git.lucien.xin@gmail.com>
+        id S1726261AbgBREiX (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 17 Feb 2020 23:38:23 -0500
+Received: from cnshjsmin05.nokia-sbell.com ([116.246.26.45]:19604 "EHLO
+        cnshjsmin05.nokia-sbell.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726245AbgBREiX (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Mon, 17 Feb 2020 23:38:23 -0500
+X-Greylist: delayed 901 seconds by postgrey-1.27 at vger.kernel.org; Mon, 17 Feb 2020 23:38:22 EST
+X-AuditID: ac18929d-8e32c9c000001441-9e-5e4b66b83d28
+Received: from CNSHPPEXCH1605.nsn-intra.net (Unknown_Domain [135.251.51.105])
+        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by cnshjsmin05.nokia-sbell.com (Symantec Messaging Gateway) with SMTP id A2.FD.05185.8B66B4E5; Tue, 18 Feb 2020 12:23:20 +0800 (HKT)
+Received: from CNSHPPEXCH1609.nsn-intra.net (135.251.51.109) by
+ CNSHPPEXCH1605.nsn-intra.net (135.251.51.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 18 Feb 2020 12:23:20 +0800
+Received: from CNSHPPEXCH1609.nsn-intra.net ([135.251.51.109]) by
+ CNSHPPEXCH1609.nsn-intra.net ([135.251.51.109]) with mapi id 15.01.1713.007;
+ Tue, 18 Feb 2020 12:23:20 +0800
+From:   "Chen, Chris A. (NSB - CN/Qingdao)" <chris.a.chen@nokia-sbell.com>
+To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "Fan, Jessie (NSB - CN/Qingdao)" <jessie.fan@nokia-sbell.com>
+CC:     "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        "dajiang.zhang@nokia.com" <dajiang.zhang@nokia.com>,
+        "piggy@acm.org" <piggy@acm.org>,
+        "karl@athena.chicago.il.us" <karl@athena.chicago.il.us>,
+        "chris@hundredacre.ac.uk" <chris@hundredacre.ac.uk>,
+        "jgrimm@us.ibm.com" <jgrimm@us.ibm.com>,
+        "xingang.guo@intel.com" <xingang.guo@intel.com>,
+        "sri@us.ibm.com" <sri@us.ibm.com>,
+        "daisyc@us.ibm.com" <daisyc@us.ibm.com>,
+        "ardelle.fan@intel.com" <ardelle.fan@intel.com>,
+        "kevin.gao@intel.com" <kevin.gao@intel.com>
+Subject: RE: v5.3.12 SCTP Stream Negotiation Problem
+Thread-Topic: v5.3.12 SCTP Stream Negotiation Problem
+Thread-Index: AQHV5g0ePvHlF/NL5kaQVc1sX4qpvqggWDfQ
+Date:   Tue, 18 Feb 2020 04:23:20 +0000
+Message-ID: <05a00ef6c37d4463a1ed9f54a6042812@nokia-sbell.com>
+References: <9c353cef257847c7b64793d3839abc33@nokia-sbell.com>
+ <29c18e4a424343bab0fea1904cfae492@nokia-sbell.com>
+ <20200218034001.GA2547@localhost.localdomain>
+In-Reply-To: <20200218034001.GA2547@localhost.localdomain>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [135.251.51.115]
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7f0002ee4446436104eb72bcfa9a4cf417570f7e.1581998873.git.lucien.xin@gmail.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrMIsWRmVeSWpSXmKPExsXS/ts4U3dHmnecwfsZehZtTXfYLBbu7Wa0
+        mHdiP4vFjMtHmSy6J8xmttgzcR2LxdMFr1ktfq04zmrxreEsu8Xyk++YLc619TI5cHtcvuLt
+        sXPtCyaPnbPusnvcXXyIxWPxnpdMHueu9TF7fN4kF8AexWWTkpqTWZZapG+XwJXxdu831oJX
+        qhXvnvxmamB8o9LFyMkhIWAisfbkA6YuRi4OIYFDTBJn75yFcv4ySiw538IM4WxilLg44zwb
+        SAubgIfE/w+vwWwRgQqJndObwTqYBSazSFw6/JodJCEMNHf1v+csEEWmEkvW/WGFsI0kvh1f
+        ADSVg4NFQFXiwSclkDCvgJ3Elo9zwWYKCSxmlOh5GgpicwpYSSxe8oURxGYUEJP4fmoNE4jN
+        LCAucevJfCaIFwQkluw5zwxhi0q8fPyPFWS8hICSRN8GqHItiXkNv6FsRYkp3Q/ZIdYKSpyc
+        +YRlAqPYLCRTZyFpmYWkZRaSlgWMLKsYpZPzijOyinMz8wxM9fLyszMTdYuTUnNy9JLzczcx
+        AqN6jcSkuTsYOzvjDzEKcDAq8fCumOAVJ8SaWFZcmXuIUYKDWUmE11scKMSbklhZlVqUH19U
+        mpNafIhRmoNFSZy3ZfLCWCGB9MSS1OzU1ILUIpgsEwenVAPjvCldvhflZeY6Oq5ccWxvnqdl
+        xZLf27iz7k3M/W2zf/KlXcuvd19mjdkeZml2ekP0zidrvSc9KkovS23zKmq3W+iz9mPm0iom
+        jwv8rlNn5LTxpz40ZN63Pk6mzNZH5N/LQOdVTWfyX3Mu+cdvLxiwKPbIolMcfgU9hs0eD7xs
+        LNnj9pQd7/2txFKckWioxVxUnAgAFdboI+YCAAA=
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Feb 18, 2020 at 12:07:53PM +0800, Xin Long wrote:
-> When T2 timer is to be stopped, the asoc should also be deleted,
-> otherwise, there will be no chance to call sctp_association_free
-> and the asoc could last in memory forever.
-> 
-> However, in sctp_sf_shutdown_sent_abort(), after adding the cmd
-> SCTP_CMD_TIMER_STOP for T2 timer, it may return error due to the
-> format error from __sctp_sf_do_9_1_abort() and miss adding
-> SCTP_CMD_ASSOC_FAILED where the asoc will be deleted.
-> 
-> This patch is to fix it by moving the format error check out of
-> __sctp_sf_do_9_1_abort(), and do it before adding the cmd
-> SCTP_CMD_TIMER_STOP for T2 timer.
-> 
-> Thanks Hangbin for reporting this issue by the fuzz testing.
-> 
-> v1->v2:
->   - improve the comment in the code as Marcelo's suggestion.
-> 
-> Fixes: 96ca468b86b0 ("sctp: check invalid value of length parameter in error cause")
-> Reported-by: Hangbin Liu <liuhangbin@gmail.com>
-> Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-
-Thanks :-)
-
-> Signed-off-by: Xin Long <lucien.xin@gmail.com>
-> ---
->  net/sctp/sm_statefuns.c | 29 ++++++++++++++++++++---------
->  1 file changed, 20 insertions(+), 9 deletions(-)
-> 
-> diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
-> index 748e3b1..6a16af4 100644
-> --- a/net/sctp/sm_statefuns.c
-> +++ b/net/sctp/sm_statefuns.c
-> @@ -170,6 +170,16 @@ static inline bool sctp_chunk_length_valid(struct sctp_chunk *chunk,
->  	return true;
->  }
->  
-> +/* Check for format error in an ABORT chunk */
-> +static inline bool sctp_err_chunk_valid(struct sctp_chunk *chunk)
-> +{
-> +	struct sctp_errhdr *err;
-> +
-> +	sctp_walk_errors(err, chunk->chunk_hdr);
-> +
-> +	return (void *)err == (void *)chunk->chunk_end;
-> +}
-> +
->  /**********************************************************
->   * These are the state functions for handling chunk events.
->   **********************************************************/
-> @@ -2255,6 +2265,9 @@ enum sctp_disposition sctp_sf_shutdown_pending_abort(
->  		    sctp_bind_addr_state(&asoc->base.bind_addr, &chunk->dest))
->  		return sctp_sf_discard_chunk(net, ep, asoc, type, arg, commands);
->  
-> +	if (!sctp_err_chunk_valid(chunk))
-> +		return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
-> +
->  	return __sctp_sf_do_9_1_abort(net, ep, asoc, type, arg, commands);
->  }
->  
-> @@ -2298,6 +2311,9 @@ enum sctp_disposition sctp_sf_shutdown_sent_abort(
->  		    sctp_bind_addr_state(&asoc->base.bind_addr, &chunk->dest))
->  		return sctp_sf_discard_chunk(net, ep, asoc, type, arg, commands);
->  
-> +	if (!sctp_err_chunk_valid(chunk))
-> +		return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
-> +
->  	/* Stop the T2-shutdown timer. */
->  	sctp_add_cmd_sf(commands, SCTP_CMD_TIMER_STOP,
->  			SCTP_TO(SCTP_EVENT_TIMEOUT_T2_SHUTDOWN));
-> @@ -2565,6 +2581,9 @@ enum sctp_disposition sctp_sf_do_9_1_abort(
->  		    sctp_bind_addr_state(&asoc->base.bind_addr, &chunk->dest))
->  		return sctp_sf_discard_chunk(net, ep, asoc, type, arg, commands);
->  
-> +	if (!sctp_err_chunk_valid(chunk))
-> +		return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
-> +
->  	return __sctp_sf_do_9_1_abort(net, ep, asoc, type, arg, commands);
->  }
->  
-> @@ -2582,16 +2601,8 @@ static enum sctp_disposition __sctp_sf_do_9_1_abort(
->  
->  	/* See if we have an error cause code in the chunk.  */
->  	len = ntohs(chunk->chunk_hdr->length);
-> -	if (len >= sizeof(struct sctp_chunkhdr) + sizeof(struct sctp_errhdr)) {
-> -		struct sctp_errhdr *err;
-> -
-> -		sctp_walk_errors(err, chunk->chunk_hdr);
-> -		if ((void *)err != (void *)chunk->chunk_end)
-> -			return sctp_sf_pdiscard(net, ep, asoc, type, arg,
-> -						commands);
-> -
-> +	if (len >= sizeof(struct sctp_chunkhdr) + sizeof(struct sctp_errhdr))
->  		error = ((struct sctp_errhdr *)chunk->skb->data)->cause;
-> -	}
->  
->  	sctp_add_cmd_sf(commands, SCTP_CMD_SET_SK_ERR, SCTP_ERROR(ECONNRESET));
->  	/* ASSOC_FAILED will DELETE_TCB. */
-> -- 
-> 2.1.0
-> 
+VGhhbmtzIE1hcmNlbG8gZm9yIHRoZSBjb25maXJtYXRpb24uDQpXZSdsbCB0cnkgdGhlIHBhdGNo
+IHlvdSBzdWdnZXN0Lg0KDQpSZWdhcmRzLA0KQ2hyaXMNCg0KLS0tLS1PcmlnaW5hbCBNZXNzYWdl
+LS0tLS0NCkZyb206IE1hcmNlbG8gUmljYXJkbyBMZWl0bmVyIDxtYXJjZWxvLmxlaXRuZXJAZ21h
+aWwuY29tPiANClNlbnQ6IDIwMjDE6jLUwjE4yNUgMTE6NDANClRvOiBGYW4sIEplc3NpZSAoTlNC
+IC0gQ04vUWluZ2RhbykgPGplc3NpZS5mYW5Abm9raWEtc2JlbGwuY29tPg0KQ2M6IGxpbnV4LXNj
+dHBAdmdlci5rZXJuZWwub3JnOyBkYWppYW5nLnpoYW5nQG5va2lhLmNvbTsgcGlnZ3lAYWNtLm9y
+Zzsga2FybEBhdGhlbmEuY2hpY2Fnby5pbC51czsgY2hyaXNAaHVuZHJlZGFjcmUuYWMudWs7IGpn
+cmltbUB1cy5pYm0uY29tOyB4aW5nYW5nLmd1b0BpbnRlbC5jb207IHNyaUB1cy5pYm0uY29tOyBk
+YWlzeWNAdXMuaWJtLmNvbTsgYXJkZWxsZS5mYW5AaW50ZWwuY29tOyBrZXZpbi5nYW9AaW50ZWwu
+Y29tOyBDaGVuLCBDaHJpcyBBLiAoTlNCIC0gQ04vUWluZ2RhbykgPGNocmlzLmEuY2hlbkBub2tp
+YS1zYmVsbC5jb20+DQpTdWJqZWN0OiBSZTogdjUuMy4xMiBTQ1RQIFN0cmVhbSBOZWdvdGlhdGlv
+biBQcm9ibGVtDQoNCkhpLA0KDQpPbiBUdWUsIEZlYiAxOCwgMjAyMCBhdCAxMjozNzoxN0FNICsw
+MDAwLCBGYW4sIEplc3NpZSAoTlNCIC0gQ04vUWluZ2Rhbykgd3JvdGU6DQo+IEhpLA0KPiANCj4g
+SSBmb3VuZCB0aGUgU0NUUCBTdHJlYW0gbmVnb3RpYXRpb24gZG9lc24ndCB3b3JrIGFzIGV4cGVj
+dGVkLCB0aGF0IGlzLCB0aGUgbG9jYWwgb3V0Ym91bmQgc3RyZWFtIGFuZCB0aGUgcmVtb3RlIGlu
+Ym91bmQgc3RyZWFtIGNvbXBhcmlzb24gc2VlbXMgbWlzc2luZy4NCj4gRm9yIGV4YW1wbGUsIHdo
+ZW4gdGhlIGxvY2FsIG91dHN0cmVhbSgxNikgaXMgZ3JlYXRlciB0aGFuIHRoZSByZW1vdGUgaW5i
+b3VuZCBzdHJlYW0oMiksIDE2IGlzIHNhdmVkIGFuZCB1c2VkIGFzIHRoZSAiT1VUUyIsIHdoaWNo
+IGlzIHNob3duIGZyb20gL3Byb2MvcGlkL25ldC9zY3RwL2Fzc29jcyBiZWxvdy4NCj4gQ2FuIGFu
+eW9uZSBoZWxwIGNvbW1lbnQ/DQo+IA0KPiBGcm9tIGxvY2FsIGVuZCBwb2ludCwgMTYgaXMgc2V0
+IGFzIGJvdGggdGhlIG91dGJvdW5kIGFuZCBpbmJvdW5kIHN0cmVhbS4NCj4gRnJvbSB0aGUgcmVt
+b3RlIGVuZCBwb2ludCwgMiBpcyBzZXQgZm9yIGJvdGggdGhlIG91dGJvdW5kIGFuZCBpbmJvdW5k
+IA0KPiBzdHJlYW0NCj4gDQo+IEhvd2V2ZXIsIGFmdGVyIHRoZSBhc3NvY2lhdGlvbiBpcyB1cCwg
+dGhlIGluYm91bmQgYW5kIG91dGJvdW5kIHN0cmVhbSBpcyBzZXQgYXMgKDIsMTYpLCB3aGljaCBJ
+IHRoaW5rIGlzIHVuZXhwZWN0ZWQuDQo+IHNoLTQuMiMgY2F0IDEvbmV0L3NjdHAvYXNzb2NzDQo+
+IEFTU09DIFNPQ0sgU1RZIFNTVCBTVCBIQktUIEFTU09DLUlEIFRYX1FVRVVFIFJYX1FVRVVFIFVJ
+RCBJTk9ERSBMUE9SVCANCj4gUlBPUlQgTEFERFJTIDwtPiBSQUREUlMgSEJJTlQgSU5TIE9VVFMg
+TUFYUlQgVDFYIFQyWCBSVFhDIHdtZW1hIHdtZW1xIA0KPiBzbmRidWYgcmN2YnVmIDU1ZGFlNWJi
+IGJiM2RlYzcyIDAgNyAzIDAgMjQxNSAwIDAgNTA0IDEyMjM0NTEgMjkwNSAzOTA0IA0KPiB4eC54
+eC54eC54eCB5eS55eS55eS55eSA8LT4gKnp6Lnp6Lnp6Lnp6IHd3Lnd3Lnd3Lnd3IDMwMDAwIDIg
+MTYgMTAgMCAwIA0KPiAwIDEgMCAyNjIxNDQgMjYyMTQ0DQo+IA0KPiBJIGZ1cnRoZXIgY2hlY2tl
+ZCB0aGUga2VybmVsIGNvZGUgYW5kIGZvdW5kIGluIHY1LjAsIHRoZXJlIGlzIHN0aWxsIGNvbXBh
+cmlzb24gbG9naWM6IG1pbihvdXRjbnQsIHN0cmVhbS0+b3V0Y250KSBhbmQgc2F2ZSB0aGUgc21h
+bGxlciBvbmUgaW4gdGhlIGZ1bmN0aW9uIHNjdHBfc3RyZWFtX2FsbG9jX291dCgpLg0KPiBCdXQg
+dGhlIGxvZ2ljIGRpc2FwcGVhcmVkIGluIHY1LjEsIGFuZCBpZiB0aGUgIm91dGNudCIgaXMgc21h
+bGxlciwgaXQncyBub3Qgc2F2ZWQgbG9jYWxseS4NCj4gc3RhdGljIGludCBzY3RwX3N0cmVhbV9h
+bGxvY19vdXQoc3RydWN0IHNjdHBfc3RyZWFtICpzdHJlYW0sIF9fdTE2IG91dGNudCwNCj4gICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBnZnBfdCBnZnApIHsNCj4gICAgICAgICBpbnQg
+cmV0Ow0KPiANCj4gICAgICAgICBpZiAob3V0Y250IDw9IHN0cmVhbS0+b3V0Y250KSAvL0hlcmUg
+aXMgcHJvYmxlbWF0aWMsIGFuZCB0aGUgb3V0Y250IGlzIG5vdCBzYXZlZCBsb2NhbGx5Lg0KDQpN
+YWtlcyBzZW5zZS4NCkJlZm9yZSAyMDc1ZTUwY2FmNWUgKCJzY3RwOiBjb252ZXJ0IHRvIGdlbnJh
+ZGl4IikgaXQgd2FzIHVwZGF0aW5nDQpzdHJlYW0tPm91dGNudCB3aXRoIHNtYWxsZXIgdmFsdWVz
+IHdoZW4gYXBwbGljYWJsZToNCg0KLSAgICAgICBpZiAob3V0Y250ID4gc3RyZWFtLT5vdXRjbnQp
+DQotICAgICAgICAgICAgICAgZmFfemVybyhvdXQsIHN0cmVhbS0+b3V0Y250LCAob3V0Y250IC0g
+c3RyZWFtLT5vdXRjbnQpKTsNCisgICAgICAgaWYgKG91dGNudCA8PSBzdHJlYW0tPm91dGNudCkN
+CisgICAgICAgICAgICAgICByZXR1cm4gMDsNCg0KLSAgICAgICBzdHJlYW0tPm91dCA9IG91dDsN
+Cg0KSXQgYWxzbyBhZmZlY3RzIHRoZSBpbnB1dCBzdHJlYW0gQUZBSUNULg0KQ2FuIHlvdSBwbGVh
+c2UgdHJ5IHRoZSBmb2xsb3dpbmcgcGF0Y2g/DQoNClRoYW5rcywNCk1hcmNlbG8NCg0KLS0tODwt
+LS0NCg0KZGlmZiAtLWdpdCBhL25ldC9zY3RwL3N0cmVhbS5jIGIvbmV0L3NjdHAvc3RyZWFtLmMg
+aW5kZXggNjdmN2U3MWY5MTI5Li4zNGYwYjczMTJmZTggMTAwNjQ0DQotLS0gYS9uZXQvc2N0cC9z
+dHJlYW0uYw0KKysrIGIvbmV0L3NjdHAvc3RyZWFtLmMNCkBAIC04MSwxMiArODEsMTMgQEAgc3Rh
+dGljIGludCBzY3RwX3N0cmVhbV9hbGxvY19vdXQoc3RydWN0IHNjdHBfc3RyZWFtICpzdHJlYW0s
+IF9fdTE2IG91dGNudCwNCiAJaW50IHJldDsNCiANCiAJaWYgKG91dGNudCA8PSBzdHJlYW0tPm91
+dGNudCkNCi0JCXJldHVybiAwOw0KKwkJZ290byBvdXQ7DQogDQogCXJldCA9IGdlbnJhZGl4X3By
+ZWFsbG9jKCZzdHJlYW0tPm91dCwgb3V0Y250LCBnZnApOw0KIAlpZiAocmV0KQ0KIAkJcmV0dXJu
+IHJldDsNCiANCitvdXQ6DQogCXN0cmVhbS0+b3V0Y250ID0gb3V0Y250Ow0KIAlyZXR1cm4gMDsN
+CiB9DQpAQCAtOTYsMTMgKzk3LDE0IEBAIHN0YXRpYyBpbnQgc2N0cF9zdHJlYW1fYWxsb2NfaW4o
+c3RydWN0IHNjdHBfc3RyZWFtICpzdHJlYW0sIF9fdTE2IGluY250LCAgew0KIAlpbnQgcmV0Ow0K
+IA0KLQlpZiAoaW5jbnQgPD0gc3RyZWFtLT5pbmNudCkNCi0JCXJldHVybiAwOw0KKwlpZiAoaW5j
+bnQgPiBzdHJlYW0tPmluY250KQ0KKwkJZ290byBvdXQ7DQogDQogCXJldCA9IGdlbnJhZGl4X3By
+ZWFsbG9jKCZzdHJlYW0tPmluLCBpbmNudCwgZ2ZwKTsNCiAJaWYgKHJldCkNCiAJCXJldHVybiBy
+ZXQ7DQogDQorb3V0Og0KIAlzdHJlYW0tPmluY250ID0gaW5jbnQ7DQogCXJldHVybiAwOw0KIH0N
+Cg==
