@@ -2,152 +2,105 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C61161806
-	for <lists+linux-sctp@lfdr.de>; Mon, 17 Feb 2020 17:35:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 389CF161E36
+	for <lists+linux-sctp@lfdr.de>; Tue, 18 Feb 2020 01:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729301AbgBQQfE (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 17 Feb 2020 11:35:04 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:44753 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728952AbgBQQfD (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 17 Feb 2020 11:35:03 -0500
-Received: by mail-pg1-f196.google.com with SMTP id g3so9329356pgs.11;
-        Mon, 17 Feb 2020 08:35:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=YrIogMAzNjDoho/ZMU6x1lezaGjyCZgCFRA4k/XFA2Q=;
-        b=aXgx9FuIkeYKessQtQzklWhRed4jxOnavjhebJk8qxFqotlinaiVCYCk9oJYu7YW58
-         gE55ReQ6tAr5DE6hchYO+4+STqMfXLl700fgujDLdPKXRYMhUFHY/WFDFxmf9wuYPaK/
-         XrQgQaGivi9aO3xhZ4tC2oWJbDEWMDQF0Jvp4RIc8kD0ri6Tq3e8bnXsK2mOjGpZo9QH
-         O0vJozOBSNIOg7dsM86py2lI0LJieWnmw7A7EpM2+Qwqjn6lmuo1aBqwCRckWbSfpLn0
-         hHFihs3ga6m4FjlXEmLo65qmWVypS1yq7RbE79ska5OatKQK8LZ1YhMPelfMNYQQg0Z1
-         uBag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=YrIogMAzNjDoho/ZMU6x1lezaGjyCZgCFRA4k/XFA2Q=;
-        b=dlVhztOs8sw3mztTOxVqP0gpco8E3nAt/KiC8TZZwUgLv9F+T2SUYvIWCXBSOk7d2N
-         Kb1E8r4NpMZXbUV6Q86aMbgvPk3Yytz/oYJa0dVRBpShaih/XCaJG0nBHDI/b+X9ALGO
-         rhsmgkxml0bPxDXj5RlMrodztx46fFylwFzlm0ZcByhNDaMsrGzicwnTrXAtD2cegHUX
-         9xIgCIDbXrTtsT6dWZoGNV9HvUaduzS8nLvkU2++yYPen2DGbEP1PdIPO/rVTQQ8b8nU
-         c4YyuqaqglghpQQQjta+7tTI5pUZOzCK6YV2jzLCKgbv5pf/QynpAzSKWr5sZcKqDw1Q
-         fKPw==
-X-Gm-Message-State: APjAAAXSXrgbVeFnnYrIEkAnkxqvVX1U77pLTjBXqrfhXhb7WrIuR/qO
-        ZzYsVdxIbrivddBOpZNLgkxRu7fQ
-X-Google-Smtp-Source: APXvYqydvjkI9S+SrpEeWISB9MlWmSQ3HxruBrrg/IpEMPCedHSOfzWlJhjNx2aOmtrEeyu91UG0LQ==
-X-Received: by 2002:a63:5c0e:: with SMTP id q14mr18826292pgb.313.1581957301149;
-        Mon, 17 Feb 2020 08:35:01 -0800 (PST)
-Received: from localhost ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id w26sm952373pfj.119.2020.02.17.08.34.59
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 17 Feb 2020 08:35:00 -0800 (PST)
-From:   Xin Long <lucien.xin@gmail.com>
-To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
-Cc:     davem@davemloft.net,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH net] sctp: move the format error check out of __sctp_sf_do_9_1_abort
-Date:   Tue, 18 Feb 2020 00:34:52 +0800
-Message-Id: <1833bf6abc2610393666b930fe629534cd21e0fa.1581957292.git.lucien.xin@gmail.com>
-X-Mailer: git-send-email 2.1.0
+        id S1726002AbgBRAhZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Mon, 17 Feb 2020 19:37:25 -0500
+Received: from cnshjsmin05.app.nokia-sbell.com ([116.246.26.45]:19832 "EHLO
+        cnshjsmin05.nokia-sbell.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725997AbgBRAhZ (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Mon, 17 Feb 2020 19:37:25 -0500
+X-AuditID: ac18929d-8e32c9c000001441-42-5e4b31c09099
+Received: from CNSHPPEXCH1605.nsn-intra.net (Unknown_Domain [135.251.51.105])
+        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by cnshjsmin05.nokia-sbell.com (Symantec Messaging Gateway) with SMTP id F5.37.05185.0C13B4E5; Tue, 18 Feb 2020 08:37:20 +0800 (HKT)
+Received: from CNSHPPEXCH1608.nsn-intra.net (135.251.51.108) by
+ CNSHPPEXCH1605.nsn-intra.net (135.251.51.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 18 Feb 2020 08:37:17 +0800
+Received: from CNSHPPEXCH1608.nsn-intra.net ([135.251.51.108]) by
+ CNSHPPEXCH1608.nsn-intra.net ([135.251.51.108]) with mapi id 15.01.1713.007;
+ Tue, 18 Feb 2020 08:37:17 +0800
+From:   "Fan, Jessie (NSB - CN/Qingdao)" <jessie.fan@nokia-sbell.com>
+To:     "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>
+CC:     "dajiang.zhang@nokia.com" <dajiang.zhang@nokia.com>,
+        "piggy@acm.org" <piggy@acm.org>,
+        "karl@athena.chicago.il.us" <karl@athena.chicago.il.us>,
+        "chris@hundredacre.ac.uk" <chris@hundredacre.ac.uk>,
+        "jgrimm@us.ibm.com" <jgrimm@us.ibm.com>,
+        "xingang.guo@intel.com" <xingang.guo@intel.com>,
+        "sri@us.ibm.com" <sri@us.ibm.com>,
+        "daisyc@us.ibm.com" <daisyc@us.ibm.com>,
+        "ardelle.fan@intel.com" <ardelle.fan@intel.com>,
+        "kevin.gao@intel.com" <kevin.gao@intel.com>,
+        "Chen, Chris A. (NSB - CN/Qingdao)" <chris.a.chen@nokia-sbell.com>
+Subject: RE: v5.3.12 SCTP Stream Negotiation Problem
+Thread-Topic: v5.3.12 SCTP Stream Negotiation Problem
+Thread-Index: AdXlrLY4UK7/UQp9T1OKdInYOGTdVQARfdhA
+Date:   Tue, 18 Feb 2020 00:37:17 +0000
+Message-ID: <29c18e4a424343bab0fea1904cfae492@nokia-sbell.com>
+References: <9c353cef257847c7b64793d3839abc33@nokia-sbell.com>
+In-Reply-To: <9c353cef257847c7b64793d3839abc33@nokia-sbell.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [135.251.51.115]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrOIsWRmVeSWpSXmKPExsXS/ts4U/eAoXecwa0OaYu2pjtsFgv3djNa
+        zDuxn8VixuWjTBbdE2YzW+yZuI7F4umC16wW3xrOslssP/mO2eJcWy+TA5fH5SveHjvXvmDy
+        uLv4EIvH4j0vmTzOXetj9vi8SS6ALYrLJiU1J7MstUjfLoEr41HvL9aCx7wVx3d/Zm9g3MTV
+        xcjJISFgIrFq4nX2LkYuDiGBQ0wSr2+3sYAkhAT+Mkoc3KcCkdjEKNH65wozSIJNwFli/uQ3
+        YLaIgK3Ey67pbF2MHBzMAnNYJNpLQMLCQENX/3vOAlFiKrFk3R9WCNtI4su6M2A2i4CqxN3j
+        XUwgNq+AnUTf5Y/MEHvtJF7MPAhWwylgL/F6+wGwOYwCshLTHt0Hq2cWEJe49WQ+E8QDAhJL
+        9pxnhrBFJV4+/scKco6EgJJE3waoch2JBbs/sUHY2hLLFr5mhlgrKHFy5hOWCYxis5BMnYWk
+        ZRaSlllIWhYwsqxilE7OK87IKs7NzDMw1cvLz85M1C1OSs3J0UvOz93ECIzeNRKT5u5g7OyM
+        P8QowMGoxMO7YoJXnBBrYllxZe4hRgkOZiURXm9xoBBvSmJlVWpRfnxRaU5q8SFGaQ4WJXHe
+        lskLY4UE0hNLUrNTUwtSi2CyTBycUg2MJffONirMvJK+7cmplfeuNZRbBj+4/HD+btX709+W
+        /90w67wyv1ZIwoTlXPzsl1dbrF/57dPn/Nb+KNXoKZteZQVEifAvjIpNDm+Wu8ifVeKhPfdM
+        w/neD4KGj0RkI9eyhf/f4PF5auv77XdLpW78F/nTbRK5e80mdeWEeyyLvTknlJufKn/bqMRS
+        nJFoqMVcVJwIAC7QFWnaAgAA
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-When T2 timer is to be stopped, the asoc should also be deleted,
-otherwise, there will be no chance to call sctp_association_free
-and the asoc could last in memory forever.
+Hi, 
 
-However, in sctp_sf_shutdown_sent_abort(), after adding the cmd
-SCTP_CMD_TIMER_STOP for T2 timer, it may return error due to the
-format error from __sctp_sf_do_9_1_abort() and miss adding
-SCTP_CMD_ASSOC_FAILED where the asoc will be deleted.
+I found the SCTP Stream negotiation doesn't work as expected, that is, the local outbound stream and the remote inbound stream comparison seems missing.
+For example, when the local outstream(16) is greater than the remote inbound stream(2), 16 is saved and used as the "OUTS", which is shown from /proc/pid/net/sctp/assocs below.
+Can anyone help comment?
 
-This patch is to fix it by moving the format error check out of
-__sctp_sf_do_9_1_abort(), and do it before adding the cmd
-SCTP_CMD_TIMER_STOP for T2 timer.
+From local end point, 16 is set as both the outbound and inbound stream.
+From the remote end point, 2 is set for both the outbound and inbound stream
 
-Thanks Hangbin for reporting this issue by the fuzz testing.
+However, after the association is up, the inbound and outbound stream is set as (2,16), which I think is unexpected.
+sh-4.2# cat 1/net/sctp/assocs
+ASSOC SOCK STY SST ST HBKT ASSOC-ID TX_QUEUE RX_QUEUE UID INODE LPORT RPORT LADDRS <-> RADDRS HBINT INS OUTS MAXRT T1X T2X RTXC wmema wmemq sndbuf rcvbuf
+55dae5bb bb3dec72 0 7 3 0 2415 0 0 504 1223451 2905 3904 xx.xx.xx.xx yy.yy.yy.yy <-> *zz.zz.zz.zz ww.ww.ww.ww 30000 2 16 10 0 0 0 1 0 262144 262144
 
-Fixes: 96ca468b86b0 ("sctp: check invalid value of length parameter in error cause")
-Reported-by: Hangbin Liu <liuhangbin@gmail.com>
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
----
- net/sctp/sm_statefuns.c | 29 ++++++++++++++++++++---------
- 1 file changed, 20 insertions(+), 9 deletions(-)
+I further checked the kernel code and found in v5.0, there is still comparison logic: min(outcnt, stream->outcnt) and save the smaller one in the function sctp_stream_alloc_out().
+But the logic disappeared in v5.1, and if the "outcnt" is smaller, it's not saved locally.
+static int sctp_stream_alloc_out(struct sctp_stream *stream, __u16 outcnt,
+                                gfp_t gfp)
+{
+        int ret;
 
-diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
-index 748e3b1..e2b2b41 100644
---- a/net/sctp/sm_statefuns.c
-+++ b/net/sctp/sm_statefuns.c
-@@ -170,6 +170,16 @@ static inline bool sctp_chunk_length_valid(struct sctp_chunk *chunk,
- 	return true;
- }
- 
-+/* Check for the format error in an ABORT chunk */
-+static inline bool sctp_err_chunk_valid(struct sctp_chunk *chunk)
-+{
-+	struct sctp_errhdr *err;
-+
-+	sctp_walk_errors(err, chunk->chunk_hdr);
-+
-+	return (void *)err == (void *)chunk->chunk_end;
-+}
-+
- /**********************************************************
-  * These are the state functions for handling chunk events.
-  **********************************************************/
-@@ -2255,6 +2265,9 @@ enum sctp_disposition sctp_sf_shutdown_pending_abort(
- 		    sctp_bind_addr_state(&asoc->base.bind_addr, &chunk->dest))
- 		return sctp_sf_discard_chunk(net, ep, asoc, type, arg, commands);
- 
-+	if (!sctp_err_chunk_valid(chunk))
-+		return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
-+
- 	return __sctp_sf_do_9_1_abort(net, ep, asoc, type, arg, commands);
- }
- 
-@@ -2298,6 +2311,9 @@ enum sctp_disposition sctp_sf_shutdown_sent_abort(
- 		    sctp_bind_addr_state(&asoc->base.bind_addr, &chunk->dest))
- 		return sctp_sf_discard_chunk(net, ep, asoc, type, arg, commands);
- 
-+	if (!sctp_err_chunk_valid(chunk))
-+		return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
-+
- 	/* Stop the T2-shutdown timer. */
- 	sctp_add_cmd_sf(commands, SCTP_CMD_TIMER_STOP,
- 			SCTP_TO(SCTP_EVENT_TIMEOUT_T2_SHUTDOWN));
-@@ -2565,6 +2581,9 @@ enum sctp_disposition sctp_sf_do_9_1_abort(
- 		    sctp_bind_addr_state(&asoc->base.bind_addr, &chunk->dest))
- 		return sctp_sf_discard_chunk(net, ep, asoc, type, arg, commands);
- 
-+	if (!sctp_err_chunk_valid(chunk))
-+		return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
-+
- 	return __sctp_sf_do_9_1_abort(net, ep, asoc, type, arg, commands);
- }
- 
-@@ -2582,16 +2601,8 @@ static enum sctp_disposition __sctp_sf_do_9_1_abort(
- 
- 	/* See if we have an error cause code in the chunk.  */
- 	len = ntohs(chunk->chunk_hdr->length);
--	if (len >= sizeof(struct sctp_chunkhdr) + sizeof(struct sctp_errhdr)) {
--		struct sctp_errhdr *err;
--
--		sctp_walk_errors(err, chunk->chunk_hdr);
--		if ((void *)err != (void *)chunk->chunk_end)
--			return sctp_sf_pdiscard(net, ep, asoc, type, arg,
--						commands);
--
-+	if (len >= sizeof(struct sctp_chunkhdr) + sizeof(struct sctp_errhdr))
- 		error = ((struct sctp_errhdr *)chunk->skb->data)->cause;
--	}
- 
- 	sctp_add_cmd_sf(commands, SCTP_CMD_SET_SK_ERR, SCTP_ERROR(ECONNRESET));
- 	/* ASSOC_FAILED will DELETE_TCB. */
--- 
-2.1.0
+        if (outcnt <= stream->outcnt) //Here is problematic, and the outcnt is not saved locally.
+                return 0;
 
+        ret = genradix_prealloc(&stream->out, outcnt, gfp);
+        if (ret)
+                return ret;
+
+        stream->outcnt = outcnt;
+        return 0;
+}
+
+Thanks,
+Jessie and Chris
