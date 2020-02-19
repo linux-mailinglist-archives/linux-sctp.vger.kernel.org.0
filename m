@@ -2,66 +2,62 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AB0E162095
-	for <lists+linux-sctp@lfdr.de>; Tue, 18 Feb 2020 06:57:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 971DC164569
+	for <lists+linux-sctp@lfdr.de>; Wed, 19 Feb 2020 14:25:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726074AbgBRF5R (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 18 Feb 2020 00:57:17 -0500
-Received: from shards.monkeyblade.net ([23.128.96.9]:58538 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726023AbgBRF5R (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 18 Feb 2020 00:57:17 -0500
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::f0c])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 6465515B4789B;
-        Mon, 17 Feb 2020 21:57:16 -0800 (PST)
-Date:   Mon, 17 Feb 2020 21:57:15 -0800 (PST)
-Message-Id: <20200217.215715.632639629013006126.davem@davemloft.net>
-To:     lucien.xin@gmail.com
-Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
-        marcelo.leitner@gmail.com, nhorman@tuxdriver.com,
-        liuhangbin@gmail.com
-Subject: Re: [PATCHv2 net] sctp: move the format error check out of
- __sctp_sf_do_9_1_abort
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <7f0002ee4446436104eb72bcfa9a4cf417570f7e.1581998873.git.lucien.xin@gmail.com>
-References: <7f0002ee4446436104eb72bcfa9a4cf417570f7e.1581998873.git.lucien.xin@gmail.com>
-X-Mailer: Mew version 6.8 on Emacs 26.3
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 17 Feb 2020 21:57:16 -0800 (PST)
+        id S1727891AbgBSNZl convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Wed, 19 Feb 2020 08:25:41 -0500
+Received: from scm.imp.edu.mx ([132.247.16.103]:52999 "EHLO scm.imp.edu.mx"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727858AbgBSNZk (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Wed, 19 Feb 2020 08:25:40 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by scm.imp.edu.mx (Postfix) with ESMTP id 0B9D6187EC6;
+        Wed, 19 Feb 2020 06:11:30 -0600 (CST)
+X-Virus-Scanned: by SpamTitan at imp.edu.mx
+Received: from scm.imp.edu.mx (localhost [127.0.0.1])
+        by scm.imp.edu.mx (Postfix) with ESMTP id A5671187EC2;
+        Wed, 19 Feb 2020 04:51:48 -0600 (CST)
+Authentication-Results: scm.imp.edu.mx; none
+Received: from imp.edu.mx (unknown [10.249.93.105])
+        by scm.imp.edu.mx (Postfix) with ESMTP id A57A518DA0C;
+        Wed, 19 Feb 2020 04:51:44 -0600 (CST)
+Received: from localhost (localhost [127.0.0.1])
+        by imp.edu.mx (Postfix) with ESMTP id 42659180635F4D;
+        Wed, 19 Feb 2020 04:51:45 -0600 (CST)
+Received: from imp.edu.mx ([127.0.0.1])
+        by localhost (imp.edu.mx [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id AEHVIyCtmFWh; Wed, 19 Feb 2020 04:51:45 -0600 (CST)
+Received: from localhost (localhost [127.0.0.1])
+        by imp.edu.mx (Postfix) with ESMTP id 22AF8180635F48;
+        Wed, 19 Feb 2020 04:51:45 -0600 (CST)
+X-Virus-Scanned: amavisd-new at imp.edu.mx
+Received: from imp.edu.mx ([127.0.0.1])
+        by localhost (imp.edu.mx [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id v4mRbSAMbTIG; Wed, 19 Feb 2020 04:51:45 -0600 (CST)
+Received: from [45.147.4.119] (unknown [45.147.4.119])
+        by imp.edu.mx (Postfix) with ESMTPSA id F32BF180635F43;
+        Wed, 19 Feb 2020 04:51:43 -0600 (CST)
+Content-Type: text/plain; charset="iso-8859-1"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: 19-02-2020
+To:     Recipients <mucios@imp.edu.mx>
+From:   "urs portmann" <mucios@imp.edu.mx>
+Date:   Wed, 19 Feb 2020 21:51:42 +1100
+Reply-To: onube@qq.com
+Message-Id: <20200219105143.F32BF180635F43@imp.edu.mx>
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Xin Long <lucien.xin@gmail.com>
-Date: Tue, 18 Feb 2020 12:07:53 +0800
+Guten Morgen,
+                                          19-02-2020
+Wir haben versucht, Sie zu erreichen und haben noch nichts von Ihnen gehört. Haben Sie unsere letzte E-Mail über Ihre S.p.e.n.d.e erhalten? Wenn nicht, melden Sie sich bitte bei uns, um weitere Informationen zu erhalten.
 
-> When T2 timer is to be stopped, the asoc should also be deleted,
-> otherwise, there will be no chance to call sctp_association_free
-> and the asoc could last in memory forever.
-> 
-> However, in sctp_sf_shutdown_sent_abort(), after adding the cmd
-> SCTP_CMD_TIMER_STOP for T2 timer, it may return error due to the
-> format error from __sctp_sf_do_9_1_abort() and miss adding
-> SCTP_CMD_ASSOC_FAILED where the asoc will be deleted.
-> 
-> This patch is to fix it by moving the format error check out of
-> __sctp_sf_do_9_1_abort(), and do it before adding the cmd
-> SCTP_CMD_TIMER_STOP for T2 timer.
-> 
-> Thanks Hangbin for reporting this issue by the fuzz testing.
-> 
-> v1->v2:
->   - improve the comment in the code as Marcelo's suggestion.
-> 
-> Fixes: 96ca468b86b0 ("sctp: check invalid value of length parameter in error cause")
-> Reported-by: Hangbin Liu <liuhangbin@gmail.com>
-> Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-> Signed-off-by: Xin Long <lucien.xin@gmail.com>
+Wir warten darauf, von Ihnen zu hören, sobald Sie diese Nachricht erhalten, die Sie bei der weiteren Vorgehensweise unterstützt.
 
-Applied and queued up for -stable.
+Mfg
+urs portmann
