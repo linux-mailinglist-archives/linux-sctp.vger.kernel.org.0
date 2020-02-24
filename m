@@ -2,140 +2,139 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57833169BB3
-	for <lists+linux-sctp@lfdr.de>; Mon, 24 Feb 2020 02:17:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D96E016B042
+	for <lists+linux-sctp@lfdr.de>; Mon, 24 Feb 2020 20:29:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727158AbgBXBRA (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 23 Feb 2020 20:17:00 -0500
-Received: from act-mtaout3.csiro.au ([150.229.7.39]:46124 "EHLO
-        act-MTAout3.csiro.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727151AbgBXBRA (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sun, 23 Feb 2020 20:17:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=csiro.au; i=@csiro.au; q=dns/txt; s=dkim;
-  t=1582507018; x=1614043018;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=8ozODLngOOXUI2XYS6Jn873Uvxyk6Ns76+dOQRBeiH0=;
-  b=o+2AUoLOofRsNCFHJVgFloGdn5eavsYHNVlh4gIwxBfsgtUmqsQ8o3LS
-   AHGEQPPctR0yC70UBlXBvN4vMF5gp1zrB9+NV0AJOz0nNiKm7HuCQ7LNK
-   XHcJoLh/yhXxjJyNbGE+OZ5Ljjd+o9Gh7zXj5IYPowrKX78M2Pg6hIQ1W
-   E=;
-IronPort-SDR: OYkSjjZ7LKHaIXG3QAx7NrF7JWxnOYTziAsBBDppnFHeYAZLvYS+pPG5KLju3RkrD2IQ3qeL2O
- UBG0fsf3d/UQ==
-X-SBRS: 4.0
-IronPort-PHdr: =?us-ascii?q?9a23=3Ai91Vix1p6r0lv6FWsmDT+zVfbzU7u7jyIg8e44?=
- =?us-ascii?q?YmjLQLaKm44pD+JxKDt+51ggrPWoPWo7JfhuzavrqoeFRI4I3J8RVgOIdJSw?=
- =?us-ascii?q?dDjMwXmwI6B8vQJUT9LfPuKQcgFcVNfFR+/mu8d0FIS47z?=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A+EaAAAYI1NejACwBSSwhIATAJKcgDJ?=
- =?us-ascii?q?lHAEBAQEBBwEBEQEEBAEBgWcHAQELAYFTUF6BCwQ1hBSDRgOEWoYVgl+Pbol?=
- =?us-ascii?q?UgSQDVAkBAQENAS0CBAEBAoQ+AheBdiQ0CQ4CAwEBCwEBBgEBAQEBBQQCAhA?=
- =?us-ascii?q?BAQEmhWcMg1NxAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE?=
- =?us-ascii?q?BBQKBDD4BAQECARIREQwBATcBBAsCAQgOBgYCJgICAjAVEAIEDieDBIJLAw4?=
- =?us-ascii?q?fAQECAqEwAoE5iGEBAXSBMoJ/AQEFhHsYggwJCQGBBCoBjCOCGoERgmUuPoQ?=
- =?us-ascii?q?pAQEgF4J6LoIwkGWfNQcDHoIelmUcgjkBD4gbkEqqNwIEAgQFAg4BAQWBUji?=
- =?us-ascii?q?BWmyDQFAYDY4dBxODWYpVdIEpjVUBAQ?=
-X-IPAS-Result: =?us-ascii?q?A+EaAAAYI1NejACwBSSwhIATAJKcgDJlHAEBAQEBBwEBE?=
- =?us-ascii?q?QEEBAEBgWcHAQELAYFTUF6BCwQ1hBSDRgOEWoYVgl+PbolUgSQDVAkBAQENA?=
- =?us-ascii?q?S0CBAEBAoQ+AheBdiQ0CQ4CAwEBCwEBBgEBAQEBBQQCAhABAQEmhWcMg1NxA?=
- =?us-ascii?q?QEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBBQKBDD4BAQECA?=
- =?us-ascii?q?RIREQwBATcBBAsCAQgOBgYCJgICAjAVEAIEDieDBIJLAw4fAQECAqEwAoE5i?=
- =?us-ascii?q?GEBAXSBMoJ/AQEFhHsYggwJCQGBBCoBjCOCGoERgmUuPoQpAQEgF4J6LoIwk?=
- =?us-ascii?q?GWfNQcDHoIelmUcgjkBD4gbkEqqNwIEAgQFAg4BAQWBUjiBWmyDQFAYDY4dB?=
- =?us-ascii?q?xODWYpVdIEpjVUBAQ?=
-Received: from exch2-cdc.nexus.csiro.au ([IPv6:2405:b000:601:13::247:32])
-  by act-ironport-int.csiro.au with ESMTP/TLS/ECDHE-RSA-AES256-SHA384; 24 Feb 2020 12:16:56 +1100
-Received: from exch4-cdc.nexus.csiro.au (2405:b000:601:13::247:34) by
- exch2-cdc.nexus.csiro.au (2405:b000:601:13::247:32) with Microsoft SMTP
- Server (TLS) id 15.0.1497.2; Mon, 24 Feb 2020 12:16:56 +1100
-Received: from ExEdge1.csiro.au (150.229.7.34) by exch4-cdc.nexus.csiro.au
- (152.83.247.34) with Microsoft SMTP Server (TLS) id 15.0.1497.2 via Frontend
- Transport; Mon, 24 Feb 2020 12:16:56 +1100
-Received: from AUS01-ME1-obe.outbound.protection.outlook.com (104.47.116.58)
- by ExEdge1.csiro.au (150.229.7.34) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 24 Feb 2020 12:16:42 +1100
+        id S1726687AbgBXT3C (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 24 Feb 2020 14:29:02 -0500
+Received: from mail-vi1eur05on2122.outbound.protection.outlook.com ([40.107.21.122]:11802
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725860AbgBXT3B (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Mon, 24 Feb 2020 14:29:01 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bHJRjLy2SFh81u4WmU8G5Yll8ciqNyh9RNtP1iSkHz+/ZKYhdc5SD3Yomo5Zlot+FZkCs9oVtP4ETCSCMp0sHYik6VDipm28FH5bScXBpvAGozT9oIEGaVDx87y3PtTC/XQKipyj1/zCD+EdxdyxMlatRIvZnCdAJtmagzWEwRDEitbDTmA+t94fN/Ktu4N+Yk35LRMl1NZ0emIdIRdLqz5/D2nOPRAF6LB1lOxXGdAwljoWyqQcSx5/WZGi1fx987c9zF85hOzT7qy2tiohBGkV8LUhI/A8jFGdv9r3DzVmzvKoB8tPpIiGGyet7/4Bd8I7w+kdu6pDdSdpDJFnVA==
+ b=W0oXTh5zAt6PBKjHL1pyNydndU1CanOkzTp+LPZ2rXb3m1ezMlnLuhgjbkeBFcEWB9SyGNMJEJkLQ0TzGdOuYAZLPH6D+whEUiwYWvNZv/DuHiT2ioWJViVnUUVDSn1TSNEABxwPweyK4+zcKrr0G9pUPUAPlubS9sKtiLTt/Hji8716iOd6KNnq4Mi4Pl5N08SDBo1kDbTu0RlUH1m3m0QkawPkVSprxLaQNHtJE+JISxeVfOQWVeVFP5Eq2AfoC+lFF+810MSZSG13PJzM0sdPSs57eHeQAEIf/yl8P45SbkZBRf1ZMrXYmsHGWKnspq+Z26puMksFTw2oMDXI4g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8ozODLngOOXUI2XYS6Jn873Uvxyk6Ns76+dOQRBeiH0=;
- b=aZus/VtZuN38MC+Xx+pbYaOSB9SoLcovRz7osB4iyuQ+9KwF8aF8ELa7x8ph9Qbw30a5+cIiNhscfYsYSTTG9sGXSth606sshxE7+cP+wnccOJlbz7XfRfgQfVm/oga47RPvxSv6Ap2QdLbFjQbYusu5OfR7HQKpah/2RaaeSv12rF98tU/BkxDf7Z60gkyxi34MnoCGzcgj0kbuPxj2k15vAdSj4AJAQtPl4FeJ7MS8YlwZZYBDqqNtyE5/1a9lUe8LmCPme62JsvVTYLhD+wd1AfUp1oo4ysDhqK8DdjJcg61IBFYOmD7PB1j2RZyC8vnw/76YUtwe46f490aaug==
+ bh=GiW376Wul9kkQMr2tqnjPOLfbPL+0IrlvCJNXM5USyg=;
+ b=SnmJMN6NU0RAgqIIGa6EqZYoKJtpWGJuH/EMrRpwQet8ux9lxxVh8padCsJiqSooBBLQilPSJoMNSeqZfuYsY0QLE+DQMoRgBdvcEOoM7PfYSqWShSVf6SU5M4+6zyayn5EaC9ShMxeKJ2xcTl5+H0JGKSYwwEhNsUdSTkw2rgC1emV+L0yBL9mblqNUW6Ss8HcKFUXuJ2yHFfI8s7x1DfpT1+rB6mWdkxcUkpW/gWAiKgtHsnPww+CjQ5P+ZAVU2Vl/qlZsl63qlRmzgQEchsUyDQ+t2i/8rX2nqjYcHb0WTeGLpepqMP33sifYCq1UnDVC2f61y/8JGP59hks5nA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csiro.au; dmarc=pass action=none header.from=csiro.au;
- dkim=pass header.d=csiro.au; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=CSIROAU.onmicrosoft.com; s=selector1-CSIROAU-onmicrosoft-com;
+ smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
+ dkim=pass header.d=nokia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8ozODLngOOXUI2XYS6Jn873Uvxyk6Ns76+dOQRBeiH0=;
- b=D8O1pQ9/e/v2ls8/BRbaQ1em1sUQU5K4Grt4Qt5GU7QLtShcjAhFKra5DljSFHuSC9gQr6r1r6/8rLtiDUQ5G4wI3EpSxPjZZuI+Yb1cc2OI9Pi4cXbClY6p/JhxauLfOX5URxnGT+ikiuAu4wKasEFFpYYlXscBZnSOEmCxabk=
-Received: from SYAPR01MB2623.ausprd01.prod.outlook.com (52.134.184.142) by
- SYAPR01MB2560.ausprd01.prod.outlook.com (52.134.177.12) with Microsoft SMTP
+ bh=GiW376Wul9kkQMr2tqnjPOLfbPL+0IrlvCJNXM5USyg=;
+ b=m9meu+1eXRmz/Om/EzQcuEyBvPw4ppbhNsJXeFsWzh0PxhJ74fkBEcg8m6es043Zvi+8lyfIFawovuM07ExqYGLMuKlDhW4bxfjexcThBqsbFj8qSz/S06bVp7Sf6CgppFqkk5jvV67lajTgCMbgPBiQVyzPf6Nd8l5geHfzTHc=
+Received: from HE1PR0702MB3610.eurprd07.prod.outlook.com (10.167.124.27) by
+ HE1PR0702MB3580.eurprd07.prod.outlook.com (52.133.6.15) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2750.21; Mon, 24 Feb 2020 01:16:55 +0000
-Received: from SYAPR01MB2623.ausprd01.prod.outlook.com
- ([fe80::8cd0:f034:e817:ff08]) by SYAPR01MB2623.ausprd01.prod.outlook.com
- ([fe80::8cd0:f034:e817:ff08%4]) with mapi id 15.20.2750.021; Mon, 24 Feb 2020
- 01:16:55 +0000
-From:   "Craig, Daniel (CASS, Marsfield)" <Daniel.Craig@csiro.au>
+ 15.20.2772.11; Mon, 24 Feb 2020 19:28:55 +0000
+Received: from HE1PR0702MB3610.eurprd07.prod.outlook.com
+ ([fe80::fd31:53d3:1e20:be4a]) by HE1PR0702MB3610.eurprd07.prod.outlook.com
+ ([fe80::fd31:53d3:1e20:be4a%7]) with mapi id 15.20.2772.010; Mon, 24 Feb 2020
+ 19:28:55 +0000
+From:   "Leppanen, Jere (Nokia - FI/Espoo)" <jere.leppanen@nokia.com>
 To:     Xin Long <lucien.xin@gmail.com>
-CC:     "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>
-Subject: Re: Possible SCTP bug in kernel 4.9.199 and later
-Thread-Topic: Possible SCTP bug in kernel 4.9.199 and later
-Thread-Index: AQHV6Ds9a4sSF2yyFEaGxsYrR0uOhqgkqK6AgAJkDwCAAoL/AA==
-Date:   Mon, 24 Feb 2020 01:16:55 +0000
-Message-ID: <etPan.5e532406.7f9fee55.4a7f@csiro.au>
-References: <etPan.5e4f04f9.7f1d9184.6626@csiro.au>
- <etPan.5e4f0735.2451de02.6626@csiro.au>
- <CADvbK_c85MCYmT08MxjszFHA-jxqKsFGsWjDdMkGFH9zDr+8bA@mail.gmail.com>
- <CADvbK_c85MCYmT08MxjszFHA-jxqKsFGsWjDdMkGFH9zDr+8bA@mail.gmail.com>
-In-Reply-To: <CADvbK_c85MCYmT08MxjszFHA-jxqKsFGsWjDdMkGFH9zDr+8bA@mail.gmail.com>
-Accept-Language: en-AU, en-US
+CC:     "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>
+Subject: Re: Problems with peeled-off sockets
+Thread-Topic: Problems with peeled-off sockets
+Thread-Index: AQHV5zmMyVOer6MEVEe650Mbn6KYd6gmy8gAgAO3SQw=
+Date:   Mon, 24 Feb 2020 19:28:55 +0000
+Message-ID: <HE1PR0702MB361028B4B8C2E4D03AA23B4EECEC0@HE1PR0702MB3610.eurprd07.prod.outlook.com>
+References: <HE1PR0702MB36104FDAA4369769A3A69704EC100@HE1PR0702MB3610.eurprd07.prod.outlook.com>,<CADvbK_cmZdbVxpjxuXKaqyjTBSXsRUovxAAxC4syWnmu6Y+9yA@mail.gmail.com>
+In-Reply-To: <CADvbK_cmZdbVxpjxuXKaqyjTBSXsRUovxAAxC4syWnmu6Y+9yA@mail.gmail.com>
+Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Daniel.Craig@csiro.au; 
-x-originating-ip: [2405:b000:205:3::199:238]
+ smtp.mailfrom=jere.leppanen@nokia.com; 
+x-originating-ip: [91.153.156.237]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c790341c-6b19-4e2c-0d6e-08d7b8c73cd6
-x-ms-traffictypediagnostic: SYAPR01MB2560:
-x-microsoft-antispam-prvs: <SYAPR01MB2560B04C2C41591B9DF59253FFEC0@SYAPR01MB2560.ausprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:595;
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: fb1fb073-7c39-41f1-d3f7-08d7b95fc9a8
+x-ms-traffictypediagnostic: HE1PR0702MB3580:
+x-microsoft-antispam-prvs: <HE1PR0702MB3580186714012C313B49142FECEC0@HE1PR0702MB3580.eurprd07.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
 x-forefront-prvs: 032334F434
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(396003)(346002)(376002)(366004)(136003)(199004)(189003)(5660300002)(86362001)(54906003)(2906002)(36756003)(6916009)(4326008)(8676002)(8936002)(81166006)(478600001)(81156014)(71200400001)(4744005)(66556008)(66476007)(6486002)(76116006)(2616005)(6506007)(186003)(316002)(66946007)(66446008)(64756008)(6512007);DIR:OUT;SFP:1101;SCL:1;SRVR:SYAPR01MB2560;H:SYAPR01MB2623.ausprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(366004)(346002)(376002)(39860400002)(136003)(396003)(189003)(199004)(66556008)(4326008)(478600001)(6506007)(71200400001)(6916009)(9686003)(26005)(66446008)(316002)(66476007)(53546011)(8936002)(55016002)(64756008)(2906002)(3480700007)(186003)(81156014)(33656002)(8676002)(5660300002)(7696005)(76116006)(66946007)(52536014)(81166006)(86362001);DIR:OUT;SFP:1102;SCL:1;SRVR:HE1PR0702MB3580;H:HE1PR0702MB3610.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nokia.com does not designate
+ permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +IKUj5npKK2WqGuTJjn2ijOBcyb0lopBNyCDNj08kLlCNs2JayXx0Vw7t5l1ufKF94a2ZEWEa0iKHIgmt8idFLVUKdDY7vrrYT39rQLlitLdjs3H8YktJGPVyc+n3dgsjv5C7A+VrcCD997islqY81jkIzaNGIYS7zOA75l4eJTQd+m4CWXcbv7PF0bjV4Ockhy6xpuKpU9WFhdTUWSND7rFP9wC1Ins3t0KnKuZe/Y9T06aolB+IrzKvEDWNUYvu5zr+I98PFtAS3mwStry8XtWZlJYMpReeHx+YE/WpD7uSpluLvVQTOYUdAGjpg7MjGGeJ8MU+Py9IrpBpKbhZLwMiatWMi+8fi/AwZw3NUoXfBci+86RMGjGcWm1BtVM/xhqGgSkdg/4l0wGocRIK24w9PW4dktaAgm+E8lEri4s5A7U8yvDOJ1KKWgcF3F7
-x-ms-exchange-antispam-messagedata: WIdEOt7SP3icoAgNQsJHU2U4siowFz5V8+HiPtHkdA7+Ys7y1TmCiFnHv1jNbDMLYGTNO7InLXwGmzNsG4xZJen9T+w0ZtR9O3Khb/cFrQgCnkrm6PbpnnFyw/lm4fqUJ3VJhXfzlY+LSIAyIhX1yUllHKicVVvUXhAoPZho+9XBvfUS5x+UZbLnl3S0rLGE
+x-microsoft-antispam-message-info: /3d0siOAwpzwiIqo6nSWX1BydlmKtawJrXDvfsuroum89OSgZs5RHV65GMnpUmnGjrvBQbGmxZ4nfegTI2dQ43Hh4V5K8aCbt+bSuM+BRCR//ZwOs8J0XPdk13hMqdAFavE7dbPE7lH3TFcs3s4Yg6rsSxofpTCXb2UgVg1ptm2QA0wU366aJafdru/4Tdp7iMaNtZy2kA39qRALwvPobY2AjGczVpsOsu3YIYuQp8kPcMf1yHcbh5V8j6UuXDpF8lA1jcP5ZFXmV8EMt8j8aVwdEUvWTDRiNODkiEAmFxup5eWrcFx4e60aE53ZhfgZYTreIp0ze1Drfw8qKvUwS2TJQJzAAzCo85WbPEjZzNc3TCU9jRSb9BDU/gvf3eaBCKyh0RHmm9HuRitRUSN9zGanDJT8mTXmMJPRcGgn3tbULkmEapbNnlGcTcJtijKo
+x-ms-exchange-antispam-messagedata: Wml8J9jE4Z3e8DYnLrJyb15qepWGT7t4SfuIS7iZmStoywI8MrqEmksM2/30Wh2IEXUWXNrl1Y6xr104rUaZc5r6yfWf0VUg1sJqGraw+kJLeP6Sxxkpi4AorQ6f1+u7+wwFVq9J1HMdGhTCt2ezuQ==
 x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <661F685A45254F45B921A5DB1531608F@ausprd01.prod.outlook.com>
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: c790341c-6b19-4e2c-0d6e-08d7b8c73cd6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Feb 2020 01:16:55.3798
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fb1fb073-7c39-41f1-d3f7-08d7b95fc9a8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Feb 2020 19:28:55.0931
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 0fe05593-19ac-4f98-adbf-0375fce7f160
+X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OafU5bQDguR7L0SLMazVlt7ZaTSFdFYHxuZ3SSfOIwdkYGW4wkBmHeiJ5iWQ4d/C
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SYAPR01MB2560
-X-OriginatorOrg: csiro.au
+X-MS-Exchange-CrossTenant-userprincipalname: fpLzAfzwoS23INbnzgCpYFTik8fyHblTqJQ2nQUV+X0UNGGdB9HB6oUae0gaPouFK2ST9lijm3Hng8cbuZ8Tkw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0702MB3580
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-wqANCkhpLA0KDQooQXBvbG9naWVzIGFnYWluIGZvciBIVE1MIG1haWwpDQoNCj4gUGxlYXNlIGJh
-Y2twb3J0IHRoaXMgY29tbWl0OiAgDQo+ICANCj4gY29tbWl0IGRhMzYyN2MzMGQyMjlmZWExZTA3
-MGU5ODQzNjZmODBhMWM0ZDkxNjYgIA0KPiBBdXRob3I6IEdhbmcgSGUgIA0KPiBEYXRlOiBUdWUg
-TWF5IDI5IDExOjA5OjIyIDIwMTggKzA4MDAgIA0KPiAgDQo+IGRsbTogcmVtb3ZlIE9fTk9OQkxP
-Q0sgZmxhZyBpbiBzY3RwX2Nvbm5lY3RfdG9fc29jayAgDQoNCkRMTSBpcyBhYmxlIHRvIGNvbm5l
-Y3QgYWdhaW4gaW4gNC45LjE5OSBhZnRlciBhcHBseWluZyB0aGF0IGNoYW5nZS4NCg0KQ2hlZXJz
-LA0KRGFuDQoNCkRhbmllbCBDcmFpZyAgDQpTeXN0ZW1zIEFkbWluaXN0cmF0b3IgIA0KQXN0cm9u
-b215IGFuZCBTcGFjZSBTY2llbmNlIHwgQ1NJUk8NCg0KDQoNCg==
+On Sat, 22 Feb 2020, Xin Long wrote:=0A=
+=0A=
+> On Thu, Feb 20, 2020 at 5:18 PM Leppanen, Jere (Nokia - FI/Espoo)=0A=
+> <jere.leppanen@nokia.com> wrote:=0A=
+>>=0A=
+>> Hello All,=0A=
+>> =0A=
+>> According to the RFC, a peeled-off socket is a one-to-one socket. But =
+=0A=
+>> in lksctp a peeled-off socket it not TCP style, it's UDP_HIGH_BANDWIDTH=
+=0A=
+>> style. Because of this, shutdown() doesn't work, linger probably=0A=
+>> doesn't work, and so on.=0A=
+>> =0A=
+>> For example, in sctp_shutdown():=0A=
+>>         =0A=
+>> static void sctp_shutdown(struct sock *sk, int how)=0A=
+>> {       =0A=
+>>         struct net *net =3D sock_net(sk);=0A=
+>>         struct sctp_endpoint *ep;=0A=
+>>                 =0A=
+>>         if (!sctp_style(sk, TCP))=0A=
+>>                 return;=0A=
+>> =0A=
+>> Here we just bail out, because a peeled-off socket is not TCP style.=0A=
+>>=0A=
+>> Is this just a bug, or am I missing something? Asking mostly out of =0A=
+>> personal curiosity.=0A=
+> I would say, it's because .shutdown is tcp_prot thing and udp_prot doesn'=
+t=0A=
+> have. sctp doesn't have to implement it for UDP style socket. But for TCP=
+-=0A=
+> style socket, sctp is trying to be compatible with TCP protocol user API.=
+ =0A=
+> But even though,  sctp's .shutdown is still not fully compatible with TCP=
+=0A=
+> protocol due to sctp's 3-way shakehands for finishing a connection.=0A=
+=0A=
+Thanks a bunch for replying, Xin Long. I'm not quite sure what you mean. =
+=0A=
+The actual association shutdown doesn't even come into play here, since =0A=
+shutdown() doesn't do anything with peeled-off sockets.=0A=
+=0A=
+If you mean that the current implementation of shutdown() might have =0A=
+some problems with peeled-off sockets; well, that's true, but I suppose =0A=
+that means that there's something to fix somewhere.=0A=
+=0A=
+It looks like the reason for the peculiar socket style of peeled-off =0A=
+sockets is that they're created by copying from a one-to-many socket and =
+=0A=
+modified a little to resemble a one-to-one socket. But this leads to =0A=
+problems in several places in the code. Is this just implementation that =
+=0A=
+was never finalized?=0A=
