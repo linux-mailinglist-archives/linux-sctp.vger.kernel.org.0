@@ -2,137 +2,125 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1C7173B17
-	for <lists+linux-sctp@lfdr.de>; Fri, 28 Feb 2020 16:13:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B23C2174405
+	for <lists+linux-sctp@lfdr.de>; Sat, 29 Feb 2020 01:59:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726945AbgB1PMu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Fri, 28 Feb 2020 10:12:50 -0500
-Received: from mail-n.franken.de ([193.175.24.27]:33881 "EHLO drew.franken.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726720AbgB1PMu (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Fri, 28 Feb 2020 10:12:50 -0500
-X-Greylist: delayed 547 seconds by postgrey-1.27 at vger.kernel.org; Fri, 28 Feb 2020 10:12:49 EST
-Received: from [IPv6:2a02:8109:1140:c3d:d27:d546:be49:ed77] (unknown [IPv6:2a02:8109:1140:c3d:d27:d546:be49:ed77])
-        (Authenticated sender: lurchi)
-        by drew.franken.de (Postfix) with ESMTPSA id 57325721E280D;
-        Fri, 28 Feb 2020 16:03:38 +0100 (CET)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.0 \(3608.60.0.2.5\))
-Subject: Re: Problems with peeled-off sockets
-From:   Michael Tuexen <michael.tuexen@lurchi.franken.de>
-In-Reply-To: <CADvbK_dh1GjDmso9vfHmLEvYhgx3cQ1ajNjafAyyx6hz04_KTg@mail.gmail.com>
-Date:   Fri, 28 Feb 2020 16:03:37 +0100
-Cc:     "Leppanen, Jere (Nokia - FI/Espoo)" <jere.leppanen@nokia.com>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <B0B70C1F-50C0-40E6-B59F-19CA67682C6E@lurchi.franken.de>
-References: <HE1PR0702MB36104FDAA4369769A3A69704EC100@HE1PR0702MB3610.eurprd07.prod.outlook.com>
- <CADvbK_cmZdbVxpjxuXKaqyjTBSXsRUovxAAxC4syWnmu6Y+9yA@mail.gmail.com>
- <HE1PR0702MB361028B4B8C2E4D03AA23B4EECEC0@HE1PR0702MB3610.eurprd07.prod.outlook.com>
- <CADvbK_f=COyrHh+17pdBq=acmR+cbv08quK6qbpHCg7FbwTsNw@mail.gmail.com>
- <HE1PR0702MB3610F8DFB115DA9D35D71A76ECEB0@HE1PR0702MB3610.eurprd07.prod.outlook.com>
- <CADvbK_dh1GjDmso9vfHmLEvYhgx3cQ1ajNjafAyyx6hz04_KTg@mail.gmail.com>
-To:     Xin Long <lucien.xin@gmail.com>
-X-Mailer: Apple Mail (2.3608.60.0.2.5)
-X-Spam-Status: No, score=-2.9 required=5.0 tests=ALL_TRUSTED,BAYES_00
-        autolearn=disabled version=3.4.1
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on mail-n.franken.de
+        id S1726527AbgB2A7X (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 28 Feb 2020 19:59:23 -0500
+Received: from gateway34.websitewelcome.com ([192.185.149.46]:35075 "EHLO
+        gateway34.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726046AbgB2A7X (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Fri, 28 Feb 2020 19:59:23 -0500
+X-Greylist: delayed 1500 seconds by postgrey-1.27 at vger.kernel.org; Fri, 28 Feb 2020 19:59:22 EST
+Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id D15B32793DF
+        for <linux-sctp@vger.kernel.org>; Fri, 28 Feb 2020 18:10:12 -0600 (CST)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id 7phsj3diIEfyq7phsj8qqQ; Fri, 28 Feb 2020 18:10:12 -0600
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
+        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=xNOoVJXsQbHnYoAPlqTzBSpU3sayaB7un57WUVRF4FU=; b=LBGYo6LshgUkcdiSBa0nmaAXXe
+        OcV/VoGtUETVQ+4F4FxUjBDEvsIrXEGAjJ+NugNxt28ekCSY7AnG6zELbrsdQuswt8/XF+3kbxACm
+        l52EovVYi3wjqHX4LYaI4AmmJJ6jyhyC9dzVb7m7x9GupsX989cS1ffPIPPmzm4KGUMWUWqRgLImk
+        gW++/eNhnnqLTt51nBqAMGLdZRnhCT22/52nEWWcKRuMNs5dCBeyJ06di3bLRE6YXINxM/FK4qnCD
+        ZKB68xtYJcGxiaKHckJAEDhDqU44Bgq3iUNbml+ZTl1cAnO3RuXjwiQziRwClF2kFFhgL2ufXgY8C
+        tIteve2Q==;
+Received: from [200.39.15.57] (port=31903 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.92)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1j7php-002dlM-48; Fri, 28 Feb 2020 18:10:10 -0600
+Date:   Fri, 28 Feb 2020 18:13:05 -0600
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: [PATCH][next] net: sctp: Replace zero-length array with
+ flexible-array member
+Message-ID: <20200229001305.GA7465@embeddedor>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 200.39.15.57
+X-Source-L: No
+X-Exim-ID: 1j7php-002dlM-48
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (embeddedor) [200.39.15.57]:31903
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 10
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-> On 28. Feb 2020, at 15:31, Xin Long <lucien.xin@gmail.com> wrote:
-> 
-> On Fri, Feb 28, 2020 at 9:57 PM Leppanen, Jere (Nokia - FI/Espoo)
-> <jere.leppanen@nokia.com> wrote:
->> 
->> On Thu, 27 Feb 2020, Xin Long wrote:
->> 
->>> On Tue, Feb 25, 2020 at 3:28 AM Leppanen, Jere (Nokia - FI/Espoo)
->>> <jere.leppanen@nokia.com> wrote:
->>>> 
->>>> On Sat, 22 Feb 2020, Xin Long wrote:
->>>> 
->>>>> On Thu, Feb 20, 2020 at 5:18 PM Leppanen, Jere (Nokia - FI/Espoo)
->>>>> <jere.leppanen@nokia.com> wrote:
->>>>>> 
->>>>>> Hello All,
->>>>>> 
->>>>>> According to the RFC, a peeled-off socket is a one-to-one socket. But
->>>>>> in lksctp a peeled-off socket it not TCP style, it's UDP_HIGH_BANDWIDTH
->>>>>> style. Because of this, shutdown() doesn't work, linger probably
->>>>>> doesn't work, and so on.
->>>>>> 
->>>>>> For example, in sctp_shutdown():
->>>>>> 
->>>>>> static void sctp_shutdown(struct sock *sk, int how)
->>>>>> {
->>>>>>        struct net *net = sock_net(sk);
->>>>>>        struct sctp_endpoint *ep;
->>>>>> 
->>>>>>        if (!sctp_style(sk, TCP))
->>>>>>                return;
->>>>>> 
->>>>>> Here we just bail out, because a peeled-off socket is not TCP style.
->>>>>> 
->>>>>> Is this just a bug, or am I missing something? Asking mostly out of
->>>>>> personal curiosity.
->>>>> I would say, it's because .shutdown is tcp_prot thing and udp_prot doesn't
->>>>> have. sctp doesn't have to implement it for UDP style socket. But for TCP-
->>>>> style socket, sctp is trying to be compatible with TCP protocol user API.
->>>>> But even though,  sctp's .shutdown is still not fully compatible with TCP
->>>>> protocol due to sctp's 3-way shakehands for finishing a connection.
->>>> 
->>>> Thanks a bunch for replying, Xin Long. I'm not quite sure what you mean.
->>>> The actual association shutdown doesn't even come into play here, since
->>>> shutdown() doesn't do anything with peeled-off sockets.
->>> Hi,  Leppanen,
->>> sorry for late.
->>> 
->>> SCTP has two types of sockets: UDP and TCP styles.
->>> TCP style associations are not allowed to be peeled off.
->>> only UDP style associations can be peeled off.
->>> 
->>> Then shutdown can only work for TCP style, this explains
->>> why peeled-off sk can use shutdown.
->>> 
->>> 
->>>> 
->>>> If you mean that the current implementation of shutdown() might have
->>>> some problems with peeled-off sockets; well, that's true, but I suppose
->>>> that means that there's something to fix somewhere.
->>> I think it returns for peeled-off sockets (UDP style sockets) on purpose.
->>> it's like why you want to use shutdown on a UDP socket?
->>> 
->>>> 
->>>> It looks like the reason for the peculiar socket style of peeled-off
->>>> sockets is that they're created by copying from a one-to-many socket and
->>>> modified a little to resemble a one-to-one socket. But this leads to
->>>> problems in several places in the code. Is this just implementation that
->>>> was never finalized?
->>> Right, peeled-off will allow users to use a new sk to control that asoc.
->>> but again, it's a feature UDP style socket.
->>> any other problems have you seen?
->> 
->> To clarify, by "peeled-off socket" I mean a socket returned by
->> sctp_peeloff(). sctp_peeloff() takes as an argument a
->> one-to-many socket, and returns a one-to-one socket.
->> 
->> The RFC (https://tools.ietf.org/html/rfc6458#section-9.2)
->> clearly states about the socket returned by sctp_peeloff() that
->> "[...] the new socket is a one-to-one style socket."
-> OK, I got you now.
-> Linux creates a TCP/one-to-many style socket there actually.
-> Interesting, BSD seems to do the same.
-> I will double check and make a patch for this once confirmed.
-I would expect that the socket returned by sctp_peeloff() is
-a one-to-one style socket and behave like one. If BSD is not
-like this, it is a bug and I would like to know.
+The current codebase makes use of the zero-length array language
+extension to the C90 standard, but the preferred mechanism to declare
+variable-length types such as these ones is a flexible array member[1][2],
+introduced in C99:
 
-Best regards
-Michael
-> 
-> Thanks.
+struct foo {
+        int stuff;
+        struct boo array[];
+};
+
+By making use of the mechanism above, we will get a compiler warning
+in case the flexible array does not occur last in the structure, which
+will help us prevent some kind of undefined behavior bugs from being
+inadvertently introduced[3] to the codebase from now on.
+
+Also, notice that, dynamic memory allocations won't be affected by
+this change:
+
+"Flexible array members have incomplete type, and so the sizeof operator
+may not be applied. As a quirk of the original implementation of
+zero-length arrays, sizeof evaluates to zero."[1]
+
+This issue was found with the help of Coccinelle.
+
+[1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+[2] https://github.com/KSPP/linux/issues/21
+[3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
+
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+ include/net/sctp/structs.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/net/sctp/structs.h b/include/net/sctp/structs.h
+index 314a2fa21d6b..fb42c90348d3 100644
+--- a/include/net/sctp/structs.h
++++ b/include/net/sctp/structs.h
+@@ -326,7 +326,7 @@ struct sctp_cookie {
+ 	 * the association TCB is re-constructed from the cookie.
+ 	 */
+ 	__u32 raw_addr_list_len;
+-	struct sctp_init_chunk peer_init[0];
++	struct sctp_init_chunk peer_init[];
+ };
+ 
+ 
+-- 
+2.25.0
 
