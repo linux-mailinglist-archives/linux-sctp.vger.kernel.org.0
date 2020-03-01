@@ -2,74 +2,61 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE4B174BE0
-	for <lists+linux-sctp@lfdr.de>; Sun,  1 Mar 2020 06:52:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A564175394
+	for <lists+linux-sctp@lfdr.de>; Mon,  2 Mar 2020 07:13:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727065AbgCAFwp (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 1 Mar 2020 00:52:45 -0500
-Received: from shards.monkeyblade.net ([23.128.96.9]:38860 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725821AbgCAFwp (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sun, 1 Mar 2020 00:52:45 -0500
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 7E14715BDA6EC;
-        Sat, 29 Feb 2020 21:52:44 -0800 (PST)
-Date:   Sat, 29 Feb 2020 21:52:44 -0800 (PST)
-Message-Id: <20200229.215244.324977010862063842.davem@davemloft.net>
-To:     gustavo@embeddedor.com
-Cc:     vyasevich@gmail.com, nhorman@tuxdriver.com,
-        marcelo.leitner@gmail.com, kuba@kernel.org,
-        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] net: sctp: Replace zero-length array with
- flexible-array member
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200229001305.GA7465@embeddedor>
-References: <20200229001305.GA7465@embeddedor>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
+        id S1726436AbgCBGN0 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 2 Mar 2020 01:13:26 -0500
+Received: from mail.dsns.gov.ua ([194.0.148.101]:47304 "EHLO mail.dsns.gov.ua"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725446AbgCBGNZ (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Mon, 2 Mar 2020 01:13:25 -0500
+X-Greylist: delayed 25093 seconds by postgrey-1.27 at vger.kernel.org; Mon, 02 Mar 2020 01:13:21 EST
+Received: from localhost (localhost [127.0.0.1])
+        by mail.dsns.gov.ua (Postfix) with ESMTP id BBE291FC7B1A;
+        Sun,  1 Mar 2020 22:27:30 +0200 (EET)
+Received: from mail.dsns.gov.ua ([127.0.0.1])
+        by localhost (mail.dsns.gov.ua [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id S75rTB7JEydT; Sun,  1 Mar 2020 22:27:30 +0200 (EET)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.dsns.gov.ua (Postfix) with ESMTP id 5BA411FA620B;
+        Sun,  1 Mar 2020 22:21:45 +0200 (EET)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.dsns.gov.ua 5BA411FA620B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dsns.gov.ua;
+        s=1E60DAC0-2607-11E9-81E6-7A77C2B36653; t=1583094106;
+        bh=njlCkWFc0hcw8eBX6ul4CN7Q0eDgIqGtksJn7ge99kc=;
+        h=Date:From:Message-ID:MIME-Version;
+        b=MNqv7wxPb5ptLZpegGrPa1iHEdOJdTNOKGb2U9Q58t3BFdT49XFh6vgS/zn8rC/5g
+         kv0SFE7rEwzovJv/Mhtz0k+GVvpPt7OCD6QywRS3XLVVTQ78OZWx7bJkET3c0Qby4R
+         GlMOw+XvvGVgeWiXN9SkeMoUw7yQdk4qHeiKR3brBdFqXyTdhi1fcOA0x5ea9y4Mdf
+         uJ+lLv+3ajPY0nYC6Y5zKKiMiGl1+zwhzFU1RmzBc/0/750Vn7x0OrSXsrCa3svrBg
+         LELzoQhKe29LUs7spnxLrcWYu/C9WVYycts6au+voFgGIbvN7QkHkUp9tFmmQWi/eZ
+         UlVPHz07I6+5Q==
+X-Virus-Scanned: amavisd-new at dsns.gov.ua
+Received: from mail.dsns.gov.ua ([127.0.0.1])
+        by localhost (mail.dsns.gov.ua [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 6j_p4uF_JICh; Sun,  1 Mar 2020 22:21:45 +0200 (EET)
+Received: from mail.dsns.gov.ua (localhost [127.0.0.1])
+        by mail.dsns.gov.ua (Postfix) with ESMTP id A04FF1FC5450;
+        Sun,  1 Mar 2020 21:59:28 +0200 (EET)
+Date:   Sun, 1 Mar 2020 21:59:28 +0200 (EET)
+From:   Peter Wong <sport08@dsns.gov.ua>
+Reply-To: petrwong@hotmail.com
+Message-ID: <464635221.3674166.1583092768623.JavaMail.zimbra@dsns.gov.ua>
+Subject: Hello
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Sat, 29 Feb 2020 21:52:44 -0800 (PST)
+X-Originating-IP: [5.154.174.49, 172.68.102.151]
+X-Mailer: Zimbra 8.8.15_GA_3899 (zclient/8.8.15_GA_3899)
+Thread-Index: 3O/8ccrlbZdxQ9U2SgkVgLNKDcW1Og==
+Thread-Topic: Hello
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Date: Fri, 28 Feb 2020 18:13:05 -0600
 
-> The current codebase makes use of the zero-length array language
-> extension to the C90 standard, but the preferred mechanism to declare
-> variable-length types such as these ones is a flexible array member[1][2],
-> introduced in C99:
-> 
-> struct foo {
->         int stuff;
->         struct boo array[];
-> };
-> 
-> By making use of the mechanism above, we will get a compiler warning
-> in case the flexible array does not occur last in the structure, which
-> will help us prevent some kind of undefined behavior bugs from being
-> inadvertently introduced[3] to the codebase from now on.
-> 
-> Also, notice that, dynamic memory allocations won't be affected by
-> this change:
-> 
-> "Flexible array members have incomplete type, and so the sizeof operator
-> may not be applied. As a quirk of the original implementation of
-> zero-length arrays, sizeof evaluates to zero."[1]
-> 
-> This issue was found with the help of Coccinelle.
-> 
-> [1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-> [2] https://github.com/KSPP/linux/issues/21
-> [3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
-> 
-> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
 
-Applied.
+Can we talk now?
