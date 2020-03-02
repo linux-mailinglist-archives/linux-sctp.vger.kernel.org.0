@@ -2,144 +2,300 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1192117542B
-	for <lists+linux-sctp@lfdr.de>; Mon,  2 Mar 2020 07:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2CAA1757B3
+	for <lists+linux-sctp@lfdr.de>; Mon,  2 Mar 2020 10:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726144AbgCBG5Z (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 2 Mar 2020 01:57:25 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:43723 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726052AbgCBG5Z (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 2 Mar 2020 01:57:25 -0500
-Received: by mail-pf1-f195.google.com with SMTP id s1so5088522pfh.10;
-        Sun, 01 Mar 2020 22:57:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=yj6/i5PGnAg2vla96UjqFrCdBrIGa+0X2TdjaqrEe/Y=;
-        b=b3YGAK+UaX8TgwholOzZWDvv6xiBB9MBD8W8HCqJKBDjtNZ4yAKmNsvufbvD0WfAUl
-         Ojc82bK5Bjm+5D8Q8lMDrBd7BFFueGhCQrqvSR04Q0Jk0ZjypGlwv4hyNIZsUbAusv7v
-         Ji1aB983yP1zxrJANQVBU22Diz46XD+Htr8bDCERtSNAcyA/5rBIk8epJk1/pE+HC1Tw
-         Ql375z7BhpWDZ6TkeIeU2ZhSegkTExqWy4Q8GVH5fR3MTK7OhngJ7qmd5p1yJViVWmog
-         KISGPrhBp7C1I3mN1BQpg1q7o/SsxhxVQXWqIhSJu+/AmCyjMuMZuBekoavBeNucB3gb
-         bxOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=yj6/i5PGnAg2vla96UjqFrCdBrIGa+0X2TdjaqrEe/Y=;
-        b=TqDTFU6880YieAQxJKwv6J37cSpiocwGea3Kf528L+75aaVRvPlFIb/jE6tzWfobj/
-         GH7fj7jDfYkmRuvSJ4n/Vn63U47JZgD++WGxBQCvqF4WzJJfF4qWAMDP5M8EHdXqX56l
-         GkfJWzp5S9fK/oPJYxz+12TK2z5g799oJTYaUxF1ktO5WOqeCYPcyyZerzNnhmTxrR6i
-         Nm8J9QSzt0J9IYKY+I/isc/iuws9adVCMTmfqIu2nAmWI9qgWn8YODFkQtSypB/TjAFq
-         1Q08x2lo257UGA8D6lzYUJPN16OS9MG2yNJHVl7v7C6BW2wjyTSY05Y9a0DBDR40B13K
-         eo8Q==
-X-Gm-Message-State: APjAAAW52LxyWrLLDIoBoKpbZkSkdYsZof09zxz689uAaBWaahZYkEgh
-        ckvd4n6+El1Y2KbjYtBuqQE1dOs0
-X-Google-Smtp-Source: APXvYqxSXnsiG4+LCZDRHNiley9tMRpBi+u+lobMGf/b4EqgU5kJ6fLJkASc97wabIcXeS/tmmtw5Q==
-X-Received: by 2002:a63:3207:: with SMTP id y7mr18907478pgy.344.1583132243928;
-        Sun, 01 Mar 2020 22:57:23 -0800 (PST)
-Received: from localhost ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id o12sm7078715pfp.1.2020.03.01.22.57.22
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 01 Mar 2020 22:57:23 -0800 (PST)
-From:   Xin Long <lucien.xin@gmail.com>
-To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
-Cc:     davem@davemloft.net,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>, jere.leppanen@nokia.com,
-        michael.tuexen@lurchi.franken.de
-Subject: [PATCH net] sctp: return a one-to-one type socket when doing peeloff
-Date:   Mon,  2 Mar 2020 14:57:15 +0800
-Message-Id: <b3091c0764023bbbb17a26a71e124d0f81349f20.1583132235.git.lucien.xin@gmail.com>
-X-Mailer: git-send-email 2.1.0
+        id S1727130AbgCBJxa (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 2 Mar 2020 04:53:30 -0500
+Received: from ganesha.gnumonks.org ([213.95.27.120]:49559 "EHLO
+        ganesha.gnumonks.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727060AbgCBJxa (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 2 Mar 2020 04:53:30 -0500
+X-Greylist: delayed 913 seconds by postgrey-1.27 at vger.kernel.org; Mon, 02 Mar 2020 04:53:29 EST
+Received: from uucp by ganesha.gnumonks.org with local-bsmtp (Exim 4.89)
+        (envelope-from <laforge@gnumonks.org>)
+        id 1j8hWh-0008AB-C5
+        for linux-sctp@vger.kernel.org; Mon, 02 Mar 2020 10:38:15 +0100
+Received: from laforge by localhost.localdomain with local (Exim 4.93)
+        (envelope-from <laforge@gnumonks.org>)
+        id 1j8hU4-001AQM-1H
+        for linux-sctp@vger.kernel.org; Mon, 02 Mar 2020 10:35:32 +0100
+Date:   Mon, 2 Mar 2020 10:35:32 +0100
+From:   Harald Welte <laforge@gnumonks.org>
+To:     linux-sctp@vger.kernel.org
+Subject: Expected SCTP DATA chunk per second performance
+Message-ID: <20200302093532.GE43827@nataraja>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="p1Od3smaOkJqivj4"
+Content-Disposition: inline
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-As it says in rfc6458#section-9.2:
 
-  The application uses the sctp_peeloff() call to branch off an
-  association into a separate socket.  (Note that the semantics are
-  somewhat changed from the traditional one-to-one style accept()
-  call.)  Note also that the new socket is a one-to-one style socket.
-  Thus, it will be confined to operations allowed for a one-to-one
-  style socket.
+--p1Od3smaOkJqivj4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Prior to this patch, sctp_peeloff() returned a one-to-many type socket,
-on which some operations are not allowed, like shutdown, as Jere
-reported.
+Hi!
 
-This patch is to change it to return a one-to-one type socket instead.
+I've been trying to implement some DIAMETER load testing, and I discovered that
+it's apparently not my application layer code that is throttling the rate,
+but the kernel SCTP stack.  I currently cannot get to more than 500 SCTP data
+chunks per second on a 5.4.19 kernel (happy to try other versions).
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Reported-by: Leppanen, Jere (Nokia - FI/Espoo) <jere.leppanen@nokia.com>
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
----
- net/sctp/socket.c | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+The most simplistic setup to reproduce is:
+* run a single-threaded SCTP server and SCTP client on the same machine
+* use loopback / localhost for communication
+* have the transmitter continuously transmit sctp_sendmsg() of 100-200 bytes
+* have the receiver just sctp_recvmsg() and discard the data
+* use a single stream in a single association for now to establish a base-line
 
-diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-index 1b56fc4..2b55beb 100644
---- a/net/sctp/socket.c
-+++ b/net/sctp/socket.c
-@@ -88,8 +88,7 @@ static int sctp_send_asconf(struct sctp_association *asoc,
- static int sctp_do_bind(struct sock *, union sctp_addr *, int);
- static int sctp_autobind(struct sock *sk);
- static int sctp_sock_migrate(struct sock *oldsk, struct sock *newsk,
--			     struct sctp_association *assoc,
--			     enum sctp_socket_type type);
-+			     struct sctp_association *assoc);
- 
- static unsigned long sctp_memory_pressure;
- static atomic_long_t sctp_memory_allocated;
-@@ -4965,7 +4964,7 @@ static struct sock *sctp_accept(struct sock *sk, int flags, int *err, bool kern)
- 	/* Populate the fields of the newsk from the oldsk and migrate the
- 	 * asoc to the newsk.
- 	 */
--	error = sctp_sock_migrate(sk, newsk, asoc, SCTP_SOCKET_TCP);
-+	error = sctp_sock_migrate(sk, newsk, asoc);
- 	if (error) {
- 		sk_common_release(newsk);
- 		newsk = NULL;
-@@ -5711,7 +5710,7 @@ int sctp_do_peeloff(struct sock *sk, sctp_assoc_t id, struct socket **sockp)
- 		return -EINVAL;
- 
- 	/* Create a new socket.  */
--	err = sock_create(sk->sk_family, SOCK_SEQPACKET, IPPROTO_SCTP, &sock);
-+	err = sock_create(sk->sk_family, SOCK_STREAM, IPPROTO_SCTP, &sock);
- 	if (err < 0)
- 		return err;
- 
-@@ -5727,8 +5726,7 @@ int sctp_do_peeloff(struct sock *sk, sctp_assoc_t id, struct socket **sockp)
- 	/* Populate the fields of the newsk from the oldsk and migrate the
- 	 * asoc to the newsk.
- 	 */
--	err = sctp_sock_migrate(sk, sock->sk, asoc,
--				SCTP_SOCKET_UDP_HIGH_BANDWIDTH);
-+	err = sctp_sock_migrate(sk, sock->sk, asoc);
- 	if (err) {
- 		sock_release(sock);
- 		sock = NULL;
-@@ -9453,8 +9451,7 @@ static inline void sctp_copy_descendant(struct sock *sk_to,
-  * and its messages to the newsk.
-  */
- static int sctp_sock_migrate(struct sock *oldsk, struct sock *newsk,
--			     struct sctp_association *assoc,
--			     enum sctp_socket_type type)
-+			     struct sctp_association *assoc)
- {
- 	struct sctp_sock *oldsp = sctp_sk(oldsk);
- 	struct sctp_sock *newsp = sctp_sk(newsk);
-@@ -9562,7 +9559,7 @@ static int sctp_sock_migrate(struct sock *oldsk, struct sock *newsk,
- 	 * original UDP-style socket or created with the accept() call on a
- 	 * TCP-style socket..
- 	 */
--	newsp->type = type;
-+	newsp->type = SCTP_SOCKET_TCP;
- 
- 	/* Mark the new socket "in-use" by the user so that any packets
- 	 * that may arrive on the association after we've moved it are
+Whether I use a complex diameter stack and test framework or whether I use a
+simplistic 120 line C program that just transmits small data chunks, the
+rate always is limited to about 500 DATA chunks per second.
+
+In wireshark, I can see that up to 9 DATA chunks are aggregated into each SCTP
+packet.  However, it typically takes the stack 203-201ms to send a SACK to each
+of those packets.  Only after that SACK is received, it seems the sender is
+transmitting more DATA chunks in the next packet.
+
+I wonder if this is expected behavior?  As far as I understand, SCTP only has
+a congestion window based on number of bytes, and not on number of chunks. The
+windows as per INIT/INIT_ACK is at 160496 bytes, while 144 bytes * 9 chunks is
+only 1296 bytes, i.e. the window cannot be full at all.
+
+Any ideas what's happening here and how to increase the throughput in terms of
+number of DATA chunks per second?
+
+A demo program is attached for your reference
+
+Thanks in advance.
+
+Regards,
+	Harald
+
 -- 
-2.1.0
+- Harald Welte <laforge@gnumonks.org>           http://laforge.gnumonks.org/
+============================================================================
+"Privacy in residential applications is a desirable marketing option."
+                                                  (ETSI EN 300 175-7 Ch. A6)
 
+--p1Od3smaOkJqivj4
+Content-Type: text/x-csrc; charset=us-ascii
+Content-Disposition: attachment; filename="sctptest.c"
+
+/*
+ * Simple SCTP test program, original version by Daniel Mack
+ * at https://gist.github.com/zonque/7d03568eab14a2bb57cb
+ *
+ * Modified in 2020 by Harald Welte <laforge@gnumonks.org> for
+ * - DATA chunk rate testing.
+ * - initial support for userspace SCTP stack testing
+ *
+ * Compile:
+ *
+ *   gcc sctptest.c -o server -lsctp -Wall
+ *   ln -s server client
+ *
+ * Invoke:
+ *
+ *   ./client
+ *   ./server
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <libgen.h>
+#include <time.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+#define _GNU_SOURCE
+#include <getopt.h>
+
+#define HAVE_KERNEL_SCTP
+
+#ifdef HAVE_KERNEL_SCTP
+#include <netinet/sctp.h>
+#define ext_socket socket
+#define ext_bind bind
+#define ext_setsockopt setsockopt
+#define ext_listen listen
+#define ext_accept accept
+#define ext_close close
+#define ext_connect connect
+#else
+/* sctplib + socketapi */
+#include <ext_socket.h>
+#include <sctp.h>
+#endif
+
+#define MY_PORT_NUM 62324
+
+/* compute differece between two timespec */
+static void timespec_diff(const struct timespec *start, const struct timespec *stop,
+			  struct timespec *result)
+{
+	if ((stop->tv_nsec - start->tv_nsec) < 0) {
+		result->tv_sec = stop->tv_sec - start->tv_sec - 1;
+		result->tv_nsec = stop->tv_nsec - start->tv_nsec + 1000000000;
+	} else {
+		result->tv_sec = stop->tv_sec - start->tv_sec;
+		result->tv_nsec = stop->tv_nsec - start->tv_nsec;
+	}
+}
+
+static void die(const char *s) {
+	perror(s);
+	exit(1);
+}
+
+static void server(int argc, char **argv)
+{
+	struct sockaddr_in servaddr = {
+		.sin_family = AF_INET,
+		.sin_addr.s_addr = htonl(INADDR_ANY),
+		.sin_port = htons(MY_PORT_NUM),
+	};
+	struct sctp_initmsg initmsg = {
+		.sinit_num_ostreams = 5,
+		.sinit_max_instreams = 5,
+		.sinit_max_attempts = 4,
+	};
+	struct sctp_sndrcvinfo sndrcvinfo;
+	int listen_fd, conn_fd, flags, ret, in;
+
+	listen_fd = ext_socket(AF_INET, SOCK_STREAM, IPPROTO_SCTP);
+	if (listen_fd < 0)
+		die("socket");
+
+	ret = ext_bind(listen_fd, (struct sockaddr *) &servaddr, sizeof(servaddr));
+	if (ret < 0)
+		die("bind");
+
+	ret = ext_setsockopt(listen_fd, IPPROTO_SCTP, SCTP_INITMSG, &initmsg, sizeof(initmsg));
+	if (ret < 0)
+		die("setsockopt");
+
+	ret = ext_listen(listen_fd, initmsg.sinit_max_instreams);
+	if (ret < 0)
+		die("listen");
+
+	for (;;) {
+		char buffer[1024];
+		unsigned int num_chunks_rcvd;
+
+		printf("Waiting for connection\n");
+		fflush(stdout);
+
+		conn_fd = ext_accept(listen_fd, (struct sockaddr *) NULL, NULL);
+		if(conn_fd < 0)
+			die("accept()");
+
+		printf("New client connected\n");
+		fflush(stdout);
+		num_chunks_rcvd = 0;
+
+		while (1) {
+			in = sctp_recvmsg(conn_fd, buffer, sizeof(buffer), NULL, 0, &sndrcvinfo, &flags);
+			if (in <= 0)
+				break;
+			num_chunks_rcvd++;
+		}
+
+		printf("Server: Received %u chunks, closing\n", num_chunks_rcvd);
+		fflush(stdout);
+
+		ext_close(conn_fd);
+	}
+}
+
+static void client(int argc, char **argv) {
+	struct sockaddr_in servaddr = {
+		.sin_family = AF_INET,
+		.sin_port = htons(MY_PORT_NUM),
+		.sin_addr.s_addr = inet_addr("127.0.0.1"),
+	};
+	struct timespec ts_start, ts_stop, ts_diff;
+	uint8_t *payload;
+	unsigned int num_chunks = 10000;
+	unsigned int chunksize = 150;
+	int conn_fd, ret;
+
+	while (1) {
+		int option_index = 0, c;
+		const struct option long_options[] = {
+			{ "num-chunks", 1, 0, 'n' },
+			{ "chunk-size", 1, 0, 's' },
+			{ 0, 0, 0, 0 }
+		};
+
+		c = getopt_long(argc, argv, "n:s:", long_options, &option_index);
+		if (c == -1)
+			break;
+
+		switch (c) {
+		case 'n':
+			num_chunks = atoi(optarg);
+			break;
+		case 's':
+			chunksize = atoi(optarg);
+			break;
+		default:
+			break;
+		}
+	}
+
+	printf("About to send %u chunks of each %u bytes\n", num_chunks, chunksize);
+
+	payload = malloc(chunksize);
+	if (!payload)
+		die("malloc()");
+
+	conn_fd = ext_socket(AF_INET, SOCK_STREAM, IPPROTO_SCTP);
+	if (conn_fd < 0)
+		die("socket()");
+
+	ret = ext_connect(conn_fd, (struct sockaddr *) &servaddr, sizeof(servaddr));
+	if (ret < 0)
+		die("connect()");
+
+	ret = clock_gettime(CLOCK_MONOTONIC_RAW, &ts_start);
+	if (ret < 0)
+		die("clock_gettime()");
+
+	for (int i = 0; i < num_chunks; i++) {
+		ret = sctp_sendmsg(conn_fd, payload, chunksize, NULL, 0, 0, 0, 0, 0, 0 );
+		if (ret < 0)
+			die("sctp_sendmsg");
+	}
+
+	ret = clock_gettime(CLOCK_MONOTONIC_RAW, &ts_stop);
+	if (ret < 0)
+		die("clock_gettime()");
+	timespec_diff(&ts_start, &ts_stop, &ts_diff);
+	float diff_f = (float)ts_diff.tv_sec + (float)ts_diff.tv_nsec/1000000000.0;
+	printf("%u DATA chunks of %u bytes each in %5.2f seconds: %5.2f DATA chunks per second\n",
+		num_chunks, chunksize, diff_f, (float)num_chunks/diff_f);
+
+	close(conn_fd);
+
+}
+
+int main(int argc, char **argv) {
+
+	if (strstr(basename(argv[0]), "server"))
+		server(argc, argv);
+	else
+		client(argc, argv);
+
+	return 0;
+}
+
+--p1Od3smaOkJqivj4--
