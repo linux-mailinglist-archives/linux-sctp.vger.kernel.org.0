@@ -2,77 +2,66 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B6EE175E27
-	for <lists+linux-sctp@lfdr.de>; Mon,  2 Mar 2020 16:26:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B25101781D3
+	for <lists+linux-sctp@lfdr.de>; Tue,  3 Mar 2020 20:02:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726969AbgCBP0n convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Mon, 2 Mar 2020 10:26:43 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:53744 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726831AbgCBP0n (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 2 Mar 2020 10:26:43 -0500
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-40-WLaV-7VkOZGk-9jJ2RsFAg-1; Mon, 02 Mar 2020 15:26:40 +0000
-X-MC-Unique: WLaV-7VkOZGk-9jJ2RsFAg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Mon, 2 Mar 2020 15:26:39 +0000
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Mon, 2 Mar 2020 15:26:39 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Harald Welte' <laforge@gnumonks.org>,
-        Michael Tuexen <michael.tuexen@lurchi.franken.de>
-CC:     "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>
-Subject: RE: Expected SCTP DATA chunk per second performance
-Thread-Topic: Expected SCTP DATA chunk per second performance
-Thread-Index: AQHV8JnZZO3aqJ7SmkSot9pPWmOt8ag1a+pw
-Date:   Mon, 2 Mar 2020 15:26:39 +0000
-Message-ID: <473732823f1b40f2bb5d47935840696c@AcuMS.aculab.com>
-References: <20200302093532.GE43827@nataraja>
- <9CFD9C59-9602-4983-B708-A6CED6330DD1@lurchi.franken.de>
- <20200302123754.GM43827@nataraja>
- <C8B077E2-A9C2-423E-80BE-B5C583110735@lurchi.franken.de>
- <20200302134743.GP43827@nataraja>
-In-Reply-To: <20200302134743.GP43827@nataraja>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1731792AbgCCSGw (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 3 Mar 2020 13:06:52 -0500
+Received: from mail-il1-f194.google.com ([209.85.166.194]:40726 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733276AbgCCSGv (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 3 Mar 2020 13:06:51 -0500
+Received: by mail-il1-f194.google.com with SMTP id g6so3577600ilc.7
+        for <linux-sctp@vger.kernel.org>; Tue, 03 Mar 2020 10:06:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=42VRx4KA+cD1ZZnhz/34yl/kjJSKnU+ahvHX6e7S6BM=;
+        b=s5F7HbUzu8PML3bbwUb0UiWMLxdDV1JMTrGB1diF7j50Pe2i5JusS4dTXC0p3rExzp
+         cY/x7luWCmVb66f62SzrgdJvxs7/j3NJru6nHfIKzRtQAHP/QiUX+9Fxv+m1wN4gQzzY
+         +jjuig6xR7RAqw+MIiBX3i2uHmdSDp6lgW7BUEE4J0nx4ic16VVvifUjTqzWluXIO6SB
+         gFPHYOShXu+oflMZeXqfzV8qEViULYcSVf7VZhRL7y4I3L9jOLC3/ScDsHEDAOdf0Fe6
+         QdnRPBEgeUc2awJzoN0nmU5gJTV30lWVFbdeLw3Tofxea+Esu7kobg1kYpUATT/2ux5Y
+         OB+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=42VRx4KA+cD1ZZnhz/34yl/kjJSKnU+ahvHX6e7S6BM=;
+        b=qHPR/8zdCxuew6dqn9TVt1PGmC1gnCQP/QI70X3OJ6uKEwHoMx4p4IEB6eWgJ/TtAn
+         nKdgOMZAGWL0btmtvfkMuKibD7ct3v1S8sut23Cbfeqqn/RHN12xrp1a7a2Y7KrhRTs1
+         QouswVjo2EusMEmBDiEGpqe/NEIaDwK+PcFxCeGhqGHeUiSs/+9jMK2g4X/Xz637LO7F
+         ouUmkXorUYywtX1Ztl22Hb+yykyFX2L2iexdMqA3dIkHVtKdmlbGoDNb0kZk4wpxoASD
+         aLW8Y1ZIsX7c22fhlTFKl7wU6U6hmhCIMMsw3HIeRc57Iweg85Uw0g3lJZJC3S4bVxN1
+         PG1A==
+X-Gm-Message-State: ANhLgQ0ZQGN+f66dtPcY6065A+n2POut6SjBmkJ+dbBzF1zLlwLqtTsD
+        sOGklsasD+BAYdr9vtTdibzHC+3OvICLOAhApGM=
+X-Google-Smtp-Source: ADFU+vsVQVdjikFcraXDO/5V5Yhfad6CZUwvCLoUcdzG0PIo538vbAX5IzyZAELLyuwZfYgkmlgSjyYyK00O03z4A1Y=
+X-Received: by 2002:a92:b506:: with SMTP id f6mr6045351ile.103.1583258810372;
+ Tue, 03 Mar 2020 10:06:50 -0800 (PST)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Received: by 2002:a02:9f04:0:0:0:0:0 with HTTP; Tue, 3 Mar 2020 10:06:49 -0800 (PST)
+Reply-To: dr.challynoah@gmail.com
+From:   DR CHALLY NOAH <mayorabrahamedge404@gmail.com>
+Date:   Tue, 3 Mar 2020 19:06:49 +0100
+Message-ID: <CALqVJWeC6HBrRgr4uBSZq1w12dBC_RHwpd8_CGoFdL1uY-mThg@mail.gmail.com>
+Subject: Hello Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Harald Welte
-> Sent: 02 March 2020 13:48
-...
-> When disabling NAGLE ('client -d' of the attached program), I'm getting
-> much higher throughput, but there is no single IP packet with more than
-> a single DATA chunk inside at all anymore.  The latter is expected on
-> the one hand side (every syscall goes all the way to build a packet and
-> send it), but given at the high sender rate I would have expected that
-> every so often multiple DATA chunks arrive from userspace before a
-> packet has been sent (socket send buffer)?  In any case, no complaints
-> in this case.
-
-You'd have to flow control off (ie no ack from the remote system) the
-connections before data chunks get merged.
-
-If you know you have another data chunk to send, set MSG_MORE on the send.
-That should stop the packet being sent until it is full.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Hello Dear,
+What Have Kept You Waiting To Claim Your $600,000.00 USD Compensation Award?
+This said fund was issued out by the UNITED NATIONS To compensate
+you.Please If You Have Not Claim Your Fund (Award),Kindly contact me
+at   DR.CHALLYNOAH@GMAIL.COM   for further details on how to proceed your
+fund (award)release to you or better still reply back Immediately You
+Receive This Information For An Urgent Confirmation And Release Of Your
+Fund To You Without Delays, as your email was listed among those to be
+compensated this year.Congratulations..
+Best Regards,
+Dr Chally Noah.
+Minister Of Finance On Foreign Remittance:
