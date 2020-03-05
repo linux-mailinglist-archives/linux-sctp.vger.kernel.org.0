@@ -2,86 +2,112 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EADE917A3EC
-	for <lists+linux-sctp@lfdr.de>; Thu,  5 Mar 2020 12:16:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A501017A710
+	for <lists+linux-sctp@lfdr.de>; Thu,  5 Mar 2020 15:02:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727398AbgCELQS (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 5 Mar 2020 06:16:18 -0500
-Received: from ulan.pagasa.dost.gov.ph ([202.90.128.205]:47754 "EHLO
-        mailgw.pagasa.dost.gov.ph" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725880AbgCELQQ (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 5 Mar 2020 06:16:16 -0500
-X-Greylist: delayed 1274 seconds by postgrey-1.27 at vger.kernel.org; Thu, 05 Mar 2020 06:16:06 EST
-Received: from webmail.pagasa.dost.int ([10.10.11.8])
-        by mailgw.pagasa.dost.gov.ph  with ESMTP id 025AseSK006737-025AseSM006737
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 5 Mar 2020 18:54:40 +0800
-Received: from localhost (localhost [127.0.0.1])
-        by webmail.pagasa.dost.int (Postfix) with ESMTP id 2FB4F2981A90;
-        Thu,  5 Mar 2020 18:46:49 +0800 (PST)
-Received: from webmail.pagasa.dost.int ([127.0.0.1])
-        by localhost (webmail.pagasa.dost.int [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id r7J1A0N3aHYl; Thu,  5 Mar 2020 18:46:48 +0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by webmail.pagasa.dost.int (Postfix) with ESMTP id 2232C2981A4C;
-        Thu,  5 Mar 2020 18:46:48 +0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 webmail.pagasa.dost.int 2232C2981A4C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pagasa.dost.gov.ph;
-        s=96B9A03E-48B0-11EA-A7E8-92F42F537CE2; t=1583405208;
-        bh=RC75T5p3JPNk7JUNB+lH0UfaFQO1Ac584gPL3SIL6h8=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=vwxX3L8Z7uHnDJPZBIix9IBQi0XMBiY4sLQTc/9+h6pT2FHeTz61v6B+3f3w6WhXh
-         jUdnW3+FuZCvkf1pcG3LkjpsYvCQO7zO587a10BanpMqFFL6zPGTaTUsrqnCnsqpAd
-         CtN8Atz3iXBEFHZeiXsfNfnWSfk0n7tqEffbmBy8=
-X-Virus-Scanned: amavisd-new at pagasa.dost.int
-Received: from webmail.pagasa.dost.int ([127.0.0.1])
-        by localhost (webmail.pagasa.dost.int [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id WT2tTJV-1oie; Thu,  5 Mar 2020 18:46:47 +0800 (PST)
-Received: from webmail.pagasa.dost.int (webmail.pagasa.dost.int [10.11.1.8])
-        by webmail.pagasa.dost.int (Postfix) with ESMTP id 5119729819D2;
-        Thu,  5 Mar 2020 18:46:46 +0800 (PST)
-Date:   Thu, 5 Mar 2020 18:46:46 +0800 (PST)
-From:   "Juanito S. Galang" <juanito.galang@pagasa.dost.gov.ph>
-Message-ID: <1980644409.3575157.1583405206290.JavaMail.zimbra@pagasa.dost.gov.ph>
-Subject: 
+        id S1727049AbgCEOBs convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Thu, 5 Mar 2020 09:01:48 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:26913 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726846AbgCEOBr (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 5 Mar 2020 09:01:47 -0500
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-164-KJo5V8FzM7mDZwf714M0Bg-1; Thu, 05 Mar 2020 14:01:44 +0000
+X-MC-Unique: KJo5V8FzM7mDZwf714M0Bg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Thu, 5 Mar 2020 14:01:43 +0000
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Thu, 5 Mar 2020 14:01:43 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Jere Leppanen' <jere.leppanen@nokia.com>,
+        Xin Long <lucien.xin@gmail.com>
+CC:     network dev <netdev@vger.kernel.org>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        "michael.tuexen@lurchi.franken.de" <michael.tuexen@lurchi.franken.de>
+Subject: RE: [PATCH net] sctp: return a one-to-one type socket when doing
+ peeloff
+Thread-Topic: [PATCH net] sctp: return a one-to-one type socket when doing
+ peeloff
+Thread-Index: AQHV8kg53juXUxi3m0qbVfk5LNaAmag6CEpg
+Date:   Thu, 5 Mar 2020 14:01:43 +0000
+Message-ID: <8831b4dc929148f28cca658a4d7a11d9@AcuMS.aculab.com>
+References: <b3091c0764023bbbb17a26a71e124d0f81349f20.1583132235.git.lucien.xin@gmail.com>
+ <HE1PR0702MB3610BB291019DD7F51DBC906ECE40@HE1PR0702MB3610.eurprd07.prod.outlook.com>
+ <CADvbK_ewk7mGNr6T4smWeQ0TcW3q4yabKZwGX3dK=XcH7gv=KQ@mail.gmail.com>
+ <alpine.LFD.2.21.2003041349400.19073@sut4-server4-pub.sut-1.archcommon.nsn-rdnet.net>
+In-Reply-To: <alpine.LFD.2.21.2003041349400.19073@sut4-server4-pub.sut-1.archcommon.nsn-rdnet.net>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Zimbra 8.8.15_GA_3899 (ZimbraWebClient - GC79 (Win)/8.8.15_GA_3895)
-Thread-Index: lWYDQbv6QI/eIWKrWUD3NPCXqIIr9A==
-Thread-Topic: 
-X-FEAS-DKIM: Valid
-Authentication-Results: mailgw.pagasa.dost.gov.ph;
-        dkim=pass header.i=@pagasa.dost.gov.ph
-To:     unlisted-recipients:; (no To-header on input)
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
+From: Jere Leppanen
+> Sent: 04 March 2020 17:13
+> On Wed, 4 Mar 2020, Xin Long wrote:
+> 
+> > On Wed, Mar 4, 2020 at 2:38 AM Leppanen, Jere (Nokia - FI/Espoo)
+> > <jere.leppanen@nokia.com> wrote:
+> >>
+> >> On Mon, 2 Mar 2020, Xin Long wrote:
+> >>
+> >>> As it says in rfc6458#section-9.2:
+> >>>
+> >>>   The application uses the sctp_peeloff() call to branch off an
+> >>>   association into a separate socket.  (Note that the semantics are
+> >>>   somewhat changed from the traditional one-to-one style accept()
+> >>>   call.)  Note also that the new socket is a one-to-one style socket.
+> >>>   Thus, it will be confined to operations allowed for a one-to-one
+> >>>   style socket.
+> >>>
+> >>> Prior to this patch, sctp_peeloff() returned a one-to-many type socket,
+> >>> on which some operations are not allowed, like shutdown, as Jere
+> >>> reported.
+> >>>
+> >>> This patch is to change it to return a one-to-one type socket instead.
+> >>
+> >> Thanks for looking into this. I like the patch, and it fixes my simple
+> >> test case.
+> >>
+> >> But with this patch, peeled-off sockets are created by copying from a
+> >> one-to-many socket to a one-to-one socket. Are you sure that that's
+> >> not going to cause any problems? Is it possible that there was a
+> >> reason why peeloff wasn't implemented this way in the first place?
+> > I'm not sure, it's been there since very beginning, and I couldn't find
+> > any changelog about it.
+> >
+> > I guess it was trying to differentiate peeled-off socket from TCP style
+> > sockets.
+> 
+> Well, that's probably the reason for UDP_HIGH_BANDWIDTH style. And maybe
+> there is legitimate need for that differentiation in some cases, but I
+> think inventing a special socket style is not the best way to handle it.
+> 
+> But actually I meant why is a peeled-off socket created as SOCK_SEQPACKET
+> instead of SOCK_STREAM. It could be to avoid copying from SOCK_SEQPACKET
+> to SOCK_STREAM, but why would we need to avoid that?
 
+Because you don't want all the acks and retransmissions??
 
-Herzlichen Gl=C3=BCckwunsch Lieber Beg=C3=BCnstigter,Sie erhalten diese E-M=
-ail von der Robert Bailey Foundation. Ich bin ein pensionierter Regierungsa=
-ngestellter aus Harlem und ein Gewinner des Powerball Lottery Jackpot im We=
-rt von 343,8 Millionen US-Dollar. Ich bin der gr=C3=B6=C3=9Fte Jackpot-Gewi=
-nner in der Geschichte der New Yorker Lotterie im US-Bundesstaat Amerika. I=
-ch habe diese Lotterie am 27. Oktober 2018 gewonnen und m=C3=B6chte Sie dar=
-=C3=BCber informieren, dass Google in Zusammenarbeit mit Microsoft Ihre "E-=
-Mail-Adresse" auf meine Bitte, einen Spendenbetrag von 3.000.000,00 Million=
-en Euro zu erhalten, =C3=BCbermittelt hat. Ich spende diese 3 Millionen Eur=
-o an Sie, um den Wohlt=C3=A4tigkeitsheimen und armen Menschen in Ihrer Geme=
-inde zu helfen, damit wir die Welt f=C3=BCr alle verbessern k=C3=B6nnen.Wei=
-tere Informationen finden Sie auf der folgenden Website, damit Sie nicht sk=
-eptisch sind
-Diese Spende von 3 Mio. EUR.https://nypost.com/2018/11/14/meet-the-winner-o=
-f-the-biggest-lottery-jackpot-in-new-york-history/Sie k=C3=B6nnen auch mein=
- YouTube f=C3=BCr mehr Best=C3=A4tigung aufpassen:
-https://www.youtube.com/watch?v=3DH5vT18Ysavc
-Bitte beachten Sie, dass alle Antworten an (robertdonation7@gmail.com=C2=A0=
- ) gesendet werden, damit wir das k=C3=B6nnen
-Fahren Sie fort, um das gespendete Geld an Sie zu =C3=BCberweisen.E-Mail: r=
-obertdonation7@gmail.comFreundliche Gr=C3=BC=C3=9Fe,
-Robert Bailey
-* * * * * * * * * * * * * * * *
-Powerball Jackpot Gewinner
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
