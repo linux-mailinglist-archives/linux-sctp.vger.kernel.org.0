@@ -2,52 +2,37 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2FF617D536
-	for <lists+linux-sctp@lfdr.de>; Sun,  8 Mar 2020 18:22:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2733217D5B7
+	for <lists+linux-sctp@lfdr.de>; Sun,  8 Mar 2020 19:58:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726338AbgCHRV7 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 8 Mar 2020 13:21:59 -0400
-Received: from www752.sakura.ne.jp ([59.106.19.202]:60825 "EHLO
-        www752.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726322AbgCHRV7 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sun, 8 Mar 2020 13:21:59 -0400
-X-Greylist: delayed 4498 seconds by postgrey-1.27 at vger.kernel.org; Sun, 08 Mar 2020 13:21:58 EDT
-Received: from fsav103.sakura.ne.jp (fsav103.sakura.ne.jp [27.133.134.230])
-        by www752.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 028FuUUd062485;
-        Mon, 9 Mar 2020 00:56:30 +0900 (JST)
-        (envelope-from postmaster@hokusetubad.sakura.ne.jp)
-Received: from www752.sakura.ne.jp (59.106.19.202)
- by fsav103.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav103.sakura.ne.jp);
- Mon, 09 Mar 2020 00:56:30 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav103.sakura.ne.jp)
-Received: from www752.sakura.ne.jp (localhost [127.0.0.1])
-        by www752.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 028FuT9a062470;
-        Mon, 9 Mar 2020 00:56:30 +0900 (JST)
-        (envelope-from postmaster@hokusetubad.sakura.ne.jp)
-Received: (from hokusetubad@localhost)
-        by www752.sakura.ne.jp (8.15.2/8.15.2/Submit) id 028FuTri062469;
-        Mon, 9 Mar 2020 00:56:29 +0900 (JST)
-        (envelope-from postmaster@hokusetubad.sakura.ne.jp)
-Message-Id: <202003081556.028FuTri062469@www752.sakura.ne.jp>
-X-Authentication-Warning: www752.sakura.ne.jp: hokusetubad set sender to postmaster@hokusetubad.sakura.ne.jp using -f
-Subject: BUSINESS PROPOSAL
-From:   postmaster@hokusetubad.sakura.ne.jp
-Reply-To: abulkareem461@gmail.com
-To:     herton@canonical.com
+        id S1726360AbgCHS6N (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 8 Mar 2020 14:58:13 -0400
+Received: from ns1.bdren.net.bd ([163.47.37.11]:43236 "EHLO dn1.bdren.net.bd"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726318AbgCHS6N (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Sun, 8 Mar 2020 14:58:13 -0400
+X-Greylist: delayed 4920 seconds by postgrey-1.27 at vger.kernel.org; Sun, 08 Mar 2020 14:58:06 EDT
+Received: from User ([156.96.45.188])
+        (authenticated bits=0)
+        by dn1.bdren.net.bd (8.14.4/8.14.4) with ESMTP id 028HWv59022119;
+        Sun, 8 Mar 2020 23:33:00 +0600
+Message-Id: <202003081733.028HWv59022119@dn1.bdren.net.bd>
+Reply-To: <francoispiniault@gmail.com>
+From:   "Francois Pinault" <francioispinaul@gmail.com>
+Subject: Re:
+Date:   Sun, 8 Mar 2020 13:33:22 -0400
 MIME-Version: 1.0
-Date:   Mon, 09 Mar 2020 00:56:29 +0900
-Content-Type: text/plain; charset="ISO-2022-JP"
+Content-Type: text/plain;
+        charset="Windows-1251"
 Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Dearest Friend
-
-I am Mr Abdul Kareem working with Emirate NBD Bank Dubai,United Arab Emirate as Finance Manager.
-I have a very profitable Business that concerns you and will benefit both of us after completion.
-Kindly get back to me for more details.
-Awaiting your response.
-Regards
-Abdul Kareem
+A donation was made in your favour by Francois Pinault, reply for more details.
