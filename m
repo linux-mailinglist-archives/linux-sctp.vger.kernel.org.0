@@ -2,171 +2,220 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8391803D9
-	for <lists+linux-sctp@lfdr.de>; Tue, 10 Mar 2020 17:45:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C64E7180E8D
+	for <lists+linux-sctp@lfdr.de>; Wed, 11 Mar 2020 04:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726420AbgCJQpW (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 10 Mar 2020 12:45:22 -0400
-Received: from mail-vk1-f195.google.com ([209.85.221.195]:40919 "EHLO
-        mail-vk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726269AbgCJQpW (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 10 Mar 2020 12:45:22 -0400
-Received: by mail-vk1-f195.google.com with SMTP id k63so1613859vka.7;
-        Tue, 10 Mar 2020 09:45:19 -0700 (PDT)
+        id S1727685AbgCKDef (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 10 Mar 2020 23:34:35 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:46627 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727659AbgCKDee (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 10 Mar 2020 23:34:34 -0400
+Received: by mail-qt1-f196.google.com with SMTP id t13so554040qtn.13;
+        Tue, 10 Mar 2020 20:34:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Id7nxzKDmSxI0cxB6yaElDPLzg27V9lnZyiHS/FO3cA=;
-        b=OLgxZaW6bKNkMqqk5xI+ZQZ5koSwhOU2O2YajGrqtFX0SGrvSFA9HmS/gCiiWJw8G/
-         Asl8ogHEcdLsWX8yltDot3pYdZGeoA3rT7NfPPqvrk1mYkJ7A31cY43vYOamEzs9SwXP
-         JcosmGuuSgns7PgnY2K1/NO2xPkuw29r9EZUa2ie2FQ+PZGF8bRwPwKbAKRZz1H+g73v
-         Oivk+VjqvgZ31Rx2ZbTPnVy7H/MQdjdr98cb5WzHBD94PJNx0tDJf7tkxjYIiXhGirO2
-         F0S4i/g0nTnmcM8ID3R5XfUXFMqneDfyw4Bgl9hNo/MNMJUU8aFxZJD/tx8yHNmj8vud
-         jcJg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pUV0rX2vW+ZsRJLO/LC2/Xyy7DtxKT4R5EIehHFqI3s=;
+        b=alqlQ1lFHA0LSKy4o+88UKc0SqavULRpGBKcuxUARbBKuW+U+j48n98WQ9qmC9eJG9
+         rTrrmouMQyYKmYW4TD+JzCfDMXiCqAayu5LJox+1RrPUbB6NBS70/biRJxMzBqIBOJd/
+         rRs6axEv9KsKhLdGcjjwFHz7/V9nPT0ZB6RMv0KWIqqN948ZBN4NXcAlItPpIXiyh6/M
+         KAUJu6sxu1h+IbfG9oxGE6f+AazpTcst9ck1DXlQNdi4g//dk4NL2olCZwKWjYLpetmI
+         /StDRd++67mLg7M+epZTfEf+pxW0vk3FmBF94X5nWADpEQY0k+7+EHPGJ26cvHPThjoe
+         27/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Id7nxzKDmSxI0cxB6yaElDPLzg27V9lnZyiHS/FO3cA=;
-        b=jLFFZMcdNHpnnf/qzXshaC4vxS+xrTOwN5gXZmfWL0bRpVwBCrxh7QA/ADOj2O2+GU
-         s/hvJXPjv6wYew5IUjLlzbR9tPTBZ/UvoPc5gPm3JAZLS4Sd1wIZ+uUONGee3MnExtk8
-         w1se1fkhPKalUw/NqjDiSFzC3F1DYD4ZcOK70/5chZ70TqVtrWh4VHPA4W2kabUcIPLk
-         Ha1minHqWfxvCN6IITCUGJjjRQzIB5/wHrUML4gKgaeLVniV0LybJYC80wH8MZL8JXsC
-         XKI+49Tahh3U+H94SeDhPwjlTQ7p79Onq/1u6HYYTDbtmxSCC+BfdXAPh49IfTT1rzj1
-         DGFw==
-X-Gm-Message-State: ANhLgQ0iayZ1s2KQVDjLWxSKsPCiB+b3kRS90afZytKJZYc1qtnXcRYb
-        4Pz8w4xPgoo58qfXXvVLZ3Pz1Ln3r3rCywY4rMA=
-X-Google-Smtp-Source: ADFU+vsFnMZOJyX+JnMLr2gSOiucHUxAptJ2co35Xt2ai8onMy2NXP9Q6zK4kHPGL3XY4vYMadgXzXQO5GJyc3DfNHA=
-X-Received: by 2002:a1f:b401:: with SMTP id d1mr11868133vkf.26.1583858719158;
- Tue, 10 Mar 2020 09:45:19 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pUV0rX2vW+ZsRJLO/LC2/Xyy7DtxKT4R5EIehHFqI3s=;
+        b=FFMYe8o7sun5fzZ9x9CaND5f8/en8VqWJ2nRC9sfrM630iSgNYwR13L2J8DszEz2rS
+         7+juyZq+gFdIx1tCzvzsuF/aDiaO2Y2l/ToeK0tub0gxb7Oedyr8QOyMMMM5G3b1d+tW
+         ne3mdAAFS6Du+Mhe7GM0C6ROE3JQRlLfSM3ob42AYU6HqSAxZLU8dJcDx/OrlrZA+YMg
+         d/Fb+ceMSx0IBzFg7TkbR1Tzqm7thT/2h6uumrdIml69z/B8mU/e3rvBbCq7xeaINWaB
+         nBU0wDGVTkXzwK+Nf8dB91ML4SPrioqaWTIZIDu/YeTQxv6gGP6ua96IeC/1rxmNX9IU
+         x1yw==
+X-Gm-Message-State: ANhLgQ096sT7H19Klsem/+0Rh+mfTzHQk3vKfUh1STkjfXOzk5RUJtSq
+        bqIcThBfVsIcjVku2IjdpZY=
+X-Google-Smtp-Source: ADFU+vvbBlaWNYiLvyCRZEzbozAOS3rZneCxDHiwBCVLStd2reg1Q4o8x8Wk3UBX1aH8EqDx/eclYA==
+X-Received: by 2002:ac8:76d0:: with SMTP id q16mr902276qtr.73.1583897671750;
+        Tue, 10 Mar 2020 20:34:31 -0700 (PDT)
+Received: from localhost.localdomain ([2001:1284:f028:aa40:30e3:a413:313c:50ab])
+        by smtp.gmail.com with ESMTPSA id j85sm9816695qke.20.2020.03.10.20.34.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Mar 2020 20:34:30 -0700 (PDT)
+Received: by localhost.localdomain (Postfix, from userid 1000)
+        id 8690DC163B; Wed, 11 Mar 2020 00:34:28 -0300 (-03)
+Date:   Wed, 11 Mar 2020 00:34:28 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Jere Leppanen <jere.leppanen@nokia.com>
+Cc:     Xin Long <lucien.xin@gmail.com>,
+        network dev <netdev@vger.kernel.org>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        "michael.tuexen@lurchi.franken.de" <michael.tuexen@lurchi.franken.de>
+Subject: Re: [PATCH net] sctp: return a one-to-one type socket when doing
+ peeloff
+Message-ID: <20200311033428.GD2547@localhost.localdomain>
+References: <b3091c0764023bbbb17a26a71e124d0f81349f20.1583132235.git.lucien.xin@gmail.com>
+ <HE1PR0702MB3610BB291019DD7F51DBC906ECE40@HE1PR0702MB3610.eurprd07.prod.outlook.com>
+ <CADvbK_ewk7mGNr6T4smWeQ0TcW3q4yabKZwGX3dK=XcH7gv=KQ@mail.gmail.com>
+ <alpine.LFD.2.21.2003041349400.19073@sut4-server4-pub.sut-1.archcommon.nsn-rdnet.net>
 MIME-Version: 1.0
-References: <00000000000088452f05a07621d2@google.com>
-In-Reply-To: <00000000000088452f05a07621d2@google.com>
-From:   =?UTF-8?B?6buE56eL6ZKn?= <anenbupt@gmail.com>
-Date:   Wed, 11 Mar 2020 00:45:08 +0800
-Message-ID: <CADG63jBA42RVg_GGDHhMP0iL0VP2FTm8N7684wdOccATO_TrzA@mail.gmail.com>
-Subject: Re: WARNING: refcount bug in sctp_wfree
-To:     syzbot <syzbot+cea71eec5d6de256d54d@syzkaller.appspotmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-sctp@vger.kernel.org, marcelo.leitner@gmail.com,
-        netdev@vger.kernel.org, nhorman@tuxdriver.com,
-        syzkaller-bugs@googlegroups.com, vyasevich@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.LFD.2.21.2003041349400.19073@sut4-server4-pub.sut-1.archcommon.nsn-rdnet.net>
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-sctp_wfree
-    ->refcount_sub_and_test(sizeof(struct sctp_chunk),
-                                      &sk->sk_wmem_alloc)
-sctp_wfree will sub sizeof(struct sctp_chunk) for every skb. So could
-we add the extra size for gso segment ?
+On Wed, Mar 04, 2020 at 07:13:14PM +0200, Jere Leppanen wrote:
+> On Wed, 4 Mar 2020, Xin Long wrote:
+> 
+> > On Wed, Mar 4, 2020 at 2:38 AM Leppanen, Jere (Nokia - FI/Espoo)
+> > <jere.leppanen@nokia.com> wrote:
+> > > 
+> > > On Mon, 2 Mar 2020, Xin Long wrote:
+> > > 
+> > > > As it says in rfc6458#section-9.2:
+> > > > 
+> > > >   The application uses the sctp_peeloff() call to branch off an
+> > > >   association into a separate socket.  (Note that the semantics are
+> > > >   somewhat changed from the traditional one-to-one style accept()
+> > > >   call.)  Note also that the new socket is a one-to-one style socket.
+> > > >   Thus, it will be confined to operations allowed for a one-to-one
+> > > >   style socket.
+> > > > 
+> > > > Prior to this patch, sctp_peeloff() returned a one-to-many type socket,
+> > > > on which some operations are not allowed, like shutdown, as Jere
+> > > > reported.
+> > > > 
+> > > > This patch is to change it to return a one-to-one type socket instead.
+> > > 
+> > > Thanks for looking into this. I like the patch, and it fixes my simple
+> > > test case.
+> > > 
+> > > But with this patch, peeled-off sockets are created by copying from a
+> > > one-to-many socket to a one-to-one socket. Are you sure that that's
+> > > not going to cause any problems? Is it possible that there was a
+> > > reason why peeloff wasn't implemented this way in the first place?
+> > I'm not sure, it's been there since very beginning, and I couldn't find
+> > any changelog about it.
+> > 
+> > I guess it was trying to differentiate peeled-off socket from TCP style
+> > sockets.
 
+Me too.
 
+> 
+> Well, that's probably the reason for UDP_HIGH_BANDWIDTH style. And maybe
+> there is legitimate need for that differentiation in some cases, but I think
+> inventing a special socket style is not the best way to handle it.
 
---- a/net/sctp/output.c
-+++ b/net/sctp/output.c
-@@ -398,7 +398,8 @@ static void sctp_packet_gso_append(struct sk_buff
-*head, struct sk_buff *skb)
-        head->truesize += skb->truesize;
-        head->data_len += skb->len;
-        head->len += skb->len;
--       refcount_add(skb->truesize, &head->sk->sk_wmem_alloc);
-+       refcount_add(skb->truesize + sizeof(struct sctp_chunk),
-+                               &head->sk->sk_wmem_alloc);
+I agree, but.. (in the end of the email)
 
-        __skb_header_release(skb);
+> 
+> But actually I meant why is a peeled-off socket created as SOCK_SEQPACKET
+> instead of SOCK_STREAM. It could be to avoid copying from SOCK_SEQPACKET to
+> SOCK_STREAM, but why would we need to avoid that?
+> 
+> Mark Butler commented in 2006
+> (https://sourceforge.net/p/lksctp/mailman/message/10122693/):
+> 
+>     In short, SOCK_SEQPACKET could/should be replaced with SOCK_STREAM
+>     right there, but there might be a minor dependency or two that would
+>     need to be fixed.
+> 
+> > 
+> > > 
+> > > With this patch there's no way to create UDP_HIGH_BANDWIDTH style
+> > > sockets anymore, so the remaining references should probably be
+> > > cleaned up:
+> > > 
+> > > ./net/sctp/socket.c:1886:       if (!sctp_style(sk, UDP_HIGH_BANDWIDTH) && msg->msg_name) {
+> > > ./net/sctp/socket.c:8522:       if (sctp_style(sk, UDP_HIGH_BANDWIDTH))
+> > > ./include/net/sctp/structs.h:144:       SCTP_SOCKET_UDP_HIGH_BANDWIDTH,
+> > > 
+> > > This patch disables those checks. The first one ignores a destination
+> > > address given to sendmsg() with a peeled-off socket - I don't know
+> > > why. The second one prevents listen() on a peeled-off socket.
+> > My understanding is:
+> > UDP_HIGH_BANDWIDTH is another kind of one-to-one socket, like TCP style.
+> > it can get asoc by its socket when sending msg, doesn't need daddr.
+> 
+> But on that association, the peer may have multiple addresses. The RFC says
+> (https://tools.ietf.org/html/rfc6458#section-4.1.8):
+> 
+>     When sending, the msg_name field [...] is used to indicate a preferred
+>     peer address if the sender wishes to discourage the stack from sending
+>     the message to the primary address of the receiver.
 
-On Tue, Mar 10, 2020 at 9:36 AM syzbot
-<syzbot+cea71eec5d6de256d54d@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    2c523b34 Linux 5.6-rc5
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=155a5f29e00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=a5295e161cd85b82
-> dashboard link: https://syzkaller.appspot.com/bug?extid=cea71eec5d6de256d54d
-> compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=164b5181e00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=166dd70de00000
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+cea71eec5d6de256d54d@syzkaller.appspotmail.com
->
-> ------------[ cut here ]------------
-> refcount_t: underflow; use-after-free.
-> WARNING: CPU: 1 PID: 8668 at lib/refcount.c:28 refcount_warn_saturate+0x15b/0x1a0 lib/refcount.c:28
-> Kernel panic - not syncing: panic_on_warn set ...
-> CPU: 1 PID: 8668 Comm: syz-executor779 Not tainted 5.6.0-rc5-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Call Trace:
->  __dump_stack lib/dump_stack.c:77 [inline]
->  dump_stack+0x1e9/0x30e lib/dump_stack.c:118
->  panic+0x264/0x7a0 kernel/panic.c:221
->  __warn+0x209/0x210 kernel/panic.c:582
->  report_bug+0x1ac/0x2d0 lib/bug.c:195
->  fixup_bug arch/x86/kernel/traps.c:174 [inline]
->  do_error_trap+0xca/0x1c0 arch/x86/kernel/traps.c:267
->  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
->  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
-> RIP: 0010:refcount_warn_saturate+0x15b/0x1a0 lib/refcount.c:28
-> Code: c7 e4 ff d0 88 31 c0 e8 23 20 b3 fd 0f 0b eb 85 e8 8a 4a e0 fd c6 05 ff 70 b1 05 01 48 c7 c7 10 00 d1 88 31 c0 e8 05 20 b3 fd <0f> 0b e9 64 ff ff ff e8 69 4a e0 fd c6 05 df 70 b1 05 01 48 c7 c7
-> RSP: 0018:ffffc90001f577d0 EFLAGS: 00010246
-> RAX: 8c9c9070bbb4e500 RBX: 0000000000000003 RCX: ffff8880938a63c0
-> RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-> RBP: 0000000000000003 R08: ffffffff815e16e6 R09: fffffbfff15db92a
-> R10: fffffbfff15db92a R11: 0000000000000000 R12: dffffc0000000000
-> R13: ffff88809de82000 R14: ffff8880a89237c0 R15: 1ffff11013be52b0
->  sctp_wfree+0x3b1/0x710 net/sctp/socket.c:9111
->  skb_release_head_state+0xfb/0x210 net/core/skbuff.c:651
->  skb_release_all net/core/skbuff.c:662 [inline]
->  __kfree_skb+0x22/0x1c0 net/core/skbuff.c:678
->  sctp_chunk_destroy net/sctp/sm_make_chunk.c:1454 [inline]
->  sctp_chunk_put+0x17b/0x200 net/sctp/sm_make_chunk.c:1481
->  __sctp_outq_teardown+0x80a/0x9d0 net/sctp/outqueue.c:257
->  sctp_association_free+0x21e/0x7c0 net/sctp/associola.c:339
->  sctp_cmd_delete_tcb net/sctp/sm_sideeffect.c:930 [inline]
->  sctp_cmd_interpreter net/sctp/sm_sideeffect.c:1318 [inline]
->  sctp_side_effects net/sctp/sm_sideeffect.c:1185 [inline]
->  sctp_do_sm+0x3c01/0x5560 net/sctp/sm_sideeffect.c:1156
->  sctp_primitive_ABORT+0x93/0xc0 net/sctp/primitive.c:104
->  sctp_close+0x231/0x770 net/sctp/socket.c:1512
->  inet_release+0x135/0x180 net/ipv4/af_inet.c:427
->  __sock_release net/socket.c:605 [inline]
->  sock_close+0xd8/0x260 net/socket.c:1283
->  __fput+0x2d8/0x730 fs/file_table.c:280
->  task_work_run+0x176/0x1b0 kernel/task_work.c:113
->  exit_task_work include/linux/task_work.h:22 [inline]
->  do_exit+0x5ef/0x1f80 kernel/exit.c:801
->  do_group_exit+0x15e/0x2c0 kernel/exit.c:899
->  __do_sys_exit_group+0x13/0x20 kernel/exit.c:910
->  __se_sys_exit_group+0x10/0x10 kernel/exit.c:908
->  __x64_sys_exit_group+0x37/0x40 kernel/exit.c:908
->  do_syscall_64+0xf3/0x1b0 arch/x86/entry/common.c:294
->  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> RIP: 0033:0x43ef98
-> Code: Bad RIP value.
-> RSP: 002b:00007ffcc7e7c398 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 000000000043ef98
-> RDX: 0000000000000000 RSI: 000000000000003c RDI: 0000000000000000
-> RBP: 00000000004be7a8 R08: 00000000000000e7 R09: ffffffffffffffd0
-> R10: 000000002059aff8 R11: 0000000000000246 R12: 0000000000000001
-> R13: 00000000006d01a0 R14: 0000000000000000 R15: 0000000000000000
-> Kernel Offset: disabled
-> Rebooting in 86400 seconds..
->
->
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this bug, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+Which means the currect check in 1886 is wrong and should be fixed regardless.
+
+> 
+> > 
+> > Now I thinking to fix your issue in sctp_shutdown():
+> > 
+> > @@ -5163,7 +5163,7 @@ static void sctp_shutdown(struct sock *sk, int how)
+> >        struct net *net = sock_net(sk);
+> >        struct sctp_endpoint *ep;
+> > 
+> > -       if (!sctp_style(sk, TCP))
+> > +       if (sctp_style(sk, UDP))
+> >                return;
+> > 
+> > in this way, we actually think:
+> > one-to-many socket: UDP style socket
+> > one-to-one socket includes: UDP_HIGH_BANDWIDTH and TCP style sockets.
+> > 
+> 
+> That would probably fix shutdown(), but there are other problems as well.
+> sctp_style() is called in nearly a hundred different places, I wonder if
+> anyone systematically went through all of them back when UDP_HIGH_BANDWIDTH
+> was added.
+
+I suppose, and with no grounds, just random thoughts, that
+UDP_HIGH_BANDWIDTH is a left-over from an early draft/implementation.
+
+> 
+> I think getting rid of UDP_HIGH_BANDWIDTH altogether is a much cleaner
+> solution. That's what your patch does, which is why I like it. But such a
+> change could easily break something.
+
+Xin's initial patch here or this without backward compatibility, will
+create some user-noticeable differences, yes. For example, in
+sctp_recvmsg():
+        if (sctp_style(sk, TCP) && !sctp_sstate(sk, ESTABLISHED) &&
+            !sctp_sstate(sk, CLOSING) && !sctp_sstate(sk, CLOSED)) {
+                err = -ENOTCONN;
+                goto out;
+
+And in sctp_setsockopt_autoclose():
+" * This socket option is applicable to the UDP-style socket only. When"
+        /* Applicable to UDP-style socket only */
+        if (sctp_style(sk, TCP))
+                return -EOPNOTSUPP;
+
+Although on RFC it was updated to:
+8.1.8.  Automatic Close of Associations (SCTP_AUTOCLOSE)
+   This socket option is applicable to the one-to-many style socket
+   only.
+
+These would start to be checked with such change. The first is a
+minor, because that return code is already possible from within
+sctp_wait_for_packet(), it's mostly just enforced later. But the
+second..  Yes, we're violating the RFC in there, but OTOH, I'm afraid
+it may be too late to fix it.
+
+Removing UDP_HIGH_BANDWIDTH would thus require some weird checks, like
+in the autoclose example above, something like:
+        /* Applicable to one-to-many sockets only */
+        if (sctp_style(sk, TCP) && !sctp_peeledoff(sk))
+                return -EOPNOTSUPP;
+
+Which doesn't help much by now. Yet, maybe there is only a few cases
+like this around?
+
+  Marcelo
