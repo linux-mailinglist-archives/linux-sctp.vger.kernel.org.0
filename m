@@ -2,120 +2,66 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2409C186579
-	for <lists+linux-sctp@lfdr.de>; Mon, 16 Mar 2020 08:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E60186F49
+	for <lists+linux-sctp@lfdr.de>; Mon, 16 Mar 2020 16:51:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728363AbgCPHQA (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 16 Mar 2020 03:16:00 -0400
-Received: from mail-il1-f193.google.com ([209.85.166.193]:43394 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728302AbgCPHQA (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 16 Mar 2020 03:16:00 -0400
-Received: by mail-il1-f193.google.com with SMTP id d14so14901681ilq.10;
-        Mon, 16 Mar 2020 00:15:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tRh0qGsHo1Z8/8EsTHyXL3Vn9WTVBKRNVDpdnxNvsWU=;
-        b=sbtgZ4fcgpuUhIPdsfN86WqZ2Z3IKkM7ZUIa3UnsbXvVMMvEM5UulAwdMpvlQMRABu
-         NOgyRpFJzQaKdYHO3n64PY+He+tvBhGOZ+nvQwGUSSYWlylCtk5pJePV6CBs5DqSjluO
-         mtkBLQfX6fJg1hO/Hbo4KLondpf6k9vmeNv8gZyDze9nF+DNZbBnBymDNmd1TFxW1lYq
-         4F0Y+xZnGnh8qasrIhTXn3oMGvAmPgURcP11NWuDZWtLiSBM8clE86G5LWdD2GFMLC7X
-         Zl8o2y5SM2HDmYg/6MTVMzmUaytPDPu0H0Z2NHyGmvRd3iy+yRPKo1U27GIccXE7bOR9
-         7Iew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tRh0qGsHo1Z8/8EsTHyXL3Vn9WTVBKRNVDpdnxNvsWU=;
-        b=Hrda7V4uffvLoCjS9ra6kbAh5Sm9cdgPlPwPaL4ix3xBm9/9rwfBJFEmu999hE+LFg
-         EM9gABy1bwd2Qd8xSsj+Za3uuP2lz6CYvVdXz3+UNjjYW93Uf75JPVLJt9gmI9zMRxf8
-         oBaGsxOKa4gv5BE+IBGKwLGEiCM71D/WMEHqid3CocYXIRPovNVfUsSLHRLnbXnbUqta
-         0GWHbwAhtrC9rEsNiz6TTXVKzphEeUhfZRINJHmrWV3f0ikCFw2fsArTdh1+mZPqr9jC
-         5Ig1WrmSjMHBQuuyhPF4DBFsMurGGnLqjzQ8iYe35sDkT6Tb9Nn+10JBbsYwutJ6D/if
-         A2dA==
-X-Gm-Message-State: ANhLgQ0p+N0infP7zRll5+xx/Y0egE5rJhRBP6ifOBOQfs/rENw3ZK3y
-        DjIVSoLdICipNCtTeIP2xMQTEhTVfVlk+0IN4QY=
-X-Google-Smtp-Source: ADFU+vuwyY6yUEhRU+0bXIjjvAJjxvEP7ZJrXrSiHKFUMWhDQrDXRhZFaMVz6T+YtT+E0hIPwj4EiME6IaF5YZJzlJA=
-X-Received: by 2002:a92:dd0e:: with SMTP id n14mr9668098ilm.0.1584342957526;
- Mon, 16 Mar 2020 00:15:57 -0700 (PDT)
+        id S1732094AbgCPPvZ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 16 Mar 2020 11:51:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50956 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731989AbgCPPvZ (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Mon, 16 Mar 2020 11:51:25 -0400
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CD4EA2071C;
+        Mon, 16 Mar 2020 15:51:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584373885;
+        bh=smYlIIlYR5FV3SifVHQI+MBbv/xwX8LecTo18P0xOfY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ICscU/9IsUDyRnvuS0ebSl0/HD0xCUkCBtlOPvFr6ovjChwH81Gyz6hIPmNAE51dF
+         keL5Er7uv/qmx/F85nUGV7zfjwgiFy6ySXiOA807h+MO9hxashewgNyLcmd1RZRc9Z
+         udeSSEHS05e0nb4Lp2G7rWBlAMYC7XeU7nMj6F6M=
+Date:   Mon, 16 Mar 2020 15:51:19 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     syzbot <syzbot+cea71eec5d6de256d54d@syzkaller.appspotmail.com>,
+        ardb@kernel.org, davem@davemloft.net, guohanjun@huawei.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-sctp@vger.kernel.org, marcelo.leitner@gmail.com,
+        mingo@kernel.org, netdev@vger.kernel.org, nhorman@tuxdriver.com,
+        syzkaller-bugs@googlegroups.com, vyasevich@gmail.com
+Subject: Re: WARNING: refcount bug in sctp_wfree
+Message-ID: <20200316155119.GB13004@willie-the-truck>
+References: <00000000000088452f05a07621d2@google.com>
+ <000000000000cc985b05a07ce36f@google.com>
+ <202003100900.1E2E399@keescook>
 MIME-Version: 1.0
-References: <1584341983-11245-1-git-send-email-hqjagain@gmail.com>
-In-Reply-To: <1584341983-11245-1-git-send-email-hqjagain@gmail.com>
-From:   Qiujun Huang <hqjagain@gmail.com>
-Date:   Mon, 16 Mar 2020 15:15:46 +0800
-Message-ID: <CAJRQjofA4+LJxYn-HQdBZ_Lxv3DgS1WrPtM3L1z4-ycRKPS5nw@mail.gmail.com>
-Subject: Re: [PATCH] drm/lease: fix potential race in fill_object_idr
-To:     vyasevich@gmail.com, nhorman@tuxdriver.com,
-        marcelo.leitner@gmail.com, "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-sctp@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202003100900.1E2E399@keescook>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Sorry about sending to wrong maintainers. Please ignore it.
-I'll resend it.
+On Tue, Mar 10, 2020 at 09:01:18AM -0700, Kees Cook wrote:
+> On Tue, Mar 10, 2020 at 02:39:01AM -0700, syzbot wrote:
+> > syzbot has bisected this bug to:
+> > 
+> > commit fb041bb7c0a918b95c6889fc965cdc4a75b4c0ca
+> > Author: Will Deacon <will@kernel.org>
+> > Date:   Thu Nov 21 11:59:00 2019 +0000
+> > 
+> >     locking/refcount: Consolidate implementations of refcount_t
+> 
+> I suspect this is just bisecting to here because it made the refcount
+> checks more strict?
 
-On Mon, Mar 16, 2020 at 2:59 PM Qiujun Huang <hqjagain@gmail.com> wrote:
->
-> We should hold idr_mutex for idr_alloc.
->
-> Signed-off-by: Qiujun Huang <hqjagain@gmail.com>
-> ---
->  drivers/gpu/drm/drm_lease.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/drm_lease.c b/drivers/gpu/drm/drm_lease.c
-> index b481caf..427ee21 100644
-> --- a/drivers/gpu/drm/drm_lease.c
-> +++ b/drivers/gpu/drm/drm_lease.c
-> @@ -418,6 +418,7 @@ static int fill_object_idr(struct drm_device *dev,
->                 goto out_free_objects;
->         }
->
-> +       mutex_lock(&dev->mode_config.idr_mutex);
->         /* add their IDs to the lease request - taking into account
->            universal planes */
->         for (o = 0; o < object_count; o++) {
-> @@ -437,7 +438,7 @@ static int fill_object_idr(struct drm_device *dev,
->                 if (ret < 0) {
->                         DRM_DEBUG_LEASE("Object %d cannot be inserted into leases (%d)\n",
->                                         object_id, ret);
-> -                       goto out_free_objects;
-> +                       goto out_unlock;
->                 }
->                 if (obj->type == DRM_MODE_OBJECT_CRTC && !universal_planes) {
->                         struct drm_crtc *crtc = obj_to_crtc(obj);
-> @@ -445,20 +446,22 @@ static int fill_object_idr(struct drm_device *dev,
->                         if (ret < 0) {
->                                 DRM_DEBUG_LEASE("Object primary plane %d cannot be inserted into leases (%d)\n",
->                                                 object_id, ret);
-> -                               goto out_free_objects;
-> +                               goto out_unlock;
->                         }
->                         if (crtc->cursor) {
->                                 ret = idr_alloc(leases, &drm_lease_idr_object, crtc->cursor->base.id, crtc->cursor->base.id + 1, GFP_KERNEL);
->                                 if (ret < 0) {
->                                         DRM_DEBUG_LEASE("Object cursor plane %d cannot be inserted into leases (%d)\n",
->                                                         object_id, ret);
-> -                                       goto out_free_objects;
-> +                                       goto out_unlock;
->                                 }
->                         }
->                 }
->         }
->
->         ret = 0;
-> +out_unlock:
-> +       mutex_unlock(&dev->mode_config.idr_mutex);
->  out_free_objects:
->         for (o = 0; o < object_count; o++) {
->                 if (objects[o])
-> --
-> 1.8.3.1
->
+Yes, this is the commit that enables full refcount checking for all
+architectures unconditionally, so it's the canary in the coalmine rather
+than the source of the problem.
+
+Will
