@@ -2,62 +2,114 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D8118831B
-	for <lists+linux-sctp@lfdr.de>; Tue, 17 Mar 2020 13:09:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1E6188987
+	for <lists+linux-sctp@lfdr.de>; Tue, 17 Mar 2020 16:55:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726248AbgCQMJx (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 17 Mar 2020 08:09:53 -0400
-Received: from sonic316-53.consmr.mail.ne1.yahoo.com ([66.163.187.179]:43295
-        "EHLO sonic316-53.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726917AbgCQMJw (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>);
-        Tue, 17 Mar 2020 08:09:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1584446992; bh=kcevCRoll2+Bsa3FDERpIV72LVcB1A4YV1b5N2AWYBk=; h=Date:From:Reply-To:Subject:References:From:Subject; b=R2hxu2RQ8hOyhS7sTKSo4jdv8WKwY6BR3khPfDSFYvuuuAfycY9D3AVw95K7tnHBux7FY/hdMiwfl5jLAj+Ktj/ZiHW7nTZFT6UErMO7c7e0KiE4kQRQc111ifcQnl/C56ASe/K2jhelpwQs0+PIbRd0clWII8pqRHHIOeZ0YpMiWIr4Ltr2zCsqzONK39bcZ0s0hAc3ll4QdDxc46ptRQ/Ti7W7pRVV4l3nKFY43httbQeO9QESXxEHmGGu6N66RUELyo6Zrt0h3knrgycG2gcmAhW16M0mshHoYVqeB+nstqnZ01ecbgjKhV/ldzX68I9rcShGbzAtSRxpBqn0Kw==
-X-YMail-OSG: qdCr2PsVM1nIwIx1AKy.e0FCS.rAd5ac4MxA9hTyV2WuoJ1XEsqzJcIb9i4xyJa
- JzIp.EWFG0G7AGEzQCj.2mq4TQWDNbguQgmjs7p9k6O5aFvfST.A.ssV88.k_2ER1CE08MXbWGq9
- cjSA_M19ZjX17gMVCIHzAhMg0XsT0nWMAju52QIT1uf6m8UOb75.tfWWPupeOMaXV2Fjfy3t6N9Y
- ABBVwXHy7Kpl0yEREGRbWZ2NUdvI_DO.cFlzQ7Xwfc2V0SGhHNjGjRqZLi5CekKLnnc1HOyRG7sI
- g7Zblgddn8N9zQgkTr6G2T3uu1aBQMXiGWCsw_z6zY7LfbPlxliLCk7skpP5BhJEwWSBnoy38u6S
- fBCCylvXr5Ou56L2cqtFEEVb6aSFfrzxZGkAZ6wxPu5ntI__tL8QYiLet6.I0ZWVgGJbuQqQ8zU9
- 9B7UH4zgBSdBexTtLk3Wn8QprmcYHgJ_Aplmr2.TokMfdTXynEnU2SiocvUnFDC9sZrVG_unO2gn
- YMOwlpa9d9WbmsswieS6PR6OEWjhGTZrj_6DP0iWnE5lq5gXt1Qu0ztD6H75TDjZY6ckR.3y3TcR
- 4mpdwDsehReD2BkyjQcYarsuNZNY92.2XQesOMmPaQGmR9lMp.z8PXHe8l02GeCcycyNfPISpwil
- QcM6PX0Fe8_4CDS3Cj7_zzcL3LnmvqTJLSntRRcKfzNuAGd4p.ri3Yk_usTs8ykC7bjtZLoCa1TB
- NwcYhq70JpJ5IRRuQLKsEpITWLCSYr5eDjCin8iUW4dCYntT1nwjl5p.bigHYbRR4W5sCE6rd9nz
- aMcqagDJHNc5waXavXbVsy27ncfi8giW9ZIwXFSiDDoiWvHNRR3H5ArSEOjFeX6modl2ks.JWeXv
- JxquImzCsr1WmJc8fOuu9yBsQVaPVfutUZjGLfZVRFVYCgXCgeBsoQdVq04sxTnzgsrZ5CXxLf8u
- RIjT5xqD9W88z6.MCDM7rcQUsmJwA8UKINsVHGA9K2fFetL1D0VODMZOqAx5IUc0rwsYaB3G13Yv
- X6G.hWRHbOiH546X7ZjP_Xli7EMoLYAGVJoC_a0U3F2mXOWhA1NyAGt0SpmG72VTDX6N.z1PkK.K
- ifEt0nunX8cHgTPVIlJ8G8owOLFlZuQTCGGmzi5etW9pZBNckyKcXi5VEi5dHd_7Vs0m4mPEVgfV
- RrrvmAJ.Sf_X23bhvIKllBqqkrYSslD5HB9LzuCEp_aZek9qb6ulxCwVi99neD.Ho2Au4Nk9E8FS
- K4SWvuaPKNb7.avL9W0mtC1ExSW4YKs5aCPbnmIWeSZVBynhRZQfulD9YFVngEP2J2plifXjqzVz
- LF0Cs3pMJQ7QIj9YuNX3M8pLxtOWKycpa
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Tue, 17 Mar 2020 12:09:52 +0000
-Date:   Tue, 17 Mar 2020 12:07:51 +0000 (UTC)
-From:   Stephen Li <stenn7@gabg.net>
-Reply-To: stephli947701@gmail.com
-Message-ID: <442828441.1833677.1584446871712@mail.yahoo.com>
-Subject: REF
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <442828441.1833677.1584446871712.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.15342 YMailNodin Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+        id S1726647AbgCQPzo (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 17 Mar 2020 11:55:44 -0400
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:55541 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726643AbgCQPzo (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 17 Mar 2020 11:55:44 -0400
+Received: by mail-pj1-f65.google.com with SMTP id mj6so10173736pjb.5;
+        Tue, 17 Mar 2020 08:55:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=rIOYXa4n3W4fvDIFexK8Xd1iAbQHd2/NWX4UF2y8JPU=;
+        b=irfrBskVIzOYnt/8r4tZQkRb68wX1xdH3cibG7ArPih3W4C8DDXVzgNH550GQ96uAr
+         jqoYAlgRrigTEqn3/aSlfNxHsiqOPz8uSpuxx032eJ1yTZFg7zVtabnFhEjkdfuXwHQC
+         ZptWEZfY/eBxexy70Z6S05vR1GuZjwB8UEArvF4djW+XTlobg7LpVrFmKkUJ5IAuD9w4
+         ShHyFljj8mHxonbV1k6VGzmLVXAQVDsiD3Fv5iYzEM0Cp6vv1kPRKTZQ+q+ejfWOhSL3
+         l6ZOb71iiAsJcf3s/dNYOvvI/VIngpu4fwhYmDyFnaZorpKvJ5cNbswj6fBnOkCZh8CM
+         NyFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=rIOYXa4n3W4fvDIFexK8Xd1iAbQHd2/NWX4UF2y8JPU=;
+        b=kzf0S5W4ROoCDhdY7wzm8EHP5t0ArTNqeqou1uVvNVr/LAfD8jEnD9vX84rNHyY9Ed
+         MN9Ba83VDW3FqgNf03+Hj77YKLvQbAs5V3mYQIkYQl6qd64gN3kqEutHEeE9mNtdQiLD
+         x1Bde86f8brDkn27UPfxoJQskK6hQrlI+Pedy/SJH7iqW6Vlv/tRxP2UMMgHScGuPile
+         wTP5tU0f/AJPAW7nsorPWJfsLvt5ygZ2sNm/hamD7cHsSl0PzESxJOKmUfREHuXuqch2
+         /gTIWVHBVcB6lqWHsFmHs/25TJhszxEg8hPbOq6VciyuxnMW74aTKwu7m8be50clQXrI
+         ygSw==
+X-Gm-Message-State: ANhLgQ18q5Mwu8Bm105BZuGWJ1AcQBDku7XdXDn7nkRipi3DvKtGoFfG
+        UkczOs8dvp3lqyMel87dDPQ=
+X-Google-Smtp-Source: ADFU+vsXJcKIHwYeeKLVHimqaIiwGZKzfpf0o1uTLHXjAzQQxGHWA+wfsYGrjvu6bZ6GZ6w3hOSWCg==
+X-Received: by 2002:a17:902:d712:: with SMTP id w18mr5146760ply.238.1584460542597;
+        Tue, 17 Mar 2020 08:55:42 -0700 (PDT)
+Received: from localhost ([161.117.239.120])
+        by smtp.gmail.com with ESMTPSA id s19sm3665027pfh.218.2020.03.17.08.55.40
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 17 Mar 2020 08:55:41 -0700 (PDT)
+From:   Qiujun Huang <hqjagain@gmail.com>
+To:     marcelo.leitner@gmail.com, davem@davemloft.net
+Cc:     vyasevich@gmail.com, nhorman@tuxdriver.com, kuba@kernel.org,
+        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, anenbupt@gmail.com,
+        Qiujun Huang <hqjagain@gmail.com>
+Subject: [PATCH v2] sctp: fix refcount bug in sctp_wfree
+Date:   Tue, 17 Mar 2020 23:55:36 +0800
+Message-Id: <20200317155536.10227-1-hqjagain@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
+Do accounting for skb's real sk.
+In some case skb->sk != asoc->base.sk:
 
+migrate routing        sctp_check_transmitted routing
+------------                    ---------------
+lock_sock_nested();
+                               mv the transmitted skb to
+                               the it's local tlist
 
-Greetings,
-I was searching through a local business directory when I found your
-profile. I am Soliciting On-Behalf of my private client who is
-interested in having a serious business investment in your country. If
-you have a valid business, investment or project he can invest
-back to me for more details. Your swift response is highly needed.
-Sincerely
-Stephen Li
-Please response back to me with is my private email below for more details
-stephli947701@gmail.com
+sctp_for_each_tx_datachunk(
+sctp_clear_owner_w);
+sctp_assoc_migrate();
+sctp_for_each_tx_datachunk(
+sctp_set_owner_w);
+
+                               put the skb back to the
+                               assoc lists
+----------------------------------------------------
+
+The skbs which held bysctp_check_transmitted were not changed
+to newsk. They were not dealt with by sctp_for_each_tx_datachunk
+(sctp_clear_owner_w/sctp_set_owner_w).
+
+It looks only trouble here so handling it in sctp_wfree is enough.
+
+Reported-and-tested-by: syzbot+cea71eec5d6de256d54d@syzkaller.appspotmail.com
+Signed-off-by: Qiujun Huang <hqjagain@gmail.com>
+---
+ net/sctp/socket.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+index 1b56fc440606..5f5c28b30e25 100644
+--- a/net/sctp/socket.c
++++ b/net/sctp/socket.c
+@@ -9080,7 +9080,7 @@ static void sctp_wfree(struct sk_buff *skb)
+ {
+ 	struct sctp_chunk *chunk = skb_shinfo(skb)->destructor_arg;
+ 	struct sctp_association *asoc = chunk->asoc;
+-	struct sock *sk = asoc->base.sk;
++	struct sock *sk = skb->sk;
+ 
+ 	sk_mem_uncharge(sk, skb->truesize);
+ 	sk->sk_wmem_queued -= skb->truesize + sizeof(struct sctp_chunk);
+@@ -9109,7 +9109,7 @@ static void sctp_wfree(struct sk_buff *skb)
+ 	}
+ 
+ 	sock_wfree(skb);
+-	sctp_wake_up_waiters(sk, asoc);
++	sctp_wake_up_waiters(asoc->base.sk, asoc);
+ 
+ 	sctp_association_put(asoc);
+ }
+-- 
+2.17.1
+
