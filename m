@@ -2,148 +2,156 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 556471894A1
-	for <lists+linux-sctp@lfdr.de>; Wed, 18 Mar 2020 04:55:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE8F1894C2
+	for <lists+linux-sctp@lfdr.de>; Wed, 18 Mar 2020 05:08:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726478AbgCRDzy (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 17 Mar 2020 23:55:54 -0400
-Received: from mail-qv1-f66.google.com ([209.85.219.66]:42729 "EHLO
-        mail-qv1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726229AbgCRDzy (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 17 Mar 2020 23:55:54 -0400
-Received: by mail-qv1-f66.google.com with SMTP id ca9so12193848qvb.9;
-        Tue, 17 Mar 2020 20:55:53 -0700 (PDT)
+        id S1726553AbgCREIK (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 18 Mar 2020 00:08:10 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:44634 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726550AbgCREIK (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 18 Mar 2020 00:08:10 -0400
+Received: by mail-io1-f65.google.com with SMTP id v3so13367074iot.11;
+        Tue, 17 Mar 2020 21:08:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4w0fVuhtcWUrWrEECdk2qkWG8xGkG11mQX5K+KieeCg=;
-        b=U7g4r8lFCvt3Z7d9CMTwyuOKIPtDFDsXdLFXgbkLDuO5hV2zFuFmKbdzb2DS83a+Pv
-         7RZMASrPmhL2C3+EUH8urNDPMt3Fb3QuowBcea3l+Ihqiwnd02uWvQ4tE1G0x8i7/gqL
-         o4Nzjpe68ER5PXAynfkZxELUqXWi+fq+8lHhpuj+4OxcUCDACuUu1ueB2EPvF3AHVDW4
-         dvqImW1EoOpDJzSYqdrFkeeidMIe67MdE6tzdrELEUbe63vtcORFETYow1IHw8i5TQO6
-         WCwubo2kpuyChIOOdQESHygGyGIGEbcjw8wXdQOIiWYMGFVHmUo+qkdak/ii4Dt4EUtF
-         W87A==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1y3VYEMMB36hbyX25xJqlRITD/GhHC8JGwRXWq8x8hA=;
+        b=SO1oIEi2lDBKF7zFXFbJuTnir4JvQJ83EqL16ln6U9b73HI37FJPY/n5zd7WBeA4xT
+         eSOzwhphtjC7ORQUrP0kEn/x138QBwEZmTGV1ZFH67YzooM5QTeQdhe20aVtaVekb8NI
+         /xk5e95ZvfaF+L+HwedaiiDWNLiWVD2GIn0O5GV5HTgtvdXrSlHs5k76QDGfSmBR7EVl
+         dZH04BE11Hjcorz0Jivn353F2yM6mHaDdC6UVNlMeYzrsTMCdQXDWkYTKSg4bQ9L/cLv
+         ciTKEip9JzgGb8gtO9GBGHvVZgyNsPKIxU8hC+4TeJa1PtMkDlhooHjyQUkoohoaGpU3
+         JNGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4w0fVuhtcWUrWrEECdk2qkWG8xGkG11mQX5K+KieeCg=;
-        b=UII4nG6tMbq2r0TFPrFcN15x/zSBtSEurlrpTcYP5ByAw35+ZJl7//S7J3qeu8QsW8
-         TPY3bB1fDstgjiLv0FHnCheGNVtNCVIf03hIT8LLU4TOfjwqjOycYZD8PVqPMTe9fFWG
-         hwwR3HRSK/W8G8+C6DGZ0mKdx5WVu1sOz8AXfpDGxtvB9eJ3MKwA57kKTkWTMtQnuBka
-         nshPhJ76sMr7vMYOsIQ+HpiSm1jzpf4h7qJHS81ssiazKhKxf3vKrP13LgqvJGf0XFyT
-         qfL0gmQqTpSDbn43IARqtmyW1lSsJPj7T1HoP5zIz+2K8mxWE5dSIAkp6sM60ujC3t0A
-         Bvsg==
-X-Gm-Message-State: ANhLgQ2C93wFtWqrMKghMEfdfgXSONM+oHDEsolLp9fNPELuXpQDpRD6
-        JHm5/cod01adgwtV4AmqSOY=
-X-Google-Smtp-Source: ADFU+vsBEvZq/VSmCYpryFG8+yqe1CqMSCYGxnfsasmZm6OuNkNGUUqEOM++LKgciXgMQY1z7xc7Lg==
-X-Received: by 2002:ad4:5642:: with SMTP id bl2mr2430914qvb.11.1584503752892;
-        Tue, 17 Mar 2020 20:55:52 -0700 (PDT)
-Received: from localhost.localdomain ([2001:1284:f013:bfaf:5636:cd03:74f7:34b0])
-        by smtp.gmail.com with ESMTPSA id f26sm3338754qkl.119.2020.03.17.20.55.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Mar 2020 20:55:52 -0700 (PDT)
-Received: by localhost.localdomain (Postfix, from userid 1000)
-        id DA47BC550F; Wed, 18 Mar 2020 00:55:49 -0300 (-03)
-Date:   Wed, 18 Mar 2020 00:55:49 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Qiujun Huang <hqjagain@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1y3VYEMMB36hbyX25xJqlRITD/GhHC8JGwRXWq8x8hA=;
+        b=tAufFOWTrLSSjfYWYvWvPwGhZygK5CkhD78f3XX15TyhCweqQjBu+J01dox2a/dWNF
+         0b/ia3/6yhtxqLXvfi9MTroGGGqwDRlVSiJBZJD4GxLxNgzYAPDWnRy8e3HOi804C4Et
+         N/VMzN9XKyY3E2w6atzY4ihYtU5+PunyGPLxlHi8M+ntbw2VbFSOyuMC42ZnauRiKdz8
+         7TCJFV/UPorTvHdMv37m4O8QFc0lPJziJyddXx9d86wA6cadpLxxJFnj/tA2innKHApd
+         BNmAJoZwFldAWm6fRDsVFAgvDCwbbzyXjHBn95QrLwA4b2nrQrdFhDBv0L726n/HF4UD
+         3gqQ==
+X-Gm-Message-State: ANhLgQ37dhah8DKs1ZBEPNidNqIi3HoJeXwNcpl2/hMjzzjnpfilz+oN
+        gr4FPhAWZMuUvGZ4vPBiaODiOrg8WTSNhQj1J/Y=
+X-Google-Smtp-Source: ADFU+vvgce9sXkaz3f8wxIYnDObhVxsw1YvGMs4jy4g39o/Wm9Ssbao4HjLfqzLh+ADtG1QWpcoybH8JO0n1aBJbC1U=
+X-Received: by 2002:a02:220f:: with SMTP id o15mr2608999jao.106.1584504489108;
+ Tue, 17 Mar 2020 21:08:09 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200317155536.10227-1-hqjagain@gmail.com> <20200317173039.GA3828@localhost.localdomain>
+ <CAJRQjocwMzmBiYXwCnupE7hd8qYveBXtUiF2WKBe=TFfJLqcDw@mail.gmail.com> <20200318035549.GC3756@localhost.localdomain>
+In-Reply-To: <20200318035549.GC3756@localhost.localdomain>
+From:   Qiujun Huang <hqjagain@gmail.com>
+Date:   Wed, 18 Mar 2020 12:07:58 +0800
+Message-ID: <CAJRQjoeGtALzDHUS+OUJfK-JqQ_T-_RX74Opt-TLTxufVAQN7g@mail.gmail.com>
+Subject: Re: [PATCH v2] sctp: fix refcount bug in sctp_wfree
+To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 Cc:     "David S. Miller" <davem@davemloft.net>, vyasevich@gmail.com,
         nhorman@tuxdriver.com, Jakub Kicinski <kuba@kernel.org>,
         linux-sctp@vger.kernel.org, netdev <netdev@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>, anenbupt@gmail.com
-Subject: Re: [PATCH v2] sctp: fix refcount bug in sctp_wfree
-Message-ID: <20200318035549.GC3756@localhost.localdomain>
-References: <20200317155536.10227-1-hqjagain@gmail.com>
- <20200317173039.GA3828@localhost.localdomain>
- <CAJRQjocwMzmBiYXwCnupE7hd8qYveBXtUiF2WKBe=TFfJLqcDw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJRQjocwMzmBiYXwCnupE7hd8qYveBXtUiF2WKBe=TFfJLqcDw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, Mar 18, 2020 at 10:45:51AM +0800, Qiujun Huang wrote:
-> On Wed, Mar 18, 2020 at 1:30 AM Marcelo Ricardo Leitner
-> <marcelo.leitner@gmail.com> wrote:
-> >
-> > Hi,
-> >
-> > On Tue, Mar 17, 2020 at 11:55:36PM +0800, Qiujun Huang wrote:
-> > > Do accounting for skb's real sk.
-> > > In some case skb->sk != asoc->base.sk:
-> > >
-> > > migrate routing        sctp_check_transmitted routing
-> > > ------------                    ---------------
-> >                                  sctp_close();
-> >                                    lock_sock(sk2);
-> >                                  sctp_primitive_ABORT();
-> >                                  sctp_do_sm();
-> >                                  sctp_cmd_interpreter();
-> >                                  sctp_cmd_process_sack();
-> >                                  sctp_outq_sack();
-> >                                  sctp_check_transmitted();
-> >
-> >   lock_sock(sk1);
-> >   sctp_getsockopt_peeloff();
-> >   sctp_do_peeloff();
-> >   sctp_sock_migrate();
-> > > lock_sock_nested(sk2);
-> > >                                mv the transmitted skb to
-> > >                                the it's local tlist
-> >
-> >
-> > How can sctp_do_sm() be called in the 2nd column so that it bypasses
-> > the locks in the left column, allowing this mv to happen?
-> >
-> > >
-> > > sctp_for_each_tx_datachunk(
-> > > sctp_clear_owner_w);
-> > > sctp_assoc_migrate();
-> > > sctp_for_each_tx_datachunk(
-> > > sctp_set_owner_w);
-> > >
-> > >                                put the skb back to the
-> > >                                assoc lists
-> > > ----------------------------------------------------
-> > >
-> > > The skbs which held bysctp_check_transmitted were not changed
-> > > to newsk. They were not dealt with by sctp_for_each_tx_datachunk
-> > > (sctp_clear_owner_w/sctp_set_owner_w).
-> >
-> > It would make sense but I'm missing one step earlier, I'm not seeing
-> > how the move to local list is allowed/possible in there. It really
-> > shouldn't be possible.
-> 
-> I totally agree that.
-> My mistake. So I added some log in my test showing the case:
-> The backtrace:
-> sctp_close
-> sctp_primitive_ABORT
-> sctp_do_sm
-> sctp_association_free
-> __sctp_outq_teardown
->      /* Throw away unacknowledged chunks. */
->     list_for_each_entry(transport, &q->asoc->peer.transport_addr_list,
->     transports) {
->     printk("[%d]deal with transmitted %#llx from transport %#llx  %s,
-> %d\n", raw_smp_processor_id(),
->    &transport->transmitted, transport, __func__, __LINE__);
->    while ((lchunk = sctp_list_dequeue(&transport->transmitted)) != NULL) {
-> 
-> The trouble skb is from another peer sk in the same asoc, but
-> accounted to the base.sk.
+On Wed, Mar 18, 2020 at 11:55 AM Marcelo Ricardo Leitner
+<marcelo.leitner@gmail.com> wrote:
+>
+> On Wed, Mar 18, 2020 at 10:45:51AM +0800, Qiujun Huang wrote:
+>
+> Hmm, not sure how you got that out of that debug msg, but okay.
+> Even if so, how would this trouble skb be accounted on the wrong sk by
+> then?
+>
+> Asking because the fix that we want may be a better locking, to
+> prevent this situation from happening, than compensating for it in
+> sctp_wfree(). But for that we need to understand how this happened.
+>
 
-Hmm, not sure how you got that out of that debug msg, but okay.
-Even if so, how would this trouble skb be accounted on the wrong sk by
-then?
+Yes, I should find the root cause. Here is the log
 
-Asking because the fix that we want may be a better locking, to
-prevent this situation from happening, than compensating for it in
-sctp_wfree(). But for that we need to understand how this happened.
+[   86.507432][ T8813] [1]skb 0xffff88809fdfc800 0xffff88809621e7c0:
+truesize 768, sk alloc 769 sctp_set_owner_w 137
+[   86.532042][ T8813] [1]skb 0xffff888099ebbe80 0xffff88809621e7c0:
+truesize 131328, sk alloc 132353 sctp_set_owner_w 137
+[   86.543426][ T8813] [1]skb 0xffff88809ef55cc0 0xffff88809621e7c0:
+truesize 131328, sk alloc 263937 sctp_set_owner_w 137
+[   86.563229][ T8813] [1]skb 0xffff88809ef557c0 0xffff88809621e7c0:
+truesize 131328, sk alloc 395521 sctp_set_owner_w 137
+[   86.589332][ T8813] [1]skb 0xffff88809ef55a40 0xffff88809621e7c0:
+truesize 33024, sk alloc 428801 sctp_set_owner_w 137
+[   86.602211][ T8813] [1]deal with transmitted 0xffff8880910b0a80
+from transport 0xffff8880910b0800  __sctp_outq_teardown, 216
+[   86.616336][ T8813] [1]put back to queue 0xffff888091dc8770
+sctp_check_transmitted, 1683
+[   86.625610][ T8813] [1]get packet 0xffff888099ebbe80 from queue
+0xffff888096b2c280  sctp_check_transmitted, 1437
+[   86.637105][ T8813] [1]put skb 0xffff888099ebbe80 back.
+sctp_check_transmitted, 1533
+[   86.646284][ T8813] [1]put back to queue 0xffff888096b2c280
+sctp_check_transmitted, 1683          ----
+[   86.687575][ T8813] [1]before sk 0xffff88809621e7c0
+sctp_sock_migrate, 9592                               ----I think
+something wrong opens here. 0xffff888099ebbe80 not changed to newsk
+[   86.696296][ T8813] [1]skb 0xffff88809ef55cc0 0xffff88809621e7c0:
+truesize 131328, sk alloc 429057 sctp_wfree 9101 real sk
+0xffff88809621e7c0
+[   86.721891][ T8813] [1]transmitted done queue 0xffff888091dc83d0
+sctp_for_each_tx_datachunk, 166
+[   86.757260][ T8813] [1]retransmit done queue 0xffff888091dc8770
+sctp_for_each_tx_datachunk, 171
+[   86.771065][ T8813] [1]sacked done queue 0xffff888091dc8760
+sctp_for_each_tx_datachunk, 176
+[   86.797487][ T8813] [1]abandoned done queue 0xffff888091dc8780
+sctp_for_each_tx_datachunk, 181
+[   86.814856][ T8813] [0]skb 0xffff88809ef557c0 0xffff88809621e7c0:
+truesize 131328, sk alloc 297473 sctp_wfree 9101 real sk
+0xffff88809621e7c0
+[   86.831799][ T8813] [0]skb 0xffff88809ef55a40 0xffff88809621e7c0:
+truesize 33024, sk alloc 165889 sctp_wfree 9101 real sk
+0xffff88809621e7c0
+[   86.845473][ T8813] [0]out_chunk_list done queue 0xffff888091dc8730
+sctp_for_each_tx_datachunk, 186
+[   86.866011][ T8813] [0]skb 0xffff88809ef55cc0 0xffff8880a3bb2800:
+truesize 131328, sk alloc 131329 sctp_set_owner_w 137
+[   86.884811][ T8813] [0]transmitted done queue 0xffff888091dc83d0
+sctp_for_each_tx_datachunk, 166
+[   86.896150][ T8813] [0]retransmit done queue 0xffff888091dc8770
+sctp_for_each_tx_datachunk, 171
+[   86.907233][ T8813] [0]sacked done queue 0xffff888091dc8760
+sctp_for_each_tx_datachunk, 176
+[   86.916825][ T8813] [0]abandoned done queue 0xffff888091dc8780
+sctp_for_each_tx_datachunk, 181
+[   86.927458][ T8813] [0]skb 0xffff88809ef557c0 0xffff8880a3bb2800:
+truesize 131328, sk alloc 262913 sctp_set_owner_w 137
+[   86.957446][ T8813] [0]skb 0xffff88809ef55a40 0xffff8880a3bb2800:
+truesize 33024, sk alloc 296193 sctp_set_owner_w 137
+[   86.971810][ T8813] [0]out_chunk_list done queue 0xffff888091dc8730
+sctp_for_each_tx_datachunk, 186
+[   86.992386][ T8813] [0]after sk 0xffff8880a3bb2800 sctp_sock_migrate, 9597
+[   87.091320][ T8811] [1]deal with transmitted 0xffff8880a6f52280
+from transport 0xffff8880a6f52000  __sctp_outq_teardown, 216
+[   87.110552][ T8811] [1]skb 0xffff88809fdfc800 0xffff88809621e7c0:
+truesize 768, sk alloc 132609 sctp_wfree 9101 real sk
+0xffff88809621e7c0
+[   87.180238][ T8811] [0]deal with transmitted 0xffff888096b2c280
+from transport 0xffff888096b2c000  __sctp_outq_teardown, 216
+[   87.264062][ T8811] [0]skb 0xffff888099ebbe80 0xffff8880a3bb2800:
+truesize 131328, sk alloc 296449 sctp_wfree 9101 real sk
+0xffff88809621e7c0       --->the trouble skb
+[   87.289730][ T8811] [1]skb 0xffff88809ef55cc0 0xffff8880a3bb2800:
+truesize 131328, sk alloc 296193 sctp_wfree 9101 real sk
+0xffff8880a3bb2800
+[   87.314206][ T8811] [1]skb 0xffff88809ef557c0 0xffff8880a3bb2800:
+truesize 131328, sk alloc 164609 sctp_wfree 9101 real sk
+0xffff8880a3bb2800
+[   87.329602][ T8811] [1]skb 0xffff88809ef55a40 0xffff8880a3bb2800:
+truesize 33024, sk alloc 33025 sctp_wfree 9101 real sk
+0xffff8880a3bb2800
 
-  Marcelo
+>   Marcelo
