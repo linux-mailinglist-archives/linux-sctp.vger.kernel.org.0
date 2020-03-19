@@ -2,73 +2,134 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 230A21894DB
-	for <lists+linux-sctp@lfdr.de>; Wed, 18 Mar 2020 05:23:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE0118C012
+	for <lists+linux-sctp@lfdr.de>; Thu, 19 Mar 2020 20:07:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726227AbgCREXN (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 18 Mar 2020 00:23:13 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:41129 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726219AbgCREXN (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 18 Mar 2020 00:23:13 -0400
-Received: by mail-il1-f195.google.com with SMTP id l14so22347896ilj.8;
-        Tue, 17 Mar 2020 21:23:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0jhvppohiGdkVH4kDUuCkzpSB1MhlV8OnkUGzMM6rqA=;
-        b=RDet+2Z+Lfi2S7uCJcx3wrx3jgthVPCp1iaSHTRXmtgG/JAFqfO+94wXHET7LnU4SN
-         FExE5CQ2if5LZ5P+8B7OPd67iAOyXKQqYiKOZ94kod+p+QNOaepENep/c+kBg/LQOwpH
-         VFt14LAiWmknu+haC8uUXDw6UGqt2EuTH/4TYDt/5dkFWN83pzTXWm29nKiP7k+/uI/n
-         lgFRN9lk78zxx4dkBHuiLM1Hjhaj33GB7nwDpBE9E3wn1rB8qdxqFISA7piqy8SkSTag
-         1iDIs6yePatVtKRWexYOf5I47yy8jhzubz4KbvrdZImiTdMAXRzUhifKC/ah0vQCfZXA
-         c0pw==
+        id S1727279AbgCSTHR (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 19 Mar 2020 15:07:17 -0400
+Received: from mail-il1-f197.google.com ([209.85.166.197]:38423 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727235AbgCSTHQ (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 19 Mar 2020 15:07:16 -0400
+Received: by mail-il1-f197.google.com with SMTP id i67so2917436ilf.5
+        for <linux-sctp@vger.kernel.org>; Thu, 19 Mar 2020 12:07:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0jhvppohiGdkVH4kDUuCkzpSB1MhlV8OnkUGzMM6rqA=;
-        b=F1xyAlOnsrZx2+8FR1/cJ5X8sXTtu3cMKjEPWQXj2TDnTeUXPV6RWHVhGNV5jxy84t
-         tHQTnBbC6EZxJ8MXZi6vmOTQIQ306pXDo8SiZy7NVgaE220o1Vsn9GDlvjCfoNWwVBlf
-         2sRIWZJD0i9iU8AErIqSfJmoAOGPxqQVg3AI1EU54ABfn9AxE8Buhfetav/xcOXtwA5a
-         GLbeatcrjccXhSEBEgn3no/B+/HbKPbYaoqBhEhgJI6ihpO0Vsf+rZcTkJvDQAkxy6H0
-         BIMnzeYFmcQyeDRfXkRlM6ko0buRt8cPktLb3p3T8xwZzrEKMUMBl9HvDYMm1NXv6x1R
-         LXJA==
-X-Gm-Message-State: ANhLgQ0BvL+WpEkNAq2KSQ9nm5flO51wxYU455XYssf6oAKlOgGh5l2Y
-        XPSS0z471ATVj1ErlMNQV1LbgtRFYaZUj8u7Bmw=
-X-Google-Smtp-Source: ADFU+vtqkCN72qjYs1Zx1mwfm2LXiYho3C9TjXQ2/kQEL1e+vz9pwGTwUIsgZpkniv9KTeOTWpYDb7vZoqR78EP07Bw=
-X-Received: by 2002:a92:83ca:: with SMTP id p71mr2017072ilk.278.1584505390662;
- Tue, 17 Mar 2020 21:23:10 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=JK4j91aQp8xu0adgIRNWGetww6zGg0DWJPZzVkz/f5s=;
+        b=k8JjX222fE3Q48bnWcpCNroypZ0O4X1hPCjE/i2DVxUA7XD1lJ6dZ+6dNApfw4SRwj
+         /7CI/XZDfj3l0tZxxzvZSrsvyh1zVytrPsVnPioXzTKcymj9iPvkalyBguzMpxjvL2L0
+         UELQ1AgUncecBAJzfnBjZuIul3iSM1hre45PhISH80zxEcXluYVyvzTBHPS/7rsWVYJY
+         gxSfLpzp6N4jW8pbP8K+xDR5v0opHWX6602qXBjIujAAp9w0ahTunNunH0tp8jovuqux
+         OfNCrEuLtnzQiRFmvwnOg4ZKcrOC88j7Xh185O2ubck/FQONG2HVA/NJ7POPBbvkaEgi
+         V2bQ==
+X-Gm-Message-State: ANhLgQ0Xf7LN3GaVnkRzFHxH9gTvVrUwG/+/WIkmCOgGL+g/YRe5ULxM
+        pw+5YqWpsJExLh63hRY0m+V4EfW4Ekjwn585lRlurdeur5/p
+X-Google-Smtp-Source: ADFU+vtvBsH7etlrl1Zx74wee00IqMfrHha6pAhzcBYU4nKxhFmdO8EF/gSiaAdL5UWYDiwqoAN6Zej/knvSVfttizzdrh8HPPpU
 MIME-Version: 1.0
-References: <20200317155536.10227-1-hqjagain@gmail.com> <20200317173039.GA3828@localhost.localdomain>
- <CAJRQjocwMzmBiYXwCnupE7hd8qYveBXtUiF2WKBe=TFfJLqcDw@mail.gmail.com>
- <20200318035549.GC3756@localhost.localdomain> <CAJRQjoeGtALzDHUS+OUJfK-JqQ_T-_RX74Opt-TLTxufVAQN7g@mail.gmail.com>
-In-Reply-To: <CAJRQjoeGtALzDHUS+OUJfK-JqQ_T-_RX74Opt-TLTxufVAQN7g@mail.gmail.com>
-From:   Qiujun Huang <hqjagain@gmail.com>
-Date:   Wed, 18 Mar 2020 12:22:59 +0800
-Message-ID: <CAJRQjofnjzO9ZZ12Ccxz1gBDiDt5Kt=E7Z2q4=vpcwY5AkOB9A@mail.gmail.com>
-Subject: Re: [PATCH v2] sctp: fix refcount bug in sctp_wfree
-To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>, vyasevich@gmail.com,
-        nhorman@tuxdriver.com, Jakub Kicinski <kuba@kernel.org>,
-        linux-sctp@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, anenbupt@gmail.com
+X-Received: by 2002:a92:358b:: with SMTP id c11mr4415053ilf.64.1584644834463;
+ Thu, 19 Mar 2020 12:07:14 -0700 (PDT)
+Date:   Thu, 19 Mar 2020 12:07:14 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000074219d05a139e082@google.com>
+Subject: general protection fault in sctp_ulpevent_nofity_peer_addr_change
+From:   syzbot <syzbot+3950016bd95c2ca0377b@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-sctp@vger.kernel.org, marcelo.leitner@gmail.com,
+        netdev@vger.kernel.org, nhorman@tuxdriver.com,
+        syzkaller-bugs@googlegroups.com, vyasevich@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-[ T8813] [1]put skb 0xffff888099ebbe80 back. sctp_check_transmitted, 1533
-[ T8813] [1]put back to queue 0xffff888096b2c280 sctp_check_transmitted, 1683
-Something wrong happens here, 0xffff888099ebbe80 not changed to newsk
-[ T8813] [1]before sk 0xffff88809621e7c0 sctp_sock_migrate, 9592
+Hello,
 
-cause
+syzbot found the following crash on:
 
-[ T8811] [0]skb 0xffff888099ebbe80 0xffff8880a3bb2800: truesize
-131328, sk alloc 296449 sctp_wfree 9101
-               real sk 0xffff88809621e7c0
+HEAD commit:    5076190d mm: slub: be more careful about the double cmpxch..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14d2a61de00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9f894bd92023de02
+dashboard link: https://syzkaller.appspot.com/bug?extid=3950016bd95c2ca0377b
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+userspace arch: i386
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1162bbe3e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13c93b45e00000
 
-it's sk is still oldsk.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+3950016bd95c2ca0377b@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xdffffc0000000017: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x00000000000000b8-0x00000000000000bf]
+CPU: 0 PID: 10161 Comm: syz-executor044 Not tainted 5.6.0-rc6-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:sctp_ulpevent_nofity_peer_addr_change+0xed/0xa30 net/sctp/ulpevent.c:347
+Code: 03 80 3c 02 00 0f 85 19 08 00 00 48 8b ab a8 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d bd bc 00 00 00 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 70
+RSP: 0018:ffffc900022a7308 EFLAGS: 00010207
+RAX: dffffc0000000000 RBX: ffff888096004150 RCX: 0000000000000000
+RDX: 0000000000000017 RSI: 0000000000000000 RDI: 00000000000000bc
+RBP: 0000000000000000 R08: ffff88809419a500 R09: ffffc900022a7358
+R10: fffff52000454e7a R11: ffffc900022a73d7 R12: 0000000000000000
+R13: 0000000000000004 R14: 0000000000000000 R15: ffff888096004150
+FS:  0000000000000000(0000) GS:ffff8880ae600000(0063) knlGS:000000000935d840
+CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
+CR2: 0000000020000180 CR3: 0000000093589000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ sctp_assoc_set_primary+0x6c/0x300 net/sctp/associola.c:435
+ sctp_assoc_rm_peer+0x77c/0xa40 net/sctp/associola.c:508
+ sctp_assoc_update+0x50a/0xe30 net/sctp/associola.c:1116
+ sctp_cmd_assoc_update net/sctp/sm_sideeffect.c:836 [inline]
+ sctp_cmd_interpreter net/sctp/sm_sideeffect.c:1305 [inline]
+ sctp_side_effects net/sctp/sm_sideeffect.c:1185 [inline]
+ sctp_do_sm+0x1c57/0x4ed0 net/sctp/sm_sideeffect.c:1156
+ sctp_assoc_bh_rcv+0x386/0x6d0 net/sctp/associola.c:1044
+ sctp_inq_push+0x1da/0x270 net/sctp/inqueue.c:80
+ sctp_backlog_rcv+0x1f3/0x1290 net/sctp/input.c:344
+ sk_backlog_rcv include/net/sock.h:963 [inline]
+ __release_sock+0x134/0x3a0 net/core/sock.c:2440
+ release_sock+0x54/0x1b0 net/core/sock.c:2956
+ sctp_wait_for_connect+0x308/0x530 net/sctp/socket.c:9280
+ __sctp_connect+0x9d2/0xc70 net/sctp/socket.c:1225
+ __sctp_setsockopt_connectx+0x127/0x180 net/sctp/socket.c:1321
+ sctp_setsockopt_connectx net/sctp/socket.c:1353 [inline]
+ sctp_setsockopt net/sctp/socket.c:4698 [inline]
+ sctp_setsockopt+0x15a1/0x7090 net/sctp/socket.c:4655
+ compat_sock_common_setsockopt+0xf6/0x120 net/core/sock.c:3165
+ __compat_sys_setsockopt+0x15d/0x310 net/compat.c:384
+ __do_compat_sys_setsockopt net/compat.c:397 [inline]
+ __se_compat_sys_setsockopt net/compat.c:394 [inline]
+ __ia32_compat_sys_setsockopt+0xb9/0x150 net/compat.c:394
+ do_syscall_32_irqs_on arch/x86/entry/common.c:337 [inline]
+ do_fast_syscall_32+0x270/0xe8f arch/x86/entry/common.c:408
+ entry_SYSENTER_compat+0x70/0x7f arch/x86/entry/entry_64_compat.S:139
+Modules linked in:
+---[ end trace a970df05c462f077 ]---
+RIP: 0010:sctp_ulpevent_nofity_peer_addr_change+0xed/0xa30 net/sctp/ulpevent.c:347
+Code: 03 80 3c 02 00 0f 85 19 08 00 00 48 8b ab a8 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d bd bc 00 00 00 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 70
+RSP: 0018:ffffc900022a7308 EFLAGS: 00010207
+RAX: dffffc0000000000 RBX: ffff888096004150 RCX: 0000000000000000
+RDX: 0000000000000017 RSI: 0000000000000000 RDI: 00000000000000bc
+RBP: 0000000000000000 R08: ffff88809419a500 R09: ffffc900022a7358
+R10: fffff52000454e7a R11: ffffc900022a73d7 R12: 0000000000000000
+R13: 0000000000000004 R14: 0000000000000000 R15: ffff888096004150
+FS:  0000000000000000(0000) GS:ffff8880ae600000(0063) knlGS:000000000935d840
+CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
+CR2: 0000000020000180 CR3: 0000000093589000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
