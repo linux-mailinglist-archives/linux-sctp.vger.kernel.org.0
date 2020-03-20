@@ -2,64 +2,144 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BBB818D0BD
-	for <lists+linux-sctp@lfdr.de>; Fri, 20 Mar 2020 15:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E746318D567
+	for <lists+linux-sctp@lfdr.de>; Fri, 20 Mar 2020 18:10:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726896AbgCTO2E (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 20 Mar 2020 10:28:04 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:56427 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727414AbgCTO2D (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 20 Mar 2020 10:28:03 -0400
-Received: by mail-io1-f69.google.com with SMTP id d13so4646262ioo.23
-        for <linux-sctp@vger.kernel.org>; Fri, 20 Mar 2020 07:28:03 -0700 (PDT)
+        id S1726955AbgCTRKn (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 20 Mar 2020 13:10:43 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:45231 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726843AbgCTRKn (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 20 Mar 2020 13:10:43 -0400
+Received: by mail-pl1-f193.google.com with SMTP id b9so2756497pls.12;
+        Fri, 20 Mar 2020 10:10:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=dmTAKZsOrskmdb08IB/kIN4Tko0TXFx78YTHcn9sjHs=;
+        b=tLZcOTSHbzPVCR3AG2+mAifql+769ivSpTQTBMlh6th2LdR+oAOc2/weE2HUc2wJiu
+         /r8N7P0HiDRWNtBMsLHKr6OYdQkFasbGJSQ0ZXp5zCC3Zf1/Bxe7HYGptq8Il9SIjFV3
+         RMEjUG5gdrlSW3hSwDoQBnNR2zHagqh9dLK1jHTDh81Pj7oEnJWFc6ysp5ilChxOUBsA
+         PlY++RGN6Z/2MGNL+ysUz3vwRNlZ3E5QBslLhy15fBOEVIOKj6ijuiufe8tQ6A6SlVYm
+         aJj/8WVGlcUJh6PNfCh5dR3QwtO5oWaVHpc1L5OQ1ODMNPLjMkiYsnlbt/yYhwLmG2kE
+         r9Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=V3eZ0Q2sozWnNVeRof3nsCb56+obGL4I8lV01F1qBnw=;
-        b=F7IostgzqSX79yr0I3HJnR7x9tpQ+Gd/6ccSTRWmDBHspCHqng8tiJFHC6fQc487BS
-         GThL/nbnCwipxDQdUDCTLBLRzpPFMkReJoR16nEU2WyHX9G5zjsaJz6/6kD+tdr4pqZo
-         2Rt5aDNgYpn1NGDx08DF+13ewLc7YmKoi/eJ8YbFFCHJCOAZgbcLQm3H/UkUfxFYFqEH
-         qNj3LIYG2uTmdQ6+VnvWXTAX4B71R/Ru4rodNI6PsycHw7UhuXm0UdS5wY+/Ps+cKNlm
-         vUsT905W2X7Eabzha+wGBMEn+CL0HVxw9QKFNyP9iyep2aWY9N76y32/xSMPm/GCaNAB
-         g+Cw==
-X-Gm-Message-State: ANhLgQ1Bp/CEV8QxzVpP3tWcrqORRgLWvamtXpXXYbab9F2BmHRQFA3N
-        JnpoB4FAF/BvIOSz+ITHzduz/yzpjCsRRhCWYokk+SUv0aAF
-X-Google-Smtp-Source: ADFU+vs8Llim/P/NcDrRl0rA9xDffc9w+ks14520WpdyQ2KMPPDXKIdigsLz5Hd/lFxeKcOVJou3SzJdzLJ5COhOBHpYl/hSWQAs
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=dmTAKZsOrskmdb08IB/kIN4Tko0TXFx78YTHcn9sjHs=;
+        b=XEcUN3WExNBcZOUOn37lvd2YJZFBHedbFaRx9gMtdsc+9U4wYM6qLepTCPzjLe4vsB
+         K8rEpk3Yz1ZZB7+qu1+7/VulehYd0th3MeEv/xQXb0oivrEfZ56L8k8QXFpWGuUOvZx1
+         RnYaXPhxTQjeRTgZtCuhwNR3pEoVYl7MI+MrV1WSjKuNGTYSVUp/f4ObKo1DzxozUyG+
+         ut5PRafjFBw8Cmt/MI4Z8qt3oORv8h4UMqFBHXIQyv3Oj4FeqCAMWX9GbEppgy3MvjwJ
+         8ERvZLpsLRoY5gqMv5prWq6JKiHKGMog+fc5DONheXWthzThp2D5KXeGMSNUzU8ayj4+
+         ysTg==
+X-Gm-Message-State: ANhLgQ3RA+eDblyyrMnjisewHbsUsHKE4Kkij/M2mwU1O7elt+o5cE4O
+        nu2VhiZLiNq10sIshY3ANk0=
+X-Google-Smtp-Source: ADFU+vsbvo0qKpR9+HJnBvXdM8IOc+aDirksacAjmHUPAv08xhQvyOjS8M/zVurVzDlnE+1JD2j6GA==
+X-Received: by 2002:a17:902:728d:: with SMTP id d13mr9528398pll.92.1584724241817;
+        Fri, 20 Mar 2020 10:10:41 -0700 (PDT)
+Received: from [192.168.86.235] (c-73-241-150-58.hsd1.ca.comcast.net. [73.241.150.58])
+        by smtp.gmail.com with ESMTPSA id j4sm5998656pfg.133.2020.03.20.10.10.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Mar 2020 10:10:40 -0700 (PDT)
+Subject: Re: [PATCH v3] sctp: fix refcount bug in sctp_wfree
+To:     Qiujun Huang <hqjagain@gmail.com>, marcelo.leitner@gmail.com,
+        davem@davemloft.net
+Cc:     vyasevich@gmail.com, nhorman@tuxdriver.com, kuba@kernel.org,
+        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, anenbupt@gmail.com
+References: <20200320110959.2114-1-hqjagain@gmail.com>
+From:   Eric Dumazet <eric.dumazet@gmail.com>
+Message-ID: <2dc8673f-a46d-1438-95a8-cfb455bbea57@gmail.com>
+Date:   Fri, 20 Mar 2020 10:10:38 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-X-Received: by 2002:a92:2911:: with SMTP id l17mr8982118ilg.166.1584714482967;
- Fri, 20 Mar 2020 07:28:02 -0700 (PDT)
-Date:   Fri, 20 Mar 2020 07:28:02 -0700
-In-Reply-To: <CADG63jAwaYMP+Q3WNqpOnf39_XZ3z5ZZu-ST-f5q2XM+kHgcgg@mail.gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d3ee8f05a14a17f4@google.com>
-Subject: Re: WARNING: refcount bug in sctp_wfree
-From:   syzbot <syzbot+cea71eec5d6de256d54d@syzkaller.appspotmail.com>
-To:     anenbupt@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
-        marcelo.leitner@gmail.com, netdev@vger.kernel.org,
-        nhorman@tuxdriver.com, syzkaller-bugs@googlegroups.com,
-        vyasevich@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200320110959.2114-1-hqjagain@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello,
 
-syzbot has tested the proposed patch and the reproducer did not trigger crash:
 
-Reported-and-tested-by: syzbot+cea71eec5d6de256d54d@syzkaller.appspotmail.com
+On 3/20/20 4:09 AM, Qiujun Huang wrote:
+> Do accounting for skb's real sk.
+> In some case skb->sk != asoc->base.sk:
+> 
+> for the trouble SKB, it was in outq->transmitted queue
+> 
+> sctp_outq_sack
+> 	sctp_check_transmitted
+> 		SKB was moved to outq->sack
+> 	then throw away the sack queue
+> 		SKB was deleted from outq->sack
+> (but the datamsg held SKB at sctp_datamsg_to_asoc
+> So, sctp_wfree was not called to destroy SKB)
+> 
+> then migrate happened
+> 
+> 	sctp_for_each_tx_datachunk(
+> 	sctp_clear_owner_w);
+> 	sctp_assoc_migrate();
+> 	sctp_for_each_tx_datachunk(
+> 	sctp_set_owner_w);
+> SKB was not in the outq, and was not changed to newsk
+> 
+> finally
+> 
+> __sctp_outq_teardown
+> 	sctp_chunk_put (for another skb)
+> 		sctp_datamsg_put
+> 			__kfree_skb(msg->frag_list)
+> 				sctp_wfree (for SKB)
+> this case in sctp_wfree SKB->sk was oldsk.
+> 
+> It looks only trouble here so handling it in sctp_wfree is enough.
+> 
+> Reported-and-tested-by: syzbot+cea71eec5d6de256d54d@syzkaller.appspotmail.com
+> Signed-off-by: Qiujun Huang <hqjagain@gmail.com>
+> ---
+>  net/sctp/socket.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+> index 1b56fc440606..5f5c28b30e25 100644
+> --- a/net/sctp/socket.c
+> +++ b/net/sctp/socket.c
+> @@ -9080,7 +9080,7 @@ static void sctp_wfree(struct sk_buff *skb)
+>  {
+>  	struct sctp_chunk *chunk = skb_shinfo(skb)->destructor_arg;
+>  	struct sctp_association *asoc = chunk->asoc;
+> -	struct sock *sk = asoc->base.sk;
+> +	struct sock *sk = skb->sk;
+>  
+>  	sk_mem_uncharge(sk, skb->truesize);
+>  	sk->sk_wmem_queued -= skb->truesize + sizeof(struct sctp_chunk);
+> @@ -9109,7 +9109,7 @@ static void sctp_wfree(struct sk_buff *skb)
+>  	}
+>  
+>  	sock_wfree(skb);
+> -	sctp_wake_up_waiters(sk, asoc);
+> +	sctp_wake_up_waiters(asoc->base.sk, asoc);
+>  
+>  	sctp_association_put(asoc);
+>  }
+> 
 
-Tested on:
+This does not really solve the issue.
 
-commit:         a8a7ac16 sctp: fix refcount bug in sctp_wfree
-git tree:       https://github.com/hqj/hqjagain_test.git sctp_wfree_refcount_bug
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a5295e161cd85b82
-dashboard link: https://syzkaller.appspot.com/bug?extid=cea71eec5d6de256d54d
-compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
+Even if the particular syzbot repro is now fine.
 
-Note: testing is done by a robot and is best-effort only.
+Really, having anything _after_ the sock_wfree(skb) is the bug, since the current thread no longer
+own a reference on a socket.
+
+
+
+
