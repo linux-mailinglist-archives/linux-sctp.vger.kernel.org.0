@@ -2,49 +2,51 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33CB618CC96
-	for <lists+linux-sctp@lfdr.de>; Fri, 20 Mar 2020 12:20:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C60918CFD3
+	for <lists+linux-sctp@lfdr.de>; Fri, 20 Mar 2020 15:16:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726896AbgCTLUF (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 20 Mar 2020 07:20:05 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:35498 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726894AbgCTLUE (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 20 Mar 2020 07:20:04 -0400
-Received: by mail-oi1-f196.google.com with SMTP id k8so6117485oik.2
-        for <linux-sctp@vger.kernel.org>; Fri, 20 Mar 2020 04:20:02 -0700 (PDT)
+        id S1727163AbgCTOQY (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 20 Mar 2020 10:16:24 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:43070 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726666AbgCTOQX (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 20 Mar 2020 10:16:23 -0400
+Received: by mail-lf1-f66.google.com with SMTP id n20so4662037lfl.10
+        for <linux-sctp@vger.kernel.org>; Fri, 20 Mar 2020 07:16:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=6w+aFSJ+2vZ3lBtg9xVXLOFVqSNoMPd625E7FNYobb8=;
-        b=duuFC854Gg8oOx5l5AYN6iP68xZYeqHzpGZtEnTw/ik/EKtzQMEuZ3BqqeKwq61QgD
-         +vY/mY91SwpGkG1yK3rSBJKN+4xC494DwxJaYTx8uHaIi/Aa30XompFIP48WGIeqIwiF
-         lmKQtbTHvPkRMldiDL8Xktb6KouFkMBKZhVNhcdHBawiSSbmxmQCVzCOp1bGB5SNU2G7
-         eNeZoUuI6xIuD9d2fckvamAvbBb0B/IfFeWLMb4GjUFeF6ecwLlRpq8rnEb+5s/PPieP
-         UzptDDKRf8YaSwtim/MmRx/0JCu8xcty8AV+ycTNTc9AJ0fMS3zo1D8dhCWOyVkHN9rv
-         Y/gw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=l/YyKtMjSFEbJma+JMWyuZRcQRGW5JZxNPUfP4y/LSk=;
+        b=BfnEAd8uG6GC6CDLQ5u0nq49UCtRtfH3i8hGbmGo+plIK7gRG0fqAclzwNu/WnEuoi
+         KK5+5PSN+nkNGuNqgHLsI14YwLphoMGCOiLhfqdOHgzF4ETUvp5znzi+i+B3oKbe43Hv
+         CuZ0pReoyJju9AF7O88wcO/Y0sQUG0yVM8vU3BTG8oToQIbVm5D8jOruTZs65AtPlHiq
+         QgATnixoSiP6NZMDNeSvKv+w+N2FjE7cjFQm5KufYiwUgnrhmDKNdCwqj22JeFDcI7HT
+         K7o3DUQlGGm1v7L0qFsJvM5znLzGHItqBfYDYVEjWOJPMCybQGmGjvmCAyJ9RavZFvnt
+         2nPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=6w+aFSJ+2vZ3lBtg9xVXLOFVqSNoMPd625E7FNYobb8=;
-        b=kcNwTX3Be1wtOBzYSptZ5RFIp55I/T/7YmQxPVLPMzLoTYbJKVPkEIqrEH3HK6JVxa
-         SrKiUavWMiTL39o+fembBHjXi1kwzZ4KRvBx/WleNxCFGHiulXqoc6wStMDHXD7bY6fs
-         ifFeN3JIqDL5WRnQTqf0JIpH8n5Nb6dj5ryzOouWlyvBUhjVO+XYeibkd+hXP9yvR3fW
-         e1+oBTGKu3XoIY829uitnGkvyRFlnTEjsZ5ngEf4XmMFLB+3vU5vO1U7x7M7QjSCSdH/
-         P1WhmfrFAy336GE9qal8b8FYQa9juJJr8MngWG01f94pFoaYUSXaTri9R2PNJ50I4t4I
-         NL+w==
-X-Gm-Message-State: ANhLgQ0Te9/Pi6VshnbzZZFEFO89gXNfUxxlxTRLLLAT/lIZAVSu2f1s
-        bArakWmEDmyA2QfRgW3toFm9DFHBbNJH4p/68cU=
-X-Google-Smtp-Source: ADFU+vvR/mGZ0F8IfP8rajl/KXQB0WzRsQQFR7vAUhwy8MWQCvfNv+SkrV92lNJ1CcznVLp5pjBwJcU6pW16BlfCV4o=
-X-Received: by 2002:aca:210c:: with SMTP id 12mr5676182oiz.0.1584703202252;
- Fri, 20 Mar 2020 04:20:02 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=l/YyKtMjSFEbJma+JMWyuZRcQRGW5JZxNPUfP4y/LSk=;
+        b=YDTZi0Kcur1c8SH7Hw+MTvoy1wEevrhc0mSZMWRJOKq9z1i0l6FHCoF/8T00pAmF5I
+         pvzYaAgMYzpIE0VMbWRHOcDKQjIKgNRerI+3YYo5HwI4eBO5j7FgJxeFs17KXthj7jYR
+         AC5vugQoNn5zzwmGwDlbaVdZM9ImKGhFEV3gISzUr0itOJg4O0hssk1Qdvi3w/UlRPec
+         87b5s6w4f77uMuKILIUrjEennxpkny8vmMjx0mMHIuN/kv7ixkNjyLTt4z/UkNN+Uc0p
+         SnEIrh1Sr7QgBn3Yj5+bWIaDJq1V7jBJgBdhSYRLxQlzzXJFBO0DahDjW7nIN4mBevEw
+         AUSg==
+X-Gm-Message-State: ANhLgQ10Jj8Io+GmV9b1EUyJtvKBj8ef/MBzHH42j9M+D5tXCWb2wW/7
+        0lHMI/JOPdrSuoQZFm70L/KJb5SKXTd+XjDty9I=
+X-Google-Smtp-Source: ADFU+vu3JZXQuKlTUKktIyObwirusoMFcO8NWHlnqd3iFd+mrvS7adcKe6AK1heBVUN1hmguLypnBYsdy3UcWuinO38=
+X-Received: by 2002:a05:6512:46a:: with SMTP id x10mr356714lfd.193.1584713781404;
+ Fri, 20 Mar 2020 07:16:21 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6838:40c6:0:0:0:0 with HTTP; Fri, 20 Mar 2020 04:20:01
+Received: by 2002:a05:6512:3055:0:0:0:0 with HTTP; Fri, 20 Mar 2020 07:16:20
  -0700 (PDT)
-From:   ECOWAS COMMITEE <ecowasmonitoringcommitteeabj@gmail.com>
-Date:   Fri, 20 Mar 2020 11:20:01 +0000
-Message-ID: <CAHHubrZRrohCzE4mAJroy4ozKitfTgF-wH6yi7zkLdQu26eLpA@mail.gmail.com>
-Subject: HAPPY SURVIVAL OF CORONAVIRUS
+Reply-To: clarkrobinson44444@gmail.com
+From:   Clark Robinson <drlarrylee42@gmail.com>
+Date:   Fri, 20 Mar 2020 07:16:20 -0700
+Message-ID: <CALi8qqb1Y1buj-Wr+VTwLj3Z=XQun54s1PXNgY5oA4G04qtZBg@mail.gmail.com>
+Subject: LOAN OFFER
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
@@ -52,28 +54,24 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Dear Sir/Madam
+-- 
 
-HAPPY SURVIVAL OF CORONAVIRUS
 
-We the West African Monitoring Committee of the West African Economic
-Community(ECOWAS)are contacting you for a business transaction which
-we feel will be of great interest to you.
+Do you need a loan to start your business? Do you need a loan to pay
+with your bills ? At the moment we offer Education loan , business
+loan , mortgage, agricultural credit , personal loan , auto loan ,
+etc. , if you need a loan with specific interest so we can send more
+information to You .We Give Out Loans For 3% Interest Rate And We
+Offer Loans From $5,000 To $50,000,000.00 USD
 
-Our duty is to see to the coming in and out of funds into this sub
-region.There is a fund which we confiscated worth of $12.5 million
-dollars.We will like you to receive this fund on your name in your
-account and as well helping us in the investment.
+    Contact us by email: clarkrobinson44444@gmail.com
 
-You are advised to contact us as soon as you get this message for
-details of the transaction if you find it interesting.
+CREDIT APPLICATION
 
-Best Regards,
+Full Name:
+Country:
+Telephone No :
+Amount of the loan Needed :
+DURATION:
 
-Mr John Aka
-
-Chairman
-ECOWAS
-West African Monitoring Committee
-Tel 00225 6716 6756
-Abidjan Cote D'Ivoire
+Contact us by email: clarkrobinson44444@gmail.com
