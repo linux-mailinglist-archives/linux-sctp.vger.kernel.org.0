@@ -2,64 +2,61 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0925B18E66C
-	for <lists+linux-sctp@lfdr.de>; Sun, 22 Mar 2020 05:47:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F196218E71F
+	for <lists+linux-sctp@lfdr.de>; Sun, 22 Mar 2020 07:41:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726538AbgCVEqO (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 22 Mar 2020 00:46:14 -0400
-Received: from mail-il1-f199.google.com ([209.85.166.199]:48308 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725765AbgCVEqN (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sun, 22 Mar 2020 00:46:13 -0400
-Received: by mail-il1-f199.google.com with SMTP id h26so1742942ilf.15
-        for <linux-sctp@vger.kernel.org>; Sat, 21 Mar 2020 21:46:13 -0700 (PDT)
+        id S1725892AbgCVGlR (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 22 Mar 2020 02:41:17 -0400
+Received: from mail-vs1-f51.google.com ([209.85.217.51]:46001 "EHLO
+        mail-vs1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725881AbgCVGlR (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sun, 22 Mar 2020 02:41:17 -0400
+Received: by mail-vs1-f51.google.com with SMTP id x82so6635702vsc.12;
+        Sat, 21 Mar 2020 23:41:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0FVH9lZ/HXMu1482Vsk3kACq86y1ubOdqxK/BhWz3os=;
+        b=ncUZJlohxmtm6zQakobDf7amad4ORwcCRzNTPaYRhQ6WjCgtnq1PtvAWtjiCtm2wXt
+         KN/Kca1xWWeNth9eUiBKLi9OmmVRxJE0tYzno0ghDM1C7cUOrutNkWWuvD6GEd7meg9C
+         tVFtGnOCOLH6WTSvIWRqo/I7kvp5TrcyspRhB3ni3JVO3fDdYHkfjkQU48VezZgsEDmQ
+         6ksH6yqw2IDFGgVl0c4duEsWxKW2NLZHGqvrzek3S1fWpQ6orrAQER5kqIjClcWeRWap
+         EOHo+MWvp+BoRnBbImwYqfe+r+RoBWc0asb0pwhMVWCEZjfqMHt4UsAWqKe915CStmq5
+         tAUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=GI4GkIJkW1bKRzFiBtT/34jbKoBVKx5WZcrXpE1yJ60=;
-        b=RwR3GsEJH1TiqoGBxYjjypjiJLtwSyx8VqGOQzHsPnpDHKyUiDs6rACjXTg49alpTI
-         r6hShLKsgxGTSIaDQ/PIf2k6GVd6JHsqaazm9s4fxnhcSgXbkrvNXYD6BcbnpnwQiqTT
-         G7sx3iiJK13LPckdjXSq3cDiiHhZJjck+f27f6rFf/Rh/ezdMOzkgKNCSzaYW88LTPRU
-         OS9LYVfPFECqGudAowHJpl11GJEYJFRkpeFM2JSQM8YMp2tsIV1yhLy4aQK9mNly2dtx
-         DKyvUSn43/nVS2s92SvAWHRBDUp9+IZLF6CnsPY6j55lMIqVS/gJIopXKf8MppY5X/Kx
-         UIaA==
-X-Gm-Message-State: ANhLgQ03EKBeeGYQwW7Pbki9oV+tfWYTy1rmT39q8b0FUOEgcMo1U9Vg
-        z6R+ebzuMpif9y0pRepn5h7O8ij2xg+57KaI149pyrL/KbZs
-X-Google-Smtp-Source: ADFU+vsJt5RAxUckaqjG5zRClhUofRtFleFv8EV/BOf4ia/aNTZI5251vcnXqewrTdJPZ9LxYOHay+p6Ei7aFnsYFXYRUdY460/d
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0FVH9lZ/HXMu1482Vsk3kACq86y1ubOdqxK/BhWz3os=;
+        b=b/y1ALyVX1pLuVl7D/fTqDY3CTb6xDCvWX7kUyp+K2qY5XpSqoR7xcQ0no70IQwUEA
+         E2jnfHUclCMRzFH/LPbG3RbGEPPiLzOojqqD89pRdX5nBemQz4intPv0xdKfUB6ecjiK
+         U1bZrQjObIbAQYav5kvv9oT6mzb5FNQ71nXajxg99NAE/v6yA4YAoa6ibJ19kIMhwyBS
+         Pl8YKbxSN80VxW0LjkDI2ccSIFWPFm684/qymUfY94NkfVOWCWV+vt6KWo3QzBNRAJ6k
+         GFRKJQ495sy+DHE3DuNvVPL62+Ir6y4RJI7HSQR3ojx7u3Ez8O1GVM3qUm/acTdOvl1j
+         vo8w==
+X-Gm-Message-State: ANhLgQ10mOp5rq6zfnE8luKGEhfYT5PclRT6KvMpeIr6b9DJe2HdvpqI
+        zDtxHdD1Ta5Kc00vd5nqmCKjgGPFfiDD1fhcCaQ=
+X-Google-Smtp-Source: ADFU+vub3xhS7J7IYzeJuE5ApI2j8bGNmi5QG2kYvTUeHq+fkXkK2y6oZK64R3kO31TZ3alMVbiVLd4p76MpZya7R9E=
+X-Received: by 2002:a67:c189:: with SMTP id h9mr1142966vsj.91.1584859276174;
+ Sat, 21 Mar 2020 23:41:16 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a92:9e99:: with SMTP id s25mr14982996ilk.306.1584851942582;
- Sat, 21 Mar 2020 21:39:02 -0700 (PDT)
-Date:   Sat, 21 Mar 2020 21:39:02 -0700
-In-Reply-To: <CADG63jB59ZXWSUFKieXKGGEbPT9=z5OPARBjGqMgfh+K-k4-yQ@mail.gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000f2eea05a16a1979@google.com>
+References: <CADG63jB59ZXWSUFKieXKGGEbPT9=z5OPARBjGqMgfh+K-k4-yQ@mail.gmail.com>
+ <0000000000000f2eea05a16a1979@google.com>
+In-Reply-To: <0000000000000f2eea05a16a1979@google.com>
+From:   Qiujun Huang <anenbupt@gmail.com>
+Date:   Sun, 22 Mar 2020 14:41:02 +0800
+Message-ID: <CADG63jCpZWBjtJH_rjzBjTyTfYV0z9SHf1CzT9ic0-VY5C4AiQ@mail.gmail.com>
 Subject: Re: WARNING: refcount bug in sctp_wfree
-From:   syzbot <syzbot+cea71eec5d6de256d54d@syzkaller.appspotmail.com>
-To:     anenbupt@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
-        marcelo.leitner@gmail.com, netdev@vger.kernel.org,
-        nhorman@tuxdriver.com, syzkaller-bugs@googlegroups.com,
-        vyasevich@gmail.com
+To:     syzbot <syzbot+cea71eec5d6de256d54d@syzkaller.appspotmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-sctp@vger.kernel.org, marcelo.leitner@gmail.com,
+        netdev@vger.kernel.org, nhorman@tuxdriver.com,
+        syzkaller-bugs@googlegroups.com, vyasevich@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello,
-
-syzbot has tested the proposed patch and the reproducer did not trigger crash:
-
-Reported-and-tested-by: syzbot+cea71eec5d6de256d54d@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         e76397e4 iterate datamsg list
-git tree:       https://github.com/hqj/hqjagain_test.git sctp_for_each_tx_datachunk
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6dfa02302d6db985
-dashboard link: https://syzkaller.appspot.com/bug?extid=cea71eec5d6de256d54d
-compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
-
-Note: testing is done by a robot and is best-effort only.
+#syz test: https://github.com/hqj/hqjagain_test.git datamsg_list
