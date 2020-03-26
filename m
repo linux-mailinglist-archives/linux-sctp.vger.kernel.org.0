@@ -2,194 +2,90 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BDD671936B1
-	for <lists+linux-sctp@lfdr.de>; Thu, 26 Mar 2020 04:22:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D067319377D
+	for <lists+linux-sctp@lfdr.de>; Thu, 26 Mar 2020 06:22:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727677AbgCZDW6 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 25 Mar 2020 23:22:58 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:33777 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727560AbgCZDW5 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 25 Mar 2020 23:22:57 -0400
-Received: by mail-qk1-f196.google.com with SMTP id v7so5137759qkc.0;
-        Wed, 25 Mar 2020 20:22:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YeOy0OBasIdly6oWWvsKSzzwXWKpMwurTBwp+GVkZds=;
-        b=KCmIfvbYyV7j43ojdw2tuBoWEvYIzBj7v7nPy611jNiX7OuPrMWI1OFBiJODURzwPO
-         iIU/LkLvDfZcJ5yqUdM6z97qgBbw+DL5czuJoqk1KdCAzLvvWcJXq2i3wTi6JLIc3KA1
-         AkvaRfuM7sxuswgbDJGdPO4sKjnc19a3gTVnrvaFX+hlBbK36TCUlRkXzTO9zFRYnmgs
-         gPeJGy04xFJwAMAokTAZ4KO40eX/DDfgg2cf3ffgtwNYkkrcjaWTG6T4VuSF4JVEr/PY
-         aHjhSF0712u6Mv5Fc+oi7pDIn6226qGec2iu2g8QzFU/Mj++QPrGgD3h5WWsgOEWk/wQ
-         iFQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YeOy0OBasIdly6oWWvsKSzzwXWKpMwurTBwp+GVkZds=;
-        b=s4kk8tGoK4NcvpSejZ8uWiWLpZMC9wPsj4itBktbTWL3r/ajwd7dLKGfRkzVSTl8lq
-         0fByktlQoiDtruoe8uM7eRH762q6FsMcYUKMvQYhpezNyM4xoyLnLQE1z5QYHPXBhXTx
-         VCRSYy6RXVSJppOgwdjmpF8T2QUUIMM+mtwwqb2IxvX5b+C38NUulvl8te+tdVrq0vZe
-         EgpEvfxh9icaiSRLxUJP9rqXsJXlZOQv9xpcNdi2hkSp7yWr8R7mugaDAr5nHj7KFNea
-         V+XGGlftW6g9+UGzE4qyCoS0/0CF9By1e07HilVnv4ocHTp6pz+RhdaSeN/cEAK90O6X
-         daGw==
-X-Gm-Message-State: ANhLgQ3teMoYXMoZJLjcBvHmScGrCx1n3rOeiyiFSS/DtUKBE+hvr7NQ
-        CBVSuw/cj5sJtHn+9z9SU4I=
-X-Google-Smtp-Source: ADFU+vs8Ayeb6bVEbFzkIaUSWWCm8+4rjxtf1TQeNATQ5/YUiFsyKQNQlmIu8dGuhB8WFBwYSX88fQ==
-X-Received: by 2002:a37:7e82:: with SMTP id z124mr5941475qkc.360.1585192976039;
-        Wed, 25 Mar 2020 20:22:56 -0700 (PDT)
-Received: from localhost.localdomain ([2001:1284:f028:d8e3:b319:cf5:7776:b4d9])
-        by smtp.gmail.com with ESMTPSA id t140sm619143qke.48.2020.03.25.20.22.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Mar 2020 20:22:55 -0700 (PDT)
-Received: by localhost.localdomain (Postfix, from userid 1000)
-        id EC155C5CE4; Thu, 26 Mar 2020 00:22:52 -0300 (-03)
-Date:   Thu, 26 Mar 2020 00:22:52 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Qiujun Huang <hqjagain@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>, vyasevich@gmail.com,
-        nhorman@tuxdriver.com, Jakub Kicinski <kuba@kernel.org>,
-        linux-sctp@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, anenbupt@gmail.com
-Subject: Re: [PATCH v4] sctp: fix refcount bug in sctp_wfree
-Message-ID: <20200326032252.GI3756@localhost.localdomain>
-References: <20200322090425.6253-1-hqjagain@gmail.com>
- <20200326001416.GH3756@localhost.localdomain>
- <CAJRQjoeWUHj7Ep5ycTxVJVuxmhzrzXx=-rP_h=hCCrBvgTUNEg@mail.gmail.com>
+        id S1725842AbgCZFWv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Thu, 26 Mar 2020 01:22:51 -0400
+Received: from cnshjsmin03.nokia-sbell.com ([116.246.26.71]:26562 "EHLO
+        cnshjsmin03.nokia-sbell.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725775AbgCZFWv (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Thu, 26 Mar 2020 01:22:51 -0400
+X-AuditID: ac189297-ec3ff7000000bab2-d7-5e7c3c272b45
+Received: from CNSHPPEXCH1609.nsn-intra.net (Unknown_Domain [135.251.51.109])
+        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by cnshjsmin03.nokia-sbell.com (Symantec Messaging Gateway) with SMTP id 9B.71.47794.72C3C7E5; Thu, 26 Mar 2020 13:22:47 +0800 (HKT)
+Received: from CNSHPPEXCH1609.nsn-intra.net (135.251.51.109) by
+ CNSHPPEXCH1609.nsn-intra.net (135.251.51.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1847.3; Thu, 26 Mar 2020 13:22:46 +0800
+Received: from CNSHPPEXCH1609.nsn-intra.net ([135.251.51.109]) by
+ CNSHPPEXCH1609.nsn-intra.net ([135.251.51.109]) with mapi id 15.01.1847.007;
+ Thu, 26 Mar 2020 13:22:46 +0800
+From:   "Mao, Jinhui (NSB - CN/Hangzhou)" <jinhui.mao@nokia-sbell.com>
+To:     "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>
+Subject: One question regarding the SCTP write buffer free mechanism
+Thread-Topic: One question regarding the SCTP write buffer free mechanism
+Thread-Index: AdYDLpGaGVoPpsYATP6yhoepKrJy1A==
+Date:   Thu, 26 Mar 2020 05:22:46 +0000
+Message-ID: <9f7ef2f9a93b420c915a9e130356cdfa@nokia-sbell.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [135.251.51.115]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJRQjoeWUHj7Ep5ycTxVJVuxmhzrzXx=-rP_h=hCCrBvgTUNEg@mail.gmail.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrLLMWRmVeSWpSXmKPExsXS/ts4V1fdpibOYNkMJounC16zOjB6fN4k
+        F8AYxWWTkpqTWZZapG+XwJUx651IwU2xiuVnnRoYJ3F1MXJySAiYSJzrf87axcjFISRwiEli
+        9vU5zBDOX0aJ/RMnQzmbGCXeNuxgB2lhE3CReLt/L5gtImAr8bJrOhuILQwU/zB5OtAoDqC4
+        p8StWZIQJXoSC79vYQKxWQRUJf7+aWEGsXkF7CS6fh4Ba2UUkJWY9ug+WA2zgLjErSfzmSCu
+        E5BYsuc8M4QtKvHy8T+w8RICShJ9G6DKdSQW7P7EBmFrSyxb+BpqvKDEyZlPWCYwCs9CMnUW
+        kpZZSFpmIWlZwMiyilE6Oa84I6s4NzPPwFgvLz87M1G3OCk1J0cvOT93EyMw0NdITJq+g/HY
+        Ae9DjAIcjEo8vBssq+OEWBPLiitzDzFKcDArifBuTq2IE+JNSaysSi3Kjy8qzUktPsQozcGi
+        JM7bMnlhrJBAemJJanZqakFqEUyWiYNTqoGRt7/15nzTDIZPZttuFtRcVrr/9MrXRzN9IlYd
+        OW9SXWf99U7RycN7vr1wj9/+sdMrku16Dq9/0KabDEfOvD34WlVG7e3R6Pbi1X6vWu2tbt5u
+        +NbvEXLyh/65eaqGl3KZdurYJXJwsmf/Kbyy5rltX+os5hChM8X6ls6183XEDMLMGydxql9T
+        YinOSDTUYi4qTgQA6FFBjXACAAA=
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, Mar 26, 2020 at 09:30:08AM +0800, Qiujun Huang wrote:
-> On Thu, Mar 26, 2020 at 8:14 AM Marcelo Ricardo Leitner
-> <marcelo.leitner@gmail.com> wrote:
-> >
-> > On Sun, Mar 22, 2020 at 05:04:25PM +0800, Qiujun Huang wrote:
-> > > sctp_sock_migrate should iterate over the datamsgs to modify
-> > > all trunks(skbs) to newsk. For this, out_msg_list is added to
-> >
-> > s/trunks/chunks/
-> 
-> My :p.
-> 
-> >
-> > > sctp_outq to maintain datamsgs list.
-> >
-> > It is an interesting approach. It speeds up the migration, yes, but it
-> > will also use more memory per datamsg, for an operation that, when
-> > performed, the socket is usually calm.
-> >
-> > It's also another list to be handled, and I'm not seeing the patch
-> > here move the datamsg itself now to the new outq. It would need
-> > something along these lines:
-> 
-> Are all the rx chunks in the rx queues?
+Dear Linux SCTP experts. 
 
-Yes, even with GSO.
+Recently we found a SCTP problem in our product, the scenario can be described as follow
 
-> 
-> > sctp_sock_migrate()
-> > {
-> > ...
-> >         /* Move any messages in the old socket's receive queue that are for the
-> >          * peeled off association to the new socket's receive queue.
-> >          */
-> >         sctp_skb_for_each(skb, &oldsk->sk_receive_queue, tmp) {
-> >                 event = sctp_skb2event(skb);
-> > ...
-> >                 /* Walk through the pd_lobby, looking for skbs that
-> >                  * need moved to the new socket.
-> >                  */
-> >                 sctp_skb_for_each(skb, &oldsp->pd_lobby, tmp) {
-> >                         event = sctp_skb2event(skb);
-> >
-> > That said, I don't think it's worth this new list.
-> 
-> About this case:
-> datamsg
->                    ->chunk0                       chunk1
->        chunk2
->  queue          ->transmitted                 ->retransmit
->  ->not in any queue
-
-We always can find it through the other chunks, otherwise it's freed.
-
-> 
-> Also need to maintain a datamsg list to record which datamsg is
-> processed avoiding repetitive
-> processing.
-
-Right, but for that we can add a simple check on
-sctp_for_each_tx_datamsg() based on a parameter.
-
-> So, list it to outq. Maybe it will be used sometime.
-
-We can change it when the time comes. For now, if we can avoid growing
-sctp_datamsg, it's better. With this patch, it grows from 40 to 56
-bytes, leaving just 8 left before it starts using a slab of 128 bytes
-for it.
+Endpoint A                                                                                     Endpoint Z 
+{App sends 3 messages; strm 0} DATA [TSN=6] ---------------> (ack) 
+                                                     DATA [TSN=7] ---------------> (lost)
+                                                     DATA [TSN=8] ---------------> (gap detected,immediately send ack)
+                                                                                              /----- SACK [TSN Ack=6,Block=1, Start=2,End=2]
+                                                                                    <-----/ 
+                                                                                     ......
+                                                   DATA [TSN=10] ---------------> (gap detected,immediately send ack)
+                                                                                               /----- SACK [TSN Ack=6,Block=1, Start=2,End=4]
+                                                                                    <-----/       (3 SACK to indicate that TSN=7 lost, fast re-trans triggered)
+                                       Re-trans DATA [TSN=7] ---------------> (also lost)
+                                                    DATA [TSN=11] ---------------> (gap detected,immediately send ack)
+                                                                                               /----- SACK [TSN Ack=6,Block=1, Start=2,End=5]
+                                                                                     <-----/       
+                                                                                       ......
+                                                  DATA [TSN=340] ---------------> (gap detected,immediately send ack)
+                                                                                                /----- SACK [TSN Ack=6,Block=1, Start=2,End=334]
+                                                                                      <-----/       
+                       Error happened on Endpoint A when calling SCTP sendmsg to send more to Endpoint B, the error is "Resource temporarily unavailable". Association is not destroyed at this time. 
+1 second later RTO Timeout 2nd Re-trans DATA [TSN=7] ---------------> (Acked)
 
 
-The patched list_for_each_entry() can/should be factored out into
-__sctp_for_each_tx_datachunk, whose first parameter then is the queue
-instead the asoc.
+So could you please help to comments on the following question?
+-	Does this means that if an gap is found in the SACK, those packages sent after this lost packet will stay in the write buffer until the gap is filled? Even if they are successfully SACKed?
 
----8<---
+Thanks a lot!
 
-diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-index fed26a1e9518..62f401799709 100644
---- a/net/sctp/socket.c
-+++ b/net/sctp/socket.c
-@@ -148,19 +148,30 @@ static void sctp_clear_owner_w(struct sctp_chunk *chunk)
- }
- 
- static void sctp_for_each_tx_datachunk(struct sctp_association *asoc,
-+				       bool clear,
- 				       void (*cb)(struct sctp_chunk *))
- 
- {
-+	struct sctp_datamsg *msg, *prev_msg = NULL;
- 	struct sctp_outq *q = &asoc->outqueue;
-+	struct sctp_chunk *chunk, *c;
- 	struct sctp_transport *t;
--	struct sctp_chunk *chunk;
- 
- 	list_for_each_entry(t, &asoc->peer.transport_addr_list, transports)
- 		list_for_each_entry(chunk, &t->transmitted, transmitted_list)
- 			cb(chunk);
- 
--	list_for_each_entry(chunk, &q->retransmit, transmitted_list)
--		cb(chunk);
-+	list_for_each_entry(chunk, &q->sacked, transmitted_list) {
-+		msg = chunk->msg;
-+		if (msg == prev_msg)
-+			continue;
-+		list_for_each_entry(c, &msg->chunks, frag_list) {
-+			if ((clear && asoc->base.sk == c->skb->sk) ||
-+			    (!clear && asoc->base.sk != c->skb->sk))
-+				cb(c);
-+		}
-+		prev_msg = msg;
-+	}
- 
- 	list_for_each_entry(chunk, &q->sacked, transmitted_list)
- 		cb(chunk);
-@@ -9574,9 +9585,9 @@ static int sctp_sock_migrate(struct sock *oldsk, struct sock *newsk,
- 	 * paths won't try to lock it and then oldsk.
- 	 */
- 	lock_sock_nested(newsk, SINGLE_DEPTH_NESTING);
--	sctp_for_each_tx_datachunk(assoc, sctp_clear_owner_w);
-+	sctp_for_each_tx_datachunk(assoc, true, sctp_clear_owner_w);
- 	sctp_assoc_migrate(assoc, newsk);
--	sctp_for_each_tx_datachunk(assoc, sctp_set_owner_w);
-+	sctp_for_each_tx_datachunk(assoc, false, sctp_set_owner_w);
- 
- 	/* If the association on the newsk is already closed before accept()
- 	 * is called, set RCV_SHUTDOWN flag.
+Best Regards!
+
+Mao Jinhui
