@@ -2,51 +2,51 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 209A21937ED
-	for <lists+linux-sctp@lfdr.de>; Thu, 26 Mar 2020 06:37:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27EF4193862
+	for <lists+linux-sctp@lfdr.de>; Thu, 26 Mar 2020 07:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725842AbgCZFhV (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 26 Mar 2020 01:37:21 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:41186 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725819AbgCZFhV (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 26 Mar 2020 01:37:21 -0400
-Received: by mail-io1-f66.google.com with SMTP id y24so4816218ioa.8;
-        Wed, 25 Mar 2020 22:37:20 -0700 (PDT)
+        id S1726014AbgCZGNk (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 26 Mar 2020 02:13:40 -0400
+Received: from mail-il1-f194.google.com ([209.85.166.194]:44286 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725854AbgCZGNk (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 26 Mar 2020 02:13:40 -0400
+Received: by mail-il1-f194.google.com with SMTP id j69so4269761ila.11;
+        Wed, 25 Mar 2020 23:13:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=yjzInxM0pIYbsUCVZCe5a0aF1UXSDBe5qOylaXntsgg=;
-        b=sEfodghILrA7zg5Jpmc1g+tluz4aIELMRWGcR2UqEhod3PmdZVWMUQnBVbRHJkLnd4
-         35haqHOVMue4TQr6C7CSFDgOSnUkifMrjl+OMh3/KQo9WvIKrnZ/Qt5r3oNMUoubYVkw
-         6GZeQugdPAECiXC+CzeMEOVS4LoqHO87d8fgLYPbVQJl5hLkqPc/sRn/mBNsxIjLwaYu
-         D/7pqDUMpeIMX43LS9Dn+376mxr+VqHs60CaDlrmkBdM3R80bNo0V9FdbcFwLp0qRGk2
-         RbcA9qijL/YL2XXchsMYI0izFOf/XZbEvAdd2mhQxT+T/do2MNrLN1TNoa7Y5vcgXRFs
-         r73w==
+        bh=gPcEMXRPvJbPRuzCholrxluQ5t3A7xCzgVaJ5THOoRY=;
+        b=N9vzyOdwXAXB5WPGxkQ8W5+wvd2JsUkiSHY5539u40WEOuUUrxRMhPUtb6kU66COUv
+         qfbZqUxwjQmHwwjTRZ7WPqjhyUhuWKmOydrDoq80F7mT8OI2mEPPzzlK67GGPDogyZJ5
+         P4f67J9P0WKpdin9RGv6F56fc4aawSYbAUjRpIB+z0195YjoFz7P8TXIjyJ0O5HoQPZM
+         7+4rWoMTczd7EH0jvHZl+4DS677Jho2AuLwdBKjmpMWkYjFYd4fMPCV3z6128bhziuqV
+         oDgO4vTaq/3O8uE3dMCzmsgul6IzADL74gO7P55pE51lahiWGHb6AwVPaIAA7HrH2g5q
+         V8Aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=yjzInxM0pIYbsUCVZCe5a0aF1UXSDBe5qOylaXntsgg=;
-        b=rQFksGKGGgAmco/Q7O6ookDJ7f9jS9EhIovH2j/Yjcw+EA1u7bH0Hd1Ml4kC79/wKJ
-         YCbfdm6RhgU2VGLtZSfVlzvoB4CJuUdEMMIcgdgDHpL6juj+ENSGXWxPfWii5JJcDqYO
-         n9Ukc46XJ6/Wme7o4pRo14GnF8D3c2yonDQLeCVjzSTlhT7/AKkAGpVvGLdO1mbkQi51
-         rgmgJ7skvsry1YNMWGlV/Mg1klk0kD2xYwCQwxX3zzQTFEGGJ41YISjU/Lt1zEBmQCnb
-         uw6ApCHpDXRNH+51ZG93rRme9kEAbxgPx281DOvarV6fniLQUCFWWujRH9CjCZHvwDf4
-         LPcQ==
-X-Gm-Message-State: ANhLgQ2PKU8rfpEqd4fC/HyV4NQLL1Nb863dNe8Qb/KOD0ZzZMvse0fB
-        jGsYVVt4MEKsrh71lIg2l0zQ6Ww0yLg0R/YR4lwkwSMx+QEMRw==
-X-Google-Smtp-Source: ADFU+vvkoZa+7GNGNGrLJtZyF5EQgA4y/IMboSp8zlk8PLJTzaNQgSYzDsAHHSuu7AvsFD2Anhn/FqJS0Sh89fhGkLs=
-X-Received: by 2002:a6b:c813:: with SMTP id y19mr6237617iof.125.1585201039849;
- Wed, 25 Mar 2020 22:37:19 -0700 (PDT)
+        bh=gPcEMXRPvJbPRuzCholrxluQ5t3A7xCzgVaJ5THOoRY=;
+        b=si0tZuDi0cGUvl/KlAo3JUnRPZDZHAMihyL06DIW344v174vcLw258OjnughKqObHk
+         bAKZqT4qW68gsFNpf+6qNMAAwKwtfg6IGbMUHMEjNsbmJUFxS5YD34FvX3sYGOM4iPzl
+         PP3vxZZSdno2HSsX9F3y2yKXmeZNbA2YQK8zb5k2yj9I10U3uNki0ixIqU7hVTzqYNaR
+         sVfdVX9PMaxH5i7PazQvbnkHcy50LMNiHKIwcANv6UsN/SG/BFkvFez7MRh58IIXlfyy
+         HuEmdbS/Zii7D71tX9OY+Lu6C0IQatwo19A3jvLW96cQgfpHyRUbzw6eDO9CVkzbyasq
+         QtfA==
+X-Gm-Message-State: ANhLgQ3D9MU6cuZC/vtY/nlaRDAFMPJFtpDn0V3DzILcrXkD+UOrsT2u
+        U7EQqTPrTZRhpNufftoxrkYdp0TkenCuPi4eimw=
+X-Google-Smtp-Source: ADFU+vs6KETsoMXOKa6/Hpv8q6jFxVHOIR6dOWAk9pb9UfR3mTorNVVw5EKqX3tAq78npUgYNZswjF9f6dL3TSXDxf4=
+X-Received: by 2002:a92:5b56:: with SMTP id p83mr7258454ilb.70.1585203217463;
+ Wed, 25 Mar 2020 23:13:37 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200322090425.6253-1-hqjagain@gmail.com> <20200326001416.GH3756@localhost.localdomain>
  <CAJRQjoeWUHj7Ep5ycTxVJVuxmhzrzXx=-rP_h=hCCrBvgTUNEg@mail.gmail.com> <20200326032252.GI3756@localhost.localdomain>
 In-Reply-To: <20200326032252.GI3756@localhost.localdomain>
 From:   Qiujun Huang <hqjagain@gmail.com>
-Date:   Thu, 26 Mar 2020 13:37:08 +0800
-Message-ID: <CAJRQjoecj9Dwbs_bDhiFT_rbhSFh_PwPNW9dHUvaNcd+2RreJg@mail.gmail.com>
+Date:   Thu, 26 Mar 2020 14:13:26 +0800
+Message-ID: <CAJRQjoc345azEnNK29Npmqco5CL8zL9zi_ZvKF-1bRm_eWsksQ@mail.gmail.com>
 Subject: Re: [PATCH v4] sctp: fix refcount bug in sctp_wfree
 To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 Cc:     "David S. Miller" <davem@davemloft.net>, vyasevich@gmail.com,
@@ -115,17 +115,6 @@ On Thu, Mar 26, 2020 at 11:22 AM Marcelo Ricardo Leitner
 > >  ->not in any queue
 >
 > We always can find it through the other chunks, otherwise it's freed.
-
-Yes.
-
-datamsg   (chunk0, chunk1, chunk2)
-chunk1 in transmiited queue
-chunk2 in retransmit queue
-chunk0 not in any queue
-
- We also need to check chunk2->msg processed or not, when we iterate
-retransmit queue.
-
 >
 > >
 > > Also need to maintain a datamsg list to record which datamsg is
@@ -134,6 +123,9 @@ retransmit queue.
 >
 > Right, but for that we can add a simple check on
 > sctp_for_each_tx_datamsg() based on a parameter.
+
+Great! I get it, thanks!
+
 >
 > > So, list it to outq. Maybe it will be used sometime.
 >
@@ -141,9 +133,6 @@ retransmit queue.
 > sctp_datamsg, it's better. With this patch, it grows from 40 to 56
 > bytes, leaving just 8 left before it starts using a slab of 128 bytes
 > for it.
-
-I get that, thanks.
-
 >
 >
 > The patched list_for_each_entry() can/should be factored out into
@@ -187,12 +176,7 @@ I get that, thanks.
 > +               }
 > +               prev_msg = msg;
 > +       }
-
-The case exists?
-datamsg   (chunk0, chunk1, chunk2)
-chunk1 chunk2 in &q->retransmit
-chunk0 not in any queue (deleted in sctp_outq_sack)
-
+>
 >         list_for_each_entry(chunk, &q->sacked, transmitted_list)
 >                 cb(chunk);
 > @@ -9574,9 +9585,9 @@ static int sctp_sock_migrate(struct sock *oldsk, struct sock *newsk,
