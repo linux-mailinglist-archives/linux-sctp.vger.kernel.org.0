@@ -2,83 +2,99 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3DEF18F50C
-	for <lists+linux-sctp@lfdr.de>; Mon, 23 Mar 2020 13:52:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 161681934E6
+	for <lists+linux-sctp@lfdr.de>; Thu, 26 Mar 2020 01:14:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728256AbgCWMwq (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 23 Mar 2020 08:52:46 -0400
-Received: from sonic316-11.consmr.mail.bf2.yahoo.com ([74.6.130.121]:33466
-        "EHLO sonic316-11.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727326AbgCWMwq (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>);
-        Mon, 23 Mar 2020 08:52:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1584967964; bh=/GcFFbn2btZiSKYiGCo/BleXlnSRHZPoMjv/YxR5ftE=; h=Date:From:Reply-To:Subject:References:From:Subject; b=JpPUYs32a9ukh8pJIquIEGqCdV9Qu6LGnqzSVdIbXTYKNYSQ+EPdgkFnNE3024S7nHrPwMISFKZ5GmeXJPx69wHUneNvz1IMO+u6NcwAp/Ok8XtjRomL6lWnfLBaGLkHlSOuti6/NtuFmmmd3B2bMD46jGWRogubrq+r/MsmEJ7136WpAHz9i9Ks5Vp4rn+f2Ysi7ShIvU4fTfi2+5ka+ak1cmt0krY0MnbgASzghVonV4DdY0nto9tv8psjfemNh9XScXwjlZkaOaumSwXgBqc+e1wPdi2xhq5kNMygXZBjI+mTNG1D/CEuonSS5zw3HV+nFt1apvOpDlaSi3KJsQ==
-X-YMail-OSG: HL8apOIVM1lgp.purCLLqQ3zJmy4ONwvBYVdwYQKDX7bek5159sx3swwFqn0ckC
- 5bDLBhDnR0nUBCvPWJZ0FhT9lkoSibHHSsbg0RRgGYxqOoYtnW2m8P8ZvyV7ybzXzowWbIVnbEkP
- g44s0gptK3BzGPAfpBUSUfw6Alf9VDmKhOvoeEn70Hxr6w3yvvO5odfC2PtwmkFnFTQgfpQ6QFEi
- _CNj1ea6zJfktUcSQ3IB533C_L7MHSVZeZN2vdBZlV2x1ZbqpkC8Gm5hX9qWQIps7nq2LhxKbmHK
- .XfdDQVfapGmb8Aie7.OqifIgE6l1TXPet4eFkcsnCHm6MQVcKS40IJ8OUEThpoczfhzwAQqGcKv
- 4pscFMzzT_W0c1jkFyI.FyEQkql7i1ncFbtOt79g9dRrztch2NGg3s6ir7CYajGZJC60QMJ.EkVx
- 1Ukk_PFsZdYrD8356qF31BjFDTInNgCAFLDybtDwV2Ds4l4Mggu8OnSjdKVnCm0EfkSTGsB7liz.
- 5uU4.Uq1Q5qOIqUAZx5EavtRSgXMxxp.NAAdWFW_tjZyJmsH5_CFvVh6bNLYEJW6tjF.CYnQ9GrV
- Mo_kKN.fEYiaoGqcgiPPR.g88ojAylNstbFZxL7.UgVZizBHESaXCga02hWAjGAiRt1OsDoC3Lqm
- awu0p0OSOKMmjWEKty6m6eFzNKAg4EAYp1ULfJnZq3DB_ytrok4IpdyJFZUdknf7kfYvZ.V9W.sP
- Pf_Lhjvlvp2EI6.IZjxkV7O3tVDvujjIzcAtb8W040.kvQ0blYxrFsfUluifOt23Q3OglDZ93OCi
- 6T4yi29iTku0XQl8uTEIwm8ZfOSESo1nnCmbY5L.A7KV19_qmvSEh3leEWmVYnwUCd0iPa7WHGXg
- SqwvnOIDw.gIA83A.OTPEE9z8VODcGJhUaXXxlJ5a66yCOPRmH22TI_PLsQWn.wn67UnNdC4Co1h
- r_cdMVTHDozobBsq.Q17XCRuOGMaTagUPZ.izKiZ62ZxDMBjaGc7.EbTrWZc_seoUP1ycChhM4T5
- Dnp1n7boWOH_uVwcrE04ocsawBPj7ACwugENlAGiRb4Dn.8uIV2pWBEywhMpuXDu1lsurSJwR9XO
- URBh_eSLXjWRGDUUn.sC9KUMOxQFZGQ0AiYuY15Qw59sxIlpzpiRJq1aH7BPKcBORb_OX3RF2hTF
- nVSx_E9ULElw38aUh8WkSDwL0_TpnLF8BDJ9WTO_4anWJySuYHhIY_KBe3Z47yLCy4H.A_9Q0BKR
- .a5f.UtAPmIC8oyHngJY9xM0FXGVXPxXtXHEWqkULO7FkSTacaarXPs891KQyhnSjYV9FvtVw17Y
- y
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.bf2.yahoo.com with HTTP; Mon, 23 Mar 2020 12:52:44 +0000
-Date:   Mon, 23 Mar 2020 12:52:40 +0000 (UTC)
-From:   Jak Abdullah mishail <mjakabdullah@gmail.com>
-Reply-To: mishailjakabdullah@gmail.com
-Message-ID: <738434492.359534.1584967960652@mail.yahoo.com>
-Subject: GREETING,
+        id S1727530AbgCZAOV (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 25 Mar 2020 20:14:21 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:44682 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727498AbgCZAOV (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 25 Mar 2020 20:14:21 -0400
+Received: by mail-qt1-f194.google.com with SMTP id x16so3874232qts.11;
+        Wed, 25 Mar 2020 17:14:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=S7Sc2duj77D7JUnGMQoCkHU904ydcBEnNRzF9FLm+YI=;
+        b=RlP8ohqHvEQkTK5kGgiSBl6WH15PaVWtiHB0v1Iv/6+Vfb7Eka28N35XydaiEqMzR/
+         jyu0O0ohpyMxX4ljdq7uAa05nGe/pUIyNc9EcCYEbxQw9WHup+M3MJlOoqNaH7GaJ2yj
+         IIL3xL3riXneubS0jgb8qcUWmvFUyfQDfxyG8dEmm56J0BIvzPHd9zdvAocR0scnEneT
+         ytPm34ox8nq05DzF6Ndfs7FOgsEZUd5mtuxinmQv/6KP2RC9XOVR3AE081hTqJaNTNcC
+         SwPCUuoNv6teuL1fTt1fk5V6SCKAiCa9FQmkBJahwk8h5XoEJOdj7j1iApionCMf+WdI
+         VOZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=S7Sc2duj77D7JUnGMQoCkHU904ydcBEnNRzF9FLm+YI=;
+        b=JeN73LHIHRj/Ot6qfymUEkqFZCOq8Z1sowgVqkWna2PPHAmrKStznoh/YpIYlkJSEy
+         VjZ3FlXTUoYGJCp2XW0y/3Ucf8FcHOiu2Lgmc5sfhsCndulgvXEW8en3PmEbg6aRamhH
+         bUlIsgeu5qLOXapdShMfOWdJi+bFEIpApoFoA9xf98gxDLKsqbKyaO/ghEkWzyMF1Sz/
+         FMpgp0dO4TAfy3PcIfjw++ON2iRpQFYauLKunrXR8n7CxP8rC1lhVb6jfMMmk0NuBe2C
+         yoektX9YOA4PeaZ1IcESiZ731A9cxAdUrM3he/rt7n512ftSRZAP8TGS4jFNkBOnBNqM
+         PwmA==
+X-Gm-Message-State: ANhLgQ2Lyeh0qNteFNqizwUPyRW6B6J3lys4fjq5+SoSdnBpzk2Z7EKo
+        q524Aw5g0AXLlLhDtTjM4zU=
+X-Google-Smtp-Source: ADFU+vvK1RIyUK2HbSXkLR4unarSaVy6joaX5gpk8/f4lhxjrE6nMTj7npVg5cJ/aI0GxF+KKR9pDQ==
+X-Received: by 2002:ac8:568b:: with SMTP id h11mr4420271qta.105.1585181659543;
+        Wed, 25 Mar 2020 17:14:19 -0700 (PDT)
+Received: from localhost.localdomain ([2001:1284:f028:d8e3:b319:cf5:7776:b4d9])
+        by smtp.gmail.com with ESMTPSA id 82sm340437qkd.62.2020.03.25.17.14.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Mar 2020 17:14:18 -0700 (PDT)
+Received: by localhost.localdomain (Postfix, from userid 1000)
+        id 4C55BC5CE4; Wed, 25 Mar 2020 21:14:16 -0300 (-03)
+Date:   Wed, 25 Mar 2020 21:14:16 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Qiujun Huang <hqjagain@gmail.com>
+Cc:     davem@davemloft.net, vyasevich@gmail.com, nhorman@tuxdriver.com,
+        kuba@kernel.org, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        anenbupt@gmail.com
+Subject: Re: [PATCH v4] sctp: fix refcount bug in sctp_wfree
+Message-ID: <20200326001416.GH3756@localhost.localdomain>
+References: <20200322090425.6253-1-hqjagain@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-References: <738434492.359534.1584967960652.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.15518 YMailNodin Mozilla/5.0 (Windows NT 6.3; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200322090425.6253-1-hqjagain@gmail.com>
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Greeting,
+On Sun, Mar 22, 2020 at 05:04:25PM +0800, Qiujun Huang wrote:
+> sctp_sock_migrate should iterate over the datamsgs to modify
+> all trunks(skbs) to newsk. For this, out_msg_list is added to
 
-My Name is Mr.Jak Abdullah mishail from Damascus Syria, and I am now resign=
-ed from the government. I am a member of an opposition party goverment in S=
-yria and a business man also,
+s/trunks/chunks/
 
-I need a foreign partner to enable me transport my investment capital and t=
-hen Relocate with my family, honestly I wish I will discuss more and get al=
-ong I need a partner because my investment capital is in my international a=
-ccount. Am interested in buying Properties, houses, building real estates a=
-nd some tourist places, my capital for investment is ($16.5 million USD) Me=
-anwhile if there is any profitable investment that you have so much experie=
-nce on it then we can join together as partners since I=E2=80=99m a foreign=
-er.
+> sctp_outq to maintain datamsgs list.
 
-I came across your e-mail contact through private search while in need of y=
-our assistance and I decided to contact you directly to ask you if you know=
- any Lucrative Business Investment in your Country I can invest my Money si=
-nce my Country Syria Security and Economic Independent has lost to the Grea=
-test Lower level, and our Culture has lost forever including our happiness =
-has been taken away from us. Our Country has been on fire for many years no=
-w.
+It is an interesting approach. It speeds up the migration, yes, but it
+will also use more memory per datamsg, for an operation that, when
+performed, the socket is usually calm.
 
-If you are capable of handling this business Contact me for more details i =
-will appreciate it if you can contact me immediately.
-You may as well tell me little more about yourself. Contact me urgently to =
-enable us proceed with the business.
+It's also another list to be handled, and I'm not seeing the patch
+here move the datamsg itself now to the new outq. It would need
+something along these lines:
+sctp_sock_migrate()
+{
+...
+        /* Move any messages in the old socket's receive queue that are for the
+         * peeled off association to the new socket's receive queue.
+         */
+        sctp_skb_for_each(skb, &oldsk->sk_receive_queue, tmp) {
+                event = sctp_skb2event(skb);
+...
+                /* Walk through the pd_lobby, looking for skbs that
+                 * need moved to the new socket.
+                 */
+                sctp_skb_for_each(skb, &oldsp->pd_lobby, tmp) {
+                        event = sctp_skb2event(skb);
 
-I will be waiting for your respond.
+That said, I don't think it's worth this new list.
 
-Sincerely Yours,
-
-Jak Abdullah mishail
+  Marcelo
