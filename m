@@ -2,64 +2,67 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DCA31973A4
-	for <lists+linux-sctp@lfdr.de>; Mon, 30 Mar 2020 07:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01CE01979CD
+	for <lists+linux-sctp@lfdr.de>; Mon, 30 Mar 2020 12:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728255AbgC3FCn (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 30 Mar 2020 01:02:43 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:33230 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726085AbgC3FCn (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 30 Mar 2020 01:02:43 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id E41D015C5C89D;
-        Sun, 29 Mar 2020 22:02:42 -0700 (PDT)
-Date:   Sun, 29 Mar 2020 22:02:42 -0700 (PDT)
-Message-Id: <20200329.220242.1383520985415551854.davem@davemloft.net>
-To:     marcelo.leitner@gmail.com
-Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
-        nhorman@tuxdriver.com, lucien.xin@gmail.com,
-        meng.a.jin@nokia-sbell.com
-Subject: Re: [PATCH net] sctp: fix possibly using a bad saddr with a given
- dst
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <d6baf212bdd7c54df847e0b5117406419c993a4f.1585182887.git.mleitner@redhat.com>
-References: <d6baf212bdd7c54df847e0b5117406419c993a4f.1585182887.git.mleitner@redhat.com>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Sun, 29 Mar 2020 22:02:43 -0700 (PDT)
+        id S1729732AbgC3Kwq (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 30 Mar 2020 06:52:46 -0400
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:33665 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729640AbgC3Kwq (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 30 Mar 2020 06:52:46 -0400
+Received: by mail-pj1-f65.google.com with SMTP id jz1so6288531pjb.0
+        for <linux-sctp@vger.kernel.org>; Mon, 30 Mar 2020 03:52:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=82B0OONv9gwbZlPp43NzThDz2fRV+KRFwafOQ16joDw=;
+        b=I2bZK+Edwp7f1bl38ZDsYZ8gkHoLOp7N+SgwKjOSdbsqnWhmYlKKFyWTTwwdBuA4Vg
+         rwBHnP7ed1EksF/Uo6wi0daOtai1jA53B5b9RrMCwInP8fTj6xlf+N87Jxy7Sxa+QbUF
+         l2GP0Lv6JzwuZiPJAzgKXNfvaR6mAHzPBfBvakflfZ8B4h5bL4zPFQy+qXgn4TFvbTXz
+         A1ohkR077EumDiarvC1dhS/fXXyUHKbnnxfkdMVlwSlZiAQJvL50ZQklv05R+GT0yrBC
+         3q/4vjuGZ1FGpK3Ogg0O4Ce18OqauZECfFoMpKCzkd0qt9LKtlmIkWUwZqPjuntycFFN
+         I7DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=82B0OONv9gwbZlPp43NzThDz2fRV+KRFwafOQ16joDw=;
+        b=Z7xhVl7m+F2GoBHzB1zCQT64Skk442J/QE76sv4iQCD5ksKTutyXTiFgRBn9jDP0K7
+         TLW4kJ9ZAFRYs7UWo5CxphzFL5UJv7HZ1GdnF08O4iyL/Iq+8rYoNLQYyTwoqdVUyc/h
+         4VaiF2h8PK60VhRc2F3v3VH/XrGnKvyMnz7jMggLTpitLmf/1tcatqaKGTlBvh41c5KH
+         fkErVMiA6oCwjWmf0N7AXQKS5mDsnchf4ypZdNfOGb0Y4ARzS8NH8yNX5sAw783roIj5
+         iHd+1J2Ip8vouDwuD99jBE78BVGYpkYd9jMnY4uR0vA35rwgNB4LIXn6189MEBzTioKJ
+         r8cw==
+X-Gm-Message-State: ANhLgQ308p4F/8z2JdFfk/5DG1cTHUHmRriIrIiTLylHJAXycLeFdfiu
+        oKY73A3/NLFNMDfyUhrC5PxTn39W3lw5OIAK3ar8S0fh
+X-Google-Smtp-Source: APiQypIWKERkhJyfw3nllppwlKx4Kg5tACX7YV91IKVmdYpKGJw8tan3l05zjbxOy64C+jzvYjD6e0YtF987t4KsIjw=
+X-Received: by 2002:a67:e24c:: with SMTP id w12mr8442912vse.153.1585565563772;
+ Mon, 30 Mar 2020 03:52:43 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a67:c005:0:0:0:0:0 with HTTP; Mon, 30 Mar 2020 03:52:43
+ -0700 (PDT)
+Reply-To: maryalice00.12@postribe.com
+From:   Maryalice Williams <maryalicewilliams730@gmail.com>
+Date:   Mon, 30 Mar 2020 08:52:43 -0200
+Message-ID: <CAKwdjsr+YKgJk7z-UHX7Zo55cx5RUN3-bw03sWcArP4vbM2B5g@mail.gmail.com>
+Subject: Reply For More Details.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Date: Thu, 26 Mar 2020 20:47:46 -0300
+-- 
+My dear,
 
-> Under certain circumstances, depending on the order of addresses on the
-> interfaces, it could be that sctp_v[46]_get_dst() would return a dst
-> with a mismatched struct flowi.
-> 
-> For example, if when walking through the bind addresses and the first
-> one is not a match, it saves the dst as a fallback (added in
-> 410f03831c07), but not the flowi. Then if the next one is also not a
-> match, the previous dst will be returned but with the flowi information
-> for the 2nd address, which is wrong.
-> 
-> The fix is to use a locally stored flowi that can be used for such
-> attempts, and copy it to the parameter only in case it is a possible
-> match, together with the corresponding dst entry.
-> 
-> The patch updates IPv6 code mostly just to be in sync. Even though the issue
-> is also present there, it fallback is not expected to work with IPv6.
-> 
-> Fixes: 410f03831c07 ("sctp: add routing output fallback")
-> Reported-by: Jin Meng <meng.a.jin@nokia-sbell.com>
-> Signed-off-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+I am Mrs Maryalice Williams, I want to send you donation of two
+million seven hundred thousand Dollars ($2.7M) for volunteer projects
+in your country due to my ill health that could not permit me. Kindly
+reply for more details, and also send me the following details, as per
+below, your full Name ..........,  Address...........,
+Age...............,  Occupation ...............
 
-Applied and queued up for -stable.
+Remain blessed,
+Mrs. Maryalice Williams.
