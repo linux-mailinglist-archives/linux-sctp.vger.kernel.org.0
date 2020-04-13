@@ -2,44 +2,37 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12A9E1A6E15
-	for <lists+linux-sctp@lfdr.de>; Mon, 13 Apr 2020 23:17:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDBDA1A6E65
+	for <lists+linux-sctp@lfdr.de>; Mon, 13 Apr 2020 23:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388872AbgDMVRt (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 13 Apr 2020 17:17:49 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:39229 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2388869AbgDMVQx (ORCPT
+        id S2389126AbgDMVdv (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 13 Apr 2020 17:33:51 -0400
+Received: from smtprelay0129.hostedemail.com ([216.40.44.129]:47468 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2389040AbgDMVdu (ORCPT
         <rfc822;linux-sctp@vger.kernel.org>);
-        Mon, 13 Apr 2020 17:16:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586812612;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=nDsD8ARELWs0d4asbSq1NjjS9iTGbr+u27Se40H771Q=;
-        b=OpnyKRskBXJLEtUdxfF7H+AiMVw8WCqUQvEOO3WeWg+m7J418wYlKLE5V0k52i7+pe5V5F
-        FTk5BDx6xu7qKuWD9pxqWuWlpi//BmiKLquj+OaCjSy47bXvkpodae+W08Ro85gidyzd6e
-        9JA7ZyPIldBK2RmKWjW4P+HprG8GQDs=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-346-rjIc-N9CM66LO5fX_MJoTg-1; Mon, 13 Apr 2020 17:16:49 -0400
-X-MC-Unique: rjIc-N9CM66LO5fX_MJoTg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 64AE4107ACCA;
-        Mon, 13 Apr 2020 21:16:44 +0000 (UTC)
-Received: from llong.com (ovpn-115-28.rdu2.redhat.com [10.10.115.28])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1198311D2D3;
-        Mon, 13 Apr 2020 21:16:39 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
+        Mon, 13 Apr 2020 17:33:50 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay06.hostedemail.com (Postfix) with ESMTP id D45AF18027F9D;
+        Mon, 13 Apr 2020 21:33:46 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:966:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2196:2199:2393:2559:2562:2693:2828:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3868:3871:3872:4321:4385:5007:6119:6742:6743:7808:8660:10004:10400:10466:10848:11026:11232:11657:11658:11914:12043:12048:12296:12297:12438:12740:12760:12895:13069:13148:13230:13311:13357:13439:14659:14721:21080:21451:21627:21990:30054:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:2,LUA_SUMMARY:none
+X-HE-Tag: badge84_5a5696689f027
+X-Filterd-Recvd-Size: 3380
+Received: from XPS-9350.home (unknown [47.151.136.130])
+        (Authenticated sender: joe@perches.com)
+        by omf07.hostedemail.com (Postfix) with ESMTPA;
+        Mon, 13 Apr 2020 21:33:40 +0000 (UTC)
+Message-ID: <efd6ceb1f182aa7364e9706422768a1c1335aee4.camel@perches.com>
+Subject: Re: [PATCH 2/2] crypto: Remove unnecessary memzero_explicit()
+From:   Joe Perches <joe@perches.com>
+To:     Waiman Long <longman@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         David Howells <dhowells@redhat.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
         Matthew Wilcox <willy@infradead.org>,
         David Rientjes <rientjes@google.com>
 Cc:     linux-mm@kvack.org, keyrings@vger.kernel.org,
@@ -60,160 +53,54 @@ Cc:     linux-mm@kvack.org, keyrings@vger.kernel.org,
         linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
         linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
         cocci@systeme.lip6.fr, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, Waiman Long <longman@redhat.com>
-Subject: [PATCH 2/2] crypto: Remove unnecessary memzero_explicit()
-Date:   Mon, 13 Apr 2020 17:15:50 -0400
-Message-Id: <20200413211550.8307-3-longman@redhat.com>
-In-Reply-To: <20200413211550.8307-1-longman@redhat.com>
+        linux-integrity@vger.kernel.org
+Date:   Mon, 13 Apr 2020 14:31:32 -0700
+In-Reply-To: <20200413211550.8307-3-longman@redhat.com>
 References: <20200413211550.8307-1-longman@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+         <20200413211550.8307-3-longman@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.34.1-2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Since kfree_sensitive() will do an implicit memzero_explicit(), there
-is no need to call memzero_explicit() before it. Eliminate those
-memzero_explicit() and simplify the call sites.
+On Mon, 2020-04-13 at 17:15 -0400, Waiman Long wrote:
+> Since kfree_sensitive() will do an implicit memzero_explicit(), there
+> is no need to call memzero_explicit() before it. Eliminate those
+> memzero_explicit() and simplify the call sites.
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- .../crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c  | 15 +++------------
- .../crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c  | 16 +++-------------
- drivers/crypto/amlogic/amlogic-gxl-cipher.c      | 10 ++--------
- drivers/crypto/inside-secure/safexcel_hash.c     |  3 +--
- 4 files changed, 9 insertions(+), 35 deletions(-)
+2 bits of trivia:
 
-diff --git a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
-index aa4e8fdc2b32..46c10c7ca6d0 100644
---- a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
-+++ b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
-@@ -366,10 +366,7 @@ void sun8i_ce_cipher_exit(struct crypto_tfm *tfm)
- {
- 	struct sun8i_cipher_tfm_ctx *op = crypto_tfm_ctx(tfm);
- 
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
-+	kfree_sensitive(op->key);
- 	crypto_free_sync_skcipher(op->fallback_tfm);
- 	pm_runtime_put_sync_suspend(op->ce->dev);
- }
-@@ -391,10 +388,7 @@ int sun8i_ce_aes_setkey(struct crypto_skcipher *tfm, const u8 *key,
- 		dev_dbg(ce->dev, "ERROR: Invalid keylen %u\n", keylen);
- 		return -EINVAL;
- 	}
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
-+	kfree_sensitive(op->key);
- 	op->keylen = keylen;
- 	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
- 	if (!op->key)
-@@ -416,10 +410,7 @@ int sun8i_ce_des3_setkey(struct crypto_skcipher *tfm, const u8 *key,
- 	if (err)
- 		return err;
- 
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
-+	free_sensitive(op->key, op->keylen);
- 	op->keylen = keylen;
- 	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
- 	if (!op->key)
-diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
-index 5246ef4f5430..7e09a923cbaf 100644
---- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
-+++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
-@@ -249,7 +249,6 @@ static int sun8i_ss_cipher(struct skcipher_request *areq)
- 			offset = areq->cryptlen - ivsize;
- 			if (rctx->op_dir & SS_DECRYPTION) {
- 				memcpy(areq->iv, backup_iv, ivsize);
--				memzero_explicit(backup_iv, ivsize);
- 				kfree_sensitive(backup_iv);
- 			} else {
- 				scatterwalk_map_and_copy(areq->iv, areq->dst, offset,
-@@ -367,10 +366,7 @@ void sun8i_ss_cipher_exit(struct crypto_tfm *tfm)
- {
- 	struct sun8i_cipher_tfm_ctx *op = crypto_tfm_ctx(tfm);
- 
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
-+	kfree_sensitive(op->key);
- 	crypto_free_sync_skcipher(op->fallback_tfm);
- 	pm_runtime_put_sync(op->ss->dev);
- }
-@@ -392,10 +388,7 @@ int sun8i_ss_aes_setkey(struct crypto_skcipher *tfm, const u8 *key,
- 		dev_dbg(ss->dev, "ERROR: Invalid keylen %u\n", keylen);
- 		return -EINVAL;
- 	}
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
-+	kfree_sensitive(op->key);
- 	op->keylen = keylen;
- 	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
- 	if (!op->key)
-@@ -418,10 +411,7 @@ int sun8i_ss_des3_setkey(struct crypto_skcipher *tfm, const u8 *key,
- 		return -EINVAL;
- 	}
- 
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
-+	kfree_sensitive(op->key);
- 	op->keylen = keylen;
- 	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
- 	if (!op->key)
-diff --git a/drivers/crypto/amlogic/amlogic-gxl-cipher.c b/drivers/crypto/amlogic/amlogic-gxl-cipher.c
-index fd1269900d67..f424397fbba4 100644
---- a/drivers/crypto/amlogic/amlogic-gxl-cipher.c
-+++ b/drivers/crypto/amlogic/amlogic-gxl-cipher.c
-@@ -341,10 +341,7 @@ void meson_cipher_exit(struct crypto_tfm *tfm)
- {
- 	struct meson_cipher_tfm_ctx *op = crypto_tfm_ctx(tfm);
- 
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
-+	kfree_sensitive(op->key)
- 	crypto_free_sync_skcipher(op->fallback_tfm);
- }
- 
-@@ -368,10 +365,7 @@ int meson_aes_setkey(struct crypto_skcipher *tfm, const u8 *key,
- 		dev_dbg(mc->dev, "ERROR: Invalid keylen %u\n", keylen);
- 		return -EINVAL;
- 	}
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
-+	kfree_sensitive(op->key);
- 	op->keylen = keylen;
- 	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
- 	if (!op->key)
-diff --git a/drivers/crypto/inside-secure/safexcel_hash.c b/drivers/crypto/inside-secure/safexcel_hash.c
-index 43962bc709c6..4a2d162914de 100644
---- a/drivers/crypto/inside-secure/safexcel_hash.c
-+++ b/drivers/crypto/inside-secure/safexcel_hash.c
-@@ -1081,8 +1081,7 @@ static int safexcel_hmac_init_pad(struct ahash_request *areq,
- 		}
- 
- 		/* Avoid leaking */
--		memzero_explicit(keydup, keylen);
--		kfree(keydup);
-+		kfree_sensitive(keydup);
- 
- 		if (ret)
- 			return ret;
--- 
-2.18.1
+> diff --git a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
+[]
+> @@ -391,10 +388,7 @@ int sun8i_ce_aes_setkey(struct crypto_skcipher *tfm, const u8 *key,
+>  		dev_dbg(ce->dev, "ERROR: Invalid keylen %u\n", keylen);
+>  		return -EINVAL;
+>  	}
+> -	if (op->key) {
+> -		memzero_explicit(op->key, op->keylen);
+> -		kfree(op->key);
+> -	}
+> +	kfree_sensitive(op->key);
+>  	op->keylen = keylen;
+>  	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
+>  	if (!op->key)
+
+It might be a defect to set op->keylen before the kmemdup succeeds.
+
+> @@ -416,10 +410,7 @@ int sun8i_ce_des3_setkey(struct crypto_skcipher *tfm, const u8 *key,
+>  	if (err)
+>  		return err;
+>  
+> -	if (op->key) {
+> -		memzero_explicit(op->key, op->keylen);
+> -		kfree(op->key);
+> -	}
+> +	free_sensitive(op->key, op->keylen);
+
+Why not kfree_sensitive(op->key) ?
+
 
