@@ -2,46 +2,40 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A12481A7BE1
-	for <lists+linux-sctp@lfdr.de>; Tue, 14 Apr 2020 15:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9351A84B4
+	for <lists+linux-sctp@lfdr.de>; Tue, 14 Apr 2020 18:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502611AbgDNNJO (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 14 Apr 2020 09:09:14 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:33625 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2502604AbgDNNJG (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>);
-        Tue, 14 Apr 2020 09:09:06 -0400
+        id S2391516AbgDNQZn (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 14 Apr 2020 12:25:43 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:55112 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2391479AbgDNQZF (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 14 Apr 2020 12:25:05 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586869745;
+        s=mimecast20190719; t=1586881501;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hBYiVbPBfUS+AcwD+sXBpDKSbw0tQLOGN9sYzZKYAmI=;
-        b=BTAN21WocSEZDEQm2BhK4woJchErWB0xzslg0PRL+jaW73JuBBrb4U+r4OkMNKBbmzZ4UU
-        SCbUG2wUypFUui+uF2bDpjjfzTzcGjJONpKqua7ehfBP327KAv9KBAk5zaFQIpt7gAzXFP
-        mOe73lGOE/I3IOT6gqpXRWTm7whysyw=
+        bh=yW8t58m2bp1NhazlqC7/k8J+nPWsrZBYDWUsjTyk2qQ=;
+        b=NsgcQPq0gDRRzr+WCv6O+IejAhACeGf91UcZUch7xVIEkk4F0++6WsAKwkQ+6nkMoq/jD7
+        lzSV3f1EuKP3Hxnp2JivHQcF6Vr/Z22M++foNVb8RdxR7eWsyL6QJbeO4NazIgQ9svAhXl
+        7AFa78Hn9YCF68TMh9hKXOVlm2kXUcc=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-106-PA7uLtZsM327ACx1G3T_7g-1; Tue, 14 Apr 2020 09:07:49 -0400
-X-MC-Unique: PA7uLtZsM327ACx1G3T_7g-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+ us-mta-87-m_CJjLwlPvyXxruKyZ4cKA-1; Tue, 14 Apr 2020 12:24:56 -0400
+X-MC-Unique: m_CJjLwlPvyXxruKyZ4cKA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 96CEA8048E4;
-        Tue, 14 Apr 2020 13:07:05 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-113-129.rdu2.redhat.com [10.10.113.129])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5AB5418A8E;
-        Tue, 14 Apr 2020 13:06:57 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20200413211550.8307-2-longman@redhat.com>
-References: <20200413211550.8307-2-longman@redhat.com> <20200413211550.8307-1-longman@redhat.com>
-To:     Waiman Long <longman@redhat.com>, herbert@gondor.apana.org.au
-cc:     Andrew Morton <akpm@linux-foundation.org>,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 12123107ACC4;
+        Tue, 14 Apr 2020 16:24:50 +0000 (UTC)
+Received: from llong.remote.csb (ovpn-118-173.rdu2.redhat.com [10.10.118.173])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0E02D118DEE;
+        Tue, 14 Apr 2020 16:24:36 +0000 (UTC)
+Subject: Re: [PATCH v2 2/2] crypto: Remove unnecessary memzero_explicit()
+To:     Christophe Leroy <christophe.leroy@c-s.fr>,
+        Andrew Morton <akpm@linux-foundation.org>,
         David Howells <dhowells@redhat.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         James Morris <jmorris@namei.org>,
@@ -49,11 +43,11 @@ cc:     Andrew Morton <akpm@linux-foundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Joe Perches <joe@perches.com>,
         Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>, linux-mm@kvack.org,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-crypto@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
+        David Rientjes <rientjes@google.com>
+Cc:     linux-mm@kvack.org, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-crypto@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
@@ -69,54 +63,97 @@ cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
         cocci@systeme.lip6.fr, linux-security-module@vger.kernel.org,
         linux-integrity@vger.kernel.org
-Subject: Re: [PATCH 1/2] mm, treewide: Rename kzfree() to kfree_sensitive()
+References: <20200413211550.8307-1-longman@redhat.com>
+ <20200413222846.24240-1-longman@redhat.com>
+ <eca85e0b-0af3-c43a-31e4-bd5c3f519798@c-s.fr>
+From:   Waiman Long <longman@redhat.com>
+Organization: Red Hat
+Message-ID: <e194a51f-a5e5-a557-c008-b08cac558572@redhat.com>
+Date:   Tue, 14 Apr 2020 12:24:36 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3807473.1586869616.1@warthog.procyon.org.uk>
-Date:   Tue, 14 Apr 2020 14:06:56 +0100
-Message-ID: <3807474.1586869616@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+In-Reply-To: <eca85e0b-0af3-c43a-31e4-bd5c3f519798@c-s.fr>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Waiman Long <longman@redhat.com> wrote:
+On 4/14/20 2:08 AM, Christophe Leroy wrote:
+>
+>
+> Le 14/04/2020 =C3=A0 00:28, Waiman Long a =C3=A9crit=C2=A0:
+>> Since kfree_sensitive() will do an implicit memzero_explicit(), there
+>> is no need to call memzero_explicit() before it. Eliminate those
+>> memzero_explicit() and simplify the call sites. For better correctness=
+,
+>> the setting of keylen is also moved down after the key pointer check.
+>>
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>> ---
+>> =C2=A0 .../allwinner/sun8i-ce/sun8i-ce-cipher.c=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 | 19 +++++-------------
+>> =C2=A0 .../allwinner/sun8i-ss/sun8i-ss-cipher.c=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 | 20 +++++--------------
+>> =C2=A0 drivers/crypto/amlogic/amlogic-gxl-cipher.c=C2=A0=C2=A0 | 12 ++=
++--------
+>> =C2=A0 drivers/crypto/inside-secure/safexcel_hash.c=C2=A0 |=C2=A0 3 +-=
+-
+>> =C2=A0 4 files changed, 14 insertions(+), 40 deletions(-)
+>>
+>> diff --git a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
+>> b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
+>> index aa4e8fdc2b32..8358fac98719 100644
+>> --- a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
+>> +++ b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
+>> @@ -366,10 +366,7 @@ void sun8i_ce_cipher_exit(struct crypto_tfm *tfm)
+>> =C2=A0 {
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct sun8i_cipher_tfm_ctx *op =3D cry=
+pto_tfm_ctx(tfm);
+>> =C2=A0 -=C2=A0=C2=A0=C2=A0 if (op->key) {
+>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 memzero_explicit(op->key, =
+op->keylen);
+>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfree(op->key);
+>> -=C2=A0=C2=A0=C2=A0 }
+>> +=C2=A0=C2=A0=C2=A0 kfree_sensitive(op->key);
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 crypto_free_sync_skcipher(op->fallback_=
+tfm);
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pm_runtime_put_sync_suspend(op->ce->dev=
+);
+>> =C2=A0 }
+>> @@ -391,14 +388,11 @@ int sun8i_ce_aes_setkey(struct crypto_skcipher
+>> *tfm, const u8 *key,
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_dbg(ce->dev=
+, "ERROR: Invalid keylen %u\n", keylen);
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -EINVAL;
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>> -=C2=A0=C2=A0=C2=A0 if (op->key) {
+>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 memzero_explicit(op->key, =
+op->keylen);
+>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfree(op->key);
+>> -=C2=A0=C2=A0=C2=A0 }
+>> -=C2=A0=C2=A0=C2=A0 op->keylen =3D keylen;
+>> +=C2=A0=C2=A0=C2=A0 kfree_sensitive(op->key);
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 op->key =3D kmemdup(key, keylen, GFP_KE=
+RNEL | GFP_DMA);
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!op->key)
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -ENOMEM;
+>> +=C2=A0=C2=A0=C2=A0 op->keylen =3D keylen;
+>
+> Does it matter at all to ensure op->keylen is not set when of->key is
+> NULL ? I'm not sure.
+>
+> But if it does, then op->keylen should be set to 0 when freeing op->key=
+.=20
 
-> As said by Linus:
-> 
->   A symmetric naming is only helpful if it implies symmetries in use.
->   Otherwise it's actively misleading.
-> 
->   In "kzalloc()", the z is meaningful and an important part of what the
->   caller wants.
-> 
->   In "kzfree()", the z is actively detrimental, because maybe in the
->   future we really _might_ want to use that "memfill(0xdeadbeef)" or
->   something. The "zero" part of the interface isn't even _relevant_.
-> 
-> The main reason that kzfree() exists is to clear sensitive information
-> that should not be leaked to other future users of the same memory
-> objects.
-> 
-> Rename kzfree() to kfree_sensitive() to follow the example of the
-> recently added kvfree_sensitive() and make the intention of the API
-> more explicit. In addition, memzero_explicit() is used to clear the
-> memory to make sure that it won't get optimized away by the compiler.
-> 
-> The renaming is done by using the command sequence:
-> 
->   git grep -w --name-only kzfree |\
->   xargs sed -i 's/\bkzfree\b/kfree_sensitive/'
-> 
-> followed by some editing of the kfree_sensitive() kerneldoc and the
-> use of memzero_explicit() instead of memset().
-> 
-> Suggested-by: Joe Perches <joe@perches.com>
-> Signed-off-by: Waiman Long <longman@redhat.com>
+My thinking is that if memory allocation fails, we just don't touch
+anything and return an error code. I will not explicitly set keylen to 0
+in this case unless it is specified in the API documentation.
 
-Since this changes a lot of crypto stuff, does it make sense for it to go via
-the crypto tree?
-
-Acked-by: David Howells <dhowells@redhat.com>
+Cheers,
+Longman
 
