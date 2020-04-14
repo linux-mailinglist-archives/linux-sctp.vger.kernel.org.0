@@ -2,39 +2,35 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 740D81A8B12
-	for <lists+linux-sctp@lfdr.de>; Tue, 14 Apr 2020 21:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B75EB1A8BAD
+	for <lists+linux-sctp@lfdr.de>; Tue, 14 Apr 2020 21:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504950AbgDNTiv (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 14 Apr 2020 15:38:51 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:51017 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2504955AbgDNTiJ (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 14 Apr 2020 15:38:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586893088;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=K7rEujuH9mCHHkQNQF3bIC7vs8ss/qE9yTiJvgoWENY=;
-        b=RUtwHLrSbkaJMm0IrMRS9rm0IZmdDO3dP2/xxkZGnWHf/t7JN2MxaoW4q5N/mb6RPBFLLy
-        P947ZeFYc1NGC7YZYlO7Mw3aqTJi1Hqp7+A3wGm8Zn3fqfDRZznd1zIsAv1KIqCY5KfpPZ
-        cSeVgzUqVzTuzDNClrQrNJ8UGRg4zNQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-139-BEtuMjG3PL-f8LyKeyu6gQ-1; Tue, 14 Apr 2020 15:38:03 -0400
-X-MC-Unique: BEtuMjG3PL-f8LyKeyu6gQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7A5A58017F3;
-        Tue, 14 Apr 2020 19:37:58 +0000 (UTC)
-Received: from llong.remote.csb (ovpn-118-173.rdu2.redhat.com [10.10.118.173])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0277F100E7E3;
-        Tue, 14 Apr 2020 19:37:51 +0000 (UTC)
+        id S2505283AbgDNT5B (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 14 Apr 2020 15:57:01 -0400
+Received: from smtprelay0211.hostedemail.com ([216.40.44.211]:34122 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2505250AbgDNTz5 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Tue, 14 Apr 2020 15:55:57 -0400
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave04.hostedemail.com (Postfix) with ESMTP id D5D591802CCB4;
+        Tue, 14 Apr 2020 19:47:05 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay06.hostedemail.com (Postfix) with ESMTP id 9E3611802B57F;
+        Tue, 14 Apr 2020 19:47:05 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:966:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1537:1561:1593:1594:1711:1714:1730:1747:1777:1792:2196:2199:2393:2559:2562:2828:3138:3139:3140:3141:3142:3622:3865:3867:3872:3874:4321:4385:5007:6742:6743:10004:10400:10848:11232:11658:11914:12297:12740:12760:12895:13069:13311:13357:13439:14659:14721:21080:21627:30045:30054:30070:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: coal59_5a1e7cc02a463
+X-Filterd-Recvd-Size: 2796
+Received: from XPS-9350.home (unknown [47.151.136.130])
+        (Authenticated sender: joe@perches.com)
+        by omf07.hostedemail.com (Postfix) with ESMTPA;
+        Tue, 14 Apr 2020 19:46:59 +0000 (UTC)
+Message-ID: <2a58f592879cf67b4c6b8e859ce87e1f9652902a.camel@perches.com>
 Subject: Re: [PATCH v2 2/2] crypto: Remove unnecessary memzero_explicit()
-To:     =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>
+From:   Joe Perches <joe@perches.com>
+To:     Waiman Long <longman@redhat.com>,
+        Michal =?ISO-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
 Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
         Andrew Morton <akpm@linux-foundation.org>,
         David Howells <dhowells@redhat.com>,
@@ -42,7 +38,6 @@ Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
         James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
         Matthew Wilcox <willy@infradead.org>,
         David Rientjes <rientjes@google.com>, linux-mm@kvack.org,
         keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -64,108 +59,34 @@ Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
         linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
         cocci@systeme.lip6.fr, linux-security-module@vger.kernel.org,
         linux-integrity@vger.kernel.org
+Date:   Tue, 14 Apr 2020 12:44:49 -0700
+In-Reply-To: <578fe9b6-1ccd-2698-60aa-96c3f2dd2c31@redhat.com>
 References: <20200413211550.8307-1-longman@redhat.com>
- <20200413222846.24240-1-longman@redhat.com>
- <eca85e0b-0af3-c43a-31e4-bd5c3f519798@c-s.fr>
- <e194a51f-a5e5-a557-c008-b08cac558572@redhat.com>
- <20200414191601.GZ25468@kitsune.suse.cz>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <578fe9b6-1ccd-2698-60aa-96c3f2dd2c31@redhat.com>
-Date:   Tue, 14 Apr 2020 15:37:51 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+         <20200413222846.24240-1-longman@redhat.com>
+         <eca85e0b-0af3-c43a-31e4-bd5c3f519798@c-s.fr>
+         <e194a51f-a5e5-a557-c008-b08cac558572@redhat.com>
+         <20200414191601.GZ25468@kitsune.suse.cz>
+         <578fe9b6-1ccd-2698-60aa-96c3f2dd2c31@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.34.1-2 
 MIME-Version: 1.0
-In-Reply-To: <20200414191601.GZ25468@kitsune.suse.cz>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On 4/14/20 3:16 PM, Michal Such=E1nek wrote:
-> On Tue, Apr 14, 2020 at 12:24:36PM -0400, Waiman Long wrote:
->> On 4/14/20 2:08 AM, Christophe Leroy wrote:
->>>
->>> Le 14/04/2020 =E0 00:28, Waiman Long a =E9crit=A0:
->>>> Since kfree_sensitive() will do an implicit memzero_explicit(), ther=
-e
->>>> is no need to call memzero_explicit() before it. Eliminate those
->>>> memzero_explicit() and simplify the call sites. For better correctne=
-ss,
->>>> the setting of keylen is also moved down after the key pointer check=
-.
->>>>
->>>> Signed-off-by: Waiman Long <longman@redhat.com>
->>>> ---
->>>> =A0 .../allwinner/sun8i-ce/sun8i-ce-cipher.c=A0=A0=A0=A0=A0 | 19 +++=
-++-------------
->>>> =A0 .../allwinner/sun8i-ss/sun8i-ss-cipher.c=A0=A0=A0=A0=A0 | 20 +++=
-++--------------
->>>> =A0 drivers/crypto/amlogic/amlogic-gxl-cipher.c=A0=A0 | 12 +++------=
---
->>>> =A0 drivers/crypto/inside-secure/safexcel_hash.c=A0 |=A0 3 +--
->>>> =A0 4 files changed, 14 insertions(+), 40 deletions(-)
->>>>
->>>> diff --git a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
->>>> b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
->>>> index aa4e8fdc2b32..8358fac98719 100644
->>>> --- a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
->>>> +++ b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
->>>> @@ -366,10 +366,7 @@ void sun8i_ce_cipher_exit(struct crypto_tfm *tf=
-m)
->>>> =A0 {
->>>> =A0=A0=A0=A0=A0 struct sun8i_cipher_tfm_ctx *op =3D crypto_tfm_ctx(t=
-fm);
->>>> =A0 -=A0=A0=A0 if (op->key) {
->>>> -=A0=A0=A0=A0=A0=A0=A0 memzero_explicit(op->key, op->keylen);
->>>> -=A0=A0=A0=A0=A0=A0=A0 kfree(op->key);
->>>> -=A0=A0=A0 }
->>>> +=A0=A0=A0 kfree_sensitive(op->key);
->>>> =A0=A0=A0=A0=A0 crypto_free_sync_skcipher(op->fallback_tfm);
->>>> =A0=A0=A0=A0=A0 pm_runtime_put_sync_suspend(op->ce->dev);
->>>> =A0 }
->>>> @@ -391,14 +388,11 @@ int sun8i_ce_aes_setkey(struct crypto_skcipher
->>>> *tfm, const u8 *key,
->>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0 dev_dbg(ce->dev, "ERROR: Invalid keylen =
-%u\n", keylen);
->>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0 return -EINVAL;
->>>> =A0=A0=A0=A0=A0 }
->>>> -=A0=A0=A0 if (op->key) {
->>>> -=A0=A0=A0=A0=A0=A0=A0 memzero_explicit(op->key, op->keylen);
->>>> -=A0=A0=A0=A0=A0=A0=A0 kfree(op->key);
->>>> -=A0=A0=A0 }
->>>> -=A0=A0=A0 op->keylen =3D keylen;
->>>> +=A0=A0=A0 kfree_sensitive(op->key);
->>>> =A0=A0=A0=A0=A0 op->key =3D kmemdup(key, keylen, GFP_KERNEL | GFP_DM=
-A);
->>>> =A0=A0=A0=A0=A0 if (!op->key)
->>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0 return -ENOMEM;
->>>> +=A0=A0=A0 op->keylen =3D keylen;
->>> Does it matter at all to ensure op->keylen is not set when of->key is
->>> NULL ? I'm not sure.
->>>
->>> But if it does, then op->keylen should be set to 0 when freeing op->k=
-ey.=20
->> My thinking is that if memory allocation fails, we just don't touch
->> anything and return an error code. I will not explicitly set keylen to=
- 0
->> in this case unless it is specified in the API documentation.
-> You already freed the key by now so not touching anything is not
-> possible. The key is set to NULL on allocation failure so setting keyle=
-n
-> to 0 should be redundant. However, setting keylen to 0 is consisent wit=
-h
-> not having a key, and it avoids the possibility of leaking the length
-> later should that ever cause any problem.
+On Tue, 2020-04-14 at 15:37 -0400, Waiman Long wrote:
+> OK, I can change it to clear the key length when the allocation failed
+> which isn't likely.
 
-OK, I can change it to clear the key length when the allocation failed
-which isn't likely.
 
-Cheers,
-Longman
+Perhaps:
+
+	kfree_sensitive(op->key);
+	op->key = NULL;
+	op->keylen = 0;
+
+but I don't know that it impacts any possible state.
 
 
