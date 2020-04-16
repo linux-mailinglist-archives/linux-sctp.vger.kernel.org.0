@@ -2,131 +2,151 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C6C31A923A
-	for <lists+linux-sctp@lfdr.de>; Wed, 15 Apr 2020 07:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62D5B1AB94F
+	for <lists+linux-sctp@lfdr.de>; Thu, 16 Apr 2020 09:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393192AbgDOFBm (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 15 Apr 2020 01:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35184 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393186AbgDOFBK (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 15 Apr 2020 01:01:10 -0400
-Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20882C061A0F
-        for <linux-sctp@vger.kernel.org>; Tue, 14 Apr 2020 22:01:09 -0700 (PDT)
-Received: by mail-qv1-xf42.google.com with SMTP id fb4so232674qvb.7
-        for <linux-sctp@vger.kernel.org>; Tue, 14 Apr 2020 22:01:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ef3HLI/XX5ogd42JRuoGnEbb/Ln3ZxgvuLj5jaeUWkI=;
-        b=Tcxzc6xC3iVTZShTUf3CIv3N8B5ZyCbru12fLV5+tpVooL5/Bo3MM2R4w1+y/qKNnw
-         9lu0zJBRs+VK1Bc14YzwiZC+K/efs95VT8GzxaoJoz3t2WhfDZxWX+BgsMNU20r8wRPv
-         WS98QN/V8NZIzymtO0juNqdA9Tg6/2OTyjU7Zm1KL9ejebzf7wo1d0uOEsRrlg17M8fg
-         qYmffi6H6MwGLJe4epZjwPPvjWIdIXS0xtejpuhYYUqQSrz2GfoywvJh6tC6sCJVyKe7
-         xzOQhWdIv/o82YQJCk9DtMPUw2B8iLWuNwugd4l1OepDEbLixuOHRPHRALsrInJO+Rsn
-         o1og==
+        id S2437962AbgDPHFZ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 16 Apr 2020 03:05:25 -0400
+Received: from mail-il1-f199.google.com ([209.85.166.199]:43078 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437901AbgDPHFQ (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 16 Apr 2020 03:05:16 -0400
+Received: by mail-il1-f199.google.com with SMTP id o9so8135933ila.10
+        for <linux-sctp@vger.kernel.org>; Thu, 16 Apr 2020 00:05:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ef3HLI/XX5ogd42JRuoGnEbb/Ln3ZxgvuLj5jaeUWkI=;
-        b=emuP8o6cuW+QDmZZxxgWOqZNvM3PE1EY6Vhsg2UPMzH+rtlDi8MAw92RaJEsM1xDws
-         9OjSK7ZfYorYdlfkVyWvwxhu4utcfo6DN6R7IVaNubUdsLSCvadCluH/sn58cNJsOfMY
-         UZ07Hxzzal+fKHG0HdB2lX1AJu+ConLVoCQJz+3xlQWn4rOrBFg9vJIHKSIU20w4Qaxa
-         uYkEofKLXrI0O/3t2TJbDB7HWP1zEO79jPpg8fLwOlpIvGUuzPMzZIpiMAJbDRC9zn7C
-         KUU/R/xN/MJ1NAfldPsNr575L9IG4/t3GKCLE4loTIgxTXFiGryDCM1Wm59yrDbAZEvn
-         cZ2w==
-X-Gm-Message-State: AGi0PuaM8PCmFq+AR2dMsqAEMdt6UQEa/RItZNtTOvA+6jIrzOIfTqYv
-        pDDIuyEELHfjRoXAyJbWZGzRhw==
-X-Google-Smtp-Source: APiQypJRjg+PyUSZjrIkjpxdMfgyPb9bMEWnffTFRMxoE1aQMUITXzNurR0P/0BN6q0H0W5xTyhSBA==
-X-Received: by 2002:a0c:e88d:: with SMTP id b13mr3243342qvo.245.1586926868219;
-        Tue, 14 Apr 2020 22:01:08 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::e623])
-        by smtp.gmail.com with ESMTPSA id 10sm6168833qtp.4.2020.04.14.22.01.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Apr 2020 22:01:07 -0700 (PDT)
-Date:   Wed, 15 Apr 2020 01:01:06 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>, linux-mm@kvack.org,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-crypto@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-ppp@vger.kernel.org,
-        wireguard@lists.zx2c4.com, linux-wireless@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        cocci@systeme.lip6.fr, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH 1/2] mm, treewide: Rename kzfree() to kfree_sensitive()
-Message-ID: <20200415050106.GA154671@cmpxchg.org>
-References: <20200413211550.8307-1-longman@redhat.com>
- <20200413211550.8307-2-longman@redhat.com>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=TVvBVOi41Qo7r/+UOsEfQG1z/YRIhNfOcDF384KFc24=;
+        b=VdypON6+oCLuxYB/nPqSNC40UJRVMaJPULKhvCd0fPO9quDx0q7378xVRabRJ8YnpM
+         S4Mfq8ox0aOZ161cUIFARLY5YGeBGKJH1GaxuQKpd9xGhg7kNiBetWqfZ96uI6d1SuYu
+         5nTRMOxE+tuxzWlXNvO50VwXq6SqODezyZRLDpdJNQF6hnsizoIEVzTSSwur8SWxVHU1
+         Qlm1bSpsKzehA8b6L17X+pnz1EMwJsBzD1XEsNflOrHzJYqH+OrGMVXCPzrmu/VMdDOE
+         1pJQy0o6j+HAjWNrFd9z43o4rV9ByvZFEUulPCjHG/FMzjvGqTqSqiv6n7ylZ3ut039J
+         vLpQ==
+X-Gm-Message-State: AGi0Pub7kcLnafsZto72gRIDLLNJRUWwHfST0JDLJVsC93Z6I/EaEYZx
+        pGX7ff/vnlhJEnKw/XH3rQpvsp6cJyf/iBy/7nv3V6583gr2
+X-Google-Smtp-Source: APiQypKBqNDHPOkuF+tpw9qAi5DbjodJ5a9xwXABXAyXw6VezRclbW19E1SSkdh9CYCb+KnhaYXF/crHs7oo6yopYcjrft2QOZu3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200413211550.8307-2-longman@redhat.com>
+X-Received: by 2002:a6b:7203:: with SMTP id n3mr16253379ioc.23.1587020714552;
+ Thu, 16 Apr 2020 00:05:14 -0700 (PDT)
+Date:   Thu, 16 Apr 2020 00:05:14 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f1377e05a3630d32@google.com>
+Subject: KMSAN: uninit-value in sctp_ootb_pkt_new
+From:   syzbot <syzbot+6751381fe5a26df5b74d@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, glider@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
+        marcelo.leitner@gmail.com, netdev@vger.kernel.org,
+        nhorman@tuxdriver.com, syzkaller-bugs@googlegroups.com,
+        vyasevich@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Mon, Apr 13, 2020 at 05:15:49PM -0400, Waiman Long wrote:
-> As said by Linus:
-> 
->   A symmetric naming is only helpful if it implies symmetries in use.
->   Otherwise it's actively misleading.
+Hello,
 
-As the btrfs example proves - people can be tempted by this false
-symmetry to pair kzalloc with kzfree, which isn't what we wanted.
+syzbot found the following crash on:
 
->   In "kzalloc()", the z is meaningful and an important part of what the
->   caller wants.
-> 
->   In "kzfree()", the z is actively detrimental, because maybe in the
->   future we really _might_ want to use that "memfill(0xdeadbeef)" or
->   something. The "zero" part of the interface isn't even _relevant_.
-> 
-> The main reason that kzfree() exists is to clear sensitive information
-> that should not be leaked to other future users of the same memory
-> objects.
-> 
-> Rename kzfree() to kfree_sensitive() to follow the example of the
-> recently added kvfree_sensitive() and make the intention of the API
-> more explicit. In addition, memzero_explicit() is used to clear the
-> memory to make sure that it won't get optimized away by the compiler.
-> 
-> The renaming is done by using the command sequence:
-> 
->   git grep -w --name-only kzfree |\
->   xargs sed -i 's/\bkzfree\b/kfree_sensitive/'
-> 
-> followed by some editing of the kfree_sensitive() kerneldoc and the
-> use of memzero_explicit() instead of memset().
-> 
-> Suggested-by: Joe Perches <joe@perches.com>
-> Signed-off-by: Waiman Long <longman@redhat.com>
+HEAD commit:    75303409 kmsan: dma: call KMSAN hooks for DMA mappings whe..
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=11d2f9e7e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7811db4cc444a7f6
+dashboard link: https://syzkaller.appspot.com/bug?extid=6751381fe5a26df5b74d
+compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
 
-Looks good to me. Thanks for fixing this very old mistake.
+Unfortunately, I don't have any reproducer for this crash yet.
 
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+6751381fe5a26df5b74d@syzkaller.appspotmail.com
+
+=====================================================
+BUG: KMSAN: uninit-value in __arch_swab32 arch/x86/include/uapi/asm/swab.h:10 [inline]
+BUG: KMSAN: uninit-value in __fswab32 include/uapi/linux/swab.h:60 [inline]
+BUG: KMSAN: uninit-value in sctp_ootb_pkt_new+0x202/0x540 net/sctp/sm_statefuns.c:6256
+CPU: 0 PID: 20127 Comm: syz-executor.2 Not tainted 5.6.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x1c9/0x220 lib/dump_stack.c:118
+ kmsan_report+0xf7/0x1e0 mm/kmsan/kmsan_report.c:118
+ __msan_warning+0x58/0xa0 mm/kmsan/kmsan_instr.c:215
+ __arch_swab32 arch/x86/include/uapi/asm/swab.h:10 [inline]
+ __fswab32 include/uapi/linux/swab.h:60 [inline]
+ sctp_ootb_pkt_new+0x202/0x540 net/sctp/sm_statefuns.c:6256
+ sctp_sf_tabort_8_4_8+0xe6/0x7e0 net/sctp/sm_statefuns.c:3372
+ sctp_sf_do_5_1B_init+0x6be/0x1b60 net/sctp/sm_statefuns.c:338
+ sctp_do_sm+0x2b4/0x9a30 net/sctp/sm_sideeffect.c:1153
+ sctp_endpoint_bh_rcv+0xd54/0xfe0 net/sctp/endpointola.c:395
+ sctp_inq_push+0x300/0x420 net/sctp/inqueue.c:80
+ sctp_rcv+0x48b9/0x5410 net/sctp/input.c:256
+ ip_protocol_deliver_rcu+0x700/0xbc0 net/ipv4/ip_input.c:204
+ ip_local_deliver_finish net/ipv4/ip_input.c:231 [inline]
+ NF_HOOK include/linux/netfilter.h:307 [inline]
+ ip_local_deliver+0x62a/0x7c0 net/ipv4/ip_input.c:252
+ dst_input include/net/dst.h:442 [inline]
+ ip_rcv_finish net/ipv4/ip_input.c:428 [inline]
+ NF_HOOK include/linux/netfilter.h:307 [inline]
+ ip_rcv+0x6cf/0x750 net/ipv4/ip_input.c:538
+ __netif_receive_skb_one_core net/core/dev.c:5187 [inline]
+ __netif_receive_skb net/core/dev.c:5301 [inline]
+ netif_receive_skb_internal net/core/dev.c:5391 [inline]
+ netif_receive_skb+0xbb5/0xf20 net/core/dev.c:5450
+ tun_rx_batched include/linux/skbuff.h:4351 [inline]
+ tun_get_user+0x6aef/0x6f60 drivers/net/tun.c:1997
+ tun_chr_write_iter+0x1f2/0x360 drivers/net/tun.c:2026
+ call_write_iter include/linux/fs.h:1902 [inline]
+ new_sync_write fs/read_write.c:483 [inline]
+ __vfs_write+0xa5a/0xca0 fs/read_write.c:496
+ vfs_write+0x44a/0x8f0 fs/read_write.c:558
+ ksys_write+0x267/0x450 fs/read_write.c:611
+ __do_sys_write fs/read_write.c:623 [inline]
+ __se_sys_write+0x92/0xb0 fs/read_write.c:620
+ __x64_sys_write+0x4a/0x70 fs/read_write.c:620
+ do_syscall_64+0xb8/0x160 arch/x86/entry/common.c:296
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x45c889
+Code: ad b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 7b b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007f973b07dc78 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 00007f973b07e6d4 RCX: 000000000045c889
+RDX: 000000000000002e RSI: 00000000200001c0 RDI: 0000000000000003
+RBP: 000000000076bf00 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00000000ffffffff
+R13: 0000000000000d0d R14: 00000000004cf3b9 R15: 000000000076bf0c
+
+Uninit was created at:
+ kmsan_save_stack_with_flags mm/kmsan/kmsan.c:144 [inline]
+ kmsan_internal_poison_shadow+0x66/0xd0 mm/kmsan/kmsan.c:127
+ kmsan_slab_alloc+0x8a/0xe0 mm/kmsan/kmsan_hooks.c:82
+ slab_alloc_node mm/slub.c:2801 [inline]
+ __kmalloc_node_track_caller+0xb40/0x1200 mm/slub.c:4420
+ __kmalloc_reserve net/core/skbuff.c:142 [inline]
+ __alloc_skb+0x2fd/0xac0 net/core/skbuff.c:210
+ alloc_skb include/linux/skbuff.h:1081 [inline]
+ alloc_skb_with_frags+0x18c/0xa70 net/core/skbuff.c:5764
+ sock_alloc_send_pskb+0xada/0xc60 net/core/sock.c:2245
+ tun_alloc_skb drivers/net/tun.c:1529 [inline]
+ tun_get_user+0x10ae/0x6f60 drivers/net/tun.c:1843
+ tun_chr_write_iter+0x1f2/0x360 drivers/net/tun.c:2026
+ call_write_iter include/linux/fs.h:1902 [inline]
+ new_sync_write fs/read_write.c:483 [inline]
+ __vfs_write+0xa5a/0xca0 fs/read_write.c:496
+ vfs_write+0x44a/0x8f0 fs/read_write.c:558
+ ksys_write+0x267/0x450 fs/read_write.c:611
+ __do_sys_write fs/read_write.c:623 [inline]
+ __se_sys_write+0x92/0xb0 fs/read_write.c:620
+ __x64_sys_write+0x4a/0x70 fs/read_write.c:620
+ do_syscall_64+0xb8/0x160 arch/x86/entry/common.c:296
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+=====================================================
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
