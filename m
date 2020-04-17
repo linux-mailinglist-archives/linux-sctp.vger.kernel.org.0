@@ -2,58 +2,94 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8583E1AD340
-	for <lists+linux-sctp@lfdr.de>; Fri, 17 Apr 2020 01:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8431AD4EF
+	for <lists+linux-sctp@lfdr.de>; Fri, 17 Apr 2020 05:45:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727875AbgDPXfG (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 16 Apr 2020 19:35:06 -0400
-Received: from mail.dsns.gov.ua ([194.0.148.99]:37970 "EHLO mail.dsns.gov.ua"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725770AbgDPXfD (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 16 Apr 2020 19:35:03 -0400
-X-Greylist: delayed 9287 seconds by postgrey-1.27 at vger.kernel.org; Thu, 16 Apr 2020 19:34:56 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mail.dsns.gov.ua (Postfix) with ESMTP id 6223A1EC85AF;
-        Thu, 16 Apr 2020 23:35:36 +0300 (EEST)
-Received: from mail.dsns.gov.ua ([127.0.0.1])
-        by localhost (mail.dsns.gov.ua [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id ekdCUR6pZ0Aa; Thu, 16 Apr 2020 23:35:36 +0300 (EEST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.dsns.gov.ua (Postfix) with ESMTP id 67C3E1EC85F9;
-        Thu, 16 Apr 2020 23:35:26 +0300 (EEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.dsns.gov.ua 67C3E1EC85F9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dsns.gov.ua;
-        s=1E60DAC0-2607-11E9-81E6-7A77C2B36653; t=1587069326;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=BFrHb0sdI6ttGZUrYrU3NgniYtd1aDAhnXXb2vKIb2B9styAswbm0NbzZRAHiMp0y
-         hUE3veWMbUD+qTP/VmiRFig+sJh7tgrjRSipmI8jEPDH4mLyVFQtPdyPojLkpu/SlT
-         y/CjSPHdIqozfsh/zyWU9aeO41yKuuO77HTVyT/eVGDUtLYGTijz0IeETvwB1Yur4I
-         5RegLOWC96rliENvAjVU5IoM4JfcadYa95Q959RRtGyCSnevHOMfGycVhDjkxX/p7G
-         0gUYzq9GdO73hW8YI3AV2m5dSWB1tPfsxP4FJUwoBTp88jIZZeY7uAiDenSeAUtBdj
-         PKl/BScyij7GQ==
-X-Virus-Scanned: amavisd-new at dsns.gov.ua
-Received: from mail.dsns.gov.ua ([127.0.0.1])
-        by localhost (mail.dsns.gov.ua [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id U4DcK3mdlYyf; Thu, 16 Apr 2020 23:35:26 +0300 (EEST)
-Received: from mail.dsns.gov.ua (localhost [127.0.0.1])
-        by mail.dsns.gov.ua (Postfix) with ESMTP id 9BAF81EC8118;
-        Thu, 16 Apr 2020 23:35:15 +0300 (EEST)
-Date:   Thu, 16 Apr 2020 23:35:15 +0300 (EEST)
-From:   Saleem Netanyahu <duchenko@dsns.gov.ua>
-Reply-To: Saleem Netanyahu <saleemnetu@gmail.com>
-Message-ID: <1255292802.718114.1587069315574.JavaMail.zimbra@dsns.gov.ua>
-Subject: Hey, how are u, can we talk?
+        id S1726465AbgDQDpQ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 16 Apr 2020 23:45:16 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:45300 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726474AbgDQDpL (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 16 Apr 2020 23:45:11 -0400
+Received: by mail-io1-f70.google.com with SMTP id y4so683629ioy.12
+        for <linux-sctp@vger.kernel.org>; Thu, 16 Apr 2020 20:45:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=hOnKfvz92d+3vQbiWu1IoCbVPw/u5sRXIPxJWHDs3S8=;
+        b=MtHP9z7XA/ISq82Di8v2dkO0q0nCtqlg2X2YX70ALor2Ay3Lpbu+hNjHin0dPun4Kr
+         Qp/sgPfx0rHtbnzL8ljS8kldVXIQjqsmJF4bcqwCJthUePIk5vVfSm4Jjvt2jCyY16Wj
+         oOF+KWjYfv61tmbO2Yox2abm4KyFsfADQZbAhtUqcb4GeiXzBGQW6oKko86gMZcmow2+
+         2eYBBBedHurFOkWZ2OMzl35qGdinQclFg2GIK3zTbEONNaJ8QQrpYpVGuNyTZNrAAUCq
+         LVjYI2rEWiqNDtcbe0Xql6hvFc5qC3XH/mU5NMGyR8FV94tYLkIh0cF3BTHYhroygFQK
+         E4Sw==
+X-Gm-Message-State: AGi0PuYbmSuSIW9wAssM6lK7t5pfuwZjkn96a1tsGOf5q33pIyJYLsMq
+        HSvLrTZgOfzTeGOVJ/axp3f+Iq+vWizb1WoFIAn5eKkM/TYV
+X-Google-Smtp-Source: APiQypJEkeg0NpTLEnkdy9odmuVK2S3aDkvJmnDn2mOUeSJm2gQyAUXL2O60uCFOaNh/H/lg3aNMDYWJS0FYxbq2cArScOe1DD55
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [45.82.223.36, 172.69.54.54]
-X-Mailer: Zimbra 8.8.15_GA_3918 (zclient/8.8.15_GA_3918)
-Thread-Index: oV9MZN6+Sh4gFPdsGziQ2IngcJhATw==
-Thread-Topic: Hey, how are u, can we talk?
-To:     unlisted-recipients:; (no To-header on input)
+X-Received: by 2002:a05:6602:13d4:: with SMTP id o20mr1236860iov.104.1587095110119;
+ Thu, 16 Apr 2020 20:45:10 -0700 (PDT)
+Date:   Thu, 16 Apr 2020 20:45:10 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004373bc05a37460df@google.com>
+Subject: memory leak in sctp_stream_init_ext (2)
+From:   syzbot <syzbot+96e916d6f6f7617bc9fc@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-sctp@vger.kernel.org, marcelo.leitner@gmail.com,
+        netdev@vger.kernel.org, nhorman@tuxdriver.com,
+        syzkaller-bugs@googlegroups.com, vyasevich@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
+Hello,
+
+syzbot found the following crash on:
+
+HEAD commit:    00086336 Merge tag 'efi-urgent-2020-04-15' of git://git.ke..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12996107e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=efff978b972fb2c
+dashboard link: https://syzkaller.appspot.com/bug?extid=96e916d6f6f7617bc9fc
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=137ddf3fe00000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+96e916d6f6f7617bc9fc@syzkaller.appspotmail.com
+
+BUG: memory leak
+unreferenced object 0xffff888103ba4580 (size 96):
+  comm "syz-executor.1", pid 8335, jiffies 4294953411 (age 14.410s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000b06f3e80>] kmalloc include/linux/slab.h:555 [inline]
+    [<00000000b06f3e80>] kzalloc include/linux/slab.h:669 [inline]
+    [<00000000b06f3e80>] sctp_stream_init_ext+0x28/0xe0 net/sctp/stream.c:162
+    [<00000000aff2ecba>] sctp_sendmsg_to_asoc+0x9af/0xab0 net/sctp/socket.c:1811
+    [<00000000d5d5eb76>] sctp_sendmsg+0x2a6/0xc60 net/sctp/socket.c:2031
+    [<0000000023cdbfa3>] inet_sendmsg+0x39/0x60 net/ipv4/af_inet.c:807
+    [<00000000885878ef>] sock_sendmsg_nosec net/socket.c:652 [inline]
+    [<00000000885878ef>] sock_sendmsg+0x4c/0x60 net/socket.c:672
+    [<0000000009d727e5>] __sys_sendto+0x11d/0x1c0 net/socket.c:2000
+    [<0000000066974477>] __do_sys_sendto net/socket.c:2012 [inline]
+    [<0000000066974477>] __se_sys_sendto net/socket.c:2008 [inline]
+    [<0000000066974477>] __x64_sys_sendto+0x26/0x30 net/socket.c:2008
+    [<00000000ecc1fea9>] do_syscall_64+0x6e/0x220 arch/x86/entry/common.c:295
+    [<00000000605d798b>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
+
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
