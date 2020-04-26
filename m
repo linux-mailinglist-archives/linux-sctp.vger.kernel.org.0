@@ -2,144 +2,101 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB921B90CE
-	for <lists+linux-sctp@lfdr.de>; Sun, 26 Apr 2020 16:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0D51B9436
+	for <lists+linux-sctp@lfdr.de>; Sun, 26 Apr 2020 23:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726157AbgDZOJP (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 26 Apr 2020 10:09:15 -0400
-Received: from mail-il1-f199.google.com ([209.85.166.199]:45648 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726156AbgDZOJO (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sun, 26 Apr 2020 10:09:14 -0400
-Received: by mail-il1-f199.google.com with SMTP id t10so16579670ilf.12
-        for <linux-sctp@vger.kernel.org>; Sun, 26 Apr 2020 07:09:12 -0700 (PDT)
+        id S1726332AbgDZVkQ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 26 Apr 2020 17:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47058 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726199AbgDZVkQ (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Sun, 26 Apr 2020 17:40:16 -0400
+Received: from mail-oo1-xc41.google.com (mail-oo1-xc41.google.com [IPv6:2607:f8b0:4864:20::c41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421EEC061A41
+        for <linux-sctp@vger.kernel.org>; Sun, 26 Apr 2020 14:40:16 -0700 (PDT)
+Received: by mail-oo1-xc41.google.com with SMTP id x16so3434520oop.13
+        for <linux-sctp@vger.kernel.org>; Sun, 26 Apr 2020 14:40:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=M0oXuhWj4yor2xuDqXST2KtwYz0wKDi2kwMlCmNACN8=;
+        b=OQAmmBWQLVvCGpSFaRVT0jhFqyJYlFzpPtM0ERdsMv5BMWqGVpAnQiTXHPkTFIhhDq
+         iO/lpr64N26EP0dxB10A0fkgtPeAaIBLb8GUQiaY5/uVX1ENTCtoEIyHXpHujp46829a
+         H/zju7dU3MLI3oNF+gW0KzslTA4s0cAa4QU+gkpXJmtHhl+SYpoHbU4LfRVl8Fo7XYoP
+         CIW7tMH8dVBgwXmAvymUEwBrM7pPWCZ2TiUk1EZy8Yg4ddJQsvjK8Z8/PYB3HdyPxPzs
+         BxusNMzXOjVcdNEjx40f8k7f4wKiTKtwjK8vodsOibKn9IKyW6cjrDWYXblcsbqS9AAr
+         rUZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=pgeHEmJ3Yp5PttG/VcLln/3EKq6Mf1M6+5x9rIZGbsw=;
-        b=Yo/IOYkPrwLFVizc9goCAGFfKWRuP5tQar3Roj1Y84JYYPhPgJYPr8RuzgWsN7KcTX
-         /AQY+qmLKRQlG7w/WxnNipsbyP7uLbZo/oqqHAlixo3epCGJoBVgnMzBBRndmKDNOHkg
-         iAOvpL8Kz2oiD4PbVWEnzo2Ll0BvEgjiVb5+9HHPaI9A3hV1S1utrAH+SuLy6WfrzRJJ
-         B1l3gitCRXjbSCSozjgEzdG+494ePB6VPLGJs18Z6MOSqHz3xN9ln63uSlgjswo81Frt
-         J3hCfIwGYNFm3hCRcEAtvGwBCAX/awuVrTuFbh9h6dK00hRaIjw2zqvh3tReNDyiqB1y
-         sZyA==
-X-Gm-Message-State: AGi0PuZyZABOKr0jj/sV4BWnwLdFQM7txqXXe1qNtCFq7ENK13gZnZ+m
-        zGmmPw1bDhxp8FJkYyg4dv6Ex5nKvMjDxyeKEUfYoKZpJrql
-X-Google-Smtp-Source: APiQypL+PzGPwqLflshfjZEe5EdryYwoMXXQIi2SWV2/7YPKn/nYZKzHseEjYIbC6fFFALLP7S/TGK8emecnu/FlaGlICw6/MSoX
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=M0oXuhWj4yor2xuDqXST2KtwYz0wKDi2kwMlCmNACN8=;
+        b=LF4Qy46QWZ0vXGuWqUEm+5sd3BIsQdQayo7gdja6FxKau85mn0R29W7CwU0DHcDoar
+         Qo9sAHE8pwClPeL7w54Jg5aLxsUKiqt1LVJrYWWpTQQnFToYkkWJAEHbMf1s3kDY8kMn
+         qZ1gGGm21CsEuer33sVaDxPvfhMRaZTv4D5ukr+2qc9tY5hX36yFoksqqbmKBt4ht8Oh
+         we2kEuVegjvWk8qlepzG8KcXX2f+etIot+2pZKrbPl1zlGowhM4z7Dwvr2EPFKYc8Ucb
+         7VMbK0Yg6uQd0JjPzSNt3cy7T7HBswD7nm4wHFx/Vk7kmDVT5BH6j+ZWCReEXt7Q3gUi
+         tuKw==
+X-Gm-Message-State: AGi0PuY/P8xAH6zgV73B6yOBdegby61cypEbQ/fV4NjjrCvIV1aeLm5K
+        cozei+dMQGEWoKhworq1PS36oddD0HXnow6IYZI=
+X-Google-Smtp-Source: APiQypJCggetBSOyihUsi5hi2hrG2Yo9LB9s8vCdZn+G5NuZVy9DKQeEGbtmq4HfrWVSuGDOx+Iu1KQ38N0CU4eR+3g=
+X-Received: by 2002:a4a:b78f:: with SMTP id a15mr16783405oop.59.1587937214831;
+ Sun, 26 Apr 2020 14:40:14 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a5e:8e44:: with SMTP id r4mr16796312ioo.47.1587910152288;
- Sun, 26 Apr 2020 07:09:12 -0700 (PDT)
-Date:   Sun, 26 Apr 2020 07:09:12 -0700
-In-Reply-To: <000000000000f1377e05a3630d32@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009000aa05a4322411@google.com>
-Subject: Re: KMSAN: uninit-value in sctp_ootb_pkt_new
-From:   syzbot <syzbot+6751381fe5a26df5b74d@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, glider@google.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
-        marcelo.leitner@gmail.com, netdev@vger.kernel.org,
-        nhorman@tuxdriver.com, syzkaller-bugs@googlegroups.com,
-        vyasevich@gmail.com
+Received: by 2002:a05:6820:20c:0:0:0:0 with HTTP; Sun, 26 Apr 2020 14:40:14
+ -0700 (PDT)
+Reply-To: sophia303robin@gmail.com
+From:   "Mrs. Sophia Robin" <mrsbeccy8@gmail.com>
+Date:   Sun, 26 Apr 2020 14:40:14 -0700
+Message-ID: <CAHU1do3ETNaBmBffU6pG8tt+TUUiaY1Cv75kixd0aoGzxDm1Vw@mail.gmail.com>
+Subject: Hello My Dearest
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-syzbot has found a reproducer for the following crash on:
+Hello My Dearest
 
-HEAD commit:    bfa90a4a kmsan: remove __GFP_NO_KMSAN_SHADOW
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=13ab7fbfe00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a5915107b3106aaa
-dashboard link: https://syzkaller.appspot.com/bug?extid=6751381fe5a26df5b74d
-compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=138df47fe00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=158a182fe00000
+Please I appeal to you to exercise a little patience and read through
+my mail carefully, I am contacting you personally for investment
+assistance and a long term business relationship in your Country.
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+6751381fe5a26df5b74d@syzkaller.appspotmail.com
+I am Mrs. Sophia Robin  a citizen of the united state of America 41
+years old ,  I work in HSBC Bank in Milan Italy  as a Telex Manager
+charge of wire transfer department.
 
-batman_adv: batadv0: Interface activated: batadv_slave_1
-=====================================================
-BUG: KMSAN: uninit-value in __arch_swab32 arch/x86/include/uapi/asm/swab.h:10 [inline]
-BUG: KMSAN: uninit-value in __fswab32 include/uapi/linux/swab.h:60 [inline]
-BUG: KMSAN: uninit-value in sctp_ootb_pkt_new+0x202/0x540 net/sctp/sm_statefuns.c:6256
-CPU: 0 PID: 8800 Comm: syz-executor949 Not tainted 5.6.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x1c9/0x220 lib/dump_stack.c:118
- kmsan_report+0xf7/0x1e0 mm/kmsan/kmsan_report.c:118
- __msan_warning+0x58/0xa0 mm/kmsan/kmsan_instr.c:215
- __arch_swab32 arch/x86/include/uapi/asm/swab.h:10 [inline]
- __fswab32 include/uapi/linux/swab.h:60 [inline]
- sctp_ootb_pkt_new+0x202/0x540 net/sctp/sm_statefuns.c:6256
- sctp_sf_tabort_8_4_8+0xe6/0x7e0 net/sctp/sm_statefuns.c:3372
- sctp_sf_do_5_1B_init+0x6be/0x1b60 net/sctp/sm_statefuns.c:338
- sctp_do_sm+0x2b4/0x9a30 net/sctp/sm_sideeffect.c:1153
- sctp_endpoint_bh_rcv+0xd54/0xfe0 net/sctp/endpointola.c:395
- sctp_inq_push+0x300/0x420 net/sctp/inqueue.c:80
- sctp_rcv+0x48b9/0x5410 net/sctp/input.c:256
- ip_protocol_deliver_rcu+0x700/0xbc0 net/ipv4/ip_input.c:204
- ip_local_deliver_finish net/ipv4/ip_input.c:231 [inline]
- NF_HOOK include/linux/netfilter.h:307 [inline]
- ip_local_deliver+0x62a/0x7c0 net/ipv4/ip_input.c:252
- dst_input include/net/dst.h:442 [inline]
- ip_rcv_finish net/ipv4/ip_input.c:428 [inline]
- NF_HOOK include/linux/netfilter.h:307 [inline]
- ip_rcv+0x6cf/0x750 net/ipv4/ip_input.c:538
- __netif_receive_skb_one_core net/core/dev.c:5187 [inline]
- __netif_receive_skb net/core/dev.c:5301 [inline]
- netif_receive_skb_internal net/core/dev.c:5391 [inline]
- netif_receive_skb+0xbb5/0xf20 net/core/dev.c:5450
- tun_rx_batched include/linux/skbuff.h:4351 [inline]
- tun_get_user+0x6aef/0x6f60 drivers/net/tun.c:1997
- tun_chr_write_iter+0x1f2/0x360 drivers/net/tun.c:2026
- call_write_iter include/linux/fs.h:1902 [inline]
- new_sync_write fs/read_write.c:483 [inline]
- __vfs_write+0xa5a/0xca0 fs/read_write.c:496
- vfs_write+0x44a/0x8f0 fs/read_write.c:558
- ksys_write+0x267/0x450 fs/read_write.c:611
- __do_sys_write fs/read_write.c:623 [inline]
- __se_sys_write+0x92/0xb0 fs/read_write.c:620
- __x64_sys_write+0x4a/0x70 fs/read_write.c:620
- do_syscall_64+0xb8/0x160 arch/x86/entry/common.c:296
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x443659
-Code: 18 89 d0 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 7b 10 fc ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007fff60095968 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 0000000000003172 RCX: 0000000000443659
-RDX: 000000000000002e RSI: 00000000200000c0 RDI: 0000000000000003
-RBP: 00007fff60095990 R08: 0000000000000000 R09: 0000000000000000
-R10: 000000000000aa14 R11: 0000000000000246 R12: 656c6c616b7a7973
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+I am contacting you for an important and  urgent business transaction,
+I  want the bank to transfer the money left by Dr. Cheng Chao,  A
+Chinese   Politicians who  died, March 17th 2020 without any trace of
+his family member,  he used our bank to launder money overseas through
+the help of their Political advisers. And most of the funds which they
+transferred out of the shores of China  were gold and oil money that
+was supposed to have been used to develop the continent.
+Can you invest this money and also help the poor ? The amount value at
+($10.5million Dollars), left in his account still unclaimed, if you
+know that you are capable to invest this fund into any   profitable
+business in your country kindly send me your details information as
+listed below to enable me draft you an application form of claim along
+with the deposit certificate which you are going to fill with your
+bank account detail necessary and contact the HSBC Bank in Madrid
+Spain for immediate transfer of the Amount into your bank account
+direct.
 
-Uninit was created at:
- kmsan_save_stack_with_flags mm/kmsan/kmsan.c:144 [inline]
- kmsan_internal_poison_shadow+0x66/0xd0 mm/kmsan/kmsan.c:127
- kmsan_slab_alloc+0x8a/0xe0 mm/kmsan/kmsan_hooks.c:80
- slab_alloc_node mm/slub.c:2801 [inline]
- __kmalloc_node_track_caller+0xb40/0x1200 mm/slub.c:4420
- __kmalloc_reserve net/core/skbuff.c:142 [inline]
- __alloc_skb+0x2fd/0xac0 net/core/skbuff.c:210
- alloc_skb include/linux/skbuff.h:1081 [inline]
- alloc_skb_with_frags+0x18c/0xa70 net/core/skbuff.c:5764
- sock_alloc_send_pskb+0xada/0xc60 net/core/sock.c:2245
- tun_alloc_skb drivers/net/tun.c:1529 [inline]
- tun_get_user+0x10ae/0x6f60 drivers/net/tun.c:1843
- tun_chr_write_iter+0x1f2/0x360 drivers/net/tun.c:2026
- call_write_iter include/linux/fs.h:1902 [inline]
- new_sync_write fs/read_write.c:483 [inline]
- __vfs_write+0xa5a/0xca0 fs/read_write.c:496
- vfs_write+0x44a/0x8f0 fs/read_write.c:558
- ksys_write+0x267/0x450 fs/read_write.c:611
- __do_sys_write fs/read_write.c:623 [inline]
- __se_sys_write+0x92/0xb0 fs/read_write.c:620
- __x64_sys_write+0x4a/0x70 fs/read_write.c:620
- do_syscall_64+0xb8/0x160 arch/x86/entry/common.c:296
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-=====================================================
+Percentage share will be 60,for me/ 40, for you.
 
+(1) Your full name..................................................
+(2) Your address....................................................
+(3) Your Nationality.................................................
+(4) Your Age / Sex.....................................................
+(5) Your  Occupation............................................
+(6) Your marital status......................................
+(7) Your direct telephone number..................
+(8) Your photo.......................................
+
+Thanks with my best regards.
+Mrs. Sophia Robin
+Telex Manager
+Milan Italy  (H.S.B.C)
