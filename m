@@ -2,91 +2,144 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84EF41B6378
-	for <lists+linux-sctp@lfdr.de>; Thu, 23 Apr 2020 20:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB921B90CE
+	for <lists+linux-sctp@lfdr.de>; Sun, 26 Apr 2020 16:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730383AbgDWS1O (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 23 Apr 2020 14:27:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52908 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730354AbgDWS1O (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 23 Apr 2020 14:27:14 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F80C09B043
-        for <linux-sctp@vger.kernel.org>; Thu, 23 Apr 2020 11:27:13 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id w20so7515064iob.2
-        for <linux-sctp@vger.kernel.org>; Thu, 23 Apr 2020 11:27:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=DHzQtr3OkXyFWXbvXEU307GvVJtF7cl8Gt7nfdQPyE8=;
-        b=G0MearUWJO2XoX5WFWCbOSBM0KnomNOcLxBMKb36E56Tk8IIyFbWO7z4INTed1WkRU
-         qeMi1eRR7YsA+BDT6DQvUAii78YnzCjvNMVBKy4slcZy3/gJbFRS56rTYb2i1ZQ8vqn/
-         EOaplCA4N/rSu1DPvHSaWXp+qBo2gCjTbf/vDHta9DawS0nUkV5FYws7CV/zXlK/VYiG
-         COL+ehFclZxGMjmnJCFdgQT7XS8eBs73XeZW6OQ9vAUq0KfaGK/YZHActLVD5NzSJiie
-         gXxsbNT9IQMnd4wAzDKDPSrX8AkY/tvkHFQgBX+60qxPigWKusZrEf/ce5VP7zRF3LJ+
-         eYhg==
+        id S1726157AbgDZOJP (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 26 Apr 2020 10:09:15 -0400
+Received: from mail-il1-f199.google.com ([209.85.166.199]:45648 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726156AbgDZOJO (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sun, 26 Apr 2020 10:09:14 -0400
+Received: by mail-il1-f199.google.com with SMTP id t10so16579670ilf.12
+        for <linux-sctp@vger.kernel.org>; Sun, 26 Apr 2020 07:09:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=DHzQtr3OkXyFWXbvXEU307GvVJtF7cl8Gt7nfdQPyE8=;
-        b=PeeBUctwI5P+PMgSjERMqz6JjVzfOsz6xrcq31qHvM6G7wnb6zGRgzzoNNaIWbASH/
-         Rb04CIuXGI6xso2lkW1z0b/l8V0uvaeYuaHGX51md+dH3LawO/eDUCrX+K2J2D1k45RF
-         PlIK4QmEWZgokAlKX5kvPSyv2Gnwcd5p2spai3QFpKrinzsPGf0bIAbknv/Vxu9Ib9qj
-         GDCfAIFHOvyfuGOk/DxpT1FFCNG22g89j+lIZdVpLogjmeSyFfzfHjZ8YJF1Iu2SurYg
-         KjKkGCJIT7TAAeSX0Yy3T2SGmMVXEV0w5dlL4vZMscw18t31FsYuEU2SBjEkENKLv0p1
-         HmVQ==
-X-Gm-Message-State: AGi0PuZFBKVGDxU74HAH5yucHRiciEiCeGjDcdmh3O+dfr/2R67/aaTf
-        +jdeLGYpkoEKqg++bQQNX4RyZxxtZhSD3YSehA==
-X-Google-Smtp-Source: APiQypKOhu0Ivyzu1MQANRLgnSM6D7f6PDwmOyOGFsy7UwOOUt5tM1gVxevJ7CcMC29eb2aYcjzRxadXayX+T6slpNc=
-X-Received: by 2002:a05:6602:d:: with SMTP id b13mr5025673ioa.176.1587666433220;
- Thu, 23 Apr 2020 11:27:13 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=pgeHEmJ3Yp5PttG/VcLln/3EKq6Mf1M6+5x9rIZGbsw=;
+        b=Yo/IOYkPrwLFVizc9goCAGFfKWRuP5tQar3Roj1Y84JYYPhPgJYPr8RuzgWsN7KcTX
+         /AQY+qmLKRQlG7w/WxnNipsbyP7uLbZo/oqqHAlixo3epCGJoBVgnMzBBRndmKDNOHkg
+         iAOvpL8Kz2oiD4PbVWEnzo2Ll0BvEgjiVb5+9HHPaI9A3hV1S1utrAH+SuLy6WfrzRJJ
+         B1l3gitCRXjbSCSozjgEzdG+494ePB6VPLGJs18Z6MOSqHz3xN9ln63uSlgjswo81Frt
+         J3hCfIwGYNFm3hCRcEAtvGwBCAX/awuVrTuFbh9h6dK00hRaIjw2zqvh3tReNDyiqB1y
+         sZyA==
+X-Gm-Message-State: AGi0PuZyZABOKr0jj/sV4BWnwLdFQM7txqXXe1qNtCFq7ENK13gZnZ+m
+        zGmmPw1bDhxp8FJkYyg4dv6Ex5nKvMjDxyeKEUfYoKZpJrql
+X-Google-Smtp-Source: APiQypL+PzGPwqLflshfjZEe5EdryYwoMXXQIi2SWV2/7YPKn/nYZKzHseEjYIbC6fFFALLP7S/TGK8emecnu/FlaGlICw6/MSoX
 MIME-Version: 1.0
-Received: by 2002:a02:c845:0:0:0:0:0 with HTTP; Thu, 23 Apr 2020 11:27:12
- -0700 (PDT)
-Reply-To: boa.benin107@yahoo.com
-From:   "Mrs. Angella Michelle" <info.zennitbankplcnigerian@gmail.com>
-Date:   Thu, 23 Apr 2020 20:27:12 +0200
-Message-ID: <CABHzvrnzZLe4Z0E4acOdcsDJTPa3wvp-Oz12f_M4TQ03PAGZkw@mail.gmail.com>
-Subject: Contact Eco bank-Benin to receive your payment funds transfer amount
- of $12.800.000,00 Million USD,approved this morning by IMF.
-To:     undisclosed-recipients:;
+X-Received: by 2002:a5e:8e44:: with SMTP id r4mr16796312ioo.47.1587910152288;
+ Sun, 26 Apr 2020 07:09:12 -0700 (PDT)
+Date:   Sun, 26 Apr 2020 07:09:12 -0700
+In-Reply-To: <000000000000f1377e05a3630d32@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009000aa05a4322411@google.com>
+Subject: Re: KMSAN: uninit-value in sctp_ootb_pkt_new
+From:   syzbot <syzbot+6751381fe5a26df5b74d@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, glider@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
+        marcelo.leitner@gmail.com, netdev@vger.kernel.org,
+        nhorman@tuxdriver.com, syzkaller-bugs@googlegroups.com,
+        vyasevich@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Attn Dear.
-Contact Bank of Africa-Benin to receive your payment funds transfer amount =
-of
-$12.800.000,00 Million USD,approved this morning by IMF.
-Happy to inform you, we have finally deposited your payment funds
-$12.8 million us dollars with the Paying Bank of Africa-Benin
-to transfer the payment amount of $12.800,000,00 Million Us Dollars to you
-Contact the bank immediately you receive this email now.
-Director Bank of Africa-Benin: Dr. Festus Obiara
-Email id:  boa.benin107@yahoo.com
-Tel/mobile, (229) 62819378
-BOA-BENIN | GROUPE BANK OF AFRICA, boa-benin
-Avenue Jean-Paul II - 08 BP 0879 - Cotonou - B=C3=A9nin
-Phone:(229) 62819378.
-2020 GROUPE BANK OF AFRICA
-Be advised to re-confirm your bank details to this bank as listed.
-Your account Holder's name----------------
-Bank Name----------------------------------------------------------
-Bank address----------------------------------------------
-Account Numbers---------------------------------------
-Rounting-----------------------------------------------------------------
-Your direct Phone Numbers----------------------------------------------
-Note,I have paid the deposit and insurance fees for you
-But the only money you are to send to this bank is $150.00 us dollars
-Been for the wire transfer fees of your funds
-Contact Him now to receive your transfer deposited this morning
-I wait for your reply upon confirmation
-Mrs. Angella Michelle
-Editor, Zenith Bank- Companies Benin
-mrsa9389@gmail.com
+syzbot has found a reproducer for the following crash on:
+
+HEAD commit:    bfa90a4a kmsan: remove __GFP_NO_KMSAN_SHADOW
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=13ab7fbfe00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a5915107b3106aaa
+dashboard link: https://syzkaller.appspot.com/bug?extid=6751381fe5a26df5b74d
+compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=138df47fe00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=158a182fe00000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+6751381fe5a26df5b74d@syzkaller.appspotmail.com
+
+batman_adv: batadv0: Interface activated: batadv_slave_1
+=====================================================
+BUG: KMSAN: uninit-value in __arch_swab32 arch/x86/include/uapi/asm/swab.h:10 [inline]
+BUG: KMSAN: uninit-value in __fswab32 include/uapi/linux/swab.h:60 [inline]
+BUG: KMSAN: uninit-value in sctp_ootb_pkt_new+0x202/0x540 net/sctp/sm_statefuns.c:6256
+CPU: 0 PID: 8800 Comm: syz-executor949 Not tainted 5.6.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x1c9/0x220 lib/dump_stack.c:118
+ kmsan_report+0xf7/0x1e0 mm/kmsan/kmsan_report.c:118
+ __msan_warning+0x58/0xa0 mm/kmsan/kmsan_instr.c:215
+ __arch_swab32 arch/x86/include/uapi/asm/swab.h:10 [inline]
+ __fswab32 include/uapi/linux/swab.h:60 [inline]
+ sctp_ootb_pkt_new+0x202/0x540 net/sctp/sm_statefuns.c:6256
+ sctp_sf_tabort_8_4_8+0xe6/0x7e0 net/sctp/sm_statefuns.c:3372
+ sctp_sf_do_5_1B_init+0x6be/0x1b60 net/sctp/sm_statefuns.c:338
+ sctp_do_sm+0x2b4/0x9a30 net/sctp/sm_sideeffect.c:1153
+ sctp_endpoint_bh_rcv+0xd54/0xfe0 net/sctp/endpointola.c:395
+ sctp_inq_push+0x300/0x420 net/sctp/inqueue.c:80
+ sctp_rcv+0x48b9/0x5410 net/sctp/input.c:256
+ ip_protocol_deliver_rcu+0x700/0xbc0 net/ipv4/ip_input.c:204
+ ip_local_deliver_finish net/ipv4/ip_input.c:231 [inline]
+ NF_HOOK include/linux/netfilter.h:307 [inline]
+ ip_local_deliver+0x62a/0x7c0 net/ipv4/ip_input.c:252
+ dst_input include/net/dst.h:442 [inline]
+ ip_rcv_finish net/ipv4/ip_input.c:428 [inline]
+ NF_HOOK include/linux/netfilter.h:307 [inline]
+ ip_rcv+0x6cf/0x750 net/ipv4/ip_input.c:538
+ __netif_receive_skb_one_core net/core/dev.c:5187 [inline]
+ __netif_receive_skb net/core/dev.c:5301 [inline]
+ netif_receive_skb_internal net/core/dev.c:5391 [inline]
+ netif_receive_skb+0xbb5/0xf20 net/core/dev.c:5450
+ tun_rx_batched include/linux/skbuff.h:4351 [inline]
+ tun_get_user+0x6aef/0x6f60 drivers/net/tun.c:1997
+ tun_chr_write_iter+0x1f2/0x360 drivers/net/tun.c:2026
+ call_write_iter include/linux/fs.h:1902 [inline]
+ new_sync_write fs/read_write.c:483 [inline]
+ __vfs_write+0xa5a/0xca0 fs/read_write.c:496
+ vfs_write+0x44a/0x8f0 fs/read_write.c:558
+ ksys_write+0x267/0x450 fs/read_write.c:611
+ __do_sys_write fs/read_write.c:623 [inline]
+ __se_sys_write+0x92/0xb0 fs/read_write.c:620
+ __x64_sys_write+0x4a/0x70 fs/read_write.c:620
+ do_syscall_64+0xb8/0x160 arch/x86/entry/common.c:296
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x443659
+Code: 18 89 d0 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 7b 10 fc ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007fff60095968 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 0000000000003172 RCX: 0000000000443659
+RDX: 000000000000002e RSI: 00000000200000c0 RDI: 0000000000000003
+RBP: 00007fff60095990 R08: 0000000000000000 R09: 0000000000000000
+R10: 000000000000aa14 R11: 0000000000000246 R12: 656c6c616b7a7973
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+
+Uninit was created at:
+ kmsan_save_stack_with_flags mm/kmsan/kmsan.c:144 [inline]
+ kmsan_internal_poison_shadow+0x66/0xd0 mm/kmsan/kmsan.c:127
+ kmsan_slab_alloc+0x8a/0xe0 mm/kmsan/kmsan_hooks.c:80
+ slab_alloc_node mm/slub.c:2801 [inline]
+ __kmalloc_node_track_caller+0xb40/0x1200 mm/slub.c:4420
+ __kmalloc_reserve net/core/skbuff.c:142 [inline]
+ __alloc_skb+0x2fd/0xac0 net/core/skbuff.c:210
+ alloc_skb include/linux/skbuff.h:1081 [inline]
+ alloc_skb_with_frags+0x18c/0xa70 net/core/skbuff.c:5764
+ sock_alloc_send_pskb+0xada/0xc60 net/core/sock.c:2245
+ tun_alloc_skb drivers/net/tun.c:1529 [inline]
+ tun_get_user+0x10ae/0x6f60 drivers/net/tun.c:1843
+ tun_chr_write_iter+0x1f2/0x360 drivers/net/tun.c:2026
+ call_write_iter include/linux/fs.h:1902 [inline]
+ new_sync_write fs/read_write.c:483 [inline]
+ __vfs_write+0xa5a/0xca0 fs/read_write.c:496
+ vfs_write+0x44a/0x8f0 fs/read_write.c:558
+ ksys_write+0x267/0x450 fs/read_write.c:611
+ __do_sys_write fs/read_write.c:623 [inline]
+ __se_sys_write+0x92/0xb0 fs/read_write.c:620
+ __x64_sys_write+0x4a/0x70 fs/read_write.c:620
+ do_syscall_64+0xb8/0x160 arch/x86/entry/common.c:296
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+=====================================================
+
