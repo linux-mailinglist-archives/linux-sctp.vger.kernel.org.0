@@ -2,74 +2,70 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D7D1C0721
-	for <lists+linux-sctp@lfdr.de>; Thu, 30 Apr 2020 21:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 227681C12B4
+	for <lists+linux-sctp@lfdr.de>; Fri,  1 May 2020 15:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726486AbgD3T46 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 30 Apr 2020 15:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726338AbgD3T46 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 30 Apr 2020 15:56:58 -0400
-Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4006CC035495;
-        Thu, 30 Apr 2020 12:56:58 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 4DE7A1289CE3F;
-        Thu, 30 Apr 2020 12:56:55 -0700 (PDT)
-Date:   Thu, 30 Apr 2020 12:56:54 -0700 (PDT)
-Message-Id: <20200430.125654.335144341485365161.davem@davemloft.net>
-To:     mchehab+huawei@kernel.org
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, devel@driverdev.osuosl.org, coreteam@netfilter.org,
-        netfilter-devel@vger.kernel.org, kou.ishizaki@toshiba.co.jp,
-        netdev@vger.kernel.org, paulus@samba.org,
-        linuxppc-dev@lists.ozlabs.org, marcelo.leitner@gmail.com,
-        kadlec@netfilter.org, johannes@sipsolutions.net, fw@strlen.de,
-        gregkh@linuxfoundation.org, kuba@kernel.org,
-        benh@kernel.crashing.org, linux-wireless@vger.kernel.org,
-        geoff@infradead.org, mpe@ellerman.id.au, linux-can@vger.kernel.org,
-        ioana.ciornei@nxp.com, linux-sctp@vger.kernel.org,
-        vyasevich@gmail.com, rds-devel@oss.oracle.com,
-        ruxandra.radulescu@nxp.com, dhowells@redhat.com,
-        pablo@netfilter.org, kvalo@codeaurora.org,
-        santosh.shilimkar@oracle.com, socketcan@hartkopp.net,
-        nhorman@tuxdriver.com, courmisch@gmail.com,
-        linux-rdma@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-x25@vger.kernel.org, mkl@pengutronix.de
-Subject: Re: [PATCH 00/37] net: manually convert files to ReST format -
- part 2
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <cover.1588261997.git.mchehab+huawei@kernel.org>
-References: <cover.1588261997.git.mchehab+huawei@kernel.org>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Thu, 30 Apr 2020 12:56:56 -0700 (PDT)
+        id S1728737AbgEANQZ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 1 May 2020 09:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728586AbgEANQZ (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 1 May 2020 09:16:25 -0400
+Received: from ganesha.gnumonks.org (ganesha.gnumonks.org [IPv6:2001:780:45:1d:225:90ff:fe52:c662])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B18C061A0C;
+        Fri,  1 May 2020 06:16:25 -0700 (PDT)
+Received: from uucp by ganesha.gnumonks.org with local-bsmtp (Exim 4.89)
+        (envelope-from <laforge@gnumonks.org>)
+        id 1jUVWc-0006qD-Ve; Fri, 01 May 2020 15:16:19 +0200
+Received: from laforge by localhost.localdomain with local (Exim 4.93)
+        (envelope-from <laforge@gnumonks.org>)
+        id 1jUVWR-005pUN-AV; Fri, 01 May 2020 15:16:07 +0200
+Date:   Fri, 1 May 2020 15:16:07 +0200
+From:   Harald Welte <laforge@gnumonks.org>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
+Subject: Re: ABI breakage in sctp_event_subscribe (was [PATCH net-next 0/4]
+ sctp: add some missing events from rfc5061)
+Message-ID: <20200501131607.GU1294372@nataraja>
+References: <cover.1570534014.git.lucien.xin@gmail.com>
+ <20200419102536.GA4127396@nataraja>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200419102536.GA4127396@nataraja>
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Date: Thu, 30 Apr 2020 18:03:55 +0200
+Dear Linux SCTP developers,
 
-> That's the second part of my work to convert the networking
-> text files into ReST. it is based on today's linux-next (next-20200430).
-> 
-> The full series (including those ones) are at:
-> 
-> 	https://git.linuxtv.org/mchehab/experimental.git/log/?h=net-docs
-> 
-> I should be sending the remaining patches (another /38 series)
-> after getting those merged at -next.
-> 
-> The documents, converted to HTML via the building system are at:
-> 
-> 	https://www.infradead.org/~mchehab/kernel_docs/networking/
+On Sun, Apr 19, 2020 at 12:25:36PM +0200, Harald Welte wrote:
+> this patchset (merged back in Q4/2019) has broken ABI compatibility, more
+> or less exactly as it was discussed/predicted in Message-Id
+> <20190206201430.18830-1-julien@arista.com>
+> "[PATCH net] sctp: make sctp_setsockopt_events() less strict about the option length"
+> on this very list in February 2019.
 
-Series applied to net-next, thank you.
+does the lack of any follow-up so far seems to indicate nobody considers
+this a problem?  Even without any feedback from the Linux kernel
+developers, I would be curious to hear What do other SCTP users say.
+
+So far I have a somewhat difficult time understanding that I would be
+the only one worried about ABI breakage?  If that's the case, I guess
+it would be best to get the word out that people using Linux SCTP should
+better make sure to not use binary packages but always build on the
+system they run it on, to ensure kernel headers are identical.
+
+I don't mean this in any cynical way.  The point is either the ABI is
+stable and people can move binaries between different OS/kernel
+versions, or they cannot.  So far the general assumption on Linux is you
+can, but with SCTP you can not, so this needs to be clarified.
+
+Regards,
+	Harald
+-- 
+- Harald Welte <laforge@gnumonks.org>           http://laforge.gnumonks.org/
+============================================================================
+"Privacy in residential applications is a desirable marketing option."
+                                                  (ETSI EN 300 175-7 Ch. A6)
