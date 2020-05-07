@@ -2,171 +2,238 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEE181C6950
-	for <lists+linux-sctp@lfdr.de>; Wed,  6 May 2020 08:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A7F31C9AB9
+	for <lists+linux-sctp@lfdr.de>; Thu,  7 May 2020 21:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728240AbgEFGrk (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 6 May 2020 02:47:40 -0400
-Received: from ex13-edg-ou-002.vmware.com ([208.91.0.190]:21995 "EHLO
-        EX13-EDG-OU-002.vmware.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727812AbgEFGrk (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 6 May 2020 02:47:40 -0400
-X-Greylist: delayed 914 seconds by postgrey-1.27 at vger.kernel.org; Wed, 06 May 2020 02:47:40 EDT
-Received: from sc9-mailhost3.vmware.com (10.113.161.73) by
- EX13-EDG-OU-002.vmware.com (10.113.208.156) with Microsoft SMTP Server id
- 15.0.1156.6; Tue, 5 May 2020 23:32:29 -0700
-Received: from localhost.localdomain (ashwinh-vm-1.vmware.com [10.110.19.225])
-        by sc9-mailhost3.vmware.com (Postfix) with ESMTP id 7F1E0400A2;
-        Tue,  5 May 2020 23:32:29 -0700 (PDT)
-From:   ashwin-h <ashwinh@vmware.com>
-To:     <vyasevich@gmail.com>, <nhorman@tuxdriver.com>
-CC:     <davem@davemloft.net>, <linux-sctp@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <srivatsab@vmware.com>, <srivatsa@csail.mit.edu>,
-        <rostedt@goodmis.org>, <srostedt@vmware.com>,
-        <gregkh@linuxfoundation.org>, <ashwin.hiranniah@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>, Ashwin H <ashwinh@vmware.com>
-Subject: [PATCH 2/2] sctp: implement memory accounting on rx path
-Date:   Wed, 6 May 2020 19:50:54 +0530
-Message-ID: <b2d9886afc672b4120f101eeb9217e68abb61471.1588242081.git.ashwinh@vmware.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1588242081.git.ashwinh@vmware.com>
-References: <cover.1588242081.git.ashwinh@vmware.com>
+        id S1726598AbgEGTR1 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 7 May 2020 15:17:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40456 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726367AbgEGTR1 (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Thu, 7 May 2020 15:17:27 -0400
+Received: from embeddedor (unknown [189.207.59.248])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 12D94208E4;
+        Thu,  7 May 2020 19:17:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588879046;
+        bh=NI1NNHNQxAj31G0gMyaFy0gKg4JKQOVR7RH2UvV+/x4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jl48oLR2VeoTo602PGIg4UgQyYWFUhkSiAF2YGCFd3+6VJ8hDms5jE1FomSdDJs2R
+         VtH30SDdEr+tCmYj0FfNpdmkjnJ1xE2d3fmK0k5t8mgIF/QXuz0Q5t/lC4eBf6GK3Z
+         mRTkotziX+9eCoKp8tY7+6as1FgI4TJm0wkjubtY=
+Date:   Thu, 7 May 2020 14:21:52 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc:     linux-sctp@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] sctp: Replace zero-length array with flexible-array
+Message-ID: <20200507192152.GA16230@embeddedor>
 MIME-Version: 1.0
-Content-Type: text/plain
-Received-SPF: None (EX13-EDG-OU-002.vmware.com: ashwinh@vmware.com does not
- designate permitted sender hosts)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Xin Long <lucien.xin@gmail.com>
+The current codebase makes use of the zero-length array language
+extension to the C90 standard, but the preferred mechanism to declare
+variable-length types such as these ones is a flexible array member[1][2],
+introduced in C99:
 
-commit 9dde27de3e5efa0d032f3c891a0ca833a0d31911 upstream.
+struct foo {
+        int stuff;
+        struct boo array[];
+};
 
-sk_forward_alloc's updating is also done on rx path, but to be consistent
-we change to use sk_mem_charge() in sctp_skb_set_owner_r().
+By making use of the mechanism above, we will get a compiler warning
+in case the flexible array does not occur last in the structure, which
+will help us prevent some kind of undefined behavior bugs from being
+inadvertently introduced[3] to the codebase from now on.
 
-In sctp_eat_data(), it's not enough to check sctp_memory_pressure only,
-which doesn't work for mem_cgroup_sockets_enabled, so we change to use
-sk_under_memory_pressure().
+Also, notice that, dynamic memory allocations won't be affected by
+this change:
 
-When it's under memory pressure, sk_mem_reclaim() and sk_rmem_schedule()
-should be called on both RENEGE or CHUNK DELIVERY path exit the memory
-pressure status as soon as possible.
+"Flexible array members have incomplete type, and so the sizeof operator
+may not be applied. As a quirk of the original implementation of
+zero-length arrays, sizeof evaluates to zero."[1]
 
-Note that sk_rmem_schedule() is using datalen to make things easy there.
+sizeof(flexible-array-member) triggers a warning because flexible array
+members have incomplete type[1]. There are some instances of code in
+which the sizeof operator is being incorrectly/erroneously applied to
+zero-length arrays and the result is zero. Such instances may be hiding
+some bugs. So, this work (flexible-array member conversions) will also
+help to get completely rid of those sorts of issues.
 
-Reported-by: Matteo Croce <mcroce@redhat.com>
-Tested-by: Matteo Croce <mcroce@redhat.com>
-Acked-by: Neil Horman <nhorman@tuxdriver.com>
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Ashwin H <ashwinh@vmware.com>
+This issue was found with the help of Coccinelle.
+
+[1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+[2] https://github.com/KSPP/linux/issues/21
+[3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
+
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
- include/net/sctp/sctp.h |  2 +-
- net/sctp/sm_statefuns.c |  6 ++++--
- net/sctp/ulpevent.c     | 19 ++++++++-----------
- net/sctp/ulpqueue.c     |  3 ++-
- 4 files changed, 15 insertions(+), 15 deletions(-)
+ include/linux/sctp.h |   36 ++++++++++++++++++------------------
+ 1 file changed, 18 insertions(+), 18 deletions(-)
 
-diff --git a/include/net/sctp/sctp.h b/include/net/sctp/sctp.h
-index 2c6570e..fef8c33 100644
---- a/include/net/sctp/sctp.h
-+++ b/include/net/sctp/sctp.h
-@@ -421,7 +421,7 @@ static inline void sctp_skb_set_owner_r(struct sk_buff *skb, struct sock *sk)
- 	/*
- 	 * This mimics the behavior of skb_set_owner_r
- 	 */
--	sk->sk_forward_alloc -= event->rmem_len;
-+	sk_mem_charge(sk, event->rmem_len);
- }
+diff --git a/include/linux/sctp.h b/include/linux/sctp.h
+index 8ccd82105de8..76731230bbc5 100644
+--- a/include/linux/sctp.h
++++ b/include/linux/sctp.h
+@@ -221,7 +221,7 @@ struct sctp_datahdr {
+ 	__be16 stream;
+ 	__be16 ssn;
+ 	__u32 ppid;
+-	__u8  payload[0];
++	__u8  payload[];
+ };
  
- /* Tests if the list has one and only one entry. */
-diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
-index 9f4d325..93cbf88 100644
---- a/net/sctp/sm_statefuns.c
-+++ b/net/sctp/sm_statefuns.c
-@@ -6444,13 +6444,15 @@ static int sctp_eat_data(const struct sctp_association *asoc,
- 	 * in sctp_ulpevent_make_rcvmsg will drop the frame if we grow our
- 	 * memory usage too much
- 	 */
--	if (*sk->sk_prot_creator->memory_pressure) {
-+	if (sk_under_memory_pressure(sk)) {
- 		if (sctp_tsnmap_has_gap(map) &&
- 		    (sctp_tsnmap_get_ctsn(map) + 1) == tsn) {
- 			pr_debug("%s: under pressure, reneging for tsn:%u\n",
- 				 __func__, tsn);
- 			deliver = SCTP_CMD_RENEGE;
--		 }
-+		} else {
-+			sk_mem_reclaim(sk);
-+		}
- 	}
+ struct sctp_data_chunk {
+@@ -269,7 +269,7 @@ struct sctp_inithdr {
+ 	__be16 num_outbound_streams;
+ 	__be16 num_inbound_streams;
+ 	__be32 initial_tsn;
+-	__u8  params[0];
++	__u8  params[];
+ };
  
- 	/*
-diff --git a/net/sctp/ulpevent.c b/net/sctp/ulpevent.c
-index 8cb7d98..c2a7478 100644
---- a/net/sctp/ulpevent.c
-+++ b/net/sctp/ulpevent.c
-@@ -634,8 +634,9 @@ struct sctp_ulpevent *sctp_ulpevent_make_rcvmsg(struct sctp_association *asoc,
- 						gfp_t gfp)
- {
- 	struct sctp_ulpevent *event = NULL;
--	struct sk_buff *skb;
--	size_t padding, len;
-+	struct sk_buff *skb = chunk->skb;
-+	struct sock *sk = asoc->base.sk;
-+	size_t padding, datalen;
- 	int rx_count;
+ struct sctp_init_chunk {
+@@ -299,13 +299,13 @@ struct sctp_cookie_preserve_param {
+ /* Section 3.3.2.1 Host Name Address (11) */
+ struct sctp_hostname_param {
+ 	struct sctp_paramhdr param_hdr;
+-	uint8_t hostname[0];
++	uint8_t hostname[];
+ };
  
- 	/*
-@@ -646,15 +647,12 @@ struct sctp_ulpevent *sctp_ulpevent_make_rcvmsg(struct sctp_association *asoc,
- 	if (asoc->ep->rcvbuf_policy)
- 		rx_count = atomic_read(&asoc->rmem_alloc);
- 	else
--		rx_count = atomic_read(&asoc->base.sk->sk_rmem_alloc);
-+		rx_count = atomic_read(&sk->sk_rmem_alloc);
+ /* Section 3.3.2.1 Supported Address Types (12) */
+ struct sctp_supported_addrs_param {
+ 	struct sctp_paramhdr param_hdr;
+-	__be16 types[0];
++	__be16 types[];
+ };
  
--	if (rx_count >= asoc->base.sk->sk_rcvbuf) {
-+	datalen = ntohs(chunk->chunk_hdr->length);
+ /* ADDIP Section 3.2.6 Adaptation Layer Indication */
+@@ -317,25 +317,25 @@ struct sctp_adaptation_ind_param {
+ /* ADDIP Section 4.2.7 Supported Extensions Parameter */
+ struct sctp_supported_ext_param {
+ 	struct sctp_paramhdr param_hdr;
+-	__u8 chunks[0];
++	__u8 chunks[];
+ };
  
--		if ((asoc->base.sk->sk_userlocks & SOCK_RCVBUF_LOCK) ||
--		    (!sk_rmem_schedule(asoc->base.sk, chunk->skb,
--				       chunk->skb->truesize)))
--			goto fail;
--	}
-+	if (rx_count >= sk->sk_rcvbuf || !sk_rmem_schedule(sk, skb, datalen))
-+		goto fail;
+ /* AUTH Section 3.1 Random */
+ struct sctp_random_param {
+ 	struct sctp_paramhdr param_hdr;
+-	__u8 random_val[0];
++	__u8 random_val[];
+ };
  
- 	/* Clone the original skb, sharing the data.  */
- 	skb = skb_clone(chunk->skb, gfp);
-@@ -681,8 +679,7 @@ struct sctp_ulpevent *sctp_ulpevent_make_rcvmsg(struct sctp_association *asoc,
- 	 * The sender should never pad with more than 3 bytes.  The receiver
- 	 * MUST ignore the padding bytes.
- 	 */
--	len = ntohs(chunk->chunk_hdr->length);
--	padding = SCTP_PAD4(len) - len;
-+	padding = SCTP_PAD4(datalen) - datalen;
+ /* AUTH Section 3.2 Chunk List */
+ struct sctp_chunks_param {
+ 	struct sctp_paramhdr param_hdr;
+-	__u8 chunks[0];
++	__u8 chunks[];
+ };
  
- 	/* Fixup cloned skb with just this chunks data.  */
- 	skb_trim(skb, chunk->chunk_end - padding - skb->data);
-diff --git a/net/sctp/ulpqueue.c b/net/sctp/ulpqueue.c
-index 0b42710..7de9be3 100644
---- a/net/sctp/ulpqueue.c
-+++ b/net/sctp/ulpqueue.c
-@@ -1106,7 +1106,8 @@ void sctp_ulpq_renege(struct sctp_ulpq *ulpq, struct sctp_chunk *chunk,
- 			freed += sctp_ulpq_renege_frags(ulpq, needed - freed);
- 	}
- 	/* If able to free enough room, accept this chunk. */
--	if (freed >= needed) {
-+	if (sk_rmem_schedule(asoc->base.sk, chunk->skb, needed) &&
-+	    freed >= needed) {
- 		int retval = sctp_ulpq_tail_data(ulpq, chunk, gfp);
- 		/*
- 		 * Enter partial delivery if chunk has not been
--- 
-2.7.4
+ /* AUTH Section 3.3 HMAC Algorithm */
+ struct sctp_hmac_algo_param {
+ 	struct sctp_paramhdr param_hdr;
+-	__be16 hmac_ids[0];
++	__be16 hmac_ids[];
+ };
+ 
+ /* RFC 2960.  Section 3.3.3 Initiation Acknowledgement (INIT ACK) (2):
+@@ -350,7 +350,7 @@ struct sctp_initack_chunk {
+ /* Section 3.3.3.1 State Cookie (7) */
+ struct sctp_cookie_param {
+ 	struct sctp_paramhdr p;
+-	__u8 body[0];
++	__u8 body[];
+ };
+ 
+ /* Section 3.3.3.1 Unrecognized Parameters (8) */
+@@ -384,7 +384,7 @@ struct sctp_sackhdr {
+ 	__be32 a_rwnd;
+ 	__be16 num_gap_ack_blocks;
+ 	__be16 num_dup_tsns;
+-	union sctp_sack_variable variable[0];
++	union sctp_sack_variable variable[];
+ };
+ 
+ struct sctp_sack_chunk {
+@@ -436,7 +436,7 @@ struct sctp_shutdown_chunk {
+ struct sctp_errhdr {
+ 	__be16 cause;
+ 	__be16 length;
+-	__u8  variable[0];
++	__u8  variable[];
+ };
+ 
+ struct sctp_operr_chunk {
+@@ -594,7 +594,7 @@ struct sctp_fwdtsn_skip {
+ 
+ struct sctp_fwdtsn_hdr {
+ 	__be32 new_cum_tsn;
+-	struct sctp_fwdtsn_skip skip[0];
++	struct sctp_fwdtsn_skip skip[];
+ };
+ 
+ struct sctp_fwdtsn_chunk {
+@@ -611,7 +611,7 @@ struct sctp_ifwdtsn_skip {
+ 
+ struct sctp_ifwdtsn_hdr {
+ 	__be32 new_cum_tsn;
+-	struct sctp_ifwdtsn_skip skip[0];
++	struct sctp_ifwdtsn_skip skip[];
+ };
+ 
+ struct sctp_ifwdtsn_chunk {
+@@ -658,7 +658,7 @@ struct sctp_addip_param {
+ 
+ struct sctp_addiphdr {
+ 	__be32	serial;
+-	__u8	params[0];
++	__u8	params[];
+ };
+ 
+ struct sctp_addip_chunk {
+@@ -718,7 +718,7 @@ struct sctp_addip_chunk {
+ struct sctp_authhdr {
+ 	__be16 shkey_id;
+ 	__be16 hmac_id;
+-	__u8   hmac[0];
++	__u8   hmac[];
+ };
+ 
+ struct sctp_auth_chunk {
+@@ -733,7 +733,7 @@ struct sctp_infox {
+ 
+ struct sctp_reconf_chunk {
+ 	struct sctp_chunkhdr chunk_hdr;
+-	__u8 params[0];
++	__u8 params[];
+ };
+ 
+ struct sctp_strreset_outreq {
+@@ -741,13 +741,13 @@ struct sctp_strreset_outreq {
+ 	__be32 request_seq;
+ 	__be32 response_seq;
+ 	__be32 send_reset_at_tsn;
+-	__be16 list_of_streams[0];
++	__be16 list_of_streams[];
+ };
+ 
+ struct sctp_strreset_inreq {
+ 	struct sctp_paramhdr param_hdr;
+ 	__be32 request_seq;
+-	__be16 list_of_streams[0];
++	__be16 list_of_streams[];
+ };
+ 
+ struct sctp_strreset_tsnreq {
 
