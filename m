@@ -2,139 +2,101 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 934E21CE182
-	for <lists+linux-sctp@lfdr.de>; Mon, 11 May 2020 19:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61ECA1CE2CF
+	for <lists+linux-sctp@lfdr.de>; Mon, 11 May 2020 20:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730336AbgEKRVO (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 11 May 2020 13:21:14 -0400
-Received: from mail-il1-f199.google.com ([209.85.166.199]:45118 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729658AbgEKRVO (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 11 May 2020 13:21:14 -0400
-Received: by mail-il1-f199.google.com with SMTP id t10so9933219ilf.12
-        for <linux-sctp@vger.kernel.org>; Mon, 11 May 2020 10:21:14 -0700 (PDT)
+        id S1731072AbgEKSbd (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 11 May 2020 14:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49046 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729825AbgEKSbd (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Mon, 11 May 2020 14:31:33 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E723EC061A0C;
+        Mon, 11 May 2020 11:31:32 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id g16so8075734qtp.11;
+        Mon, 11 May 2020 11:31:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=W9v2pHHx1D7eBpE4o9IR/Rkokec9q6VQtmrv8BGwFy4=;
+        b=lFOPBOSgjwrfiEYsJxmcOzBtU3TsnFrsX0SanpVq7AKWi2aS5+Bo/6BGkHZpI0IMZ7
+         3fAUoCSbaSTRT536jeiyZv/QsHiRJGHOyCi3o1u9AP2ju+gebzBz/3MXLDDmKtwWm8kQ
+         C0I/4Z7fZg8cqqhwNoaVehtMaIqGEMPuiix89bMdfM7iK00GHOt0tPje0IzEsn6LXLmz
+         /f4+qc5JJiZ/xI5HFJ+io+Thzm8ykSFwGfmhdFi/LL+JcFfFRQLnuh3uAd2rkpFpAqEk
+         DZ/IE2VVS/80XerfS4EgEL0cQgsCY+RTrUJSNJwl4TiuJbW35v5/vyd/Y6nooFDCi2Tq
+         0V/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=n/Jv74xGVecUMFGbk0cscRosnzR2e3OxqcMoNdQON/Y=;
-        b=njtsFsUmCVRiWvClTFBi4b43FyEqWcbDtCCXL2Gu6gPtP8HmPmb9PIUmo3BpwTaX/+
-         WCXRGoFz+Q8os39YNROH7hzDx08sYoKs2CFg90pyyRD53IzSFSRk8l/b5etOIBzeiQis
-         xgNU2SR8mM+4sSvg7OrK1vmLJj92ZTMhTDGcovMxEUjymbFSGKMAl5ZAsaBn79Zq2ak7
-         OyLrLJx21MzV3+9Asmz4IkL2PjLgDlJRRmcWEIW+5Qmug6XGfC0MiuwnqKpYmDIjYt21
-         mV9ZyfeFKQM8LbAYRVyGSoKI5xLc4lGq544EsCLY7bVTnN+PXMR6K1ZnQYdLL8JsZjal
-         /V9g==
-X-Gm-Message-State: AGi0PuZ9/+DBHMYkDL0RkeWa9NsY4WDQNwDMO2y1lqCmCaLrlXtOAnWg
-        Tq3mKNazBbolIezh7QPztTebo2408Zl0f7jLsd31P1ylvzwL
-X-Google-Smtp-Source: APiQypL7z32WqVtJf+HU76MSmqdvhpd5b/+cWTCe8doO6sm7iJCSjXzZWEJ2xO7z9PbqCNV4hMLSwQdu3OIPRYsm0YiBnlo2Q/Bm
-MIME-Version: 1.0
-X-Received: by 2002:a02:3b4b:: with SMTP id i11mr16625500jaf.16.1589217673581;
- Mon, 11 May 2020 10:21:13 -0700 (PDT)
-Date:   Mon, 11 May 2020 10:21:13 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e79ab005a56292f5@google.com>
-Subject: WARNING in cgroup_finalize_control
-From:   syzbot <syzbot+9c08aaa363ca5784c9e9@syzkaller.appspotmail.com>
-To:     andriin@fb.com, ast@kernel.org, bpf@vger.kernel.org,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=W9v2pHHx1D7eBpE4o9IR/Rkokec9q6VQtmrv8BGwFy4=;
+        b=MgTUPd2PALVYqnJ+uA7F3tKImpPqXgo4+R4r1fsfEUzzZO26Ok2fHSoW+tWSBcXF38
+         8YpXLwp7VClhTig/sqCbZKp4DuNTWRahGgmLoiwG1h6X+MTzsrXEq/B6rLD/z0CnEXVC
+         ZNKuhv1J8KzEbJnjH/iodhnr8YsH5fAIGjFVEwmV60GEg25LxcJEqyiu83eM9QKttvVE
+         KR+BzKlfilwciqR4xVUtNVO5amWM3tiCTdkNLDyix2lnqxOPBG8nGwU9l7S0WzZMQXcO
+         KaeGmYa3Pk4olm38js3XOUmRcOCUYP3YojdSYtVI4cQkAKB1iQgR9+30iCoukLGw9yI0
+         2RMA==
+X-Gm-Message-State: AGi0Pubvi7YdV5hTXDp8rXJ6uMhPl+W0dXJuZAyWVn17ysPm0IdskvFV
+        McPCDTLKxAPc5BA88ZcySPw=
+X-Google-Smtp-Source: APiQypLP6T/eno4QX23rLXt0O50+Eml+eh12wQ9eWizX4D5Zl+JIy3avs3yOTjCuVQQHSSRstqsHqg==
+X-Received: by 2002:aed:3f92:: with SMTP id s18mr17838902qth.145.1589221891984;
+        Mon, 11 May 2020 11:31:31 -0700 (PDT)
+Received: from localhost.localdomain ([168.181.48.228])
+        by smtp.gmail.com with ESMTPSA id x55sm10035452qtk.3.2020.05.11.11.31.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 May 2020 11:31:30 -0700 (PDT)
+Received: by localhost.localdomain (Postfix, from userid 1000)
+        id C9D02C5A09; Mon, 11 May 2020 15:31:27 -0300 (-03)
+Date:   Mon, 11 May 2020 15:31:27 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     syzbot <syzbot+9c08aaa363ca5784c9e9@syzkaller.appspotmail.com>
+Cc:     andriin@fb.com, ast@kernel.org, bpf@vger.kernel.org,
         cgroups@vger.kernel.org, christian@brauner.io,
         coreteam@netfilter.org, daniel@iogearbox.net, davem@davemloft.net,
         hannes@cmpxchg.org, john.fastabend@gmail.com, kaber@trash.net,
         kadlec@blackhole.kfki.hu, kafai@fb.com, kpsingh@chromium.org,
         linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
-        lizefan@huawei.com, marcelo.leitner@gmail.com,
-        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        nhorman@tuxdriver.com, pablo@netfilter.org, songliubraving@fb.com,
+        lizefan@huawei.com, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, nhorman@tuxdriver.com,
+        pablo@netfilter.org, songliubraving@fb.com,
         syzkaller-bugs@googlegroups.com, tj@kernel.org,
         vyasevich@gmail.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: WARNING in cgroup_finalize_control
+Message-ID: <20200511183127.GI2688@localhost.localdomain>
+References: <000000000000e79ab005a56292f5@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000e79ab005a56292f5@google.com>
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello,
+On Mon, May 11, 2020 at 10:21:13AM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following crash on:
+> 
+> HEAD commit:    a811c1fa Merge git://git.kernel.org/pub/scm/linux/kernel/g..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=16ad1d70100000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=43badbd0e7e1137e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=9c08aaa363ca5784c9e9
+> compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10d3c588100000
+> 
+> The bug was bisected to:
+> 
+> commit eab59075d3cd7f3535aa2dbbc19a198dfee58892
+> Author: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+> Date:   Wed Dec 28 11:26:31 2016 +0000
+> 
+>     sctp: reduce indent level at sctp_sf_tabort_8_4_8
 
-syzbot found the following crash on:
-
-HEAD commit:    a811c1fa Merge git://git.kernel.org/pub/scm/linux/kernel/g..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16ad1d70100000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=43badbd0e7e1137e
-dashboard link: https://syzkaller.appspot.com/bug?extid=9c08aaa363ca5784c9e9
-compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10d3c588100000
-
-The bug was bisected to:
-
-commit eab59075d3cd7f3535aa2dbbc19a198dfee58892
-Author: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Date:   Wed Dec 28 11:26:31 2016 +0000
-
-    sctp: reduce indent level at sctp_sf_tabort_8_4_8
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=151b6c7c100000
-final crash:    https://syzkaller.appspot.com/x/report.txt?x=171b6c7c100000
-console output: https://syzkaller.appspot.com/x/log.txt?x=131b6c7c100000
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+9c08aaa363ca5784c9e9@syzkaller.appspotmail.com
-Fixes: eab59075d3cd ("sctp: reduce indent level at sctp_sf_tabort_8_4_8")
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 7373 at kernel/cgroup/cgroup.c:3111 cgroup_apply_control_disable kernel/cgroup/cgroup.c:3111 [inline]
-WARNING: CPU: 0 PID: 7373 at kernel/cgroup/cgroup.c:3111 cgroup_finalize_control+0xb6c/0xd60 kernel/cgroup/cgroup.c:3178
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 7373 Comm: syz-executor.0 Not tainted 5.7.0-rc4-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x1e9/0x30e lib/dump_stack.c:118
- panic+0x264/0x7a0 kernel/panic.c:221
- __warn+0x209/0x210 kernel/panic.c:582
- report_bug+0x1ac/0x2d0 lib/bug.c:195
- fixup_bug arch/x86/kernel/traps.c:175 [inline]
- do_error_trap+0xca/0x1c0 arch/x86/kernel/traps.c:267
- do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
- invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
-RIP: 0010:cgroup_apply_control_disable kernel/cgroup/cgroup.c:3111 [inline]
-RIP: 0010:cgroup_finalize_control+0xb6c/0xd60 kernel/cgroup/cgroup.c:3178
-Code: 89 f7 ff d3 eb 08 e8 53 fe 07 00 0f 1f 00 49 ff c4 49 83 fc 0d 0f 84 63 01 00 00 e8 3e fe 07 00 e9 a9 f8 ff ff e8 34 fe 07 00 <0f> 0b e9 88 f9 ff ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c cd f8 ff
-RSP: 0018:ffffc900035a7ba8 EFLAGS: 00010293
-RAX: ffffffff816b637c RBX: 0000000000000002 RCX: ffff88809e876100
-RDX: 0000000000000000 RSI: 0000000000000002 RDI: 0000000000000000
-RBP: ffffffff89307148 R08: ffffffff816b5cfc R09: ffffed1015d07074
-R10: ffffed1015d07074 R11: 0000000000000000 R12: 0000000000000008
-R13: ffff88809251c000 R14: ffff88808eef2400 R15: dffffc0000000000
- rebind_subsystems+0x737/0xe60 kernel/cgroup/cgroup.c:1750
- cgroup_setup_root+0x679/0xd50 kernel/cgroup/cgroup.c:1984
- cgroup1_root_to_use kernel/cgroup/cgroup-v1.c:1190 [inline]
- cgroup1_get_tree+0x7a2/0xae0 kernel/cgroup/cgroup-v1.c:1207
- vfs_get_tree+0x88/0x270 fs/super.c:1547
- do_new_mount fs/namespace.c:2816 [inline]
- do_mount+0x17ec/0x2900 fs/namespace.c:3141
- __do_sys_mount fs/namespace.c:3350 [inline]
- __se_sys_mount+0xd3/0x100 fs/namespace.c:3327
- do_syscall_64+0xf3/0x1b0 arch/x86/entry/common.c:295
- entry_SYSCALL_64_after_hwframe+0x49/0xb3
-RIP: 0033:0x45f27a
-Code: b8 a6 00 00 00 0f 05 48 3d 01 f0 ff ff 0f 83 ad 8c fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 0f 83 8a 8c fb ff c3 66 0f 1f 84 00 00 00 00 00
-RSP: 002b:00007fff4f78e3a8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 00007fff4f78e400 RCX: 000000000045f27a
-RDX: 00000000004cad91 RSI: 00000000004c1465 RDI: 00000000004c1428
-RBP: 0000000000000000 R08: 00000000004cf7b8 R09: 000000000000001c
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000418390
-R13: 00007fff4f78e628 R14: 0000000000000000 R15: 0000000000000000
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
-
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+The reproducer is not touching any sctp code and the commit above
+didn't have any functional change. Not sure how the bisect ended up on
+it, but this isn't triggered by sctp.
