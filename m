@@ -2,35 +2,60 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD831D0851
-	for <lists+linux-sctp@lfdr.de>; Wed, 13 May 2020 08:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E041D1338
+	for <lists+linux-sctp@lfdr.de>; Wed, 13 May 2020 14:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732302AbgEMG3p (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 13 May 2020 02:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46212 "EHLO
+        id S1731904AbgEMMvs (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 13 May 2020 08:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732175AbgEMG3F (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 13 May 2020 02:29:05 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3618AC061A0C;
-        Tue, 12 May 2020 23:29:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=sYCeJWkvwiDcLO4azUz4Lghn771ZTzcCvIj3ODxfKA4=; b=L0xgcDwWBew/hUDnMRVxjAFIu0
-        nr3l2q6XF2Vl5FSu5iuND7L/B2s0+8lrY924YcHINLJjs2142Hvi/lu17oLe8a5J7XrMXSQn1vZ+s
-        KBdAEHb6c/nnwY5To5NpuwJe8USThbqwt/dx1BNtU4i0rsfEG1zyWAvoQtPe4Fn6tBCQ6dafGi6ti
-        sSF+YmLo/T0y5dtSly4MHmSA1G3UtgRy+xGkAB7nKDU2CUQp6V12yTilYZ/C2KcbvR3q/BB0ButgR
-        Tw5mexnLFPfVVKybEa3N1yFk0d6sUieQD9fw+qvEadIByagJTSJpz2Mw0hAKD9fkVdDYSQR4fa2Q+
-        MTpTE7mQ==;
-Received: from [2001:4bb8:180:9d3f:c70:4a89:bc61:2] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jYksb-0005Jo-4P; Wed, 13 May 2020 06:28:33 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Eric Dumazet <edumazet@google.com>,
+        with ESMTP id S1731773AbgEMMvr (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 13 May 2020 08:51:47 -0400
+Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0CFC061A0E
+        for <linux-sctp@vger.kernel.org>; Wed, 13 May 2020 05:51:46 -0700 (PDT)
+Received: by mail-qk1-x741.google.com with SMTP id f13so16534353qkh.2
+        for <linux-sctp@vger.kernel.org>; Wed, 13 May 2020 05:51:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=I21hL7AkwUgdNPUI4l7KTQwvXQoa/NOyWUo4IiS5Zaw=;
+        b=m6ad7mNkFXWQP2LAar13cizth8P3iKliOem15ctBmD+RRB5NWWGZ4hVFaLb43OUHF4
+         dEfbKyHnbdTPvph0NO3q6QQG3feEsDR1NN/aDJiylAVOx6elqA7EySRBy4zgPJs7Fz0/
+         Wh3NuXdccvtT3AKlZIUnJi/oe7DjFVTOpq20lvPm5ktnPdoP012Lk/9j/pUDGJCnQSsG
+         TmFagaUtz3vbm20kiJmFo0AhIIm3asYdCe/QXnsQdcQLCh91UXycsxj5M4FwgjK5Th4v
+         OuuA5GD8cz9mUhRoZ9e54BvWpbbFTnY1KxAJWQ9Fh7pEfNmqL/JrbXuEeLjTtGaJiHKf
+         PtmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=I21hL7AkwUgdNPUI4l7KTQwvXQoa/NOyWUo4IiS5Zaw=;
+        b=rI4SofdoYSMXbksrGT/NQQg2cEcqYbQUhpFTg8HWFM1SI3CGOs4fK2hfX5DbHdfUn7
+         8JYlHiycnamM2a+RZB6PwnWyw2IMDW8NvVkqXxcVQPzG3OgxXAe/m5Qmnrsn9f+8gRw8
+         LaRepMnMabf9izjhfU+nDIYYySbR7tFSdGW4noRihREHjRVIZS/hOk23pZXU40m78yci
+         YlKwS5kh0TTuVvJOofz4bJY5TUwhiGhAazsxXCH8ILE6MDSUPfUeyiRAi9oyyi42Qrgc
+         9g6O9jV1dNlGnfNe+bUBK/1RhMfaVFo4cOI+x74B7VXKSztNzSg1cSYsT/XpDMJrc+c3
+         YcCw==
+X-Gm-Message-State: AGi0PuZFvIAEgvwf/rBiyErRlcnoipEA84PSz5Xwmx2kAdjfm2LpAh40
+        4goCKfqzRIocixAiULDDK5uDgg==
+X-Google-Smtp-Source: APiQypKy6izjhUbivG+/I6PWV8eR0peu4dabx2HIoItXGvYLmzKEIJJmSlJIMmuJWfJIdDxUx9gC8w==
+X-Received: by 2002:a37:61d8:: with SMTP id v207mr26564281qkb.146.1589374305465;
+        Wed, 13 May 2020 05:51:45 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
+        by smtp.gmail.com with ESMTPSA id t67sm13779002qka.17.2020.05.13.05.51.44
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 13 May 2020 05:51:44 -0700 (PDT)
+Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1jYqrQ-0008K6-D9; Wed, 13 May 2020 09:51:44 -0300
+Date:   Wed, 13 May 2020 09:51:44 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
         Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
         Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
         Vlad Yasevich <vyasevich@gmail.com>,
@@ -45,86 +70,47 @@ Cc:     Eric Dumazet <edumazet@google.com>,
         ocfs2-devel@oss.oracle.com, netdev@vger.kernel.org,
         linux-sctp@vger.kernel.org, ceph-devel@vger.kernel.org,
         rds-devel@oss.oracle.com, linux-nfs@vger.kernel.org
-Subject: [PATCH 33/33] net: remove kernel_getsockopt
-Date:   Wed, 13 May 2020 08:26:48 +0200
-Message-Id: <20200513062649.2100053-34-hch@lst.de>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200513062649.2100053-1-hch@lst.de>
+Subject: Re: [PATCH 11/33] tcp: tcp_sock_set_nodelay
+Message-ID: <20200513125144.GC29989@ziepe.ca>
 References: <20200513062649.2100053-1-hch@lst.de>
+ <20200513062649.2100053-12-hch@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200513062649.2100053-12-hch@lst.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-No users left.
+On Wed, May 13, 2020 at 08:26:26AM +0200, Christoph Hellwig wrote:
+> Add a helper to directly set the TCP_NODELAY sockopt from kernel space
+> without going through a fake uaccess.  Cleanup the callers to avoid
+> pointless wrappers now that this is a simple function call.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  drivers/block/drbd/drbd_int.h             |  7 ----
+>  drivers/block/drbd/drbd_main.c            |  2 +-
+>  drivers/block/drbd/drbd_receiver.c        |  4 +--
+>  drivers/infiniband/sw/siw/siw_cm.c        | 24 +++-----------
+>  drivers/nvme/host/tcp.c                   |  9 +-----
+>  drivers/nvme/target/tcp.c                 | 12 ++-----
+>  drivers/target/iscsi/iscsi_target_login.c | 15 ++-------
+>  fs/cifs/connect.c                         | 10 ++----
+>  fs/dlm/lowcomms.c                         |  8 ++---
+>  fs/ocfs2/cluster/tcp.c                    | 20 ++----------
+>  include/linux/tcp.h                       |  1 +
+>  net/ceph/messenger.c                      | 11 ++-----
+>  net/ipv4/tcp.c                            | 39 +++++++++++++++--------
+>  net/rds/tcp.c                             | 11 +------
+>  net/rds/tcp.h                             |  1 -
+>  net/rds/tcp_listen.c                      |  2 +-
+>  16 files changed, 49 insertions(+), 127 deletions(-)
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- include/linux/net.h |  2 --
- net/socket.c        | 34 ----------------------------------
- 2 files changed, 36 deletions(-)
+No problem with the siw change
 
-diff --git a/include/linux/net.h b/include/linux/net.h
-index ece7513326293..e10f378194a59 100644
---- a/include/linux/net.h
-+++ b/include/linux/net.h
-@@ -303,8 +303,6 @@ int kernel_connect(struct socket *sock, struct sockaddr *addr, int addrlen,
- 		   int flags);
- int kernel_getsockname(struct socket *sock, struct sockaddr *addr);
- int kernel_getpeername(struct socket *sock, struct sockaddr *addr);
--int kernel_getsockopt(struct socket *sock, int level, int optname, char *optval,
--		      int *optlen);
- int kernel_sendpage(struct socket *sock, struct page *page, int offset,
- 		    size_t size, int flags);
- int kernel_sendpage_locked(struct sock *sk, struct page *page, int offset,
-diff --git a/net/socket.c b/net/socket.c
-index f37c3ef508691..49000f0d87f71 100644
---- a/net/socket.c
-+++ b/net/socket.c
-@@ -3715,40 +3715,6 @@ int kernel_getpeername(struct socket *sock, struct sockaddr *addr)
- }
- EXPORT_SYMBOL(kernel_getpeername);
- 
--/**
-- *	kernel_getsockopt - get a socket option (kernel space)
-- *	@sock: socket
-- *	@level: API level (SOL_SOCKET, ...)
-- *	@optname: option tag
-- *	@optval: option value
-- *	@optlen: option length
-- *
-- *	Assigns the option length to @optlen.
-- *	Returns 0 or an error.
-- */
--
--int kernel_getsockopt(struct socket *sock, int level, int optname,
--			char *optval, int *optlen)
--{
--	mm_segment_t oldfs = get_fs();
--	char __user *uoptval;
--	int __user *uoptlen;
--	int err;
--
--	uoptval = (char __user __force *) optval;
--	uoptlen = (int __user __force *) optlen;
--
--	set_fs(KERNEL_DS);
--	if (level == SOL_SOCKET)
--		err = sock_getsockopt(sock, level, optname, uoptval, uoptlen);
--	else
--		err = sock->ops->getsockopt(sock, level, optname, uoptval,
--					    uoptlen);
--	set_fs(oldfs);
--	return err;
--}
--EXPORT_SYMBOL(kernel_getsockopt);
--
- /**
-  *	kernel_sendpage - send a &page through a socket (kernel space)
-  *	@sock: socket
--- 
-2.26.2
+Acked-by: Jason Gunthorpe <jgg@mellanox.com>
 
+Jason
