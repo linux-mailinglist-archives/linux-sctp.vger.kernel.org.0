@@ -2,78 +2,106 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0991A1D14CE
-	for <lists+linux-sctp@lfdr.de>; Wed, 13 May 2020 15:27:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF0391D17F0
+	for <lists+linux-sctp@lfdr.de>; Wed, 13 May 2020 16:52:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387846AbgEMN1Y (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 13 May 2020 09:27:24 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:56582 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2387843AbgEMN1Y (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>);
-        Wed, 13 May 2020 09:27:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1589376443;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OH0J8d3K3U+hQmWR8NPajZuhzGmc4mTANodrmCJL8cs=;
-        b=hmIIzXq+0OW/u/cmfBWeH6p231chnMjtMPfCQaNvAGOxoX2Qcax5cyNVIiUg2aDGAuTf73
-        hnbc/nB1iC43FXU/vr/+dQvjXgVxVKWLL3B4GgnBU3kdfbuvwuZ8vIH+iE8h0qUpChD/0h
-        Ct+JEyFRWEOJiMD7IlPpNa6yzHVUECk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-417-iyWGfh95OW-O_Gj4FkwCgg-1; Wed, 13 May 2020 09:27:19 -0400
-X-MC-Unique: iyWGfh95OW-O_Gj4FkwCgg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A9855835B40;
-        Wed, 13 May 2020 13:27:16 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-112-59.rdu2.redhat.com [10.10.112.59])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 811E61C92D;
-        Wed, 13 May 2020 13:27:06 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20200513062649.2100053-7-hch@lst.de>
-References: <20200513062649.2100053-7-hch@lst.de> <20200513062649.2100053-1-hch@lst.de>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     dhowells@redhat.com, "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-nvme@lists.infradead.org, linux-sctp@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-afs@lists.infradead.org,
-        drbd-dev@lists.linbit.com, linux-cifs@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-rdma@vger.kernel.org,
-        cluster-devel@redhat.com, Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        linux-block@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, Neil Horman <nhorman@tuxdriver.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        netdev@vger.kernel.org, Vlad Yasevich <vyasevich@gmail.com>,
-        linux-kernel@vger.kernel.org, Jon Maloy <jmaloy@redhat.com>,
-        Ying Xue <ying.xue@windriver.com>, ocfs2-devel@oss.oracle.com
-Subject: Re: [PATCH 06/33] net: add sock_set_timestamps
+        id S2388837AbgEMOwa (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 13 May 2020 10:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40128 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728345AbgEMOw3 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 13 May 2020 10:52:29 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46882C061A0C;
+        Wed, 13 May 2020 07:52:28 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id x18so8957868ybq.8;
+        Wed, 13 May 2020 07:52:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=Ag7d1R4oU70+Y1dGMwgHYVRH8OdiIM2rnBAshx67Csg=;
+        b=NM/ixUgQ77MwmVFv32i2dIj/4IHwxgmq5ZhM4IPdxDPNFw/Xyrqmhv/4AiPJMIVHri
+         bHd4lqQWVL2Fd+P9oILIYjifQsnNF5G1cce5p06vNKHKHg0qFCEw7oxP2E7Ev+BgkNpa
+         onpn6Fj5kHqGbvJwXRhoHESFqrO0b21QLDOXSHIL6Q92VBuJUDMm7ciuumQyG56c+BEr
+         ndmkEJ5YwHkwRg9W3x8Rtq67T+l9DEVjv5Zn6lojDZ70dhluhGwDFiPTrqBNgqsS6+bo
+         dbPkeiCmQOy0Qax0+QaRnOqWevOHbh5P8NlXTv/VgguH21TdLBNf5enXG+Fc2rcD1Xmr
+         D4kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=Ag7d1R4oU70+Y1dGMwgHYVRH8OdiIM2rnBAshx67Csg=;
+        b=Vy0+CoQwsbYzLBmY763cvyp8ICWL3u28aZgmvLL+glZok4OqS9sfUOAAtn/pwxQn9J
+         z8NZCkMx9PtonXIq/P1xpqfOFL8xLS3T3hqOjIdlYI5VzlICxE/i0U8qEgWpy6YPDGGB
+         Jb3ZtY/VcTvONhjMikLM39IQtCfaex66rqoyj3ty9/0ygHpA0TLV5HOOymSKVeKDfEQY
+         TYzry055zMlyKVrKWUolX81uhp8j0adGUlGv9Ykcf+f4i0bHavZ25hfk6FDGs2YpdpoV
+         1qPqWFAL+1TpHCFB+lg4UV6lLRX7nip9oWWEumqqt8/oW610vu9ALHM3dCIxQxoKC/98
+         ShhA==
+X-Gm-Message-State: AOAM530xMKOxVdK4GNaxaszkZBGPoXsqf9H/4eW8VmZf4MYeK6JOy99R
+        7t3tgugpLeogqxtHrJMxLBQRqLyPnJEojfVyaMc=
+X-Google-Smtp-Source: ABdhPJw1+ODS777zhwKBpaQ1DEPQH6Wiw1QS2RVxWHIW4/0lA/gYWBoN1piY+NdIWjdtMZAD/7nDVNuZ6f/ZvjCCAVY=
+X-Received: by 2002:a25:2e50:: with SMTP id b16mr19372364ybn.346.1589381547494;
+ Wed, 13 May 2020 07:52:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3124743.1589376425.1@warthog.procyon.org.uk>
-Date:   Wed, 13 May 2020 14:27:05 +0100
-Message-ID: <3124744.1589376425@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+From:   Jonas Falkevik <jonas.falkevik@gmail.com>
+Date:   Wed, 13 May 2020 16:52:16 +0200
+Message-ID: <CABUN9aCXZBTdYHSK5oSVX-HAA1wTWmyBW_ked_ydsCjsV-Ckaw@mail.gmail.com>
+Subject: [PATCH] sctp: check assoc before SCTP_ADDR_{MADE_PRIM,ADDED} event
+To:     Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Xin Long <lucien.xin@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Christoph Hellwig <hch@lst.de> wrote:
+Do not generate SCTP_ADDR_{MADE_PRIM,ADDED} events for SCTP_FUTURE_ASSOC assocs.
 
-> Add a helper to directly set the SO_TIMESTAMP* sockopts from kernel space
-> without going through a fake uaccess.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+These events are described in rfc6458#section-6.1
+SCTP_PEER_ADDR_CHANGE:
+This tag indicates that an address that is
+part of an existing association has experienced a change of
+state (e.g., a failure or return to service of the reachability
+of an endpoint via a specific transport address).
 
-Reviewed-by: David Howells <dhowells@redhat.com>
+Signed-off-by: Jonas Falkevik <jonas.falkevik@gmail.com>
+---
+ net/sctp/associola.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
+diff --git a/net/sctp/associola.c b/net/sctp/associola.c
+index 437079a4883d..0c5dd295f9b8 100644
+--- a/net/sctp/associola.c
++++ b/net/sctp/associola.c
+@@ -432,8 +432,10 @@ void sctp_assoc_set_primary(struct sctp_association *asoc,
+         changeover = 1 ;
+
+     asoc->peer.primary_path = transport;
+-    sctp_ulpevent_nofity_peer_addr_change(transport,
+-                          SCTP_ADDR_MADE_PRIM, 0);
++    if (sctp_assoc2id(asoc) != SCTP_FUTURE_ASSOC)
++        sctp_ulpevent_nofity_peer_addr_change(transport,
++                              SCTP_ADDR_MADE_PRIM,
++                              0);
+
+     /* Set a default msg_name for events. */
+     memcpy(&asoc->peer.primary_addr, &transport->ipaddr,
+@@ -714,7 +716,10 @@ struct sctp_transport *sctp_assoc_add_peer(struct
+sctp_association *asoc,
+     list_add_tail_rcu(&peer->transports, &asoc->peer.transport_addr_list);
+     asoc->peer.transport_count++;
+
+-    sctp_ulpevent_nofity_peer_addr_change(peer, SCTP_ADDR_ADDED, 0);
++    if (sctp_assoc2id(asoc) != SCTP_FUTURE_ASSOC)
++        sctp_ulpevent_nofity_peer_addr_change(peer,
++                              SCTP_ADDR_ADDED,
++                              0);
+
+     /* If we do not yet have a primary path, set one.  */
+     if (!asoc->peer.primary_path) {
+--
+2.25.3
