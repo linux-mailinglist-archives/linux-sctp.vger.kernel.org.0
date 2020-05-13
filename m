@@ -2,71 +2,56 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11E0E1D1DCC
-	for <lists+linux-sctp@lfdr.de>; Wed, 13 May 2020 20:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 921501D1EA9
+	for <lists+linux-sctp@lfdr.de>; Wed, 13 May 2020 21:12:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390263AbgEMSpq (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 13 May 2020 14:45:46 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:38905 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390103AbgEMSpn (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 13 May 2020 14:45:43 -0400
-Received: by mail-pg1-f193.google.com with SMTP id u5so141840pgn.5;
-        Wed, 13 May 2020 11:45:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=oGExS5qpyhaJE9sRdyvo65rhkDZrEjTLCCqtKDwIC/k=;
-        b=TS/6HqhyaUBitGN4hJlVvmHSFhkuo70+216kyjBQDE1WZjef3NGT/YuohVXnCKZr7z
-         K4PJgBtP1wkjYZNeHCOUTKvZeggbMRYrUPv0kGtbOUxxXjB0868SRXo5nj2JebjktftL
-         IvFmHQJqsyhNa8c5iPBpd2+wzW660tNQcojBVoZiRfU5OQi/BBL8H9pan2p7VymaHAko
-         wN1u32p6TWkDOYso15HTxqJL2328FnrUWVcyLCaXGnAsP+fN/vTBcapBq/2ZVUH2B6AY
-         +NlLPGmghXU30Cq1kmHJcpUU1RbuVGxR1r3omjcrYaogMV8KW2lJad5a5hzsFuqNzKKL
-         X/SQ==
-X-Gm-Message-State: AOAM5338Ixu2NVbtVMVyhA5hkSRag2/BM++OtuHK2zdZiRvOSVvkWnr8
-        Mmya9dyMxMYZK56jbGtBOn4=
-X-Google-Smtp-Source: ABdhPJxuCtZ6LqG/D7UsLLlMEE3Gj8Q00WqSwzmkuBnzsqf4vGt4xYIyJ/k3v57Ipr7A3TPHVfXEFQ==
-X-Received: by 2002:a62:7d91:: with SMTP id y139mr631244pfc.172.1589395542971;
-        Wed, 13 May 2020 11:45:42 -0700 (PDT)
-Received: from ?IPv6:2601:647:4802:9070:59e0:deac:a73c:5d11? ([2601:647:4802:9070:59e0:deac:a73c:5d11])
-        by smtp.gmail.com with ESMTPSA id g10sm238580pfk.103.2020.05.13.11.45.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 May 2020 11:45:41 -0700 (PDT)
+        id S2390510AbgEMTMO (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 13 May 2020 15:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2390379AbgEMTMN (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Wed, 13 May 2020 15:12:13 -0400
+Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925F6C061A0C;
+        Wed, 13 May 2020 12:12:13 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 6900A127DD751;
+        Wed, 13 May 2020 12:12:11 -0700 (PDT)
+Date:   Wed, 13 May 2020 12:12:10 -0700 (PDT)
+Message-Id: <20200513.121210.1508400748648949138.davem@davemloft.net>
+To:     hch@lst.de
+Cc:     kuba@kernel.org, edumazet@google.com, kuznet@ms2.inr.ac.ru,
+        yoshfuji@linux-ipv6.org, vyasevich@gmail.com,
+        nhorman@tuxdriver.com, marcelo.leitner@gmail.com,
+        jmaloy@redhat.com, ying.xue@windriver.com,
+        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-nvme@lists.infradead.org, target-devel@vger.kernel.org,
+        linux-afs@lists.infradead.org, linux-cifs@vger.kernel.org,
+        cluster-devel@redhat.com, ocfs2-devel@oss.oracle.com,
+        netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
+        ceph-devel@vger.kernel.org, rds-devel@oss.oracle.com,
+        linux-nfs@vger.kernel.org
 Subject: Re: remove kernel_setsockopt and kernel_getsockopt
-To:     Christoph Hellwig <hch@lst.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-nvme@lists.infradead.org, linux-sctp@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-afs@lists.infradead.org,
-        drbd-dev@lists.linbit.com, linux-cifs@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-rdma@vger.kernel.org,
-        cluster-devel@redhat.com, Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        linux-block@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, Neil Horman <nhorman@tuxdriver.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        netdev@vger.kernel.org, Vlad Yasevich <vyasevich@gmail.com>,
-        linux-kernel@vger.kernel.org, Jon Maloy <jmaloy@redhat.com>,
-        Ying Xue <ying.xue@windriver.com>, ocfs2-devel@oss.oracle.com
-References: <20200513062649.2100053-1-hch@lst.de>
-From:   Sagi Grimberg <sagi@grimberg.me>
-Message-ID: <2c9a28f7-4268-2295-0d64-ada9178a5553@grimberg.me>
-Date:   Wed, 13 May 2020 11:45:39 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Firefox/68.0 Thunderbird/68.7.0
-MIME-Version: 1.0
+From:   David Miller <davem@davemloft.net>
 In-Reply-To: <20200513062649.2100053-1-hch@lst.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+References: <20200513062649.2100053-1-hch@lst.de>
+X-Mailer: Mew version 6.8 on Emacs 26.3
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Wed, 13 May 2020 12:12:12 -0700 (PDT)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
+From: Christoph Hellwig <hch@lst.de>
+Date: Wed, 13 May 2020 08:26:15 +0200
 
 > Hi Dave,
 > 
@@ -83,8 +68,17 @@ X-Mailing-List: linux-sctp@vger.kernel.org
 > 
 > Nevertheless the diffstat looks quite promising:
 > 
->   42 files changed, 721 insertions(+), 799 deletions(-)
+>  42 files changed, 721 insertions(+), 799 deletions(-)
 
-For the nvme-tcp bits,
+Overall I'm fine with these changes, but three things need to happen
+before I can think about applying this:
 
-Acked-by: Sagi Grimberg <sagi@grimberg.me>
+1) Address David's feedback about the ip_mtu*() calls that can occur
+   on ipv6 sockets too.
+
+2) Handle the feedback about dlm now bringing in sctp even if sctp
+   sockets are not even used because of the symbol dependency.
+
+3) Add the rxrpc documentation requested by David.
+
+Thank you.
