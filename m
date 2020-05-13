@@ -2,191 +2,115 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D75FF1D1FDD
-	for <lists+linux-sctp@lfdr.de>; Wed, 13 May 2020 22:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C431D2087
+	for <lists+linux-sctp@lfdr.de>; Wed, 13 May 2020 23:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390667AbgEMULU (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 13 May 2020 16:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33590 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2388033AbgEMULT (ORCPT
+        id S1727790AbgEMVAv (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 13 May 2020 17:00:51 -0400
+Received: from smtprelay0154.hostedemail.com ([216.40.44.154]:51208 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725977AbgEMVAu (ORCPT
         <rfc822;linux-sctp@vger.kernel.org>);
-        Wed, 13 May 2020 16:11:19 -0400
-Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8696EC061A0C;
-        Wed, 13 May 2020 13:11:19 -0700 (PDT)
-Received: by mail-qk1-x743.google.com with SMTP id g185so680831qke.7;
-        Wed, 13 May 2020 13:11:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Bu6Mn7nu/2nMhVqLxMtcXhprIvb1oiL88xKXB3rFnvs=;
-        b=ha2rz7a+uJSIrsNLif4JDODHzjcRXp87jUXkhEL+uI8YXozF6E43esRWkYOsJzLrSM
-         ByTUwpBZpCbutk1E+8Joqld19nq3FK/B5nHwWJ//YPb7IjJIY8MWOoLCASo0fEDL/86d
-         DnSjFGMeYuRF2yGqfW1B2Lgk4Pip9qE7Y4w8nIdM7/lMSJZEnxx7EbvhjX6JxFWao368
-         hFQB9e9zwx9vSXH3CjKICejxKsJKXNRmsedmcnoM/KSVmiH5JyAS+zETrHTy/O4XFaQo
-         xWvJRPMY9SVeMXkLzr4NhIquCG0k5yr0Wui6w7PK0/ibVMqKPE8DWSlHyUHg1LcKbnJt
-         713Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Bu6Mn7nu/2nMhVqLxMtcXhprIvb1oiL88xKXB3rFnvs=;
-        b=MQSGV8C8AR93lRbLcLD21EBhWzE3NDfP/lLR5qxvFScK3W+pnSDWe5UzVVP/zclT5p
-         vnI+n/yP2DOUozk/aYD8R2c1vuk+MzNASJTqvw/yu4WmsbkYbw8R3LOluYs8h49NttLU
-         fk3d/8gGMwmbHfobLJ32+hy7JUcAc/y+m3fD01AYHXF00uCl3R7RBfXDR85XREAf2vK7
-         wvdAol8HMZpXXrMEx70+55hdBkADAil1Ai7h5+bP8R7G/rlrLtZcUX8o8pbgSplPj2XA
-         7gWYjhR+NEN64IXNJlmA7lVumJbcvKEu6A7Y3WArDnzmxWBeNgwUSIO3E9uKTT/C3hpy
-         hg0A==
-X-Gm-Message-State: AOAM530yrEfZWgx1a+/leyQrUoypk/UxBrdJqb185TZvS3pDUmDTpvUB
-        Ppeu1LjhZtquplEfNgPEG1xQurL6Az/NkIaxSKvrXvQ//xs=
-X-Google-Smtp-Source: ABdhPJy9XpniT38I13QZIJ/GI7X+4v3jGCbSZ0uedfL9qJ9DsRL9/uVljftMTDd9/4jjkJLUfKHeFS0MrhTajYNO8No=
-X-Received: by 2002:a25:d103:: with SMTP id i3mr1370559ybg.182.1589400678679;
- Wed, 13 May 2020 13:11:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <CABUN9aCXZBTdYHSK5oSVX-HAA1wTWmyBW_ked_ydsCjsV-Ckaw@mail.gmail.com>
- <20200513160116.GA2491@localhost.localdomain>
-In-Reply-To: <20200513160116.GA2491@localhost.localdomain>
-From:   Jonas Falkevik <jonas.falkevik@gmail.com>
-Date:   Wed, 13 May 2020 22:11:05 +0200
-Message-ID: <CABUN9aCuoA+CXLujUxXyiKWQPkwq9_eOXNqOR=MK7dPY++Fxng@mail.gmail.com>
-Subject: Re: [PATCH] sctp: check assoc before SCTP_ADDR_{MADE_PRIM,ADDED} event
-To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
+        Wed, 13 May 2020 17:00:50 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay08.hostedemail.com (Postfix) with ESMTP id CA6F0182CED34;
+        Wed, 13 May 2020 21:00:48 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:960:966:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2194:2196:2199:2200:2393:2559:2562:2828:3138:3139:3140:3141:3142:3353:3622:3865:3866:3867:3871:3874:4250:4321:4385:5007:6742:6743:10004:10400:10848:11026:11232:11473:11658:11914:12043:12296:12297:12438:12555:12740:12760:12895:12986:13069:13311:13357:13439:14096:14097:14659:14721:21080:21627:21987:30012:30054:30059:30062:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:2,LUA_SUMMARY:none
+X-HE-Tag: mist41_5dde648048f06
+X-Filterd-Recvd-Size: 3554
+Received: from XPS-9350.home (unknown [47.151.136.130])
+        (Authenticated sender: joe@perches.com)
+        by omf01.hostedemail.com (Postfix) with ESMTPA;
+        Wed, 13 May 2020 21:00:44 +0000 (UTC)
+Message-ID: <0ee5acfaca4cf32d4efad162046b858981a4dae3.camel@perches.com>
+Subject: Re: [PATCH 20/33] ipv4: add ip_sock_set_recverr
+From:   Joe Perches <joe@perches.com>
+To:     Christoph Hellwig <hch@lst.de>,
         "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xin Long <lucien.xin@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Jon Maloy <jmaloy@redhat.com>,
+        Ying Xue <ying.xue@windriver.com>, drbd-dev@lists.linbit.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-nvme@lists.infradead.org,
+        target-devel@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-cifs@vger.kernel.org, cluster-devel@redhat.com,
+        ocfs2-devel@oss.oracle.com, netdev@vger.kernel.org,
+        linux-sctp@vger.kernel.org, ceph-devel@vger.kernel.org,
+        rds-devel@oss.oracle.com, linux-nfs@vger.kernel.org
+Date:   Wed, 13 May 2020 14:00:43 -0700
+In-Reply-To: <20200513062649.2100053-21-hch@lst.de>
+References: <20200513062649.2100053-1-hch@lst.de>
+         <20200513062649.2100053-21-hch@lst.de>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.1-2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, May 13, 2020 at 6:01 PM Marcelo Ricardo Leitner
-<marcelo.leitner@gmail.com> wrote:
->
-> On Wed, May 13, 2020 at 04:52:16PM +0200, Jonas Falkevik wrote:
-> > Do not generate SCTP_ADDR_{MADE_PRIM,ADDED} events for SCTP_FUTURE_ASSOC assocs.
->
-> How did you get them?
->
+On Wed, 2020-05-13 at 08:26 +0200, Christoph Hellwig wrote:
+> Add a helper to directly set the IP_RECVERR sockopt from kernel space
+> without going through a fake uaccess.
 
-I think one case is when receiving INIT chunk in sctp_sf_do_5_1B_init().
-Here a closed association is created, sctp_make_temp_assoc().
-Which is later used when calling sctp_process_init().
-In sctp_process_init() one of the first things are to call
-sctp_assoc_add_peer()
-on the closed / temp assoc.
+This seems used only with true as the second arg.
+Is there reason to have that argument at all?
 
-sctp_assoc_add_peer() are generating the SCTP_ADDR_ADDED event on the socket
-for the potentially new association.
+> diff --git a/include/net/ip.h b/include/net/ip.h
+[]
+> @@ -767,5 +767,6 @@ static inline bool inetdev_valid_mtu(unsigned int mtu)
+>  
+>  void ip_sock_set_tos(struct sock *sk, int val);
+>  void ip_sock_set_freebind(struct sock *sk, bool val);
+> +void ip_sock_set_recverr(struct sock *sk, bool val);
+>  
+>  #endif	/* _IP_H */
+> diff --git a/net/ipv4/ip_sockglue.c b/net/ipv4/ip_sockglue.c
+> index 0c40887a817f8..9abecc3195520 100644
+> --- a/net/ipv4/ip_sockglue.c
+> +++ b/net/ipv4/ip_sockglue.c
+> @@ -589,6 +589,16 @@ void ip_sock_set_freebind(struct sock *sk, bool val)
+>  }
+>  EXPORT_SYMBOL(ip_sock_set_freebind);
+>  
+> +void ip_sock_set_recverr(struct sock *sk, bool val)
+> +{
+> +	lock_sock(sk);
+> +	inet_sk(sk)->recverr = val;
+> +	if (!val)
+> +		skb_queue_purge(&sk->sk_error_queue);
+> +	release_sock(sk);
+> +}
+> +EXPORT_SYMBOL(ip_sock_set_recverr);
+> +
+>  /*
+>   *	Socket option code for IP. This is the end of the line after any
+>   *	TCP,UDP etc options on an IP socket.
+> diff --git a/net/rxrpc/local_object.c b/net/rxrpc/local_object.c
+> index 562ea36c96b0f..1b87b8a9ff725 100644
+> --- a/net/rxrpc/local_object.c
+> +++ b/net/rxrpc/local_object.c
+> @@ -171,13 +171,7 @@ static int rxrpc_open_socket(struct rxrpc_local *local, struct net *net)
+>  		/* Fall through */
+>  	case AF_INET:
+>  		/* we want to receive ICMP errors */
+> -		opt = 1;
+> -		ret = kernel_setsockopt(local->socket, SOL_IP, IP_RECVERR,
+> -					(char *) &opt, sizeof(opt));
+> -		if (ret < 0) {
+> -			_debug("setsockopt failed");
+> -			goto error;
+> -		}
+> +		ip_sock_set_recverr(local->socket->sk, true);
+>  
+>  		/* we want to set the don't fragment bit */
+>  		opt = IP_PMTUDISC_DO;
 
-$ cat sctp.bpftrace
-#!/usr/local/bin/bpftrace
-
-BEGIN
-{
-   printf("Tracing sctp_assoc_add_peer\n");
-   printf("Hit Ctrl-C to end.\n");
-}
-
-kprobe:sctp_assoc_add_peer
-{
-   @[kstack]=count();
-}
-
-$ sudo bpftrace sctp.bpftrace
-Attaching 2 probes...
-Tracing sctp_assoc_add_peer
-Hit Ctrl-C to end.
-^C
-
-@[
-   sctp_assoc_add_peer+1
-   sctp_process_init+77
-   sctp_sf_do_5_1B_init+615
-   sctp_do_sm+132
-   sctp_endpoint_bh_rcv+256
-   sctp_rcv+2379
-   ip_protocol_deliver_rcu+393
-   ip_local_deliver_finish+68
-   ip_local_deliver+203
-   ip_rcv+156
-   __netif_receive_skb_one_core+96
-   process_backlog+164
-   net_rx_action+312
-   __softirqentry_text_start+238
-   do_softirq_own_stack+42
-   do_softirq.part.0+65
-   __local_bh_enable_ip+75
-   ip_finish_output2+415
-   ip_output+102
-   __ip_queue_xmit+364
-   sctp_packet_transmit+1814
-   sctp_outq_flush_ctrl.constprop.0+394
-   sctp_outq_flush+86
-   sctp_do_sm+3914
-   sctp_primitive_ASSOCIATE+44
-   __sctp_connect+707
-   sctp_inet_connect+98
-   __sys_connect+156
-   __x64_sys_connect+22
-   do_syscall_64+91
-   entry_SYSCALL_64_after_hwframe+68
-]: 1
-...
-
-> I'm thinking you're fixing a side-effect of another issue here. For
-> example, in sctp_assoc_update(), it first calls sctp_assoc_add_peer()
-> to only then call sctp_assoc_set_id(), which would generate the event
-> you might have seen. In this case, it should be allocating IDR before,
-> so that the event can be sent with the right assoc_id already.
->
-> >
-> > These events are described in rfc6458#section-6.1
-> > SCTP_PEER_ADDR_CHANGE:
-> > This tag indicates that an address that is
-> > part of an existing association has experienced a change of
-> > state (e.g., a failure or return to service of the reachability
-> > of an endpoint via a specific transport address).
-> >
-> > Signed-off-by: Jonas Falkevik <jonas.falkevik@gmail.com>
-> > ---
-> >  net/sctp/associola.c | 11 ++++++++---
-> >  1 file changed, 8 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/net/sctp/associola.c b/net/sctp/associola.c
-> > index 437079a4883d..0c5dd295f9b8 100644
-> > --- a/net/sctp/associola.c
-> > +++ b/net/sctp/associola.c
-> > @@ -432,8 +432,10 @@ void sctp_assoc_set_primary(struct sctp_association *asoc,
-> >          changeover = 1 ;
-> >
-> >      asoc->peer.primary_path = transport;
-> > -    sctp_ulpevent_nofity_peer_addr_change(transport,
-> > -                          SCTP_ADDR_MADE_PRIM, 0);
-> > +    if (sctp_assoc2id(asoc) != SCTP_FUTURE_ASSOC)
-> > +        sctp_ulpevent_nofity_peer_addr_change(transport,
-> > +                              SCTP_ADDR_MADE_PRIM,
-> > +                              0);
-> >
-> >      /* Set a default msg_name for events. */
-> >      memcpy(&asoc->peer.primary_addr, &transport->ipaddr,
-> > @@ -714,7 +716,10 @@ struct sctp_transport *sctp_assoc_add_peer(struct
-> > sctp_association *asoc,
-> >      list_add_tail_rcu(&peer->transports, &asoc->peer.transport_addr_list);
-> >      asoc->peer.transport_count++;
-> >
-> > -    sctp_ulpevent_nofity_peer_addr_change(peer, SCTP_ADDR_ADDED, 0);
-> > +    if (sctp_assoc2id(asoc) != SCTP_FUTURE_ASSOC)
-> > +        sctp_ulpevent_nofity_peer_addr_change(peer,
-> > +                              SCTP_ADDR_ADDED,
-> > +                              0);
-> >
-> >      /* If we do not yet have a primary path, set one.  */
-> >      if (!asoc->peer.primary_path) {
-> > --
-> > 2.25.3
