@@ -2,55 +2,55 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D14F1D1CCB
-	for <lists+linux-sctp@lfdr.de>; Wed, 13 May 2020 20:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF491D1CE4
+	for <lists+linux-sctp@lfdr.de>; Wed, 13 May 2020 20:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389998AbgEMSBE (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 13 May 2020 14:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41190 "EHLO
+        id S2390097AbgEMSDI (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 13 May 2020 14:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1732488AbgEMSBD (ORCPT
+        by vger.kernel.org with ESMTP id S2390004AbgEMSDH (ORCPT
         <rfc822;linux-sctp@vger.kernel.org>);
-        Wed, 13 May 2020 14:01:03 -0400
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A771C061A0C;
-        Wed, 13 May 2020 11:01:03 -0700 (PDT)
-Received: by mail-qt1-x844.google.com with SMTP id r8so539668qtm.11;
-        Wed, 13 May 2020 11:01:03 -0700 (PDT)
+        Wed, 13 May 2020 14:03:07 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF22EC061A0C;
+        Wed, 13 May 2020 11:03:06 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id l1so577082qtp.6;
+        Wed, 13 May 2020 11:03:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=djizPthGumhy0aa82+s6m3Q9KQZDbFYAxoC6yOMwIJE=;
-        b=bAlDH4C90L0WzuRWsV4+5Ckq+bqXFHL0YffjYTiIuP49rNtPXi8CvoXPRhlbDCns+x
-         gC+7ZNqshiqIAcsWjLCQjmdrO9oOMlgzWJt0Xj3ZekTSDW9iCVFPAciWKXwTtsaX1rZ2
-         VXCvvcg46I46jlg7EFLEyU90g8qDy5piGIZW0hen68PREB7hgPLiPfR3hs/JkD6zQYkN
-         qhNZuKBqh3uPmvPNqsvUQXsiprnLUtG/XpqeqOiXfQs/5jIJPARkKZ81vF+9uN+yzLI2
-         eDKxA7G8EEOFtgRLiqaZBFmhCr8blUDY0MqJ/GRWYF1K7PJ/mlVIvS7rM9jzk67nFQW1
-         Y3SQ==
+        bh=3rJSQfC8qhqPgAdT7p7uqG4zYxw0cOP69JvDMu+AmoU=;
+        b=rgheQSt1YItEgWJaK+D0bGz+/qHfNOAGsXjdVRWwUQiGqsFIGS1wvoYG+aGTafU+PV
+         /Wam8diPaOgVXFRqoqZXtgZpq5ZoS7P+w+jAXFzuJRlWX6AXxlicjH1KtuahsCm7X1oB
+         1KM/eHxvJqcmXNEYPF4b+olwDLqfGRmRJKuO8mBihqp1FZjIXqkKRuN4K2fkmkt1KR4y
+         BY4TuAPJr9Fm34DqlaEou7vS5F0NmzH1lmiODzJGQ+/eBluPCt8Nwyn9o9iFlcChI8ne
+         mr8KP8dnkN8R85f07cGwIMBpujRbjafuA86KSdBGJqLxAx2+yPjgt33/gw2dY8MXvXik
+         E3ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=djizPthGumhy0aa82+s6m3Q9KQZDbFYAxoC6yOMwIJE=;
-        b=Vb1VY/D7jT5BCbZ9ToaFaOLKaN2+kpXpimp3Zllwigjen1/4Kh5iuQy3ioxPYUI4FG
-         wNd/1XtV+Wo3rbN/2hk1jikKtXyvwg5OWFVYSN4xdNXYpU8CxeGF0NLMPUA7pivwR4ac
-         B0fGr0pisf/ZE0hZCtyYTNH2vVPbeFSJob1XQCg0pR1Y4qf4W8cLoRC0JzM1xj5PD99h
-         eXkGJ/Dee12f9laCXbpDgZZ2kNohfoFTviJI6jgqXy8X9AWuqqCAH0Ql6tnUIOU7b0/u
-         eOOFty1laN8gtMZDRpy6uhDZSVcRtItGpbh9QYToLXkYkbo/Ij3/lJArLysFWaUD5sH8
-         hL+w==
-X-Gm-Message-State: AOAM530bLBHGoPAAvYE8cJ+3dayoO8voLV8QG1tZolYc2Ct4rPCudd2z
-        k7Y4idS777sG35MhcS96kz4=
-X-Google-Smtp-Source: ABdhPJzqbx3RBTNCuLykPLCx+cM+JeljoJjlYEyBds2uiDxtrploYjJasdpV7X3XZIToMReWEu/bXw==
-X-Received: by 2002:ac8:4b67:: with SMTP id g7mr328118qts.346.1589392862149;
-        Wed, 13 May 2020 11:01:02 -0700 (PDT)
-Received: from localhost.localdomain ([2001:1284:f013:f4e9:6bc3:5a0:7baf:1a14])
-        by smtp.gmail.com with ESMTPSA id v28sm310105qtb.49.2020.05.13.11.01.00
+        bh=3rJSQfC8qhqPgAdT7p7uqG4zYxw0cOP69JvDMu+AmoU=;
+        b=AL41WpjTzKYqMQaaAILJH7BYfajSEzOyfHxaPEF4CnDEXy/kxPXuWEjq/D9mQThxsY
+         TIgLjPtWoSqCWOknNR7VDtW1t7On35WjZiA25mC8yKRoezaf4y2ClhMjE3PnMtQSbyKa
+         LB757WRGI056kpd2w1hUMj9aziV6fO78R+87CmB3fgSUVI00ejadFvuPQjkqDkP50pZK
+         hr18nETEOZBWwjx5BzZtycI2w/dbnFob37KY3Sra07zsFZCnCcDRWKDM7xWWTz4yPSDt
+         uB8E+ZhDlsKuq9jR0ZH6LQBAxOjtNm2BUub3qj5DMjt+hi0J4XcZjji66ndHsLIE0PZ3
+         y3bA==
+X-Gm-Message-State: AOAM533Tcj/2BCeZkt8pfpcaHALVTC+JgZ8/tdCWDim+uta9d542dxad
+        pBKRtoWJLqwLH74/pSgiy9g=
+X-Google-Smtp-Source: ABdhPJxDn2Ym2XNFWojVR75lfnXVzFyakSG9ONLgdWGtZA79aHqlLy1IZQIR41clkG4iLZ4VQYg8Bg==
+X-Received: by 2002:ac8:67cf:: with SMTP id r15mr355571qtp.258.1589392985891;
+        Wed, 13 May 2020 11:03:05 -0700 (PDT)
+Received: from localhost.localdomain ([168.181.48.228])
+        by smtp.gmail.com with ESMTPSA id f68sm476350qke.74.2020.05.13.11.03.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2020 11:01:01 -0700 (PDT)
+        Wed, 13 May 2020 11:03:05 -0700 (PDT)
 Received: by localhost.localdomain (Postfix, from userid 1000)
-        id 88707C08DA; Wed, 13 May 2020 15:00:58 -0300 (-03)
-Date:   Wed, 13 May 2020 15:00:58 -0300
+        id 8AE9BC08DA; Wed, 13 May 2020 15:03:02 -0300 (-03)
+Date:   Wed, 13 May 2020 15:03:02 -0300
 From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -69,100 +69,156 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         ocfs2-devel@oss.oracle.com, netdev@vger.kernel.org,
         linux-sctp@vger.kernel.org, ceph-devel@vger.kernel.org,
         rds-devel@oss.oracle.com, linux-nfs@vger.kernel.org
-Subject: Re: [PATCH 27/33] sctp: export sctp_setsockopt_bindx
-Message-ID: <20200513180058.GB2491@localhost.localdomain>
+Subject: Re: [PATCH 32/33] sctp: add sctp_sock_get_primary_addr
+Message-ID: <20200513180302.GC2491@localhost.localdomain>
 References: <20200513062649.2100053-1-hch@lst.de>
- <20200513062649.2100053-28-hch@lst.de>
+ <20200513062649.2100053-33-hch@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200513062649.2100053-28-hch@lst.de>
+In-Reply-To: <20200513062649.2100053-33-hch@lst.de>
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, May 13, 2020 at 08:26:42AM +0200, Christoph Hellwig wrote:
-> And call it directly from dlm instead of going through kernel_setsockopt.
+On Wed, May 13, 2020 at 08:26:47AM +0200, Christoph Hellwig wrote:
+> Add a helper to directly get the SCTP_PRIMARY_ADDR sockopt from kernel
+> space without going through a fake uaccess.
 
-The advantage on using kernel_setsockopt here is that sctp module will
-only be loaded if dlm actually creates a SCTP socket.  With this
-change, sctp will be loaded on setups that may not be actually using
-it. It's a quite big module and might expose the system.
-
-I'm okay with the SCTP changes, but I'll defer to DLM folks to whether
-that's too bad or what for DLM.
+Same comment as on the other dlm/sctp patch.
 
 > 
 > Signed-off-by: Christoph Hellwig <hch@lst.de>
 > ---
->  fs/dlm/lowcomms.c       | 13 ++++++++-----
->  include/net/sctp/sctp.h |  3 +++
->  net/sctp/socket.c       |  5 +++--
->  3 files changed, 14 insertions(+), 7 deletions(-)
+>  fs/dlm/lowcomms.c       | 11 +++-----
+>  include/net/sctp/sctp.h |  1 +
+>  net/sctp/socket.c       | 57 +++++++++++++++++++++++++----------------
+>  3 files changed, 39 insertions(+), 30 deletions(-)
 > 
 > diff --git a/fs/dlm/lowcomms.c b/fs/dlm/lowcomms.c
-> index b722a09a7ca05..e4939d770df53 100644
+> index 6fa45365666a8..46d2d71b62c57 100644
 > --- a/fs/dlm/lowcomms.c
 > +++ b/fs/dlm/lowcomms.c
-> @@ -1005,14 +1005,17 @@ static int sctp_bind_addrs(struct connection *con, uint16_t port)
->  		memcpy(&localaddr, dlm_local_addr[i], sizeof(localaddr));
->  		make_sockaddr(&localaddr, port, &addr_len);
+> @@ -855,10 +855,9 @@ static int tcp_accept_from_sock(struct connection *con)
+>  static int sctp_accept_from_sock(struct connection *con)
+>  {
+>  	/* Check that the new node is in the lockspace */
+> -	struct sctp_prim prim;
+> +	struct sctp_prim prim = { };
+>  	int nodeid;
+> -	int prim_len, ret;
+> -	int addr_len;
+> +	int addr_len, ret;
+>  	struct connection *newcon;
+>  	struct connection *addcon;
+>  	struct socket *newsock;
+> @@ -876,11 +875,7 @@ static int sctp_accept_from_sock(struct connection *con)
+>  	if (ret < 0)
+>  		goto accept_err;
 >  
-> -		if (!i)
-> +		if (!i) {
->  			result = kernel_bind(con->sock,
->  					     (struct sockaddr *)&localaddr,
->  					     addr_len);
-> -		else
-> -			result = kernel_setsockopt(con->sock, SOL_SCTP,
-> -						   SCTP_SOCKOPT_BINDX_ADD,
-> -						   (char *)&localaddr, addr_len);
-> +		} else {
-> +			lock_sock(con->sock->sk);
-> +			result = sctp_setsockopt_bindx(con->sock->sk,
-> +					(struct sockaddr *)&localaddr, addr_len,
-> +					SCTP_BINDX_ADD_ADDR);
-> +			release_sock(con->sock->sk);
-> +		}
->  
->  		if (result < 0) {
->  			log_print("Can't bind to %d addr number %d, %d.\n",
+> -	memset(&prim, 0, sizeof(struct sctp_prim));
+> -	prim_len = sizeof(struct sctp_prim);
+> -
+> -	ret = kernel_getsockopt(newsock, IPPROTO_SCTP, SCTP_PRIMARY_ADDR,
+> -				(char *)&prim, &prim_len);
+> +	ret = sctp_sock_get_primary_addr(con->sock->sk, &prim);
+>  	if (ret < 0) {
+>  		log_print("getsockopt/sctp_primary_addr failed: %d", ret);
+>  		goto accept_err;
 > diff --git a/include/net/sctp/sctp.h b/include/net/sctp/sctp.h
-> index 3ab5c6bbb90bd..f702b14d768ba 100644
+> index b505fa082f254..c98b1d14db853 100644
 > --- a/include/net/sctp/sctp.h
 > +++ b/include/net/sctp/sctp.h
-> @@ -615,4 +615,7 @@ static inline bool sctp_newsk_ready(const struct sock *sk)
->  	return sock_flag(sk, SOCK_DEAD) || sk->sk_socket;
->  }
+> @@ -618,5 +618,6 @@ static inline bool sctp_newsk_ready(const struct sock *sk)
+>  int sctp_setsockopt_bindx(struct sock *sk, struct sockaddr *kaddrs,
+>  		int addrs_size, int op);
+>  void sctp_sock_set_nodelay(struct sock *sk, bool val);
+> +int sctp_sock_get_primary_addr(struct sock *sk, struct sctp_prim *prim);
 >  
-> +int sctp_setsockopt_bindx(struct sock *sk, struct sockaddr *kaddrs,
-> +		int addrs_size, int op);
-> +
 >  #endif /* __net_sctp_h__ */
 > diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-> index 1c96b52c4aa28..30c981d9f6158 100644
+> index 64c395f7a86d5..39bf8090dbe1e 100644
 > --- a/net/sctp/socket.c
 > +++ b/net/sctp/socket.c
-> @@ -979,8 +979,8 @@ int sctp_asconf_mgmt(struct sctp_sock *sp, struct sctp_sockaddr_entry *addrw)
->   *
->   * Returns 0 if ok, <0 errno code on error.
->   */
-> -static int sctp_setsockopt_bindx(struct sock *sk, struct sockaddr *kaddrs,
-> -				 int addrs_size, int op)
-> +int sctp_setsockopt_bindx(struct sock *sk, struct sockaddr *kaddrs,
-> +		int addrs_size, int op)
->  {
->  	int err;
->  	int addrcnt = 0;
-> @@ -1032,6 +1032,7 @@ static int sctp_setsockopt_bindx(struct sock *sk, struct sockaddr *kaddrs,
->  		return -EINVAL;
->  	}
+> @@ -6411,6 +6411,35 @@ static int sctp_getsockopt_local_addrs(struct sock *sk, int len,
+>  	return err;
 >  }
-> +EXPORT_SYMBOL(sctp_setsockopt_bindx);
 >  
->  static int sctp_connect_new_asoc(struct sctp_endpoint *ep,
->  				 const union sctp_addr *daddr,
+> +static int __sctp_sock_get_primary_addr(struct sock *sk, struct sctp_prim *prim)
+> +{
+> +	struct sctp_association *asoc;
+> +
+> +	asoc = sctp_id2assoc(sk, prim->ssp_assoc_id);
+> +	if (!asoc)
+> +		return -EINVAL;
+> +	if (!asoc->peer.primary_path)
+> +		return -ENOTCONN;
+> +
+> +	memcpy(&prim->ssp_addr, &asoc->peer.primary_path->ipaddr,
+> +		asoc->peer.primary_path->af_specific->sockaddr_len);
+> +
+> +	sctp_get_pf_specific(sk->sk_family)->addr_to_user(sctp_sk(sk),
+> +			(union sctp_addr *)&prim->ssp_addr);
+> +	return 0;
+> +}
+> +
+> +int sctp_sock_get_primary_addr(struct sock *sk, struct sctp_prim *prim)
+> +{
+> +	int ret;
+> +
+> +	lock_sock(sk);
+> +	ret = __sctp_sock_get_primary_addr(sk, prim);
+> +	release_sock(sk);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL(sctp_sock_get_primary_addr);
+> +
+>  /* 7.1.10 Set Primary Address (SCTP_PRIMARY_ADDR)
+>   *
+>   * Requests that the local SCTP stack use the enclosed peer address as
+> @@ -6421,35 +6450,19 @@ static int sctp_getsockopt_primary_addr(struct sock *sk, int len,
+>  					char __user *optval, int __user *optlen)
+>  {
+>  	struct sctp_prim prim;
+> -	struct sctp_association *asoc;
+> -	struct sctp_sock *sp = sctp_sk(sk);
+> +	int ret;
+>  
+>  	if (len < sizeof(struct sctp_prim))
+>  		return -EINVAL;
+> -
+> -	len = sizeof(struct sctp_prim);
+> -
+> -	if (copy_from_user(&prim, optval, len))
+> +	if (copy_from_user(&prim, optval, sizeof(struct sctp_prim)))
+>  		return -EFAULT;
+>  
+> -	asoc = sctp_id2assoc(sk, prim.ssp_assoc_id);
+> -	if (!asoc)
+> -		return -EINVAL;
+> -
+> -	if (!asoc->peer.primary_path)
+> -		return -ENOTCONN;
+> -
+> -	memcpy(&prim.ssp_addr, &asoc->peer.primary_path->ipaddr,
+> -		asoc->peer.primary_path->af_specific->sockaddr_len);
+> -
+> -	sctp_get_pf_specific(sk->sk_family)->addr_to_user(sp,
+> -			(union sctp_addr *)&prim.ssp_addr);
+> +	ret = __sctp_sock_get_primary_addr(sk, &prim);
+> +	if (ret)
+> +		return ret;
+>  
+> -	if (put_user(len, optlen))
+> +	if (put_user(len, optlen) || copy_to_user(optval, &prim, len))
+>  		return -EFAULT;
+> -	if (copy_to_user(optval, &prim, len))
+> -		return -EFAULT;
+> -
+>  	return 0;
+>  }
+>  
 > -- 
 > 2.26.2
 > 
