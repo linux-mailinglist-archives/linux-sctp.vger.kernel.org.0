@@ -2,128 +2,96 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5D81D1A3D
-	for <lists+linux-sctp@lfdr.de>; Wed, 13 May 2020 18:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C8A1D1C68
+	for <lists+linux-sctp@lfdr.de>; Wed, 13 May 2020 19:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389543AbgEMQBZ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 13 May 2020 12:01:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389537AbgEMQBY (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 13 May 2020 12:01:24 -0400
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70EE8C061A0C;
-        Wed, 13 May 2020 09:01:23 -0700 (PDT)
-Received: by mail-qt1-x844.google.com with SMTP id j2so187312qtr.12;
-        Wed, 13 May 2020 09:01:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gDEGyQnYOplCe+b2bduCD1NxRiNW5Fcu+RuIWNa1OVw=;
-        b=IXyjPELcQyD5gdttArcdwU7+1LQqG6/ZBgarATcp7ASUXUIw60bmvRmFlawI8eROc1
-         ID95lZbsfppvCnFJ/whBX/fUV21HjSdb1ffl38pin+rX6Aov45DhRq8DOBOdsEF425p2
-         ms5vUVofiC4bJtuWMTsRQC08fCTxEqTbBUbRR+W84QKvtxP2FMy1Fl0Rqmvf0Pc2YKlC
-         eK5y8Jcj4r969++jesYOjSfDN85ruV/9pFPQZvJs9ipGmpMwyy9jHdIC61Krod6zu/jK
-         pTmZMSYV8hvUfD44+cCKIpIWpV7aMeF3wtNjbGfPHqbV5fgT5AX+TnSSsa/81Si0JulZ
-         lmuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gDEGyQnYOplCe+b2bduCD1NxRiNW5Fcu+RuIWNa1OVw=;
-        b=uLag9w6XijBequS5JTfk3gf/cIxZQhqr9qLXPJE4PvuwZE/aY/LUieE6K9KgGh6Q/F
-         rbs57APFvqIG5kRwY8Ht9rws3NlXQ6+NRSoGGV+FweLhE++pV4J2+Ezeb4VkQF3qKa+Y
-         Dv68x9KtJU3T/XHxeSJf0TYMdzjMXu8w75BjAo2tKoFZNmxW/D/XGbTe7uQpC62oz8BY
-         gTqT22THvEI2PbwvwtK0Rg1c/Sp//IYz/xZbZ4BWZlCkRO7P2bf8D2MU2ibas/iFBCZR
-         D+NQCD/V6GXevEpCIiFMXdQdfTrE45W/BQM+RYddfHVjIIeWZ/pxlDy73pxkW/gw+Mzb
-         wTkQ==
-X-Gm-Message-State: AGi0PubG4hYv8qz6p/7aqXYmQ3MDX41PP3e5MxmH7hXrzb9k5MhQCoDQ
-        lZx0JzlyA142RxiNE+A5rGQ=
-X-Google-Smtp-Source: APiQypLEa5DbO43gtfzf8xyX7id6nt1AixGK016BmPhbJ+nK7lrYw/rkTIrTyRfLg1cXu5uVimMK0w==
-X-Received: by 2002:ac8:5311:: with SMTP id t17mr16856713qtn.42.1589385682534;
-        Wed, 13 May 2020 09:01:22 -0700 (PDT)
-Received: from localhost.localdomain ([2001:1284:f013:f4e9:6bc3:5a0:7baf:1a14])
-        by smtp.gmail.com with ESMTPSA id y140sm156177qkb.127.2020.05.13.09.01.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2020 09:01:21 -0700 (PDT)
-Received: by localhost.localdomain (Postfix, from userid 1000)
-        id 6E656C08DA; Wed, 13 May 2020 13:01:16 -0300 (-03)
-Date:   Wed, 13 May 2020 13:01:16 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Jonas Falkevik <jonas.falkevik@gmail.com>
-Cc:     Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
+        id S1732892AbgEMRjH (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 13 May 2020 13:39:07 -0400
+Received: from smtprelay0150.hostedemail.com ([216.40.44.150]:54324 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1732694AbgEMRjG (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Wed, 13 May 2020 13:39:06 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay05.hostedemail.com (Postfix) with ESMTP id 213E41802912F;
+        Wed, 13 May 2020 17:39:05 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:968:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:1801:2194:2199:2393:2559:2562:2828:3138:3139:3140:3141:3142:3353:3622:3865:3866:3867:3868:3870:3872:3874:4030:4321:4605:5007:6742:6743:7875:8603:8660:10004:10400:10848:11026:11232:11658:11914:12043:12296:12297:12679:12740:12760:12895:13019:13069:13146:13148:13156:13228:13230:13311:13357:13439:14040:14659:14721:21080:21627:30054:30070:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: watch82_4eccc56996d20
+X-Filterd-Recvd-Size: 2964
+Received: from XPS-9350.home (unknown [47.151.136.130])
+        (Authenticated sender: joe@perches.com)
+        by omf13.hostedemail.com (Postfix) with ESMTPA;
+        Wed, 13 May 2020 17:39:01 +0000 (UTC)
+Message-ID: <ecc165c33962d964d518c80de605af632eee0474.camel@perches.com>
+Subject: Re: remove kernel_setsockopt and kernel_getsockopt
+From:   Joe Perches <joe@perches.com>
+To:     Christoph Hellwig <hch@lst.de>,
         "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xin Long <lucien.xin@gmail.com>
-Subject: Re: [PATCH] sctp: check assoc before SCTP_ADDR_{MADE_PRIM,ADDED}
- event
-Message-ID: <20200513160116.GA2491@localhost.localdomain>
-References: <CABUN9aCXZBTdYHSK5oSVX-HAA1wTWmyBW_ked_ydsCjsV-Ckaw@mail.gmail.com>
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Jon Maloy <jmaloy@redhat.com>,
+        Ying Xue <ying.xue@windriver.com>, drbd-dev@lists.linbit.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-nvme@lists.infradead.org,
+        target-devel@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-cifs@vger.kernel.org, cluster-devel@redhat.com,
+        ocfs2-devel@oss.oracle.com, netdev@vger.kernel.org,
+        linux-sctp@vger.kernel.org, ceph-devel@vger.kernel.org,
+        rds-devel@oss.oracle.com, linux-nfs@vger.kernel.org
+Date:   Wed, 13 May 2020 10:38:59 -0700
+In-Reply-To: <20200513062649.2100053-1-hch@lst.de>
+References: <20200513062649.2100053-1-hch@lst.de>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.1-2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABUN9aCXZBTdYHSK5oSVX-HAA1wTWmyBW_ked_ydsCjsV-Ckaw@mail.gmail.com>
+Content-Transfer-Encoding: 7bit
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, May 13, 2020 at 04:52:16PM +0200, Jonas Falkevik wrote:
-> Do not generate SCTP_ADDR_{MADE_PRIM,ADDED} events for SCTP_FUTURE_ASSOC assocs.
+On Wed, 2020-05-13 at 08:26 +0200, Christoph Hellwig wrote:
+> this series removes the kernel_setsockopt and kernel_getsockopt
+> functions, and instead switches their users to small functions that
+> implement setting (or in one case getting) a sockopt directly using
+> a normal kernel function call with type safety and all the other
+> benefits of not having a function call.
+> 
+> In some cases these functions seem pretty heavy handed as they do
+> a lock_sock even for just setting a single variable, but this mirrors
+> the real setsockopt implementation - counter to that a few kernel
+> drivers just set the fields directly already.
+> 
+> Nevertheless the diffstat looks quite promising:
+> 
+>  42 files changed, 721 insertions(+), 799 deletions(-)
 
-How did you get them?
+trivia:
 
-I'm thinking you're fixing a side-effect of another issue here. For
-example, in sctp_assoc_update(), it first calls sctp_assoc_add_peer()
-to only then call sctp_assoc_set_id(), which would generate the event
-you might have seen. In this case, it should be allocating IDR before,
-so that the event can be sent with the right assoc_id already.
+It might be useful to show overall object size change.
 
-> 
-> These events are described in rfc6458#section-6.1
-> SCTP_PEER_ADDR_CHANGE:
-> This tag indicates that an address that is
-> part of an existing association has experienced a change of
-> state (e.g., a failure or return to service of the reachability
-> of an endpoint via a specific transport address).
-> 
-> Signed-off-by: Jonas Falkevik <jonas.falkevik@gmail.com>
-> ---
->  net/sctp/associola.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/net/sctp/associola.c b/net/sctp/associola.c
-> index 437079a4883d..0c5dd295f9b8 100644
-> --- a/net/sctp/associola.c
-> +++ b/net/sctp/associola.c
-> @@ -432,8 +432,10 @@ void sctp_assoc_set_primary(struct sctp_association *asoc,
->          changeover = 1 ;
-> 
->      asoc->peer.primary_path = transport;
-> -    sctp_ulpevent_nofity_peer_addr_change(transport,
-> -                          SCTP_ADDR_MADE_PRIM, 0);
-> +    if (sctp_assoc2id(asoc) != SCTP_FUTURE_ASSOC)
-> +        sctp_ulpevent_nofity_peer_addr_change(transport,
-> +                              SCTP_ADDR_MADE_PRIM,
-> +                              0);
-> 
->      /* Set a default msg_name for events. */
->      memcpy(&asoc->peer.primary_addr, &transport->ipaddr,
-> @@ -714,7 +716,10 @@ struct sctp_transport *sctp_assoc_add_peer(struct
-> sctp_association *asoc,
->      list_add_tail_rcu(&peer->transports, &asoc->peer.transport_addr_list);
->      asoc->peer.transport_count++;
-> 
-> -    sctp_ulpevent_nofity_peer_addr_change(peer, SCTP_ADDR_ADDED, 0);
-> +    if (sctp_assoc2id(asoc) != SCTP_FUTURE_ASSOC)
-> +        sctp_ulpevent_nofity_peer_addr_change(peer,
-> +                              SCTP_ADDR_ADDED,
-> +                              0);
-> 
->      /* If we do not yet have a primary path, set one.  */
->      if (!asoc->peer.primary_path) {
-> --
-> 2.25.3
+More EXPORT_SYMBOL uses increase object size a little.
+
+And not sure it matters much except it reduces overall object
+size, but these patches remove (unnecessary) logging on error
+and that could be mentioned in the cover letter too.
+
+e.g.:
+
+-       ret = kernel_setsockopt(queue->sock, SOL_SOCKET, SO_LINGER,
+-                       (char *)&sol, sizeof(sol));
+-       if (ret) {
+-               dev_err(nctrl->device,
+-                       "failed to set SO_LINGER sock opt %d\n", ret);
+-               goto err_sock;
+-       }
++       sock_set_linger(queue->sock->sk, true, 0);
+
+
+
