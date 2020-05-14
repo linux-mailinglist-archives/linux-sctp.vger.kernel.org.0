@@ -2,65 +2,57 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D31771D2691
-	for <lists+linux-sctp@lfdr.de>; Thu, 14 May 2020 07:12:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B1771D27B1
+	for <lists+linux-sctp@lfdr.de>; Thu, 14 May 2020 08:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725911AbgENFMt convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Thu, 14 May 2020 01:12:49 -0400
-Received: from mail.srna.rs ([185.150.193.60]:37942 "EHLO mail.srna.rs"
+        id S1726078AbgENG02 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 14 May 2020 02:26:28 -0400
+Received: from verein.lst.de ([213.95.11.211]:50202 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725788AbgENFMt (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 14 May 2020 01:12:49 -0400
-X-Greylist: delayed 20059 seconds by postgrey-1.27 at vger.kernel.org; Thu, 14 May 2020 01:12:48 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mail.srna.rs (Postfix) with ESMTP id 121B77429F7;
-        Thu, 14 May 2020 00:42:38 +0200 (CEST)
-Received: from mail.srna.rs ([127.0.0.1])
-        by localhost (mail.srna.rs [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 4d9jNC23Ns5N; Thu, 14 May 2020 00:42:37 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.srna.rs (Postfix) with ESMTP id DCD3447C43D;
-        Wed, 13 May 2020 23:55:44 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at srna.rs
-Received: from mail.srna.rs ([127.0.0.1])
-        by localhost (mail.srna.rs [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id CjrjlKEBTZ0z; Wed, 13 May 2020 23:55:44 +0200 (CEST)
-Received: from [10.121.165.103] (unknown [185.189.113.54])
-        by mail.srna.rs (Postfix) with ESMTPSA id E654046E1EE;
-        Wed, 13 May 2020 23:38:35 +0200 (CEST)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1725818AbgENG01 (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Thu, 14 May 2020 02:26:27 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 8B05468B05; Thu, 14 May 2020 08:26:22 +0200 (CEST)
+Date:   Thu, 14 May 2020 08:26:22 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-nvme@lists.infradead.org, linux-sctp@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-afs@lists.infradead.org,
+        drbd-dev@lists.linbit.com, linux-cifs@vger.kernel.org,
+        rds-devel@oss.oracle.com, linux-rdma@vger.kernel.org,
+        cluster-devel@redhat.com, Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        linux-block@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, Neil Horman <nhorman@tuxdriver.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        netdev@vger.kernel.org, Vlad Yasevich <vyasevich@gmail.com>,
+        linux-kernel@vger.kernel.org, Jon Maloy <jmaloy@redhat.com>,
+        Ying Xue <ying.xue@windriver.com>, ocfs2-devel@oss.oracle.com
+Subject: Re: [PATCH 21/33] ipv4: add ip_sock_set_mtu_discover
+Message-ID: <20200514062622.GA8564@lst.de>
+References: <20200513062649.2100053-22-hch@lst.de> <20200513062649.2100053-1-hch@lst.de> <3123898.1589375861@warthog.procyon.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Spende
-To:     Recipients <dunja.pasalic@srna.rs>
-From:   dunja.pasalic@srna.rs
-Date:   Wed, 13 May 2020 14:39:37 -0700
-Reply-To: mariaschaefflergruppe@gmail.com
-X-Antivirus: avast! (VPS 200410-0, 04/09/2020), Outbound message
-X-Antivirus-Status: Clean
-Message-Id: <20200513213838.E654046E1EE@mail.srna.rs>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3123898.1589375861@warthog.procyon.org.uk>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hallo,
+On Wed, May 13, 2020 at 02:17:41PM +0100, David Howells wrote:
+> Christoph Hellwig <hch@lst.de> wrote:
+> 
+> > +		ip_sock_set_mtu_discover(conn->params.local->socket->sk,
+> > +				IP_PMTUDISC_DONT);
+> 
+> Um... The socket in question could be an AF_INET6 socket, not an AF_INET4
+> socket - I presume it will work in that case.  If so:
 
-Ich bin Maria Elisabeth Schaeffler, eine deutsche Geschäftsfrau, Investorin und Geschäftsführerin der Schaeffler Gruppe. Ich bin einer der Eigentümer der Schaeffler Gruppe. Ich habe 25 Prozent meines persönlichen Vermögens für wohltätige Zwecke verschenkt. Und ich habe auch zugesagt, den Rest von 25% in diesem Jahr 2020 an Einzelpersonen zu verschenken. Ich habe beschlossen, Ihnen 1.000.000,00 Euro zu spenden. Wenn Sie an meiner Spende interessiert sind, kontaktieren Sie mich für weitere Informationen.
-
-Sie können auch mehr über mich über den unten stehenden Link lesen
-
-https://en.wikipedia.org/wiki/Maria-Elisabeth_Schaeffler
-
-==========================================
-Herzliche Grüße,
-Frau Maria-Elisabeth Schaeffler,
-Vorsitzender
-Schaeffler Gruppe.
-E-Mail: mariaschaefflergruppe@gmail.com
-
----
-This email is free from viruses and malware because avast! Antivirus protection is active.
-https://www.avast.com/antivirus
-
+Yes, the implementation of that sockopt, including the inet_sock
+structure where these options are set is shared between ipv4 and ipv6.
