@@ -2,102 +2,76 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AB5E1D2DE8
-	for <lists+linux-sctp@lfdr.de>; Thu, 14 May 2020 13:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 685581D2ED6
+	for <lists+linux-sctp@lfdr.de>; Thu, 14 May 2020 13:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726322AbgENLLk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Thu, 14 May 2020 07:11:40 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:41493 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725999AbgENLLj (ORCPT
+        id S1727790AbgENLvf (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 14 May 2020 07:51:35 -0400
+Received: from smtprelay0155.hostedemail.com ([216.40.44.155]:44686 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725955AbgENLve (ORCPT
         <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 14 May 2020 07:11:39 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-265-AUtpnFh1OOqNFr-2xQZocg-1; Thu, 14 May 2020 12:11:35 +0100
-X-MC-Unique: AUtpnFh1OOqNFr-2xQZocg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Thu, 14 May 2020 12:11:34 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Thu, 14 May 2020 12:11:34 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Christoph Hellwig' <hch@lst.de>
-CC:     'Joe Perches' <joe@perches.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        Thu, 14 May 2020 07:51:34 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay02.hostedemail.com (Postfix) with ESMTP id 82BDA2C1F;
+        Thu, 14 May 2020 11:51:31 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:968:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1539:1593:1594:1711:1730:1747:1777:1792:2393:2553:2559:2562:2828:3138:3139:3140:3141:3142:3352:3622:3865:3867:3868:3870:3871:3872:3874:4321:5007:6742:6743:10004:10400:10848:11232:11658:11914:12296:12297:12740:12760:12895:13069:13160:13229:13311:13357:13439:14659:21080:21611:21627:30054:30090:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: soup46_cc3a3aa2090a
+X-Filterd-Recvd-Size: 2294
+Received: from XPS-9350.home (unknown [47.151.136.130])
+        (Authenticated sender: joe@perches.com)
+        by omf01.hostedemail.com (Postfix) with ESMTPA;
+        Thu, 14 May 2020 11:51:27 +0000 (UTC)
+Message-ID: <9992a1fe768a0b1e9bb9470d2728ba25dbe042db.camel@perches.com>
+Subject: Re: [PATCH 20/33] ipv4: add ip_sock_set_recverr
+From:   Joe Perches <joe@perches.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Eric Dumazet <edumazet@google.com>,
-        "Alexey Kuznetsov" <kuznet@ms2.inr.ac.ru>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
         Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
         Vlad Yasevich <vyasevich@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         Jon Maloy <jmaloy@redhat.com>,
-        Ying Xue <ying.xue@windriver.com>,
-        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
-        "linux-afs@lists.infradead.org" <linux-afs@lists.infradead.org>,
-        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
-        "cluster-devel@redhat.com" <cluster-devel@redhat.com>,
-        "ocfs2-devel@oss.oracle.com" <ocfs2-devel@oss.oracle.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>,
-        "rds-devel@oss.oracle.com" <rds-devel@oss.oracle.com>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>
-Subject: RE: remove kernel_setsockopt and kernel_getsockopt
-Thread-Topic: remove kernel_setsockopt and kernel_getsockopt
-Thread-Index: AQHWKU15LJmP4mOGDE2/GHhLszFt9KinP7aQgAAO/ACAABIowP//8l8AgAAaF3A=
-Date:   Thu, 14 May 2020 11:11:34 +0000
-Message-ID: <c2034daa0a23454abb5e5c5714807735@AcuMS.aculab.com>
+        Ying Xue <ying.xue@windriver.com>, drbd-dev@lists.linbit.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-nvme@lists.infradead.org,
+        target-devel@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-cifs@vger.kernel.org, cluster-devel@redhat.com,
+        ocfs2-devel@oss.oracle.com, netdev@vger.kernel.org,
+        linux-sctp@vger.kernel.org, ceph-devel@vger.kernel.org,
+        rds-devel@oss.oracle.com, linux-nfs@vger.kernel.org
+Date:   Thu, 14 May 2020 04:51:26 -0700
+In-Reply-To: <20200514103025.GB12680@lst.de>
 References: <20200513062649.2100053-1-hch@lst.de>
- <ecc165c33962d964d518c80de605af632eee0474.camel@perches.com>
- <756758e8f0e34e2e97db470609f5fbba@AcuMS.aculab.com>
- <20200514101838.GA12548@lst.de>
- <a76440f7305c4653877ff2abff499f4e@AcuMS.aculab.com>
- <20200514103450.GA12901@lst.de>
-In-Reply-To: <20200514103450.GA12901@lst.de>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+         <20200513062649.2100053-21-hch@lst.de>
+         <0ee5acfaca4cf32d4efad162046b858981a4dae3.camel@perches.com>
+         <20200514103025.GB12680@lst.de>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.1-2 
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 7bit
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: 'Christoph Hellwig'
-> Sent: 14 May 2020 11:35
-> On Thu, May 14, 2020 at 10:26:41AM +0000, David Laight wrote:
-> > From: Christoph Hellwig
-> > > Only for those were we have users, and all those are covered.
-> >
-> > What do we tell all our users when our kernel SCTP code
-> > no longer works?
+On Thu, 2020-05-14 at 12:30 +0200, Christoph Hellwig wrote:
+> On Wed, May 13, 2020 at 02:00:43PM -0700, Joe Perches wrote:
+> > On Wed, 2020-05-13 at 08:26 +0200, Christoph Hellwig wrote:
+> > > Add a helper to directly set the IP_RECVERR sockopt from kernel space
+> > > without going through a fake uaccess.
+> > 
+> > This seems used only with true as the second arg.
+> > Is there reason to have that argument at all?
 > 
-> We only care about in-tree modules, just like for every other interface
-> in the kernel.
+> Mostly to keep it symmetric with the sockopt.  I could probably remove
+> a few arguments in the series if we want to be strict.
 
-Even if our management agreed to release the code and the code
-layout matched the kernel guidelines you still wouldn't want
-two large drivers that implement telephony functionality
-for hardware that very few people actually have.
+My preference would use strict and add
+arguments only when necessary.
 
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
 
