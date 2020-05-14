@@ -2,94 +2,96 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5265F1D32B9
-	for <lists+linux-sctp@lfdr.de>; Thu, 14 May 2020 16:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9E11D3D9E
+	for <lists+linux-sctp@lfdr.de>; Thu, 14 May 2020 21:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727072AbgENOYX (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 14 May 2020 10:24:23 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:55481 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726066AbgENOYU (ORCPT
+        id S1727910AbgENTfh (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 14 May 2020 15:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55184 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726128AbgENTfh (ORCPT
         <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 14 May 2020 10:24:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1589466259;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fGWHZrRoLExAS3mHwk8ufZ/s4MYBxFdJolCaEnLqA8M=;
-        b=b1rhOycoMMBblLDZZG90LP4zGipmqQGMcaPGos5675G1SkvlsdII6ADo3FvgpT6zkdVGjK
-        E276ADYPcw6AL2N914pPK2d1P8PRH04pvfLJuz30Sz+fu+CfSVD2Q/aD9zDwHYHXLCooB8
-        qBBd86ag6482sDbgJdx5xK8gWSnFi+c=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-187-gDkumX-iOmOMry4mSLa6sw-1; Thu, 14 May 2020 10:24:17 -0400
-X-MC-Unique: gDkumX-iOmOMry4mSLa6sw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8B5F8800053;
-        Thu, 14 May 2020 14:24:13 +0000 (UTC)
-Received: from redhat.com (null.msp.redhat.com [10.15.80.136])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E42045D9CA;
-        Thu, 14 May 2020 14:24:04 +0000 (UTC)
-Date:   Thu, 14 May 2020 09:24:03 -0500
-From:   David Teigland <teigland@redhat.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Christine Caulfield <ccaulfie@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
+        Thu, 14 May 2020 15:35:37 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5A3C061A0C;
+        Thu, 14 May 2020 12:35:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2cAIpvlCjeek2UlOhaJLhP9ft/jEX+ktFmYjxRqXe+8=; b=VKrUJVLC1QZKeaeXa89WwIPrud
+        xWN6tLhwKrf0IpJKq477Gsgmnmh5IAspTgAHgDcohLeDdrarSFbeKBc4Rw2VutH7Wdqvp+u4GJ57w
+        S0xlexgFqHGVwvMQi6/gLdhHcd2BhEAtEJoKic/a9cMDbNfSZrkHXscgCV9WUJWrinXP0EAaolivK
+        hCE8IgM4uAPNE59ZVrZ32j3gM0r62sSoSbqGvAOLM1yqh1PJXDV7uEOvyuE6GKFQZHwxYJw4fajs3
+        Axa1m0R1dUG8mD1OUgFnasRlFQOsu7tu4NrpejMq4uvEZ+5h/r1+/qUH0gkhEmZ3YbfFR3xYXvB1l
+        kED1vgQw==;
+Received: from willy by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jZJdf-0003fM-JH; Thu, 14 May 2020 19:35:27 +0000
+Date:   Thu, 14 May 2020 12:35:27 -0700
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     'Christoph Hellwig' <hch@lst.de>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
         Eric Dumazet <edumazet@google.com>,
+        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
+        "linux-afs@lists.infradead.org" <linux-afs@lists.infradead.org>,
+        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
+        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
+        "rds-devel@oss.oracle.com" <rds-devel@oss.oracle.com>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "cluster-devel@redhat.com" <cluster-devel@redhat.com>,
         Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Vlad Yasevich <vyasevich@gmail.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        'Joe Perches' <joe@perches.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
         Neil Horman <nhorman@tuxdriver.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Jon Maloy <jmaloy@redhat.com>,
-        Ying Xue <ying.xue@windriver.com>, drbd-dev@lists.linbit.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-nvme@lists.infradead.org,
-        target-devel@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-cifs@vger.kernel.org, cluster-devel@redhat.com,
-        ocfs2-devel@oss.oracle.com, netdev@vger.kernel.org,
-        linux-sctp@vger.kernel.org, ceph-devel@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-nfs@vger.kernel.org
-Subject: Re: is it ok to always pull in sctp for dlm, was: Re: [PATCH 27/33]
- sctp: export sctp_setsockopt_bindx
-Message-ID: <20200514142403.GA1447@redhat.com>
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        Ying Xue <ying.xue@windriver.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "ocfs2-devel@oss.oracle.com" <ocfs2-devel@oss.oracle.com>
+Subject: Re: [Ocfs2-devel] remove kernel_setsockopt and kernel_getsockopt
+Message-ID: <20200514193527.GB16070@bombadil.infradead.org>
 References: <20200513062649.2100053-1-hch@lst.de>
- <20200513062649.2100053-28-hch@lst.de>
- <20200513180058.GB2491@localhost.localdomain>
- <20200514104040.GA12979@lst.de>
+ <ecc165c33962d964d518c80de605af632eee0474.camel@perches.com>
+ <756758e8f0e34e2e97db470609f5fbba@AcuMS.aculab.com>
+ <20200514101838.GA12548@lst.de>
+ <a76440f7305c4653877ff2abff499f4e@AcuMS.aculab.com>
+ <20200514103450.GA12901@lst.de>
+ <c2034daa0a23454abb5e5c5714807735@AcuMS.aculab.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200514104040.GA12979@lst.de>
-User-Agent: Mutt/1.8.3 (2017-05-23)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+In-Reply-To: <c2034daa0a23454abb5e5c5714807735@AcuMS.aculab.com>
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, May 14, 2020 at 12:40:40PM +0200, Christoph Hellwig wrote:
-> On Wed, May 13, 2020 at 03:00:58PM -0300, Marcelo Ricardo Leitner wrote:
-> > On Wed, May 13, 2020 at 08:26:42AM +0200, Christoph Hellwig wrote:
-> > > And call it directly from dlm instead of going through kernel_setsockopt.
+On Thu, May 14, 2020 at 11:11:34AM +0000, David Laight wrote:
+> From: 'Christoph Hellwig'
+> > Sent: 14 May 2020 11:35
+> > On Thu, May 14, 2020 at 10:26:41AM +0000, David Laight wrote:
+> > > From: Christoph Hellwig
+> > > > Only for those were we have users, and all those are covered.
+> > >
+> > > What do we tell all our users when our kernel SCTP code
+> > > no longer works?
 > > 
-> > The advantage on using kernel_setsockopt here is that sctp module will
-> > only be loaded if dlm actually creates a SCTP socket.  With this
-> > change, sctp will be loaded on setups that may not be actually using
-> > it. It's a quite big module and might expose the system.
-> > 
-> > I'm okay with the SCTP changes, but I'll defer to DLM folks to whether
-> > that's too bad or what for DLM.
+> > We only care about in-tree modules, just like for every other interface
+> > in the kernel.
 > 
-> So for ipv6 I could just move the helpers inline as they were trivial
-> and avoid that issue.  But some of the sctp stuff really is way too
-> big for that, so the only other option would be to use symbol_get.
+> Even if our management agreed to release the code and the code
+> layout matched the kernel guidelines you still wouldn't want
+> two large drivers that implement telephony functionality
+> for hardware that very few people actually have.
 
-Let's try symbol_get, having the sctp module always loaded caused problems
-last time it happened (almost nobody uses dlm with it.)
-Dave 
-
+Oh, good point, we'll change the policy for all modules and make every
+interface in the kernel stable from now on to cater to your special case.
