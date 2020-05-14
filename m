@@ -2,36 +2,36 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 663CF1D29E8
-	for <lists+linux-sctp@lfdr.de>; Thu, 14 May 2020 10:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 708BB1D2A1B
+	for <lists+linux-sctp@lfdr.de>; Thu, 14 May 2020 10:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726137AbgENIXr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Thu, 14 May 2020 04:23:47 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:44964 "EHLO
+        id S1726108AbgENIbD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Thu, 14 May 2020 04:31:03 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:26910 "EHLO
         eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726088AbgENIXr (ORCPT
+        by vger.kernel.org with ESMTP id S1725977AbgENIbC (ORCPT
         <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 14 May 2020 04:23:47 -0400
+        Thu, 14 May 2020 04:31:02 -0400
 Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
  TLS) by relay.mimecast.com with ESMTP id
- uk-mta-160-NR0jAm9dMXGz0XSWuD-CMg-1; Thu, 14 May 2020 09:23:44 +0100
-X-MC-Unique: NR0jAm9dMXGz0XSWuD-CMg-1
+ uk-mta-41-3XJ_vbSSOB-Mdnc0632Mfw-1; Thu, 14 May 2020 09:29:32 +0100
+X-MC-Unique: 3XJ_vbSSOB-Mdnc0632Mfw-1
 Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
  AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Thu, 14 May 2020 09:23:43 +0100
+ Server (TLS) id 15.0.1347.2; Thu, 14 May 2020 09:29:31 +0100
 Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
  AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Thu, 14 May 2020 09:23:43 +0100
+ Thu, 14 May 2020 09:29:31 +0100
 From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Marcelo Ricardo Leitner' <marcelo.leitner@gmail.com>,
-        Christoph Hellwig <hch@lst.de>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
+To:     'Joe Perches' <joe@perches.com>, Christoph Hellwig <hch@lst.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+CC:     Eric Dumazet <edumazet@google.com>,
         Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
         Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Vlad Yasevich <vyasevich@gmail.com>,
+        "Vlad Yasevich" <vyasevich@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
+        "Marcelo Ricardo Leitner" <marcelo.leitner@gmail.com>,
         Jon Maloy <jmaloy@redhat.com>,
         Ying Xue <ying.xue@windriver.com>,
         "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
@@ -49,15 +49,14 @@ CC:     "David S. Miller" <davem@davemloft.net>,
         "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>,
         "rds-devel@oss.oracle.com" <rds-devel@oss.oracle.com>,
         "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>
-Subject: RE: [PATCH 27/33] sctp: export sctp_setsockopt_bindx
-Thread-Topic: [PATCH 27/33] sctp: export sctp_setsockopt_bindx
-Thread-Index: AQHWKVB6yiOODFVfBEqdWGEpseVc56inPsjA
-Date:   Thu, 14 May 2020 08:23:43 +0000
-Message-ID: <f22a26559aa9430ab8549c0624729082@AcuMS.aculab.com>
+Subject: RE: remove kernel_setsockopt and kernel_getsockopt
+Thread-Topic: remove kernel_setsockopt and kernel_getsockopt
+Thread-Index: AQHWKU15LJmP4mOGDE2/GHhLszFt9KinP7aQ
+Date:   Thu, 14 May 2020 08:29:30 +0000
+Message-ID: <756758e8f0e34e2e97db470609f5fbba@AcuMS.aculab.com>
 References: <20200513062649.2100053-1-hch@lst.de>
- <20200513062649.2100053-28-hch@lst.de>
- <20200513180058.GB2491@localhost.localdomain>
-In-Reply-To: <20200513180058.GB2491@localhost.localdomain>
+ <ecc165c33962d964d518c80de605af632eee0474.camel@perches.com>
+In-Reply-To: <ecc165c33962d964d518c80de605af632eee0474.camel@perches.com>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -74,25 +73,36 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Marcelo Ricardo Leitner
-> Sent: 13 May 2020 19:01
-> On Wed, May 13, 2020 at 08:26:42AM +0200, Christoph Hellwig wrote:
-> > And call it directly from dlm instead of going through kernel_setsockopt.
-> 
-> The advantage on using kernel_setsockopt here is that sctp module will
-> only be loaded if dlm actually creates a SCTP socket.  With this
-> change, sctp will be loaded on setups that may not be actually using
-> it. It's a quite big module and might expose the system.
-> 
-> I'm okay with the SCTP changes, but I'll defer to DLM folks to whether
-> that's too bad or what for DLM.
+From: Joe Perches
+> Sent: 13 May 2020 18:39
+> On Wed, 2020-05-13 at 08:26 +0200, Christoph Hellwig wrote:
+> > this series removes the kernel_setsockopt and kernel_getsockopt
+> > functions, and instead switches their users to small functions that
+> > implement setting (or in one case getting) a sockopt directly using
+> > a normal kernel function call with type safety and all the other
+> > benefits of not having a function call.
+> >
+> > In some cases these functions seem pretty heavy handed as they do
+> > a lock_sock even for just setting a single variable, but this mirrors
+> > the real setsockopt implementation - counter to that a few kernel
+> > drivers just set the fields directly already.
+> >
+> > Nevertheless the diffstat looks quite promising:
+> >
+> >  42 files changed, 721 insertions(+), 799 deletions(-)
 
-I didn't see these sneak through.
+I missed this patch going through.
+Massive NACK.
 
-There is a big long list of SCTP socket options that are
-needed to make anything work.
+You need to export functions that do most of the socket options
+for all protocols.
+As well as REUSADDR and NODELAY SCTP has loads because a lot
+of stuff that should have been extra system calls got piled
+into setsockopt.
 
-They all need exporting.
+An alternate solution would be to move the copy_to/from_user()
+into a wrapper function so that the kernel_[sg]etsockopt()
+functions would bypass them completely.
 
 	David
 
