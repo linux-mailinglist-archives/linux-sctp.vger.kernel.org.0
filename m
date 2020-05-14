@@ -2,36 +2,36 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 708BB1D2A1B
-	for <lists+linux-sctp@lfdr.de>; Thu, 14 May 2020 10:31:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2411D2BCB
+	for <lists+linux-sctp@lfdr.de>; Thu, 14 May 2020 11:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726108AbgENIbD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Thu, 14 May 2020 04:31:03 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:26910 "EHLO
+        id S1726070AbgENJvG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Thu, 14 May 2020 05:51:06 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:21180 "EHLO
         eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725977AbgENIbC (ORCPT
+        by vger.kernel.org with ESMTP id S1726055AbgENJvF (ORCPT
         <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 14 May 2020 04:31:02 -0400
+        Thu, 14 May 2020 05:51:05 -0400
 Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
  TLS) by relay.mimecast.com with ESMTP id
- uk-mta-41-3XJ_vbSSOB-Mdnc0632Mfw-1; Thu, 14 May 2020 09:29:32 +0100
-X-MC-Unique: 3XJ_vbSSOB-Mdnc0632Mfw-1
+ uk-mta-28-HEHwcrXHOXCxTcoBkns_Pw-1; Thu, 14 May 2020 10:51:01 +0100
+X-MC-Unique: HEHwcrXHOXCxTcoBkns_Pw-1
 Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
  AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Thu, 14 May 2020 09:29:31 +0100
+ Server (TLS) id 15.0.1347.2; Thu, 14 May 2020 10:51:00 +0100
 Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
  AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Thu, 14 May 2020 09:29:31 +0100
+ Thu, 14 May 2020 10:51:00 +0100
 From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Joe Perches' <joe@perches.com>, Christoph Hellwig <hch@lst.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-CC:     Eric Dumazet <edumazet@google.com>,
+To:     'Marcelo Ricardo Leitner' <marcelo.leitner@gmail.com>,
+        Christoph Hellwig <hch@lst.de>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
         Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
         Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "Vlad Yasevich" <vyasevich@gmail.com>,
+        Vlad Yasevich <vyasevich@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
-        "Marcelo Ricardo Leitner" <marcelo.leitner@gmail.com>,
         Jon Maloy <jmaloy@redhat.com>,
         Ying Xue <ying.xue@windriver.com>,
         "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
@@ -49,14 +49,15 @@ CC:     Eric Dumazet <edumazet@google.com>,
         "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>,
         "rds-devel@oss.oracle.com" <rds-devel@oss.oracle.com>,
         "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>
-Subject: RE: remove kernel_setsockopt and kernel_getsockopt
-Thread-Topic: remove kernel_setsockopt and kernel_getsockopt
-Thread-Index: AQHWKU15LJmP4mOGDE2/GHhLszFt9KinP7aQ
-Date:   Thu, 14 May 2020 08:29:30 +0000
-Message-ID: <756758e8f0e34e2e97db470609f5fbba@AcuMS.aculab.com>
+Subject: RE: [PATCH 32/33] sctp: add sctp_sock_get_primary_addr
+Thread-Topic: [PATCH 32/33] sctp: add sctp_sock_get_primary_addr
+Thread-Index: AQHWKVDpRRlTTX4YZEat3HB6AYvqqainVRxw
+Date:   Thu, 14 May 2020 09:51:00 +0000
+Message-ID: <d112e18bfbdd40dfb219ed2c1f2082d4@AcuMS.aculab.com>
 References: <20200513062649.2100053-1-hch@lst.de>
- <ecc165c33962d964d518c80de605af632eee0474.camel@perches.com>
-In-Reply-To: <ecc165c33962d964d518c80de605af632eee0474.camel@perches.com>
+ <20200513062649.2100053-33-hch@lst.de>
+ <20200513180302.GC2491@localhost.localdomain>
+In-Reply-To: <20200513180302.GC2491@localhost.localdomain>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -73,36 +74,28 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Joe Perches
-> Sent: 13 May 2020 18:39
-> On Wed, 2020-05-13 at 08:26 +0200, Christoph Hellwig wrote:
-> > this series removes the kernel_setsockopt and kernel_getsockopt
-> > functions, and instead switches their users to small functions that
-> > implement setting (or in one case getting) a sockopt directly using
-> > a normal kernel function call with type safety and all the other
-> > benefits of not having a function call.
-> >
-> > In some cases these functions seem pretty heavy handed as they do
-> > a lock_sock even for just setting a single variable, but this mirrors
-> > the real setsockopt implementation - counter to that a few kernel
-> > drivers just set the fields directly already.
-> >
-> > Nevertheless the diffstat looks quite promising:
-> >
-> >  42 files changed, 721 insertions(+), 799 deletions(-)
+From: Marcelo Ricardo Leitner
+> Sent: 13 May 2020 19:03
+> 
+> On Wed, May 13, 2020 at 08:26:47AM +0200, Christoph Hellwig wrote:
+> > Add a helper to directly get the SCTP_PRIMARY_ADDR sockopt from kernel
+> > space without going through a fake uaccess.
+> 
+> Same comment as on the other dlm/sctp patch.
 
-I missed this patch going through.
-Massive NACK.
+Wouldn't it be best to write sctp_[gs]etsockotp() that
+use a kernel buffer and then implement the user-space
+calls using a wrapper that does the copies to an on-stack
+(or malloced if big) buffer.
 
-You need to export functions that do most of the socket options
-for all protocols.
-As well as REUSADDR and NODELAY SCTP has loads because a lot
-of stuff that should have been extra system calls got piled
-into setsockopt.
+That will also simplify the code be removing all the copies
+and -EFAULT returns.
+Only the size checks will be needed and the code can assume
+the buffer is at least the size of the on-stack buffer.
 
-An alternate solution would be to move the copy_to/from_user()
-into a wrapper function so that the kernel_[sg]etsockopt()
-functions would bypass them completely.
+Our SCTP code uses SO_REUSADDR, SCTP_EVENTS, SCTP_NODELAY,
+SCTP_STATUS, SCTP_INITMSG, IPV6_ONLY, SCTP_SOCKOPT_BINDX_ADD
+and SO_LINGER.
 
 	David
 
