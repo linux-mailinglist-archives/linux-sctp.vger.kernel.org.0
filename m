@@ -2,106 +2,157 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 029FF1D4F8E
-	for <lists+linux-sctp@lfdr.de>; Fri, 15 May 2020 15:52:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 308131D53F5
+	for <lists+linux-sctp@lfdr.de>; Fri, 15 May 2020 17:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726202AbgEONwD (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 15 May 2020 09:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56684 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726160AbgEONwC (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 15 May 2020 09:52:02 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55662C061A0C
-        for <linux-sctp@vger.kernel.org>; Fri, 15 May 2020 06:52:01 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id d16so2260590edq.7
-        for <linux-sctp@vger.kernel.org>; Fri, 15 May 2020 06:52:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=8P15B7yVg5zuP9hnNQBrVV9U1ImrShnajp0OKHJjOZY=;
-        b=pm5dpiSU+iNrFu4yQcyxba5JDCTk85/LA+3i/RhKgCkaYQfKAMbgjrfCD6hqmknwGj
-         jV0P+UqDgPbUKYhc327T9iIi8iwl9wd+vJlYXApO4iVvrX4iNSA0AieZsKZ/k2de2HiI
-         /B4ZSkEzUK3eAMekoNeXkNXkG3IcPOqOHWKUINkCu3qvWB7qeFQysVODzHhdsHyRy2iu
-         TGmQ7QTSlFuVo8jIspXK/tHywqDVZuVPwYd5Pk/uxzxqkZyhvromnkDw/8cCUArQqj1A
-         iQoK3xXoxjqIeG4+gb/9unWB522dBjzkCUyffzZGJxNmVmEPsoPX6vzxPcViOjklFF5E
-         8beQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=8P15B7yVg5zuP9hnNQBrVV9U1ImrShnajp0OKHJjOZY=;
-        b=nyBXLo2QiVOdsOFAU4vFVl1ojrOBNjWUEt1f8+Qda+9IZgFzt7qL7A4GDEvH9dXkDU
-         FKVRbkERP43ZtMzVyDEDQPvndNR6FMTk5DvB3HmUVSXpOAvG92poKm2LdW0zuqbwf4f9
-         t6IwF1g69UBqHPcTSM4xQQgr/JOZ3QN0T6rpAIyV7x7l0yGx3mvJ6MJ1z336LfRsYXtU
-         X1AKX6++nqoxtqegT1ABOIPZJ2lA5f0PLwfA37Fr2mhTe5aXizogkK6Q6liARapjQ7SO
-         Ww/znKY6vXCglhqi3d168btDwqWcQVnF0QVchFaDbQHOhs4didO4iQzv8eFXN5PH76/H
-         d6RQ==
-X-Gm-Message-State: AOAM530EWdx4sDHj8Rvpb7IK/u5rBFXu4RUtDV36lR11JMJ9FLVLNLR9
-        X+2z9IC3gJdBwc+5bClk9MoTua465mZrDGr4senl8DtF
-X-Google-Smtp-Source: ABdhPJyuGlCWqQehOHvfPeYxcP3idfksqR5AiK1Zpc7Y6zNNfUJpu4X0N8b9Dl/6fCwKWSiJsFhdW6SnVs6AJ7eaewo=
-X-Received: by 2002:a50:8d5e:: with SMTP id t30mr2885725edt.332.1589550719839;
- Fri, 15 May 2020 06:51:59 -0700 (PDT)
+        id S1726341AbgEOPOW (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 15 May 2020 11:14:22 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:59174 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726727AbgEOPOV (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 15 May 2020 11:14:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1589555657;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4jFShFTg902A0q2PIFAj13bBAo+TkoHxdtSFzmSJaQc=;
+        b=B8PkO8cLVVph/pN4dd3OZCiD6m3ovZaGaJOWfBZ+StZadTXIGXXz6Kc8OJqI4xXgRdbDLF
+        gpI19S0HgO2Wop0X+9LiGznCSklVw/JiTjRedmd7OXpuIr+1pQSS/84mQvJWYxZmtVbL5A
+        NMYg5s8AC5X1Mq9UFaQ7HCAfDCjKjCU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-472-LQVTQu0OPIyPDmXCi0pv9g-1; Fri, 15 May 2020 11:14:13 -0400
+X-MC-Unique: LQVTQu0OPIyPDmXCi0pv9g-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 03A5684B8A0;
+        Fri, 15 May 2020 15:14:10 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-112-95.rdu2.redhat.com [10.10.112.95])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D912F76E64;
+        Fri, 15 May 2020 15:13:59 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20200514102919.GA12680@lst.de>
+References: <20200514102919.GA12680@lst.de> <20200513062649.2100053-30-hch@lst.de> <20200513062649.2100053-1-hch@lst.de> <3123534.1589375587@warthog.procyon.org.uk>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     dhowells@redhat.com, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-nvme@lists.infradead.org, linux-sctp@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-afs@lists.infradead.org,
+        drbd-dev@lists.linbit.com, linux-cifs@vger.kernel.org,
+        rds-devel@oss.oracle.com, linux-rdma@vger.kernel.org,
+        cluster-devel@redhat.com, Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        linux-block@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, Neil Horman <nhorman@tuxdriver.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        netdev@vger.kernel.org, Vlad Yasevich <vyasevich@gmail.com>,
+        linux-kernel@vger.kernel.org, Jon Maloy <jmaloy@redhat.com>,
+        Ying Xue <ying.xue@windriver.com>, ocfs2-devel@oss.oracle.com
+Subject: Re: [PATCH 29/33] rxrpc_sock_set_min_security_level
 MIME-Version: 1.0
-Received: by 2002:a54:3c8b:0:0:0:0:0 with HTTP; Fri, 15 May 2020 06:51:59
- -0700 (PDT)
-Reply-To: mstheresaaheidi@yahoo.com
-From:   Ms Theresa Heidi <enginjoeb@gmail.com>
-Date:   Fri, 15 May 2020 08:51:59 -0500
-Message-ID: <CAHk_fxWgAXJOFMAJXS0D6W=vfCq-10dN+6W1fKz-MGD5MiPeXw@mail.gmail.com>
-Subject: HELP URGENT MATTER!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <128581.1589555639.1@warthog.procyon.org.uk>
 Content-Transfer-Encoding: quoted-printable
+Date:   Fri, 15 May 2020 16:13:59 +0100
+Message-ID: <128582.1589555639@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Dear Beloved One,
+Christoph Hellwig <hch@lst.de> wrote:
 
-CHARITY DONATION Please read carefully, I know it is true that this
-letter may come to you as a surprise. nevertheless,i humbly ask you to
-give me your attention and hear me, i am writing this mail to you with
-heavy sorrow in my heart,i have chose to reach you through Internet
-because it still remains the fastest medium of communication, after
-going through your profile in search of an honest person.
+> > Looks good - but you do need to add this to Documentation/networking/r=
+xrpc.txt
+> > also, thanks.
+> =
 
-My name is Mrs Theresa Heidi i am native France currently hospitalized
-in a private hospital here in Israel as a result of lungs cancer I am
-62 years old and I was diagnosed of lungs cancer for about 4 years
-ago, immediately after the death of my husband, who has left me
-everything he worked for. I'm with my laptop in a hospital here in
-where I have been undergoing treatment for cancer of the lungs
+> That file doesn't exist, instead we now have a
+> cumentation/networking/rxrpc.rst in weird markup.
 
-Now that is clear that I=E2=80=99m approaching the last-days of my life and=
- i
-don't even need the money again for any thing and because my doctor
-told me that i would not last for the period of one year due to Lungs
-cancer problem.I have some funds inherited from my late husband, the
-sum of $15 Million United State Dollars ( US$15,000,000,00 ),
+Yeah - that's only in net/next thus far.
 
-This money is still with the foreign bank and the management just
-wrote me as the true owner to come forward to receive the money for
-keeping it so long or rather issue a letter of authorization to
-somebody to receive it on my behalf since I can't come over because of
-my illness or they may get it confiscated.
+> Where do you want this to be added, and with what text?  Remember I don'=
+t
+> really know what this thing does, I just provide a shortcut.
 
-I decided to contact you if you may be willing and interested to
-handle these trust funds in good faith before anything happens to
-me.This is not a stolen money and there are no dangers involved,is
-100% risk free with full legal proof.
+The document itself describes what each rxrpc sockopt does.  Just look for
+RXRPC_MIN_SECURITY_LEVEL in there;-)
 
-I want you to help me withdraw this money from the foreign bank then
-use the funds for Charity works/assistance to less privileged people
-in the society.It is my last wish to see that this money is invested
-to any organization of your choice.
+Anyway, see the attached.  This also fixes a couple of errors in the doc t=
+hat
+I noticed.
 
-I want you to take 45% of the total money for your personal use while
-55% of the money will go to charity. I will appreciate your utmost
-confidentiality and trust in this matter to accomplish my heart
-desire, as I don't want anything that will jeopardize my last wish.
+David
+---
+diff --git a/Documentation/networking/rxrpc.rst b/Documentation/networking=
+/rxrpc.rst
+index 5ad35113d0f4..68552b92dc44 100644
+--- a/Documentation/networking/rxrpc.rst
++++ b/Documentation/networking/rxrpc.rst
+@@ -477,7 +477,7 @@ AF_RXRPC sockets support a few socket options at the S=
+OL_RXRPC level:
+ 	 Encrypted checksum plus packet padded and first eight bytes of packet
+ 	 encrypted - which includes the actual packet length.
+ =
 
-Yours Beloved Sister.
-Mrs Theresa Heidi
+-     (c) RXRPC_SECURITY_ENCRYPTED
++     (c) RXRPC_SECURITY_ENCRYPT
+ =
+
+ 	 Encrypted checksum plus entire packet padded and encrypted, including
+ 	 actual packet length.
+@@ -578,7 +578,7 @@ A client would issue an operation by:
+      This issues a request_key() to get the key representing the security
+      context.  The minimum security level can be set::
+ =
+
+-	unsigned int sec =3D RXRPC_SECURITY_ENCRYPTED;
++	unsigned int sec =3D RXRPC_SECURITY_ENCRYPT;
+ 	setsockopt(client, SOL_RXRPC, RXRPC_MIN_SECURITY_LEVEL,
+ 		   &sec, sizeof(sec));
+ =
+
+@@ -1090,6 +1090,15 @@ The kernel interface functions are as follows:
+      jiffies).  In the event of the timeout occurring, the call will be
+      aborted and -ETIME or -ETIMEDOUT will be returned.
+ =
+
++ (#) Apply the RXRPC_MIN_SECURITY_LEVEL sockopt to a socket from within i=
+n the
++     kernel::
++
++       int rxrpc_sock_set_min_security_level(struct sock *sk,
++					     unsigned int val);
++
++     This specifies the minimum security level required for calls on this
++     socket.
++
+ =
+
+ Configurable Parameters
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+diff --git a/fs/afs/rxrpc.c b/fs/afs/rxrpc.c
+index 7dfcbd58da85..e313dae01674 100644
+--- a/fs/afs/rxrpc.c
++++ b/fs/afs/rxrpc.c
+@@ -57,7 +57,7 @@ int afs_open_socket(struct afs_net *net)
+ 	srx.transport.sin6.sin6_port	=3D htons(AFS_CM_PORT);
+ =
+
+ 	ret =3D rxrpc_sock_set_min_security_level(socket->sk,
+-			RXRPC_SECURITY_ENCRYPT);
++						RXRPC_SECURITY_ENCRYPT);
+ 	if (ret < 0)
+ 		goto error_2;
+ =
+
