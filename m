@@ -2,98 +2,242 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 853991D47E5
-	for <lists+linux-sctp@lfdr.de>; Fri, 15 May 2020 10:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BB8B1D4825
+	for <lists+linux-sctp@lfdr.de>; Fri, 15 May 2020 10:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727928AbgEOIOO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Fri, 15 May 2020 04:14:14 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:43411 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727904AbgEOION (ORCPT
+        id S1727097AbgEOIam (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 15 May 2020 04:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726694AbgEOIam (ORCPT
         <rfc822;linux-sctp@vger.kernel.org>);
-        Fri, 15 May 2020 04:14:13 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-135-kgvmV9-GP7CT7oWXwAS8yw-1; Fri, 15 May 2020 09:14:08 +0100
-X-MC-Unique: kgvmV9-GP7CT7oWXwAS8yw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Fri, 15 May 2020 09:14:07 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Fri, 15 May 2020 09:14:07 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'David Miller' <davem@davemloft.net>
-CC:     "hch@lst.de" <hch@lst.de>, "joe@perches.com" <joe@perches.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuznet@ms2.inr.ac.ru" <kuznet@ms2.inr.ac.ru>,
-        "yoshfuji@linux-ipv6.org" <yoshfuji@linux-ipv6.org>,
-        "vyasevich@gmail.com" <vyasevich@gmail.com>,
-        "nhorman@tuxdriver.com" <nhorman@tuxdriver.com>,
-        "marcelo.leitner@gmail.com" <marcelo.leitner@gmail.com>,
-        "jmaloy@redhat.com" <jmaloy@redhat.com>,
-        "ying.xue@windriver.com" <ying.xue@windriver.com>,
-        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
-        "linux-afs@lists.infradead.org" <linux-afs@lists.infradead.org>,
-        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
-        "cluster-devel@redhat.com" <cluster-devel@redhat.com>,
-        "ocfs2-devel@oss.oracle.com" <ocfs2-devel@oss.oracle.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>,
-        "rds-devel@oss.oracle.com" <rds-devel@oss.oracle.com>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>
-Subject: RE: remove kernel_setsockopt and kernel_getsockopt
-Thread-Topic: remove kernel_setsockopt and kernel_getsockopt
-Thread-Index: AQHWKU15LJmP4mOGDE2/GHhLszFt9KinP7aQgAAO/ACAABIowIAAkWGAgADbQOA=
-Date:   Fri, 15 May 2020 08:14:07 +0000
-Message-ID: <29428bc7a5344412be9f632bced8888d@AcuMS.aculab.com>
-References: <756758e8f0e34e2e97db470609f5fbba@AcuMS.aculab.com>
-        <20200514101838.GA12548@lst.de>
-        <a76440f7305c4653877ff2abff499f4e@AcuMS.aculab.com>
- <20200514.130357.1683454520750761365.davem@davemloft.net>
-In-Reply-To: <20200514.130357.1683454520750761365.davem@davemloft.net>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 15 May 2020 04:30:42 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E18C061A0C;
+        Fri, 15 May 2020 01:30:41 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id b8so739268ybn.0;
+        Fri, 15 May 2020 01:30:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EC0F16Lhf+mGr9sBBMIazR5Y1Rhhl5byvyHX6wEiBSA=;
+        b=pRLpDEx1Oe+fTmC/biGMXuMA0uac1MntTWM5YhXJxnljsaKtNfN84KMoe8IIqanVX/
+         4HqhjGaAOv9dC3mxRrFUMbpUeykI2wHus829SN2eCeETavkB1LSLPCTcahUsBnBl+Uus
+         TXpomhTDN2Z/KdHpJACLdG9wtOR8VewLby8rAVNHL3FDjwFBVcw6FKWbXjhs/QQ0YbYP
+         Kz8rm3HoAc3HygRinCrZblgESJxgQq0oIopLw3JTvcwBRK3B52n6UC2W40Sq89CDNx4b
+         YuT/tHGESqEndPyxSgrumAded88CTc27uf1cuwaILhBiXokUPDnAkLjEal0hwLJX3DFM
+         YKmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EC0F16Lhf+mGr9sBBMIazR5Y1Rhhl5byvyHX6wEiBSA=;
+        b=ld3y4eoOyU/t6cEswhcSedQg8Bmy2IYtN4BYYGu4LlInPnnnVfZouaUXR9jERJnWaC
+         cTrsdjaCK0ZvDmKDVg/xXGoXVZdCkRvvrkBllvuKEpgds219eGf01fiR+zwCFgwL/Vqw
+         9gvvqhqECVtqU/VbV7w2GblQD8nSH6n30u4XAxFRYbIiZHc+yO1K2HODmlBQwDBwXAhl
+         xXDpqUzeYJrfw7y9RHH3h2NKYyIxlWbrzW12hx4MsAzvAHpNFjf9l3jFRsiKvEIa34Hx
+         OnoqU4nSyiDNjlU813Ks1qH7SxM9HiK9C7iNQ79Qs36ndjaNoQlSpW0d4ympQ2D/RqvW
+         6Dag==
+X-Gm-Message-State: AOAM532SeRmPrD4sT6l27GTAahIJXvpVirW0I5al0PQV8/NrsRSuxRau
+        bBOdozg5FK5ENG+j2e6Zsp8ZULN1mwKi4lSlrHDWkroM
+X-Google-Smtp-Source: ABdhPJyorroK1wIpDSj3snZLmNxYQFwFupZ+Hyj/bGWY4gBbB5HKXHs+1Ft6QvjZfk6wdA87myP6piV07MBWNHH6cSo=
+X-Received: by 2002:a25:bb03:: with SMTP id z3mr3630143ybg.6.1589531440987;
+ Fri, 15 May 2020 01:30:40 -0700 (PDT)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+References: <CABUN9aCXZBTdYHSK5oSVX-HAA1wTWmyBW_ked_ydsCjsV-Ckaw@mail.gmail.com>
+ <20200513160116.GA2491@localhost.localdomain> <CABUN9aCuoA+CXLujUxXyiKWQPkwq9_eOXNqOR=MK7dPY++Fxng@mail.gmail.com>
+ <20200513213230.GE2491@localhost.localdomain>
+In-Reply-To: <20200513213230.GE2491@localhost.localdomain>
+From:   Jonas Falkevik <jonas.falkevik@gmail.com>
+Date:   Fri, 15 May 2020 10:30:29 +0200
+Message-ID: <CABUN9aBoxXjdPk9piKAZV-2dYOCEnuXr-4H5ZVVvqeMMFRsf7A@mail.gmail.com>
+Subject: Re: [PATCH] sctp: check assoc before SCTP_ADDR_{MADE_PRIM,ADDED} event
+To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc:     Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xin Long <lucien.xin@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Looking at __sys_setsockopt() I noticed that the BPF intercept
-can also cause set_fs(KERNEL_DS) be set in order to pass a
-modified buffer into the actual setsockopt() code.
+On Wed, May 13, 2020 at 11:32 PM Marcelo Ricardo Leitner
+<marcelo.leitner@gmail.com> wrote:
+>
+> On Wed, May 13, 2020 at 10:11:05PM +0200, Jonas Falkevik wrote:
+> > On Wed, May 13, 2020 at 6:01 PM Marcelo Ricardo Leitner
+> > <marcelo.leitner@gmail.com> wrote:
+> > >
+> > > On Wed, May 13, 2020 at 04:52:16PM +0200, Jonas Falkevik wrote:
+> > > > Do not generate SCTP_ADDR_{MADE_PRIM,ADDED} events for SCTP_FUTURE_ASSOC assocs.
+> > >
+> > > How did you get them?
+> > >
+> >
+> > I think one case is when receiving INIT chunk in sctp_sf_do_5_1B_init().
+> > Here a closed association is created, sctp_make_temp_assoc().
+> > Which is later used when calling sctp_process_init().
+> > In sctp_process_init() one of the first things are to call
+> > sctp_assoc_add_peer()
+> > on the closed / temp assoc.
+> >
+> > sctp_assoc_add_peer() are generating the SCTP_ADDR_ADDED event on the socket
+> > for the potentially new association.
+>
+> I see, thanks. The SCTP_FUTURE_ASSOC means something different. It is
+> for setting/getting socket options that will be used for new asocs. In
+> this case, it is just a coincidence that asoc_id is not set (but
+> initialized to 0) and SCTP_FUTURE_ASSOC is also 0.
 
-If that functionality is to be kept then the underlying
-protocol specific code needs changing to accept a kernel buffer.
+yes, you are right, I overlooked that.
 
-The 32bit compat code would also be a lot simpler if it could
-pass an kernel buffer through.
-At the moment it copies the modified buffer back out onto the
-user stack.
+> Moreso, if I didn't
+> miss anything, it would block valid events, such as those from
+>  sctp_sf_do_5_1D_ce
+>    sctp_process_init
+> because sctp_process_init will only call sctp_assoc_set_id() by its
+> end.
 
-I'm sure there have been suggestions to remove that complete hack.
-Fixing the compat code would leave a kernel_[sg]et_sockopt() that
-still worked.
+Do we want these events at this stage?
+Since the association is a newly established one, have the peer address changed?
+Should we enqueue these messages with sm commands instead?
+And drop them if we don't have state SCTP_STATE_ESTABLISHED?
 
-	David
+>
+> I can't see a good reason for generating any event on temp assocs. So
+> I'm thinking the checks on this patch should be on whether the asoc is
+> a temporary one instead. WDYT?
+>
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Agree, we shouldn't rely on coincidence.
+Either check temp instead or the above mentioned state?
 
+> Then, considering the socket is locked, both code points should be
+> allocating the IDR earlier. It's expensive, yes (point being, it could
+> be avoided in case of other failures), but it should be generating
+> events with the right assoc id. Are you interested in pursuing this
+> fix as well?
+
+Sure.
+
+If we check temp status instead, we would need to allocate IDR earlier,
+as you mention. So that we send the notification with correct assoc id.
+
+But shouldn't the SCTP_COMM_UP, for a newly established association, be the
+first notification event sent?
+The SCTP_COMM_UP notification is enqueued later in sctp_sf_do_5_1D_ce().
+
+
+>
+> >
+> > $ cat sctp.bpftrace
+> > #!/usr/local/bin/bpftrace
+> >
+> > BEGIN
+> > {
+> >    printf("Tracing sctp_assoc_add_peer\n");
+> >    printf("Hit Ctrl-C to end.\n");
+> > }
+> >
+> > kprobe:sctp_assoc_add_peer
+> > {
+> >    @[kstack]=count();
+> > }
+> >
+> > $ sudo bpftrace sctp.bpftrace
+> > Attaching 2 probes...
+> > Tracing sctp_assoc_add_peer
+> > Hit Ctrl-C to end.
+> > ^C
+> >
+> > @[
+> >    sctp_assoc_add_peer+1
+> >    sctp_process_init+77
+> >    sctp_sf_do_5_1B_init+615
+> >    sctp_do_sm+132
+> >    sctp_endpoint_bh_rcv+256
+> >    sctp_rcv+2379
+> >    ip_protocol_deliver_rcu+393
+> >    ip_local_deliver_finish+68
+> >    ip_local_deliver+203
+> >    ip_rcv+156
+> >    __netif_receive_skb_one_core+96
+> >    process_backlog+164
+> >    net_rx_action+312
+> >    __softirqentry_text_start+238
+> >    do_softirq_own_stack+42
+> >    do_softirq.part.0+65
+> >    __local_bh_enable_ip+75
+> >    ip_finish_output2+415
+> >    ip_output+102
+> >    __ip_queue_xmit+364
+> >    sctp_packet_transmit+1814
+> >    sctp_outq_flush_ctrl.constprop.0+394
+> >    sctp_outq_flush+86
+> >    sctp_do_sm+3914
+> >    sctp_primitive_ASSOCIATE+44
+> >    __sctp_connect+707
+> >    sctp_inet_connect+98
+> >    __sys_connect+156
+> >    __x64_sys_connect+22
+> >    do_syscall_64+91
+> >    entry_SYSCALL_64_after_hwframe+68
+> > ]: 1
+> > ...
+> >
+> > > I'm thinking you're fixing a side-effect of another issue here. For
+> > > example, in sctp_assoc_update(), it first calls sctp_assoc_add_peer()
+> > > to only then call sctp_assoc_set_id(), which would generate the event
+> > > you might have seen. In this case, it should be allocating IDR before,
+> > > so that the event can be sent with the right assoc_id already.
+> > >
+> > > >
+> > > > These events are described in rfc6458#section-6.1
+> > > > SCTP_PEER_ADDR_CHANGE:
+> > > > This tag indicates that an address that is
+> > > > part of an existing association has experienced a change of
+> > > > state (e.g., a failure or return to service of the reachability
+> > > > of an endpoint via a specific transport address).
+> > > >
+> > > > Signed-off-by: Jonas Falkevik <jonas.falkevik@gmail.com>
+> > > > ---
+> > > >  net/sctp/associola.c | 11 ++++++++---
+> > > >  1 file changed, 8 insertions(+), 3 deletions(-)
+> > > >
+> > > > diff --git a/net/sctp/associola.c b/net/sctp/associola.c
+> > > > index 437079a4883d..0c5dd295f9b8 100644
+> > > > --- a/net/sctp/associola.c
+> > > > +++ b/net/sctp/associola.c
+> > > > @@ -432,8 +432,10 @@ void sctp_assoc_set_primary(struct sctp_association *asoc,
+> > > >          changeover = 1 ;
+> > > >
+> > > >      asoc->peer.primary_path = transport;
+> > > > -    sctp_ulpevent_nofity_peer_addr_change(transport,
+> > > > -                          SCTP_ADDR_MADE_PRIM, 0);
+> > > > +    if (sctp_assoc2id(asoc) != SCTP_FUTURE_ASSOC)
+> > > > +        sctp_ulpevent_nofity_peer_addr_change(transport,
+> > > > +                              SCTP_ADDR_MADE_PRIM,
+> > > > +                              0);
+> > > >
+> > > >      /* Set a default msg_name for events. */
+> > > >      memcpy(&asoc->peer.primary_addr, &transport->ipaddr,
+> > > > @@ -714,7 +716,10 @@ struct sctp_transport *sctp_assoc_add_peer(struct
+> > > > sctp_association *asoc,
+> > > >      list_add_tail_rcu(&peer->transports, &asoc->peer.transport_addr_list);
+> > > >      asoc->peer.transport_count++;
+> > > >
+> > > > -    sctp_ulpevent_nofity_peer_addr_change(peer, SCTP_ADDR_ADDED, 0);
+> > > > +    if (sctp_assoc2id(asoc) != SCTP_FUTURE_ASSOC)
+> > > > +        sctp_ulpevent_nofity_peer_addr_change(peer,
+> > > > +                              SCTP_ADDR_ADDED,
+> > > > +                              0);
+> > > >
+> > > >      /* If we do not yet have a primary path, set one.  */
+> > > >      if (!asoc->peer.primary_path) {
+> > > > --
+> > > > 2.25.3
