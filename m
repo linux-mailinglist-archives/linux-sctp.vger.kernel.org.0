@@ -2,55 +2,65 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F4691D75F0
-	for <lists+linux-sctp@lfdr.de>; Mon, 18 May 2020 13:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15B6C1D8D14
+	for <lists+linux-sctp@lfdr.de>; Tue, 19 May 2020 03:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727007AbgERLIf (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 18 May 2020 07:08:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726279AbgERLIf (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 18 May 2020 07:08:35 -0400
-X-Greylist: delayed 300 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 18 May 2020 04:08:34 PDT
-Received: from vps.dvp24.com (unknown [IPv6:2a02:348:36:5b8c::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCE1C061A0C;
-        Mon, 18 May 2020 04:08:34 -0700 (PDT)
-Received: from localhost ([127.0.0.1] helo=dvp24.com)
-        by vps.dvp24.com with esmtpa (Exim 4.77)
-        (envelope-from <abhay@dvp24.com>)
-        id 1jadYS-0006r4-97; Mon, 18 May 2020 13:03:32 +0200
+        id S1726573AbgESBZP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Mon, 18 May 2020 21:25:15 -0400
+Received: from mailserver.iluze.com ([88.198.233.204]:51018 "EHLO
+        mailserver.iluze.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726292AbgESBZO (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 18 May 2020 21:25:14 -0400
+X-Greylist: delayed 829 seconds by postgrey-1.27 at vger.kernel.org; Mon, 18 May 2020 21:25:14 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mailserver.iluze.com (Postfix) with ESMTP id A8C474C28FF;
+        Tue, 19 May 2020 03:05:30 +0200 (CEST)
+Received: from mailserver.iluze.com ([127.0.0.1])
+        by localhost (mailserver.iluze.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id uy7HQ-ym0MTd; Tue, 19 May 2020 03:05:27 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by mailserver.iluze.com (Postfix) with ESMTP id 970184C5B6C;
+        Tue, 19 May 2020 02:25:15 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mailserver.iluze.com
+Received: from mailserver.iluze.com ([127.0.0.1])
+        by localhost (mailserver.iluze.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Mzc2oF9yKBy2; Tue, 19 May 2020 02:25:14 +0200 (CEST)
+Received: from [172.20.10.2] (unknown [129.205.113.33])
+        by mailserver.iluze.com (Postfix) with ESMTPSA id B22854C1B46;
+        Tue, 19 May 2020 00:17:14 +0200 (CEST)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Mon, 18 May 2020 12:03:32 +0100
-From:   pedro hills <abhay@dvp24.com>
-To:     undisclosed-recipients:;
-Subject: (DONATION) $2 Million Has Been Donated
-Reply-To: <pedrohills@outlook.es>
-Mail-Reply-To: <pedrohills@outlook.es>
-Message-ID: <4f8b251c274cf8e27d8c41dd4ed99b52@dvp24.com>
-X-Sender: abhay@dvp24.com
-User-Agent: Roundcube Webmail/0.7.1
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Spende
+To:     Recipients <obchod@jakziskatpraci.cz>
+From:   obchod@jakziskatpraci.cz
+Date:   Mon, 18 May 2020 15:17:02 -0700
+Reply-To: mariaschaefflergruppe@gmail.com
+X-Antivirus: avast! (VPS 200517-0, 05/16/2020), Outbound message
+X-Antivirus-Status: Clean
+Message-Id: <20200518221714.B22854C1B46@mailserver.iluze.com>
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
+Hallo,
 
+Ich bin Maria Elisabeth Schaeffler, eine deutsche Geschäftsfrau, Investorin und Geschäftsführerin der Schaeffler Gruppe. Ich bin einer der Eigentümer der Schaeffler Gruppe. Ich habe 25 Prozent meines persönlichen Vermögens für wohltätige Zwecke verschenkt. Und ich habe auch zugesagt, den Rest von 25% in diesem Jahr 2020 an Einzelpersonen zu verschenken. Ich habe beschlossen, Ihnen 1.000.000,00 Euro zu spenden. Wenn Sie an meiner Spende interessiert sind, kontaktieren Sie mich für weitere Informationen.
 
--- 
-$2 Million Has Been Donated To You,By PEDRO this is Real For More Info
-  Contact PEDRO immediately for your clame This Email:
-  pedrohills@outlook.es
+Sie können auch mehr über mich über den unten stehenden Link lesen
 
-  Contact phone number +34632232897
-  Send Your Response To: pedrohills@outlook.es
+https://en.wikipedia.org/wiki/Maria-Elisabeth_Schaeffler
 
-  2 Millionen US-Dollar wurden an Sie gespendet. Von PEDRO ist dies fÃ¼r
-weitere Informationen real
-  Wenden Sie sich umgehend an PEDRO. Diese E-Mail:
-  pedrohills@outlook.es
+==========================================
+Herzliche Grüße,
+Frau Maria-Elisabeth Schaeffler,
+Vorsitzender
+Schaeffler Gruppe.
+E-Mail: mariaschaefflergruppe@gmail.com
 
-  Kontakttelefonnummer +34632232897
-  Senden Sie Ihre Antwort an: pedrohills@outlook.es
+---
+This email is free from viruses and malware because avast! Antivirus protection is active.
+https://www.avast.com/antivirus
+
