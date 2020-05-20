@@ -2,66 +2,108 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C31D01DA4EE
-	for <lists+linux-sctp@lfdr.de>; Wed, 20 May 2020 00:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 395071DAE5D
+	for <lists+linux-sctp@lfdr.de>; Wed, 20 May 2020 11:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726283AbgESWsH (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 19 May 2020 18:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50478 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726064AbgESWsH (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 19 May 2020 18:48:07 -0400
-Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3282BC061A0E;
-        Tue, 19 May 2020 15:48:07 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 6F1EF128F0072;
-        Tue, 19 May 2020 15:48:06 -0700 (PDT)
-Date:   Tue, 19 May 2020 15:48:05 -0700 (PDT)
-Message-Id: <20200519.154805.2002435538113436383.davem@davemloft.net>
-To:     nhorman@tuxdriver.com
-Cc:     linux-sctp@vger.kernel.org, vyasevich@gmail.com,
-        jere.leppanen@nokia.com, marcelo.leitner@gmail.com,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH] sctp: Don't add the shutdown timer if its already been
- added
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200519200405.857632-1-nhorman@tuxdriver.com>
-References: <20200519200405.857632-1-nhorman@tuxdriver.com>
-X-Mailer: Mew version 6.8 on Emacs 26.3
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Tue, 19 May 2020 15:48:06 -0700 (PDT)
+        id S1726525AbgETJKa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Wed, 20 May 2020 05:10:30 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:37652 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726224AbgETJKa (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Wed, 20 May 2020 05:10:30 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-50-tluLY8XmNuuDjM3-9TBDiA-1; Wed, 20 May 2020 10:10:26 +0100
+X-MC-Unique: tluLY8XmNuuDjM3-9TBDiA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Wed, 20 May 2020 10:10:25 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Wed, 20 May 2020 10:10:25 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Marcelo Ricardo Leitner' <marcelo.leitner@gmail.com>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        Neil Horman <nhorman@tuxdriver.com>
+Subject: RE: sctp doesn't honour net.ipv6.bindv6only
+Thread-Topic: sctp doesn't honour net.ipv6.bindv6only
+Thread-Index: AdYtySwMD5fuoEShRtCmkqkLr9/ogQARLsAAABzoS0A=
+Date:   Wed, 20 May 2020 09:10:23 +0000
+Message-ID: <2889b2f6b55f42fcaa1dc8552df33911@AcuMS.aculab.com>
+References: <62ff05456c5d4ab5953b85fff3934ba9@AcuMS.aculab.com>
+ <20200519194710.GP2491@localhost.localdomain>
+In-Reply-To: <20200519194710.GP2491@localhost.localdomain>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Neil Horman <nhorman@tuxdriver.com>
-Date: Tue, 19 May 2020 16:04:05 -0400
+From: Marcelo Ricardo Leitner
+> Sent: 19 May 2020 20:47
+> 
+> On Tue, May 19, 2020 at 10:47:17AM +0000, David Laight wrote:
+> > The sctp code doesn't use sk->sk_ipv6only (which is initialised
+> > from net.ipv6.bindv6only) but instead uses its own flag
+> 
+> It actually does, via [__]ipv6_only_sock() calls since 7dab83de50c7
+> ("sctp: Support ipv6only AF_INET6 sockets.").
+> 
+> > sp->v4mapped which always defaults to 1.
+> >
+> > There may also be an expectation that
+> >   [gs]etsockopt(sctp_fd, IPPROTO_IPV6, IPV6_V6ONLY,...)
+> > will access the flag that sctp uses internally.
+> > (Matching TCP and UDP.)
+> 
+> My understanding is that these are slightly different.
+> 
+> v4mapped, if false, will allow the socket to deal with both address
+> types, without mapping. If true, it will map v4 into v6.
+> v6only, if false, it will do mapping for tcp/udp, but sctp won't use
+> it. If true, it will deny using v4, which is complementary to v4mapped
+> for sctp.
+> 
+> Did I miss anything?
 
-> This BUG halt was reported a while back, but the patch somehow got
-> missed:
-> 
- ...
-> It appears that the side effect that starts the shutdown timer was processed
-> multiple times, which can happen as multiple paths can trigger it.  This of
-> course leads to the BUG halt in add_timer getting called.
-> 
-> Fix seems pretty straightforward, just check before the timer is added if its
-> already been started.  If it has mod the timer instead to min(current
-> expiration, new expiration)
-> 
-> Its been tested but not confirmed to fix the problem, as the issue has only
-> occured in production environments where test kernels are enjoined from being
-> installed.  It appears to be a sane fix to me though.  Also, recentely,
-> Jere found a reproducer posted on list to confirm that this resolves the
-> issues
-> 
-> Signed-off-by: Neil Horman <nhorman@tuxdriver.com>
+Possibly I did, I wasn't looking much beyond the [sg]etsockopt code.
+Although our code supports SCTP/IPv6 and I have tested it a bit
+I don't think any of our customers use it (yet).
+We default to creating IPv6 listening sockets but all the connections
+are IPv4.
 
-Applied and queued up for -stable, thanks.
+I think I'm still confused though:
+
+IIRC v6only (mainly) affects listening sockets.
+If 0 (the default on Linux) an IPv4 connection will 'attach to' an
+IPv6 socket and the application will see v4mapped addresses [1].
+If 1 the application needs to create two separate sockets to receive
+both IPv4 and IPV6 connections.
+
+I can't see how SCTP would be any different to TCP and UDP.
+It can't make any sense to dual-home with a mixture of IPv4/6 addresses.
+
+So does v4mapped just control the format of the addresses on the socket
+interface when an IPv4 connection is using an IPv6 socket? 
+
+[1] Actually, thinking further I can't remember whether this is true.
+All our code allows for v4mapped addresses and decodes them for printing.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
