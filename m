@@ -2,58 +2,67 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78ED91DB610
-	for <lists+linux-sctp@lfdr.de>; Wed, 20 May 2020 16:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F37C21DB78A
+	for <lists+linux-sctp@lfdr.de>; Wed, 20 May 2020 16:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726570AbgETOSg (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 20 May 2020 10:18:36 -0400
-Received: from verein.lst.de ([213.95.11.211]:50062 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726436AbgETOSf (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Wed, 20 May 2020 10:18:35 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 9508368C4E; Wed, 20 May 2020 16:18:30 +0200 (CEST)
-Date:   Wed, 20 May 2020 16:18:30 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Joe Perches <joe@perches.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Jon Maloy <jmaloy@redhat.com>,
-        Ying Xue <ying.xue@windriver.com>, drbd-dev@lists.linbit.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-nvme@lists.infradead.org,
-        target-devel@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-cifs@vger.kernel.org, cluster-devel@redhat.com,
-        ocfs2-devel@oss.oracle.com, netdev@vger.kernel.org,
-        linux-sctp@vger.kernel.org, ceph-devel@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-nfs@vger.kernel.org
-Subject: Re: [PATCH 20/33] ipv4: add ip_sock_set_recverr
-Message-ID: <20200520141830.GA28867@lst.de>
-References: <20200513062649.2100053-1-hch@lst.de> <20200513062649.2100053-21-hch@lst.de> <0ee5acfaca4cf32d4efad162046b858981a4dae3.camel@perches.com> <20200514103025.GB12680@lst.de> <9992a1fe768a0b1e9bb9470d2728ba25dbe042db.camel@perches.com>
+        id S1726596AbgETO5M convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Wed, 20 May 2020 10:57:12 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:29410 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726436AbgETO5M (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Wed, 20 May 2020 10:57:12 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-198-oU5m7Sq8OWeamHa9CXHv9Q-1; Wed, 20 May 2020 15:57:08 +0100
+X-MC-Unique: oU5m7Sq8OWeamHa9CXHv9Q-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Wed, 20 May 2020 15:57:07 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Wed, 20 May 2020 15:57:07 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        "'Marcelo Ricardo Leitner'" <marcelo.leitner@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>
+Subject: Minor bugs in sctp_getsockopt()
+Thread-Topic: Minor bugs in sctp_getsockopt()
+Thread-Index: AdYutkRgUgUY6MdaR2Ggkk9vFBykug==
+Date:   Wed, 20 May 2020 14:57:07 +0000
+Message-ID: <a91c8461b73b499593d014e3fcadce71@AcuMS.aculab.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9992a1fe768a0b1e9bb9470d2728ba25dbe042db.camel@perches.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, May 14, 2020 at 04:51:26AM -0700, Joe Perches wrote:
-> > Mostly to keep it symmetric with the sockopt.  I could probably remove
-> > a few arguments in the series if we want to be strict.
-> 
-> My preference would use strict and add
-> arguments only when necessary.
+I've found 2 minor bugs in sctp_getsockopt().
 
-In a few cases that would create confusion as the arguments are rather
-overloaded.  But for a lot of the cases where it doesn't and there isn't
-really much use for other arguments I've done that now.
+sctp_getsockopt_peer_auth_chunks() fails to allow for the header
+structure when checking the length of the user buffer.
+So it can write beyond the end of the user buffer.
+
+sctp_getsockopt_pr_streamstatus() fails to do the copy_to_user()
+when streamoute is NULL.
+
+I found these in the middle of writing another patch.
+So generating the patch is tricky.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
