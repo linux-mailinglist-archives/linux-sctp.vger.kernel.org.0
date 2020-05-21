@@ -2,119 +2,74 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9C81DC81F
-	for <lists+linux-sctp@lfdr.de>; Thu, 21 May 2020 10:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81FB71DC8BD
+	for <lists+linux-sctp@lfdr.de>; Thu, 21 May 2020 10:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728446AbgEUIBi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Thu, 21 May 2020 04:01:38 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:44811 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728151AbgEUIBi (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 21 May 2020 04:01:38 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-186-4FoxtkRnOIu_oKGM1EEfFg-1; Thu, 21 May 2020 09:01:34 +0100
-X-MC-Unique: 4FoxtkRnOIu_oKGM1EEfFg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Thu, 21 May 2020 09:01:33 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Thu, 21 May 2020 09:01:33 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Christoph Hellwig' <hch@lst.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-CC:     Eric Dumazet <edumazet@google.com>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "Vlad Yasevich" <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        "Marcelo Ricardo Leitner" <marcelo.leitner@gmail.com>,
-        Jon Maloy <jmaloy@redhat.com>,
-        Ying Xue <ying.xue@windriver.com>,
-        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
-        "linux-afs@lists.infradead.org" <linux-afs@lists.infradead.org>,
-        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
-        "cluster-devel@redhat.com" <cluster-devel@redhat.com>,
-        "ocfs2-devel@oss.oracle.com" <ocfs2-devel@oss.oracle.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>,
-        "rds-devel@oss.oracle.com" <rds-devel@oss.oracle.com>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>
-Subject: RE: remove kernel_setsockopt and kernel_getsockopt v2
-Thread-Topic: remove kernel_setsockopt and kernel_getsockopt v2
-Thread-Index: AQHWL0EWFDRlmpM/90uRt9jvD36P/KiyKtMA
-Date:   Thu, 21 May 2020 08:01:33 +0000
-Message-ID: <138a17dfff244c089b95f129e4ea2f66@AcuMS.aculab.com>
-References: <20200520195509.2215098-1-hch@lst.de>
-In-Reply-To: <20200520195509.2215098-1-hch@lst.de>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1728671AbgEUIer (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 21 May 2020 04:34:47 -0400
+Received: from verein.lst.de ([213.95.11.211]:53663 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728571AbgEUIer (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Thu, 21 May 2020 04:34:47 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 2946668BEB; Thu, 21 May 2020 10:34:43 +0200 (CEST)
+Date:   Thu, 21 May 2020 10:34:42 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc:     David Miller <davem@davemloft.net>, hch@lst.de, kuba@kernel.org,
+        edumazet@google.com, kuznet@ms2.inr.ac.ru, yoshfuji@linux-ipv6.org,
+        vyasevich@gmail.com, nhorman@tuxdriver.com, jmaloy@redhat.com,
+        ying.xue@windriver.com, drbd-dev@lists.linbit.com,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-nvme@lists.infradead.org, target-devel@vger.kernel.org,
+        linux-afs@lists.infradead.org, linux-cifs@vger.kernel.org,
+        cluster-devel@redhat.com, ocfs2-devel@oss.oracle.com,
+        netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
+        ceph-devel@vger.kernel.org, rds-devel@oss.oracle.com,
+        linux-nfs@vger.kernel.org
+Subject: Re: [PATCH 31/33] sctp: add sctp_sock_set_nodelay
+Message-ID: <20200521083442.GA7771@lst.de>
+References: <20200520195509.2215098-1-hch@lst.de> <20200520195509.2215098-32-hch@lst.de> <20200520231001.GU2491@localhost.localdomain> <20200520.162355.2212209708127373208.davem@davemloft.net> <20200520233913.GV2491@localhost.localdomain>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200520233913.GV2491@localhost.localdomain>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Christoph Hellwig
-> Sent: 20 May 2020 20:55
+On Wed, May 20, 2020 at 08:39:13PM -0300, Marcelo Ricardo Leitner wrote:
+> On Wed, May 20, 2020 at 04:23:55PM -0700, David Miller wrote:
+> > From: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+> > Date: Wed, 20 May 2020 20:10:01 -0300
+> > 
+> > > The duplication with sctp_setsockopt_nodelay() is quite silly/bad.
+> > > Also, why have the 'true' hardcoded? It's what dlm uses, yes, but the
+> > > API could be a bit more complete than that.
+> > 
+> > The APIs are being designed based upon what in-tree users actually
+> > make use of.  We can expand things later if necessary.
 > 
-> this series removes the kernel_setsockopt and kernel_getsockopt
-> functions, and instead switches their users to small functions that
-> implement setting (or in one case getting) a sockopt directly using
-> a normal kernel function call with type safety and all the other
-> benefits of not having a function call.
+> Sometimes expanding things later can be though, thus why the worry.
+> But ok, I get it. Thanks.
 > 
-> In some cases these functions seem pretty heavy handed as they do
-> a lock_sock even for just setting a single variable, but this mirrors
-> the real setsockopt implementation unlike a few drivers that just set
-> set the fields directly.
+> The comment still applies, though. (re the duplication)
 
-How much does this increase the kernel code by?
+Where do you see duplication?
 
-You are also replicating a lot of code making it more
-difficult to maintain.
+sctp_setsockopt_nodelay does the following things:
 
-I don't think the performance of an socket option code
-really matters - it is usually done once when a socket
-is initialised and the other costs of establishing a
-connection will dominate.
+ - verifies optlen, returns -EINVAL if it doesn't match
+ - calls get_user, returns -EFAULT on error
+ - converts the value from get_user to a boolean and assigns it
+   to sctp_sk(sk)->nodelay
+ - returns 0.
 
-Pulling the user copies outside the [gs]etsocksopt switch
-statement not only reduces the code size (source and object)
-and trivially allows kernel_[sg]sockopt() to me added to
-the list of socket calls.
+sctp_sock_set_nodelay does:
 
-It probably isn't possible to pull the usercopies right
-out into the syscall wrapper because of some broken
-requests.
-
-I worried about whether getsockopt() should read the entire
-user buffer first. SCTP needs the some of it often (including a
-sockaddr_storage in one case), TCP needs it once.
-However the cost of reading a few words is small, and a big
-buffer probably needs setting to avoid leaking kernel
-memory if the structure has holes or fields that don't get set.
-Reading from userspace solves both issues.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+ - call lock_sock
+ - assign true to sctp_sk(sk)->nodelay
+ - call release_sock
+ - does not return an error code
