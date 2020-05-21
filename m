@@ -2,93 +2,141 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B621DC306
-	for <lists+linux-sctp@lfdr.de>; Thu, 21 May 2020 01:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9EFB1DC378
+	for <lists+linux-sctp@lfdr.de>; Thu, 21 May 2020 02:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727819AbgETXjT (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 20 May 2020 19:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
+        id S1726819AbgEUAR3 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 20 May 2020 20:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726697AbgETXjS (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 20 May 2020 19:39:18 -0400
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B934C061A0E;
-        Wed, 20 May 2020 16:39:17 -0700 (PDT)
-Received: by mail-qt1-x841.google.com with SMTP id m44so4094210qtm.8;
-        Wed, 20 May 2020 16:39:17 -0700 (PDT)
+        with ESMTP id S1726619AbgEUAR3 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 20 May 2020 20:17:29 -0400
+Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21312C061A0E;
+        Wed, 20 May 2020 17:17:29 -0700 (PDT)
+Received: by mail-qk1-x741.google.com with SMTP id f13so5642881qkh.2;
+        Wed, 20 May 2020 17:17:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=usgVE9wGsTmR3Ul4KmzuJXmMmNEoxcCV+K4pKCDDnEw=;
-        b=FsipvN1GuGM9UbR7VsW4XkubLiUqC8Dqtu7L937s2qadx/bxbgPsMl9fWYiJlizujH
-         c9qxkVWOxpVMlAT7nNkHzdOL6XRXbCOpar1C4DQC47Sws3swXaaqI9YAuQyLubSZ0OK0
-         rRko/wzRAKCkIy15w/nWQBRVBLwMvtGjJCE2gisIPTfPY2zdgnpj1FMzVNCnVI10QH79
-         YBAX7tezDRj2K0TOr70GJg9yP9kYgu14VxvOjzih8uvep1FVSB5EojcU0QtKwd0T+IdB
-         hjRKTNxmgJ9liw0vUGr1peJpzaW/R/f+lsktCjxXTndLxOoBi3/frCJqvNi3QaPXR6GX
-         kpaA==
+        bh=6VjbEhQDFU1/kcyRd3meryKPmdnEABgZ4qDJb1UqetE=;
+        b=NOJud/lsJqiKVSGbBL8wenpgaXOIhEsVA2iHONC6Z+Guz4miHbzU8z6fZRKt/pjjfm
+         S6pMI6iBicZe/Hrq9ELWEF8SohHAHW6e7iihOhNd6eVYC8IXnMNceAvQ327cK+7QTuN3
+         +WqKXpgZfikGe1hVeIZrdNGqR66r5nNbjw5jTEG4v+iArcpxwbK7/+wuntubBLAsLT6I
+         UmosiK6sI26diUMzsq90bttl716MSGQnowHHQpJHzno6xEsM4tciHp+CpLt70a7NJ8oJ
+         MmOymIcYwH9YYzXSi7Z8yudFrlN+gni8r0Qy2VT2np62xr8DRqP/RzL/tHLZRLBziok0
+         n3NA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=usgVE9wGsTmR3Ul4KmzuJXmMmNEoxcCV+K4pKCDDnEw=;
-        b=NX+9uVe/yO0GL9KKvOXOHz5GefBwZRpFfy0UuHRq/9fs+d7Q54crmTq+eztKuFh4KV
-         mrzbWrwiEF2044382M3G9Q8ipjtasHXxaTgrRfrg1RYxTHCm7fS2H2ArcoYXKnToO3dE
-         Om5GFMxY/+u7KqgCb9kq2W2sZVymiitDmKy4DA3wEseC06UIt+1E1DK+wY4U3jydrwmv
-         LXqXEbW0BXFdo6Bm0kQ6Ryvi6DPK/2qKTmhxkiPfs4/05L4icxx3gP9RTEARQkq0U2pn
-         RQMMLV+aRGJoxOYKx6cq2unZSbgeV9mINAar97dF/XXoKCwgN0KU5W5FXpfdXXnNWSQd
-         Y8fw==
-X-Gm-Message-State: AOAM530kitqhp7j8IZQRRpzIFXJBDZpaIJprNSrFUZrdCEHBVWeplmTB
-        C59Pm4gBUHx/XTUg8i+HSa8=
-X-Google-Smtp-Source: ABdhPJzb0RQavdlFPdZ2esbonBQnAnxuJh+Wdn80ZrxdL0NcIMXKvb5xhinFWySzKcTGVqX7yVkgxA==
-X-Received: by 2002:ac8:1af3:: with SMTP id h48mr7625941qtk.371.1590017956516;
-        Wed, 20 May 2020 16:39:16 -0700 (PDT)
+        bh=6VjbEhQDFU1/kcyRd3meryKPmdnEABgZ4qDJb1UqetE=;
+        b=OzXRF6qSIvdexOdg1sgNdDtMGSYfBzDL5ZhSIy6N2L/xMYlx8KYye18MEkyeMjUeJ4
+         Jj77K3AV7HKznDVeuobGGChNHW9WiRzwLTjOmKwyxUmJdczlBcExylvKHTg3taAhG1Kz
+         Cl2CmybTU3AFwLO8FM1rlesvX35zUaIfHuruVDpv/A9y+gSqWMwr8/irIghsdFRe+890
+         vh+Romy2I/H7HAMVRExTXVbPi+f5/ZsCRB5u+sKTRlhHlVvIUs8GQagb7d6l7p13SQ/4
+         xdctfw1OzkmowK3umLfxxvTMXXVIhiTUlLjVKlruNeqzCSFVJVH0LVJQXkfkYTBFcpwn
+         e0cA==
+X-Gm-Message-State: AOAM531Y5b76rIC8Sg869yyFzKiqxe3F8J9CuJVG/cUZ05R511+yBoyn
+        OtrSKDSpZ9HUfsT8Lqxja8qk738wEL173A==
+X-Google-Smtp-Source: ABdhPJz+OlWSF0IkJyBW0ofYclhKPKOjs7+ka9IcVzynH1tZUWXdn5Ns7lr5YlGRN43Sqmy+npAwgw==
+X-Received: by 2002:ae9:f50f:: with SMTP id o15mr7791756qkg.177.1590020248272;
+        Wed, 20 May 2020 17:17:28 -0700 (PDT)
 Received: from localhost.localdomain ([168.181.48.225])
-        by smtp.gmail.com with ESMTPSA id z10sm3685208qtu.22.2020.05.20.16.39.15
+        by smtp.gmail.com with ESMTPSA id n5sm3508091qke.124.2020.05.20.17.17.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 May 2020 16:39:15 -0700 (PDT)
+        Wed, 20 May 2020 17:17:27 -0700 (PDT)
 Received: by localhost.localdomain (Postfix, from userid 1000)
-        id 43E1FC0DAC; Wed, 20 May 2020 20:39:13 -0300 (-03)
-Date:   Wed, 20 May 2020 20:39:13 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     David Miller <davem@davemloft.net>
-Cc:     hch@lst.de, kuba@kernel.org, edumazet@google.com,
-        kuznet@ms2.inr.ac.ru, yoshfuji@linux-ipv6.org, vyasevich@gmail.com,
-        nhorman@tuxdriver.com, jmaloy@redhat.com, ying.xue@windriver.com,
-        drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-nvme@lists.infradead.org,
-        target-devel@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-cifs@vger.kernel.org, cluster-devel@redhat.com,
-        ocfs2-devel@oss.oracle.com, netdev@vger.kernel.org,
-        linux-sctp@vger.kernel.org, ceph-devel@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-nfs@vger.kernel.org
-Subject: Re: [PATCH 31/33] sctp: add sctp_sock_set_nodelay
-Message-ID: <20200520233913.GV2491@localhost.localdomain>
-References: <20200520195509.2215098-1-hch@lst.de>
- <20200520195509.2215098-32-hch@lst.de>
- <20200520231001.GU2491@localhost.localdomain>
- <20200520.162355.2212209708127373208.davem@davemloft.net>
+        id 32EFEC0DAC; Wed, 20 May 2020 21:17:25 -0300 (-03)
+Date:   Wed, 20 May 2020 21:17:25 -0300
+From:   'Marcelo Ricardo Leitner' <marcelo.leitner@gmail.com>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        Neil Horman <nhorman@tuxdriver.com>
+Subject: Re: [PATCH net-next] sctp: Pull the user copies out of the
+ individual sockopt functions.
+Message-ID: <20200521001725.GW2491@localhost.localdomain>
+References: <fd94b5e41a7c4edc8f743c56a04ed2c9@AcuMS.aculab.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200520.162355.2212209708127373208.davem@davemloft.net>
+In-Reply-To: <fd94b5e41a7c4edc8f743c56a04ed2c9@AcuMS.aculab.com>
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, May 20, 2020 at 04:23:55PM -0700, David Miller wrote:
-> From: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-> Date: Wed, 20 May 2020 20:10:01 -0300
-> 
-> > The duplication with sctp_setsockopt_nodelay() is quite silly/bad.
-> > Also, why have the 'true' hardcoded? It's what dlm uses, yes, but the
-> > API could be a bit more complete than that.
-> 
-> The APIs are being designed based upon what in-tree users actually
-> make use of.  We can expand things later if necessary.
+On Wed, May 20, 2020 at 03:08:13PM +0000, David Laight wrote:
+...
+> Only SCTP_SOCKOPT_CONNECTX3 contains an indirect pointer.
+> It is also the only getsockopt() that wants to return a buffer
+> and an error code. It is also definitely abusing getsockopt().
+...
+> @@ -1375,11 +1350,11 @@ struct compat_sctp_getaddrs_old {
+>  #endif
+>  
+>  static int sctp_getsockopt_connectx3(struct sock *sk, int len,
+> -				     char __user *optval,
+> -				     int __user *optlen)
+> +				     struct sctp_getaddrs_old *param,
+> +				     int *optlen)
+>  {
+> -	struct sctp_getaddrs_old param;
+>  	sctp_assoc_t assoc_id = 0;
+> +	struct sockaddr *addrs;
+>  	int err = 0;
+>  
+>  #ifdef CONFIG_COMPAT
+> @@ -1388,29 +1363,28 @@ static int sctp_getsockopt_connectx3(struct sock *sk, int len,
+>  
+>  		if (len < sizeof(param32))
+>  			return -EINVAL;
+> -		if (copy_from_user(&param32, optval, sizeof(param32)))
+> -			return -EFAULT;
+> +		param32 = *(struct compat_sctp_getaddrs_old *)param;
+>  
+> -		param.assoc_id = param32.assoc_id;
+> -		param.addr_num = param32.addr_num;
+> -		param.addrs = compat_ptr(param32.addrs);
+> +		param->assoc_id = param32.assoc_id;
+> +		param->addr_num = param32.addr_num;
+> +		param->addrs = compat_ptr(param32.addrs);
+>  	} else
+>  #endif
+>  	{
+> -		if (len < sizeof(param))
+> +		if (len < sizeof(*param))
+>  			return -EINVAL;
+> -		if (copy_from_user(&param, optval, sizeof(param)))
+> -			return -EFAULT;
+>  	}
+>  
+> -	err = __sctp_setsockopt_connectx(sk, (struct sockaddr __user *)
+> -					 param.addrs, param.addr_num,
+> +	addrs = memdup_user(param->addrs, param->addr_num);
 
-Sometimes expanding things later can be though, thus why the worry.
-But ok, I get it. Thanks.
+I'm staring at this for a while now but I don't get this memdup_user.
+AFAICT, params->addrs is not __user anymore here, because
+sctp_getsockopt() copied the whole thing already, no?
+Also weird because it is being called from kernel_sctp_getsockopt(),
+which now has no knowledge of __user buffers.
+Maybe I didn't get something from the patch description.
 
-The comment still applies, though. (re the duplication)
+> +	if (IS_ERR(addrs))
+> +		return PTR_ERR(addrs);
+> +
+> +	err = __sctp_setsockopt_connectx(sk, addrs, param->addr_num,
+>  					 &assoc_id);
+> +	kfree(addrs);
+>  	if (err == 0 || err == -EINPROGRESS) {
+> -		if (copy_to_user(optval, &assoc_id, sizeof(assoc_id)))
+> -			return -EFAULT;
+> -		if (put_user(sizeof(assoc_id), optlen))
+> -			return -EFAULT;
+> +		*(sctp_assoc_t *)param = assoc_id;
+> +		*optlen = sizeof(assoc_id);
+>  	}
+>  
+>  	return err;
