@@ -2,24 +2,30 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81FB71DC8BD
-	for <lists+linux-sctp@lfdr.de>; Thu, 21 May 2020 10:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D301DC8E9
+	for <lists+linux-sctp@lfdr.de>; Thu, 21 May 2020 10:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728671AbgEUIer (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 21 May 2020 04:34:47 -0400
-Received: from verein.lst.de ([213.95.11.211]:53663 "EHLO verein.lst.de"
+        id S1728679AbgEUImb (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 21 May 2020 04:42:31 -0400
+Received: from verein.lst.de ([213.95.11.211]:53697 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728571AbgEUIer (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 21 May 2020 04:34:47 -0400
+        id S1728389AbgEUIma (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Thu, 21 May 2020 04:42:30 -0400
 Received: by verein.lst.de (Postfix, from userid 2407)
-        id 2946668BEB; Thu, 21 May 2020 10:34:43 +0200 (CEST)
-Date:   Thu, 21 May 2020 10:34:42 +0200
+        id 1D9C368BEB; Thu, 21 May 2020 10:42:25 +0200 (CEST)
+Date:   Thu, 21 May 2020 10:42:24 +0200
 From:   Christoph Hellwig <hch@lst.de>
 To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     David Miller <davem@davemloft.net>, hch@lst.de, kuba@kernel.org,
-        edumazet@google.com, kuznet@ms2.inr.ac.ru, yoshfuji@linux-ipv6.org,
-        vyasevich@gmail.com, nhorman@tuxdriver.com, jmaloy@redhat.com,
-        ying.xue@windriver.com, drbd-dev@lists.linbit.com,
+Cc:     Christoph Hellwig <hch@lst.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Jon Maloy <jmaloy@redhat.com>,
+        Ying Xue <ying.xue@windriver.com>, drbd-dev@lists.linbit.com,
         linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
         linux-nvme@lists.infradead.org, target-devel@vger.kernel.org,
         linux-afs@lists.infradead.org, linux-cifs@vger.kernel.org,
@@ -27,49 +33,60 @@ Cc:     David Miller <davem@davemloft.net>, hch@lst.de, kuba@kernel.org,
         netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
         ceph-devel@vger.kernel.org, rds-devel@oss.oracle.com,
         linux-nfs@vger.kernel.org
-Subject: Re: [PATCH 31/33] sctp: add sctp_sock_set_nodelay
-Message-ID: <20200521083442.GA7771@lst.de>
-References: <20200520195509.2215098-1-hch@lst.de> <20200520195509.2215098-32-hch@lst.de> <20200520231001.GU2491@localhost.localdomain> <20200520.162355.2212209708127373208.davem@davemloft.net> <20200520233913.GV2491@localhost.localdomain>
+Subject: Re: [PATCH 32/33] net: add a new bind_add method
+Message-ID: <20200521084224.GA7859@lst.de>
+References: <20200520195509.2215098-1-hch@lst.de> <20200520195509.2215098-33-hch@lst.de> <20200520230025.GT2491@localhost.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200520233913.GV2491@localhost.localdomain>
+In-Reply-To: <20200520230025.GT2491@localhost.localdomain>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, May 20, 2020 at 08:39:13PM -0300, Marcelo Ricardo Leitner wrote:
-> On Wed, May 20, 2020 at 04:23:55PM -0700, David Miller wrote:
-> > From: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-> > Date: Wed, 20 May 2020 20:10:01 -0300
-> > 
-> > > The duplication with sctp_setsockopt_nodelay() is quite silly/bad.
-> > > Also, why have the 'true' hardcoded? It's what dlm uses, yes, but the
-> > > API could be a bit more complete than that.
-> > 
-> > The APIs are being designed based upon what in-tree users actually
-> > make use of.  We can expand things later if necessary.
+On Wed, May 20, 2020 at 08:00:25PM -0300, Marcelo Ricardo Leitner wrote:
+> > +	if (err)
+> > +		return err;
+> > +
+> > +	lock_sock(sk);
+> > +	err = sctp_do_bind(sk, (union sctp_addr *)addr, af->sockaddr_len);
+> > +	if (!err)
+> > +		err = sctp_send_asconf_add_ip(sk, addr, 1);
 > 
-> Sometimes expanding things later can be though, thus why the worry.
-> But ok, I get it. Thanks.
+> Some problems here.
+> - addr may contain a list of addresses
+> - the addresses, then, are not being validated
+> - sctp_do_bind may fail, on which it requires some undoing
+>   (like sctp_bindx_add does)
+> - code duplication with sctp_setsockopt_bindx.
+
+sctp_do_bind and thus this function only support a single address, as
+that is the only thing that the DLM code requires.  I could move the
+user copy out of sctp_setsockopt_bindx and reuse that, but it is a
+rather rcane API.
+
 > 
-> The comment still applies, though. (re the duplication)
+> This patch will conflict with David's one,
+> [PATCH net-next] sctp: Pull the user copies out of the individual sockopt functions.
 
-Where do you see duplication?
+Do you have a link?  A quick google search just finds your mail that
+I'm replying to.
 
-sctp_setsockopt_nodelay does the following things:
+> (I'll finish reviewing it in the sequence)
+> 
+> AFAICT, this patch could reuse/build on his work in there. The goal is
+> pretty much the same and would avoid the issues above.
+> 
+> This patch could, then, point the new bind_add proto op to the updated
+> sctp_setsockopt_bindx almost directly.
+> 
+> Question then is: dlm never removes an addr from the bind list. Do we
+> want to add ops for both? Or one that handles both operations?
+> Anyhow, having the add operation but not the del seems very weird to
+> me.
 
- - verifies optlen, returns -EINVAL if it doesn't match
- - calls get_user, returns -EFAULT on error
- - converts the value from get_user to a boolean and assigns it
-   to sctp_sk(sk)->nodelay
- - returns 0.
-
-sctp_sock_set_nodelay does:
-
- - call lock_sock
- - assign true to sctp_sk(sk)->nodelay
- - call release_sock
- - does not return an error code
+We generally only add operations for things that we actually use.
+bind_del is another logical op, but we can trivially add that when we
+need it.
