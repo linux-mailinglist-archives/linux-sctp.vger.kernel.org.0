@@ -2,29 +2,36 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D001DC98D
-	for <lists+linux-sctp@lfdr.de>; Thu, 21 May 2020 11:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 817F01DCB3D
+	for <lists+linux-sctp@lfdr.de>; Thu, 21 May 2020 12:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728750AbgEUJL6 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 21 May 2020 05:11:58 -0400
-Received: from verein.lst.de ([213.95.11.211]:53831 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728545AbgEUJL6 (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 21 May 2020 05:11:58 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id DBA5368C4E; Thu, 21 May 2020 11:11:50 +0200 (CEST)
-Date:   Thu, 21 May 2020 11:11:50 +0200
-From:   'Christoph Hellwig' <hch@lst.de>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     'Christoph Hellwig' <hch@lst.de>,
-        "David S. Miller" <davem@davemloft.net>,
+        id S1728922AbgEUKqi convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Thu, 21 May 2020 06:46:38 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:54833 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728720AbgEUKqi (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Thu, 21 May 2020 06:46:38 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-221-qFd0NAKZNGeARFK-F-oKaQ-1; Thu, 21 May 2020 11:46:34 +0100
+X-MC-Unique: qFd0NAKZNGeARFK-F-oKaQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Thu, 21 May 2020 11:46:33 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Thu, 21 May 2020 11:46:33 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Christoph Hellwig' <hch@lst.de>
+CC:     "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Eric Dumazet <edumazet@google.com>,
         Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
         Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
         Vlad Yasevich <vyasevich@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "Marcelo Ricardo Leitner" <marcelo.leitner@gmail.com>,
         Jon Maloy <jmaloy@redhat.com>,
         Ying Xue <ying.xue@windriver.com>,
         "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
@@ -41,57 +48,59 @@ Cc:     'Christoph Hellwig' <hch@lst.de>,
         "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>,
         "rds-devel@oss.oracle.com" <rds-devel@oss.oracle.com>,
         "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>
-Subject: Re: remove kernel_setsockopt and kernel_getsockopt v2
-Message-ID: <20200521091150.GA8401@lst.de>
-References: <20200520195509.2215098-1-hch@lst.de> <138a17dfff244c089b95f129e4ea2f66@AcuMS.aculab.com>
+Subject: RE: remove kernel_setsockopt and kernel_getsockopt v2
+Thread-Topic: remove kernel_setsockopt and kernel_getsockopt v2
+Thread-Index: AQHWL0EWFDRlmpM/90uRt9jvD36P/KiyKtMAgAAFoACAACnvQA==
+Date:   Thu, 21 May 2020 10:46:33 +0000
+Message-ID: <b7c7cf98999f4167b821f4425896e4e8@AcuMS.aculab.com>
+References: <20200520195509.2215098-1-hch@lst.de>
+ <138a17dfff244c089b95f129e4ea2f66@AcuMS.aculab.com>
+ <20200521091150.GA8401@lst.de>
+In-Reply-To: <20200521091150.GA8401@lst.de>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <138a17dfff244c089b95f129e4ea2f66@AcuMS.aculab.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, May 21, 2020 at 08:01:33AM +0000, David Laight wrote:
-> How much does this increase the kernel code by?
-
- 44 files changed, 660 insertions(+), 843 deletions(-)
-
-
-> You are also replicating a lot of code making it more
-> difficult to maintain.
-
-No, I specifically don't.
-
-> I don't think the performance of an socket option code
-> really matters - it is usually done once when a socket
-> is initialised and the other costs of establishing a
-> connection will dominate.
+From: 'Christoph Hellwig'
+> Sent: 21 May 2020 10:12
+...
+> > I worried about whether getsockopt() should read the entire
+> > user buffer first. SCTP needs the some of it often (including a
+> > sockaddr_storage in one case), TCP needs it once.
+> > However the cost of reading a few words is small, and a big
+> > buffer probably needs setting to avoid leaking kernel
+> > memory if the structure has holes or fields that don't get set.
+> > Reading from userspace solves both issues.
 > 
-> Pulling the user copies outside the [gs]etsocksopt switch
-> statement not only reduces the code size (source and object)
-> and trivially allows kernel_[sg]sockopt() to me added to
-> the list of socket calls.
-> 
-> It probably isn't possible to pull the usercopies right
-> out into the syscall wrapper because of some broken
-> requests.
+> As mention in the thread on the last series:  That was my first idea, but
+> we have way to many sockopts, especially in obscure protocols that just
+> hard code the size.  The chance of breaking userspace in a way that can't
+> be fixed without going back to passing user pointers to get/setsockopt
+> is way to high to commit to such a change unfortunately.
 
-Please read through the previous discussion of the rationale and the
-options.  We've been there before.
+Right the syscall stubs probably can't do it.
+But the per-protocol ones can for the main protocols.
 
-> I worried about whether getsockopt() should read the entire
-> user buffer first. SCTP needs the some of it often (including a
-> sockaddr_storage in one case), TCP needs it once.
-> However the cost of reading a few words is small, and a big
-> buffer probably needs setting to avoid leaking kernel
-> memory if the structure has holes or fields that don't get set.
-> Reading from userspace solves both issues.
+I posted a patch for SCTP yesterday that removes 800 lines
+of source and 8k of object code.
+Even that needs a horrid bodge for one request where the
+length returned has to be less than the data copied!
 
-As mention in the thread on the last series:  That was my first idea, but
-we have way to many sockopts, especially in obscure protocols that just
-hard code the size.  The chance of breaking userspace in a way that can't
-be fixed without going back to passing user pointers to get/setsockopt
-is way to high to commit to such a change unfortunately.
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
