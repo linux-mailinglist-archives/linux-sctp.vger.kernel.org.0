@@ -2,135 +2,234 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E18DD1DD02B
-	for <lists+linux-sctp@lfdr.de>; Thu, 21 May 2020 16:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B21151DD202
+	for <lists+linux-sctp@lfdr.de>; Thu, 21 May 2020 17:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728025AbgEUOg6 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 21 May 2020 10:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
+        id S1728290AbgEUPhe (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 21 May 2020 11:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726973AbgEUOg6 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 21 May 2020 10:36:58 -0400
-Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E374C061A0E;
-        Thu, 21 May 2020 07:36:58 -0700 (PDT)
-Received: by mail-qt1-x843.google.com with SMTP id x12so5596697qts.9;
-        Thu, 21 May 2020 07:36:58 -0700 (PDT)
+        with ESMTP id S1727030AbgEUPhd (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 21 May 2020 11:37:33 -0400
+Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767A6C061A0E;
+        Thu, 21 May 2020 08:37:33 -0700 (PDT)
+Received: by mail-qv1-xf42.google.com with SMTP id p4so3237046qvr.10;
+        Thu, 21 May 2020 08:37:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=rTic8LQJZFzI9/jLbTxrKbE0PiuGsUQcSqnWefT5qHo=;
-        b=O9lYBNkCwkq13oToI9CFUojkTnClG+S8afJo3cKGe+79myunVFwo5A3q1+PPRTL8eA
-         nCHFyEmSNs8SrEkDBLbmKUakCoZpOvJGJVC1veNRXiDwfMKvdOcv0DVbHYpAPvXmfaBq
-         YLV1RTtB0QxY/T/WzQ52lDoyVPKLxT+7JjnsVSJ0zWkw1UoJ3x4CtGVTmqYYswws6wWZ
-         OcP4+zUPa1MIakwYSUYPG6zD+eMQiy9wO4+ASkXJ+Y7Hv3mMGFTsaKQWcZ69kqF+uSF6
-         paw5BHFeptRw4o67vELDOjagCfczGPFYFpNslD3AaMpPA3KAtI9lt5VF4dgjWkiCrET2
-         nxeA==
+        bh=W0srFBoV+cvF6vEsz7+qpgvyMaMTlwfBwvV9plBhvrw=;
+        b=kp/lTn/w2Vk4bzuNOWy1ikgyCX5gSpqWJoebfcUyQ/G2dBjihqxLjyUNZWQpKzkBKf
+         eFPcncJKyMSyPh2DgINQ6MzVJiba7jgbxs9gVoU/BG6eoYbVAWdbzMbnMctil7nydJCk
+         9z43exIGRN0PY9RQdxGlnsNYEkpot1yT5AClLUGlM4Qqz/d9HVPJLC0eEuz9E1HWcY8N
+         DXKkbhEBZl1jLwyDgNq8nX/j+uuLhhxw/3fZHEJybkzV3xzDpQx8EXHiFcPZJhTpDfhe
+         5ulI0IxgeB6yWRLVZ1hIA+v/jPYYgSnEuilP9UeGgLeGmXwekTQdY+SGrU80Hf1iwtCf
+         UOFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=rTic8LQJZFzI9/jLbTxrKbE0PiuGsUQcSqnWefT5qHo=;
-        b=OUo2t3w0C/XVZscsKlseFnQvJaT7iV9w8dCFnXl/EEtFBdAzpzP0Vz37XiVba9SGuN
-         ywjJNU5KTytLL1eusUfi6frS0axPLIT4giBYkWwmLlemYg6pPQSoOw4VE7BFTz0F8MF7
-         7+GZrhSSW5qtwLcAct66mIKa16p+BFaobpFUEc7jkK927gP2z6p9zHQ2Mq+0EscKSUqG
-         uljhOexlf4KYp7As9fuuIXZlMPYVod2+clKobg4vRBianfTm4UJx16TaD5oc1BZa8Ujl
-         hYQF5mJt04bbkE5JboVCIqTaOYAkUUG0XRfUZLrhmvJp2pVSQpwi277Xy+JqrBcFEv/z
-         VUDQ==
-X-Gm-Message-State: AOAM533STBTf4Twj2l57ExhmNUwn+btj7LE1ERM3hyrWW+U4vzt7golA
-        ACgiLeWMSW0AIOD+mal463foFfNw4cChlA==
-X-Google-Smtp-Source: ABdhPJy4tKWDx/q/XFw5AKacPo5UtNJ3Z9vyMt9AvSfq3tpNMmgurmJleXX7jSj63qxTIU2CaURrZQ==
-X-Received: by 2002:ac8:547:: with SMTP id c7mr10769135qth.168.1590071817080;
-        Thu, 21 May 2020 07:36:57 -0700 (PDT)
-Received: from localhost.localdomain ([2001:1284:f013:b7f5:289f:a703:e466:2a27])
-        by smtp.gmail.com with ESMTPSA id m7sm5012648qti.6.2020.05.21.07.36.55
+        bh=W0srFBoV+cvF6vEsz7+qpgvyMaMTlwfBwvV9plBhvrw=;
+        b=Bxw6v5HM3Ug6tscGLpW056FRYKuc9aruljVRvz+EEFA4tZhnBH5sGpjSc17MI3Modq
+         IuY9sH3Wb0m40bRLg3BlWkQwaw/j0DVj3G3+Ske6gNYvAMBSKeI7VIwC+4PlwUG/wbcP
+         YiAlKe730lZt9V7JSWMBUTuxSEZFJ3kv96cqBHvWvmrwjejv8lEJW4li6Rco7HA53mMH
+         oxWEHrITR9ijW/drlwgMuuLMw/zjd57CKRVFeWU39FQVlGvx4VVuwoExGn7wOdtLa86d
+         ajqbWj7HepdpOYXMg9A+IOqf6WC4eByl8hewVlMSXa6oJ4w7Y/rCLHvOzmxb7jwLB28K
+         qmeA==
+X-Gm-Message-State: AOAM532TqF8T9qANX66wTrNAZwISaBYWCqAjc2bETSD/pLTNv+Lollt6
+        DGRxHYvAehEDU8GCxTfydkqJfayXo8BPPw==
+X-Google-Smtp-Source: ABdhPJyXo+SPJ+3nnTpP5Q6dsWvK/UPjFHjCdo7+FZ8/hjRU6mfkzE31qSCSq1qu5jXnAsmN2rBG8Q==
+X-Received: by 2002:a05:6214:1543:: with SMTP id t3mr10961112qvw.122.1590075452483;
+        Thu, 21 May 2020 08:37:32 -0700 (PDT)
+Received: from localhost.localdomain ([168.181.48.225])
+        by smtp.gmail.com with ESMTPSA id k3sm5118461qkb.112.2020.05.21.08.37.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 May 2020 07:36:56 -0700 (PDT)
+        Thu, 21 May 2020 08:37:31 -0700 (PDT)
 Received: by localhost.localdomain (Postfix, from userid 1000)
-        id B0E5BC0BEB; Thu, 21 May 2020 11:36:53 -0300 (-03)
-Date:   Thu, 21 May 2020 11:36:53 -0300
+        id 44A40C0BEB; Thu, 21 May 2020 12:37:29 -0300 (-03)
+Date:   Thu, 21 May 2020 12:37:29 -0300
 From:   'Marcelo Ricardo Leitner' <marcelo.leitner@gmail.com>
 To:     David Laight <David.Laight@aculab.com>
 Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        Neil Horman <nhorman@tuxdriver.com>
+        Neil Horman <nhorman@tuxdriver.com>,
+        Christoph Hellwig <hch@lst.de>
 Subject: Re: [PATCH net-next] sctp: Pull the user copies out of the
  individual sockopt functions.
-Message-ID: <20200521143653.GA74252@localhost.localdomain>
+Message-ID: <20200521153729.GB74252@localhost.localdomain>
 References: <fd94b5e41a7c4edc8f743c56a04ed2c9@AcuMS.aculab.com>
- <20200521001725.GW2491@localhost.localdomain>
- <e777874fbd0e4ccb813e08145f3c3359@AcuMS.aculab.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e777874fbd0e4ccb813e08145f3c3359@AcuMS.aculab.com>
+In-Reply-To: <fd94b5e41a7c4edc8f743c56a04ed2c9@AcuMS.aculab.com>
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, May 21, 2020 at 07:32:14AM +0000, David Laight wrote:
-> From: 'Marcelo Ricardo Leitner'
-> > Sent: 21 May 2020 01:17
-> > On Wed, May 20, 2020 at 03:08:13PM +0000, David Laight wrote:
-> > ...
-> > > Only SCTP_SOCKOPT_CONNECTX3 contains an indirect pointer.
-> > > It is also the only getsockopt() that wants to return a buffer
-> > > and an error code. It is also definitely abusing getsockopt().
-> > ...
-> > > @@ -1375,11 +1350,11 @@ struct compat_sctp_getaddrs_old {
-> > >  #endif
-> > >
-> > >  static int sctp_getsockopt_connectx3(struct sock *sk, int len,
-> > > -				     char __user *optval,
-> > > -				     int __user *optlen)
-> > > +				     struct sctp_getaddrs_old *param,
-> > > +				     int *optlen)
-> > >  {
-> > > -	struct sctp_getaddrs_old param;
-> > >  	sctp_assoc_t assoc_id = 0;
-> > > +	struct sockaddr *addrs;
-> > >  	int err = 0;
-> > >
-> > >  #ifdef CONFIG_COMPAT
-> ..
-> > >  	} else
-> > >  #endif
-> > >  	{
-> > > -		if (len < sizeof(param))
-> > > +		if (len < sizeof(*param))
-> > >  			return -EINVAL;
-> > > -		if (copy_from_user(&param, optval, sizeof(param)))
-> > > -			return -EFAULT;
-> > >  	}
-> > >
-> > > -	err = __sctp_setsockopt_connectx(sk, (struct sockaddr __user *)
-> > > -					 param.addrs, param.addr_num,
-> > > +	addrs = memdup_user(param->addrs, param->addr_num);
-> > 
-> > I'm staring at this for a while now but I don't get this memdup_user.
-> > AFAICT, params->addrs is not __user anymore here, because
-> > sctp_getsockopt() copied the whole thing already, no?
-> > Also weird because it is being called from kernel_sctp_getsockopt(),
-> > which now has no knowledge of __user buffers.
-> > Maybe I didn't get something from the patch description.
-> 
-> The connectx3 sockopt buffer contains a pointer to the user buffer
-> that contains the actual addresses.
-> So a second copy_from_user() is needed.
+On Wed, May 20, 2020 at 03:08:13PM +0000, David Laight wrote:
 
-Oh, I see now. Thanks.
+I wish we could split this patch into multiple ones. Like, one for
+each sockopt, but it doesn't seem possible. It's tough to traverse
+trough 5k lines long patch. :-(
+
+> Since SCTP rather abuses getsockopt() to perform operations and uses
+> the user buffer to select the association to get values from
+> the sctp_getsockopt() has to do a Read-Modify-Write on the user buffer.
+> 
+> An on-stack buffer is used for short requests this allows the length
+> check for simple getsockopt requests to be done by the wrapper.
+> 
+> Signed-off-by: David Laight <david.laight@aculab.com>
+> 
+> --
+> 
+> While this patch might make it easier to export the functionality
+> to other kernel modules, it doesn't make that change.
+> 
+> Only SCTP_SOCKOPT_CONNECTX3 contains an indirect pointer.
+> It is also the only getsockopt() that wants to return a buffer
+> and an error code. It is also definitely abusing getsockopt().
+
+It should have been a linear buffer. The secondary __user access is
+way worse than having the application to do another allocation. But
+too late..
 
 > 
-> This does mean that this option can only be actioned from userspace.
+> The SCTP_SOCKOPT_PEELOFF getsockopt() (another abuse) also wants to
+> return a positive value and a buffer (containing the same value) on
+> success.
+
+Unnecessary, agree, but too late for changing that.
+
 > 
-> Kernel code can get the same functionality using one of the
-> other interfaces to connectx().
+> Both these stop the sctp_getsockopt_xxx() functions returning
+> 'error or length'.
 > 
-> 	David
+> There is also real fubar of SCTP_GET_LOCAL_ADDRS which has to
+> return the wrong length 'for historic compatibility'.
+> Although I'm not sure how portable that makes applications.
 > 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+> Reduces the code by about 800 lines and 8k bytes (x86-64).
+> Most of the changed lines are replacing x.y with x->y and
+> simplifying error paths.
+
+This cleanup is something that I've been longing for a while now.
+Avoiding these repetitive user space handling is very welcomed.
+Also, I think this is pretty much aligned with Christoph's goal as
+well and can make the patches in his series easier/cleaner.
+
+Other than the comments here, this patch LGTM.
+
 > 
+> Passes 'sparse' and at least some options work.
+
+Assuming a v2 is coming, to appease the buildbot :)
+
+...
+> +static int sctp_setsockopt(struct sock *sk, int level, int optname,
+> +			   char __user *u_optval, unsigned int optlen)
+> +{
+> +	u64 param_buf[8];
+> +	int retval = 0;
+> +	void *optval;
+> +
+> +	pr_debug("%s: sk:%p, optname:%d\n", __func__, sk, optname);
+> +
+> +	/* I can hardly begin to describe how wrong this is.  This is
+> +	 * so broken as to be worse than useless.  The API draft
+> +	 * REALLY is NOT helpful here...  I am not convinced that the
+> +	 * semantics of setsockopt() with a level OTHER THAN SOL_SCTP
+> +	 * are at all well-founded.
+> +	 */
+> +	if (level != SOL_SCTP) {
+> +		struct sctp_af *af = sctp_sk(sk)->pf->af;
+> +		return af->setsockopt(sk, level, optname, u_optval, optlen);
+> +	}
+> +
+> +	if (optlen < sizeof (param_buf)) {
+> +		if (copy_from_user(&param_buf, u_optval, optlen))
+> +			return -EFAULT;
+> +		optval = param_buf;
+> +	} else {
+> +		if (optlen > USHRT_MAX)
+> +			optlen = USHRT_MAX;
+
+There are functions that can work with and expect buffers larger than
+that, such as sctp_setsockopt_auth_key:
+@@ -3693,10 +3588,6 @@ static int sctp_setsockopt_auth_key(struct sock *sk,
+ 	 */
+ 	optlen = min_t(unsigned int, optlen, USHRT_MAX + sizeof(*authkey));
+
+and sctp_setsockopt_reset_streams:
+        /* srs_number_streams is u16, so optlen can't be bigger than this. */
+        optlen = min_t(unsigned int, optlen, USHRT_MAX +
+                                             sizeof(__u16) * sizeof(*params));
+
+Need to cope with those here.
+
+> +		optval = memdup_user(u_optval, optlen);
+> +		if (IS_ERR(optval))
+> +			return PTR_ERR(optval);
+> +	}
+> +
+> +	retval = kernel_sctp_setsockopt(sk, optname, optval, optlen);
+> +	if (optval != param_buf)
+> +		kfree(optval);
+> +
+>  	return retval;
+>  }
+>  
+...
+> +static int sctp_getsockopt(struct sock *sk, int level, int optname,
+> +			   char __user *u_optval, int __user *u_optlen)
+> +{
+> +	u64 param_buf[8];
+> +	int retval = 0;
+> +	void *optval;
+> +	int len, optlen;
+> +
+> +	pr_debug("%s: sk:%p, optname:%d\n", __func__, sk, optname);
+> +
+> +	/* I can hardly begin to describe how wrong this is.  This is
+> +	 * so broken as to be worse than useless.  The API draft
+> +	 * REALLY is NOT helpful here...  I am not convinced that the
+> +	 * semantics of getsockopt() with a level OTHER THAN SOL_SCTP
+> +	 * are at all well-founded.
+> +	 */
+> +	if (level != SOL_SCTP) {
+> +		struct sctp_af *af = sctp_sk(sk)->pf->af;
+> +
+> +		retval = af->getsockopt(sk, level, optname, u_optval, u_optlen);
+> +		return retval;
+> +	}
+> +
+> +	if (get_user(len, u_optlen))
+> +		return -EFAULT;
+> +
+> +	if (len < 0)
+> +		return -EINVAL;
+> +
+> +	/* Many options are RMW so we must read in the user buffer.
+> +	 * For safetly we need to initialise it to avoid leaking
+> +	 * kernel data - the copy does this as well.
+> +	 * To simplify the processing of simple options the buffer length
+> +	 * check is repeated after the request is actioned.
+> +	 */
+> +	if (len < sizeof (param_buf)) {
+> +		/* Zero first bytes to stop KASAN complaining. */
+> +		param_buf[0] = 0;
+> +		if (copy_from_user(&param_buf, u_optval, len))
+> +			return -EFAULT;
+> +		optval = param_buf;
+> +	} else {
+> +		if (len > USHRT_MAX)
+> +			len = USHRT_MAX;
+
+This limit is not present today for sctp_getsockopt_local_addrs()
+calls (there may be others).  As is, it will limit it and may mean
+that it can't dump all addresses.  We have discussed this and didn't
+come to a conclusion on what is a safe limit to use here, at least not
+on that time.
