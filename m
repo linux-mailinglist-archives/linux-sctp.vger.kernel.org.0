@@ -2,115 +2,77 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A191DD525
-	for <lists+linux-sctp@lfdr.de>; Thu, 21 May 2020 19:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E01431DE178
+	for <lists+linux-sctp@lfdr.de>; Fri, 22 May 2020 10:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730513AbgEURto (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 21 May 2020 13:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58152 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730508AbgEURtn (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 21 May 2020 13:49:43 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D8DC061A0E;
-        Thu, 21 May 2020 10:49:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=hlg9PhtMq4qIvbnOvkvQOtSSajyIqeX7z/RthfY2owo=; b=T3WARM4mmcg3ZRBQOB5go26p1v
-        +OmSgw7E3eADgfitkfZx3szj6tofbpGmVbt7keJ8Po8okMMKzHDAaFCjlrunfy/2d1a264iOR8P+3
-        eFZifa133Qend0A0ayxlok0TOwWfdBdiBZTQW1o3/MOfGCCXBIsy3VNtDJYgRoDUR5LFhBrSHNpce
-        2Gpti01hYsbU4WRfgqtGK/tUSXET88X+fM909WC/pYTYHjWby+MWdE3FQ0ClEOgDaixeDJxnGllh/
-        3nxFHGJiJfRYJLttyFiLP9d/Kl7GNdr1FbMgd3oJZ1Av7+AI2hn/Rp+BISPvTu6ZrmDXoyU/m/vku
-        2IQTXV/Q==;
-Received: from [2001:4bb8:18c:5da7:c70:4a89:bc61:2] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jbpK6-0003UX-DF; Thu, 21 May 2020 17:49:38 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Vlad Yasevich <vyasevich@gmail.com>,
+        id S1728468AbgEVICQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Fri, 22 May 2020 04:02:16 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:38087 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728152AbgEVICP (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Fri, 22 May 2020 04:02:15 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-271-rF4uGb-jMuOP63oDQYxHmg-1; Fri, 22 May 2020 09:02:10 +0100
+X-MC-Unique: rF4uGb-jMuOP63oDQYxHmg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Fri, 22 May 2020 09:02:09 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Fri, 22 May 2020 09:02:09 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Christoph Hellwig' <hch@lst.de>,
+        Vlad Yasevich <vyasevich@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
+CC:     "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        linux-sctp@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH 49/49] sctp: pass a kernel pointer to sctp_setsockopt_pf_expose
-Date:   Thu, 21 May 2020 19:47:24 +0200
-Message-Id: <20200521174724.2635475-50-hch@lst.de>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200521174724.2635475-1-hch@lst.de>
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: RE: do a single memdup_user in sctp_setsockopt
+Thread-Topic: do a single memdup_user in sctp_setsockopt
+Thread-Index: AQHWL5hibpEyDKsV4UyRPKuzFFnyuaizvkKg
+Date:   Fri, 22 May 2020 08:02:09 +0000
+Message-ID: <348217b7a3e14c1fa4868e47362be9c5@AcuMS.aculab.com>
 References: <20200521174724.2635475-1-hch@lst.de>
+In-Reply-To: <20200521174724.2635475-1-hch@lst.de>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Use the kernel pointer that sctp_setsockopt has available instead of
-directly handling the user pointer.
+From: Christoph Hellwig
+> Sent: 21 May 2020 18:47
+> based on the review of Davids patch to do something similar I dusted off
+> the series I had started a few days ago to move the memdup_user or
+> copy_from_user from the inidividual sockopts into sctp_setsockopt,
+> which is done with one patch per option, so it might suit Marcelo's
+> taste a bit better.  I did not start any work on getsockopt.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- net/sctp/socket.c | 22 ++++++++--------------
- 1 file changed, 8 insertions(+), 14 deletions(-)
+I'm not sure that 49 patches is actually any easier to review.
+Most of the patches are just repetitions of the same change.
+If they were in different files it might be different.
 
-diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-index f9f4776b0bbfd..ec87ac9965a01 100644
---- a/net/sctp/socket.c
-+++ b/net/sctp/socket.c
-@@ -4378,33 +4378,27 @@ static int sctp_setsockopt_ecn_supported(struct sock *sk,
- }
- 
- static int sctp_setsockopt_pf_expose(struct sock *sk,
--				     char __user *optval,
-+				     struct sctp_assoc_value *params,
- 				     unsigned int optlen)
- {
--	struct sctp_assoc_value params;
- 	struct sctp_association *asoc;
- 	int retval = -EINVAL;
- 
--	if (optlen != sizeof(params))
--		goto out;
+If you try to do getsockopt() the same way it will be much
+more complicated - you have to know whether the called function
+did the copy_to_user() and then suppress it.
+
+	David
+
 -
--	if (copy_from_user(&params, optval, optlen)) {
--		retval = -EFAULT;
-+	if (optlen != sizeof(*params))
- 		goto out;
--	}
- 
--	if (params.assoc_value > SCTP_PF_EXPOSE_MAX)
-+	if (params->assoc_value > SCTP_PF_EXPOSE_MAX)
- 		goto out;
- 
--	asoc = sctp_id2assoc(sk, params.assoc_id);
--	if (!asoc && params.assoc_id != SCTP_FUTURE_ASSOC &&
-+	asoc = sctp_id2assoc(sk, params->assoc_id);
-+	if (!asoc && params->assoc_id != SCTP_FUTURE_ASSOC &&
- 	    sctp_style(sk, UDP))
- 		goto out;
- 
- 	if (asoc)
--		asoc->pf_expose = params.assoc_value;
-+		asoc->pf_expose = params->assoc_value;
- 	else
--		sctp_sk(sk)->pf_expose = params.assoc_value;
-+		sctp_sk(sk)->pf_expose = params->assoc_value;
- 	retval = 0;
- 
- out:
-@@ -4628,7 +4622,7 @@ static int sctp_setsockopt(struct sock *sk, int level, int optname,
- 		retval = sctp_setsockopt_ecn_supported(sk, kopt, optlen);
- 		break;
- 	case SCTP_EXPOSE_POTENTIALLY_FAILED_STATE:
--		retval = sctp_setsockopt_pf_expose(sk, optval, optlen);
-+		retval = sctp_setsockopt_pf_expose(sk, kopt, optlen);
- 		break;
- 	default:
- 		retval = -ENOPROTOOPT;
--- 
-2.26.2
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
