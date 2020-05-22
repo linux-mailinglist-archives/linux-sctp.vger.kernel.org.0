@@ -2,133 +2,80 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A85FF1DEC7A
-	for <lists+linux-sctp@lfdr.de>; Fri, 22 May 2020 17:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E4F1DF257
+	for <lists+linux-sctp@lfdr.de>; Sat, 23 May 2020 00:48:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730197AbgEVPws convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Fri, 22 May 2020 11:52:48 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:51422 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730181AbgEVPwr (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>);
-        Fri, 22 May 2020 11:52:47 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-18-22NYjMq_P5mJeq-ok_ESEQ-1; Fri, 22 May 2020 16:52:43 +0100
-X-MC-Unique: 22NYjMq_P5mJeq-ok_ESEQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Fri, 22 May 2020 16:52:43 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Fri, 22 May 2020 16:52:43 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Marcelo Ricardo Leitner' <marcelo.leitner@gmail.com>
-CC:     'Christoph Hellwig' <hch@lst.de>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: RE: do a single memdup_user in sctp_setsockopt
-Thread-Topic: do a single memdup_user in sctp_setsockopt
-Thread-Index: AQHWL5hibpEyDKsV4UyRPKuzFFnyuaizvkKggABehICAACJGcA==
-Date:   Fri, 22 May 2020 15:52:43 +0000
-Message-ID: <a599a1a6bed0412492bafdbeecf6bb4c@AcuMS.aculab.com>
-References: <20200521174724.2635475-1-hch@lst.de>
- <348217b7a3e14c1fa4868e47362be9c5@AcuMS.aculab.com>
- <20200522143623.GA386664@localhost.localdomain>
-In-Reply-To: <20200522143623.GA386664@localhost.localdomain>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
+        id S1731138AbgEVWsf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Fri, 22 May 2020 18:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731029AbgEVWse (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 22 May 2020 18:48:34 -0400
+Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A30C061A0E;
+        Fri, 22 May 2020 15:48:34 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 5BD2112744698;
+        Fri, 22 May 2020 15:48:34 -0700 (PDT)
+Date:   Fri, 22 May 2020 15:48:33 -0700 (PDT)
+Message-Id: <20200522.154833.1534807790311464208.davem@davemloft.net>
+To:     jere.leppanen@nokia.com
+Cc:     linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        vyasevich@gmail.com, nhorman@tuxdriver.com,
+        marcelo.leitner@gmail.com, David.Laight@aculab.com
+Subject: Re: [PATCH net 1/1] sctp: Start shutdown on association restart if
+ in SHUTDOWN-SENT state and socket is closed
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20200520151531.787414-1-jere.leppanen@nokia.com>
+References: <20200520151531.787414-1-jere.leppanen@nokia.com>
+X-Mailer: Mew version 6.8 on Emacs 26.3
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=iso-8859-1
 Content-Transfer-Encoding: 8BIT
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 22 May 2020 15:48:34 -0700 (PDT)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Marcelo Ricardo Leitner
-> Sent: 22 May 2020 15:36
+From: Jere Leppänen <jere.leppanen@nokia.com>
+Date: Wed, 20 May 2020 18:15:31 +0300
+
+> Commit bdf6fa52f01b ("sctp: handle association restarts when the
+> socket is closed.") starts shutdown when an association is restarted,
+> if in SHUTDOWN-PENDING state and the socket is closed. However, the
+> rationale stated in that commit applies also when in SHUTDOWN-SENT
+> state - we don't want to move an association to ESTABLISHED state when
+> the socket has been closed, because that results in an association
+> that is unreachable from user space.
 > 
-> On Fri, May 22, 2020 at 08:02:09AM +0000, David Laight wrote:
-> > From: Christoph Hellwig
-> > > Sent: 21 May 2020 18:47
-> > > based on the review of Davids patch to do something similar I dusted off
-> > > the series I had started a few days ago to move the memdup_user or
-> > > copy_from_user from the inidividual sockopts into sctp_setsockopt,
-> > > which is done with one patch per option, so it might suit Marcelo's
-> > > taste a bit better.  I did not start any work on getsockopt.
-> >
-> > I'm not sure that 49 patches is actually any easier to review.
-> > Most of the patches are just repetitions of the same change.
-> > If they were in different files it might be different.
+> The problem scenario:
 > 
-> It's subjective, yes, but we hardly have patches over 5k lines.
-> In the case here, as changing the functions also requires changing
-> their call later on the file, it helps to be able to check that is was
-> properly updated. Ditto for chained functions.
-
-Between them sparse and the compiler rather force you to find everything.
-The main danger was failing to change sizeof(param) to sizeof(*param)
-and I double-checked all the relevant lines/
-
-...
-> What if you two work on a joint patchset for this? The proposals are
-> quite close. The differences around the setsockopt handling are
-> minimal already. It is basically variable naming, indentation and one
-> or another small change like:
-
-If the changes match then the subfunctions are probably fine.
-
-Because I've got at least 64 bytes I can convert in-situ and assume
-(in getsockopt()) that I can action the request (if it only only a read)
-and check the length later.
-With only a memdup_user() you can't make those changes.
-
-
-> From Christoph's to David's:
-> @@ -2249,11 +2248,11 @@ static int sctp_setsockopt_autoclose(struct sock *sk, u32 *autoclose,
->                 return -EOPNOTSUPP;
->         if (optlen != sizeof(int))
->                 return -EINVAL;
-> -
-> -       if (*autoclose > net->sctp.max_autoclose)
-> +
-> +       sp->autoclose = *optval;
-> +
-> +       if (sp->autoclose > net->sctp.max_autoclose)
->                 sp->autoclose = net->sctp.max_autoclose;
-> -       else
-> -               sp->autoclose = *autoclose;
-
-I was trying not to make extra changes.
-(Apart from error path ones.)
-Clearly that should be:
-	sp->autoclose = min(*optval, net->sctp.max_autoclose);
-But that requires additional thought.
-
-> > If you try to do getsockopt() the same way it will be much
-> > more complicated - you have to know whether the called function
-> > did the copy_to_user() and then suppress it.
+> 1.  Client crashes and/or restarts.
 > 
-> If it is not possible, then the setsockopt one already splited half of
-> the lines of the patch. :-)
+> 2.  Server (using one-to-one socket) calls close(). SHUTDOWN is lost.
+> 
+> 3.  Client reconnects using the same addresses and ports.
+> 
+> 4.  Server's association is restarted. The association and the socket
+>     move to ESTABLISHED state, even though the server process has
+>     closed its descriptor.
+> 
+> Also, after step 4 when the server process exits, some resources are
+> leaked in an attempt to release the underlying inet sock structure in
+> ESTABLISHED state:
+> 
+>     IPv4: Attempt to release TCP socket in state 1 00000000377288c7
+> 
+> Fix by acting the same way as in SHUTDOWN-PENDING state. That is, if
+> an association is restarted in SHUTDOWN-SENT state and the socket is
+> closed, then start shutdown and don't move the association or the
+> socket to ESTABLISHED state.
+> 
+> Fixes: bdf6fa52f01b ("sctp: handle association restarts when the socket is closed.")
+> Signed-off-by: Jere Leppänen <jere.leppanen@nokia.com>
 
-Apart from the getsockopt() that is really a setsockopt() (CONNECTX3).
-That might tie you in real knots.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Applied and queued up for -stable, thanks.
