@@ -2,105 +2,81 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 281711E5709
-	for <lists+linux-sctp@lfdr.de>; Thu, 28 May 2020 07:51:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8F01E5CEF
+	for <lists+linux-sctp@lfdr.de>; Thu, 28 May 2020 12:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725811AbgE1Fvx (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 28 May 2020 01:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46374 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725789AbgE1Fvx (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 28 May 2020 01:51:53 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9863CC05BD1E;
-        Wed, 27 May 2020 22:51:52 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id c71so1853867wmd.5;
-        Wed, 27 May 2020 22:51:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HRgq7bWPbVQ6VGJrp0fBqbpNe57Tc4L7lPuzDuEESlg=;
-        b=n59iHBOs0c4xNGvFK3+wSzh5TPGRlTyQDPz1ALrbhYPHN3mCKBt74pDF7oxQVGF6gZ
-         TLzSKYlbuU5qaZwM2yzrt+i97z2eXsUv+xw9DfaYukVljsVyUdM5rlCEqP9LuKxIcz8X
-         1zzX7DuG1HZfDFycO4N9CbXq3nvStyvHAGU6l+Oi9PAt+wy4SPrLotkSv75sDGTUaZgO
-         teGi6SfsIw115R974AkwgxXDOiBR8HSkJm4k47C5D4aOgC3GcQ6WqJwQLyxInhXKl8xJ
-         qdLvjkXcDRK4MBzyZWZIeYeYhxCJ0jBmlRJkAkbvp+CiPm5m/OsKPrp0G4qOtKoaW4Ce
-         ayCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HRgq7bWPbVQ6VGJrp0fBqbpNe57Tc4L7lPuzDuEESlg=;
-        b=OQP93SHFyY4UZSguTFKsALk7NsKnMx8t6rpgqFKjs9t9/Apf9Y7qWLIu6PRCobyvLI
-         m/8diV39Sz3Pw8GpSIDT75jSlcDemu6xWye/VXKYXO8penZ99i5Ff2lHxMJ3xjIaNhgQ
-         UZfulxQW2bR0stUL38WoyTe5JokzJ5PC7xhwGakUX2H3dpzKXPofp+yDaoErofdnxRHV
-         NxErDnVxATOD4GhY0nmsgM2Dbp4EABZAzKCgVdMUspWdno076kdK4ECeEGda7jJdH3v6
-         oW9ZxxJj8FMn3S6FnhR+Uy6pKtazOhUnX601jh3lzcJn+Us98H3FkYi8PFkpndWHf/lF
-         w8UQ==
-X-Gm-Message-State: AOAM532dSfGEx6GzgwmK/KGeeZUShtPf63Je/YyjA4SR+eIv54b8bpgF
-        ZOhsLqj9w/xdYocldJCw+5PlVevxTYhCeeeP/H4=
-X-Google-Smtp-Source: ABdhPJw+ZEhrUFHQwLzvaDPoOl7NpS6cyRPzYipDAwFJdmB0gXgU7yXBzVHZbcd4OQZZLlzz0dvTQnUcs/SYsVro7lE=
-X-Received: by 2002:a1c:4189:: with SMTP id o131mr1695442wma.110.1590645110880;
- Wed, 27 May 2020 22:51:50 -0700 (PDT)
+        id S2387774AbgE1KQT (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 28 May 2020 06:16:19 -0400
+Received: from mail.15d01.mspz2.gob.ec ([190.11.24.171]:44688 "EHLO
+        mail.15d01.mspz2.gob.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387677AbgE1KQS (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 28 May 2020 06:16:18 -0400
+X-Greylist: delayed 538 seconds by postgrey-1.27 at vger.kernel.org; Thu, 28 May 2020 06:16:18 EDT
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.15d01.mspz2.gob.ec (Postfix) with ESMTP id C54923153D8337;
+        Thu, 28 May 2020 05:17:01 -0500 (-05)
+Received: from mail.15d01.mspz2.gob.ec ([127.0.0.1])
+        by localhost (mail.15d01.mspz2.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id YsdLGP7o6HNK; Thu, 28 May 2020 05:17:01 -0500 (-05)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.15d01.mspz2.gob.ec (Postfix) with ESMTP id 646D3315547C7E;
+        Thu, 28 May 2020 05:17:01 -0500 (-05)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.15d01.mspz2.gob.ec 646D3315547C7E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=15d01.mspz2.gob.ec;
+        s=45104620-481F-11EA-A09D-9DF8C0EB5A2C; t=1590661021;
+        bh=zLTonXbKn6LYrnOZVETw9C2bepTvRzI70GQOlIiRCC0=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=G2zKKsx/JlsMuQ1+TjTI61Z2F9du6B2CzXPogybYxnqskw4TrzQ4Vgmbi53a38GJE
+         4Tv66oK50JxKVD42SFllg5TC6tlmuaET4mTc25gFNJ4g0O39UhwVdtrxGCwjxtMxH5
+         Bbl8ROAC7DJCOM/sh+K6et57O4by/n5xyD6XTvk3lNH/eL0OADlaagW01yoleef6lF
+         zJLlOH/t8LFpXfloHXx8bz57jT6P2p5smi5CgGTs/Am8WN9/2nr63Hvg2v9Hc/vgRn
+         IpY5mWPfuGCn4NdYI9NTQnin+201P4co/DagB9P9xvxK3biaqwqMIFKlRIAD+Iu6Si
+         8ZO8FfV8oqqlQ==
+X-Virus-Scanned: amavisd-new at 15d01.mspz2.gob.ec
+Received: from mail.15d01.mspz2.gob.ec ([127.0.0.1])
+        by localhost (mail.15d01.mspz2.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id bfeY-6QYerJ4; Thu, 28 May 2020 05:17:01 -0500 (-05)
+Received: from [10.98.65.230] (unknown [105.12.3.29])
+        by mail.15d01.mspz2.gob.ec (Postfix) with ESMTPSA id 37F043153D8337;
+        Thu, 28 May 2020 05:16:19 -0500 (-05)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20200527095640.270986-1-jonas.falkevik@gmail.com>
-In-Reply-To: <20200527095640.270986-1-jonas.falkevik@gmail.com>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Thu, 28 May 2020 13:59:06 +0800
-Message-ID: <CADvbK_duBhNhPMrR2ZGkhgAhR555MNHLQM9SS95KVZDnJ=WiQQ@mail.gmail.com>
-Subject: Re: [PATCH v2] sctp: check assoc before SCTP_ADDR_{MADE_PRIM,ADDED} event
-To:     Jonas Falkevik <jonas.falkevik@gmail.com>
-Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        davem <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-        linux-sctp@vger.kernel.org, network dev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsspende_von_2=2E000=2E000_Millionen_Euro?=
+To:     Recipients <consuelo.sayavedra@15d01.mspz2.gob.ec>
+From:   ''Tayeb Souami'' <consuelo.sayavedra@15d01.mspz2.gob.ec>
+Date:   Thu, 28 May 2020 12:03:37 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20200528101620.37F043153D8337@mail.15d01.mspz2.gob.ec>
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, May 27, 2020 at 5:57 PM Jonas Falkevik <jonas.falkevik@gmail.com> wrote:
->
-> Make sure SCTP_ADDR_{MADE_PRIM,ADDED} are sent only for associations
-> that have been established.
->
-> These events are described in rfc6458#section-6.1
-> SCTP_PEER_ADDR_CHANGE:
-> This tag indicates that an address that is
-> part of an existing association has experienced a change of
-> state (e.g., a failure or return to service of the reachability
-> of an endpoint via a specific transport address).
->
-> Signed-off-by: Jonas Falkevik <jonas.falkevik@gmail.com>
-Reviewed-by: Xin Long <lucien.xin@gmail.com>
+Lieber Freund,
 
-> ---
-> Changes in v2:
->  - Check asoc state to be at least established.
->    Instead of associd being SCTP_FUTURE_ASSOC.
->  - Common check for all peer addr change event
->
->  net/sctp/ulpevent.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/net/sctp/ulpevent.c b/net/sctp/ulpevent.c
-> index c82dbdcf13f2..77d5c36a8991 100644
-> --- a/net/sctp/ulpevent.c
-> +++ b/net/sctp/ulpevent.c
-> @@ -343,6 +343,9 @@ void sctp_ulpevent_nofity_peer_addr_change(struct sctp_transport *transport,
->         struct sockaddr_storage addr;
->         struct sctp_ulpevent *event;
->
-> +       if (asoc->state < SCTP_STATE_ESTABLISHED)
-> +               return;
-> +
->         memset(&addr, 0, sizeof(struct sockaddr_storage));
->         memcpy(&addr, &transport->ipaddr, transport->af_specific->sockaddr_len);
->
-> --
-> 2.25.4
->
+Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika, der =
+Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich an 5 zu=
+f=C3=A4llige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Ma=
+il nach einem Spinball ausgew=C3=A4hlt.Ich habe den gr=C3=B6=C3=9Ften Teil =
+meines Verm=C3=B6gens auf eine Reihe von Wohlt=C3=A4tigkeitsorganisationen =
+und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die =
+Summe von =E2=82=AC 2.000.000,00 an Sie als eine der ausgew=C3=A4hlten 5 zu=
+ spenden, um meine Gewinne zu =C3=BCberpr=C3=BCfen, sehen Sie bitte meine Y=
+ou Tube Seite unten.
+
+UHR MICH HIER: https://www.youtube.com/watch?v=3DZ6ui8ZDQ6Ks
+
+
+Das ist dein Spendencode: [TS530342018]
+
+
+Antworten Sie mit dem SPENDE-CODE an diese
+
+ E-Mail:Tayebsouam.spende@gmail.com
+
+Ich hoffe, Sie und Ihre Familie gl=C3=BCcklich zu machen.
+
+Gr=C3=BC=C3=9Fe
+Herr Tayeb Souami
