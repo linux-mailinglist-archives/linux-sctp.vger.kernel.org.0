@@ -2,117 +2,72 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A3E1E7CC2
-	for <lists+linux-sctp@lfdr.de>; Fri, 29 May 2020 14:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC401E7D27
+	for <lists+linux-sctp@lfdr.de>; Fri, 29 May 2020 14:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726459AbgE2MKN (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 29 May 2020 08:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726943AbgE2MKM (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 29 May 2020 08:10:12 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980CCC03E969;
-        Fri, 29 May 2020 05:10:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=jyyKSsv2ojCllyHR6oLPZbDWIQjSKqRL9iRFY8LVQRE=; b=iNffGeA/5apqAq049Vefb7clnf
-        42PPPLdS7Jbx3l39eX/tSq7mWUY3FLKEskZ70zLSnA4S9ogou5efvAj8PSQMb6i89RjbRR8IPmMSr
-        0XBE/pYDc6uLzrBi7k5+R00kcWtMu2RAe9KNff1M9AgKqIFpd9R5yFQijW1C1iyzJawqOU6VQCNh7
-        dsT5VDBRxU7qnGaNeH4fwsVOLbFGSLtGLSF4ZamWmp+D4l/xYyLJcsMPUCfEVfiedseMvHnrWlgXB
-        iRBxbPAcpKPVXEoHQVd9zYT1F3bgxQa25lNgQmj9OhFDeXBzVVGHV9FVRxvnd/KKlo43m5xdjoQ4h
-        a73bH4iQ==;
-Received: from p4fdb1ad2.dip0.t-ipconnect.de ([79.219.26.210] helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jedpp-0006LP-IU; Fri, 29 May 2020 12:10:01 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     "David S. Miller" <davem@davemloft.net>,
+        id S1726864AbgE2M1R convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Fri, 29 May 2020 08:27:17 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:36328 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726593AbgE2M1R (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Fri, 29 May 2020 08:27:17 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-170-42ymZSVqMyi6D1OdQieiPQ-1; Fri, 29 May 2020 13:27:13 +0100
+X-MC-Unique: 42ymZSVqMyi6D1OdQieiPQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Fri, 29 May 2020 13:27:12 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Fri, 29 May 2020 13:27:12 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Christoph Hellwig' <hch@lst.de>,
+        "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
+        "Neil Horman" <nhorman@tuxdriver.com>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     David Laight <David.Laight@ACULAB.COM>, linux-sctp@vger.kernel.org,
-        linux-kernel@vger.kernel.org, cluster-devel@redhat.com,
-        netdev@vger.kernel.org
-Subject: [PATCH 4/4] net: remove kernel_setsockopt
-Date:   Fri, 29 May 2020 14:09:43 +0200
-Message-Id: <20200529120943.101454-5-hch@lst.de>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200529120943.101454-1-hch@lst.de>
+CC:     "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "cluster-devel@redhat.com" <cluster-devel@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: RE: [PATCH 4/4] net: remove kernel_setsockopt
+Thread-Topic: [PATCH 4/4] net: remove kernel_setsockopt
+Thread-Index: AQHWNbIjs7aulgkmyEm+cXWG7d/0Sai+/RtQ
+Date:   Fri, 29 May 2020 12:27:12 +0000
+Message-ID: <d95348e2191046e9986860e3f1023491@AcuMS.aculab.com>
 References: <20200529120943.101454-1-hch@lst.de>
+ <20200529120943.101454-5-hch@lst.de>
+In-Reply-To: <20200529120943.101454-5-hch@lst.de>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-No users left.
+From: Christoph Hellwig
+> Sent: 29 May 2020 13:10
+> 
+> No users left.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- include/linux/net.h |  2 --
- net/socket.c        | 31 -------------------------------
- 2 files changed, 33 deletions(-)
+There is no point even proposing this until all the changes to remove
+its use have made it at least as far into 'net-next' and probably 'net'.
 
-diff --git a/include/linux/net.h b/include/linux/net.h
-index 74ef5d7315f70..e10f378194a59 100644
---- a/include/linux/net.h
-+++ b/include/linux/net.h
-@@ -303,8 +303,6 @@ int kernel_connect(struct socket *sock, struct sockaddr *addr, int addrlen,
- 		   int flags);
- int kernel_getsockname(struct socket *sock, struct sockaddr *addr);
- int kernel_getpeername(struct socket *sock, struct sockaddr *addr);
--int kernel_setsockopt(struct socket *sock, int level, int optname, char *optval,
--		      unsigned int optlen);
- int kernel_sendpage(struct socket *sock, struct page *page, int offset,
- 		    size_t size, int flags);
- int kernel_sendpage_locked(struct sock *sk, struct page *page, int offset,
-diff --git a/net/socket.c b/net/socket.c
-index 81a98b6cbd087..976426d03f099 100644
---- a/net/socket.c
-+++ b/net/socket.c
-@@ -3624,37 +3624,6 @@ int kernel_getpeername(struct socket *sock, struct sockaddr *addr)
- }
- EXPORT_SYMBOL(kernel_getpeername);
- 
--/**
-- *	kernel_setsockopt - set a socket option (kernel space)
-- *	@sock: socket
-- *	@level: API level (SOL_SOCKET, ...)
-- *	@optname: option tag
-- *	@optval: option value
-- *	@optlen: option length
-- *
-- *	Returns 0 or an error.
-- */
+	David
+
 -
--int kernel_setsockopt(struct socket *sock, int level, int optname,
--			char *optval, unsigned int optlen)
--{
--	mm_segment_t oldfs = get_fs();
--	char __user *uoptval;
--	int err;
--
--	uoptval = (char __user __force *) optval;
--
--	set_fs(KERNEL_DS);
--	if (level == SOL_SOCKET)
--		err = sock_setsockopt(sock, level, optname, uoptval, optlen);
--	else
--		err = sock->ops->setsockopt(sock, level, optname, uoptval,
--					    optlen);
--	set_fs(oldfs);
--	return err;
--}
--EXPORT_SYMBOL(kernel_setsockopt);
--
- /**
-  *	kernel_sendpage - send a &page through a socket (kernel space)
-  *	@sock: socket
--- 
-2.26.2
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
