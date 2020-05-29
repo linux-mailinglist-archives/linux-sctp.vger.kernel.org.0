@@ -2,67 +2,55 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D43531E8650
-	for <lists+linux-sctp@lfdr.de>; Fri, 29 May 2020 20:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 969681E88A7
+	for <lists+linux-sctp@lfdr.de>; Fri, 29 May 2020 22:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727866AbgE2SJm (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 29 May 2020 14:09:42 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:51213 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727809AbgE2SJl (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>);
-        Fri, 29 May 2020 14:09:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1590775780;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Re5Y7GYMgF5tXEOvc1Z0y7a6ywWpDP5iMSjUtX5Bfvo=;
-        b=NCVof1wTgxG6oEKfq91KR8d/EPyq3VqmBmmD1gy4+oJjXYleHrBe08ZkUPqGh050OKhN9B
-        IzXjRhXOk45H3x3147A/QWw8d5Bm578cCW5QsODJblU/gsbzzsRprDdr0BviVtS2k3e0zZ
-        y0QPouGiZrbsBV9Zq5tiFk6ZfPCPx1M=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-410-I6PWn1K-O66L9uMR8gHoUg-1; Fri, 29 May 2020 14:09:36 -0400
-X-MC-Unique: I6PWn1K-O66L9uMR8gHoUg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3206A81CBE1;
-        Fri, 29 May 2020 18:09:35 +0000 (UTC)
-Received: from redhat.com (null.msp.redhat.com [10.15.80.136])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7D56E60BE2;
-        Fri, 29 May 2020 18:09:27 +0000 (UTC)
-Date:   Fri, 29 May 2020 13:09:25 -0500
-From:   David Teigland <teigland@redhat.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        David Laight <David.Laight@ACULAB.COM>,
+        id S1727951AbgE2ULa (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 29 May 2020 16:11:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726866AbgE2ULa (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 29 May 2020 16:11:30 -0400
+Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172C6C03E969;
+        Fri, 29 May 2020 13:11:30 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 068FF12837646;
+        Fri, 29 May 2020 13:11:28 -0700 (PDT)
+Date:   Fri, 29 May 2020 13:11:28 -0700 (PDT)
+Message-Id: <20200529.131128.495042470763103913.davem@davemloft.net>
+To:     hch@lst.de
+Cc:     kuba@kernel.org, vyasevich@gmail.com, nhorman@tuxdriver.com,
+        marcelo.leitner@gmail.com, David.Laight@ACULAB.COM,
         linux-sctp@vger.kernel.org, linux-kernel@vger.kernel.org,
         cluster-devel@redhat.com, netdev@vger.kernel.org
-Subject: Re: [PATCH 1/4] sctp: add sctp_sock_set_nodelay
-Message-ID: <20200529180925.GB25942@redhat.com>
+Subject: Re: remove kernel_setsockopt v4
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20200529120943.101454-1-hch@lst.de>
 References: <20200529120943.101454-1-hch@lst.de>
- <20200529120943.101454-2-hch@lst.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200529120943.101454-2-hch@lst.de>
-User-Agent: Mutt/1.8.3 (2017-05-23)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Mailer: Mew version 6.8 on Emacs 26.3
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 29 May 2020 13:11:29 -0700 (PDT)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Fri, May 29, 2020 at 02:09:40PM +0200, Christoph Hellwig wrote:
-> Add a helper to directly set the SCTP_NODELAY sockopt from kernel space
-> without going through a fake uaccess.
+From: Christoph Hellwig <hch@lst.de>
+Date: Fri, 29 May 2020 14:09:39 +0200
 
-Ack, they look fine to me, thanks.
-Dave
+> now that only the dlm calls to sctp are left for kernel_setsockopt,
+> while we haven't really made much progress with the sctp setsockopt
+> refactoring, how about this small series that splits out a
+> sctp_setsockopt_bindx_kernel that takes a kernel space address array
+> to share more code as requested by Marcelo.  This should fit in with
+> whatever variant of the refator of sctp setsockopt we go with, but
+> just solved the immediate problem for now.
+ ...
 
+Series applied, thanks.
