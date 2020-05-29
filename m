@@ -2,54 +2,54 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0776A1E8323
-	for <lists+linux-sctp@lfdr.de>; Fri, 29 May 2020 18:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0301E8341
+	for <lists+linux-sctp@lfdr.de>; Fri, 29 May 2020 18:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726829AbgE2QHA (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 29 May 2020 12:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55912 "EHLO
+        id S1726838AbgE2QKW (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 29 May 2020 12:10:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725601AbgE2QG7 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 29 May 2020 12:06:59 -0400
-Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F94C03E969;
-        Fri, 29 May 2020 09:06:59 -0700 (PDT)
-Received: by mail-qk1-x743.google.com with SMTP id n141so2685432qke.2;
-        Fri, 29 May 2020 09:06:59 -0700 (PDT)
+        with ESMTP id S1725601AbgE2QKW (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 29 May 2020 12:10:22 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415C7C03E969;
+        Fri, 29 May 2020 09:10:22 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id c12so2303364qtq.11;
+        Fri, 29 May 2020 09:10:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=2QkBQ1hsW65ifs+T38dQCXySbtszUd8Dh1ih5qIb6ac=;
-        b=bxj9ZN1HcOCP6sltQ7S8XSau8mdagaprLbERl96zHDDXcYVD9iMUrHjldPjTzJOlhA
-         RRnVvuZtp309QRcnWQFx3y+wHHslWBAIEVSvp/qwyUgpRbnDaWpRUzDIT0n4bx/iEPxt
-         Zx589SWGzTS2fNsyfvphf0IxRCJvpaEDbsnSrhqu6aJcgS9nTj5lYGgzb50GJK9yECiS
-         1SzWuhYSZXeoYfzw53kDrnjgfLO3sxjfB9B/K8nP3gjAE28ZelhdFh71/JwrTtUUANWn
-         4eOhU+hifZj+1N+tjI3/cIBgfSfOY/DgCzoqg0H2VPp1x0wyxOKRI0BGeKQKlkGh7bHO
-         CuKA==
+        bh=y+4rgbyVFdpWdnFfPGEMNo5bmNIxGC5yE0lzC9sLPDI=;
+        b=He6U0kOOqDx77apNaftx5iqXRCDUN/Q0QfmkJGZh0UUkTo6DoVWVYfdVm0xV7GhS54
+         paGRE7yOH2nkcx/QmMeoozsSehWhqDWlsRZb7upJbRD2cnjdkR9XOJoGQVTTT1m4r+Q6
+         Vsqx5aoEd8LY0sZIGDHtWZfkZ9noCBXKEiz7DH1TB6ZhNPu+FXVwRoD3bvnMZJc9GXp7
+         +puTBeFtuw54e8+uXT2kZoD+EuuH3SXs/o2Vgb2aSrBWuEaM21t6EV35fFvTAeX8P9Fy
+         hoR0YPt+cG5imBcraVSGgle5EhazdJSU4n6jKIpG53l/0qetDLvQ2VVPXbE05oh29DK2
+         DY9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=2QkBQ1hsW65ifs+T38dQCXySbtszUd8Dh1ih5qIb6ac=;
-        b=h+xhuVf/kGh5gQXavtrc/zXjpw98pSjWRwyz7nd8s6Ff4v8vmX3iEan6lB30bASvJC
-         zG2SraO/qLKyzGLzWKaUurqg+R0Y7co+ilM6d/mPHDfTjP89Oc5H8O63weRn+dhhbvx0
-         Dueav9lczCcpCCIrBI2zPe81vLnhEkKmO8nchq7ictCEMwEo6dP4+hoU2YiOUt9hvbsj
-         7qhMffE1u5OFLWNh3IJ0C9bGMHbSLQng/BJehmurVVGTIaDzpOcv28cBQkaha73vImpe
-         637As8iG+kJaElgYiOLlHl+p+yczkCi3ZGzYfwuD07673gz+3g6v0jbSmzvKR/n/nNRJ
-         XLOg==
-X-Gm-Message-State: AOAM53297C7Z1TsXpEVpq3oHwmtfHlIeAVS4iJr3o9YxhDBLuq2ywraV
-        v3wzO7vMIfSUtuhL7BA7b1E=
-X-Google-Smtp-Source: ABdhPJwMyl4MP7h2HUGz7QIi8xuwkpyEvWtq9gcbO4jTClNrEKWMsNO9bid5iODsnfpoxy8FDRo4NQ==
-X-Received: by 2002:ae9:e10f:: with SMTP id g15mr8822930qkm.285.1590768418954;
-        Fri, 29 May 2020 09:06:58 -0700 (PDT)
+        bh=y+4rgbyVFdpWdnFfPGEMNo5bmNIxGC5yE0lzC9sLPDI=;
+        b=U1QRvmu44BDyXhHZnZnszlMbf702tC5y2lDECFCrrFuIG8QdKvmXijGudQN6pZ+Ze8
+         ZCRbsuwoE1QuwlPWVe8sRggukNwwd8Pg+tmlHmtrG+3n5Qx3cT6hF9BrUYkN+HwB7fdV
+         TyrXGSqoupPIoUEcKDuYVLd/gBuP4A2DwhogU8iNNgwrKM2l273jMAspwJpjvpXAERQq
+         9geGkzw0ZivrRD8o8ljP7kK8W66KMmgv5KfD9Fk26uvplo2tIvI2lwlvVzydYzQncfrR
+         ISy7xI85CZFX0PT5wRcQh+6wT3NGQM7NyQP5W/nQkU4y2RLJgE38sGD5+eCdyvKc1IqJ
+         vtxA==
+X-Gm-Message-State: AOAM531pIFVPIZLyoqyU/w8cyxTNvyjIUxZIVuDBmcAjLEcEGksHx9ih
+        3ap5zF7VqwPC60i/YI846DQ=
+X-Google-Smtp-Source: ABdhPJwymhddx06bqmGhYsTfxrNsNdKqxYLST86rY0HaDO5CDiSL28xMj8JFIw+ygnudI/qKx7P/NQ==
+X-Received: by 2002:ac8:7ca1:: with SMTP id z1mr8885022qtv.334.1590768621466;
+        Fri, 29 May 2020 09:10:21 -0700 (PDT)
 Received: from localhost.localdomain ([2001:1284:f013:516d:2604:bfa5:7157:afa1])
-        by smtp.gmail.com with ESMTPSA id j90sm8034447qte.33.2020.05.29.09.06.57
+        by smtp.gmail.com with ESMTPSA id c83sm7579257qkb.103.2020.05.29.09.10.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 May 2020 09:06:58 -0700 (PDT)
+        Fri, 29 May 2020 09:10:20 -0700 (PDT)
 Received: by localhost.localdomain (Postfix, from userid 1000)
-        id C434AC1B84; Fri, 29 May 2020 13:06:55 -0300 (-03)
-Date:   Fri, 29 May 2020 13:06:55 -0300
+        id 6C60EC1B84; Fri, 29 May 2020 13:10:18 -0300 (-03)
+Date:   Fri, 29 May 2020 13:10:18 -0300
 From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -59,30 +59,88 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         David Laight <David.Laight@aculab.com>,
         linux-sctp@vger.kernel.org, linux-kernel@vger.kernel.org,
         cluster-devel@redhat.com, netdev@vger.kernel.org
-Subject: Re: [PATCH 3/4] net: add a new bind_add method
-Message-ID: <20200529160655.GJ2491@localhost.localdomain>
+Subject: Re: [PATCH 4/4] net: remove kernel_setsockopt
+Message-ID: <20200529161018.GK2491@localhost.localdomain>
 References: <20200529120943.101454-1-hch@lst.de>
- <20200529120943.101454-4-hch@lst.de>
+ <20200529120943.101454-5-hch@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200529120943.101454-4-hch@lst.de>
+In-Reply-To: <20200529120943.101454-5-hch@lst.de>
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Fri, May 29, 2020 at 02:09:42PM +0200, Christoph Hellwig wrote:
-> The SCTP protocol allows to bind multiple address to a socket.  That
-> feature is currently only exposed as a socket option.  Add a bind_add
-> method struct proto that allows to bind additional addresses, and
-> switch the dlm code to use the method instead of going through the
-> socket option from kernel space.
+On Fri, May 29, 2020 at 02:09:43PM +0200, Christoph Hellwig wrote:
+> No users left.
 > 
 > Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Reviewed-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 
-Even though checkpatch complained about bad alignment here:
-> +static int sctp_bind_add(struct sock *sk, struct sockaddr *addrs,
-> +		int addrlen)
+Thanks.
+
+> ---
+>  include/linux/net.h |  2 --
+>  net/socket.c        | 31 -------------------------------
+>  2 files changed, 33 deletions(-)
+> 
+> diff --git a/include/linux/net.h b/include/linux/net.h
+> index 74ef5d7315f70..e10f378194a59 100644
+> --- a/include/linux/net.h
+> +++ b/include/linux/net.h
+> @@ -303,8 +303,6 @@ int kernel_connect(struct socket *sock, struct sockaddr *addr, int addrlen,
+>  		   int flags);
+>  int kernel_getsockname(struct socket *sock, struct sockaddr *addr);
+>  int kernel_getpeername(struct socket *sock, struct sockaddr *addr);
+> -int kernel_setsockopt(struct socket *sock, int level, int optname, char *optval,
+> -		      unsigned int optlen);
+>  int kernel_sendpage(struct socket *sock, struct page *page, int offset,
+>  		    size_t size, int flags);
+>  int kernel_sendpage_locked(struct sock *sk, struct page *page, int offset,
+> diff --git a/net/socket.c b/net/socket.c
+> index 81a98b6cbd087..976426d03f099 100644
+> --- a/net/socket.c
+> +++ b/net/socket.c
+> @@ -3624,37 +3624,6 @@ int kernel_getpeername(struct socket *sock, struct sockaddr *addr)
+>  }
+>  EXPORT_SYMBOL(kernel_getpeername);
+>  
+> -/**
+> - *	kernel_setsockopt - set a socket option (kernel space)
+> - *	@sock: socket
+> - *	@level: API level (SOL_SOCKET, ...)
+> - *	@optname: option tag
+> - *	@optval: option value
+> - *	@optlen: option length
+> - *
+> - *	Returns 0 or an error.
+> - */
+> -
+> -int kernel_setsockopt(struct socket *sock, int level, int optname,
+> -			char *optval, unsigned int optlen)
+> -{
+> -	mm_segment_t oldfs = get_fs();
+> -	char __user *uoptval;
+> -	int err;
+> -
+> -	uoptval = (char __user __force *) optval;
+> -
+> -	set_fs(KERNEL_DS);
+> -	if (level == SOL_SOCKET)
+> -		err = sock_setsockopt(sock, level, optname, uoptval, optlen);
+> -	else
+> -		err = sock->ops->setsockopt(sock, level, optname, uoptval,
+> -					    optlen);
+> -	set_fs(oldfs);
+> -	return err;
+> -}
+> -EXPORT_SYMBOL(kernel_setsockopt);
+> -
+>  /**
+>   *	kernel_sendpage - send a &page through a socket (kernel space)
+>   *	@sock: socket
+> -- 
+> 2.26.2
+> 
