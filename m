@@ -2,84 +2,67 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A63C81E8350
-	for <lists+linux-sctp@lfdr.de>; Fri, 29 May 2020 18:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D43531E8650
+	for <lists+linux-sctp@lfdr.de>; Fri, 29 May 2020 20:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725681AbgE2QMH (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 29 May 2020 12:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725601AbgE2QMH (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 29 May 2020 12:12:07 -0400
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E144C03E969;
-        Fri, 29 May 2020 09:12:07 -0700 (PDT)
-Received: by mail-qt1-x844.google.com with SMTP id g18so2309389qtu.13;
-        Fri, 29 May 2020 09:12:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5Hm4Y+BJ4D4CDaqRSBoPJgH15jAjD9VDDckblAz9nbU=;
-        b=Rqj+JqwnLWRZO0jBT2Kjr4dplZYMLkOst8UiABhnGmWh5cFT+cuWfa87C78/NL7zyL
-         GB8mZ+lZqJG+wZYrMkI6q/k27fjzfBG9b1HPi0y8yx0pcrFDH262UFXb8U7LYYOMM1ht
-         Edjq47HSSFd9icFSKm3M9DTiLwyu4Xv7wCPfTYe8Gks00dxqAN4QuLy/mW2BZpUMN1c6
-         5Nj7rAocFphIuUAvPOK3WrlQiAYb0rAblxnKKbJzuOdZWGOyH+CCXPMzbR/a7vyQorvN
-         RN7pmlalI8p6bb5PFbX/ipk/AHXToMKexyY9/bk/wUisBXWzyk+58l1WOX0iyy1CAHrf
-         TKHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5Hm4Y+BJ4D4CDaqRSBoPJgH15jAjD9VDDckblAz9nbU=;
-        b=f58zMCIYGOTLD36B+vXjwXG/2YiUUhxHoteKNB5xNiFnZrLxcmSbZG8UObqmMv7zbq
-         HGZJi4pjo1GZj/v2vEUMjjdjQHoyukGxk6uXZ0k7XjoOUsNmhC4uAqWFW5dtLJSVKe5c
-         Yh4AwTuKBYTwRGkdAVF8Vau72R9pF4lAE/3NGEsu+InACERoMW43T0HzaJoc+V9IgdFE
-         4Px1HORNF1ii1jjL8+IJzmz4Xr9LSXhCFI1Gk7zzeJ2yuDLUrcX+6j4Ce0vBmIU5QE7R
-         zYPoAKtM0JRTDYCk/SErX++NPp7Vglwco9ZuXWHHOJElzTT+LWoHmtPwD2BZz1KIIMyL
-         polQ==
-X-Gm-Message-State: AOAM531cLaL6q0k7zGldl33vQpb51KeJrrbAL2fADWBKN9VIARdUNPGr
-        S1jyZoW/kUm62JIuH9ikYN4=
-X-Google-Smtp-Source: ABdhPJxJ9vHZyhS/fIlONrPd0OT9YzlS6kVi1Vtvqh7UtUjOkglBDKPjjROOo7MQ34l79/0YBwscWw==
-X-Received: by 2002:ac8:7007:: with SMTP id x7mr9451446qtm.238.1590768726505;
-        Fri, 29 May 2020 09:12:06 -0700 (PDT)
-Received: from localhost.localdomain ([168.181.48.225])
-        by smtp.gmail.com with ESMTPSA id m10sm8195646qtg.94.2020.05.29.09.12.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 May 2020 09:12:05 -0700 (PDT)
-Received: by localhost.localdomain (Postfix, from userid 1000)
-        id 4060FC1B84; Fri, 29 May 2020 13:12:03 -0300 (-03)
-Date:   Fri, 29 May 2020 13:12:03 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     David Miller <davem@davemloft.net>
-Cc:     David.Laight@aculab.com, vyasevich@gmail.com,
-        nhorman@tuxdriver.com, kuba@kernel.org, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org, hch@lst.de
-Subject: Re: [PATCH v3 net-next 1/8] sctp: setsockopt, expand some #defines
-Message-ID: <20200529161203.GL2491@localhost.localdomain>
-References: <bab9a624ee2d4e05b1198c3f7344a200@AcuMS.aculab.com>
- <8bb56a30edfb4ff696d44cf9af909d82@AcuMS.aculab.com>
- <20200526.153631.1486651154492951372.davem@davemloft.net>
+        id S1727866AbgE2SJm (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 29 May 2020 14:09:42 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:51213 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727809AbgE2SJl (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Fri, 29 May 2020 14:09:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1590775780;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Re5Y7GYMgF5tXEOvc1Z0y7a6ywWpDP5iMSjUtX5Bfvo=;
+        b=NCVof1wTgxG6oEKfq91KR8d/EPyq3VqmBmmD1gy4+oJjXYleHrBe08ZkUPqGh050OKhN9B
+        IzXjRhXOk45H3x3147A/QWw8d5Bm578cCW5QsODJblU/gsbzzsRprDdr0BviVtS2k3e0zZ
+        y0QPouGiZrbsBV9Zq5tiFk6ZfPCPx1M=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-410-I6PWn1K-O66L9uMR8gHoUg-1; Fri, 29 May 2020 14:09:36 -0400
+X-MC-Unique: I6PWn1K-O66L9uMR8gHoUg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3206A81CBE1;
+        Fri, 29 May 2020 18:09:35 +0000 (UTC)
+Received: from redhat.com (null.msp.redhat.com [10.15.80.136])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7D56E60BE2;
+        Fri, 29 May 2020 18:09:27 +0000 (UTC)
+Date:   Fri, 29 May 2020 13:09:25 -0500
+From:   David Teigland <teigland@redhat.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        David Laight <David.Laight@ACULAB.COM>,
+        linux-sctp@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cluster-devel@redhat.com, netdev@vger.kernel.org
+Subject: Re: [PATCH 1/4] sctp: add sctp_sock_set_nodelay
+Message-ID: <20200529180925.GB25942@redhat.com>
+References: <20200529120943.101454-1-hch@lst.de>
+ <20200529120943.101454-2-hch@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200526.153631.1486651154492951372.davem@davemloft.net>
+In-Reply-To: <20200529120943.101454-2-hch@lst.de>
+User-Agent: Mutt/1.8.3 (2017-05-23)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, May 26, 2020 at 03:36:31PM -0700, David Miller wrote:
-> From: David Laight <David.Laight@ACULAB.COM>
-> Date: Tue, 26 May 2020 16:44:07 +0000
-> 
-> > This should be 3/8.
-> 
-> David just respin this at some point and with this fixed and also the
-> header posting saying "0/8" properly instead of "0/1", this is really
-> messy.
-> 
-> Thanks.
+On Fri, May 29, 2020 at 02:09:40PM +0200, Christoph Hellwig wrote:
+> Add a helper to directly set the SCTP_NODELAY sockopt from kernel space
+> without going through a fake uaccess.
 
-I don't know why David's workflow is that cumbersome. I'll try to
-respin this myself, on top of Christoph's latest changes.
+Ack, they look fine to me, thanks.
+Dave
+
