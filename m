@@ -2,107 +2,96 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2CA51EA005
-	for <lists+linux-sctp@lfdr.de>; Mon,  1 Jun 2020 10:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2419F1EA21C
+	for <lists+linux-sctp@lfdr.de>; Mon,  1 Jun 2020 12:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728097AbgFAI1N convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Mon, 1 Jun 2020 04:27:13 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:38324 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728103AbgFAI1M (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 1 Jun 2020 04:27:12 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id uk-mta-4-qyf_xz7jMHaz2OtF4B_ISQ-1;
- Mon, 01 Jun 2020 09:27:08 +0100
-X-MC-Unique: qyf_xz7jMHaz2OtF4B_ISQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Mon, 1 Jun 2020 09:27:08 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Mon, 1 Jun 2020 09:27:08 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Marcelo Ricardo Leitner' <marcelo.leitner@gmail.com>,
-        Christoph Hellwig <hch@lst.de>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "cluster-devel@redhat.com" <cluster-devel@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: RE: [PATCH 2/4] sctp: refactor sctp_setsockopt_bindx
-Thread-Topic: [PATCH 2/4] sctp: refactor sctp_setsockopt_bindx
-Thread-Index: AQHWNdMG2Q0k5UY/FEi3sQ5al/OVkajDcLLw
-Date:   Mon, 1 Jun 2020 08:27:08 +0000
-Message-ID: <ef0754831c294934b67f89fd8c5e1b5b@AcuMS.aculab.com>
-References: <20200529120943.101454-1-hch@lst.de>
- <20200529120943.101454-3-hch@lst.de>
- <20200529160544.GI2491@localhost.localdomain>
-In-Reply-To: <20200529160544.GI2491@localhost.localdomain>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1725847AbgFAKqp (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 1 Jun 2020 06:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52928 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725838AbgFAKqo (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 1 Jun 2020 06:46:44 -0400
+Received: from ganesha.gnumonks.org (ganesha.gnumonks.org [IPv6:2001:780:45:1d:225:90ff:fe52:c662])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E63FC061A0E;
+        Mon,  1 Jun 2020 03:46:44 -0700 (PDT)
+Received: from uucp by ganesha.gnumonks.org with local-bsmtp (Exim 4.89)
+        (envelope-from <laforge@gnumonks.org>)
+        id 1jfhxj-000525-OD; Mon, 01 Jun 2020 12:46:35 +0200
+Received: from laforge by localhost.localdomain with local (Exim 4.93)
+        (envelope-from <laforge@gnumonks.org>)
+        id 1jfhxe-001xbq-Fy; Mon, 01 Jun 2020 12:46:30 +0200
+Date:   Mon, 1 Jun 2020 12:46:30 +0200
+From:   Harald Welte <laforge@gnumonks.org>
+To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc:     Xin Long <lucien.xin@gmail.com>,
+        network dev <netdev@vger.kernel.org>,
+        linux-sctp@vger.kernel.org
+Subject: Re: ABI breakage in sctp_event_subscribe (was [PATCH net-next 0/4]
+ sctp: add some missing events from rfc5061)
+Message-ID: <20200601104630.GQ182140@nataraja>
+References: <cover.1570534014.git.lucien.xin@gmail.com>
+ <20200419102536.GA4127396@nataraja>
+ <20200501131607.GU1294372@nataraja>
+ <20200501142008.GC2470@localhost.localdomain>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200501142008.GC2470@localhost.localdomain>
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Marcelo Ricardo Leitner
-> Sent: 29 May 2020 17:06
-> On Fri, May 29, 2020 at 02:09:41PM +0200, Christoph Hellwig wrote:
-> > Split out a sctp_setsockopt_bindx_kernel that takes a kernel pointer
-> > to the sockaddr and make sctp_setsockopt_bindx a small wrapper around
-> > it.  This prepares for adding a new bind_add proto op.
-> >
-> > Signed-off-by: Christoph Hellwig <hch@lst.de>
-> 
-> Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-> 
-> > ---
-> >  net/sctp/socket.c | 61 ++++++++++++++++++++++-------------------------
-> >  1 file changed, 28 insertions(+), 33 deletions(-)
-> >
-> > diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-> > index 827a9903ee288..6e745ac3c4a59 100644
-> > --- a/net/sctp/socket.c
-> > +++ b/net/sctp/socket.c
-> > @@ -972,23 +972,22 @@ int sctp_asconf_mgmt(struct sctp_sock *sp, struct sctp_sockaddr_entry *addrw)
-> >   * it.
-> >   *
-> >   * sk        The sk of the socket
-> > - * addrs     The pointer to the addresses in user land
-> > + * addrs     The pointer to the addresses
-> >   * addrssize Size of the addrs buffer
-> >   * op        Operation to perform (add or remove, see the flags of
-> >   *           sctp_bindx)
-> >   *
-> >   * Returns 0 if ok, <0 errno code on error.
-> >   */
-> > -static int sctp_setsockopt_bindx(struct sock *sk,
-> > -				 struct sockaddr __user *addrs,
-> > -				 int addrs_size, int op)
-> > +static int sctp_setsockopt_bindx_kernel(struct sock *sk,
-                        const
-> > +					struct sockaddr *addrs, int addrs_size,
-> > +					int op)
+Dear SCTP developers,
 
-The list of addresses ought to be 'const'.
+I have to get back to this bug.  It is slowly turning into a nightmare.
 
-IIRC that requires the test for 'port == 0' be moved down  a few layers.
+Not only affected it forwards/backwards compatibility of application binaries
+during upgrades of a distribution, but it also affects the ability to run
+containerized workloads with SCTP.  It's sort-of obvious but I didn't
+realize it until now.
 
-	David
+We are observing this problem now when we operate CentOS 8 based containers
+on a Debian 9 based (docker) host.  Apparently the CentOS userland has a different
+definition of the event structure (larger) than the Debian kernel has (smaller) -> boom.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+From my point of view, this bug is making it virtually impossible to run
+containerized telecom workloads.  I guess most users are very
+conservative and still running rather ancient kernels and/or
+distributions, but as soon as they start upgrading their kernel to
+anything that includes that patch to the SCTP events structure, the
+nightmare starts.
 
+To my knowledge, there is no infrastructure at all for a situation like this - neither
+in the Docker universe nor in k8s..  You cannot build separate container
+images depending on what the host OS/kernel is going to be.
+
+And particularly, if you are not self-hosting your container runtimes
+but running your containers on some kind of cloud infrastructure
+provider, you have no control over what exact kernel version might be in
+use there - and it also may change at any time at the discretion of the
+cloud service provider.
+
+On Fri, May 01, 2020 at 11:20:08AM -0300, Marcelo Ricardo Leitner wrote:
+> That's what we want as well. Some breakage happened, yes, by mistake,
+> and fixing that properly now, without breaking anything else, may be
+> just impossible, unfortunatelly. But you can be sure that we are
+> engaged on not doing it again.
+
+I would actually seriously consider to roll that change back - not only
+in the next kernel release but also in all stable kernel releases.  At least
+the breakage then is constrained to a limited set of kernel versions.
+
+Alternatively, I suggest to at least apply a patch to all supported
+stable kernel series (picked up hopefully distributions) that makes those
+older kernels accept a larger-length sctp_event_subscribe structure from
+userspace, *if* any of the additional members are 0 (memcmp the
+difference between old and new).
+
+Regards,
+	Harald
+-- 
+- Harald Welte <laforge@gnumonks.org>           http://laforge.gnumonks.org/
+============================================================================
+"Privacy in residential applications is a desirable marketing option."
+                                                  (ETSI EN 300 175-7 Ch. A6)
