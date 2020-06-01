@@ -2,66 +2,107 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 936DF1E944A
-	for <lists+linux-sctp@lfdr.de>; Sun, 31 May 2020 00:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2CA51EA005
+	for <lists+linux-sctp@lfdr.de>; Mon,  1 Jun 2020 10:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729517AbgE3Wfa (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sat, 30 May 2020 18:35:30 -0400
-Received: from invention.AFNIGHTS.net ([46.166.185.243]:55228 "EHLO
-        host.acceswealthservice.xyz" rhost-flags-OK-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S1729515AbgE3Wf3 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>);
-        Sat, 30 May 2020 18:35:29 -0400
-Received: from acceswealthservice.xyz (2t5j.w.time4vps.cloud [212.24.97.110])
-        by host.acceswealthservice.xyz (Postfix) with ESMTPA id 7BCBEE75DE
-        for <linux-sctp@vger.kernel.org>; Sun, 31 May 2020 00:31:16 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 host.acceswealthservice.xyz 7BCBEE75DE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=acceswealthservice.xyz; s=default; t=1590877877;
-        bh=td/1klW8T5Eyprv/u3iSt1Uq3pUK6RiW9JQei4VLqgo=;
-        h=Reply-To:From:To:Subject:Date:From;
-        b=qG14iVC/xFBKb15uWZxvwI1wrPngpGPy0CTZ0AWpLvSktZM6o12HDRhIssGsLpA+F
-         18QHYT/EZv/TdoWEZcAhs0AnUJdiP1vicba3fjdoqfyA/J+1svV35Q/qBoUZJf8879
-         fjc+meeyN2RE361NHGmqZSiEvFhdJBfgiICMhd4o=
-DKIM-Filter: OpenDKIM Filter v2.11.0 host.acceswealthservice.xyz 7BCBEE75DE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=acceswealthservice.xyz; s=default; t=1590877876;
-        bh=td/1klW8T5Eyprv/u3iSt1Uq3pUK6RiW9JQei4VLqgo=;
-        h=Reply-To:From:To:Subject:Date:From;
-        b=YOLnpyNu5MEw/U4NPqWJ+/yILlRAZ4habfqCh1rT5p7vx+wrmgxS+PPy5KUL77Oxh
-         GxtyybuOsvgfCx+M61I2RFEnTKKlSS03bjcZKsv2O+vIO8Y3O3X1QPbHETO2ZJ5/53
-         0KWkClms6Kyi1Q154GBVPwtj2AwnD+6HvQxOdpAQ=
-Reply-To: deanj22@accesswealthservices.online
-From:   Dean <deanj00@acceswealthservice.xyz>
-To:     linux-sctp@vger.kernel.org
-Subject: Investment
-Date:   31 May 2020 01:31:16 +0300
-Message-ID: <20200531013115.7384927CEBFE9FBF@acceswealthservice.xyz>
-Mime-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1728097AbgFAI1N convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Mon, 1 Jun 2020 04:27:13 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:38324 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728103AbgFAI1M (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 1 Jun 2020 04:27:12 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id uk-mta-4-qyf_xz7jMHaz2OtF4B_ISQ-1;
+ Mon, 01 Jun 2020 09:27:08 +0100
+X-MC-Unique: qyf_xz7jMHaz2OtF4B_ISQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Mon, 1 Jun 2020 09:27:08 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Mon, 1 Jun 2020 09:27:08 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Marcelo Ricardo Leitner' <marcelo.leitner@gmail.com>,
+        Christoph Hellwig <hch@lst.de>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "cluster-devel@redhat.com" <cluster-devel@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: RE: [PATCH 2/4] sctp: refactor sctp_setsockopt_bindx
+Thread-Topic: [PATCH 2/4] sctp: refactor sctp_setsockopt_bindx
+Thread-Index: AQHWNdMG2Q0k5UY/FEi3sQ5al/OVkajDcLLw
+Date:   Mon, 1 Jun 2020 08:27:08 +0000
+Message-ID: <ef0754831c294934b67f89fd8c5e1b5b@AcuMS.aculab.com>
+References: <20200529120943.101454-1-hch@lst.de>
+ <20200529120943.101454-3-hch@lst.de>
+ <20200529160544.GI2491@localhost.localdomain>
+In-Reply-To: <20200529160544.GI2491@localhost.localdomain>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Good evening. I am Dean Johnston, a broker working with Access=20
-Wealth Services. I am contacting you because one of my high=20
-profile clients is interested in investing abroad and has asked=20
-me to look for individuals and companies with interesting=20
-business ideas and companies that he can invest in. He wants to=20
-expand his portfolio and has interest in investing a substantial=20
-amount of asset abroad. I got your contact (along with other=20
-contacts) through an online business directory and I thought I'd=20
-contact you to see if you are interested in this opportunity.
+From: Marcelo Ricardo Leitner
+> Sent: 29 May 2020 17:06
+> On Fri, May 29, 2020 at 02:09:41PM +0200, Christoph Hellwig wrote:
+> > Split out a sctp_setsockopt_bindx_kernel that takes a kernel pointer
+> > to the sockaddr and make sctp_setsockopt_bindx a small wrapper around
+> > it.  This prepares for adding a new bind_add proto op.
+> >
+> > Signed-off-by: Christoph Hellwig <hch@lst.de>
+> 
+> Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+> 
+> > ---
+> >  net/sctp/socket.c | 61 ++++++++++++++++++++++-------------------------
+> >  1 file changed, 28 insertions(+), 33 deletions(-)
+> >
+> > diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+> > index 827a9903ee288..6e745ac3c4a59 100644
+> > --- a/net/sctp/socket.c
+> > +++ b/net/sctp/socket.c
+> > @@ -972,23 +972,22 @@ int sctp_asconf_mgmt(struct sctp_sock *sp, struct sctp_sockaddr_entry *addrw)
+> >   * it.
+> >   *
+> >   * sk        The sk of the socket
+> > - * addrs     The pointer to the addresses in user land
+> > + * addrs     The pointer to the addresses
+> >   * addrssize Size of the addrs buffer
+> >   * op        Operation to perform (add or remove, see the flags of
+> >   *           sctp_bindx)
+> >   *
+> >   * Returns 0 if ok, <0 errno code on error.
+> >   */
+> > -static int sctp_setsockopt_bindx(struct sock *sk,
+> > -				 struct sockaddr __user *addrs,
+> > -				 int addrs_size, int op)
+> > +static int sctp_setsockopt_bindx_kernel(struct sock *sk,
+                        const
+> > +					struct sockaddr *addrs, int addrs_size,
+> > +					int op)
 
-Please indicate your interest by replying back to this email.=20
-Once I get your response, I will give you more details and we can=20
-plan a strategy that will be beneficial to all parties.
+The list of addresses ought to be 'const'.
 
-Best regards
+IIRC that requires the test for 'port == 0' be moved down  a few layers.
 
-D Johnston
-Access Wealth Services
-+27319400855
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
