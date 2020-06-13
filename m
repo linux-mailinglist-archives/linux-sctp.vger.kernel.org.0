@@ -2,116 +2,92 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A4A1F2C72
-	for <lists+linux-sctp@lfdr.de>; Tue,  9 Jun 2020 02:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFAAC1F8348
+	for <lists+linux-sctp@lfdr.de>; Sat, 13 Jun 2020 14:48:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730360AbgFHXQz (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 8 Jun 2020 19:16:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38286 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728996AbgFHXQv (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:16:51 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0A37B20870;
-        Mon,  8 Jun 2020 23:16:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658209;
-        bh=QwrwwuW4pJqXTclhbCaGstVkf8ihm2HXr3FHk8dwLn0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HnXYUCb075yCKH6R0/qNNqC5oB4CwFSUOYUTueJ5KuLVg1Ni7uEOsKOO/m/67fbb4
-         l891lPgYc8KbAiAt3YDXi/nyMm8F/+srCXJrHZRyO4OHG2QRXnfVzfbCl4QTEMXNPO
-         s9QzPlWg63b901hx4qlDUJ/neHYdrbiJTY0hKONA=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?Jere=20Lepp=C3=A4nen?= <jere.leppanen@nokia.com>,
+        id S1726045AbgFMMsB (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sat, 13 Jun 2020 08:48:01 -0400
+Received: from mail.fudan.edu.cn ([202.120.224.10]:46765 "EHLO fudan.edu.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726021AbgFMMsB (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Sat, 13 Jun 2020 08:48:01 -0400
+X-Greylist: delayed 479 seconds by postgrey-1.27 at vger.kernel.org; Sat, 13 Jun 2020 08:48:00 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fudan.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id; bh=orDLlwUq6Gl4ZFuFaDVaEW2IqJ0LD91Me5OLf+FAEC8=; b=r
+        SW77YMq1loIYxFCKZrwu7yfjfPaheZB55hkoXsNqd9NXG7VT/zSdtiVPyU7YivR6
+        hzhO20HHLN6L8bBMctIQKjA32e7BskSN+SSsSl3GEWI0tJ9H0ZZjPM8OJrZw/hcp
+        wAkpYDMolQPmfPs/R1PNe8Qhs99IZVVSZCfJ7EnUdQ=
+Received: from localhost.localdomain (unknown [120.229.255.202])
+        by app1 (Coremail) with SMTP id XAUFCgDn7zMWyeReX8EYAA--.20920S3;
+        Sat, 13 Jun 2020 20:39:52 +0800 (CST)
+From:   Xiyu Yang <xiyuyang19@fudan.edu.cn>
+To:     Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-sctp@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 227/606] sctp: Start shutdown on association restart if in SHUTDOWN-SENT state and socket is closed
-Date:   Mon,  8 Jun 2020 19:05:52 -0400
-Message-Id: <20200608231211.3363633-227-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
-References: <20200608231211.3363633-1-sashal@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     yuanxzhang@fudan.edu.cn, kjlu@umn.edu,
+        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        Xin Tan <tanxin.ctf@gmail.com>
+Subject: [PATCH] sctp: Fix sk_buff leak when receiving a datagram
+Date:   Sat, 13 Jun 2020 20:39:25 +0800
+Message-Id: <1592051965-94731-1-git-send-email-xiyuyang19@fudan.edu.cn>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID: XAUFCgDn7zMWyeReX8EYAA--.20920S3
+X-Coremail-Antispam: 1UD129KBjvdXoW7Wr43KF1fXrWxJw43Xr4xJFb_yoWDZFg_Ja
+        97CF1xX39ruFsa9aySkrs8AFZakanFqrWIgrsrK39rG345KF9rtrZ8KFZ3CryxWrWxZry5
+        JFn5Krnxu39xZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbfxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr1j
+        6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8Jw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAG
+        YxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkIecxEwVAFwVW5JwCF04k20xvY0x0EwIxGrw
+        CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
+        14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
+        IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxK
+        x2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUqXdUUUUUU=
+X-CM-SenderInfo: irzsiiysuqikmy6i3vldqovvfxof0/
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Jere Leppänen <jere.leppanen@nokia.com>
+In sctp_skb_recv_datagram(), the function fetch a sk_buff object from
+the receiving queue to "skb" by calling skb_peek() or __skb_dequeue()
+and return its reference to the caller.
 
-[ Upstream commit d3e8e4c11870413789f029a71e72ae6e971fe678 ]
+However, when calling __skb_dequeue() successfully, the function forgets
+to hold a reference count of the "skb" object and directly return it,
+causing a potential memory leak in the caller function.
 
-Commit bdf6fa52f01b ("sctp: handle association restarts when the
-socket is closed.") starts shutdown when an association is restarted,
-if in SHUTDOWN-PENDING state and the socket is closed. However, the
-rationale stated in that commit applies also when in SHUTDOWN-SENT
-state - we don't want to move an association to ESTABLISHED state when
-the socket has been closed, because that results in an association
-that is unreachable from user space.
+Fix this issue by calling refcount_inc after __skb_dequeue()
+successfully executed.
 
-The problem scenario:
-
-1.  Client crashes and/or restarts.
-
-2.  Server (using one-to-one socket) calls close(). SHUTDOWN is lost.
-
-3.  Client reconnects using the same addresses and ports.
-
-4.  Server's association is restarted. The association and the socket
-    move to ESTABLISHED state, even though the server process has
-    closed its descriptor.
-
-Also, after step 4 when the server process exits, some resources are
-leaked in an attempt to release the underlying inet sock structure in
-ESTABLISHED state:
-
-    IPv4: Attempt to release TCP socket in state 1 00000000377288c7
-
-Fix by acting the same way as in SHUTDOWN-PENDING state. That is, if
-an association is restarted in SHUTDOWN-SENT state and the socket is
-closed, then start shutdown and don't move the association or the
-socket to ESTABLISHED state.
-
-Fixes: bdf6fa52f01b ("sctp: handle association restarts when the socket is closed.")
-Signed-off-by: Jere Leppänen <jere.leppanen@nokia.com>
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
 ---
- net/sctp/sm_statefuns.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ net/sctp/socket.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
-index 26788f4a3b9e..e86620fbd90f 100644
---- a/net/sctp/sm_statefuns.c
-+++ b/net/sctp/sm_statefuns.c
-@@ -1856,12 +1856,13 @@ static enum sctp_disposition sctp_sf_do_dupcook_a(
- 	/* Update the content of current association. */
- 	sctp_add_cmd_sf(commands, SCTP_CMD_UPDATE_ASSOC, SCTP_ASOC(new_asoc));
- 	sctp_add_cmd_sf(commands, SCTP_CMD_EVENT_ULP, SCTP_ULPEVENT(ev));
--	if (sctp_state(asoc, SHUTDOWN_PENDING) &&
-+	if ((sctp_state(asoc, SHUTDOWN_PENDING) ||
-+	     sctp_state(asoc, SHUTDOWN_SENT)) &&
- 	    (sctp_sstate(asoc->base.sk, CLOSING) ||
- 	     sock_flag(asoc->base.sk, SOCK_DEAD))) {
--		/* if were currently in SHUTDOWN_PENDING, but the socket
--		 * has been closed by user, don't transition to ESTABLISHED.
--		 * Instead trigger SHUTDOWN bundled with COOKIE_ACK.
-+		/* If the socket has been closed by user, don't
-+		 * transition to ESTABLISHED. Instead trigger SHUTDOWN
-+		 * bundled with COOKIE_ACK.
- 		 */
- 		sctp_add_cmd_sf(commands, SCTP_CMD_REPLY, SCTP_CHUNK(repl));
- 		return sctp_sf_do_9_2_start_shutdown(net, ep, asoc,
+diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+index d57e1a002ffc..4c8f0b83efd0 100644
+--- a/net/sctp/socket.c
++++ b/net/sctp/socket.c
+@@ -8990,6 +8990,8 @@ struct sk_buff *sctp_skb_recv_datagram(struct sock *sk, int flags,
+ 				refcount_inc(&skb->users);
+ 		} else {
+ 			skb = __skb_dequeue(&sk->sk_receive_queue);
++			if (skb)
++				refcount_inc(&skb->users);
+ 		}
+ 
+ 		if (skb)
 -- 
-2.25.1
+2.7.4
 
