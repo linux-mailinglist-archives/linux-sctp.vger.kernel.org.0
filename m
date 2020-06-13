@@ -2,92 +2,99 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFAAC1F8348
-	for <lists+linux-sctp@lfdr.de>; Sat, 13 Jun 2020 14:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F7D1F8427
+	for <lists+linux-sctp@lfdr.de>; Sat, 13 Jun 2020 17:59:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726045AbgFMMsB (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sat, 13 Jun 2020 08:48:01 -0400
-Received: from mail.fudan.edu.cn ([202.120.224.10]:46765 "EHLO fudan.edu.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726021AbgFMMsB (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Sat, 13 Jun 2020 08:48:01 -0400
-X-Greylist: delayed 479 seconds by postgrey-1.27 at vger.kernel.org; Sat, 13 Jun 2020 08:48:00 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fudan.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id; bh=orDLlwUq6Gl4ZFuFaDVaEW2IqJ0LD91Me5OLf+FAEC8=; b=r
-        SW77YMq1loIYxFCKZrwu7yfjfPaheZB55hkoXsNqd9NXG7VT/zSdtiVPyU7YivR6
-        hzhO20HHLN6L8bBMctIQKjA32e7BskSN+SSsSl3GEWI0tJ9H0ZZjPM8OJrZw/hcp
-        wAkpYDMolQPmfPs/R1PNe8Qhs99IZVVSZCfJ7EnUdQ=
-Received: from localhost.localdomain (unknown [120.229.255.202])
-        by app1 (Coremail) with SMTP id XAUFCgDn7zMWyeReX8EYAA--.20920S3;
-        Sat, 13 Jun 2020 20:39:52 +0800 (CST)
-From:   Xiyu Yang <xiyuyang19@fudan.edu.cn>
-To:     Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
+        id S1726618AbgFMP7J (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sat, 13 Jun 2020 11:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35068 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726609AbgFMP6W (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sat, 13 Jun 2020 11:58:22 -0400
+Received: from smtp.tuxdriver.com (tunnel92311-pt.tunnel.tserv13.ash1.ipv6.he.net [IPv6:2001:470:7:9c9::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 464A0C08C5C1;
+        Sat, 13 Jun 2020 08:58:22 -0700 (PDT)
+Received: from 2606-a000-111b-4634-0000-0000-0000-1bf2.inf6.spectrum.com ([2606:a000:111b:4634::1bf2] helo=localhost)
+        by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
+        (Exim 4.63)
+        (envelope-from <nhorman@tuxdriver.com>)
+        id 1jk8XY-0002Cu-MZ; Sat, 13 Jun 2020 11:57:55 -0400
+Date:   Sat, 13 Jun 2020 11:57:51 -0400
+From:   Neil Horman <nhorman@tuxdriver.com>
+To:     Xiyu Yang <xiyuyang19@fudan.edu.cn>
+Cc:     Vlad Yasevich <vyasevich@gmail.com>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     yuanxzhang@fudan.edu.cn, kjlu@umn.edu,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yuanxzhang@fudan.edu.cn, kjlu@umn.edu,
         Xin Tan <tanxin.ctf@gmail.com>
-Subject: [PATCH] sctp: Fix sk_buff leak when receiving a datagram
-Date:   Sat, 13 Jun 2020 20:39:25 +0800
-Message-Id: <1592051965-94731-1-git-send-email-xiyuyang19@fudan.edu.cn>
-X-Mailer: git-send-email 2.7.4
-X-CM-TRANSID: XAUFCgDn7zMWyeReX8EYAA--.20920S3
-X-Coremail-Antispam: 1UD129KBjvdXoW7Wr43KF1fXrWxJw43Xr4xJFb_yoWDZFg_Ja
-        97CF1xX39ruFsa9aySkrs8AFZakanFqrWIgrsrK39rG345KF9rtrZ8KFZ3CryxWrWxZry5
-        JFn5Krnxu39xZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbfxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr1j
-        6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8Jw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAG
-        YxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkIecxEwVAFwVW5JwCF04k20xvY0x0EwIxGrw
-        CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
-        14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
-        IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxK
-        x2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUqXdUUUUUU=
-X-CM-SenderInfo: irzsiiysuqikmy6i3vldqovvfxof0/
+Subject: Re: [PATCH] sctp: Fix sk_buff leak when receiving a datagram
+Message-ID: <20200613155751.GA161691@hmswarspite.think-freely.org>
+References: <1592051965-94731-1-git-send-email-xiyuyang19@fudan.edu.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1592051965-94731-1-git-send-email-xiyuyang19@fudan.edu.cn>
+X-Spam-Score: -2.9 (--)
+X-Spam-Status: No
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-In sctp_skb_recv_datagram(), the function fetch a sk_buff object from
-the receiving queue to "skb" by calling skb_peek() or __skb_dequeue()
-and return its reference to the caller.
+On Sat, Jun 13, 2020 at 08:39:25PM +0800, Xiyu Yang wrote:
+> In sctp_skb_recv_datagram(), the function fetch a sk_buff object from
+> the receiving queue to "skb" by calling skb_peek() or __skb_dequeue()
+> and return its reference to the caller.
+> 
+> However, when calling __skb_dequeue() successfully, the function forgets
+> to hold a reference count of the "skb" object and directly return it,
+> causing a potential memory leak in the caller function.
+> 
+> Fix this issue by calling refcount_inc after __skb_dequeue()
+> successfully executed.
+> 
+> Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+> Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
+> ---
+>  net/sctp/socket.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+> index d57e1a002ffc..4c8f0b83efd0 100644
+> --- a/net/sctp/socket.c
+> +++ b/net/sctp/socket.c
+> @@ -8990,6 +8990,8 @@ struct sk_buff *sctp_skb_recv_datagram(struct sock *sk, int flags,
+>  				refcount_inc(&skb->users);
+>  		} else {
+>  			skb = __skb_dequeue(&sk->sk_receive_queue);
+> +			if (skb)
+> +				refcount_inc(&skb->users);
+For completeness, you should probably use skb_get here, rather than refcount_inc
+directly.
 
-However, when calling __skb_dequeue() successfully, the function forgets
-to hold a reference count of the "skb" object and directly return it,
-causing a potential memory leak in the caller function.
+Also, I'm not entirely sure I see how a memory leak can happen here.  we take an
+extra reference in the skb_peek clause of this code area because if we return an
+skb that continues to exist on the sk_receive_queue list, we legitimately have
+two users for the skb (the user who called sctp_skb_recv_datagram(...,MSG_PEEK),
+and the potential next caller who will actually dequeue the skb.
 
-Fix this issue by calling refcount_inc after __skb_dequeue()
-successfully executed.
+In the else clause however, that condition doesn't exist.  the user count for
+the skb should alreday be 1, if the caller is the only user of the skb), or more
+than 1, if 1 or more callers have gotten a reference to the message using
+MSG_PEEK.
 
-Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
----
- net/sctp/socket.c | 2 ++
- 1 file changed, 2 insertions(+)
+I don't think this code is needed, and in fact will actually cause memory leaks,
+because theres no subsequent skb_unref call to drop refcount that you are adding
+here.
 
-diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-index d57e1a002ffc..4c8f0b83efd0 100644
---- a/net/sctp/socket.c
-+++ b/net/sctp/socket.c
-@@ -8990,6 +8990,8 @@ struct sk_buff *sctp_skb_recv_datagram(struct sock *sk, int flags,
- 				refcount_inc(&skb->users);
- 		} else {
- 			skb = __skb_dequeue(&sk->sk_receive_queue);
-+			if (skb)
-+				refcount_inc(&skb->users);
- 		}
- 
- 		if (skb)
--- 
-2.7.4
+Neil
 
+>  		}
+>  
+>  		if (skb)
+> -- 
+> 2.7.4
+> 
+> 
