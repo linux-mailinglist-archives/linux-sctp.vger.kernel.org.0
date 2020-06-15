@@ -2,47 +2,40 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D106C1F9F26
-	for <lists+linux-sctp@lfdr.de>; Mon, 15 Jun 2020 20:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E277F1F9F7C
+	for <lists+linux-sctp@lfdr.de>; Mon, 15 Jun 2020 20:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731325AbgFOSJo (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 15 Jun 2020 14:09:44 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:55738 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728585AbgFOSJm (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 15 Jun 2020 14:09:42 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05FI7hca026496;
-        Mon, 15 Jun 2020 18:08:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=EdV85x/l0ZQB7qs/RGol05XelTO/TGwy+i5Nwcf8gRM=;
- b=ksIm2T40o14OrDnPOVl41oLfXflESyB3DKHmSrY07W8hiE/Z7QLC5o1aUTaHPRbSwzbu
- 9c0NwLH9cAIIrEop8mGTFh8G1XGbz9PddITo/iGjFqouwLRZRmyMPkuv312Tprpn0qqE
- vsgCBz56dXPpSbVxKCQXClzuApbPztWVszZo40Z9/pDvMf5EwgQrvvf51uoX9UnrZp3o
- w/4xkBk0XXZDlc2YcrCzTOExgRGYIv3Y4giKzpy8SzyD0DJs8FkiFKoy2usbln1dH7C7
- /e2gagyqK7O847BIeVNSzHbKNPgl/68telPWwh1LacJqZVCnTiRrQlKn7a2GbDXIJ48j 0Q== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 31p6s22cke-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 15 Jun 2020 18:08:31 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05FHwvkZ051587;
-        Mon, 15 Jun 2020 18:08:30 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 31p6de1e1n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 15 Jun 2020 18:08:30 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05FI8G7g031730;
-        Mon, 15 Jun 2020 18:08:17 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 15 Jun 2020 11:08:15 -0700
-Date:   Mon, 15 Jun 2020 21:07:53 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Waiman Long <longman@redhat.com>
+        id S1731354AbgFOSkd (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 15 Jun 2020 14:40:33 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:53257 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729847AbgFOSkc (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Mon, 15 Jun 2020 14:40:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1592246431;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3LdVapGy9WTsAkwpfNEzCTfQe3Pij8/lM5ySXZsHExs=;
+        b=iOSi6SGLarrDdScRiW6WivQV/JT2U717fvdPWQPXU86jormg+4QrlYH+6CoQ1bKBcmsQ/B
+        yOW7kRTd4z9oxidxHf9YTdSea+WYeCe3RRWhWGXTJyTXsYPXL8xck6iQxf6+FPb5lAnKhS
+        S1VVssQnte2GEikXLA9qk0Y7J4KU8jk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-513-n3G_ZfGUONug8wkjJytxqA-1; Mon, 15 Jun 2020 14:40:12 -0400
+X-MC-Unique: n3G_ZfGUONug8wkjJytxqA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E5F43184D144;
+        Mon, 15 Jun 2020 18:40:06 +0000 (UTC)
+Received: from llong.remote.csb (ovpn-117-41.rdu2.redhat.com [10.10.117.41])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3972B5D9CC;
+        Mon, 15 Jun 2020 18:40:00 +0000 (UTC)
+Subject: Re: [PATCH 1/2] mm, treewide: Rename kzfree() to kfree_sensitive()
+To:     Dan Carpenter <dan.carpenter@oracle.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         David Howells <dhowells@redhat.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
@@ -71,74 +64,74 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         tipc-discussion@lists.sourceforge.net, wireguard@lists.zx2c4.com,
         linux-ppp@vger.kernel.org, linux-integrity@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH 1/2] mm, treewide: Rename kzfree() to kfree_sensitive()
-Message-ID: <20200615180753.GJ4151@kadam>
 References: <20200413211550.8307-1-longman@redhat.com>
- <20200413211550.8307-2-longman@redhat.com>
+ <20200413211550.8307-2-longman@redhat.com> <20200615180753.GJ4151@kadam>
+From:   Waiman Long <longman@redhat.com>
+Organization: Red Hat
+Message-ID: <9d084be2-29a3-7757-9386-20dbaeb5fc24@redhat.com>
+Date:   Mon, 15 Jun 2020 14:39:59 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200413211550.8307-2-longman@redhat.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9653 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 adultscore=0 bulkscore=0
- phishscore=0 malwarescore=0 spamscore=0 mlxlogscore=930 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006150134
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9653 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 impostorscore=0
- clxscore=1011 mlxscore=0 mlxlogscore=944 priorityscore=1501 phishscore=0
- malwarescore=0 suspectscore=2 spamscore=0 cotscore=-2147483648 bulkscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2006150135
+In-Reply-To: <20200615180753.GJ4151@kadam>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Mon, Apr 13, 2020 at 05:15:49PM -0400, Waiman Long wrote:
-> diff --git a/mm/slab_common.c b/mm/slab_common.c
-> index 23c7500eea7d..c08bc7eb20bd 100644
-> --- a/mm/slab_common.c
-> +++ b/mm/slab_common.c
-> @@ -1707,17 +1707,17 @@ void *krealloc(const void *p, size_t new_size, gfp_t flags)
->  EXPORT_SYMBOL(krealloc);
->  
->  /**
-> - * kzfree - like kfree but zero memory
-> + * kfree_sensitive - Clear sensitive information in memory before freeing
->   * @p: object to free memory of
->   *
->   * The memory of the object @p points to is zeroed before freed.
-> - * If @p is %NULL, kzfree() does nothing.
-> + * If @p is %NULL, kfree_sensitive() does nothing.
->   *
->   * Note: this function zeroes the whole allocated buffer which can be a good
->   * deal bigger than the requested buffer size passed to kmalloc(). So be
->   * careful when using this function in performance sensitive code.
->   */
-> -void kzfree(const void *p)
-> +void kfree_sensitive(const void *p)
->  {
->  	size_t ks;
->  	void *mem = (void *)p;
-> @@ -1725,10 +1725,10 @@ void kzfree(const void *p)
->  	if (unlikely(ZERO_OR_NULL_PTR(mem)))
->  		return;
->  	ks = ksize(mem);
-> -	memset(mem, 0, ks);
-> +	memzero_explicit(mem, ks);
-        ^^^^^^^^^^^^^^^^^^^^^^^^^
-This is an unrelated bug fix.  It really needs to be pulled into a
-separate patch by itself and back ported to stable kernels.
+On 6/15/20 2:07 PM, Dan Carpenter wrote:
+> On Mon, Apr 13, 2020 at 05:15:49PM -0400, Waiman Long wrote:
+>> diff --git a/mm/slab_common.c b/mm/slab_common.c
+>> index 23c7500eea7d..c08bc7eb20bd 100644
+>> --- a/mm/slab_common.c
+>> +++ b/mm/slab_common.c
+>> @@ -1707,17 +1707,17 @@ void *krealloc(const void *p, size_t new_size, gfp_t flags)
+>>   EXPORT_SYMBOL(krealloc);
+>>   
+>>   /**
+>> - * kzfree - like kfree but zero memory
+>> + * kfree_sensitive - Clear sensitive information in memory before freeing
+>>    * @p: object to free memory of
+>>    *
+>>    * The memory of the object @p points to is zeroed before freed.
+>> - * If @p is %NULL, kzfree() does nothing.
+>> + * If @p is %NULL, kfree_sensitive() does nothing.
+>>    *
+>>    * Note: this function zeroes the whole allocated buffer which can be a good
+>>    * deal bigger than the requested buffer size passed to kmalloc(). So be
+>>    * careful when using this function in performance sensitive code.
+>>    */
+>> -void kzfree(const void *p)
+>> +void kfree_sensitive(const void *p)
+>>   {
+>>   	size_t ks;
+>>   	void *mem = (void *)p;
+>> @@ -1725,10 +1725,10 @@ void kzfree(const void *p)
+>>   	if (unlikely(ZERO_OR_NULL_PTR(mem)))
+>>   		return;
+>>   	ks = ksize(mem);
+>> -	memset(mem, 0, ks);
+>> +	memzero_explicit(mem, ks);
+>          ^^^^^^^^^^^^^^^^^^^^^^^^^
+> This is an unrelated bug fix.  It really needs to be pulled into a
+> separate patch by itself and back ported to stable kernels.
+>
+>>   	kfree(mem);
+>>   }
+>> -EXPORT_SYMBOL(kzfree);
+>> +EXPORT_SYMBOL(kfree_sensitive);
+>>   
+>>   /**
+>>    * ksize - get the actual amount of memory allocated for a given object
+> regards,
+> dan carpenter
+>
+Thanks for the suggestion. I will break it out and post a version soon.
 
->  	kfree(mem);
->  }
-> -EXPORT_SYMBOL(kzfree);
-> +EXPORT_SYMBOL(kfree_sensitive);
->  
->  /**
->   * ksize - get the actual amount of memory allocated for a given object
+Cheers,
+Longman
 
-regards,
-dan carpenter
