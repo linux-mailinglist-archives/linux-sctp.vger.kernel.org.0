@@ -2,39 +2,47 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF401FB196
-	for <lists+linux-sctp@lfdr.de>; Tue, 16 Jun 2020 15:05:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 524051FB457
+	for <lists+linux-sctp@lfdr.de>; Tue, 16 Jun 2020 16:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728869AbgFPNFV (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 16 Jun 2020 09:05:21 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:50254 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728699AbgFPNFT (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 16 Jun 2020 09:05:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1592312717;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7nZX/JZoMn+I5qsocsgLqRgQUtpNpbf+EHIybmwJtOc=;
-        b=Kb1ntucIH/6101JMcJj/Quohma8qEmcmMwFqnZXJaANFqcO993o0plTYecMTky9PEKK8E+
-        FdsLdLUt8n/cP0JxjVNUiJKLD+G9+oc4hb+mic1vrT33io221HtRHjVQJVHfTNTWgh1fQf
-        +D0yScY7r1lA5CagffHtuiymwFSRh80=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-395-9xOyBG-QPzmPq6osX1JXvA-1; Tue, 16 Jun 2020 09:05:14 -0400
-X-MC-Unique: 9xOyBG-QPzmPq6osX1JXvA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 108C8107B7CB;
-        Tue, 16 Jun 2020 13:05:07 +0000 (UTC)
-Received: from llong.remote.csb (ovpn-114-156.rdu2.redhat.com [10.10.114.156])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3337D5D9E4;
-        Tue, 16 Jun 2020 13:05:01 +0000 (UTC)
-Subject: Re: [PATCH v4 1/3] mm/slab: Use memzero_explicit() in kzfree()
-To:     Eric Biggers <ebiggers@kernel.org>
+        id S1729043AbgFPO2D (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 16 Jun 2020 10:28:03 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:44784 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726405AbgFPO2B (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 16 Jun 2020 10:28:01 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05GELOZQ057447;
+        Tue, 16 Jun 2020 14:26:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=UepsmQC/DlQFZ6+UxfaNjoC9RmBOSxOKZ2W1AkmRQd8=;
+ b=WvEeJyFmKL8HM4eLekulNPcOb25Sw7YajmFzrepd+1TsQe+PNe2o6it9fFwXghV3FsHv
+ QdrFGubdjTeCc6kAWKTDSEoqMv3it70YtNHwfwRr3qSfXcxJVIBcqm6X7SGsetYqkHWx
+ H7ruRtQFUVaMSNzeIOu+jnB9ul0qpA74I5CLeOsjFOWmZFGD+qOJ1lRDn7UN2JHhoajF
+ f/9ecfn6gkdb7upj+cJi6IY4VZZEPZcXh9vvLg7+i5e+33eQa6zJ2K1MWUsjTMUYhONT
+ ZCDycK9k04JLa7cAHqpl868otcTeoTLOGNWMgNDyB7bEprwRuViNVIe1IhKb+72uVtQ1 Lw== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 31p6e5y3y1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 16 Jun 2020 14:26:56 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05GEODoW027404;
+        Tue, 16 Jun 2020 14:26:56 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 31p6s7kbhq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 16 Jun 2020 14:26:56 +0000
+Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05GEQfNL026862;
+        Tue, 16 Jun 2020 14:26:42 GMT
+Received: from kadam (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 16 Jun 2020 07:26:41 -0700
+Date:   Tue, 16 Jun 2020 17:26:24 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Waiman Long <longman@redhat.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         David Howells <dhowells@redhat.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
@@ -46,7 +54,6 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         David Rientjes <rientjes@google.com>,
         Michal Hocko <mhocko@suse.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
         David Sterba <dsterba@suse.cz>,
         "Jason A . Donenfeld" <Jason@zx2c4.com>, linux-mm@kvack.org,
         keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -64,80 +71,41 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
         linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
         linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, stable@vger.kernel.org
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v4 2/3] mm, treewide: Rename kzfree() to kfree_sensitive()
+Message-ID: <20200616142624.GO4282@kadam>
 References: <20200616015718.7812-1-longman@redhat.com>
- <20200616015718.7812-2-longman@redhat.com>
- <20200616033035.GB902@sol.localdomain>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <56c2304c-73cc-8f48-d8d0-5dd6c39f33f3@redhat.com>
-Date:   Tue, 16 Jun 2020 09:05:00 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+ <20200616015718.7812-3-longman@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20200616033035.GB902@sol.localdomain>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200616015718.7812-3-longman@redhat.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9653 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
+ mlxlogscore=886 adultscore=0 phishscore=0 bulkscore=0 spamscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006160106
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9653 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 adultscore=0
+ mlxscore=0 phishscore=0 mlxlogscore=893 lowpriorityscore=0 clxscore=1011
+ suspectscore=0 spamscore=0 bulkscore=0 malwarescore=0 impostorscore=0
+ cotscore=-2147483648 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006160106
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On 6/15/20 11:30 PM, Eric Biggers wrote:
-> On Mon, Jun 15, 2020 at 09:57:16PM -0400, Waiman Long wrote:
->> The kzfree() function is normally used to clear some sensitive
->> information, like encryption keys, in the buffer before freeing it back
->> to the pool. Memset() is currently used for the buffer clearing. However,
->> it is entirely possible that the compiler may choose to optimize away the
->> memory clearing especially if LTO is being used. To make sure that this
->> optimization will not happen, memzero_explicit(), which is introduced
->> in v3.18, is now used in kzfree() to do the clearing.
->>
->> Fixes: 3ef0e5ba4673 ("slab: introduce kzfree()")
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->>   mm/slab_common.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/mm/slab_common.c b/mm/slab_common.c
->> index 9e72ba224175..37d48a56431d 100644
->> --- a/mm/slab_common.c
->> +++ b/mm/slab_common.c
->> @@ -1726,7 +1726,7 @@ void kzfree(const void *p)
->>   	if (unlikely(ZERO_OR_NULL_PTR(mem)))
->>   		return;
->>   	ks = ksize(mem);
->> -	memset(mem, 0, ks);
->> +	memzero_explicit(mem, ks);
->>   	kfree(mem);
->>   }
->>   EXPORT_SYMBOL(kzfree);
-> This is a good change, but the commit message isn't really accurate.  AFAIK, no
-> one has found any case where this memset() gets optimized out.  And even with
-> LTO, it would be virtually impossible due to all the synchronization and global
-> data structures that kfree() uses.  (Remember that this isn't the C standard
-> function "free()", so the compiler can't assign it any special meaning.)
-> Not to mention that LTO support isn't actually upstream yet.
->
-> I still agree with the change, but it might be helpful if the commit message
-> were honest that this is really a hardening measure and about properly conveying
-> the intent.  As-is this sounds like a critical fix, which might confuse people.
+Last time you sent this we couldn't decide which tree it should go
+through.  Either the crypto tree or through Andrew seems like the right
+thing to me.
 
-Yes, I agree that the commit log may look a bit scary. How about the 
-following:
+Also the other issue is that it risks breaking things if people add
+new kzfree() instances while we are doing the transition.  Could you
+just add a "#define kzfree kfree_sensitive" so that things continue to
+compile and we can remove it in the next kernel release?
 
-The kzfree() function is normally used to clear some sensitive
-information, like encryption keys, in the buffer before freeing it back
-to the pool. Memset() is currently used for buffer clearing. However
-unlikely, there is still a non-zero probability that the compiler may
-choose to optimize away the memory clearing especially if LTO is being
-used in the future. To make sure that this optimization will never
-happen, memzero_explicit(), which is introduced in v3.18, is now used
-in kzfree() to future-proof it.
-
-Cheers,
-Longman
+regards,
+dan carpenter
 
