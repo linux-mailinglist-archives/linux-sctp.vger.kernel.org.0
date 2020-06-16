@@ -2,50 +2,44 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 333EC1FBE30
-	for <lists+linux-sctp@lfdr.de>; Tue, 16 Jun 2020 20:36:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD121FBE85
+	for <lists+linux-sctp@lfdr.de>; Tue, 16 Jun 2020 20:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729578AbgFPSge (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 16 Jun 2020 14:36:34 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:39756 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729566AbgFPSgd (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 16 Jun 2020 14:36:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1592332591;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7/6v2jfN6UIDhJeosnSs1R4UAP7mOiLuFVPEnJvGTnM=;
-        b=VsbTXqwl7xxf+MUWbnJM4vCOVIS/iCxA1SAjzyA8FsjzrodShKHnZfMLXBOQL/GHNJH8vC
-        OuxP6I6blTXluNjdUqYdGiIeMKVM7wFH4inGVQHpTaw8gw2uwB0FCvyIBJbPEBsvhu17TV
-        Bbxsdyz8zlcvC51jFF/xVTwdyLhzHT8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-73-AXrSOJCONRyyvrghDqFtvA-1; Tue, 16 Jun 2020 14:36:27 -0400
-X-MC-Unique: AXrSOJCONRyyvrghDqFtvA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2578680332A;
-        Tue, 16 Jun 2020 18:36:22 +0000 (UTC)
-Received: from llong.remote.csb (ovpn-114-156.rdu2.redhat.com [10.10.114.156])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3B77519C71;
-        Tue, 16 Jun 2020 18:36:16 +0000 (UTC)
-Subject: Re: [PATCH v5 2/2] mm, treewide: Rename kzfree() to kfree_sensitive()
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     David Howells <dhowells@redhat.com>,
+        id S1730056AbgFPSyB (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 16 Jun 2020 14:54:01 -0400
+Received: from smtprelay0159.hostedemail.com ([216.40.44.159]:58294 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726805AbgFPSyA (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Tue, 16 Jun 2020 14:54:00 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay01.hostedemail.com (Postfix) with ESMTP id 1290410050792;
+        Tue, 16 Jun 2020 18:53:58 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 50,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:965:966:967:968:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2194:2196:2198:2199:2200:2201:2393:2525:2560:2563:2682:2685:2693:2740:2828:2859:2933:2937:2939:2942:2945:2947:2951:2954:3022:3138:3139:3140:3141:3142:3352:3622:3743:3865:3866:3867:3868:3871:3872:3874:3934:3936:3938:3941:3944:3947:3950:3953:3956:3959:4321:4385:4390:4395:5007:6248:6691:6742:6743:7807:7808:7875:7903:9025:9108:10004:10400:10848:11026:11658:11914:12043:12048:12050:12295:12296:12297:12438:12555:12740:12760:12895:13069:13311:13357:13439:13845:14096:14097:14181:14659:14721:14777:21080:21433:21451:21627:21811:21990:30054:30070:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: cent55_291055a26e01
+X-Filterd-Recvd-Size: 3364
+Received: from XPS-9350.home (unknown [47.151.136.130])
+        (Authenticated sender: joe@perches.com)
+        by omf13.hostedemail.com (Postfix) with ESMTPA;
+        Tue, 16 Jun 2020 18:53:51 +0000 (UTC)
+Message-ID: <fe3b9a437be4aeab3bac68f04193cb6daaa5bee4.camel@perches.com>
+Subject: Re: [PATCH v4 0/3] mm, treewide: Rename kzfree() to
+ kfree_sensitive()
+From:   Joe Perches <joe@perches.com>
+To:     Waiman Long <longman@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
         Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>,
-        Michal Hocko <mhocko@suse.com>,
+        David Rientjes <rientjes@google.com>
+Cc:     Michal Hocko <mhocko@suse.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
         Dan Carpenter <dan.carpenter@oracle.com>,
+        David Sterba <dsterba@suse.cz>,
         "Jason A . Donenfeld" <Jason@zx2c4.com>, linux-mm@kvack.org,
         keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
@@ -56,92 +50,60 @@ Cc:     David Howells <dhowells@redhat.com>,
         linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
         linux-wireless@vger.kernel.org, devel@driverdev.osuosl.org,
         linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        ecryptfs@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-bluetooth@vger.kernel.org, linux-wpan@vger.kernel.org,
-        linux-sctp@vger.kernel.org, linux-nfs@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net,
+        linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
         linux-security-module@vger.kernel.org,
         linux-integrity@vger.kernel.org
-References: <20200616154311.12314-1-longman@redhat.com>
- <20200616154311.12314-3-longman@redhat.com>
- <20200616110944.c13f221e5c3f54e775190afe@linux-foundation.org>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <65002c1e-5e31-1f4e-283c-186e06e55ef0@redhat.com>
-Date:   Tue, 16 Jun 2020 14:36:15 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+Date:   Tue, 16 Jun 2020 11:53:50 -0700
+In-Reply-To: <20200616015718.7812-1-longman@redhat.com>
+References: <20200616015718.7812-1-longman@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.2-0ubuntu1 
 MIME-Version: 1.0
-In-Reply-To: <20200616110944.c13f221e5c3f54e775190afe@linux-foundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On 6/16/20 2:09 PM, Andrew Morton wrote:
-> On Tue, 16 Jun 2020 11:43:11 -0400 Waiman Long <longman@redhat.com> wrote:
->
->> As said by Linus:
->>
->>    A symmetric naming is only helpful if it implies symmetries in use.
->>    Otherwise it's actively misleading.
->>
->>    In "kzalloc()", the z is meaningful and an important part of what the
->>    caller wants.
->>
->>    In "kzfree()", the z is actively detrimental, because maybe in the
->>    future we really _might_ want to use that "memfill(0xdeadbeef)" or
->>    something. The "zero" part of the interface isn't even _relevant_.
->>
->> The main reason that kzfree() exists is to clear sensitive information
->> that should not be leaked to other future users of the same memory
->> objects.
->>
->> Rename kzfree() to kfree_sensitive() to follow the example of the
->> recently added kvfree_sensitive() and make the intention of the API
->> more explicit. In addition, memzero_explicit() is used to clear the
->> memory to make sure that it won't get optimized away by the compiler.
->>
->> The renaming is done by using the command sequence:
->>
->>    git grep -w --name-only kzfree |\
->>    xargs sed -i 's/\bkzfree\b/kfree_sensitive/'
->>
->> followed by some editing of the kfree_sensitive() kerneldoc and adding
->> a kzfree backward compatibility macro in slab.h.
->>
->> ...
->>
->> --- a/include/linux/slab.h
->> +++ b/include/linux/slab.h
->> @@ -186,10 +186,12 @@ void memcg_deactivate_kmem_caches(struct mem_cgroup *, struct mem_cgroup *);
->>    */
->>   void * __must_check krealloc(const void *, size_t, gfp_t);
->>   void kfree(const void *);
->> -void kzfree(const void *);
->> +void kfree_sensitive(const void *);
->>   size_t __ksize(const void *);
->>   size_t ksize(const void *);
->>   
->> +#define kzfree(x)	kfree_sensitive(x)	/* For backward compatibility */
->> +
-> What was the thinking here?  Is this really necessary?
->
-> I suppose we could keep this around for a while to ease migration.  But
-> not for too long, please.
->
-It should be there just for 1 release cycle. I have broken out the btrfs 
-patch to the btrfs list and I didn't make the kzfree to kfree_sensitive 
-conversion there as that patch was in front in my patch list. So 
-depending on which one lands first, there can be a window where the 
-compilation may fail without this workaround. I am going to send out 
-another patch in the next release cycle to remove it.
+On Mon, 2020-06-15 at 21:57 -0400, Waiman Long wrote:
+>  v4:
+>   - Break out the memzero_explicit() change as suggested by Dan Carpenter
+>     so that it can be backported to stable.
+>   - Drop the "crypto: Remove unnecessary memzero_explicit()" patch for
+>     now as there can be a bit more discussion on what is best. It will be
+>     introduced as a separate patch later on after this one is merged.
 
-Cheers,
-Longman
+To this larger audience and last week without reply:
+https://lore.kernel.org/lkml/573b3fbd5927c643920e1364230c296b23e7584d.camel@perches.com/
+
+Are there _any_ fastpath uses of kfree or vfree?
+
+Many patches have been posted recently to fix mispairings
+of specific types of alloc and free functions.
+
+To eliminate these mispairings at a runtime cost of four
+comparisons, should the kfree/vfree/kvfree/kfree_const
+functions be consolidated into a single kfree?
+
+Something like the below:
+
+   void kfree(const void *addr)
+   {
+   	if (is_kernel_rodata((unsigned long)addr))
+   		return;
+
+   	if (is_vmalloc_addr(addr))
+   		_vfree(addr);
+   	else
+   		_kfree(addr);
+   }
+
+   #define kvfree		kfree
+   #define vfree		kfree
+   #define kfree_const	kfree
+
 
