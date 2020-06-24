@@ -2,92 +2,158 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E9C3207CF3
-	for <lists+linux-sctp@lfdr.de>; Wed, 24 Jun 2020 22:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA8E4207D83
+	for <lists+linux-sctp@lfdr.de>; Wed, 24 Jun 2020 22:36:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729175AbgFXUba (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 24 Jun 2020 16:31:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50190 "EHLO
+        id S2406703AbgFXUel (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 24 Jun 2020 16:34:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727981AbgFXUb3 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 24 Jun 2020 16:31:29 -0400
+        with ESMTP id S2406695AbgFXUeh (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 24 Jun 2020 16:34:37 -0400
 Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A65DC061573;
-        Wed, 24 Jun 2020 13:31:28 -0700 (PDT)
-Received: by mail-qk1-x742.google.com with SMTP id r22so3167775qke.13;
-        Wed, 24 Jun 2020 13:31:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BD6C061573;
+        Wed, 24 Jun 2020 13:34:37 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id e11so3232136qkm.3;
+        Wed, 24 Jun 2020 13:34:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=P+8CNlZ9Qpc5ZgQ40v352IfRPP/wLIfYxQwvpVM2BK8=;
-        b=kk7RsrcZrq+EWEq1RkGL2qELTGIfWZ+7A5f8uxNPVPEibrKo6usG/U0X0c/K+WQBaK
-         I0Vwu1ij+04Cm4N7N3hudYLfDj4vowAhndJiBzYXBiACSt71ZxTEXRs6VcfVL0KDPyjR
-         H5dwoZ2YW2q6AHbmuSGodnv9tfTkh+oXgN0UtmZW0NQBaFPV78w3U6SbYtPkS+0iSm+g
-         rnrzLxXzGuGRRRpHjzVX3PNAKgAJ+sgg24MjZrzAWiniIlFI/d+6rlJnYP3HKvOhAG5v
-         cIAaii2PEC3/5lT+LK9jL2EzJ1WsYy12heloFZpwlSbpRJmdZcTlTK1cquFc+jfo0O0J
-         A8XQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=c+1rdjNbNhNdSQ1AVA+fZ00uP3B7DPUsKONFybd/2Sg=;
+        b=DfmigqBIaoNQSbQtf1CVZ7JFr8EJ5NmREQnOiiz/pvkx6iSiiyrvkwGR3sn3hnpBNO
+         CdKLfKuH8NNZinFpCy5RHwo2kcgSIyWJkfVAR+pebuwGQUv2ngMGrCnq5Efy0AHO4g1p
+         sf3BUSWo/LdIAd2wIrYFzrcp4OsqJzrxVc4J6sB5PozGnSIn9JISk2ZdcY5DePnjWGtI
+         C4mPMi3MnH4dqQhBVItzXR4prmjN+4/bKUoOxpRU9tc6yVLRQxjtSWVVVYkXoZEtZUSb
+         iWLd+BP6HU49xzsf5GXM7H6qlIGaOVGG+bC1j8i88/NM+kI6oREDS4mtam5teVeEX8ui
+         E07A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=P+8CNlZ9Qpc5ZgQ40v352IfRPP/wLIfYxQwvpVM2BK8=;
-        b=s3oHTi3mDFAoU+7V0fWbyBH0xa8p+EdYilSaPLOEGvcnFjuq4kTjgBiNoX2XDTDs13
-         wYniwaQXuDreXHSP/4HsJVFdGscSCHtSEmv4ekkMApundTOsvZyg7TZEpBrv7LOB7AbP
-         qTwJG1Pppu4mV8vFg4NEgQq8d6IkxE6yi9QwWMBdQK0ndSKsZ+vYzuukUEQq9BEhzEBX
-         TurVWpUheaP/3uCpURhiaOlv3CttEGM2QWSp2RjBnh3j4PonBW0lBNIMIh0jqwkFA7YJ
-         3iGBVGPJf/H8wb4Ce6DCC45JLeKhJOAQyPmU4eRmzLMJf3iBOlq/3lmPgv26nUuM6E5D
-         rZAg==
-X-Gm-Message-State: AOAM532aizxMmseNUW71i8mcWi9NhS2l+gIehJ2dYArDxAuASn8iAXNO
-        SNXiirbXtslUE8ejqhyJ4l5pLMmW
-X-Google-Smtp-Source: ABdhPJxFGJjPPJsul4HY8UXD+hfA7PTPvAdjeGqHA32bUhuExyZhqZvYUt5TGM9WxXxqkE8f8Hufew==
-X-Received: by 2002:a05:620a:15da:: with SMTP id o26mr24463049qkm.304.1593030687577;
-        Wed, 24 Jun 2020 13:31:27 -0700 (PDT)
-Received: from localhost.localdomain ([2001:1284:f016:65e9:974:aec1:b314:98ea])
-        by smtp.gmail.com with ESMTPSA id p7sm3647794qki.61.2020.06.24.13.31.25
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=c+1rdjNbNhNdSQ1AVA+fZ00uP3B7DPUsKONFybd/2Sg=;
+        b=NrASBKeg6IW8nz6Cd2wz4hOKepqXL/PmUZ0wKYfeKKHRIGkaEoMWFkJJAjNQ3wgizM
+         b85SeXHR5RnqiS4ffMfmAXdkAnpSKDQ/RHTR7Qw+MfTSPNkRLEAJEhlidZMYK/O+I+cE
+         /2RLtngRxdszf//Zpon/7FPpClOX7nN+Dqq8Qk96AkK+N34toqXkKsgVuAW1crkGCUuU
+         Ns/WsdvV1fFKOoFhfZvOu5Esuui3xzAlwjc4hI9wTsH1E0TkGKBT8i6Eh+p2HVg4Bnj6
+         KagYhIWLwuxTEWGSTFDWSZ1c/g7pm7Db2ip8RodW3KG/EOsqwxUMao4wC6Re2Pwco3C6
+         dNsA==
+X-Gm-Message-State: AOAM533axYeVMN9kxSmgQjEhh/mbZ61x3v/hXf7H7Y1XFbNDWIOgNiLq
+        x20C4Sx4udk2fee09/Qt3R4=
+X-Google-Smtp-Source: ABdhPJyYFaRLGtudowV2QjaffD6oveDWFZYYeKjON25l+rUq1NyRhmcLrGXCQUF68bfsRc79oJGErA==
+X-Received: by 2002:a37:70d:: with SMTP id 13mr9285584qkh.366.1593030876192;
+        Wed, 24 Jun 2020 13:34:36 -0700 (PDT)
+Received: from localhost.localdomain ([177.220.172.113])
+        by smtp.gmail.com with ESMTPSA id d186sm4006074qkb.110.2020.06.24.13.34.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2020 13:31:26 -0700 (PDT)
+        Wed, 24 Jun 2020 13:34:35 -0700 (PDT)
 Received: by localhost.localdomain (Postfix, from userid 1000)
-        id E8370C3123; Wed, 24 Jun 2020 17:31:23 -0300 (-03)
-Date:   Wed, 24 Jun 2020 17:31:23 -0300
+        id 5D0F3C3123; Wed, 24 Jun 2020 17:34:32 -0300 (-03)
 From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     minyard@acm.org
+To:     netdev@vger.kernel.org
 Cc:     Xin Long <lucien.xin@gmail.com>,
         Michael Tuexen <Michael.Tuexen@lurchi.franken.de>,
         Yasevich <vyasevich@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
         linux-sctp@vger.kernel.org, linux-kernel@vger.kernel.org,
         Corey Minyard <cminyard@mvista.com>
-Subject: Re: [PATCH] sctp: Don't advertise IPv4 addresses if ipv6only is set
- on the socket
-Message-ID: <20200624203123.GC47547@localhost.localdomain>
-References: <c1121947c9a94703b4ab6dc434a7c3f8@AcuMS.aculab.com>
- <20200623160417.12418-1-minyard@acm.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Subject: [PATCH net] sctp: Don't advertise IPv4 addresses if ipv6only is set on the socket
+Date:   Wed, 24 Jun 2020 17:34:18 -0300
+Message-Id: <991916791cdcc37456ccb061779d485063b97129.1593030427.git.marcelo.leitner@gmail.com>
+X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20200623160417.12418-1-minyard@acm.org>
+References: <20200623160417.12418-1-minyard@acm.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Jun 23, 2020 at 11:04:17AM -0500, minyard@acm.org wrote:
-> From: Corey Minyard <cminyard@mvista.com>
-> 
-> If a socket was set ipv6only, it would still send IPv4 addresses in the
-> init and init ack packets.  So don't add IPv4 addresses to ipv6only
-> sockets.
-> 
-> Based on a patch by Xin Long <lucien.xin@gmail.com>
-> 
-> Signed-off-by: Corey Minyard <cminyard@mvista.com>
-> ---
-> I have tested this and it seem to fix the issue.  However, I'm wondering
-> if it might be better to fix it where the addresses are put into the
-> association as opposed to where they are put into the message.
+If a socket is set ipv6only, it will still send IPv4 addresses in the
+INIT and INIT_ACK packets. This potentially misleads the peer into using
+them, which then would cause association termination.
 
-Yes, it is. It even highlights why this issue was there in the first
-place. Sending a patch right after this email.
+The fix is to not add IPv4 addresses to ipv6only sockets.
 
-  Marcelo
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Reported-by: Corey Minyard <cminyard@mvista.com>
+Signed-off-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+---
+ include/net/sctp/constants.h | 8 +++++---
+ net/sctp/associola.c         | 5 ++++-
+ net/sctp/bind_addr.c         | 1 +
+ net/sctp/protocol.c          | 3 ++-
+ 4 files changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/include/net/sctp/constants.h b/include/net/sctp/constants.h
+index 15b4d9aec7ff278e67a7183f10c14be237227d6b..122d9e2d8dfde33b787d575fc42d454732550698 100644
+--- a/include/net/sctp/constants.h
++++ b/include/net/sctp/constants.h
+@@ -353,11 +353,13 @@ enum {
+ 	 ipv4_is_anycast_6to4(a))
+ 
+ /* Flags used for the bind address copy functions.  */
+-#define SCTP_ADDR6_ALLOWED	0x00000001	/* IPv6 address is allowed by
++#define SCTP_ADDR4_ALLOWED	0x00000001	/* IPv4 address is allowed by
+ 						   local sock family */
+-#define SCTP_ADDR4_PEERSUPP	0x00000002	/* IPv4 address is supported by
++#define SCTP_ADDR6_ALLOWED	0x00000002	/* IPv6 address is allowed by
++						   local sock family */
++#define SCTP_ADDR4_PEERSUPP	0x00000004	/* IPv4 address is supported by
+ 						   peer */
+-#define SCTP_ADDR6_PEERSUPP	0x00000004	/* IPv6 address is supported by
++#define SCTP_ADDR6_PEERSUPP	0x00000008	/* IPv6 address is supported by
+ 						   peer */
+ 
+ /* Reasons to retransmit. */
+diff --git a/net/sctp/associola.c b/net/sctp/associola.c
+index 72315137d7e7f20d5182291ef4b01102f030078b..8d735461fa196567ab19c583703aad098ef8e240 100644
+--- a/net/sctp/associola.c
++++ b/net/sctp/associola.c
+@@ -1565,12 +1565,15 @@ void sctp_assoc_rwnd_decrease(struct sctp_association *asoc, unsigned int len)
+ int sctp_assoc_set_bind_addr_from_ep(struct sctp_association *asoc,
+ 				     enum sctp_scope scope, gfp_t gfp)
+ {
++	struct sock *sk = asoc->base.sk;
+ 	int flags;
+ 
+ 	/* Use scoping rules to determine the subset of addresses from
+ 	 * the endpoint.
+ 	 */
+-	flags = (PF_INET6 == asoc->base.sk->sk_family) ? SCTP_ADDR6_ALLOWED : 0;
++	flags = (PF_INET6 == sk->sk_family) ? SCTP_ADDR6_ALLOWED : 0;
++	if (!inet_v6_ipv6only(sk))
++		flags |= SCTP_ADDR4_ALLOWED;
+ 	if (asoc->peer.ipv4_address)
+ 		flags |= SCTP_ADDR4_PEERSUPP;
+ 	if (asoc->peer.ipv6_address)
+diff --git a/net/sctp/bind_addr.c b/net/sctp/bind_addr.c
+index 53bc61537f44f4e766c417fcef72234df52ecd04..701c5a4e441d9c248df9472f22db5b78987f9e44 100644
+--- a/net/sctp/bind_addr.c
++++ b/net/sctp/bind_addr.c
+@@ -461,6 +461,7 @@ static int sctp_copy_one_addr(struct net *net, struct sctp_bind_addr *dest,
+ 		 * well as the remote peer.
+ 		 */
+ 		if ((((AF_INET == addr->sa.sa_family) &&
++		      (flags & SCTP_ADDR4_ALLOWED) &&
+ 		      (flags & SCTP_ADDR4_PEERSUPP))) ||
+ 		    (((AF_INET6 == addr->sa.sa_family) &&
+ 		      (flags & SCTP_ADDR6_ALLOWED) &&
+diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
+index 092d1afdee0d23cd974210839310fbf406dd443f..cde29f3c7fb3c40ee117636fa3b4b7f0a03e4fba 100644
+--- a/net/sctp/protocol.c
++++ b/net/sctp/protocol.c
+@@ -148,7 +148,8 @@ int sctp_copy_local_addr_list(struct net *net, struct sctp_bind_addr *bp,
+ 		 * sock as well as the remote peer.
+ 		 */
+ 		if (addr->a.sa.sa_family == AF_INET &&
+-		    !(copy_flags & SCTP_ADDR4_PEERSUPP))
++		    (!(copy_flags & SCTP_ADDR4_ALLOWED) ||
++		     !(copy_flags & SCTP_ADDR4_PEERSUPP)))
+ 			continue;
+ 		if (addr->a.sa.sa_family == AF_INET6 &&
+ 		    (!(copy_flags & SCTP_ADDR6_ALLOWED) ||
+-- 
+2.25.4
+
