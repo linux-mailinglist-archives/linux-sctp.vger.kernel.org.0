@@ -2,109 +2,88 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C071A20B5DB
-	for <lists+linux-sctp@lfdr.de>; Fri, 26 Jun 2020 18:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92CD520C49F
+	for <lists+linux-sctp@lfdr.de>; Sun, 28 Jun 2020 00:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726680AbgFZQ1m convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Fri, 26 Jun 2020 12:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
+        id S1726601AbgF0WGj (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sat, 27 Jun 2020 18:06:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726618AbgFZQ1m (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 26 Jun 2020 12:27:42 -0400
-Received: from drew.franken.de (drew.ipv6.franken.de [IPv6:2001:638:a02:a001:20e:cff:fe4a:feaa])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8333FC03E979;
-        Fri, 26 Jun 2020 09:27:42 -0700 (PDT)
-Received: from mb.fritz.box (ip4d15f5fc.dynamic.kabel-deutschland.de [77.21.245.252])
-        (Authenticated sender: lurchi)
-        by mail-n.franken.de (Postfix) with ESMTPSA id 7CF317220B813;
-        Fri, 26 Jun 2020 18:27:36 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.80.23.2.2\))
-Subject: Re: Strange problem with SCTP+IPv6
-From:   Michael Tuexen <Michael.Tuexen@lurchi.franken.de>
-In-Reply-To: <50b0a6ff186e408bbfe6211221cb3998@AcuMS.aculab.com>
-Date:   Fri, 26 Jun 2020 18:27:35 +0200
-Cc:     Xin Long <lucien.xin@gmail.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "minyard@acm.org" <minyard@acm.org>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <66D9D559-23D6-42B0-9401-62B00C4F748E@lurchi.franken.de>
-References: <20200621155604.GA23135@minyard.net>
- <CADvbK_d9mV9rBg7oLC+9u4fg3d_5a_g8ukPe83vOAE8ZM3FhHA@mail.gmail.com>
- <20200622165759.GA3235@minyard.net>
- <4B68D06C-00F4-42C3-804A-B5531AABCE21@lurchi.franken.de>
- <20200622183253.GQ2491@localhost.localdomain>
- <E5F42909-3AB4-47FE-98B7-DEFB63968696@lurchi.franken.de>
- <CADvbK_fddQiOJUVJNkJuxkzQ9V-tpk_ATBP4NpZ2rZketHEFcg@mail.gmail.com>
- <50b0a6ff186e408bbfe6211221cb3998@AcuMS.aculab.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-X-Mailer: Apple Mail (2.3608.80.23.2.2)
-X-Spam-Status: No, score=-2.9 required=5.0 tests=ALL_TRUSTED,BAYES_00
-        autolearn=disabled version=3.4.1
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on mail-n.franken.de
+        with ESMTP id S1725940AbgF0WGj (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sat, 27 Jun 2020 18:06:39 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF56C061794
+        for <linux-sctp@vger.kernel.org>; Sat, 27 Jun 2020 15:06:39 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id e8so6600804pgc.5
+        for <linux-sctp@vger.kernel.org>; Sat, 27 Jun 2020 15:06:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=hDm0J70xfMLbVvceQHwxPddZCp69UMTk2d0jtKg2a8s=;
+        b=N6kPulua2YSlM8imcShAj91mdG3FVs3SsXSz87fb1+u3nd7u7PFa6MKJ279dIRDWxh
+         0Ldfj86Lh7w+Xrc1R5Ac12lp/bi6BKorqLlDMWYld1qOBhdJB4N7Na0XiYaHB8nKtBEn
+         57C/Tzw6MUWAOIXcOnRxxN4MeNm7iQhU/hvtXzHXK0vqQBasxFJE8WhTf5ke+LZ6XEZm
+         /oWHd42QW3NLQJh3kf1TRlauenW2jL1Poq5HUYmLYngCGGUW3fX0WLGx3ldU3AhEukyR
+         HJCMoV5irc6uSRF+aDmFQnYTlSn+N9B5n6b9ltoSvd3dHTYHCaXSwIr77k6vqrwMxy85
+         lwfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=hDm0J70xfMLbVvceQHwxPddZCp69UMTk2d0jtKg2a8s=;
+        b=o38N3ATTxGZX6lBhnJ/I0yoJJ5D24AAPjo49QaCZozk3k4R27HgSTPQgcXGBPi5QRR
+         lzF7FzjhIGJWKpQF8s/tF9tv4fyiMq4rup1f1qTA2JlYe2XZdAICwpSq+OxUWsoVtMky
+         9DSQyXLXYGGyRgiMRoGILDo2Sjg6kst+XevxYRmG80pWpc67Ln7FLDnrDWUGaKWUBYsu
+         O0wC8HreVpVyYON673lshGrLLQaEO7uXKMCH5roc4XEWfdHKDqKFJ2ps2C1LsboiljKw
+         CFY0NrRJyXUVKPz4oSe07xcl2g1R63It6hdS5fuKGJgSldpb604nsO/p9DpcflM4HkAJ
+         VS/A==
+X-Gm-Message-State: AOAM530qySzJTJhHI56led84GP9eQ5ToSJYkYa9BqqqAlRz44KSadOio
+        udvWfSLz9mBR6es6C4JNapajWaRpKsEcr8ooUBSmKE36lYE=
+X-Google-Smtp-Source: ABdhPJwHv45zwmNuK/YSX2uBVAIqQ2zLOwtA+ngiZqoTP9Rs9Xn2gCCD3OWXiVcvkiJ+PU31Rp2ZvkRVy2hsrxlhX9g=
+X-Received: by 2002:a92:7749:: with SMTP id s70mr10069248ilc.259.1593295098567;
+ Sat, 27 Jun 2020 14:58:18 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a4f:4e46:0:0:0:0:0 with HTTP; Sat, 27 Jun 2020 14:58:17
+ -0700 (PDT)
+From:   lookman joe <mrlookmanjoe@gmail.com>
+Date:   Sat, 27 Jun 2020 22:58:17 +0100
+Message-ID: <CAG9X5Hfvk-fmbqs9+RtHRqyUu35f9-A5+EbwjPrw9eVNH09ftg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-> On 26. Jun 2020, at 18:13, David Laight <David.Laight@ACULAB.COM> wrote:
-> 
-> From: Xin Long
->> Sent: 23 June 2020 11:14
->>>> It looks like a bug to me. Testing with this test app here, I can see
->>>> the INIT_ACK being sent with a bunch of ipv4 addresses in it and
->>>> that's unexpected for a v6only socket. As is, it's the server saying
->>>> "I'm available at these other addresses too, but not."
->>> I agree.
->> Then we need a fix in sctp_bind_addrs_to_raw():
->> 
->> @@ -238,6 +240,9 @@ union sctp_params sctp_bind_addrs_to_raw(const
->> struct sctp_bind_addr *bp,
->>        addrparms = retval;
->> 
->>        list_for_each_entry(addr, &bp->address_list, list) {
->> +               if ((PF_INET6 == sk->sk_family) && inet_v6_ipv6only(sk) &&
->> +                   (AF_INET == addr->a.sa.sa_family))
->> +                       continue;
->>                af = sctp_get_af_specific(addr->a.v4.sin_family);
->>                len = af->to_addr_param(&addr->a, &rawaddr);
->>                memcpy(addrparms.v, &rawaddr, len);
-> 
-> Thought.
-> 
-> Does it make any sense to offer addresses in the INIT_ACK that don't
-> have routes to those proposed in the received INIT?
-> 
-> 'routes' probably isn't exactly the right word.
-> You probably only want the local address that will be used
-> as the source address for the probes.
-> Or, at least, sources addresses that could be used for the probes.
-> 
-> So if the INIT only contains IPv6 addresses should the INIT_ACK
-> ever contain IPv4 ones.
-The client (if it not using an IPv6 socket having IPv6 only enabled) could
-add an IPv4 address during the lifetime of the association by using the
-address reconfiguration extension.
+MONEY-GRAM TRANSFERRED PAYMENT INFO:
 
-What could be done is to not send IPv4 addresses if the INIT contains
-a Supported Address Types parameter indicating IPv6, but not IPv4 support.
-As a client you might want to send this parameter, when the IPv6 socket has
-enabled the IPV6_ONLY socket option.
-Also if the client uses an IPv4 socket, it can indicate in the Supported
-Address Parameter that it only support IPv4, and the server does not need
-to list IPv6 addresses.
+Below is the sender=E2=80=99s information
 
-Best regards
-Michael
-> 
-> 	David.
-> 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
 
+
+1. MG. REFERENCE NO#: 36360857
+
+2. SENDER'S NAME: Johnson Williams
+
+3. AMOUNT TO PICKUP: US$10,000
+
+
+
+Go to any Money Gram office near you and pick up the payment Track the
+
+Reference Number by visiting and click the link below
+
+(https://secure.moneygram.com/embed/track) and enter the Reference
+
+Number: 36360857 and the Last Name: Williams, you will find the payment
+
+available for pickup instantly.
+
+Yours Sincerely,
+
+Mrs. Helen Marvis
+United Nations Liaison Office
+Directorate for International Payments
