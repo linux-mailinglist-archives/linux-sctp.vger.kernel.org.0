@@ -2,86 +2,72 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1E020C73D
-	for <lists+linux-sctp@lfdr.de>; Sun, 28 Jun 2020 11:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEEF920D561
+	for <lists+linux-sctp@lfdr.de>; Mon, 29 Jun 2020 21:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726033AbgF1Jdw (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 28 Jun 2020 05:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42896 "EHLO
+        id S1731904AbgF2TQZ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 29 Jun 2020 15:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725999AbgF1Jdv (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sun, 28 Jun 2020 05:33:51 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FE1C061794;
-        Sun, 28 Jun 2020 02:33:51 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id q90so5999422pjh.3;
-        Sun, 28 Jun 2020 02:33:51 -0700 (PDT)
+        with ESMTP id S1731679AbgF2TQJ (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 29 Jun 2020 15:16:09 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F442C08EA50
+        for <linux-sctp@vger.kernel.org>; Mon, 29 Jun 2020 12:16:03 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id f6so2782116ioj.5
+        for <linux-sctp@vger.kernel.org>; Mon, 29 Jun 2020 12:16:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=LEwMmf/h6lZz81fIQQa2n7X18h/c5NkeCjKyOlWnANI=;
-        b=EdDPlzS2qvIUX9+SjPT5OT0T1MGU7FgmxHZQAbtDEB/YDiK12wX032s0cZohPvg0R0
-         u+viQpH109w2IcQ7kXVXC5oC2cwH3JhOYCBj/YKNrKZppLw8L2hHby0cKK9pr/aaYXdx
-         aZx4QT7x3Ucszak8h16M1alJoVTTdBssMHLrcwh3NKaOsbgPD0dbamS+Bz/li+YEtTk/
-         JDr9JoQjZ2Z+bfeKMrGy5sQ3wjO+sDWZS28/2VJnPAx4FFsrRocYZPKkpH/9b/GARG9b
-         DKzS4xog2TkJ5sXftYBmTjURlLvynpO+I2erDPPTqQQFsfOFSYDszl89r9vMCDEMHrU2
-         RDUw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
+        b=E57soH+fAZU9oM/uuDn4bCNx2wALmvA7rwFsDeo/VdmyR4hSt+vRDMPW0qpAcJ9V/h
+         UbYJ9fIR9BUAZrS+1TfrEzBoFSxbLFUBB/IIzj7rfy4Y1SyxPmM/cs9fEremwVWV5m5u
+         b9v38myIgTBJNjasjLIOUO/K2CJS7vPJsURIlWBEC7RA0ax+vZbkexDjvFbqaAUgNm/w
+         yj4NkgHNxXLdKOO4AZsIv5vnXx8YMl4s3e1fTXh2Hp6rhwVI9k4nzVvvlc/OSvXrfpbl
+         +6DOlsrKa8IKCRxKxdcbetpm2uz+ZUKJBnziwlMhGJ11qW6bGQPIDGjYXF06+gry04Zz
+         3NGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=LEwMmf/h6lZz81fIQQa2n7X18h/c5NkeCjKyOlWnANI=;
-        b=Ci6Bkajm8AxE7jtbh2doZgtSOa+tgpKSVvXBFYhjIkGRQYj79pQSPEIrqiy+MLF1d8
-         nqR+osbdXPQ8eF/eCZ2ZPDxXWE3JKHWuzw85SYjiggE4CWOz24elunBfua2KjqdfbUBn
-         fgtA5R7D8/CRdiJaOkY5rZW23VgiBz8wFyIw6NEovqKeJncgdxvUZYHb3u5XP4Go/N6q
-         droSf+yX6Dgj6I3TCP3r+vSOubqWct7RiAss5hTs981u9WvNENdm+VSC59fRimHNDZzh
-         RYySAlky1qlUM7G86AeTm3a1NyZFm9On7hT0yLbOPu26rSMNKjbd75aZNHto3UgtorOn
-         /g+g==
-X-Gm-Message-State: AOAM530dOm2IYtlgSPJMHhMBq58xUh7BStq7aSWF8BOhX7SlFR5Utvxz
-        fqVLVG0zsh3Pykgva7lTouQ=
-X-Google-Smtp-Source: ABdhPJygDGz/63sV+KBU7HpjulPDckI6G5d8KlDuhFnjtfhMxwWSendOckHwlWRCg2L6mILwauUepw==
-X-Received: by 2002:a17:90a:21c6:: with SMTP id q64mr11765110pjc.172.1593336830705;
-        Sun, 28 Jun 2020 02:33:50 -0700 (PDT)
-Received: from localhost ([43.224.245.180])
-        by smtp.gmail.com with ESMTPSA id 27sm15938911pjg.19.2020.06.28.02.33.49
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 28 Jun 2020 02:33:50 -0700 (PDT)
-From:   Geliang Tang <geliangtang@gmail.com>
-To:     Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Geliang Tang <geliangtang@gmail.com>, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next] sctp: use list_is_singular in sctp_list_single_entry
-Date:   Sun, 28 Jun 2020 17:32:25 +0800
-Message-Id: <1ae93f6e86ea0baf9ffb4068caed46d951076d12.1593336592.git.geliangtang@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
+        b=KbvMg6Kwu0m++rK4AiEKl5dhsRXpFQK1fEZZkudFPVtkm8xo15A5FkyNUZ2JVo7BIh
+         11EmkQBerpmWnBZ8C6JU8r/c768ibxdhvMPCHyo90d5SDiejH2KVoAWHDHASthwjzgqz
+         4ydI+/eCHjSpw4ikLYNb1TRgvUzUMFcEvqzTg1vMdlGYGK6TJCr2JyoFRsnowFC8GJFF
+         zbvtMcJmzi2NlZNw/O0C3gP0iPl9V6DekZk7qKY7GE18LBXQPhLbRHCHtQtv9dndlwST
+         gQ0qsFzEVC6MhHxLOtvJS6n8QkXggEZHH4nv2WtrwRKqceVvx3z8QP6/L2F48z939pfh
+         hMHw==
+X-Gm-Message-State: AOAM533Jc4RyPKo31Q8okd4mg15/rDlFcQ16pH7r2uBi0JRB85fVSpwu
+        +G2ylyGsvVW6HFS2Xqyk1OXuXgAB8Av83Q7t6Pc=
+X-Google-Smtp-Source: ABdhPJyNR5zXZ8o09DSJzsSA3OSccnAxM/c9AxKQjYYOZlXvOMCiHs1YW/1gQi1Sa70TQ2VOPtabshfviWRkV7+ICnM=
+X-Received: by 2002:a6b:db17:: with SMTP id t23mr18236117ioc.4.1593458159284;
+ Mon, 29 Jun 2020 12:15:59 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a05:6602:1588:0:0:0:0 with HTTP; Mon, 29 Jun 2020 12:15:58
+ -0700 (PDT)
+Reply-To: mrs.victoria.alexander2@gmail.com
+From:   "mrs.victoria alexander" <markalexandermilley321@gmail.com>
+Date:   Mon, 29 Jun 2020 12:15:58 -0700
+Message-ID: <CAP7XNCwEGQ+-Q==u4yk4yvJdk1X+gsfSU6pUV_hROjmF=p-DHw@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Use list_is_singular() instead of open-coding.
+Dear friend,
 
-Signed-off-by: Geliang Tang <geliangtang@gmail.com>
----
- include/net/sctp/sctp.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/net/sctp/sctp.h b/include/net/sctp/sctp.h
-index f8bcb75bb044..e3bd198b00ae 100644
---- a/include/net/sctp/sctp.h
-+++ b/include/net/sctp/sctp.h
-@@ -412,7 +412,7 @@ static inline void sctp_skb_set_owner_r(struct sk_buff *skb, struct sock *sk)
- /* Tests if the list has one and only one entry. */
- static inline int sctp_list_single_entry(struct list_head *head)
- {
--	return (head->next != head) && (head->next == head->prev);
-+	return list_is_singular(head);
- }
- 
- static inline bool sctp_chunk_pending(const struct sctp_chunk *chunk)
--- 
-2.17.1
+I have a business container transaction what that some of( $13million dollars)
 
+ I would like to discuss with you. If you are interested, please
+contact my email
+
+address (mrs.victoria.alexander2@gmail.com)
+
+My WhatsApp number but only message (+19293737780)
+
+Please do not reply if you are not ready
+Thanks
