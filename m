@@ -2,96 +2,110 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D65821C203
-	for <lists+linux-sctp@lfdr.de>; Sat, 11 Jul 2020 06:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B972B21E2BD
+	for <lists+linux-sctp@lfdr.de>; Mon, 13 Jul 2020 23:59:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726903AbgGKENU (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sat, 11 Jul 2020 00:13:20 -0400
-Received: from sonic312-21.consmr.mail.sg3.yahoo.com ([106.10.244.211]:45412
-        "EHLO sonic312-21.consmr.mail.sg3.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726729AbgGKENU (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>);
-        Sat, 11 Jul 2020 00:13:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1594440795; bh=DPYuw2gUpgtMJzJhlH/AVmRGu2wSKCY1C+f8nOCoxu0=; h=Date:From:Reply-To:Subject:References:From:Subject; b=Gut5Sw0A2sV2o9X0yzDGJ8HtYQznovLuqWWr0dMN+sfPYNERFaogb9ZkSy2dbcPsd5NX6382OHuX7A3O6rfEuTz44aWFG68RUmVl+K4Y1EL34Zt19TAcsdq206JXFLa/DRGjfWLa6TZhjdh3nv9OlmuYnP1XfC9YlA1U0/5L8u+X9upVrTfZSpRQzTbLAbEMINCq95kiOTMnIjTKGwy2LdCYTsqxg+ohPfmYaxxqhcb031UKtqTcHoPehz8yZ4I9pM/V/7u9rPDE2JVMQ5/9G3RSM+6zVCjpqFOFFN1qHqbOC75ikfDq8D8EttlqQZu3s6dQAf2XS2/FBVhpQ0pO1w==
-X-YMail-OSG: E11m.T4VM1nzgmCQrf5qaUjqQ9U4fTdK2b1WruTFOrWy9krjjqxMnh204NQ9._t
- zRx7NziTrzJK4QYmk9nEAcPniOANJfQSfPzvYJNeYI1GgysyLDgMmZROCfj4QlUZnCBIC..UcxGr
- QwIXvVysD88.jELmMqOrUelqmt7mKN.V3h11xMh7wYP4a0Y6ZuxUVko.u_cMuaxAILM.nB9IDpL5
- cEsPYZ0TXpiIH0_wEiciCXrmU.KMveg_srBqxMdREFBfHf975JJm.eEvJ4B6idDvdMiyX2Cz03vt
- Q8yQed3hYav6ybgDi83qWag2p1.sBjVJXatCEJ6gek372Lw4Fy5XcuDl7MmovauheWG.dhkbwB8D
- P1MmnAGnicFPoCB7AeVNlHNZh0hfK7Ep_3iRVM3SlMpI3dNBuf4oxdyOxCkI0txAxZmWU.FqVsq4
- 6VTsMYRArA.2BcfBNog7eXmHy4c26WSfX1nCih.TO1NbPXCzT5Kxei.kbaWKDaFvPwn4m1cNNG2s
- bj.POHGBo.CJp6EyWNm59a.SeHIFFnFA1htqjzPsRbvh0YqZ_ZOXWSsOI2YeUPu0sUMxLpk2i3yz
- 3ZDS9B4KFEAi7cJ2.wBC2b4ee0Y41DfwnGgd1pupMOCYLYlC7NQf0X.rNYKuDfxqZb3lTfW3qWaz
- ZMDpyeL9.zAfuH.yrOQ1uhIokk_PHmXn3riO3uqRFrrsvV9.MxojZjZdOB6AHSb588JnMNKcV.f8
- u_rdUbOKbClLd3kD1Ip0bgT6mI3d44GvwKsTTztrxtqzh0W3k3XDwBIubrrkhzBNdrNUkdeTcKV3
- XrAfZcRGY1ieRM2EKRR0UA909Rl4B8BexAMO.dg.IxAakennfokp0FRtj8_X611LhwgU7hOEA49f
- 6n02KPJz8Kv_V5B34AfCHmxJr2aKQpOxEQVPC1UKQcX1qkWc.ZAcqtkYPiWV4QSDnXTw7PLA45Cz
- ZvoO.qKihnNHju05JmQ2I4iTttifjKcx4krKjN5UGeo_LmOk8iB_SSayPvpZGwMKPWb51HT34cAk
- 3stgYyXwO.keh.h_2HoaRClKeFel9HWwcSZg81WYNYTZOoh_W7c7mvkUNM5T8uo88KvOTn09nlNO
- 5O.KsqAqar6bOvgG4SQ5tgyxtVix9ZueiAXg_DMjHyOxauBD0pZzy7_TCTuAMpB2Jv7mFad5uQcm
- H2oOTRrMHPJMky0O5nCs1JjfS2l982808srhBm7vk_75.YQxQBJH4fATysMX.2sMCZnYrKXaJJhN
- leuuYrU0tIFGiKX.d6bZaP9VKhJ4SVY34JnAKn7XaMNs2Tlvp8AJckQLhA3FGXdw7DKYOMBocQjJ
- e_b1rhQ--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic312.consmr.mail.sg3.yahoo.com with HTTP; Sat, 11 Jul 2020 04:13:15 +0000
-Date:   Sat, 11 Jul 2020 04:13:13 +0000 (UTC)
-From:   "Mrs. Mina A. Brunel" <mrsminaabrunel2@gmail.com>
-Reply-To: mrsminaabrunel653@gmail.com
-Message-ID: <1661914196.40231.1594440793550@mail.yahoo.com>
-Subject: My Dear in the lord
+        id S1726321AbgGMV7M (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 13 Jul 2020 17:59:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42722 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726150AbgGMV7L (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 13 Jul 2020 17:59:11 -0400
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A555EC061755
+        for <linux-sctp@vger.kernel.org>; Mon, 13 Jul 2020 14:59:11 -0700 (PDT)
+Received: by mail-oo1-xc32.google.com with SMTP id x2so2736830oog.5
+        for <linux-sctp@vger.kernel.org>; Mon, 13 Jul 2020 14:59:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:subject:message-id:reply-to:mime-version
+         :content-disposition:user-agent;
+        bh=W+WQI/ChAOUHHuyMgNk+DIT7E0EEyJB0ZmFOlACh3ew=;
+        b=XwdGfdfn1mKfX5KWyYdlq7h0Cu9+RQgvz3pL6gZTiA8ln1Ls6Vx6aDt70Omg0YQw1L
+         dIL0HO5fw9qA/Ys8jnlN3LYHF8TxZ5z+rWsvXi9ilHJIo/HfN5r9g48NNSmATefeMgYQ
+         FKB/3YY1EB63CWuKdEXhZJdGiAX2+yGt+OR/xjSs36b2gKUqBQNlWlth+DCy743tQrAa
+         lR4vap7/pwNcDT4KBHiORNWM1vyGNdfXs/3Bs7xX7akgBBvs5GQJIlRVnnNnt4++qnBc
+         bKNB4zb6wo8OAhN+R+QBQTiTw4KOgi7YS6bqIl+KeeIE51j0xM7SyQ5j2DUhUDblHkpJ
+         gi4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:subject:message-id:reply-to
+         :mime-version:content-disposition:user-agent;
+        bh=W+WQI/ChAOUHHuyMgNk+DIT7E0EEyJB0ZmFOlACh3ew=;
+        b=UJoF6w928B/sISbCky8cpffbMLWaQlmJpmF8wdTGuTKR6AG5RDaFEVqm2TmvAm8O6T
+         tbK/8xcozZuQinUGrWRApsxnGmBoQtV8xCnkNe0UW3vB9SKliDVYpf3uvDSeOUIa8dtJ
+         hsuEP1mfgB8Km/Juqp6iTMRY0h5l8gX3um2M2vpavhcJsaEuA4pgzq319AB6A3wsINSm
+         mge9xNB7eH+8Ot3Xar9TE1/Ha0PuAMfleeLq1Ru/qd2Z66jsyoiQW5lsdkFWMgJxexmF
+         sI1ese7vRt5LXYZodh2WNREfYDSOlxubv9vK6Lg/h9yKVXqJgOzXcytWZXLd5jlsjCs5
+         1fLQ==
+X-Gm-Message-State: AOAM533crbZEN7gs6K9oZ/CnbFoNHOgnLb8Eg50GgOdLURKwtRiLFZuL
+        akSztLsD9w3RVhuMCJ1+6w==
+X-Google-Smtp-Source: ABdhPJzc+fQoBV2lT16gBbIqtaFuBMqWCTKtOs8PCJYY7mvyB6XAfk0qjEUHRzfKQpL+0Grdnqg92A==
+X-Received: by 2002:a05:6820:54c:: with SMTP id n12mr1860741ooj.73.1594677550835;
+        Mon, 13 Jul 2020 14:59:10 -0700 (PDT)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id n6sm3250635otq.33.2020.07.13.14.59.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jul 2020 14:59:09 -0700 (PDT)
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:39bb:a3d6:481a:933c])
+        by serve.minyard.net (Postfix) with ESMTPSA id 3B474180050;
+        Mon, 13 Jul 2020 21:59:08 +0000 (UTC)
+Date:   Mon, 13 Jul 2020 16:59:07 -0500
+From:   Corey Minyard <minyard@acm.org>
+To:     Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Leitner <marcelo.leitner@gmail.com>,
+        linux-sctp@vger.kernel.org
+Subject: 200ms delays with SCTP streaming data
+Message-ID: <20200713215907.GE3235@minyard.net>
+Reply-To: minyard@acm.org
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-References: <1661914196.40231.1594440793550.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16271 YMailNodin Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
+Hi, it's me again with another strange issue.  In case you didn't figure
+it out before, I'm working on a library that supports all different
+types of stream I/O, and SCTP is one supported building block.  I
+noticed when I stacked a multiplexer layer on top of SCTP I started
+getting timeouts occasionally.  It took a bit, but I finally realized
+that I was getting 200ms delays occasionally between sending a packet
+and receiving a packet.  I verified this with a trace right at the
+sctp_send() and sctp_recvmsg() calls.  It doesn't seem to be regular
+in any way I can see, but it happens often enough to cause issues.
 
+If I replace the SCTP block with a TCP block, it works fine, and pretty
+much all the code is the same except where it does the read and write
+calls (including the epoll() usage, and I have also switched to select()
+and it has the same issue).  The write calls don't seem to be the issue,
+I see two back-to-back writes a few microseconds apart and see a 200ms
+delay between the messages on the receive side.
 
-My Dear in the lord
+The test in question sets up two connections and does a big simultaneous
+bidirectional transfer.  The test app has 4 threads waiting on epoll()
+handling data and writing data.
 
+And the delay is always ~200ms.  Which sounds suspicious.
 
-My name is Mrs. Mina A. Brunel I am a Norway Citizen who is living in Burki=
-na Faso, I am married to Mr. Brunel Patrice, a politicians who owns a small=
- gold company in Burkina Faso; He died of Leprosy and Radesyge, in year Feb=
-ruary 2010, During his lifetime he deposited the sum of =E2=82=AC 8.5 Milli=
-on Euro) Eight million, Five hundred thousand Euros in a bank in Ouagadougo=
-u the capital city of of Burkina in West Africa. The money was from the sal=
-e of his company and death benefits payment and entitlements of my deceased=
- husband by his company.
+It's not using sctp_sendv() at the moment, as the systems I'm running on
+don't have that yet.  But the library does have support if it sees it is
+available.
 
-I am sending you this message with heavy tears in my eyes and great sorrow =
-in my heart, and also praying that it will reach you in good health because=
- I am not in good health, I sleep every night without knowing if I may be a=
-live to see the next day. I am suffering from long time cancer and presentl=
-y I am partially suffering from Leprosy, which has become difficult for me =
-to move around. I was married to my late husband for more than 6 years with=
-out having a child and my doctor confided that I have less chance to live, =
-having to know when the cup of death will come, I decided to contact you to=
- claim the fund since I don't have any relation I grew up from an orphanage=
- home.
+So I don't think it's my library; I've stared at it a bunch (and found a
+few other bugs) but I can't reconcile this one.  There are no timers
+that would cause this in the code in question.  Just basically an
+epoll() call waiting on data and receive processing that is comparing
+data, along with write processing that is sending the same data.
 
-I have decided to donate this money for the support of helping Motherless b=
-abies/Less privileged/Widows and churches also to build the house of God be=
-cause I am dying and diagnosed with cancer for about 3 years ago. I have de=
-cided to donate from what I have inherited from my late husband to you for =
-the good work of Almighty God; I will be going in for an operation surgery =
-soon.
+Anyway, I haven't tried to create a small reproducer; I thought I would
+report it first and see if anything rang a bell.  I tried this on a
+recent kernel and got the same issue.
 
-Now I want you to stand as my next of kin to claim the funds for charity pu=
-rposes. Because of this money remains unclaimed after my death, the bank ex=
-ecutives or the government will take the money as unclaimed fund and maybe =
-use it for selfishness and worthless ventures, I need a very honest person =
-who can claim this money and use it for Charity works, for orphanages, wido=
-ws and also build schools and churches for less privilege that will be name=
-d after my late husband and my name.
+The library is at https://github.com/cminyard/gensio.  I'd need to
+provide a patch for the tracing.
 
-I need your urgent answer to know if you will be able to execute this proje=
-ct, and I will give you more information on how the fund will be transferre=
-d to your bank account or online banking.
-
-Thanks
-Mrs. Mina A. Brunel
+-corey
