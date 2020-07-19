@@ -2,123 +2,54 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA97227647
-	for <lists+linux-sctp@lfdr.de>; Tue, 21 Jul 2020 04:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9689227678
+	for <lists+linux-sctp@lfdr.de>; Tue, 21 Jul 2020 05:17:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726068AbgGUCzW (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 20 Jul 2020 22:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58276 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725857AbgGUCzV (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 20 Jul 2020 22:55:21 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879D6C061794;
-        Mon, 20 Jul 2020 19:55:21 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id e7so2179361qti.1;
-        Mon, 20 Jul 2020 19:55:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nYOJ4tS8cw/WA98jvC/US7uJ55A2B0FngHBRHIK7lIk=;
-        b=urR6IkBLDrmE3O5fp4E7C1kkQUG6odVJZO6V/R9wWCysrzG71uPflXUqXBWrE7Bbtb
-         PZerbtt0OpmGTN9XDxO1pnY0oYbi93KdUR5HKozUDiFloY/z7Um3M4f6tTTGNbcPQPpA
-         RxPW3HgTcSAdLZkQakZuXDt6ASnUQxQVWGJnkSh5Du61I0QJOlwA4NBXrnsqvViygc5k
-         HE0BYrX5pHK1ykkjKu16YWrWtZcaCKvsBKry5coKZ4D9Z0yjHPlPEs3yPNrD4i0Yks85
-         SlxrFH7cC2INutFRrDcjIE8KdSvPdSmystryRC6HIw1MhCOlVrL1PgtrKjWXwWj30JpJ
-         MRQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nYOJ4tS8cw/WA98jvC/US7uJ55A2B0FngHBRHIK7lIk=;
-        b=U4yXMrW44oiXqdIGM7UlhluyrKzRMNBR78el4WtHPhvJv2ATk70Xf5uSDuZH8iE+wH
-         24ZsH0ZNa9JiBNFh/8ndav2FX8m+3NTVNs5DiDTkfMf9feIdq3BvV00oKYzL3A+jU0Rv
-         Je2jHY8a3xlhB4Rgp6/qCgokP6SFq1uMbIDppb5YF5UWxwB63Hc5rlYOpwxNT8a4Ji66
-         WWlDTB6YayoTsJaiWpUikQ/262kCEUXTfIe8EYmEAdiKDzObZ38XhLW5zGp2Jdis8Ldz
-         pgOHQAdgw9SsMStoDmxxkBF3B4UMSahijP3rPNzQtHxYEjP3C4eZtBxG8pjPLBwOoJDM
-         nOEw==
-X-Gm-Message-State: AOAM530dm7+rrQvNS0Nqj/WENeIQaXPj4jafU3XeWRwWwMSDMixS03oK
-        1MDdqTKqYxOCApFM13+xfntZLXxe
-X-Google-Smtp-Source: ABdhPJzrhWLyx2V9SINZhlKDG40IficjzJ9C/E69PuzueVIZEWFHrDie488G+wZS6zF0iyF3TWXJvA==
-X-Received: by 2002:ac8:748b:: with SMTP id v11mr26974940qtq.293.1595300120642;
-        Mon, 20 Jul 2020 19:55:20 -0700 (PDT)
-Received: from localhost.localdomain ([168.181.48.248])
-        by smtp.gmail.com with ESMTPSA id 6sm1198516qkj.134.2020.07.20.19.55.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2020 19:55:19 -0700 (PDT)
-Received: by localhost.localdomain (Postfix, from userid 1000)
-        id 7A1E6C163B; Mon, 20 Jul 2020 23:55:17 -0300 (-03)
-Date:   Mon, 20 Jul 2020 23:55:17 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Neil Horman <nhorman@tuxdriver.com>
-Subject: Re: Misaligned IPv6 addresses is SCTP socket options.
-Message-ID: <20200721025517.GA3399@localhost.localdomain>
-References: <f380b70f54854d98a9c801c7ae6bc370@AcuMS.aculab.com>
+        id S1728559AbgGUDRV (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 20 Jul 2020 23:17:21 -0400
+Received: from [211.196.21.11] ([211.196.21.11]:53206 "EHLO
+        iscure03.localdomain" rhost-flags-FAIL-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725857AbgGUDRU (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Mon, 20 Jul 2020 23:17:20 -0400
+Received: from Shop01 (unknown [127.0.0.1])
+        by iscure03.localdomain (Postfix) with SMTP id 99A7A2AE13C;
+        Mon, 20 Jul 2020 12:16:01 +0900 (KST)
+Received: from (HELO 2v45) [146.142.217.126] by Shop01 with ESMTP id 55558734; Sun, 19 Jul 2020 12:09:37 -0400
+Message-ID: <qoap--$$2--7c-9c@95ql.c.sm7vtdb>
+From:   "MOORE GATES LTD" <TEXT@TEXT.COM>
+Reply-To: "MOORE GATES LTD" <TEXT@TEXT.COM>
+To:     linux-man@vger.kernel.org
+Subject: FROM MR. MOORE
+Date:   Sun, 19 Jul 20 12:09:37 GMT
+X-Mailer: Internet Mail Service (5.5.2650.21)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f380b70f54854d98a9c801c7ae6bc370@AcuMS.aculab.com>
+Content-Type: multipart/alternative;
+        boundary="D9F2D5A2__"
+X-Priority: 1
+X-MSMail-Priority: High
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Mon, Jul 20, 2020 at 03:50:16PM +0000, David Laight wrote:
-> Several of the structures in linux/uapi/linux/sctp.h are
-> marked __attribute__((packed, aligned(4))).
 
-I don't think we can change that by now. It's bad, yes, but it's
-exposed and, well, for a long time (since 2005).
+--D9F2D5A2__
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> I believe this was done so that the UAPI structure was the
-> same on both 32 and 64bit systems.
-> The 'natural' alignment is that of 'u64' - so would differ
-> between 32 and 64 bit x86 cpus.
-> 
-> There are two horrible issues here:
-> 
-> 1) I believe the natural alignment of u64 is actually 8
->    bytes on some 32bit architectures.
+Dear Beloved,
+Peace of the Lord be with you and family, I am Fitzpatrick Moore a
+United Kingdom Citizen, I have ($ 25M) Twenty five Million united
+states dollars with a finance House in United State. I will want you
+to help me collect this deposit and dispatch it to charity
+organizations. You will take out 30% of these funds for your
+assistance to help ME disburse this fund to charities. I will like you
+to acknowledge the receipt of this e-mail as soon as possible and
+treats with absolute confidentiality and sincerity. Please reply to my
+Email: (moorefitzpatrick@gmail.com)
+Yours Sincerely,
+Fitzpatrick Moore
 
-Not sure which?
+--D9F2D5A2__--
 
->    So the change would have broken binary compatibility
->    for 32bit applications compiled before the alignment
->    was added.
-
-If nobody complained in 15 years, that's probably not a problem. ;-)
-
-> 
-> 2) Inside the kernel the address of the structure member
->    is 'blindly' passed through as if it were an aligned
->    pointer.
->    For instance I'm pretty sure is can get passed to
->    inet_addr_is_any() (in net/core/utils.).
->    Here it gets passed to memcmp().
->    gcc will inline the memcmp() and almost certainly use 64bit
->    accesses.
->    These will fault on architectures (like sparc64).
-
-For 2) here we should fix it by copying the data into a different
-buffer, or something like that.
-That is happening on structs sctp_setpeerprim sctp_prim
-sctp_paddrparams sctp_paddrinfo, right?
-As they all use the pattern of having a sockaddr_storage after a s32.
-
-> 
-> No amount of casting can make gcc 'forget' the alignment
-> of a structure.
-> Passing to an external function as 'void *' will - but
-> even the LTO could track the alignment through.
-> 
-> 	David
-> 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
-> 
