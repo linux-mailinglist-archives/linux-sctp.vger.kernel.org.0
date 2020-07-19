@@ -2,86 +2,110 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A039B22503F
-	for <lists+linux-sctp@lfdr.de>; Sun, 19 Jul 2020 09:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B3E22541F
+	for <lists+linux-sctp@lfdr.de>; Sun, 19 Jul 2020 22:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726855AbgGSHXt (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 19 Jul 2020 03:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52660 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726719AbgGSHXk (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sun, 19 Jul 2020 03:23:40 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554CFC0619D2;
-        Sun, 19 Jul 2020 00:23:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=eRMsE6xRJtlZFD3MWcVjK8F4RNihLRwBQjgoO3VHBxE=; b=jZefwWMH3uBB3KlgI+6szHqt7v
-        ycIfYlGXXybSlFRZNLlf0CNkj0X/PLKPdw+KCx46d3Bh5zZnbpfHyxeo+M00lUDyA5FpvRvNS3xN5
-        g2FdbxmO1rCDIHfM9/7RF/Ljdv3yoG4tk6PrTbzIKKSNMKRNxi+Tt0a0Yd32mMv2vbbF729usN9lf
-        K63luTPA0nsUgVdyMPV+OMcsARxx2RWX/6/OkTVR7hgYYor1eVnlV59FOJmt3WfoN2zG//VJvOaON
-        zUS+ExjM/IsVitByNtvBjmlfTGD9Dm/ITUBNUbbAygNmf0TySPbvYBiRNtLecgZTDamefP58tHB38
-        nyg5+sLg==;
-Received: from [2001:4bb8:105:4a81:4ef5:9f24:cda4:103f] (helo=localhost)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jx3fc-0000ZF-C8; Sun, 19 Jul 2020 07:23:36 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        linux-sctp@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH 51/51] sctp: remove the out_nounlock label in sctp_setsockopt
-Date:   Sun, 19 Jul 2020 09:22:28 +0200
-Message-Id: <20200719072228.112645-52-hch@lst.de>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200719072228.112645-1-hch@lst.de>
-References: <20200719072228.112645-1-hch@lst.de>
+        id S1726135AbgGSU0z (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 19 Jul 2020 16:26:55 -0400
+Received: from smtp.al2klimov.de ([78.46.175.9]:43666 "EHLO smtp.al2klimov.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726073AbgGSU0z (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Sun, 19 Jul 2020 16:26:55 -0400
+Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
+        by smtp.al2klimov.de (Postfix) with ESMTPA id 78FF3BC085;
+        Sun, 19 Jul 2020 20:26:50 +0000 (UTC)
+From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
+To:     vyasevich@gmail.com, nhorman@tuxdriver.com,
+        marcelo.leitner@gmail.com, davem@davemloft.net, kuba@kernel.org,
+        corbet@lwn.net, linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
+Subject: [PATCH for v5.9] sctp: Replace HTTP links with HTTPS ones
+Date:   Sun, 19 Jul 2020 22:26:44 +0200
+Message-Id: <20200719202644.61663-1-grandmaster@al2klimov.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-Spamd-Bar: ++++++
+X-Spam-Level: ******
+Authentication-Results: smtp.al2klimov.de;
+        auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
+X-Spam: Yes
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-This is just used once, and a direct return for the redirect to the AF
-case is much easier to follow than jumping to the end of a very long
-function.
+Rationale:
+Reduces attack surface on kernel devs opening the links for MITM
+as HTTPS traffic is much harder to manipulate.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Deterministic algorithm:
+For each file:
+  If not .svg:
+    For each line:
+      If doesn't contain `\bxmlns\b`:
+        For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
+	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
+            If both the HTTP and HTTPS versions
+            return 200 OK and serve the same content:
+              Replace HTTP with HTTPS.
+
+Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
 ---
- net/sctp/socket.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ Continuing my work started at 93431e0607e5.
+ See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
+ (Actually letting a shell for loop submit all this stuff for me.)
 
-diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-index f2d4f8a0c426bb..9a767f35971865 100644
---- a/net/sctp/socket.c
-+++ b/net/sctp/socket.c
-@@ -4444,8 +4444,8 @@ static int sctp_setsockopt(struct sock *sk, int level, int optname,
- 	 */
- 	if (level != SOL_SCTP) {
- 		struct sctp_af *af = sctp_sk(sk)->pf->af;
--		retval = af->setsockopt(sk, level, optname, optval, optlen);
--		goto out_nounlock;
-+
-+		return af->setsockopt(sk, level, optname, optval, optlen);
- 	}
+ If there are any URLs to be removed completely
+ or at least not (just) HTTPSified:
+ Just clearly say so and I'll *undo my change*.
+ See also: https://lkml.org/lkml/2020/6/27/64
+
+ If there are any valid, but yet not changed URLs:
+ See: https://lkml.org/lkml/2020/6/26/837
+
+ If you apply the patch, please let me know.
+
+ Sorry again to all maintainers who complained about subject lines.
+ Now I realized that you want an actually perfect prefixes,
+ not just subsystem ones.
+ I tried my best...
+ And yes, *I could* (at least half-)automate it.
+ Impossible is nothing! :)
+
+
+ Documentation/networking/sctp.rst | 4 ++--
+ net/sctp/Kconfig                  | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/networking/sctp.rst b/Documentation/networking/sctp.rst
+index 9f4d9c8a925b..e2b9f4d9a8a2 100644
+--- a/Documentation/networking/sctp.rst
++++ b/Documentation/networking/sctp.rst
+@@ -15,8 +15,8 @@ developed the SCTP protocol and later handed the protocol over to the
+ Transport Area (TSVWG) working group for the continued evolvement of SCTP as a
+ general purpose transport.
  
- 	if (optlen > 0) {
-@@ -4635,8 +4635,6 @@ static int sctp_setsockopt(struct sock *sk, int level, int optname,
+-See the IETF website (http://www.ietf.org) for further documents on SCTP.
+-See http://www.ietf.org/rfc/rfc2960.txt
++See the IETF website (https://www.ietf.org) for further documents on SCTP.
++See https://www.ietf.org/rfc/rfc2960.txt
  
- 	release_sock(sk);
- 	kfree(kopt);
--
--out_nounlock:
- 	return retval;
- }
+ The initial project goal is to create an Linux kernel reference implementation
+ of SCTP that is RFC 2960 compliant and provides an programming interface
+diff --git a/net/sctp/Kconfig b/net/sctp/Kconfig
+index 39d7fa9569f8..0d4ac89ad695 100644
+--- a/net/sctp/Kconfig
++++ b/net/sctp/Kconfig
+@@ -14,7 +14,7 @@ menuconfig IP_SCTP
+ 	help
+ 	  Stream Control Transmission Protocol
  
+-	  From RFC 2960 <http://www.ietf.org/rfc/rfc2960.txt>.
++	  From RFC 2960 <https://www.ietf.org/rfc/rfc2960.txt>.
+ 
+ 	  "SCTP is a reliable transport protocol operating on top of a
+ 	  connectionless packet network such as IP.  It offers the following
 -- 
 2.27.0
 
