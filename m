@@ -2,26 +2,26 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27178227CAD
-	for <lists+linux-sctp@lfdr.de>; Tue, 21 Jul 2020 12:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C24227CE6
+	for <lists+linux-sctp@lfdr.de>; Tue, 21 Jul 2020 12:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729136AbgGUKO0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Tue, 21 Jul 2020 06:14:26 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:59498 "EHLO
+        id S1729060AbgGUK1F convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Tue, 21 Jul 2020 06:27:05 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:56694 "EHLO
         eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729046AbgGUKOZ (ORCPT
+        by vger.kernel.org with ESMTP id S1728454AbgGUK1E (ORCPT
         <rfc822;linux-sctp@vger.kernel.org>);
-        Tue, 21 Jul 2020 06:14:25 -0400
+        Tue, 21 Jul 2020 06:27:04 -0400
 Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
  TLS) by relay.mimecast.com with ESMTP id
- uk-mta-138-nfvRhVVmO1WenzQxH6ebBA-1; Tue, 21 Jul 2020 11:14:21 +0100
-X-MC-Unique: nfvRhVVmO1WenzQxH6ebBA-1
+ uk-mta-165-VkETpnrTNNiCTn0jftGBVw-1; Tue, 21 Jul 2020 11:27:00 +0100
+X-MC-Unique: VkETpnrTNNiCTn0jftGBVw-1
 Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
  AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Tue, 21 Jul 2020 11:14:20 +0100
+ Server (TLS) id 15.0.1347.2; Tue, 21 Jul 2020 11:26:58 +0100
 Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
  AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Tue, 21 Jul 2020 11:14:20 +0100
+ Tue, 21 Jul 2020 11:26:58 +0100
 From:   David Laight <David.Laight@ACULAB.COM>
 To:     'Christoph Hellwig' <hch@lst.de>,
         "David S. Miller" <davem@davemloft.net>,
@@ -55,14 +55,13 @@ CC:     "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
         "tipc-discussion@lists.sourceforge.net" 
         <tipc-discussion@lists.sourceforge.net>,
         "linux-x25@vger.kernel.org" <linux-x25@vger.kernel.org>
-Subject: RE: [PATCH 03/24] net: add a new sockptr_t type
-Thread-Topic: [PATCH 03/24] net: add a new sockptr_t type
-Thread-Index: AQHWXznVP/p0ivee+U2FmRNemPQri6kRzhiA
-Date:   Tue, 21 Jul 2020 10:14:20 +0000
-Message-ID: <6727969f2f6e467fa2d43f9773cefa27@AcuMS.aculab.com>
+Subject: RE: get rid of the address_space override in setsockopt
+Thread-Topic: get rid of the address_space override in setsockopt
+Thread-Index: AQHWXznU7Ce8ImOXV0WGgKrMes+hhakR08Lg
+Date:   Tue, 21 Jul 2020 10:26:58 +0000
+Message-ID: <ae6a743aaea3406596dbc89e332b6b3e@AcuMS.aculab.com>
 References: <20200720124737.118617-1-hch@lst.de>
- <20200720124737.118617-4-hch@lst.de>
-In-Reply-To: <20200720124737.118617-4-hch@lst.de>
+In-Reply-To: <20200720124737.118617-1-hch@lst.de>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -82,45 +81,24 @@ X-Mailing-List: linux-sctp@vger.kernel.org
 From: Christoph Hellwig
 > Sent: 20 July 2020 13:47
 > 
-> Add a uptr_t type that can hold a pointer to either a user or kernel
-> memory region, and simply helpers to copy to and from it.  For
-> architectures like x86 that have non-overlapping user and kernel
-> address space it just is a union and uses a TASK_SIZE check to
-> select the proper copy routine.  For architectures with overlapping
-> address spaces a flag to indicate the address space is used instead.
+> setsockopt is the last place in architecture-independ code that still
+> uses set_fs to force the uaccess routines to operate on kernel pointers.
 > 
-...
-> +#else /* CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE */
-> +typedef struct {
-> +	union {
-> +		void		*kernel;
-> +		void __user	*user;
-> +	};
-> +	bool		is_kernel : 1;
-> +} sockptr_t;
+> This series adds a new sockptr_t type that can contained either a kernel
+> or user pointer, and which has accessors that do the right thing, and
+> then uses it for setsockopt, starting by refactoring some low-level
+> helpers and moving them over to it before finally doing the main
+> setsockopt method.
 
-If you need to do that you might as well make it a struct
-where either the kernel or user address is defined.
-Far safer for all architectures.
+Another 'gotcha' ...
 
-Indeed you could add the length (to save passing an
-extra parameter through the layers).
-
-The system call code could even copy the code into a
-kernel buffer (setting both pointers).
-So that code that didn't need to access beyond the end
-of the implied buffer (most of it) could just access the
-kernel buffer.
-
-For getsockopt() you'd need some way of supressing the
-'default' copy back of the user buffer.
-
-This would also allow some of the sctp getsockopt to
-read (usually 4 bytes) from the 'user' buffer without
-the wrapper code always having to read in the entire
-user buffer.
+On an least some architectures (possibly only m68k) IIRC all structures
+are actually passed by reference.
+(This used to be true for sparc - but it may have changed in the
+last 30 years.)
 
 	David
+ 
 
 -
 Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
