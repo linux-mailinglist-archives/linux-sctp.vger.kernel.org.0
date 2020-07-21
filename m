@@ -2,37 +2,36 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6FD227C30
-	for <lists+linux-sctp@lfdr.de>; Tue, 21 Jul 2020 11:55:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27178227CAD
+	for <lists+linux-sctp@lfdr.de>; Tue, 21 Jul 2020 12:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728873AbgGUJzZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Tue, 21 Jul 2020 05:55:25 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:47185 "EHLO
+        id S1729136AbgGUKO0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Tue, 21 Jul 2020 06:14:26 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:59498 "EHLO
         eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729026AbgGUJzZ (ORCPT
+        by vger.kernel.org with ESMTP id S1729046AbgGUKOZ (ORCPT
         <rfc822;linux-sctp@vger.kernel.org>);
-        Tue, 21 Jul 2020 05:55:25 -0400
+        Tue, 21 Jul 2020 06:14:25 -0400
 Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
  TLS) by relay.mimecast.com with ESMTP id
- uk-mta-262-05FU3YgoN0uQBLOw_0F_FQ-1; Tue, 21 Jul 2020 10:55:21 +0100
-X-MC-Unique: 05FU3YgoN0uQBLOw_0F_FQ-1
+ uk-mta-138-nfvRhVVmO1WenzQxH6ebBA-1; Tue, 21 Jul 2020 11:14:21 +0100
+X-MC-Unique: nfvRhVVmO1WenzQxH6ebBA-1
 Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
  AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Tue, 21 Jul 2020 10:55:20 +0100
+ Server (TLS) id 15.0.1347.2; Tue, 21 Jul 2020 11:14:20 +0100
 Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
  AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Tue, 21 Jul 2020 10:55:20 +0100
+ Tue, 21 Jul 2020 11:14:20 +0100
 From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Eric Biggers' <ebiggers@kernel.org>,
-        Christoph Hellwig <hch@lst.de>
-CC:     "David S. Miller" <davem@davemloft.net>,
+To:     'Christoph Hellwig' <hch@lst.de>,
+        "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
         Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
         Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>
+CC:     "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
@@ -58,12 +57,12 @@ CC:     "David S. Miller" <davem@davemloft.net>,
         "linux-x25@vger.kernel.org" <linux-x25@vger.kernel.org>
 Subject: RE: [PATCH 03/24] net: add a new sockptr_t type
 Thread-Topic: [PATCH 03/24] net: add a new sockptr_t type
-Thread-Index: AQHWXrQmuUX3yUokMEqukKul+fTtiakRycQA
-Date:   Tue, 21 Jul 2020 09:55:20 +0000
-Message-ID: <9b7ae3245bad474db2a3889bc1c1a329@AcuMS.aculab.com>
+Thread-Index: AQHWXznVP/p0ivee+U2FmRNemPQri6kRzhiA
+Date:   Tue, 21 Jul 2020 10:14:20 +0000
+Message-ID: <6727969f2f6e467fa2d43f9773cefa27@AcuMS.aculab.com>
 References: <20200720124737.118617-1-hch@lst.de>
- <20200720124737.118617-4-hch@lst.de> <20200720163748.GA1292162@gmail.com>
-In-Reply-To: <20200720163748.GA1292162@gmail.com>
+ <20200720124737.118617-4-hch@lst.de>
+In-Reply-To: <20200720124737.118617-4-hch@lst.de>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -80,40 +79,46 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Eric Biggers
-> Sent: 20 July 2020 17:38
-...
-> How does this not introduce a massive security hole when
-> CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE?
+From: Christoph Hellwig
+> Sent: 20 July 2020 13:47
 > 
-> AFAICS, userspace can pass in a pointer >= TASK_SIZE,
-> and this code makes it be treated as a kernel pointer.
+> Add a uptr_t type that can hold a pointer to either a user or kernel
+> memory region, and simply helpers to copy to and from it.  For
+> architectures like x86 that have non-overlapping user and kernel
+> address space it just is a union and uses a TASK_SIZE check to
+> select the proper copy routine.  For architectures with overlapping
+> address spaces a flag to indicate the address space is used instead.
+> 
+...
+> +#else /* CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE */
+> +typedef struct {
+> +	union {
+> +		void		*kernel;
+> +		void __user	*user;
+> +	};
+> +	bool		is_kernel : 1;
+> +} sockptr_t;
 
-One thought I've had is that on 64-bit architectures there
-is almost always some part of the KVA that can never be valid
-and is larger than the maximum size of a user VA.
+If you need to do that you might as well make it a struct
+where either the kernel or user address is defined.
+Far safer for all architectures.
 
-If the user address is offset into this invalid area
-then it can always be distinguished from a kernel address.
+Indeed you could add the length (to save passing an
+extra parameter through the layers).
 
-Indeed it may be worth considering offsetting kernel
-addresses as well.
+The system call code could even copy the code into a
+kernel buffer (setting both pointers).
+So that code that didn't need to access beyond the end
+of the implied buffer (most of it) could just access the
+kernel buffer.
 
-This forces code to use the correct accessors.
+For getsockopt() you'd need some way of supressing the
+'default' copy back of the user buffer.
 
-It doesn't solve the problem for 32bit systems with
-CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE since
-they are likely to have all 32bit addresses available
-to both use and kernel.
-
-If you end up with a 'fat pointer' then it may be worth
-adding the length and making it a 'buffer descriptor'.
-This can then be passed by address and the reduced
-number of parameters will probably offset the cost
-of the extra indirection.
-
-The read/write functions could then take the 'buffer descriptor',
-offset and length as parameters.
+This would also allow some of the sctp getsockopt to
+read (usually 4 bytes) from the 'user' buffer without
+the wrapper code always having to read in the entire
+user buffer.
 
 	David
 
