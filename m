@@ -2,26 +2,26 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 035D1227ACB
-	for <lists+linux-sctp@lfdr.de>; Tue, 21 Jul 2020 10:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34DF8227BF1
+	for <lists+linux-sctp@lfdr.de>; Tue, 21 Jul 2020 11:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728178AbgGUIhD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Tue, 21 Jul 2020 04:37:03 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:22238 "EHLO
+        id S1728684AbgGUJih convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Tue, 21 Jul 2020 05:38:37 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:46798 "EHLO
         eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726521AbgGUIhC (ORCPT
+        by vger.kernel.org with ESMTP id S1727073AbgGUJi3 (ORCPT
         <rfc822;linux-sctp@vger.kernel.org>);
-        Tue, 21 Jul 2020 04:37:02 -0400
+        Tue, 21 Jul 2020 05:38:29 -0400
 Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
  TLS) by relay.mimecast.com with ESMTP id
- uk-mta-210-Hj1lpiGkPReD_62cmwnEEw-1; Tue, 21 Jul 2020 09:36:58 +0100
-X-MC-Unique: Hj1lpiGkPReD_62cmwnEEw-1
+ uk-mta-217-o-9Oq5ZpNDO7uw1k_-mRfA-1; Tue, 21 Jul 2020 10:38:24 +0100
+X-MC-Unique: o-9Oq5ZpNDO7uw1k_-mRfA-1
 Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
  AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Tue, 21 Jul 2020 09:36:57 +0100
+ Server (TLS) id 15.0.1347.2; Tue, 21 Jul 2020 10:38:23 +0100
 Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
  AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Tue, 21 Jul 2020 09:36:57 +0100
+ Tue, 21 Jul 2020 10:38:23 +0100
 From:   David Laight <David.Laight@ACULAB.COM>
 To:     'Christoph Hellwig' <hch@lst.de>,
         "David S. Miller" <davem@davemloft.net>,
@@ -55,16 +55,13 @@ CC:     "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
         "tipc-discussion@lists.sourceforge.net" 
         <tipc-discussion@lists.sourceforge.net>,
         "linux-x25@vger.kernel.org" <linux-x25@vger.kernel.org>
-Subject: RE: [PATCH 12/24] bpfilter: switch bpfilter_ip_set_sockopt to
- sockptr_t
-Thread-Topic: [PATCH 12/24] bpfilter: switch bpfilter_ip_set_sockopt to
- sockptr_t
-Thread-Index: AQHWXznUwerjSVAdx0W80SUXvcknn6kRtZIA
-Date:   Tue, 21 Jul 2020 08:36:57 +0000
-Message-ID: <f9493b4c514441b4b51bc7e4e75e8c40@AcuMS.aculab.com>
+Subject: RE: get rid of the address_space override in setsockopt
+Thread-Topic: get rid of the address_space override in setsockopt
+Thread-Index: AQHWXznU7Ce8ImOXV0WGgKrMes+hhakRxpwA
+Date:   Tue, 21 Jul 2020 09:38:23 +0000
+Message-ID: <60c52e31e9f240718fcda0dd5c2faeca@AcuMS.aculab.com>
 References: <20200720124737.118617-1-hch@lst.de>
- <20200720124737.118617-13-hch@lst.de>
-In-Reply-To: <20200720124737.118617-13-hch@lst.de>
+In-Reply-To: <20200720124737.118617-1-hch@lst.de>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -83,10 +80,18 @@ X-Mailing-List: linux-sctp@vger.kernel.org
 
 From: Christoph Hellwig
 > Sent: 20 July 2020 13:47
+>
+> setsockopt is the last place in architecture-independ code that still
+> uses set_fs to force the uaccess routines to operate on kernel pointers.
 > 
-> This is mostly to prepare for cleaning up the callers, as bpfilter by
-> design can't handle kernel pointers.
-                      ^^^ user ??
+> This series adds a new sockptr_t type that can contained either a kernel
+> or user pointer, and which has accessors that do the right thing, and
+> then uses it for setsockopt, starting by refactoring some low-level
+> helpers and moving them over to it before finally doing the main
+> setsockopt method.
+
+Are you planning to make the equivalent change to getsockopt()?
+Having mismatched interfaces would be very strange.
 
 	David
 
