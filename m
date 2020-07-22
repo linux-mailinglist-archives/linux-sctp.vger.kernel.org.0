@@ -2,115 +2,100 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 653C3229BD6
-	for <lists+linux-sctp@lfdr.de>; Wed, 22 Jul 2020 17:53:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 172A1229E04
+	for <lists+linux-sctp@lfdr.de>; Wed, 22 Jul 2020 19:10:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727041AbgGVPwk (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 22 Jul 2020 11:52:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36524 "EHLO
+        id S1731379AbgGVRJ4 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 22 Jul 2020 13:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726427AbgGVPwj (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 22 Jul 2020 11:52:39 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D0DC0619DC;
-        Wed, 22 Jul 2020 08:52:39 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id md7so1603463pjb.1;
-        Wed, 22 Jul 2020 08:52:39 -0700 (PDT)
+        with ESMTP id S1726462AbgGVRJz (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 22 Jul 2020 13:09:55 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCACC0619DC;
+        Wed, 22 Jul 2020 10:09:54 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id h19so3257561ljg.13;
+        Wed, 22 Jul 2020 10:09:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=m/cYP1eQph22ytwTJ/NPXtyFmzXiUNEDby7xn4T3haM=;
-        b=HDRA28TZ8B6C+ViEANmpG5Q0l3Kz7/o5tcy955Sr/5HLZbHuJGvc67GxURLEMmselX
-         waBHDf+Mo3bK+GoWqpkcp28RK9oOybNRlKyle95h6SXwv+Kgt10lU5StgRSmDZuaS4tO
-         jYITCJk1Fbqiq2VIxo3LgJ20crFO7Ku9xmDx083IbeLjX8Rkhv34KozYeFm+6+P29CJB
-         66ToNWFB7ut//lC0RCzmE2UE8aFhwPV0hn2AJKVmNywRzBmETcCG6TSBeEFCwFETVeOT
-         BHXRTgfe4OBKBhy3yRpSSdE6thJdzM9TdtGKNbRFdi0CH6ku9qyVQiN8lCQ+gKFoZvtF
-         WjPQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nqelWpCqH7nOe0oSyngzrBNpGRC3PyDyz91JHpls3Xk=;
+        b=QbFOpYWq197fvdaI4E7hogiJ5z6DhlnMwFbSAyObyOYxQk/ojAWvAxU5xeCwIzRoyp
+         bGpv6okHRbaDCk3F5IJgGXS3Wesi1t0HKLxD0rWbntKFa+o4FEuZ/aNqddB2gT9rJhFi
+         ekTLt46VwAAqYYSOS+Ti6gpiM2sULyDbPlDxrV2EC1wYfvYmkCiCMfUA2sia4+eUOZSm
+         DpKqJKTrsnJtuquGnG9/42hXesw1S5DhQmqbpijEy6OLbaHF8RyBbV+paN+wC914K+DB
+         Om2JyFGEZL8bVoXG7xFZFOn3b/hxnJAALpQKOVax/+9YzLSzmIzDLinAT6/sMjMDDXxC
+         pBiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=m/cYP1eQph22ytwTJ/NPXtyFmzXiUNEDby7xn4T3haM=;
-        b=c79EF8LZKo+PuuGc30hID78yPyPkddtJpSZj6N15LBhlDXl00gQgOPy5qSl76lwpgP
-         8E0LkVfGes6MjR1C9f31Xak1kTvXB67BxaqpDIxeno8sOZ136XlSbK/PgQZwr+OSEwsc
-         8i4HN6PWFyQJkx8GWj7Sp1NhkT0PocBpWp2iJkX0h6Cp9c5UPKdF4GSz+dTjrI+mI5Jo
-         dPKXfRSIK4oS3I63aGhLJkeR41uqeGXgI/+2jjh28Hthb3Bu/FGzKG+F2jxP1Iff6xo+
-         efU1Xx2AEEC1jKnPoTwQXLfD1PE9jAOTces8JbkcJ5EbrMT/ttLqNgvm9BgUef6pnbWY
-         SNPQ==
-X-Gm-Message-State: AOAM533KRtb1DcfgzPl4Jv6D2jnspzgFkphATqOj+n0+x618naUfT1P6
-        rAPkQrNjeRA+kVr20ypdskF03Gp7
-X-Google-Smtp-Source: ABdhPJwp14HUNRLo2ppsqUgB6ltqgrvBasryk8qhuhdMu7aPMnGFJPu4TqI/WK0+lvswF0ZsIpgr3Q==
-X-Received: by 2002:a17:90a:7103:: with SMTP id h3mr99556pjk.34.1595433158741;
-        Wed, 22 Jul 2020 08:52:38 -0700 (PDT)
-Received: from localhost ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id z62sm14290pfb.47.2020.07.22.08.52.37
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 22 Jul 2020 08:52:38 -0700 (PDT)
-From:   Xin Long <lucien.xin@gmail.com>
-To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
-Cc:     davem@davemloft.net,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>
-Subject: [PATCH net 2/2] sctp: shrink stream outq when fails to do addstream reconf
-Date:   Wed, 22 Jul 2020 23:52:12 +0800
-Message-Id: <b4172cd23a6369c12a483e58f14619640aaf24ae.1595433039.git.lucien.xin@gmail.com>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <ceb8b4f32a9235e0a846e4f8e0537fcb362edf04.1595433039.git.lucien.xin@gmail.com>
-References: <cover.1595433039.git.lucien.xin@gmail.com>
- <ceb8b4f32a9235e0a846e4f8e0537fcb362edf04.1595433039.git.lucien.xin@gmail.com>
-In-Reply-To: <cover.1595433039.git.lucien.xin@gmail.com>
-References: <cover.1595433039.git.lucien.xin@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nqelWpCqH7nOe0oSyngzrBNpGRC3PyDyz91JHpls3Xk=;
+        b=k3wIByikShOaLkMc1Od1tLGwmab7hG9iKbyDULD2uOU+twM7jxZwJn7IWxMKu4MHdb
+         2Um8GRz1pnUx6Or1zrBKsXK1VsWCVoqGK+g00uoLdXwN0ZIjQs2SY1NcE1kAF8LDVTbU
+         yec/VCQcloskNDtE/ZzYq3LleNJ4xRU3nJ3wI0s/geljdUP2TUb94FrsAN6b/v2V85qz
+         Jc8CdA/0064dg3bpth9PgXEMbwg5daPhBpS5N9zJpR/T9aF3Yn/Utf8++olez5sBFyLk
+         PhS8JcXdC8vjOKTUaUQOoc6YRUqpWtVVYj0gjyhYOFPmkN984ejeamHM/Bn02+cBPon8
+         gMPw==
+X-Gm-Message-State: AOAM531Eo1Acr/3nE2b3iA/QDxbQGbfSLq/pJjtA4rrQ+YuHqM+38kBs
+        PxMKDcJqZcbVcOCj/Ts6eT4QBe1XJMs+YgpX9dqBNA==
+X-Google-Smtp-Source: ABdhPJzXtI3YBeORsJYQmEu28fVJCUtGV7rd5sI5b8tsC3G9617tl0t2hP5zU+hEdegWolMtC+F/64n4emjrett5jt8=
+X-Received: by 2002:a2e:90da:: with SMTP id o26mr95292ljg.91.1595437793253;
+ Wed, 22 Jul 2020 10:09:53 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200720124737.118617-1-hch@lst.de> <20200720204756.iengwcguikj2yrxt@ast-mbp.dhcp.thefacebook.com>
+ <20200722075657.GB26554@lst.de>
+In-Reply-To: <20200722075657.GB26554@lst.de>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 22 Jul 2020 10:09:41 -0700
+Message-ID: <CAADnVQKy0+rsRftEzp4PvxQtj7uOwybz0Nd4_h0FR37p2Q=X4w@mail.gmail.com>
+Subject: Re: get rid of the address_space override in setsockopt
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        netfilter-devel <netfilter-devel@vger.kernel.org>,
+        coreteam@netfilter.org, linux-sctp@vger.kernel.org,
+        linux-hams@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
+        linux-can@vger.kernel.org, dccp@vger.kernel.org,
+        linux-decnet-user@lists.sourceforge.net,
+        linux-wpan@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>, mptcp@lists.01.org,
+        lvs-devel@vger.kernel.org, rds-devel@oss.oracle.com,
+        linux-afs@lists.infradead.org,
+        tipc-discussion@lists.sourceforge.net, linux-x25@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-When adding a stream with stream reconf, the new stream firstly is in
-CLOSED state but new out chunks can still be enqueued. Then once gets
-the confirmation from the peer, the state will change to OPEN.
+On Wed, Jul 22, 2020 at 12:56 AM Christoph Hellwig <hch@lst.de> wrote:
+>
+> On Mon, Jul 20, 2020 at 01:47:56PM -0700, Alexei Starovoitov wrote:
+> > > a kernel pointer.  This is something that works for most common sockopts
+> > > (and is something that the ePBF support relies on), but unfortunately
+> > > in various corner cases we either don't use the passed in length, or in
+> > > one case actually copy data back from setsockopt, so we unfortunately
+> > > can't just always do the copy in the highlevel code, which would have
+> > > been much nicer.
+> >
+> > could you rebase on bpf-next tree and we can route it this way then?
+> > we'll also test the whole thing before applying.
+>
+> The bpf-next tree is missing all my previous setsockopt cleanups, so
+> there series won't apply.
 
-However, if the peer denies, it needs to roll back the stream. But when
-doing that, it only sets the stream outcnt back, and the chunks already
-in the new stream don't get purged. It caused these chunks can still be
-dequeued in sctp_outq_dequeue_data().
-
-As its stream is still in CLOSE, the chunk will be enqueued to the head
-again by sctp_outq_head_data(). This chunk will never be sent out, and
-the chunks after it can never be dequeued. The assoc will be 'hung' in
-a dead loop of sending this chunk.
-
-To fix it, this patch is to purge these chunks already in the new
-stream by calling sctp_stream_shrink_out() when failing to do the
-addstream reconf.
-
-Fixes: 11ae76e67a17 ("sctp: implement receiver-side procedures for the Reconf Response Parameter")
-Reported-by: Ying Xu <yinxu@redhat.com>
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
----
- net/sctp/stream.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/net/sctp/stream.c b/net/sctp/stream.c
-index 4f87693..bda2536 100644
---- a/net/sctp/stream.c
-+++ b/net/sctp/stream.c
-@@ -1044,11 +1044,13 @@ struct sctp_chunk *sctp_process_strreset_resp(
- 		nums = ntohs(addstrm->number_of_streams);
- 		number = stream->outcnt - nums;
- 
--		if (result == SCTP_STRRESET_PERFORMED)
-+		if (result == SCTP_STRRESET_PERFORMED) {
- 			for (i = number; i < stream->outcnt; i++)
- 				SCTP_SO(stream, i)->state = SCTP_STREAM_OPEN;
--		else
-+		} else {
-+			sctp_stream_shrink_out(stream, number);
- 			stream->outcnt = number;
-+		}
- 
- 		*evp = sctp_ulpevent_make_stream_change_event(asoc, flags,
- 			0, nums, GFP_ATOMIC);
--- 
-2.1.0
-
+Right. I've realized that after sending that email two days ago.
+Now bpf-next->net-next PR is pending and as soon as it's merged
+bpf-next will have all the recent bits.
