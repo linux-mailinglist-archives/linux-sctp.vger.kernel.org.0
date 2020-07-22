@@ -2,139 +2,114 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAE1522A0BF
-	for <lists+linux-sctp@lfdr.de>; Wed, 22 Jul 2020 22:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 221E822A0DB
+	for <lists+linux-sctp@lfdr.de>; Wed, 22 Jul 2020 22:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732822AbgGVUcU (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 22 Jul 2020 16:32:20 -0400
-Received: from mail-io1-f72.google.com ([209.85.166.72]:53303 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726907AbgGVUcT (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 22 Jul 2020 16:32:19 -0400
-Received: by mail-io1-f72.google.com with SMTP id g11so2577243ioc.20
-        for <linux-sctp@vger.kernel.org>; Wed, 22 Jul 2020 13:32:18 -0700 (PDT)
+        id S1732319AbgGVUmg (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 22 Jul 2020 16:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726447AbgGVUmg (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 22 Jul 2020 16:42:36 -0400
+Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FA6C0619DC;
+        Wed, 22 Jul 2020 13:42:36 -0700 (PDT)
+Received: by mail-qv1-xf41.google.com with SMTP id o2so1648269qvk.6;
+        Wed, 22 Jul 2020 13:42:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7nZNWjLqJ0D5sOjFQbHfG87wkEolo85RPk9Z6kp/ytc=;
+        b=khTCCzW3E6Dk5KskWoX50Mju/0CtFCcalJxJWF9H1r60i0v8EtvUN5HsHgwez0hBaz
+         yCFH9uglcgYgZ0wWnc5I6xk+uJj1JHQ5U7Zg8kT6wjVAf4pD/oTh7a2Gv3TfknsUsDjM
+         Bczvt71B/uSq3yxvGlRjf1JoaZz6BjymEyjOJAPqk+6T+jEiOvZMJywJglwug9AWTxgE
+         LG2y2P9FkHZ6flyxYQvqlRrmZGJTwODE8NPlYxKXvhu6YVwBKRj7rivlR5azwBNFFMVo
+         fhMRNOA43jnKUGzMCj8PJuTpdU++IRzuMgm23vPs7PifTVmSBrfL+vCioHsL9SDRbTKA
+         ybYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=7imZ4Va5q5kCA+NPHlvvdTkyX0X2t9Lf27NR58K8+rs=;
-        b=HS+MTypYBV9Qc3H3VttBHy/ok778OW7VEeSiu/DVG1jWnFt7OLPdVOlX0dNnYB6PUi
-         vUQ+awkLnv7VnkyihoU3T8/+/jTUZGpJSw5LBHV6y4xoi9WLD+4twdaVrYXsegBUTG9E
-         V9htep4KaG52L1CbfMi7ety53OsaOpkpMe6E77pyixjyOmxUb5YXLqf6neCbF7bU/nuv
-         ZkfuqBzhR6M03FTvhfP5ewcFmgfQRWrR+W2rBfU90dLUbStei6+XjKk4Me5A7e+KR3B1
-         Y/aEFhqMKiNjHZF8Fe8oc2XPVTv1dBzntgbyAvH9CYTCkqx8mcH5sHujbOuxPjZyKg8u
-         7o/A==
-X-Gm-Message-State: AOAM532/fHVjN76z7qr5Vmx1I44MtE+FYsVNsbmR9Ze1P6nFJtH5FHcG
-        rK39VtK2yt3xiYYb33yGcdFp9kcHxwxwMUuPYU90sc5q+ZCD
-X-Google-Smtp-Source: ABdhPJwmJ8eTmIZSagdPyWqMOzb+vlzW9sZ69rQeAKnlfwtsmTG9VL61AtBMI3IVVugjv9qSHv55VhavHB0yX+MqWCZITNiaZBNu
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7nZNWjLqJ0D5sOjFQbHfG87wkEolo85RPk9Z6kp/ytc=;
+        b=j14iyEI7S4Hl/IQDOc08UvFCLtSMt7xp29fxFth9wdcN8XHLfDXymRWq0J6WjM2Aos
+         E1W28Awz23kztIbqzDsZkYXhmcd1l5xo1/IbgCpsVRwsQqisOjT2s5H1OFONpfOjZIGJ
+         F7QmPbbqg65HkXvid6plsJ6b3mb4XTRR7PpNfq2pOTQ4nqiJ9s99tIUvSoXloFB6Jdtp
+         s8P8siLlt+0Hp2v94ukUk6kQPUvYeD/1LtEKQLzNRCWgHZ9l8y2u+cIJ6tIjDcnSnxLF
+         weKwiuipgbd04A7z63t+PZd1nGTqperQRxuttJDSyrOVRjTJfaMiEwFH03XYkG/+gSep
+         ZFhA==
+X-Gm-Message-State: AOAM530icOQJPCUzUlhl1MpylMRRvVDVtGSBtK9JOMXA76XjS2sK/iEo
+        sUOZtIncLUmhA5mTKhsmVQBv2vBK
+X-Google-Smtp-Source: ABdhPJzq2amLTw+BDxUKKCEVqbE2WSYz5u5t4BdzTKsMsXoW8MI/Qg2BDubtp40nFT4gcfbbpN5Pug==
+X-Received: by 2002:ad4:4b6d:: with SMTP id m13mr1830201qvx.33.1595450555197;
+        Wed, 22 Jul 2020 13:42:35 -0700 (PDT)
+Received: from localhost.localdomain ([2001:1284:f016:a4f2:f184:dd41:1f10:d998])
+        by smtp.gmail.com with ESMTPSA id s190sm783587qkh.116.2020.07.22.13.42.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2020 13:42:34 -0700 (PDT)
+Received: by localhost.localdomain (Postfix, from userid 1000)
+        id F1909C18B3; Wed, 22 Jul 2020 17:42:31 -0300 (-03)
+Date:   Wed, 22 Jul 2020 17:42:31 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     Neil Horman <nhorman@tuxdriver.com>,
+        Christoph Hellwig <hch@lst.de>, linux-sctp@vger.kernel.org
+Subject: Re: [PATCH net-next] sctp: fix slab-out-of-bounds in
+ SCTP_DELAYED_SACK processing
+Message-ID: <20200722204231.GA3398@localhost.localdomain>
+References: <5955bc857c93d4bb64731ef7a9e90cb0094a8989.1595450200.git.marcelo.leitner@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:494e:: with SMTP id w75mr1669514ila.115.1595449937975;
- Wed, 22 Jul 2020 13:32:17 -0700 (PDT)
-Date:   Wed, 22 Jul 2020 13:32:17 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cf606405ab0da28a@google.com>
-Subject: memory leak in sctp_packet_transmit
-From:   syzbot <syzbot+8bb053b5d63595ab47db@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-sctp@vger.kernel.org, marcelo.leitner@gmail.com,
-        netdev@vger.kernel.org, nhorman@tuxdriver.com,
-        syzkaller-bugs@googlegroups.com, vyasevich@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5955bc857c93d4bb64731ef7a9e90cb0094a8989.1595450200.git.marcelo.leitner@gmail.com>
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello,
+Cc'ing linux-sctp@vger.kernel.org.
 
-syzbot found the following issue on:
-
-HEAD commit:    4fa640dc Merge tag 'vfio-v5.8-rc7' of git://github.com/awi..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=149e5e27100000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=61340c48ef4aedfb
-dashboard link: https://syzkaller.appspot.com/bug?extid=8bb053b5d63595ab47db
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=118d1793100000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14805758900000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8bb053b5d63595ab47db@syzkaller.appspotmail.com
-
-executing program
-executing program
-BUG: memory leak
-unreferenced object 0xffff888118cb6f00 (size 224):
-  comm "syz-executor698", pid 6423, jiffies 4294945994 (age 12.350s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 a2 2a 81 88 ff ff 40 e0 d0 24 81 88 ff ff  ...*....@..$....
-  backtrace:
-    [<00000000dbd8d389>] __alloc_skb+0x5e/0x250 net/core/skbuff.c:198
-    [<000000002ecd4b45>] alloc_skb include/linux/skbuff.h:1083 [inline]
-    [<000000002ecd4b45>] sctp_packet_transmit+0xdc/0xb30 net/sctp/output.c:572
-    [<0000000005eef223>] sctp_outq_flush_transports net/sctp/outqueue.c:1147 [inline]
-    [<0000000005eef223>] sctp_outq_flush+0xf6/0xa30 net/sctp/outqueue.c:1195
-    [<000000007ad403b8>] sctp_cmd_interpreter net/sctp/sm_sideeffect.c:1770 [inline]
-    [<000000007ad403b8>] sctp_side_effects net/sctp/sm_sideeffect.c:1185 [inline]
-    [<000000007ad403b8>] sctp_do_sm+0x197b/0x1f00 net/sctp/sm_sideeffect.c:1156
-    [<00000000696e5800>] sctp_assoc_bh_rcv+0x167/0x250 net/sctp/associola.c:1044
-    [<00000000bad89a41>] sctp_inq_push+0x76/0xa0 net/sctp/inqueue.c:80
-    [<0000000066ea2304>] sctp_backlog_rcv+0x83/0x370 net/sctp/input.c:344
-    [<000000004f4c84bd>] sk_backlog_rcv include/net/sock.h:997 [inline]
-    [<000000004f4c84bd>] __release_sock+0xa5/0x110 net/core/sock.c:2550
-    [<000000001cfa318a>] release_sock+0x32/0xc0 net/core/sock.c:3066
-    [<00000000538f7502>] sctp_wait_for_connect+0x11d/0x1e0 net/sctp/socket.c:9302
-    [<00000000a983945d>] sctp_sendmsg_to_asoc+0xa95/0xab0 net/sctp/socket.c:1892
-    [<00000000136d87b5>] sctp_sendmsg+0x704/0xbd0 net/sctp/socket.c:2038
-    [<000000003d35bb02>] inet_sendmsg+0x39/0x60 net/ipv4/af_inet.c:814
-    [<00000000109a76b3>] sock_sendmsg_nosec net/socket.c:652 [inline]
-    [<00000000109a76b3>] sock_sendmsg+0x4c/0x60 net/socket.c:672
-    [<00000000c68f9835>] __sys_sendto+0x11d/0x1c0 net/socket.c:1995
-    [<00000000b6e006ac>] __do_sys_sendto net/socket.c:2007 [inline]
-    [<00000000b6e006ac>] __se_sys_sendto net/socket.c:2003 [inline]
-    [<00000000b6e006ac>] __x64_sys_sendto+0x26/0x30 net/socket.c:2003
-
-BUG: memory leak
-unreferenced object 0xffff888119797f00 (size 224):
-  comm "syz-executor698", pid 6424, jiffies 4294946510 (age 7.190s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 a2 2a 81 88 ff ff 40 e0 d0 24 81 88 ff ff  ...*....@..$....
-  backtrace:
-    [<00000000dbd8d389>] __alloc_skb+0x5e/0x250 net/core/skbuff.c:198
-    [<000000002ecd4b45>] alloc_skb include/linux/skbuff.h:1083 [inline]
-    [<000000002ecd4b45>] sctp_packet_transmit+0xdc/0xb30 net/sctp/output.c:572
-    [<0000000005eef223>] sctp_outq_flush_transports net/sctp/outqueue.c:1147 [inline]
-    [<0000000005eef223>] sctp_outq_flush+0xf6/0xa30 net/sctp/outqueue.c:1195
-    [<000000007ad403b8>] sctp_cmd_interpreter net/sctp/sm_sideeffect.c:1770 [inline]
-    [<000000007ad403b8>] sctp_side_effects net/sctp/sm_sideeffect.c:1185 [inline]
-    [<000000007ad403b8>] sctp_do_sm+0x197b/0x1f00 net/sctp/sm_sideeffect.c:1156
-    [<00000000696e5800>] sctp_assoc_bh_rcv+0x167/0x250 net/sctp/associola.c:1044
-    [<00000000bad89a41>] sctp_inq_push+0x76/0xa0 net/sctp/inqueue.c:80
-    [<0000000066ea2304>] sctp_backlog_rcv+0x83/0x370 net/sctp/input.c:344
-    [<000000004f4c84bd>] sk_backlog_rcv include/net/sock.h:997 [inline]
-    [<000000004f4c84bd>] __release_sock+0xa5/0x110 net/core/sock.c:2550
-    [<000000001cfa318a>] release_sock+0x32/0xc0 net/core/sock.c:3066
-    [<00000000538f7502>] sctp_wait_for_connect+0x11d/0x1e0 net/sctp/socket.c:9302
-    [<00000000a983945d>] sctp_sendmsg_to_asoc+0xa95/0xab0 net/sctp/socket.c:1892
-    [<00000000136d87b5>] sctp_sendmsg+0x704/0xbd0 net/sctp/socket.c:2038
-    [<000000003d35bb02>] inet_sendmsg+0x39/0x60 net/ipv4/af_inet.c:814
-    [<00000000109a76b3>] sock_sendmsg_nosec net/socket.c:652 [inline]
-    [<00000000109a76b3>] sock_sendmsg+0x4c/0x60 net/socket.c:672
-    [<00000000c68f9835>] __sys_sendto+0x11d/0x1c0 net/socket.c:1995
-    [<00000000b6e006ac>] __do_sys_sendto net/socket.c:2007 [inline]
-    [<00000000b6e006ac>] __se_sys_sendto net/socket.c:2003 [inline]
-    [<00000000b6e006ac>] __x64_sys_sendto+0x26/0x30 net/socket.c:2003
-
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+On Wed, Jul 22, 2020 at 05:38:58PM -0300, Marcelo Ricardo Leitner wrote:
+> This sockopt accepts two kinds of parameters, using struct
+> sctp_sack_info and struct sctp_assoc_value. The mentioned commit didn't
+> notice an implicit cast from the smaller (latter) struct to the bigger
+> one (former) when copying the data from the user space, which now leads
+> to an attempt to write beyond the buffer (because it assumes the storing
+> buffer is bigger than the parameter itself).
+> 
+> Fix it by giving it a special buffer if the smaller struct is used by
+> the application.
+> 
+> Fixes: ebb25defdc17 ("sctp: pass a kernel pointer to sctp_setsockopt_delayed_ack")
+> Reported-by: syzbot+0e4699d000d8b874d8dc@syzkaller.appspotmail.com
+> Signed-off-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+> ---
+>  net/sctp/socket.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+> index 9a767f35971865f46b39131fc8d96d8c3c2aa1a8..b71c36af7687247b4fc9e160219b76f5c41b2fe2 100644
+> --- a/net/sctp/socket.c
+> +++ b/net/sctp/socket.c
+> @@ -2756,6 +2756,7 @@ static int sctp_setsockopt_delayed_ack(struct sock *sk,
+>  {
+>  	struct sctp_sock *sp = sctp_sk(sk);
+>  	struct sctp_association *asoc;
+> +	struct sctp_sack_info _params;
+>  
+>  	if (optlen == sizeof(struct sctp_sack_info)) {
+>  		if (params->sack_delay == 0 && params->sack_freq == 0)
+> @@ -2767,7 +2768,9 @@ static int sctp_setsockopt_delayed_ack(struct sock *sk,
+>  				    "Use struct sctp_sack_info instead\n",
+>  				    current->comm, task_pid_nr(current));
+>  
+> -		if (params->sack_delay == 0)
+> +		memcpy(&_params, params, sizeof(struct sctp_assoc_value));
+> +		params = &_params;
+> +		if (((struct sctp_assoc_value *)params)->assoc_value == 0)
+>  			params->sack_freq = 1;
+>  		else
+>  			params->sack_freq = 0;
+> -- 
+> 2.25.4
+> 
