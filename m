@@ -2,36 +2,29 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A0B22AD6D
-	for <lists+linux-sctp@lfdr.de>; Thu, 23 Jul 2020 13:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D10C322AE2B
+	for <lists+linux-sctp@lfdr.de>; Thu, 23 Jul 2020 13:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728583AbgGWLQY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Thu, 23 Jul 2020 07:16:24 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:47574 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728134AbgGWLQX (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 23 Jul 2020 07:16:23 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mtapsc-1-ViGpBrHmNJOPXyJW7yMjBg-2; Thu, 23 Jul 2020 12:16:19 +0100
-X-MC-Unique: ViGpBrHmNJOPXyJW7yMjBg-2
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Thu, 23 Jul 2020 12:16:16 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Thu, 23 Jul 2020 12:16:16 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Christoph Hellwig' <hch@lst.de>,
+        id S1728855AbgGWLpF (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 23 Jul 2020 07:45:05 -0400
+Received: from verein.lst.de ([213.95.11.211]:59827 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726109AbgGWLpE (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Thu, 23 Jul 2020 07:45:04 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 82EBD68AFE; Thu, 23 Jul 2020 13:44:58 +0200 (CEST)
+Date:   Thu, 23 Jul 2020 13:44:58 +0200
+From:   'Christoph Hellwig' <hch@lst.de>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     'Christoph Hellwig' <hch@lst.de>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
         Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "Eric Dumazet" <edumazet@google.com>
-CC:     "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
@@ -55,45 +48,27 @@ CC:     "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
         "tipc-discussion@lists.sourceforge.net" 
         <tipc-discussion@lists.sourceforge.net>,
         "linux-x25@vger.kernel.org" <linux-x25@vger.kernel.org>
-Subject: RE: [PATCH 13/26] bpfilter: switch bpfilter_ip_set_sockopt to
+Subject: Re: [PATCH 13/26] bpfilter: switch bpfilter_ip_set_sockopt to
  sockptr_t
-Thread-Topic: [PATCH 13/26] bpfilter: switch bpfilter_ip_set_sockopt to
- sockptr_t
-Thread-Index: AQHWYOJf8qVR0zowd02v8gaMoEO9+6kVA2RQ
-Date:   Thu, 23 Jul 2020 11:16:16 +0000
-Message-ID: <621e193e4af74d8198ed87d6a9ce8260@AcuMS.aculab.com>
-References: <20200723060908.50081-1-hch@lst.de>
- <20200723060908.50081-14-hch@lst.de>
-In-Reply-To: <20200723060908.50081-14-hch@lst.de>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+Message-ID: <20200723114458.GA31363@lst.de>
+References: <20200723060908.50081-1-hch@lst.de> <20200723060908.50081-14-hch@lst.de> <621e193e4af74d8198ed87d6a9ce8260@AcuMS.aculab.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <621e193e4af74d8198ed87d6a9ce8260@AcuMS.aculab.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Christoph Hellwig
-> Sent: 23 July 2020 07:09
+On Thu, Jul 23, 2020 at 11:16:16AM +0000, David Laight wrote:
+> From: Christoph Hellwig
+> > Sent: 23 July 2020 07:09
+> > 
+> > This is mostly to prepare for cleaning up the callers, as bpfilter by
+> > design can't handle kernel pointers.
 > 
-> This is mostly to prepare for cleaning up the callers, as bpfilter by
-> design can't handle kernel pointers.
+> You've failed to fix the sense of the above...
 
-You've failed to fix the sense of the above...
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+The sense still is correct.
