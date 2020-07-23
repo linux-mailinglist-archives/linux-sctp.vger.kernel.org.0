@@ -2,33 +2,55 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3735A22A755
-	for <lists+linux-sctp@lfdr.de>; Thu, 23 Jul 2020 08:10:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3814422AAE2
+	for <lists+linux-sctp@lfdr.de>; Thu, 23 Jul 2020 10:40:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726981AbgGWGKD (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 23 Jul 2020 02:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56558 "EHLO
+        id S1726719AbgGWIkP (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 23 Jul 2020 04:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727871AbgGWGKA (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 23 Jul 2020 02:10:00 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA58CC0619DC;
-        Wed, 22 Jul 2020 23:09:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=WZEyzaS1ykzyi+yQ2LS2wMvQkwL8k8wAtqvtWngMf9k=; b=GkQOrco1ZkuQcjMqhyS87SJRGD
-        de3B5cw7G5yO9PMtzI5w0X5s2yopJqUiVbmSr+As98wWMXn6Xl8y79CmwAlaI3j3ebpY9UAteT4Cn
-        4frKKigvk1Di9ljBzfXFKftGwds+aPPL5GLXVJjbCp6Lfwgns5RMwKcigxjHrK7cICgV+R/NKR37U
-        SMOd4Y2ouS0ew7sS3pWavsl7KIbbei8X3CRKa1fmzw0vOVSoAqB/W9Ie3NBqoKgOKk97nUpIMcDP1
-        iQ+w1wBnm6LrsYc5mEgaq6c5MgkmC+YhQvxGnziaBnG3fCFxlBnwCMxWkRXbiG0+qq3YlYZUO7b8q
-        DOf9lBbQ==;
-Received: from [2001:4bb8:18c:2acc:91df:aae8:fa3b:de9c] (helo=localhost)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jyUQN-0003qJ-36; Thu, 23 Jul 2020 06:09:47 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     "David S. Miller" <davem@davemloft.net>,
+        with ESMTP id S1726330AbgGWIjz (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 23 Jul 2020 04:39:55 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1510AC0619E5
+        for <linux-sctp@vger.kernel.org>; Thu, 23 Jul 2020 01:39:55 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id n2so3904676edr.5
+        for <linux-sctp@vger.kernel.org>; Thu, 23 Jul 2020 01:39:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares-net.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=t34u4KAm1gK/f1oDA6+0ZgZ3T1IDP3Ad7b21M8jn9IE=;
+        b=CNsYMCaC5YFx1sCHrUnGTyxK55+RElxWw1Y4CgVq4WviDSpLe5tvZRQNhbw/o8NHkS
+         5lNPKTvPIJgzELza08HXzETuGDGqESAjMwaETk5Mmah7A76FYju7HEJcSxVz2Z68Ez32
+         Fe8bkyg3EIliyQfIE0WUqAFYcrQUJWfpZsNbAdl/ll0KB40GMQt1yoxZTtepzlC4KdnZ
+         GnSg5TjVpPWt7FlYOZYnnYqZEV4wmhNftYUlMk2HjS0eEZRDa0Aihb7OonspbY3XBKmu
+         gfkANWXjINxT44g2wwmEPqLtqbE4VWM7CM7H0NR7+q8PAGIse1jhucMrcCJVf3oeSFy2
+         TE7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=t34u4KAm1gK/f1oDA6+0ZgZ3T1IDP3Ad7b21M8jn9IE=;
+        b=aQBbSI5r5TEgecetfCAZCXhUw2V2AEZvbpLnsKXZsARkN+rrubphlRga3W4Fnf++qk
+         vKw/EPpyBQjB7PNfC46SRzGJx6fXfWF2SJv2eW3tymQukY84SKu9t3qen4yUwy90TN8C
+         aG3aNhFEDDLUoGkd7rfbsmlRXtRE+5u256RjGIDAWnojlTrS/Qdu6yamfvt7LPs03hDI
+         zPGWrFlCRlF73r0X2QSSyCeRAA9DS9nk5BxrOVGIE8klCqdV2XV/M0Rw0RNx/uaazttb
+         VpODng4hkVYx9EvNXDRTBphTUuloHt6ii1mP9sia89o0XsMZVXYS+HL8bq3TID4pvFmr
+         VR4A==
+X-Gm-Message-State: AOAM531QXBuq3Io2c0peDLLLCT6R5HJi+t3cIkdXqilIYwRzVohPa5/t
+        VbuI/vzjHcs+gPMLCwPigXTc8g==
+X-Google-Smtp-Source: ABdhPJwbyZj4th/Ks5mvB+ElB/xiz0sHXiy/UKIrJCc8QLLBnJl9HfUHFNhTU1trrZNOtrIehMUs+A==
+X-Received: by 2002:aa7:da4c:: with SMTP id w12mr3098522eds.122.1595493593384;
+        Thu, 23 Jul 2020 01:39:53 -0700 (PDT)
+Received: from tsr-lap-08.nix.tessares.net ([79.132.248.22])
+        by smtp.gmail.com with ESMTPSA id q7sm1560608eja.69.2020.07.23.01.39.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jul 2020 01:39:52 -0700 (PDT)
+Subject: Re: [MPTCP] [PATCH 08/26] net: switch sock_set_timeout to sockptr_t
+To:     Christoph Hellwig <hch@lst.de>,
+        "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -46,145 +68,41 @@ Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
         mptcp@lists.01.org, lvs-devel@vger.kernel.org,
         rds-devel@oss.oracle.com, linux-afs@lists.infradead.org,
         tipc-discussion@lists.sourceforge.net, linux-x25@vger.kernel.org
-Subject: [PATCH 26/26] net: optimize the sockptr_t for unified kernel/user address spaces
-Date:   Thu, 23 Jul 2020 08:09:08 +0200
-Message-Id: <20200723060908.50081-27-hch@lst.de>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200723060908.50081-1-hch@lst.de>
 References: <20200723060908.50081-1-hch@lst.de>
+ <20200723060908.50081-9-hch@lst.de>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+Message-ID: <092368db-122f-60bc-6a32-3cd5c70727da@tessares.net>
+Date:   Thu, 23 Jul 2020 10:39:50 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20200723060908.50081-9-hch@lst.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-For architectures like x86 and arm64 we don't need the separate bit to
-indicate that a pointer is a kernel pointer as the address spaces are
-unified.  That way the sockptr_t can be reduced to a union of two
-pointers, which leads to nicer calling conventions.
+Hi Christoph,
 
-The only caveat is that we need to check that users don't pass in kernel
-address and thus gain access to kernel memory.  Thus the USER_SOCKPTR
-helper is replaced with a init_user_sockptr function that does this check
-and returns an error if it fails.
+On 23/07/2020 08:08, Christoph Hellwig wrote:
+> Pass a sockptr_t to prepare for set_fs-less handling of the kernel
+> pointer from bpf-cgroup.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>   net/mptcp/protocol.c |  6 ++++--
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- include/linux/sockptr.h     | 32 ++++++++++++++++++++++++++++++--
- net/ipv4/bpfilter/sockopt.c | 14 ++++++++------
- net/socket.c                |  6 +++++-
- 3 files changed, 43 insertions(+), 9 deletions(-)
+Thank you for looking at that!
 
-diff --git a/include/linux/sockptr.h b/include/linux/sockptr.h
-index 700856e13ea0c4..7d5cdb2b30b5f0 100644
---- a/include/linux/sockptr.h
-+++ b/include/linux/sockptr.h
-@@ -8,9 +8,34 @@
- #ifndef _LINUX_SOCKPTR_H
- #define _LINUX_SOCKPTR_H
- 
-+#include <linux/compiler.h>
- #include <linux/slab.h>
- #include <linux/uaccess.h>
- 
-+#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
-+typedef union {
-+	void		*kernel;
-+	void __user	*user;
-+} sockptr_t;
-+
-+static inline bool sockptr_is_kernel(sockptr_t sockptr)
-+{
-+	return (unsigned long)sockptr.kernel >= TASK_SIZE;
-+}
-+
-+static inline sockptr_t KERNEL_SOCKPTR(void *p)
-+{
-+	return (sockptr_t) { .kernel = p };
-+}
-+
-+static inline int __must_check init_user_sockptr(sockptr_t *sp, void __user *p)
-+{
-+	if ((unsigned long)p >= TASK_SIZE)
-+		return -EFAULT;
-+	sp->user = p;
-+	return 0;
-+}
-+#else /* CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE */
- typedef struct {
- 	union {
- 		void		*kernel;
-@@ -29,10 +54,13 @@ static inline sockptr_t KERNEL_SOCKPTR(void *p)
- 	return (sockptr_t) { .kernel = p, .is_kernel = true };
- }
- 
--static inline sockptr_t USER_SOCKPTR(void __user *p)
-+static inline int __must_check init_user_sockptr(sockptr_t *sp, void __user *p)
- {
--	return (sockptr_t) { .user = p };
-+	sp->user = p;
-+	sp->is_kernel = false;
-+	return 0;
- }
-+#endif /* CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE */
- 
- static inline bool sockptr_is_null(sockptr_t sockptr)
- {
-diff --git a/net/ipv4/bpfilter/sockopt.c b/net/ipv4/bpfilter/sockopt.c
-index 1b34cb9a7708ec..94f18d2352d007 100644
---- a/net/ipv4/bpfilter/sockopt.c
-+++ b/net/ipv4/bpfilter/sockopt.c
-@@ -57,16 +57,18 @@ int bpfilter_ip_set_sockopt(struct sock *sk, int optname, sockptr_t optval,
- 	return bpfilter_mbox_request(sk, optname, optval, optlen, true);
- }
- 
--int bpfilter_ip_get_sockopt(struct sock *sk, int optname, char __user *optval,
--			    int __user *optlen)
-+int bpfilter_ip_get_sockopt(struct sock *sk, int optname,
-+			    char __user *user_optval, int __user *optlen)
- {
--	int len;
-+	sockptr_t optval;
-+	int err, len;
- 
- 	if (get_user(len, optlen))
- 		return -EFAULT;
--
--	return bpfilter_mbox_request(sk, optname, USER_SOCKPTR(optval), len,
--				     false);
-+	err = init_user_sockptr(&optval, user_optval);
-+	if (err)
-+		return err;
-+	return bpfilter_mbox_request(sk, optname, optval, len, false);
- }
- 
- static int __init bpfilter_sockopt_init(void)
-diff --git a/net/socket.c b/net/socket.c
-index e44b8ac47f6f46..94ca4547cd7c53 100644
---- a/net/socket.c
-+++ b/net/socket.c
-@@ -2097,7 +2097,7 @@ static bool sock_use_custom_sol_socket(const struct socket *sock)
- int __sys_setsockopt(int fd, int level, int optname, char __user *user_optval,
- 		int optlen)
- {
--	sockptr_t optval = USER_SOCKPTR(user_optval);
-+	sockptr_t optval;
- 	char *kernel_optval = NULL;
- 	int err, fput_needed;
- 	struct socket *sock;
-@@ -2105,6 +2105,10 @@ int __sys_setsockopt(int fd, int level, int optname, char __user *user_optval,
- 	if (optlen < 0)
- 		return -EINVAL;
- 
-+	err = init_user_sockptr(&optval, user_optval);
-+	if (err)
-+		return err;
-+
- 	sock = sockfd_lookup_light(fd, &err, &fput_needed);
- 	if (!sock)
- 		return err;
+For MPTCP-related code:
+
+Acked-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+
+Cheers,
+Matt
 -- 
-2.27.0
-
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
