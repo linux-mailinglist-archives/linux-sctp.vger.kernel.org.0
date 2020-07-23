@@ -2,125 +2,113 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BDFB22B1EC
-	for <lists+linux-sctp@lfdr.de>; Thu, 23 Jul 2020 16:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E31E22B296
+	for <lists+linux-sctp@lfdr.de>; Thu, 23 Jul 2020 17:30:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728800AbgGWO4j convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Thu, 23 Jul 2020 10:56:39 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:55653 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728586AbgGWO4i (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 23 Jul 2020 10:56:38 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-82-SdYRZOb-OAyxxDdIZA3c_Q-1; Thu, 23 Jul 2020 15:56:34 +0100
-X-MC-Unique: SdYRZOb-OAyxxDdIZA3c_Q-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Thu, 23 Jul 2020 15:56:33 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Thu, 23 Jul 2020 15:56:33 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Christoph Hellwig' <hch@lst.de>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>,
-        "coreteam@netfilter.org" <coreteam@netfilter.org>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        "linux-hams@vger.kernel.org" <linux-hams@vger.kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "bridge@lists.linux-foundation.org" 
-        <bridge@lists.linux-foundation.org>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "dccp@vger.kernel.org" <dccp@vger.kernel.org>,
-        "linux-decnet-user@lists.sourceforge.net" 
-        <linux-decnet-user@lists.sourceforge.net>,
-        "linux-wpan@vger.kernel.org" <linux-wpan@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "mptcp@lists.01.org" <mptcp@lists.01.org>,
-        "lvs-devel@vger.kernel.org" <lvs-devel@vger.kernel.org>,
-        "rds-devel@oss.oracle.com" <rds-devel@oss.oracle.com>,
-        "linux-afs@lists.infradead.org" <linux-afs@lists.infradead.org>,
-        "tipc-discussion@lists.sourceforge.net" 
-        <tipc-discussion@lists.sourceforge.net>,
-        "linux-x25@vger.kernel.org" <linux-x25@vger.kernel.org>
-Subject: RE: [PATCH 03/26] bpfilter: reject kernel addresses
-Thread-Topic: [PATCH 03/26] bpfilter: reject kernel addresses
-Thread-Index: AQHWYLhxJPyZOJNDGEen8+LVytPg86kVPIvA///w6YCAABGh0A==
-Date:   Thu, 23 Jul 2020 14:56:33 +0000
-Message-ID: <5fc6b1716f1b4534bda95bab49512754@AcuMS.aculab.com>
-References: <20200723060908.50081-1-hch@lst.de>
- <20200723060908.50081-4-hch@lst.de>
- <c3dc5b4d84e64230bb6ca8df7bb70705@AcuMS.aculab.com>
- <20200723144455.GA12280@lst.de>
-In-Reply-To: <20200723144455.GA12280@lst.de>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1729072AbgGWPab (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 23 Jul 2020 11:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726761AbgGWPaa (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 23 Jul 2020 11:30:30 -0400
+Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4A1C0619DC;
+        Thu, 23 Jul 2020 08:30:29 -0700 (PDT)
+Received: by mail-qk1-x741.google.com with SMTP id e13so5706830qkg.5;
+        Thu, 23 Jul 2020 08:30:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4M2X8c1o1GLGue/gT+Yu3vbhPjzYcFb5GdcwmFKqkWY=;
+        b=eXAJZ9XD5BqetmyLyB5TZz7wGQpBNIlz+C1NMxXQWh3hmhzYlYzU8aFhAnM4isDJjo
+         IAqxstbtahBVLsriVMNzBUD7iApZ4zg8mmltzroHrgfdqolM4v07afdVDVmFsEPInZBO
+         hSXLz1yYAtQzKThbpWYZYThayUziLpWJspR7y5zXrWUtM7S8LLIQEjnoEieJysRISUlr
+         vMvsrWA+lB5suoZO39AYNiwSNRSAChRNLhlCTZGyafU0OIXE7wSd9roD0BE6+q3cK6zS
+         gmLoDWoD/yPIlLU7cTuv6WiohyB51M+vXE4OyCqsqs0FWIuLnFfDymgooPM/PcmD17XJ
+         H50A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4M2X8c1o1GLGue/gT+Yu3vbhPjzYcFb5GdcwmFKqkWY=;
+        b=jtaJ+MfOaubfO5g9m5pWGu4070/Quj3eyx/aAu/Ou4E3OWVZ/QRI6Xv5lpDlYHxX9D
+         8hRIbFcWrrVn/hYAqMt5mQBs1S4w9cxZmWcoLwJZDLmO5ANJE+xFKW2TTIcJjsZ89n/u
+         nl7QrLpBRy2T9NugpOBnz+U7AR7kJoU+4tNSJ9HdPu4nXOS11/+2aQH/x2BYYDgzAqLS
+         lzFrPN6wOyewzyqpMfcRmgG757Cc4LoP1yTXaOXRvGnfWH7H5/kwIHYpDvCZxEC2Yn1T
+         qnvR/NLumhzGmrQZWLicL9yxKj/s3fpT4e7n68jJUIqe1Imeygg37ICW9FJQs8TnoNfd
+         /QFw==
+X-Gm-Message-State: AOAM533QryD80IueF8YQbiJgDh5KDo4SLf8mfieVaMhs2DNC03NoWAdP
+        OQZqldvYOvWnDKPtsI8wLCyi0RJD
+X-Google-Smtp-Source: ABdhPJwR9Hh6hYOYz3Hz+plQtfbh1jjySQlltnsfxlkdKygETBvNDCJ0V/hIO3Ge7DxIOv10r7B7Sg==
+X-Received: by 2002:a37:5b46:: with SMTP id p67mr5813992qkb.346.1595518228834;
+        Thu, 23 Jul 2020 08:30:28 -0700 (PDT)
+Received: from localhost.localdomain ([138.204.24.96])
+        by smtp.gmail.com with ESMTPSA id n81sm2909642qke.11.2020.07.23.08.30.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jul 2020 08:30:27 -0700 (PDT)
+Received: by localhost.localdomain (Postfix, from userid 1000)
+        id 334DFC18B3; Thu, 23 Jul 2020 12:30:25 -0300 (-03)
+Date:   Thu, 23 Jul 2020 12:30:25 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     netdev@vger.kernel.org, Neil Horman <nhorman@tuxdriver.com>,
+        linux-sctp@vger.kernel.org
+Subject: Re: [PATCH net-next] sctp: fix slab-out-of-bounds in
+ SCTP_DELAYED_SACK processing
+Message-ID: <20200723153025.GF3307@localhost.localdomain>
+References: <5955bc857c93d4bb64731ef7a9e90cb0094a8989.1595450200.git.marcelo.leitner@gmail.com>
+ <20200722204231.GA3398@localhost.localdomain>
+ <20200723092238.GA21143@lst.de>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200723092238.GA21143@lst.de>
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: 'Christoph Hellwig'
-> Sent: 23 July 2020 15:45
+On Thu, Jul 23, 2020 at 11:22:38AM +0200, Christoph Hellwig wrote:
+> On Wed, Jul 22, 2020 at 05:42:31PM -0300, Marcelo Ricardo Leitner wrote:
+> > Cc'ing linux-sctp@vger.kernel.org.
 > 
-> On Thu, Jul 23, 2020 at 02:42:11PM +0000, David Laight wrote:
-> > From: Christoph Hellwig
-> > > Sent: 23 July 2020 07:09
-> > >
-> > > The bpfilter user mode helper processes the optval address using
-> > > process_vm_readv.  Don't send it kernel addresses fed under
-> > > set_fs(KERNEL_DS) as that won't work.
-> >
-> > What sort of operations is the bpf filter doing on the sockopt buffers?
-> >
-> > Any attempts to reject some requests can be thwarted by a second
-> > application thread modifying the buffer after the bpf filter has
-> > checked that it allowed.
-> >
-> > You can't do security by reading a user buffer twice.
-> 
-> I'm not saying that I approve of the design, but the current bpfilter
-> design uses process_vm_readv to access the buffer, which obviously does
-> not work with kernel buffers.
+> What do you think of this version, which I think is a little cleaner?
 
-Is this a different bit of bpf that that which used to directly
-intercept setsockopt() requests and pass them down from a kernel buffer?
+It splits up the argument parsing from the actual handling, ok. Looks
+good. Just one point:
 
-I can't held feeling that bpf is getting 'too big for its boots' and
-will have a local-user privilege escalation hiding in it somewhere.
+> +static int sctp_setsockopt_delayed_ack(struct sock *sk,
+> +				       struct sctp_sack_info *params,
+> +				       unsigned int optlen)
+> +{
+> +	if (optlen == sizeof(struct sctp_assoc_value)) {
+> +		struct sctp_sack_info p;
+> +
+> +		pr_warn_ratelimited(DEPRECATED
+> +				    "%s (pid %d) "
+> +				    "Use of struct sctp_assoc_value in delayed_ack socket option.\n"
+> +				    "Use struct sctp_sack_info instead\n",
+> +				    current->comm, task_pid_nr(current));
+> +
+> +		memcpy(&p, params, sizeof(struct sctp_assoc_value));
+> +		p.sack_freq = p.sack_delay ? 0 : 1;
 
-I've had to fix my 'out of tree' driver to remove the [sg]etsockopt()
-calls. Some of the replacements will go badly wrong if I've accidentally
-lost track of the socket type.
-I do have a daemon process sleeping in the driver - so I can wake it up
-and make the requests from it with a user buffer.
-I may have to implement that to get the negotiated number of 'ostreams'
-to an SCTP connection.
+Please add a comment saying that sctp_sack_info.sack_delay maps
+exactly to sctp_assoc_value.assoc_value, so that's why we can do
+memcpy and read assoc_value as sack_delay. I think it will help us not
+trip on this again in the future.
 
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+> +		return __sctp_setsockopt_delayed_ack(sk, &p);
+> +	}
+> +
+> +	if (optlen != sizeof(struct sctp_sack_info))
+> +		return -EINVAL;
+> +	if (params->sack_delay == 0 && params->sack_freq == 0)
+> +		return 0;
+> +	return __sctp_setsockopt_delayed_ack(sk, params);
+> +}
+> +
+>  /* 7.1.3 Initialization Parameters (SCTP_INITMSG)
+>   *
+>   * Applications can specify protocol parameters for the default association
