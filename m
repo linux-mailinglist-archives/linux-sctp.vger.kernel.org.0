@@ -2,109 +2,91 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6773C22ABAF
-	for <lists+linux-sctp@lfdr.de>; Thu, 23 Jul 2020 11:22:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7DA22AD5C
+	for <lists+linux-sctp@lfdr.de>; Thu, 23 Jul 2020 13:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725984AbgGWJWl (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 23 Jul 2020 05:22:41 -0400
-Received: from verein.lst.de ([213.95.11.211]:59401 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725846AbgGWJWl (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 23 Jul 2020 05:22:41 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 12CCA68AFE; Thu, 23 Jul 2020 11:22:39 +0200 (CEST)
-Date:   Thu, 23 Jul 2020 11:22:38 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     netdev@vger.kernel.org, Neil Horman <nhorman@tuxdriver.com>,
-        Christoph Hellwig <hch@lst.de>, linux-sctp@vger.kernel.org
-Subject: Re: [PATCH net-next] sctp: fix slab-out-of-bounds in
- SCTP_DELAYED_SACK processing
-Message-ID: <20200723092238.GA21143@lst.de>
-References: <5955bc857c93d4bb64731ef7a9e90cb0094a8989.1595450200.git.marcelo.leitner@gmail.com> <20200722204231.GA3398@localhost.localdomain>
+        id S1728556AbgGWLOx (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 23 Jul 2020 07:14:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726867AbgGWLOw (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 23 Jul 2020 07:14:52 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB255C0619DC;
+        Thu, 23 Jul 2020 04:14:51 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id y10so5980718eje.1;
+        Thu, 23 Jul 2020 04:14:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vdYyoECOJpkvRW+iDSJN0RIdv+nH41NS293U/5tTNzU=;
+        b=B5vDCuMK34uIsnpD9z3FcIKsP+ARgUC68tC2JBNii294ZVz92X5OyPMGm1cnHIYPvl
+         3DKQSNa/jdlu0biVdgVy3X/Usw30FobXy8VPbwfs9mZO4hgKFIB5Q6ou4++0iHZWcmIg
+         rfstWtDzaQOlAHrnGsoBfnDZMJ2kD6uwV1y2oKkj2sr770VnwjwNmw0Za18fcxNwyhPN
+         PX5gNfWd5bOhXJY1Kvg+SfF57+CLOAPlOGTBbqcVuFCBHygW7tXdpNSN+uznlRCislSc
+         n2D4vVeaN2C63ZjJ8LYUcP4YwR3kpvL7IT5R8VKRAe3yBJewccDUsJmVY4TugCpk7vZl
+         wX7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vdYyoECOJpkvRW+iDSJN0RIdv+nH41NS293U/5tTNzU=;
+        b=OSvvl4od8qhpj0fbhiA5979OI0+nto4RcDPfbflf+CsAatqxszOPd30p2nbgNR+IfU
+         Hd4Ap9iZqCDKpgUp/3NGF5K7lQtcFWmFg7DLFnZ6EUXBh/VXovuO6fj16efUU0UZJB56
+         /yZaiZovVILBMf1WY2kqzsc28Xlbo1UNKEuIIMVN9CcfLJ94OEb+/LRhUFn+19ynMxmr
+         k+mdHaryMe5vp8ozuKPKGl1b+kojsES1aVxBo8FD/TjgQC+XFj3r/D/vvcvm8xuVF0i+
+         9ryHfVoYSCkW38tTAwIW5BkJD0WHLiwdFF/WScJ0DlHUbTehhAEeCth11uxc5MqgI1dW
+         srSg==
+X-Gm-Message-State: AOAM530tjR5YjkGijVHLCXbqdpcgxRzpeQ+0qqsNcCysFIF6kxanE7VZ
+        6AArdUThi60tVzU3ctXj05E=
+X-Google-Smtp-Source: ABdhPJz4rM+z9eQOHfGGUF+Hj1F0q1VizoeW8bUipy1mWLCV1z/2+oZlfysZjxBFObbrbyKXQkFElw==
+X-Received: by 2002:a17:906:1187:: with SMTP id n7mr3696742eja.161.1595502890446;
+        Thu, 23 Jul 2020 04:14:50 -0700 (PDT)
+Received: from ltop.local ([2a02:a03f:a7fb:e200:f109:49dc:4e2a:ea12])
+        by smtp.gmail.com with ESMTPSA id y22sm1817552ejj.67.2020.07.23.04.14.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jul 2020 04:14:49 -0700 (PDT)
+Date:   Thu, 23 Jul 2020 13:14:47 +0200
+From:   Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        linux-sctp@vger.kernel.org, linux-hams@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-can@vger.kernel.org, dccp@vger.kernel.org,
+        linux-decnet-user@lists.sourceforge.net,
+        linux-wpan@vger.kernel.org, linux-s390@vger.kernel.org,
+        mptcp@lists.01.org, lvs-devel@vger.kernel.org,
+        rds-devel@oss.oracle.com, linux-afs@lists.infradead.org,
+        tipc-discussion@lists.sourceforge.net, linux-x25@vger.kernel.org
+Subject: Re: [PATCH 01/26] bpfilter: fix up a sparse annotation
+Message-ID: <20200723111447.3xj7cidlsspofsja@ltop.local>
+References: <20200723060908.50081-1-hch@lst.de>
+ <20200723060908.50081-2-hch@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200722204231.GA3398@localhost.localdomain>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <20200723060908.50081-2-hch@lst.de>
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, Jul 22, 2020 at 05:42:31PM -0300, Marcelo Ricardo Leitner wrote:
-> Cc'ing linux-sctp@vger.kernel.org.
+On Thu, Jul 23, 2020 at 08:08:43AM +0200, Christoph Hellwig wrote:
+> The __user doesn't make sense when casting to an integer type, just
+> switch to a uintptr_t cast which also removes the need for the __force.
 
-What do you think of this version, which I think is a little cleaner?
+Feel free to add my:
 
+Reviewed-by: Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
 
-diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-index 9a767f35971865..6ce460428af9f3 100644
---- a/net/sctp/socket.c
-+++ b/net/sctp/socket.c
-@@ -2749,31 +2749,12 @@ static void sctp_apply_asoc_delayed_ack(struct sctp_sack_info *params,
-  *    timer to expire.  The default value for this is 2, setting this
-  *    value to 1 will disable the delayed sack algorithm.
-  */
--
--static int sctp_setsockopt_delayed_ack(struct sock *sk,
--				       struct sctp_sack_info *params,
--				       unsigned int optlen)
-+static int __sctp_setsockopt_delayed_ack(struct sock *sk,
-+					 struct sctp_sack_info *params)
- {
- 	struct sctp_sock *sp = sctp_sk(sk);
- 	struct sctp_association *asoc;
- 
--	if (optlen == sizeof(struct sctp_sack_info)) {
--		if (params->sack_delay == 0 && params->sack_freq == 0)
--			return 0;
--	} else if (optlen == sizeof(struct sctp_assoc_value)) {
--		pr_warn_ratelimited(DEPRECATED
--				    "%s (pid %d) "
--				    "Use of struct sctp_assoc_value in delayed_ack socket option.\n"
--				    "Use struct sctp_sack_info instead\n",
--				    current->comm, task_pid_nr(current));
--
--		if (params->sack_delay == 0)
--			params->sack_freq = 1;
--		else
--			params->sack_freq = 0;
--	} else
--		return -EINVAL;
--
- 	/* Validate value parameter. */
- 	if (params->sack_delay > 500)
- 		return -EINVAL;
-@@ -2821,6 +2802,31 @@ static int sctp_setsockopt_delayed_ack(struct sock *sk,
- 	return 0;
- }
- 
-+static int sctp_setsockopt_delayed_ack(struct sock *sk,
-+				       struct sctp_sack_info *params,
-+				       unsigned int optlen)
-+{
-+	if (optlen == sizeof(struct sctp_assoc_value)) {
-+		struct sctp_sack_info p;
-+
-+		pr_warn_ratelimited(DEPRECATED
-+				    "%s (pid %d) "
-+				    "Use of struct sctp_assoc_value in delayed_ack socket option.\n"
-+				    "Use struct sctp_sack_info instead\n",
-+				    current->comm, task_pid_nr(current));
-+
-+		memcpy(&p, params, sizeof(struct sctp_assoc_value));
-+		p.sack_freq = p.sack_delay ? 0 : 1;
-+		return __sctp_setsockopt_delayed_ack(sk, &p);
-+	}
-+
-+	if (optlen != sizeof(struct sctp_sack_info))
-+		return -EINVAL;
-+	if (params->sack_delay == 0 && params->sack_freq == 0)
-+		return 0;
-+	return __sctp_setsockopt_delayed_ack(sk, params);
-+}
-+
- /* 7.1.3 Initialization Parameters (SCTP_INITMSG)
-  *
-  * Applications can specify protocol parameters for the default association
+-- Luc
