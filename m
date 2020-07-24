@@ -2,84 +2,48 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F27F522C5CB
-	for <lists+linux-sctp@lfdr.de>; Fri, 24 Jul 2020 15:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AEBD22C927
+	for <lists+linux-sctp@lfdr.de>; Fri, 24 Jul 2020 17:30:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726696AbgGXNJ1 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 24 Jul 2020 09:09:27 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:35926 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726572AbgGXNJ1 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 24 Jul 2020 09:09:27 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1jyxRv-0004tR-PI; Fri, 24 Jul 2020 13:09:19 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][V2] sctp: remove redundant initialization of variable status
-Date:   Fri, 24 Jul 2020 14:09:19 +0100
-Message-Id: <20200724130919.18497-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.27.0
+        id S1726981AbgGXP3k (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 24 Jul 2020 11:29:40 -0400
+Received: from [125.140.134.231] ([125.140.134.231]:53505 "EHLO
+        WIN-DAONO245HJF" rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726593AbgGXP3i (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 24 Jul 2020 11:29:38 -0400
+Received: from User ([66.154.113.229]) by WIN-DAONO245HJF with Microsoft SMTPSVC(8.5.9600.16384);
+         Sat, 25 Jul 2020 00:23:30 +0900
+Reply-To: <christopherwang36@gmail.com>
+From:   "CHRISTOPHER WANG" <christopherwang36@gmail.com>
+Subject: INVESTMENT
+Date:   Fri, 24 Jul 2020 08:23:47 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <WIN-DAONO245HJFs0J1008ef90d@WIN-DAONO245HJF>
+X-OriginalArrivalTime: 24 Jul 2020 15:23:30.0864 (UTC) FILETIME=[63269B00:01D661CE]
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
 
-The variable status is being initialized with a value that is never read
-and it is being updated later with a new value.  The initialization is
-redundant and can be removed.  Also put the variable declarations into
-reverse christmas tree order.
 
-Addresses-Coverity: ("Unused value")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
----
+Good day,
 
-V2: put variable declarations into reverse christmas tree order.
+You were recommended by a mutual associate. I write you regarding an investment of bearer bonds I made on behalf of a client. 
 
----
- net/sctp/protocol.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
-index 7ecaf7d575c0..d19db22262fd 100644
---- a/net/sctp/protocol.c
-+++ b/net/sctp/protocol.c
-@@ -1367,15 +1367,15 @@ static struct pernet_operations sctp_ctrlsock_ops = {
- /* Initialize the universe into something sensible.  */
- static __init int sctp_init(void)
- {
--	int i;
--	int status = -EINVAL;
--	unsigned long goal;
--	unsigned long limit;
- 	unsigned long nr_pages = totalram_pages();
-+	unsigned long limit;
-+	unsigned long goal;
-+	int max_entry_order;
-+	int num_entries;
- 	int max_share;
-+	int status;
- 	int order;
--	int num_entries;
--	int max_entry_order;
-+	int i;
+       The investment was made in 2009 and has been under my management. The said investor is deceased. The window is now available to assign these bonds to any name or company of my choice. I have all the necessary information to achieve this within 10 banking days.
+      
+       The total value of the bond is 100million pounds sterling, in a million pound denominations.
+      
+        If you can handle this, do contact me at your earliest convenience via my email christopherwang36@gmail.com
+So we can discuss the final details Thank you.
  
- 	sock_skb_cb_check_size(sizeof(struct sctp_ulpevent));
- 
--- 
-2.27.0
-
+Mr CHRISTOPHER WANG
