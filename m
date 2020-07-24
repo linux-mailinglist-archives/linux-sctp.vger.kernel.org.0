@@ -2,22 +2,22 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2765422C1EC
-	for <lists+linux-sctp@lfdr.de>; Fri, 24 Jul 2020 11:18:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 754FD22C414
+	for <lists+linux-sctp@lfdr.de>; Fri, 24 Jul 2020 13:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728130AbgGXJSC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Fri, 24 Jul 2020 05:18:02 -0400
-Received: from mx2.itam.mx ([148.205.229.36]:28540 "EHLO mx2.itam.mx"
+        id S1726258AbgGXLLe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Fri, 24 Jul 2020 07:11:34 -0400
+Received: from mx2.itam.mx ([148.205.229.36]:35644 "EHLO mx2.itam.mx"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726572AbgGXJSC (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Fri, 24 Jul 2020 05:18:02 -0400
+        id S1726114AbgGXLLd (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Fri, 24 Jul 2020 07:11:33 -0400
 Received: from cronos2.itam.mx (cronos2.itam.mx [148.205.148.141])
-        by mx2.itam.mx  with ESMTP id 06O9GMmd017856-06O9GMmn017856
+        by mx2.itam.mx  with ESMTP id 06OBAa6P031149-06OBAa6Z031149
         (version=TLSv1.0 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
-        Fri, 24 Jul 2020 04:16:23 -0500
+        Fri, 24 Jul 2020 06:10:37 -0500
 Received: from [10.28.175.153] (105.0.7.102) by cronos2.itam.mx
  (148.205.148.141) with Microsoft SMTP Server (TLS) id 14.3.468.0; Fri, 24 Jul
- 2020 04:16:22 -0500
+ 2020 06:10:36 -0500
 Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
@@ -25,9 +25,9 @@ Content-Description: Mail message body
 Subject: =?utf-8?q?Covid_19_Wohlt=C3=A4tigkeitsfonds?=
 To:     Recipients@vger.kernel.org
 From:   ''Tayeb@vger.kernel.org, Souami''@vger.kernel.org
-Date:   Fri, 24 Jul 2020 11:16:07 +0200
+Date:   Fri, 24 Jul 2020 13:10:21 +0200
 Reply-To: <charlesjacksonjr001@gmail.com>
-Message-ID: <a684bb45-c950-4ccd-a534-8b7de757567d@CRONOS2.itam.mx>
+Message-ID: <3ec42519-735d-4504-b334-e60308eb83f3@CRONOS2.itam.mx>
 X-Originating-IP: [105.0.7.102]
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
