@@ -2,51 +2,65 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 754FD22C414
-	for <lists+linux-sctp@lfdr.de>; Fri, 24 Jul 2020 13:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3354122C4F6
+	for <lists+linux-sctp@lfdr.de>; Fri, 24 Jul 2020 14:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726258AbgGXLLe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Fri, 24 Jul 2020 07:11:34 -0400
-Received: from mx2.itam.mx ([148.205.229.36]:35644 "EHLO mx2.itam.mx"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726114AbgGXLLd (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Fri, 24 Jul 2020 07:11:33 -0400
-Received: from cronos2.itam.mx (cronos2.itam.mx [148.205.148.141])
-        by mx2.itam.mx  with ESMTP id 06OBAa6P031149-06OBAa6Z031149
-        (version=TLSv1.0 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
-        Fri, 24 Jul 2020 06:10:37 -0500
-Received: from [10.28.175.153] (105.0.7.102) by cronos2.itam.mx
- (148.205.148.141) with Microsoft SMTP Server (TLS) id 14.3.468.0; Fri, 24 Jul
- 2020 06:10:36 -0500
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1726800AbgGXMSF (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 24 Jul 2020 08:18:05 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:34735 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726258AbgGXMSF (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 24 Jul 2020 08:18:05 -0400
+Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <colin.king@canonical.com>)
+        id 1jywe9-0000NI-Od; Fri, 24 Jul 2020 12:17:53 +0000
+From:   Colin King <colin.king@canonical.com>
+To:     Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] sctp: remove redundant initialization of variable status
+Date:   Fri, 24 Jul 2020 13:17:53 +0100
+Message-Id: <20200724121753.16721-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: =?utf-8?q?Covid_19_Wohlt=C3=A4tigkeitsfonds?=
-To:     Recipients@vger.kernel.org
-From:   ''Tayeb@vger.kernel.org, Souami''@vger.kernel.org
-Date:   Fri, 24 Jul 2020 13:10:21 +0200
-Reply-To: <charlesjacksonjr001@gmail.com>
-Message-ID: <3ec42519-735d-4504-b334-e60308eb83f3@CRONOS2.itam.mx>
-X-Originating-IP: [105.0.7.102]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hallo
+From: Colin Ian King <colin.king@canonical.com>
 
-Ich bin Charles W. Jackson aus North Carolina, Vereinigte Staaten von Amerika, und ich bin der Gewinner des Mega-Millionen-Jackpots von 344 Millionen US-Dollar. Ich spende die Summe von 2.000.000 Millionen Euro als Teil der Hilfsgelder für das Corona-Virus.
+The variable status is being initialized with a value that is never read
+and it is being updated later with a new value.  The initialization is
+redundant and can be removed.
 
-Dies ist Ihr Spendencode: [CJ530342019]
+Addresses-Coverity: ("Unused value")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ net/sctp/protocol.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-www.youtube.com/watch?v=BSr8myiLPMQ
+diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
+index 7ecaf7d575c0..a0448f7c64b9 100644
+--- a/net/sctp/protocol.c
++++ b/net/sctp/protocol.c
+@@ -1368,7 +1368,7 @@ static struct pernet_operations sctp_ctrlsock_ops = {
+ static __init int sctp_init(void)
+ {
+ 	int i;
+-	int status = -EINVAL;
++	int status;
+ 	unsigned long goal;
+ 	unsigned long limit;
+ 	unsigned long nr_pages = totalram_pages();
+-- 
+2.27.0
 
-Bitte antworten Sie auf diese E-Mail mit dem SPENDERCODE:
-
-charlesjacksonjr001@gmail.com
-
-Ich hoffe, dass Sie und Ihre Familie dies durchkommen
-
-
-Herr Charles Jackson
