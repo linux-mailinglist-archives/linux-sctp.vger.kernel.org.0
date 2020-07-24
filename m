@@ -2,64 +2,66 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC01C22B3E0
-	for <lists+linux-sctp@lfdr.de>; Thu, 23 Jul 2020 18:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 129E222BE2E
+	for <lists+linux-sctp@lfdr.de>; Fri, 24 Jul 2020 08:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729949AbgGWQoi (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 23 Jul 2020 12:44:38 -0400
-Received: from verein.lst.de ([213.95.11.211]:60887 "EHLO verein.lst.de"
+        id S1726591AbgGXGqG (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 24 Jul 2020 02:46:06 -0400
+Received: from verein.lst.de ([213.95.11.211]:34386 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726621AbgGWQoi (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 23 Jul 2020 12:44:38 -0400
+        id S1725942AbgGXGqG (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Fri, 24 Jul 2020 02:46:06 -0400
 Received: by verein.lst.de (Postfix, from userid 2407)
-        id 8C74368AFE; Thu, 23 Jul 2020 18:44:32 +0200 (CEST)
-Date:   Thu, 23 Jul 2020 18:44:32 +0200
+        id C96CE68AFE; Fri, 24 Jul 2020 08:46:03 +0200 (CEST)
+Date:   Fri, 24 Jul 2020 08:46:03 +0200
 From:   Christoph Hellwig <hch@lst.de>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        linux-sctp@vger.kernel.org, linux-hams@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-can@vger.kernel.org, dccp@vger.kernel.org,
-        linux-decnet-user@lists.sourceforge.net,
-        linux-wpan@vger.kernel.org, linux-s390@vger.kernel.org,
-        mptcp@lists.01.org, lvs-devel@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-afs@lists.infradead.org,
-        tipc-discussion@lists.sourceforge.net, linux-x25@vger.kernel.org
-Subject: Re: [PATCH 04/26] net: add a new sockptr_t type
-Message-ID: <20200723164432.GA20917@lst.de>
-References: <20200723060908.50081-1-hch@lst.de> <20200723060908.50081-5-hch@lst.de> <CANn89iJ3LKth-iWwh0+P3D3RqtDNv4AyXkkzhXr0oSEvE_JoRQ@mail.gmail.com>
+To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc:     Christoph Hellwig <hch@lst.de>, netdev@vger.kernel.org,
+        Neil Horman <nhorman@tuxdriver.com>, linux-sctp@vger.kernel.org
+Subject: Re: [PATCH net-next] sctp: fix slab-out-of-bounds in
+ SCTP_DELAYED_SACK processing
+Message-ID: <20200724064603.GA8449@lst.de>
+References: <5955bc857c93d4bb64731ef7a9e90cb0094a8989.1595450200.git.marcelo.leitner@gmail.com> <20200722204231.GA3398@localhost.localdomain> <20200723092238.GA21143@lst.de> <20200723153025.GF3307@localhost.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANn89iJ3LKth-iWwh0+P3D3RqtDNv4AyXkkzhXr0oSEvE_JoRQ@mail.gmail.com>
+In-Reply-To: <20200723153025.GF3307@localhost.localdomain>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, Jul 23, 2020 at 09:40:27AM -0700, Eric Dumazet wrote:
-> I am not sure why you chose sockptr_t   for something that really seems generic.
+On Thu, Jul 23, 2020 at 12:30:25PM -0300, Marcelo Ricardo Leitner wrote:
+> On Thu, Jul 23, 2020 at 11:22:38AM +0200, Christoph Hellwig wrote:
+> > On Wed, Jul 22, 2020 at 05:42:31PM -0300, Marcelo Ricardo Leitner wrote:
+> > > Cc'ing linux-sctp@vger.kernel.org.
+> > 
+> > What do you think of this version, which I think is a little cleaner?
 > 
-> Or is it really meant to be exclusive to setsockopt() and/or getsockopt() ?
+> It splits up the argument parsing from the actual handling, ok. Looks
+> good. Just one point:
 > 
-> If the first user of this had been futex code, we would have used
-> futexptr_t, I guess.
+> > +static int sctp_setsockopt_delayed_ack(struct sock *sk,
+> > +				       struct sctp_sack_info *params,
+> > +				       unsigned int optlen)
+> > +{
+> > +	if (optlen == sizeof(struct sctp_assoc_value)) {
+> > +		struct sctp_sack_info p;
+> > +
+> > +		pr_warn_ratelimited(DEPRECATED
+> > +				    "%s (pid %d) "
+> > +				    "Use of struct sctp_assoc_value in delayed_ack socket option.\n"
+> > +				    "Use struct sctp_sack_info instead\n",
+> > +				    current->comm, task_pid_nr(current));
+> > +
+> > +		memcpy(&p, params, sizeof(struct sctp_assoc_value));
+> > +		p.sack_freq = p.sack_delay ? 0 : 1;
+> 
+> Please add a comment saying that sctp_sack_info.sack_delay maps
+> exactly to sctp_assoc_value.assoc_value, so that's why we can do
+> memcpy and read assoc_value as sack_delay. I think it will help us not
+> trip on this again in the future.
 
-It was originally intended to be generic and called uptr_t, based
-on me misunderstanding that Linus wanted a file operation for it,
-which he absolutely didn't and hate with passion.  So the plan is to
-only use it for setsockopt for now, although there are some arguments
-for also using it in sendmsg/recvmsg.  There is no need to use it for
-getsockopt.
+Yeah.  Actually I think I'll go all the way and kill the not very
+obvious or type safe memcpy as well.
