@@ -2,62 +2,61 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0CE22D26F
-	for <lists+linux-sctp@lfdr.de>; Sat, 25 Jul 2020 01:49:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1C2122D31A
+	for <lists+linux-sctp@lfdr.de>; Sat, 25 Jul 2020 02:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726719AbgGXXtx (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 24 Jul 2020 19:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50250 "EHLO
+        id S1726742AbgGYAKh (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 24 Jul 2020 20:10:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726572AbgGXXtx (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 24 Jul 2020 19:49:53 -0400
+        with ESMTP id S1726592AbgGYAKh (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 24 Jul 2020 20:10:37 -0400
 Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0355EC0619D3;
-        Fri, 24 Jul 2020 16:49:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FA4C0619D3;
+        Fri, 24 Jul 2020 17:10:37 -0700 (PDT)
 Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
         (using TLSv1 with cipher AES256-SHA (256/256 bits))
         (Client did not present a certificate)
         (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 99A8512755EF8;
-        Fri, 24 Jul 2020 16:33:07 -0700 (PDT)
-Date:   Fri, 24 Jul 2020 16:49:52 -0700 (PDT)
-Message-Id: <20200724.164952.472536620054081569.davem@davemloft.net>
-To:     hch@lst.de
-Cc:     marcelo.leitner@gmail.com, nhorman@tuxdriver.com,
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 2C2E61275D089;
+        Fri, 24 Jul 2020 16:53:51 -0700 (PDT)
+Date:   Fri, 24 Jul 2020 17:10:35 -0700 (PDT)
+Message-Id: <20200724.171035.1263967627297774729.davem@davemloft.net>
+To:     colin.king@canonical.com
+Cc:     vyasevich@gmail.com, nhorman@tuxdriver.com,
+        marcelo.leitner@gmail.com, kuba@kernel.org,
         linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-        syzbot+0e4699d000d8b874d8dc@syzkaller.appspotmail.com
-Subject: Re: [PATCH v2 net-next] sctp: fix slab-out-of-bounds in
- SCTP_DELAYED_SACK processing
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][V2] sctp: remove redundant initialization of variable
+ status
 From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200724064855.132552-1-hch@lst.de>
-References: <20200724064855.132552-1-hch@lst.de>
+In-Reply-To: <20200724130919.18497-1-colin.king@canonical.com>
+References: <20200724130919.18497-1-colin.king@canonical.com>
 X-Mailer: Mew version 6.8 on Emacs 26.3
 Mime-Version: 1.0
 Content-Type: Text/Plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 24 Jul 2020 16:33:07 -0700 (PDT)
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 24 Jul 2020 16:53:51 -0700 (PDT)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
-Date: Fri, 24 Jul 2020 08:48:55 +0200
+From: Colin King <colin.king@canonical.com>
+Date: Fri, 24 Jul 2020 14:09:19 +0100
 
-> This sockopt accepts two kinds of parameters, using struct
-> sctp_sack_info and struct sctp_assoc_value. The mentioned commit didn't
-> notice an implicit cast from the smaller (latter) struct to the bigger
-> one (former) when copying the data from the user space, which now leads
-> to an attempt to write beyond the buffer (because it assumes the storing
-> buffer is bigger than the parameter itself).
+> From: Colin Ian King <colin.king@canonical.com>
 > 
-> Fix it by allocating a sctp_sack_info on stack and filling it out based
-> on the small struct for the compat case.
+> The variable status is being initialized with a value that is never read
+> and it is being updated later with a new value.  The initialization is
+> redundant and can be removed.  Also put the variable declarations into
+> reverse christmas tree order.
 > 
-> Changelog stole from an earlier patch from Marcelo Ricardo Leitner.
+> Addresses-Coverity: ("Unused value")
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+> ---
 > 
-> Fixes: ebb25defdc17 ("sctp: pass a kernel pointer to sctp_setsockopt_delayed_ack")
-> Reported-by: syzbot+0e4699d000d8b874d8dc@syzkaller.appspotmail.com
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> V2: put variable declarations into reverse christmas tree order.
 
-Applied, thanks.
+Applied to net-next, thanks.
