@@ -2,41 +2,29 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CFBB22DC7B
-	for <lists+linux-sctp@lfdr.de>; Sun, 26 Jul 2020 09:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 687C722DD00
+	for <lists+linux-sctp@lfdr.de>; Sun, 26 Jul 2020 09:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726817AbgGZHJA (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 26 Jul 2020 03:09:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
+        id S1726895AbgGZHqv (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 26 Jul 2020 03:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725829AbgGZHI7 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sun, 26 Jul 2020 03:08:59 -0400
-Received: from mail-out.m-online.net (mail-out.m-online.net [IPv6:2001:a60:0:28:0:1:25:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58577C0619D2;
-        Sun, 26 Jul 2020 00:08:59 -0700 (PDT)
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4BDvDf0Trdz1rrLW;
-        Sun, 26 Jul 2020 09:08:46 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 4BDvDY4g2Xz1qrDX;
-        Sun, 26 Jul 2020 09:08:45 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id M61H8ekLgDni; Sun, 26 Jul 2020 09:08:43 +0200 (CEST)
-X-Auth-Info: ObXr7NKuP/ed3aOqUP2DwRSFWg3CkaF7qmUDKZFNiwlgCHly/bMVI0yUZSDe+Kon
-Received: from hase.home (ppp-46-244-174-182.dynamic.mnet-online.de [46.244.174.182])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Sun, 26 Jul 2020 09:08:43 +0200 (CEST)
-Received: by hase.home (Postfix, from userid 1000)
-        id C79E21028BD; Sun, 26 Jul 2020 09:08:42 +0200 (CEST)
-From:   Andreas Schwab <schwab@linux-m68k.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     David Miller <davem@davemloft.net>, kuba@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, kuznet@ms2.inr.ac.ru,
-        yoshfuji@linux-ipv6.org, edumazet@google.com,
+        with ESMTP id S1725789AbgGZHqv (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sun, 26 Jul 2020 03:46:51 -0400
+Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC30C0619D2;
+        Sun, 26 Jul 2020 00:46:50 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::460])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 9C3271277D61E;
+        Sun, 26 Jul 2020 00:30:02 -0700 (PDT)
+Date:   Sun, 26 Jul 2020 00:46:44 -0700 (PDT)
+Message-Id: <20200726.004644.71243023033363639.davem@davemloft.net>
+To:     hch@lst.de
+Cc:     kuba@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        kuznet@ms2.inr.ac.ru, yoshfuji@linux-ipv6.org, edumazet@google.com,
         linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
@@ -49,37 +37,34 @@ Cc:     David Miller <davem@davemloft.net>, kuba@kernel.org,
         rds-devel@oss.oracle.com, linux-afs@lists.infradead.org,
         tipc-discussion@lists.sourceforge.net, linux-x25@vger.kernel.org
 Subject: Re: get rid of the address_space override in setsockopt v2
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20200726070311.GA16687@lst.de>
 References: <20200723060908.50081-1-hch@lst.de>
         <20200724.154342.1433271593505001306.davem@davemloft.net>
         <20200726070311.GA16687@lst.de>
-X-Yow:  -- I can do ANYTHING ... I can even ... SHOPLIFT!!
-Date:   Sun, 26 Jul 2020 09:08:42 +0200
-In-Reply-To: <20200726070311.GA16687@lst.de> (Christoph Hellwig's message of
-        "Sun, 26 Jul 2020 09:03:11 +0200")
-Message-ID: <87imea3g91.fsf@linux-m68k.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.0.91 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
+X-Mailer: Mew version 6.8 on Emacs 26.3
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Sun, 26 Jul 2020 00:30:03 -0700 (PDT)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Jul 26 2020, Christoph Hellwig wrote:
+From: Christoph Hellwig <hch@lst.de>
+Date: Sun, 26 Jul 2020 09:03:11 +0200
 
-> From 6601732f7a54db5f04efba08f7e9224e5b757112 Mon Sep 17 00:00:00 2001
-> From: Christoph Hellwig <hch@lst.de>
-> Date: Sun, 26 Jul 2020 09:00:09 +0200
-> Subject: mISDN: remove a debug printk in data_sock_setsockopt
->
-> The %p won't work with the new sockptr_t type.  But in the times of
-> ftrace, bpftrace and co these kinds of debug printks are pretty anyway,
+> On Fri, Jul 24, 2020 at 03:43:42PM -0700, David Miller wrote:
+>> > Changes since v1:
+>> >  - check that users don't pass in kernel addresses
+>> >  - more bpfilter cleanups
+>> >  - cosmetic mptcp tweak
+>> 
+>> Series applied to net-next, I'm build testing and will push this out when
+>> that is done.
+> 
+> The buildbot found one warning with the isdn debug code after a few
+> days, here is what I think is the best fix:
 
-I think there is a word missing after pretty.
-
-Andreas.
-
--- 
-Andreas Schwab, schwab@linux-m68k.org
-GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
-"And now for something completely different."
+I already fixed this in net-next.
