@@ -2,120 +2,131 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B6323B2BF
-	for <lists+linux-sctp@lfdr.de>; Tue,  4 Aug 2020 04:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB66C23E3EB
+	for <lists+linux-sctp@lfdr.de>; Fri,  7 Aug 2020 00:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726756AbgHDC3E (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 3 Aug 2020 22:29:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59480 "EHLO
+        id S1726276AbgHFWVe (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 6 Aug 2020 18:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726394AbgHDC3E (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 3 Aug 2020 22:29:04 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36685C06174A
-        for <linux-sctp@vger.kernel.org>; Mon,  3 Aug 2020 19:29:04 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id q16so18957669ybk.6
-        for <linux-sctp@vger.kernel.org>; Mon, 03 Aug 2020 19:29:04 -0700 (PDT)
+        with ESMTP id S1726167AbgHFWVc (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 6 Aug 2020 18:21:32 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54080C061574;
+        Thu,  6 Aug 2020 15:21:32 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id p1so111079pls.4;
+        Thu, 06 Aug 2020 15:21:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Iwt/1nxcUwFhi57dQLj6DSL9I/pGIvL5ed/nmcTtpZk=;
-        b=rWKTAPISxuGxDow7CmIiuWIEtSuyyWLWmo23vQMPsHA+5Yd8WWEKSUZtxhW1u3RDY3
-         TAiJu23CS7Y69+XVLkQftq3N2u1V9ZdwaQulmzIRdAp7PDpV2+YYBDy2KK9CHpOpzxh2
-         PZwi9nbV/R2VlKt658JDBtpPA05f5QMz9/ZRGJjMRAfcvJnYWQp1Bc7kmhoniKx2c5CG
-         LNpQFIZnfdtboIVVLFSKMa20gqW7wuHbS9YXiDZqivFr4JmRiWY79aNqgH3N10JMJ3sg
-         YK+aADEBpPrgxakrZrSf83fG+0JlCvZd1zqTKF4UI96wApBIQv5e2yFyH7G5pXr85njh
-         agMw==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=t1TN4T3jQ2jrlk3a/d7SaKfk2DJyftZUv6bXnlt6NPQ=;
+        b=GyumodkGmYKsGSwVnzxjXGz3Hc6dDp/7EX3r4spkycDyPVNN0ciFP2qEtF0XPhrBf4
+         +cCI0OWrH6x101NHuYUTOaXPwuCecyhxfEvjJRna72hDnNI+bib+8AzwceW3eJdE75Gn
+         SeIJKEi14my/hEJw+qU/KCE5RSHazXH9KHIfKLNltLm7ADcruE5/tGFOBJjd/g0Mnrl5
+         TD9+5yjblEpGaVz4M1LHrXLmcdWRpP5c2NV1JaW3i6df06bY03MlPUl3EghFXAFM5iLk
+         Ox9KU5vu5QYQH83zkF+ICm8Q2r+16LLLSd84hY8z6dVmhZCgoIg7vDd5Gd8rg9nvzxvN
+         9EXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Iwt/1nxcUwFhi57dQLj6DSL9I/pGIvL5ed/nmcTtpZk=;
-        b=DyNXl004nOjhHtggou5owkjyOenkNwHuFUGHbh0dxl/x6DOxPaCA1idawbSv8xXzJe
-         EFMW0FyEOrNJR+ID5ECh2XHK6rt9fFHUaHymwbfnuI05yumB1SyRXvVKLCQlm5ta6/7I
-         vfYR/J+UsnxooAkGKhv2uEspIgxdC6JlbiTFcwT7tiozBxwyuf1BYHAsbyITMKGv18Ak
-         RhDUqjULyGa8541yT/eKDrrnq+a+c/FuMZqVGfOFUoe4zbH8MhKBJI+ziILLEIxmDCII
-         i75SApUeMFuQTV5uxvJ3TAIEoV2G6HWsySuzZXLgJtubQmEhqSVAFEJzu3QbtEtHTwLl
-         0KiQ==
-X-Gm-Message-State: AOAM531CVr5A2WdbOy0YmzjdoTl3jsEQrKWXO5EpPLZUzVmRxwy/622d
-        dxeKvIS0pb6yHhWD9fPmyGIJRHSKz272yfmJvZ69djos
-X-Google-Smtp-Source: ABdhPJx6WYj4yBxEyGxe5UadRAVhql0+TTdlaRuvdFb7Rb8OFK8qIgOhSfdyXk8yBtBq86lhBaoEOUZ7vmKjk+VuLJA=
-X-Received: by 2002:a25:6b04:: with SMTP id g4mr12899485ybc.387.1596508143469;
- Mon, 03 Aug 2020 19:29:03 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=t1TN4T3jQ2jrlk3a/d7SaKfk2DJyftZUv6bXnlt6NPQ=;
+        b=e1lzyzb0IUfIRzudWXCJ1cnSbrZG3OU8EoVQ0p+kJDkZ1tnLXS6o966fc2KdC6EHeL
+         3SrIF0a5mXVw76vBuseFHDBVjkkqkjlSiZ4ovEVfQAjHNwieeA9kQTFnWW2rC5ZbPf9O
+         XCVz7HUemkpVnapitCxqsMEN6h+Q28m+bBbKFOppxvOEkVHfUzGS1ldj+fNmo5m0qPl1
+         ED2axOJ1D3LUxfVoNB0CC1/auI0H9efPJaH6IlviqbYNd5RQTwLOmmWz2ftkLDDCIrhJ
+         Wdyw2sb/kvUexW2wviff3HtcudiqYhWO/eNEvVHcZJMxGZcVkKXQc7LPLka0fe1Ye8m0
+         FC6w==
+X-Gm-Message-State: AOAM533QHJUjqnXMz8lHoCE9mfaVnnvTe76eDAuB5RQDhG7tKwWbhiP6
+        q6J7leABOdw2O3ozloO5s2k=
+X-Google-Smtp-Source: ABdhPJwdY4ryrXf97t2P6yPCseaEpoaitTdHlZtd60UHAYlnINemi0RFvJHHjsz9ZaSHJyy7n+NjVw==
+X-Received: by 2002:a17:902:45:: with SMTP id 63mr9766294pla.179.1596752491350;
+        Thu, 06 Aug 2020 15:21:31 -0700 (PDT)
+Received: from [10.1.10.11] (c-73-241-150-58.hsd1.ca.comcast.net. [73.241.150.58])
+        by smtp.gmail.com with ESMTPSA id w82sm9912017pff.7.2020.08.06.15.21.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Aug 2020 15:21:30 -0700 (PDT)
+Subject: Re: [PATCH 25/26] net: pass a sockptr_t into ->setsockopt
+To:     Christoph Hellwig <hch@lst.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Eric Dumazet <edumazet@google.com>
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        linux-sctp@vger.kernel.org, linux-hams@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-can@vger.kernel.org, dccp@vger.kernel.org,
+        linux-decnet-user@lists.sourceforge.net,
+        linux-wpan@vger.kernel.org, linux-s390@vger.kernel.org,
+        mptcp@lists.01.org, lvs-devel@vger.kernel.org,
+        rds-devel@oss.oracle.com, linux-afs@lists.infradead.org,
+        tipc-discussion@lists.sourceforge.net, linux-x25@vger.kernel.org,
+        Stefan Schmidt <stefan@datenfreihafen.org>
+References: <20200723060908.50081-1-hch@lst.de>
+ <20200723060908.50081-26-hch@lst.de>
+From:   Eric Dumazet <eric.dumazet@gmail.com>
+Message-ID: <6357942b-0b6e-1901-7dce-e308c9fac347@gmail.com>
+Date:   Thu, 6 Aug 2020 15:21:25 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-References: <CAMyZL9pE+343HvMHuci=+2aKS4HrtuL2GJ2oVwxw7PfL7=doKQ@mail.gmail.com>
- <20200803174232.GE3399@localhost.localdomain>
-In-Reply-To: <20200803174232.GE3399@localhost.localdomain>
-From:   sonia bhattacharya <soniaruby1@gmail.com>
-Date:   Tue, 4 Aug 2020 07:58:51 +0530
-Message-ID: <CAMyZL9o14WtFT5+MfS4qWOpzSHLiX21vSLn0795Z-_mi4hGLyQ@mail.gmail.com>
-Subject: Re: Regarding kernel SCTP module compliance to 4960
-To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     linux-sctp@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200723060908.50081-26-hch@lst.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hi Marcelo,
-
-We are using Ubuntu 18.04 with the following kernel version.
-esi14-vm-23u:~$ uname -r
-5.0.0-23-generic
-
-Just to confirm, the modinfo sctp shows the following:
-esi14-vm-23u:~$ modinfo sctp
-filename:       /lib/modules/5.0.0-23-generic/kernel/net/sctp/sctp.ko
-license:        GPL
-description:    Support for the SCTP protocol (RFC2960)
-author:         Linux Kernel SCTP developers <linux-sctp@vger.kernel.org>
-alias:          net-pf-10-proto-132
-alias:          net-pf-2-proto-132
-srcversion:     5CD1A15EE663D4E98EAC641
-depends:        libcrc32c
-retpoline:      Y
-intree:         Y
-name:           sctp
-vermagic:       5.0.0-23-generic SMP mod_unload
-signat:         PKCS#7
-signer:
-sig_key:
-sig_hashalgo:   md4
-parm:           no_checksums:Disable checksums computing and verification (bool)
-
-Kindly confirm that this is compliant to 4960 already. If that is the
-case, then it would be great if atleast the description in modinfo
-shows 4960.
 
 
-Regards,
-Sonia
+On 7/22/20 11:09 PM, Christoph Hellwig wrote:
+> Rework the remaining setsockopt code to pass a sockptr_t instead of a
+> plain user pointer.  This removes the last remaining set_fs(KERNEL_DS)
+> outside of architecture specific code.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Acked-by: Stefan Schmidt <stefan@datenfreihafen.org> [ieee802154]
+> ---
 
 
-On Mon, Aug 3, 2020 at 11:12 PM Marcelo Ricardo Leitner
-<marcelo.leitner@gmail.com> wrote:
->
-> On Mon, Aug 03, 2020 at 03:53:35PM +0530, sonia bhattacharya wrote:
-> > Hi Team,
-> >
-> >
-> >
-> > Is there a plan to upgrade the linux SCTP kernel module to be
-> > compliant to RFC 4960?
-> >
-> > Right now, it is compliant to RFC 2960.
-> >
-> >
-> > description:    Support for the SCTP protocol (RFC2960)
->
-> Hi Sonia,
->
-> There are several references to old RFCs throughout the code, just
-> because they weren't updated to the newer versions. But in regards to
-> your question, Linux SCTP kernel code is compliant to RFC4960 already.
-> If you notice anything particular missing, it's a bug. :-)
->
-> Thanks,
-> Marcelo
+...
+
+> diff --git a/net/ipv6/raw.c b/net/ipv6/raw.c
+> index 594e01ad670aa6..874f01cd7aec42 100644
+> --- a/net/ipv6/raw.c
+> +++ b/net/ipv6/raw.c
+> @@ -972,13 +972,13 @@ static int rawv6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+>  }
+>  
+
+...
+
+>  static int do_rawv6_setsockopt(struct sock *sk, int level, int optname,
+> -			    char __user *optval, unsigned int optlen)
+> +			       sockptr_t optval, unsigned int optlen)
+>  {
+>  	struct raw6_sock *rp = raw6_sk(sk);
+>  	int val;
+>  
+> -	if (get_user(val, (int __user *)optval))
+> +	if (copy_from_sockptr(&val, optval, sizeof(val)))
+>  		return -EFAULT;
+>  
+
+converting get_user(...)   to  copy_from_sockptr(...) really assumed the optlen
+has been validated to be >= sizeof(int) earlier.
+
+Which is not always the case, for example here.
+
+User application can fool us passing optlen=0, and a user pointer of exactly TASK_SIZE-1
+
+
