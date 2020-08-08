@@ -2,55 +2,27 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2BD23F2B5
-	for <lists+linux-sctp@lfdr.de>; Fri,  7 Aug 2020 20:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F9A923F7E2
+	for <lists+linux-sctp@lfdr.de>; Sat,  8 Aug 2020 15:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726209AbgHGS3Z (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 7 Aug 2020 14:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54102 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725934AbgHGS3Y (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 7 Aug 2020 14:29:24 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3A7C061756;
-        Fri,  7 Aug 2020 11:29:23 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id ha11so1330588pjb.1;
-        Fri, 07 Aug 2020 11:29:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Z120/2fGgMoMEJFP3y/UN7XiDtbeEapazuzyhr8LDZE=;
-        b=QBJVGJ0GG4JwOGjOXDhn/ptRbCpViFRSryd/D1uD/PPByb8ofXHghQtBL4zAWGT9Xe
-         QK/cUuMjhxG0m1Hgc9zv3PWjG85dcSZ3U99MdqgrJZlSJ7yNitbrWEKj0pKrpQ5j4U2+
-         mYi6rg0gFPqzK2WTohJzzlVFs9f88hQH3fpr0BAInmFjUAgk2jPvQt5YPhc+dRklJCLA
-         1PiMOZ7kUlZdKKqrhoSbKIrPYqUmIDmxZL7Nhpp4CbVKZHsjBzyt1SbkbQp0snfBQJX6
-         D0ebWljTdKFZBlaqVyAN81FA6P/pxFRTidd7EBz+FBfE/yEz78eEPIzn3SALlg9BIULK
-         bJSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Z120/2fGgMoMEJFP3y/UN7XiDtbeEapazuzyhr8LDZE=;
-        b=XBEw5BfjOhO7TRexKhdv3xqccXF1PsfVX1ssuCVYLzOJsNiEXk+gJCAgqn9rFwdB1g
-         2YIqOfMExR995vdEmm3U+cadypuRcInt+JC1mKShBlYGFMM6Q1ojgtyjf5LsD1rFarjy
-         DiC86o0dqen+w2Hnx8zSgGOFasa+tJc9YjIiENzOsBm/8zX9gpyz/RahTCncT3IO1eKA
-         jlTPXIH3pVHtjwV8a1hOvDAReyMYud61o5TRGFScvC9BUEJyDw1YmdhVzRy8ZAI7o1H6
-         8gYpYWkOtGeVvG+plRYX9PBzjltSKvq6zXNrVPF+6PDhTsx9IPAwDk1QP8Em/8p5IZ1F
-         22lw==
-X-Gm-Message-State: AOAM531B/YdZD5B+DWTBrQ6T+kMGGS75NFQ0qi3qNuaN2rKUoDL4LLDq
-        GOhATJJRfGrQwKE/goXhZZ0=
-X-Google-Smtp-Source: ABdhPJwIAkNKceIOzLVjCyNTLbqqQvdxFebKOpJzF9rIr6w9P+XPfBqJiKCvAm7AAVFD3CFXOteoEw==
-X-Received: by 2002:a17:902:b210:: with SMTP id t16mr13276026plr.90.1596824962910;
-        Fri, 07 Aug 2020 11:29:22 -0700 (PDT)
-Received: from [10.1.10.11] (c-73-241-150-58.hsd1.ca.comcast.net. [73.241.150.58])
-        by smtp.gmail.com with ESMTPSA id q66sm11499854pjq.17.2020.08.07.11.29.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Aug 2020 11:29:21 -0700 (PDT)
-Subject: Re: [PATCH 25/26] net: pass a sockptr_t into ->setsockopt
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Eric Dumazet' <eric.dumazet@gmail.com>,
+        id S1726401AbgHHNyM (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sat, 8 Aug 2020 09:54:12 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:54902 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726238AbgHHNyM (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sat, 8 Aug 2020 09:54:12 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id uk-mta-8-i9qSWaqDO72eG3L16A1dCQ-1;
+ Sat, 08 Aug 2020 14:54:08 +0100
+X-MC-Unique: i9qSWaqDO72eG3L16A1dCQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Sat, 8 Aug 2020 14:54:07 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Sat, 8 Aug 2020 14:54:07 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Eric Dumazet' <eric.dumazet@gmail.com>,
         Christoph Hellwig <hch@lst.de>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -59,7 +31,7 @@ To:     David Laight <David.Laight@ACULAB.COM>,
         Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
         Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
         Eric Dumazet <edumazet@google.com>
-Cc:     "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+CC:     "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
@@ -84,125 +56,102 @@ Cc:     "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
         <tipc-discussion@lists.sourceforge.net>,
         "linux-x25@vger.kernel.org" <linux-x25@vger.kernel.org>,
         Stefan Schmidt <stefan@datenfreihafen.org>
+Subject: RE: [PATCH 25/26] net: pass a sockptr_t into ->setsockopt
+Thread-Topic: [PATCH 25/26] net: pass a sockptr_t into ->setsockopt
+Thread-Index: AQHWbD/ze4VO5Mh7NUG6O93LfP2Gq6ksXaowgACKZoCAAVFEkA==
+Date:   Sat, 8 Aug 2020 13:54:06 +0000
+Message-ID: <ed3741fdf1774cfbbd59d06ecb6994d8@AcuMS.aculab.com>
 References: <20200723060908.50081-1-hch@lst.de>
  <20200723060908.50081-26-hch@lst.de>
  <6357942b-0b6e-1901-7dce-e308c9fac347@gmail.com>
  <f21589f1262640b09ca27ed20f8e6790@AcuMS.aculab.com>
-From:   Eric Dumazet <eric.dumazet@gmail.com>
-Message-ID: <90f626a4-d9e5-91a5-b71d-498e3b125da1@gmail.com>
-Date:   Fri, 7 Aug 2020 11:29:19 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
-MIME-Version: 1.0
-In-Reply-To: <f21589f1262640b09ca27ed20f8e6790@AcuMS.aculab.com>
-Content-Type: text/plain; charset=utf-8
+ <90f626a4-d9e5-91a5-b71d-498e3b125da1@gmail.com>
+In-Reply-To: <90f626a4-d9e5-91a5-b71d-498e3b125da1@gmail.com>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-
-
-On 8/7/20 2:18 AM, David Laight wrote:
-> From: Eric Dumazet
->> Sent: 06 August 2020 23:21
->>
->> On 7/22/20 11:09 PM, Christoph Hellwig wrote:
->>> Rework the remaining setsockopt code to pass a sockptr_t instead of a
->>> plain user pointer.  This removes the last remaining set_fs(KERNEL_DS)
->>> outside of architecture specific code.
->>>
->>> Signed-off-by: Christoph Hellwig <hch@lst.de>
->>> Acked-by: Stefan Schmidt <stefan@datenfreihafen.org> [ieee802154]
->>> ---
->>
->>
->> ...
->>
->>> diff --git a/net/ipv6/raw.c b/net/ipv6/raw.c
->>> index 594e01ad670aa6..874f01cd7aec42 100644
->>> --- a/net/ipv6/raw.c
->>> +++ b/net/ipv6/raw.c
->>> @@ -972,13 +972,13 @@ static int rawv6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
->>>  }
->>>
->>
->> ...
->>
->>>  static int do_rawv6_setsockopt(struct sock *sk, int level, int optname,
->>> -			    char __user *optval, unsigned int optlen)
->>> +			       sockptr_t optval, unsigned int optlen)
->>>  {
->>>  	struct raw6_sock *rp = raw6_sk(sk);
->>>  	int val;
->>>
->>> -	if (get_user(val, (int __user *)optval))
->>> +	if (copy_from_sockptr(&val, optval, sizeof(val)))
->>>  		return -EFAULT;
->>>
->>
->> converting get_user(...)   to  copy_from_sockptr(...) really assumed the optlen
->> has been validated to be >= sizeof(int) earlier.
->>
->> Which is not always the case, for example here.
->>
->> User application can fool us passing optlen=0, and a user pointer of exactly TASK_SIZE-1
-> 
-> Won't the user pointer force copy_from_sockptr() to call
-> copy_from_user() which will then do access_ok() on the entire
-> range and so return -EFAULT.
-> 
-> The only problems arise if the kernel code adds an offset to the
-> user address.
-> And the later patch added an offset to the copy functions.
-
-I dunno, I definitely got the following syzbot crash 
-
-No repro found by syzbot yet, but I suspect a 32bit binary program
-did :
-
-setsockopt(fd, 0x29, 0x24, 0xffffffffffffffff, 0x0)
-
-
-BUG: KASAN: wild-memory-access in memcpy include/linux/string.h:406 [inline]
-BUG: KASAN: wild-memory-access in copy_from_sockptr_offset include/linux/sockptr.h:71 [inline]
-BUG: KASAN: wild-memory-access in copy_from_sockptr include/linux/sockptr.h:77 [inline]
-BUG: KASAN: wild-memory-access in do_rawv6_setsockopt net/ipv6/raw.c:1023 [inline]
-BUG: KASAN: wild-memory-access in rawv6_setsockopt+0x1a1/0x6f0 net/ipv6/raw.c:1084
-Read of size 4 at addr 00000000ffffffff by task syz-executor.0/28251
-
-CPU: 3 PID: 28251 Comm: syz-executor.0 Not tainted 5.8.0-syzkaller #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x18f/0x20d lib/dump_stack.c:118
- __kasan_report mm/kasan/report.c:517 [inline]
- kasan_report.cold+0x5/0x37 mm/kasan/report.c:530
- check_memory_region_inline mm/kasan/generic.c:186 [inline]
- check_memory_region+0x13d/0x180 mm/kasan/generic.c:192
- memcpy+0x20/0x60 mm/kasan/common.c:105
- memcpy include/linux/string.h:406 [inline]
- copy_from_sockptr_offset include/linux/sockptr.h:71 [inline]
- copy_from_sockptr include/linux/sockptr.h:77 [inline]
- do_rawv6_setsockopt net/ipv6/raw.c:1023 [inline]
- rawv6_setsockopt+0x1a1/0x6f0 net/ipv6/raw.c:1084
- __sys_setsockopt+0x2ad/0x6d0 net/socket.c:2138
- __do_sys_setsockopt net/socket.c:2149 [inline]
- __se_sys_setsockopt net/socket.c:2146 [inline]
- __ia32_sys_setsockopt+0xb9/0x150 net/socket.c:2146
- do_syscall_32_irqs_on arch/x86/entry/common.c:84 [inline]
- __do_fast_syscall_32+0x57/0x80 arch/x86/entry/common.c:126
- do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:149
- entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
-RIP: 0023:0xf7f22569
-Code: c4 01 10 03 03 74 c0 01 10 05 03 74 b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10 08 03 74 d8 01 00 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 eb 0d 90 90 90 90 90 90 90 90 90 90 90 90
-RSP: 002b:00000000f551c0bc EFLAGS: 00000296 ORIG_RAX: 000000000000016e
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000000029
-RDX: 0000000000000024 RSI: 00000000ffffffff RDI: 0000000000000000
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-==================================================================
+RnJvbTogRXJpYyBEdW1hemV0DQo+IFNlbnQ6IDA3IEF1Z3VzdCAyMDIwIDE5OjI5DQo+IA0KPiBP
+biA4LzcvMjAgMjoxOCBBTSwgRGF2aWQgTGFpZ2h0IHdyb3RlOg0KPiA+IEZyb206IEVyaWMgRHVt
+YXpldA0KPiA+PiBTZW50OiAwNiBBdWd1c3QgMjAyMCAyMzoyMQ0KPiA+Pg0KPiA+PiBPbiA3LzIy
+LzIwIDExOjA5IFBNLCBDaHJpc3RvcGggSGVsbHdpZyB3cm90ZToNCj4gPj4+IFJld29yayB0aGUg
+cmVtYWluaW5nIHNldHNvY2tvcHQgY29kZSB0byBwYXNzIGEgc29ja3B0cl90IGluc3RlYWQgb2Yg
+YQ0KPiA+Pj4gcGxhaW4gdXNlciBwb2ludGVyLiAgVGhpcyByZW1vdmVzIHRoZSBsYXN0IHJlbWFp
+bmluZyBzZXRfZnMoS0VSTkVMX0RTKQ0KPiA+Pj4gb3V0c2lkZSBvZiBhcmNoaXRlY3R1cmUgc3Bl
+Y2lmaWMgY29kZS4NCj4gPj4+DQo+ID4+PiBTaWduZWQtb2ZmLWJ5OiBDaHJpc3RvcGggSGVsbHdp
+ZyA8aGNoQGxzdC5kZT4NCj4gPj4+IEFja2VkLWJ5OiBTdGVmYW4gU2NobWlkdCA8c3RlZmFuQGRh
+dGVuZnJlaWhhZmVuLm9yZz4gW2llZWU4MDIxNTRdDQo+ID4+PiAtLS0NCj4gPj4NCj4gPj4NCj4g
+Pj4gLi4uDQo+ID4+DQo+ID4+PiBkaWZmIC0tZ2l0IGEvbmV0L2lwdjYvcmF3LmMgYi9uZXQvaXB2
+Ni9yYXcuYw0KPiA+Pj4gaW5kZXggNTk0ZTAxYWQ2NzBhYTYuLjg3NGYwMWNkN2FlYzQyIDEwMDY0
+NA0KPiA+Pj4gLS0tIGEvbmV0L2lwdjYvcmF3LmMNCj4gPj4+ICsrKyBiL25ldC9pcHY2L3Jhdy5j
+DQo+ID4+PiBAQCAtOTcyLDEzICs5NzIsMTMgQEAgc3RhdGljIGludCByYXd2Nl9zZW5kbXNnKHN0
+cnVjdCBzb2NrICpzaywgc3RydWN0IG1zZ2hkciAqbXNnLCBzaXplX3QgbGVuKQ0KPiA+Pj4gIH0N
+Cj4gPj4+DQo+ID4+DQo+ID4+IC4uLg0KPiA+Pg0KPiA+Pj4gIHN0YXRpYyBpbnQgZG9fcmF3djZf
+c2V0c29ja29wdChzdHJ1Y3Qgc29jayAqc2ssIGludCBsZXZlbCwgaW50IG9wdG5hbWUsDQo+ID4+
+PiAtCQkJICAgIGNoYXIgX191c2VyICpvcHR2YWwsIHVuc2lnbmVkIGludCBvcHRsZW4pDQo+ID4+
+PiArCQkJICAgICAgIHNvY2twdHJfdCBvcHR2YWwsIHVuc2lnbmVkIGludCBvcHRsZW4pDQo+ID4+
+PiAgew0KPiA+Pj4gIAlzdHJ1Y3QgcmF3Nl9zb2NrICpycCA9IHJhdzZfc2soc2spOw0KPiA+Pj4g
+IAlpbnQgdmFsOw0KPiA+Pj4NCj4gPj4+IC0JaWYgKGdldF91c2VyKHZhbCwgKGludCBfX3VzZXIg
+KilvcHR2YWwpKQ0KPiA+Pj4gKwlpZiAoY29weV9mcm9tX3NvY2twdHIoJnZhbCwgb3B0dmFsLCBz
+aXplb2YodmFsKSkpDQo+ID4+PiAgCQlyZXR1cm4gLUVGQVVMVDsNCj4gPj4+DQo+ID4+DQo+ID4+
+IGNvbnZlcnRpbmcgZ2V0X3VzZXIoLi4uKSAgIHRvICBjb3B5X2Zyb21fc29ja3B0ciguLi4pIHJl
+YWxseSBhc3N1bWVkIHRoZSBvcHRsZW4NCj4gPj4gaGFzIGJlZW4gdmFsaWRhdGVkIHRvIGJlID49
+IHNpemVvZihpbnQpIGVhcmxpZXIuDQo+ID4+DQo+ID4+IFdoaWNoIGlzIG5vdCBhbHdheXMgdGhl
+IGNhc2UsIGZvciBleGFtcGxlIGhlcmUuDQo+ID4+DQo+ID4+IFVzZXIgYXBwbGljYXRpb24gY2Fu
+IGZvb2wgdXMgcGFzc2luZyBvcHRsZW49MCwgYW5kIGEgdXNlciBwb2ludGVyIG9mIGV4YWN0bHkg
+VEFTS19TSVpFLTENCj4gPg0KPiA+IFdvbid0IHRoZSB1c2VyIHBvaW50ZXIgZm9yY2UgY29weV9m
+cm9tX3NvY2twdHIoKSB0byBjYWxsDQo+ID4gY29weV9mcm9tX3VzZXIoKSB3aGljaCB3aWxsIHRo
+ZW4gZG8gYWNjZXNzX29rKCkgb24gdGhlIGVudGlyZQ0KPiA+IHJhbmdlIGFuZCBzbyByZXR1cm4g
+LUVGQVVMVC4NCj4gPg0KPiA+IFRoZSBvbmx5IHByb2JsZW1zIGFyaXNlIGlmIHRoZSBrZXJuZWwg
+Y29kZSBhZGRzIGFuIG9mZnNldCB0byB0aGUNCj4gPiB1c2VyIGFkZHJlc3MuDQo+ID4gQW5kIHRo
+ZSBsYXRlciBwYXRjaCBhZGRlZCBhbiBvZmZzZXQgdG8gdGhlIGNvcHkgZnVuY3Rpb25zLg0KPiAN
+Cj4gSSBkdW5ubywgSSBkZWZpbml0ZWx5IGdvdCB0aGUgZm9sbG93aW5nIHN5emJvdCBjcmFzaA0K
+PiANCj4gTm8gcmVwcm8gZm91bmQgYnkgc3l6Ym90IHlldCwgYnV0IEkgc3VzcGVjdCBhIDMyYml0
+IGJpbmFyeSBwcm9ncmFtDQo+IGRpZCA6DQo+IA0KPiBzZXRzb2Nrb3B0KGZkLCAweDI5LCAweDI0
+LCAweGZmZmZmZmZmZmZmZmZmZmYsIDB4MCkNCg0KQSBmZXcgdG9vIG1hbnkgZmZzLi4uDQoNCj4g
+QlVHOiBLQVNBTjogd2lsZC1tZW1vcnktYWNjZXNzIGluIG1lbWNweSBpbmNsdWRlL2xpbnV4L3N0
+cmluZy5oOjQwNiBbaW5saW5lXQ0KPiBCVUc6IEtBU0FOOiB3aWxkLW1lbW9yeS1hY2Nlc3MgaW4g
+Y29weV9mcm9tX3NvY2twdHJfb2Zmc2V0IGluY2x1ZGUvbGludXgvc29ja3B0ci5oOjcxIFtpbmxp
+bmVdDQo+IEJVRzogS0FTQU46IHdpbGQtbWVtb3J5LWFjY2VzcyBpbiBjb3B5X2Zyb21fc29ja3B0
+ciBpbmNsdWRlL2xpbnV4L3NvY2twdHIuaDo3NyBbaW5saW5lXQ0KPiBCVUc6IEtBU0FOOiB3aWxk
+LW1lbW9yeS1hY2Nlc3MgaW4gZG9fcmF3djZfc2V0c29ja29wdCBuZXQvaXB2Ni9yYXcuYzoxMDIz
+IFtpbmxpbmVdDQo+IEJVRzogS0FTQU46IHdpbGQtbWVtb3J5LWFjY2VzcyBpbiByYXd2Nl9zZXRz
+b2Nrb3B0KzB4MWExLzB4NmYwIG5ldC9pcHY2L3Jhdy5jOjEwODQNCj4gUmVhZCBvZiBzaXplIDQg
+YXQgYWRkciAwMDAwMDAwMGZmZmZmZmZmIGJ5IHRhc2sgc3l6LWV4ZWN1dG9yLjAvMjgyNTENCg0K
+WWVwLCB0aGUgY29kZSBpcyBuZWFybHksIGJ1dCBub3QgcXVpdGUgcmlnaHQuDQpUaGUgcHJvYmxl
+bSBpcyBhbG1vc3QgY2VydGFpbmx5IHRoYXQgYWNjZXNzX29rKHgsIDApIGFsd2F5cyByZXR1cm5z
+IHN1Y2Nlc3MuDQoNCkluIGFueSBjYXNlIHRoZSBjaGVjayBmb3IgYSB2YWxpZCB1c2VyIGFkZHJl
+c3Mgb3VnaHQgdG8gYmUgZXhhY3RseQ0KdGhlIHNhbWUgb25lIHRoYXQgbGF0ZXIgc2VsZWN0cyBi
+ZXR3ZWVuIGNvcHlfdG8vZnJvbV91c2VyKCkgYW5kIG1lbWNweSgpLg0KDQpUaGUgbGF0dGVyIGNv
+bXBhcmVzIHRoZSBhZGRyZXNzIGFnYWluc3QgJ1RBU0tfU0laRScuDQpIb3dldmVyIHRoYXQgaXNu
+J3QgdGhlIHJpZ2h0IHZhbHVlIGVpdGhlciAtIEkgdGhpbmsgaXQgcmVhZHMNCnRoZSB2YWx1ZSBm
+cm9tICdjdXJyZW50JyB0aGF0IHNldF9mcygpIHNldHMuDQpXaGF0IHRoaXMgY29kZSBuZWVkcyBp
+cyBhbnkgYWRkcmVzcyB0aGF0IGlzIGFib3ZlIHRoZSBoaWdoZXN0DQp1c2VyIGFkZHJlc3MgYW5k
+IGJlbG93IChvciBlcXVhbCB0bykgdG8gbG93ZXN0IGtlcm5lbCBvbmUuDQoNCk9uIGkzODYgKGFu
+ZCBwcm9iYWJseSBtb3N0IDMyYml0IGxpbnV4KSB0aGlzIGlzIDB4YzAwMDAwMDAuDQpPbiB4ODYt
+NjQgdGhpcyBjb3VsZCBiZSBhbnkgYWRkcmVzcyBpbiB0aGUgYWRkcmVzcyAnYmxhY2sgaG9sZScu
+DQpQaWNraW5nIDF1bGw8PDYzIG1heSBiZSBiZXN0Lg0KUXVpdGUgd2hhdCB0aGUgY29ycmVjdCAj
+ZGVmaW5lIGlzIHJlcXVpcmVzIGZ1cnRoZXIgcmVzZWFyY2guDQoNClRoZXJlIGlzIGFjdHVhbGx5
+IHNjb3BlIGZvciBtYWtpbmcgaW5pdF91c2VyX3NvY2twdHIoa2Vybl9hZGRyZXNzKQ0Kc2F2ZSBh
+IHZhbHVlIHRoYXQgd2lsbCBjYXVzZSBjb3B5X3RvL2Zyb21fc29ja3B0cigpIGdvIGludG8NCnRo
+ZSB1c2VyLWNvcHkgcGF0aCB3aXRoIGFuIGFkZHJlc3MgdGhhdCBhY2Nlc3Nfb2soKSB3aWxsIHJl
+amVjdC4NClRoZW4gdGhlIC1FRkFVTFQgd2lsbCBnZXQgZ2VuZXJhdGVkIGluIHRoZSAnZXhwZWN0
+ZWQnIHBsYWNlDQphbmQgdGhlcmUgaXMgbm8gc2NvcGUgZm9yIGZhaWxpbmcgdG8gdGVzdCBpdCdz
+IHJldHVybiB2YWx1ZS4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lk
+ZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0K
+UmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
