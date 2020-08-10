@@ -2,156 +2,139 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9A923F7E2
-	for <lists+linux-sctp@lfdr.de>; Sat,  8 Aug 2020 15:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04CB32409FD
+	for <lists+linux-sctp@lfdr.de>; Mon, 10 Aug 2020 17:37:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726401AbgHHNyM (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sat, 8 Aug 2020 09:54:12 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:54902 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726238AbgHHNyM (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sat, 8 Aug 2020 09:54:12 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id uk-mta-8-i9qSWaqDO72eG3L16A1dCQ-1;
- Sat, 08 Aug 2020 14:54:08 +0100
-X-MC-Unique: i9qSWaqDO72eG3L16A1dCQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Sat, 8 Aug 2020 14:54:07 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Sat, 8 Aug 2020 14:54:07 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Eric Dumazet' <eric.dumazet@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Eric Dumazet <edumazet@google.com>
-CC:     "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>,
-        "coreteam@netfilter.org" <coreteam@netfilter.org>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        "linux-hams@vger.kernel.org" <linux-hams@vger.kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "bridge@lists.linux-foundation.org" 
-        <bridge@lists.linux-foundation.org>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "dccp@vger.kernel.org" <dccp@vger.kernel.org>,
-        "linux-decnet-user@lists.sourceforge.net" 
-        <linux-decnet-user@lists.sourceforge.net>,
-        "linux-wpan@vger.kernel.org" <linux-wpan@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "mptcp@lists.01.org" <mptcp@lists.01.org>,
-        "lvs-devel@vger.kernel.org" <lvs-devel@vger.kernel.org>,
-        "rds-devel@oss.oracle.com" <rds-devel@oss.oracle.com>,
-        "linux-afs@lists.infradead.org" <linux-afs@lists.infradead.org>,
-        "tipc-discussion@lists.sourceforge.net" 
-        <tipc-discussion@lists.sourceforge.net>,
-        "linux-x25@vger.kernel.org" <linux-x25@vger.kernel.org>,
-        Stefan Schmidt <stefan@datenfreihafen.org>
-Subject: RE: [PATCH 25/26] net: pass a sockptr_t into ->setsockopt
-Thread-Topic: [PATCH 25/26] net: pass a sockptr_t into ->setsockopt
-Thread-Index: AQHWbD/ze4VO5Mh7NUG6O93LfP2Gq6ksXaowgACKZoCAAVFEkA==
-Date:   Sat, 8 Aug 2020 13:54:06 +0000
-Message-ID: <ed3741fdf1774cfbbd59d06ecb6994d8@AcuMS.aculab.com>
-References: <20200723060908.50081-1-hch@lst.de>
- <20200723060908.50081-26-hch@lst.de>
- <6357942b-0b6e-1901-7dce-e308c9fac347@gmail.com>
- <f21589f1262640b09ca27ed20f8e6790@AcuMS.aculab.com>
- <90f626a4-d9e5-91a5-b71d-498e3b125da1@gmail.com>
-In-Reply-To: <90f626a4-d9e5-91a5-b71d-498e3b125da1@gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1728528AbgHJPhj (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 10 Aug 2020 11:37:39 -0400
+Received: from mail-il1-f198.google.com ([209.85.166.198]:37975 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728749AbgHJPhT (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 10 Aug 2020 11:37:19 -0400
+Received: by mail-il1-f198.google.com with SMTP id t79so8156474ild.5
+        for <linux-sctp@vger.kernel.org>; Mon, 10 Aug 2020 08:37:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=mwA0VxfKC9y1ldI67xR8GxayzqreYluyj2U7Ecr/ZxE=;
+        b=TnRu9sKeamKWgJIU1c1DyN1us0Ipx8WxAglJDilgzVHl7p6SJbEWtyyTizpP3JfOE6
+         Q6kHEOuSjAfknaIUIhL2mdst2z5UFaW3gam8F3WnojrMz9yVPd29E8sUAYewjjqmMfmS
+         mm8she3WG22uATuhbUWzIfxD5soJR0fDML98SQgQy72Kppt8k3ZxUXUOFJAQVuhr82Xa
+         hT6+/EFx9aY8uWWUo2bqbIhN7bUVOsr/OD2XiRpy6cPy5sEs8brIScx7VI3sv6zwVkT0
+         8l39sQZ9Gn+OA9NKH8N1UjQBjQuJqCuRGENd7JrXPHyan8NscvgW8CsrD9oh/9aw07ye
+         HGhg==
+X-Gm-Message-State: AOAM533qU1Zj8npvyo8BPjvVrR7mgBKv1IfaR46PNIQ/mhgqbrdbeNwH
+        avOb6lIs6f8lcq21KfQ85IJxlxOXpAAHACuSvma32U5a6cbE
+X-Google-Smtp-Source: ABdhPJyE6YD/UF3JeesR4M8V3eeWNcRlU/BoaOUyj//sfBL8naXLYfJwRAQYZPJ4ploP62y5lKzHhSKJlVBTW63XgXdgQE1ZrUxF
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+X-Received: by 2002:a92:4403:: with SMTP id r3mr17862137ila.17.1597073838611;
+ Mon, 10 Aug 2020 08:37:18 -0700 (PDT)
+Date:   Mon, 10 Aug 2020 08:37:18 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d4adc705ac87ba8e@google.com>
+Subject: general protection fault in sctp_ulpevent_notify_peer_addr_change
+From:   syzbot <syzbot+8f2165a7b1f2820feffc@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-sctp@vger.kernel.org, marcelo.leitner@gmail.com,
+        netdev@vger.kernel.org, nhorman@tuxdriver.com,
+        syzkaller-bugs@googlegroups.com, vyasevich@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-RnJvbTogRXJpYyBEdW1hemV0DQo+IFNlbnQ6IDA3IEF1Z3VzdCAyMDIwIDE5OjI5DQo+IA0KPiBP
-biA4LzcvMjAgMjoxOCBBTSwgRGF2aWQgTGFpZ2h0IHdyb3RlOg0KPiA+IEZyb206IEVyaWMgRHVt
-YXpldA0KPiA+PiBTZW50OiAwNiBBdWd1c3QgMjAyMCAyMzoyMQ0KPiA+Pg0KPiA+PiBPbiA3LzIy
-LzIwIDExOjA5IFBNLCBDaHJpc3RvcGggSGVsbHdpZyB3cm90ZToNCj4gPj4+IFJld29yayB0aGUg
-cmVtYWluaW5nIHNldHNvY2tvcHQgY29kZSB0byBwYXNzIGEgc29ja3B0cl90IGluc3RlYWQgb2Yg
-YQ0KPiA+Pj4gcGxhaW4gdXNlciBwb2ludGVyLiAgVGhpcyByZW1vdmVzIHRoZSBsYXN0IHJlbWFp
-bmluZyBzZXRfZnMoS0VSTkVMX0RTKQ0KPiA+Pj4gb3V0c2lkZSBvZiBhcmNoaXRlY3R1cmUgc3Bl
-Y2lmaWMgY29kZS4NCj4gPj4+DQo+ID4+PiBTaWduZWQtb2ZmLWJ5OiBDaHJpc3RvcGggSGVsbHdp
-ZyA8aGNoQGxzdC5kZT4NCj4gPj4+IEFja2VkLWJ5OiBTdGVmYW4gU2NobWlkdCA8c3RlZmFuQGRh
-dGVuZnJlaWhhZmVuLm9yZz4gW2llZWU4MDIxNTRdDQo+ID4+PiAtLS0NCj4gPj4NCj4gPj4NCj4g
-Pj4gLi4uDQo+ID4+DQo+ID4+PiBkaWZmIC0tZ2l0IGEvbmV0L2lwdjYvcmF3LmMgYi9uZXQvaXB2
-Ni9yYXcuYw0KPiA+Pj4gaW5kZXggNTk0ZTAxYWQ2NzBhYTYuLjg3NGYwMWNkN2FlYzQyIDEwMDY0
-NA0KPiA+Pj4gLS0tIGEvbmV0L2lwdjYvcmF3LmMNCj4gPj4+ICsrKyBiL25ldC9pcHY2L3Jhdy5j
-DQo+ID4+PiBAQCAtOTcyLDEzICs5NzIsMTMgQEAgc3RhdGljIGludCByYXd2Nl9zZW5kbXNnKHN0
-cnVjdCBzb2NrICpzaywgc3RydWN0IG1zZ2hkciAqbXNnLCBzaXplX3QgbGVuKQ0KPiA+Pj4gIH0N
-Cj4gPj4+DQo+ID4+DQo+ID4+IC4uLg0KPiA+Pg0KPiA+Pj4gIHN0YXRpYyBpbnQgZG9fcmF3djZf
-c2V0c29ja29wdChzdHJ1Y3Qgc29jayAqc2ssIGludCBsZXZlbCwgaW50IG9wdG5hbWUsDQo+ID4+
-PiAtCQkJICAgIGNoYXIgX191c2VyICpvcHR2YWwsIHVuc2lnbmVkIGludCBvcHRsZW4pDQo+ID4+
-PiArCQkJICAgICAgIHNvY2twdHJfdCBvcHR2YWwsIHVuc2lnbmVkIGludCBvcHRsZW4pDQo+ID4+
-PiAgew0KPiA+Pj4gIAlzdHJ1Y3QgcmF3Nl9zb2NrICpycCA9IHJhdzZfc2soc2spOw0KPiA+Pj4g
-IAlpbnQgdmFsOw0KPiA+Pj4NCj4gPj4+IC0JaWYgKGdldF91c2VyKHZhbCwgKGludCBfX3VzZXIg
-KilvcHR2YWwpKQ0KPiA+Pj4gKwlpZiAoY29weV9mcm9tX3NvY2twdHIoJnZhbCwgb3B0dmFsLCBz
-aXplb2YodmFsKSkpDQo+ID4+PiAgCQlyZXR1cm4gLUVGQVVMVDsNCj4gPj4+DQo+ID4+DQo+ID4+
-IGNvbnZlcnRpbmcgZ2V0X3VzZXIoLi4uKSAgIHRvICBjb3B5X2Zyb21fc29ja3B0ciguLi4pIHJl
-YWxseSBhc3N1bWVkIHRoZSBvcHRsZW4NCj4gPj4gaGFzIGJlZW4gdmFsaWRhdGVkIHRvIGJlID49
-IHNpemVvZihpbnQpIGVhcmxpZXIuDQo+ID4+DQo+ID4+IFdoaWNoIGlzIG5vdCBhbHdheXMgdGhl
-IGNhc2UsIGZvciBleGFtcGxlIGhlcmUuDQo+ID4+DQo+ID4+IFVzZXIgYXBwbGljYXRpb24gY2Fu
-IGZvb2wgdXMgcGFzc2luZyBvcHRsZW49MCwgYW5kIGEgdXNlciBwb2ludGVyIG9mIGV4YWN0bHkg
-VEFTS19TSVpFLTENCj4gPg0KPiA+IFdvbid0IHRoZSB1c2VyIHBvaW50ZXIgZm9yY2UgY29weV9m
-cm9tX3NvY2twdHIoKSB0byBjYWxsDQo+ID4gY29weV9mcm9tX3VzZXIoKSB3aGljaCB3aWxsIHRo
-ZW4gZG8gYWNjZXNzX29rKCkgb24gdGhlIGVudGlyZQ0KPiA+IHJhbmdlIGFuZCBzbyByZXR1cm4g
-LUVGQVVMVC4NCj4gPg0KPiA+IFRoZSBvbmx5IHByb2JsZW1zIGFyaXNlIGlmIHRoZSBrZXJuZWwg
-Y29kZSBhZGRzIGFuIG9mZnNldCB0byB0aGUNCj4gPiB1c2VyIGFkZHJlc3MuDQo+ID4gQW5kIHRo
-ZSBsYXRlciBwYXRjaCBhZGRlZCBhbiBvZmZzZXQgdG8gdGhlIGNvcHkgZnVuY3Rpb25zLg0KPiAN
-Cj4gSSBkdW5ubywgSSBkZWZpbml0ZWx5IGdvdCB0aGUgZm9sbG93aW5nIHN5emJvdCBjcmFzaA0K
-PiANCj4gTm8gcmVwcm8gZm91bmQgYnkgc3l6Ym90IHlldCwgYnV0IEkgc3VzcGVjdCBhIDMyYml0
-IGJpbmFyeSBwcm9ncmFtDQo+IGRpZCA6DQo+IA0KPiBzZXRzb2Nrb3B0KGZkLCAweDI5LCAweDI0
-LCAweGZmZmZmZmZmZmZmZmZmZmYsIDB4MCkNCg0KQSBmZXcgdG9vIG1hbnkgZmZzLi4uDQoNCj4g
-QlVHOiBLQVNBTjogd2lsZC1tZW1vcnktYWNjZXNzIGluIG1lbWNweSBpbmNsdWRlL2xpbnV4L3N0
-cmluZy5oOjQwNiBbaW5saW5lXQ0KPiBCVUc6IEtBU0FOOiB3aWxkLW1lbW9yeS1hY2Nlc3MgaW4g
-Y29weV9mcm9tX3NvY2twdHJfb2Zmc2V0IGluY2x1ZGUvbGludXgvc29ja3B0ci5oOjcxIFtpbmxp
-bmVdDQo+IEJVRzogS0FTQU46IHdpbGQtbWVtb3J5LWFjY2VzcyBpbiBjb3B5X2Zyb21fc29ja3B0
-ciBpbmNsdWRlL2xpbnV4L3NvY2twdHIuaDo3NyBbaW5saW5lXQ0KPiBCVUc6IEtBU0FOOiB3aWxk
-LW1lbW9yeS1hY2Nlc3MgaW4gZG9fcmF3djZfc2V0c29ja29wdCBuZXQvaXB2Ni9yYXcuYzoxMDIz
-IFtpbmxpbmVdDQo+IEJVRzogS0FTQU46IHdpbGQtbWVtb3J5LWFjY2VzcyBpbiByYXd2Nl9zZXRz
-b2Nrb3B0KzB4MWExLzB4NmYwIG5ldC9pcHY2L3Jhdy5jOjEwODQNCj4gUmVhZCBvZiBzaXplIDQg
-YXQgYWRkciAwMDAwMDAwMGZmZmZmZmZmIGJ5IHRhc2sgc3l6LWV4ZWN1dG9yLjAvMjgyNTENCg0K
-WWVwLCB0aGUgY29kZSBpcyBuZWFybHksIGJ1dCBub3QgcXVpdGUgcmlnaHQuDQpUaGUgcHJvYmxl
-bSBpcyBhbG1vc3QgY2VydGFpbmx5IHRoYXQgYWNjZXNzX29rKHgsIDApIGFsd2F5cyByZXR1cm5z
-IHN1Y2Nlc3MuDQoNCkluIGFueSBjYXNlIHRoZSBjaGVjayBmb3IgYSB2YWxpZCB1c2VyIGFkZHJl
-c3Mgb3VnaHQgdG8gYmUgZXhhY3RseQ0KdGhlIHNhbWUgb25lIHRoYXQgbGF0ZXIgc2VsZWN0cyBi
-ZXR3ZWVuIGNvcHlfdG8vZnJvbV91c2VyKCkgYW5kIG1lbWNweSgpLg0KDQpUaGUgbGF0dGVyIGNv
-bXBhcmVzIHRoZSBhZGRyZXNzIGFnYWluc3QgJ1RBU0tfU0laRScuDQpIb3dldmVyIHRoYXQgaXNu
-J3QgdGhlIHJpZ2h0IHZhbHVlIGVpdGhlciAtIEkgdGhpbmsgaXQgcmVhZHMNCnRoZSB2YWx1ZSBm
-cm9tICdjdXJyZW50JyB0aGF0IHNldF9mcygpIHNldHMuDQpXaGF0IHRoaXMgY29kZSBuZWVkcyBp
-cyBhbnkgYWRkcmVzcyB0aGF0IGlzIGFib3ZlIHRoZSBoaWdoZXN0DQp1c2VyIGFkZHJlc3MgYW5k
-IGJlbG93IChvciBlcXVhbCB0bykgdG8gbG93ZXN0IGtlcm5lbCBvbmUuDQoNCk9uIGkzODYgKGFu
-ZCBwcm9iYWJseSBtb3N0IDMyYml0IGxpbnV4KSB0aGlzIGlzIDB4YzAwMDAwMDAuDQpPbiB4ODYt
-NjQgdGhpcyBjb3VsZCBiZSBhbnkgYWRkcmVzcyBpbiB0aGUgYWRkcmVzcyAnYmxhY2sgaG9sZScu
-DQpQaWNraW5nIDF1bGw8PDYzIG1heSBiZSBiZXN0Lg0KUXVpdGUgd2hhdCB0aGUgY29ycmVjdCAj
-ZGVmaW5lIGlzIHJlcXVpcmVzIGZ1cnRoZXIgcmVzZWFyY2guDQoNClRoZXJlIGlzIGFjdHVhbGx5
-IHNjb3BlIGZvciBtYWtpbmcgaW5pdF91c2VyX3NvY2twdHIoa2Vybl9hZGRyZXNzKQ0Kc2F2ZSBh
-IHZhbHVlIHRoYXQgd2lsbCBjYXVzZSBjb3B5X3RvL2Zyb21fc29ja3B0cigpIGdvIGludG8NCnRo
-ZSB1c2VyLWNvcHkgcGF0aCB3aXRoIGFuIGFkZHJlc3MgdGhhdCBhY2Nlc3Nfb2soKSB3aWxsIHJl
-amVjdC4NClRoZW4gdGhlIC1FRkFVTFQgd2lsbCBnZXQgZ2VuZXJhdGVkIGluIHRoZSAnZXhwZWN0
-ZWQnIHBsYWNlDQphbmQgdGhlcmUgaXMgbm8gc2NvcGUgZm9yIGZhaWxpbmcgdG8gdGVzdCBpdCdz
-IHJldHVybiB2YWx1ZS4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lk
-ZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0K
-UmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+Hello,
 
+syzbot found the following issue on:
+
+HEAD commit:    fffe3ae0 Merge tag 'for-linus-hmm' of git://git.kernel.org..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12f34d3a900000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=50463ec6729f9706
+dashboard link: https://syzkaller.appspot.com/bug?extid=8f2165a7b1f2820feffc
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1517701c900000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11b7e0e2900000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8f2165a7b1f2820feffc@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xdffffc000000004c: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000260-0x0000000000000267]
+CPU: 0 PID: 12765 Comm: syz-executor391 Not tainted 5.8.0-syzkaller #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
+RIP: 0010:sctp_ulpevent_notify_peer_addr_change+0xa9/0xad0 net/sctp/ulpevent.c:346
+Code: 03 80 3c 18 00 0f 85 9f 08 00 00 48 8b 9d b0 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d bb 60 02 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e 3a 08 00 00 44 8b a3 60 02 00
+RSP: 0018:ffffc90000d27380 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 000000000000004c RSI: ffffffff875c9422 RDI: 0000000000000260
+RBP: ffff8880235da158 R08: 0000000000000001 R09: ffff8880234cdd48
+R10: fffffbfff155f111 R11: 0000000000000000 R12: 0000000000000001
+R13: 1ffff920001a4e76 R14: 0000000000000004 R15: 0000000000000000
+FS:  00007fdd571b7700(0000) GS:ffff88802ce00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffff600400 CR3: 000000001c9d0000 CR4: 0000000000350ef0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ sctp_assoc_set_primary+0x6c/0x300 net/sctp/associola.c:435
+ sctp_assoc_rm_peer+0x6f7/0x950 net/sctp/associola.c:508
+ sctp_assoc_update+0x588/0xfd0 net/sctp/associola.c:1116
+ sctp_cmd_assoc_update net/sctp/sm_sideeffect.c:836 [inline]
+ sctp_cmd_interpreter net/sctp/sm_sideeffect.c:1305 [inline]
+ sctp_side_effects net/sctp/sm_sideeffect.c:1185 [inline]
+ sctp_do_sm+0x27f8/0x4d80 net/sctp/sm_sideeffect.c:1156
+ sctp_assoc_bh_rcv+0x386/0x6c0 net/sctp/associola.c:1044
+ sctp_inq_push+0x1da/0x270 net/sctp/inqueue.c:80
+ sctp_backlog_rcv+0x19e/0x5c0 net/sctp/input.c:344
+ sk_backlog_rcv include/net/sock.h:1001 [inline]
+ __release_sock+0x134/0x3a0 net/core/sock.c:2550
+ release_sock+0x54/0x1b0 net/core/sock.c:3087
+ sctp_wait_for_connect+0x30f/0x540 net/sctp/socket.c:9302
+ __sctp_connect+0x96b/0xc00 net/sctp/socket.c:1247
+ __sctp_setsockopt_connectx+0x12d/0x180 net/sctp/socket.c:1343
+ sctp_setsockopt_connectx net/sctp/socket.c:1375 [inline]
+ sctp_setsockopt net/sctp/socket.c:4720 [inline]
+ sctp_setsockopt+0x1642/0x70d0 net/sctp/socket.c:4677
+ __sys_setsockopt+0x24a/0x480 net/socket.c:2127
+ __do_sys_setsockopt net/socket.c:2143 [inline]
+ __se_sys_setsockopt net/socket.c:2140 [inline]
+ __x64_sys_setsockopt+0xba/0x150 net/socket.c:2140
+ do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x43e119
+Code: e8 4c b5 02 00 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 bb d0 fc ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007fdd571b6ce8 EFLAGS: 00000246 ORIG_RAX: 0000000000000036
+RAX: ffffffffffffffda RBX: 00000000006c7c58 RCX: 000000000043e119
+RDX: 000000000000006e RSI: 0000000000000084 RDI: 0000000000000003
+RBP: 00000000006c7c50 R08: 0000000000000020 R09: 0000000000000000
+R10: 0000000020000000 R11: 0000000000000246 R12: 00000000006c7c5c
+R13: 00007ffdb7fcef0f R14: 00007fdd57197000 R15: 0000000000000003
+Modules linked in:
+---[ end trace 49c057cb66761ca9 ]---
+RIP: 0010:sctp_ulpevent_notify_peer_addr_change+0xa9/0xad0 net/sctp/ulpevent.c:346
+Code: 03 80 3c 18 00 0f 85 9f 08 00 00 48 8b 9d b0 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d bb 60 02 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e 3a 08 00 00 44 8b a3 60 02 00
+RSP: 0018:ffffc90000d27380 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 000000000000004c RSI: ffffffff875c9422 RDI: 0000000000000260
+RBP: ffff8880235da158 R08: 0000000000000001 R09: ffff8880234cdd48
+R10: fffffbfff155f111 R11: 0000000000000000 R12: 0000000000000001
+R13: 1ffff920001a4e76 R14: 0000000000000004 R15: 0000000000000000
+FS:  00007fdd571b7700(0000) GS:ffff88802cf00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffff600400 CR3: 000000001c9d0000 CR4: 0000000000350ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
