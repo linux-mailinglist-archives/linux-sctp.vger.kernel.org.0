@@ -2,139 +2,176 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04CB32409FD
-	for <lists+linux-sctp@lfdr.de>; Mon, 10 Aug 2020 17:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 814F1240D01
+	for <lists+linux-sctp@lfdr.de>; Mon, 10 Aug 2020 20:31:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728528AbgHJPhj (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 10 Aug 2020 11:37:39 -0400
-Received: from mail-il1-f198.google.com ([209.85.166.198]:37975 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728749AbgHJPhT (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 10 Aug 2020 11:37:19 -0400
-Received: by mail-il1-f198.google.com with SMTP id t79so8156474ild.5
-        for <linux-sctp@vger.kernel.org>; Mon, 10 Aug 2020 08:37:19 -0700 (PDT)
+        id S1728206AbgHJSbB (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 10 Aug 2020 14:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35934 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728180AbgHJSbB (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 10 Aug 2020 14:31:01 -0400
+Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4048CC061756;
+        Mon, 10 Aug 2020 11:31:01 -0700 (PDT)
+Received: by mail-qk1-x743.google.com with SMTP id 77so9304620qkm.5;
+        Mon, 10 Aug 2020 11:31:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=flrY2lJlHhxpTaFKprp88SIz0K8XOJ8MpibhcDVgMos=;
+        b=hh4u/0+tiKEnxWRGibP8MASE3vehVJ61dqWOnOyQ01RrS5hlCmha/L7jNVyOmp+9l4
+         Br90ey2/FQBhPfwfm17tKm/MvT0x3M9qXYX7ZudC5IrgeaYCvQM8ZB00MHduyvriF1A2
+         LxF8RFLB1U2TMVU9oIW3+VelASg+PmJ5cjigRZvHMMAGUEOsM9BuwiOTH10MKnmzH3cG
+         ZhRKKiE9ZpeJ/UtvnBgo6ahJoeCl6UNTItEuVFyIrkV22ureBL8un+SCnkqgibw1m+c4
+         zozQcziQ8LwbGj2Hmms1dF/lGlafM1RMXpD62ovxB+EKME/NUGk7ef1670NqsakYGoR7
+         jPbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=mwA0VxfKC9y1ldI67xR8GxayzqreYluyj2U7Ecr/ZxE=;
-        b=TnRu9sKeamKWgJIU1c1DyN1us0Ipx8WxAglJDilgzVHl7p6SJbEWtyyTizpP3JfOE6
-         Q6kHEOuSjAfknaIUIhL2mdst2z5UFaW3gam8F3WnojrMz9yVPd29E8sUAYewjjqmMfmS
-         mm8she3WG22uATuhbUWzIfxD5soJR0fDML98SQgQy72Kppt8k3ZxUXUOFJAQVuhr82Xa
-         hT6+/EFx9aY8uWWUo2bqbIhN7bUVOsr/OD2XiRpy6cPy5sEs8brIScx7VI3sv6zwVkT0
-         8l39sQZ9Gn+OA9NKH8N1UjQBjQuJqCuRGENd7JrXPHyan8NscvgW8CsrD9oh/9aw07ye
-         HGhg==
-X-Gm-Message-State: AOAM533qU1Zj8npvyo8BPjvVrR7mgBKv1IfaR46PNIQ/mhgqbrdbeNwH
-        avOb6lIs6f8lcq21KfQ85IJxlxOXpAAHACuSvma32U5a6cbE
-X-Google-Smtp-Source: ABdhPJyE6YD/UF3JeesR4M8V3eeWNcRlU/BoaOUyj//sfBL8naXLYfJwRAQYZPJ4ploP62y5lKzHhSKJlVBTW63XgXdgQE1ZrUxF
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=flrY2lJlHhxpTaFKprp88SIz0K8XOJ8MpibhcDVgMos=;
+        b=tTeHMjOMNhIq5l4RX1DWCXOyBgFmmhR4r28axOvUcMfsDW69K9DQSfA3nXNsDPhSl7
+         u0j6FGPuklgYOkQ1bbiB1iyzdm1WRgX+SmnlKyl5JVskiTxEIMq80e/1xA7UFqtEjyWD
+         Fk/mE0WDWuvDdnytOsusN2TIwnX1OCc+Gu+iorYV0nhxUg/KtDGLJ8fUqDEqm+aOxF6P
+         cLXHlCFW0tqsKtPDu7ap386KJ6Z+Ml+KbpHXSOralGTboJWZq/4YZ5M5nzq85kMIhVeA
+         ps9EIJ8TSdDJdBHY74I7z5++S6/8E91Y3sWO7vkWDpGVzW4XXCQKZkv8niSp747npe+a
+         BSdw==
+X-Gm-Message-State: AOAM530vJ369TDu1TTuagjXXKE12FN+TUFYCZ275iBUtFSH4QwuRwwE/
+        FG/4A1N7MHTDw7qvW5x47GFGTIn64BA=
+X-Google-Smtp-Source: ABdhPJzWytMFeIsB0IUABIS95TP0e1YbR2VTsanORtht4XLUmeH3thmwCOq6RFq1v0gmwNYlsp+3Dg==
+X-Received: by 2002:a37:27cc:: with SMTP id n195mr26713576qkn.403.1597084260306;
+        Mon, 10 Aug 2020 11:31:00 -0700 (PDT)
+Received: from localhost.localdomain ([2001:1284:f016:5401:5840:1a7c:e646:9161])
+        by smtp.gmail.com with ESMTPSA id o25sm14122837qkm.42.2020.08.10.11.30.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Aug 2020 11:30:59 -0700 (PDT)
+Received: by localhost.localdomain (Postfix, from userid 1000)
+        id 219ABC1D68; Mon, 10 Aug 2020 15:30:57 -0300 (-03)
+Date:   Mon, 10 Aug 2020 15:30:57 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     syzbot <syzbot+8f2165a7b1f2820feffc@syzkaller.appspotmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        nhorman@tuxdriver.com, syzkaller-bugs@googlegroups.com,
+        vyasevich@gmail.com, lucien.xin@gmail.com, jonas.falkevik@gmail.com
+Subject: Re: general protection fault in sctp_ulpevent_notify_peer_addr_change
+Message-ID: <20200810183057.GF3399@localhost.localdomain>
+References: <000000000000d4adc705ac87ba8e@google.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:4403:: with SMTP id r3mr17862137ila.17.1597073838611;
- Mon, 10 Aug 2020 08:37:18 -0700 (PDT)
-Date:   Mon, 10 Aug 2020 08:37:18 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d4adc705ac87ba8e@google.com>
-Subject: general protection fault in sctp_ulpevent_notify_peer_addr_change
-From:   syzbot <syzbot+8f2165a7b1f2820feffc@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-sctp@vger.kernel.org, marcelo.leitner@gmail.com,
-        netdev@vger.kernel.org, nhorman@tuxdriver.com,
-        syzkaller-bugs@googlegroups.com, vyasevich@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000d4adc705ac87ba8e@google.com>
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello,
+On Mon, Aug 10, 2020 at 08:37:18AM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    fffe3ae0 Merge tag 'for-linus-hmm' of git://git.kernel.org..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=12f34d3a900000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=50463ec6729f9706
+> dashboard link: https://syzkaller.appspot.com/bug?extid=8f2165a7b1f2820feffc
+> compiler:       gcc (GCC) 10.1.0-syz 20200507
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1517701c900000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11b7e0e2900000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+8f2165a7b1f2820feffc@syzkaller.appspotmail.com
+> 
+> general protection fault, probably for non-canonical address 0xdffffc000000004c: 0000 [#1] PREEMPT SMP KASAN
+> KASAN: null-ptr-deref in range [0x0000000000000260-0x0000000000000267]
+> CPU: 0 PID: 12765 Comm: syz-executor391 Not tainted 5.8.0-syzkaller #0
+> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
+> RIP: 0010:sctp_ulpevent_notify_peer_addr_change+0xa9/0xad0 net/sctp/ulpevent.c:346
 
-syzbot found the following issue on:
+Crashed in code added by 45ebf73ebcec ("sctp: check assoc before
+SCTP_ADDR_{MADE_PRIM, ADDED} event"), but it would have crashed a
+couple of instructions later on already anyway.
 
-HEAD commit:    fffe3ae0 Merge tag 'for-linus-hmm' of git://git.kernel.org..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=12f34d3a900000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=50463ec6729f9706
-dashboard link: https://syzkaller.appspot.com/bug?extid=8f2165a7b1f2820feffc
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1517701c900000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11b7e0e2900000
+I can't reproduce this crash, with the same commit and kernel config.
+I'm not seeing how transport->asoc can be null at there.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8f2165a7b1f2820feffc@syzkaller.appspotmail.com
+While trying to reproduce this, when I aborted a test, I actually
+triggerred:
 
-general protection fault, probably for non-canonical address 0xdffffc000000004c: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000260-0x0000000000000267]
-CPU: 0 PID: 12765 Comm: syz-executor391 Not tainted 5.8.0-syzkaller #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
-RIP: 0010:sctp_ulpevent_notify_peer_addr_change+0xa9/0xad0 net/sctp/ulpevent.c:346
-Code: 03 80 3c 18 00 0f 85 9f 08 00 00 48 8b 9d b0 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d bb 60 02 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e 3a 08 00 00 44 8b a3 60 02 00
-RSP: 0018:ffffc90000d27380 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 000000000000004c RSI: ffffffff875c9422 RDI: 0000000000000260
-RBP: ffff8880235da158 R08: 0000000000000001 R09: ffff8880234cdd48
-R10: fffffbfff155f111 R11: 0000000000000000 R12: 0000000000000001
-R13: 1ffff920001a4e76 R14: 0000000000000004 R15: 0000000000000000
-FS:  00007fdd571b7700(0000) GS:ffff88802ce00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffff600400 CR3: 000000001c9d0000 CR4: 0000000000350ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- sctp_assoc_set_primary+0x6c/0x300 net/sctp/associola.c:435
- sctp_assoc_rm_peer+0x6f7/0x950 net/sctp/associola.c:508
- sctp_assoc_update+0x588/0xfd0 net/sctp/associola.c:1116
- sctp_cmd_assoc_update net/sctp/sm_sideeffect.c:836 [inline]
- sctp_cmd_interpreter net/sctp/sm_sideeffect.c:1305 [inline]
- sctp_side_effects net/sctp/sm_sideeffect.c:1185 [inline]
- sctp_do_sm+0x27f8/0x4d80 net/sctp/sm_sideeffect.c:1156
- sctp_assoc_bh_rcv+0x386/0x6c0 net/sctp/associola.c:1044
- sctp_inq_push+0x1da/0x270 net/sctp/inqueue.c:80
- sctp_backlog_rcv+0x19e/0x5c0 net/sctp/input.c:344
- sk_backlog_rcv include/net/sock.h:1001 [inline]
- __release_sock+0x134/0x3a0 net/core/sock.c:2550
- release_sock+0x54/0x1b0 net/core/sock.c:3087
- sctp_wait_for_connect+0x30f/0x540 net/sctp/socket.c:9302
- __sctp_connect+0x96b/0xc00 net/sctp/socket.c:1247
- __sctp_setsockopt_connectx+0x12d/0x180 net/sctp/socket.c:1343
- sctp_setsockopt_connectx net/sctp/socket.c:1375 [inline]
- sctp_setsockopt net/sctp/socket.c:4720 [inline]
- sctp_setsockopt+0x1642/0x70d0 net/sctp/socket.c:4677
- __sys_setsockopt+0x24a/0x480 net/socket.c:2127
- __do_sys_setsockopt net/socket.c:2143 [inline]
- __se_sys_setsockopt net/socket.c:2140 [inline]
- __x64_sys_setsockopt+0xba/0x150 net/socket.c:2140
- do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x43e119
-Code: e8 4c b5 02 00 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 bb d0 fc ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007fdd571b6ce8 EFLAGS: 00000246 ORIG_RAX: 0000000000000036
-RAX: ffffffffffffffda RBX: 00000000006c7c58 RCX: 000000000043e119
-RDX: 000000000000006e RSI: 0000000000000084 RDI: 0000000000000003
-RBP: 00000000006c7c50 R08: 0000000000000020 R09: 0000000000000000
-R10: 0000000020000000 R11: 0000000000000246 R12: 00000000006c7c5c
-R13: 00007ffdb7fcef0f R14: 00007fdd57197000 R15: 0000000000000003
-Modules linked in:
----[ end trace 49c057cb66761ca9 ]---
-RIP: 0010:sctp_ulpevent_notify_peer_addr_change+0xa9/0xad0 net/sctp/ulpevent.c:346
-Code: 03 80 3c 18 00 0f 85 9f 08 00 00 48 8b 9d b0 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d bb 60 02 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e 3a 08 00 00 44 8b a3 60 02 00
-RSP: 0018:ffffc90000d27380 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 000000000000004c RSI: ffffffff875c9422 RDI: 0000000000000260
-RBP: ffff8880235da158 R08: 0000000000000001 R09: ffff8880234cdd48
-R10: fffffbfff155f111 R11: 0000000000000000 R12: 0000000000000001
-R13: 1ffff920001a4e76 R14: 0000000000000004 R15: 0000000000000000
-FS:  00007fdd571b7700(0000) GS:ffff88802cf00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffff600400 CR3: 000000001c9d0000 CR4: 0000000000350ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+[ 1527.736212][ T8008] team0 (unregistering): Port device team_slave_1 removed
+[ 1527.896902][ T8008] team0 (unregistering): Port device team_slave_0 removed
+[ 1528.053936][ T8008] bond0 (unregistering): (slave bond_slave_1): Releasing backup interface
+[ 1528.445113][ T8008] bond0 (unregistering): (slave bond_slave_0): Releasing backup interface
+[ 1528.915669][ T8008] bond0 (unregistering): Released all slaves
+[ 1530.531179][ T8008] ------------[ cut here ]------------
+[ 1530.666414][ T8008] ODEBUG: free active (active state 0) object type: timer_list hint: delayed_work_timer_fn+0x0/0x90
+[ 1530.913574][ T8008] WARNING: CPU: 11 PID: 8008 at lib/debugobjects.c:485 debug_print_object+0x160/0x250
+[ 1531.165944][ T8008] Kernel panic - not syncing: panic_on_warn set ...
+[ 1531.291997][ T8008] CPU: 11 PID: 8008 Comm: kworker/u48:8 Not tainted 5.8.0+ #6
+[ 1531.554397][ T8008] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-2.fc32 04/01/2014
+[ 1531.842844][ T8008] Workqueue: netns cleanup_net
+[ 1531.983054][ T8008] Call Trace:
+[ 1532.122433][ T8008]  dump_stack+0x18f/0x20d
+[ 1532.257582][ T8008]  panic+0x2e3/0x75c
+[ 1532.385158][ T8008]  ? __warn_printk+0xf3/0xf3
+[ 1532.520152][ T8008]  ? console_unlock+0x7f0/0xf30
+[ 1532.643891][ T8008]  ? __warn.cold+0x5/0x45
+[ 1532.763171][ T8008]  ? __warn+0xd6/0x1f2
+[ 1532.884107][ T8008]  ? debug_print_object+0x160/0x250
+[ 1533.011290][ T8008]  __warn.cold+0x20/0x45
+[ 1533.132625][ T8008]  ? wake_up_klogd.part.0+0x8c/0xc0
+[ 1533.248423][ T8008]  ? debug_print_object+0x160/0x250
+[ 1533.370165][ T8008]  report_bug+0x1bd/0x210
+[ 1533.492858][ T8008]  handle_bug+0x38/0x90
+[ 1533.614108][ T8008]  exc_invalid_op+0x14/0x40
+[ 1533.730968][ T8008]  asm_exc_invalid_op+0x12/0x20
+[ 1533.851289][ T8008] RIP: 0010:debug_print_object+0x160/0x250
+[ 1533.964027][ T8008] Code: dd 40 b8 93 88 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 bf 00 00 00 48 8b 14 dd 40 b8 93 88 48 c7 c7 a0 ad 93 88 e8 02 66 a9 fd <0f> 0b 83 05 73 9f 13 07 01 48 83 c4 20 5b 5d 41 5c 41 5d c3 48 89
+[ 1534.313398][ T8008] RSP: 0018:ffffc90000e378a8 EFLAGS: 00010086
+[ 1534.432053][ T8008] RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
+[ 1534.677101][ T8008] RDX: ffff8881331a2300 RSI: ffffffff815d8e17 RDI: fffff520001c6f07
+[ 1534.930977][ T8008] RBP: 0000000000000001 R08: 0000000000000001 R09: ffff888142fa0fcb
+[ 1535.180403][ T8008] R10: 0000000000000000 R11: 0000000000008026 R12: ffffffff89bce120
+[ 1535.424399][ T8008] R13: ffffffff81636500 R14: dead000000000100 R15: dffffc0000000000
+[ 1535.678140][ T8008]  ? calc_wheel_index+0x3f0/0x3f0
+[ 1535.808026][ T8008]  ? vprintk_func+0x97/0x1a6
+[ 1535.939928][ T8008]  ? debug_print_object+0x160/0x250
+[ 1536.072538][ T8008]  debug_check_no_obj_freed+0x301/0x41c
+[ 1536.203742][ T8008]  ? dev_attr_show+0x90/0x90
+[ 1536.343659][ T8008]  kfree+0xf0/0x2c0
+[ 1536.484984][ T8008]  ? dev_attr_show+0x90/0x90
+[ 1536.620853][ T8008]  kvfree+0x42/0x50
+[ 1536.752990][ T8008]  ? netdev_class_remove_file_ns+0x30/0x30
+[ 1536.886457][ T8008]  device_release+0x71/0x200
+[ 1537.015419][ T8008]  ? dev_attr_show+0x90/0x90
+[ 1537.142315][ T8008]  kobject_put+0x171/0x270
+[ 1537.269426][ T8008]  netdev_run_todo+0x765/0xac0
+[ 1537.402993][ T8008]  ? dev_xdp_uninstall+0x3f0/0x3f0
+[ 1537.542007][ T8008]  ? default_device_exit_batch+0x3d0/0x3d0
+[ 1537.679397][ T8008]  ? unregister_netdevice_many+0x50/0x50
+[ 1537.811168][ T8008]  ? sysfs_remove_group+0xc2/0x170
+[ 1537.941789][ T8008]  default_device_exit_batch+0x316/0x3d0
+[ 1538.075268][ T8008]  ? unregister_netdev+0x20/0x20
+[ 1538.209131][ T8008]  ? __init_waitqueue_head+0x110/0x110
+[ 1538.340541][ T8008]  ? cfg802154_switch_netns+0x440/0x440
+[ 1538.468571][ T8008]  ? unregister_netdev+0x20/0x20
+[ 1538.574138][ T8008]  ? dev_change_net_namespace+0x1200/0x1200
+[ 1538.676756][ T8008]  ops_exit_list+0x10d/0x160
+[ 1538.778236][ T8008]  cleanup_net+0x4ea/0xa00
+[ 1538.877412][ T8008]  ? ops_free_list.part.0+0x3d0/0x3d0
+[ 1538.977271][ T8008]  ? lock_is_held_type+0xbb/0xf0
+[ 1539.069114][ T8008]  process_one_work+0x94c/0x1670
+[ 1539.165257][ T8008]  ? lock_release+0x8e0/0x8e0
+[ 1539.257102][ T8008]  ? pwq_dec_nr_in_flight+0x2d0/0x2d0
+[ 1539.343961][ T8008]  ? rwlock_bug.part.0+0x90/0x90
+[ 1539.433524][ T8008]  worker_thread+0x64c/0x1120
+[ 1539.521045][ T8008]  ? process_one_work+0x1670/0x1670
+[ 1539.610356][ T8008]  kthread+0x3b5/0x4a0
+[ 1539.698844][ T8008]  ? __kthread_bind_mask+0xc0/0xc0
+[ 1539.788834][ T8008]  ? __kthread_bind_mask+0xc0/0xc0
+[ 1539.871367][ T8008]  ret_from_fork+0x1f/0x30
+[ 1539.959633][ T8008] Kernel Offset: disabled
+[ 1540.038379][ T8008] Rebooting in 86400 seconds..
