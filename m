@@ -2,37 +2,35 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 352DB2449DE
-	for <lists+linux-sctp@lfdr.de>; Fri, 14 Aug 2020 14:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1AC7244A88
+	for <lists+linux-sctp@lfdr.de>; Fri, 14 Aug 2020 15:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726609AbgHNMlS (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 14 Aug 2020 08:41:18 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:49824 "EHLO
+        id S1728659AbgHNNgj (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 14 Aug 2020 09:36:39 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:24150 "EHLO
         eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726320AbgHNMlS (ORCPT
+        by vger.kernel.org with ESMTP id S1728650AbgHNNgi (ORCPT
         <rfc822;linux-sctp@vger.kernel.org>);
-        Fri, 14 Aug 2020 08:41:18 -0400
+        Fri, 14 Aug 2020 09:36:38 -0400
 Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
  TLS) by relay.mimecast.com with ESMTP id
- uk-mta-198-7PowwcmaMKaF6qjUJpCB3w-1; Fri, 14 Aug 2020 13:41:14 +0100
-X-MC-Unique: 7PowwcmaMKaF6qjUJpCB3w-1
+ uk-mta-28-rZh65QU-OKmx5mJW_6SZ7w-1; Fri, 14 Aug 2020 14:36:34 +0100
+X-MC-Unique: rZh65QU-OKmx5mJW_6SZ7w-1
 Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
  AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Fri, 14 Aug 2020 13:41:13 +0100
+ Server (TLS) id 15.0.1347.2; Fri, 14 Aug 2020 14:36:34 +0100
 Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
  AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Fri, 14 Aug 2020 13:41:13 +0100
+ Fri, 14 Aug 2020 14:36:34 +0100
 From:   David Laight <David.Laight@ACULAB.COM>
-To:     David Laight <David.Laight@ACULAB.COM>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>
+To:     "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        Neil Horman <nhorman@tuxdriver.com>
 CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: RE: num_ostreams and max_instreams negotiation
-Thread-Topic: num_ostreams and max_instreams negotiation
-Thread-Index: AdZyJ9ADjH3a7lNFS5SQSVqLsdlEogAD2k3Q
-Date:   Fri, 14 Aug 2020 12:41:13 +0000
-Message-ID: <c23f677ce8e14764815c83c70c6a1577@AcuMS.aculab.com>
-References: <0b4319e4b2cf4ee68fc2b0183536aa7a@AcuMS.aculab.com>
-In-Reply-To: <0b4319e4b2cf4ee68fc2b0183536aa7a@AcuMS.aculab.com>
+Subject: RE: sctp: num_ostreams and max_instreams negotiation
+Thread-Topic: sctp: num_ostreams and max_instreams negotiation
+Thread-Index: AdZyPjABix+HSvLeTmG2b9Vg1HRq1A==
+Date:   Fri, 14 Aug 2020 13:36:34 +0000
+Message-ID: <9a1bfa6085854387bf98b6171c879b37@AcuMS.aculab.com>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -42,7 +40,7 @@ x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
 Authentication-Results: relay.mimecast.com;
         auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0.001
+X-Mimecast-Spam-Score: 1.001
 X-Mimecast-Originator: aculab.com
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: base64
@@ -51,20 +49,25 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-PiBBdCBzb21lIHBvaW50IHRoZSBuZWdvdGlhdGlvbiBvZiB0aGUgbnVtYmVyIG9mIFNDVFAgc3Ry
-ZWFtcw0KPiBzZWVtcyB0byBoYXZlIGdvdCBicm9rZW4uDQo+IEkndmUgZGVmaW5pdGVseSB0ZXN0
-ZWQgaXQgaW4gdGhlIHBhc3QgKHByb2JhYmx5IDEwIHllYXJzIGFnbyEpDQo+IGJ1dCBvbiBhIDUu
-OC4wIGtlcm5lbCBnZXRzb2Nrb3B0KFNDVFBfSU5GTykgc2VlbXMgdG8gYmUNCj4gcmV0dXJuaW5n
-IHRoZSAnbnVtX29zdHJlYW1zJyBzZXQgYnkgc2V0c29ja29wdChTQ1RQX0lOSVQpDQo+IHJhdGhl
-ciB0aGFuIHRoZSBzbWFsbGVyIG9mIHRoYXQgdmFsdWUgYW5kIHRoYXQgY29uZmlndXJlZA0KPiBh
-dCB0aGUgb3RoZXIgZW5kIG9mIHRoZSBjb25uZWN0aW9uLg0KPiANCj4gSSdsbCBkbyBhIGJpdCBv
-ZiBkaWdnaW5nLg0KDQpJIGNhbid0IGZpbmQgdGhlIGNvZGUgdGhhdCBwcm9jZXNzZXMgdGhlIGlu
-aXRfYWNrLg0KQnV0IHdoZW4gc2N0cF9wcm9jc3NfaW50KCkgc2F2ZXMgdGhlIHNtYWxsZXIgdmFs
-dWUNCmluIGFzb2MtPmMuc2luaW50X21heF9vc3RyZWFtcy4NCg0KQnV0IGFmZTg5OTk2MmVlMDc5
-IChpZiBJJ3ZlIHR5cGVkIGl0IHJpZ2h0KSBjaGFuZ2VkDQp0aGUgdmFsdWVzIFNDVFBfSU5GTyBy
-ZXBvcnRlZC4NCkFwcGFyYW50bHkgYWRkaW5nICdzY3RwIHJlY29uZmlnJyBoYWQgY2hhbmdlZCB0
-aGluZ3MuDQoNClNvIEkgc3VzcGVjdCB0aGlzIGhhcyBhbGwgYmVlbiBicm9rZW4gZm9yIG92ZXIg
-MyB5ZWFycy4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJh
-bWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0
-cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+PiA+IEF0IHNvbWUgcG9pbnQgdGhlIG5lZ290aWF0aW9uIG9mIHRoZSBudW1iZXIgb2YgU0NUUCBz
+dHJlYW1zDQo+ID4gc2VlbXMgdG8gaGF2ZSBnb3QgYnJva2VuLg0KPiA+IEkndmUgZGVmaW5pdGVs
+eSB0ZXN0ZWQgaXQgaW4gdGhlIHBhc3QgKHByb2JhYmx5IDEwIHllYXJzIGFnbyEpDQo+ID4gYnV0
+IG9uIGEgNS44LjAga2VybmVsIGdldHNvY2tvcHQoU0NUUF9JTkZPKSBzZWVtcyB0byBiZQ0KPiA+
+IHJldHVybmluZyB0aGUgJ251bV9vc3RyZWFtcycgc2V0IGJ5IHNldHNvY2tvcHQoU0NUUF9JTklU
+KQ0KPiA+IHJhdGhlciB0aGFuIHRoZSBzbWFsbGVyIG9mIHRoYXQgdmFsdWUgYW5kIHRoYXQgY29u
+ZmlndXJlZA0KPiA+IGF0IHRoZSBvdGhlciBlbmQgb2YgdGhlIGNvbm5lY3Rpb24uDQo+ID4NCj4g
+PiBJJ2xsIGRvIGEgYml0IG9mIGRpZ2dpbmcuDQo+IA0KPiBJIGNhbid0IGZpbmQgdGhlIGNvZGUg
+dGhhdCBwcm9jZXNzZXMgdGhlIGluaXRfYWNrLg0KPiBCdXQgd2hlbiBzY3RwX3Byb2Nzc19pbnQo
+KSBzYXZlcyB0aGUgc21hbGxlciB2YWx1ZQ0KPiBpbiBhc29jLT5jLnNpbmludF9tYXhfb3N0cmVh
+bXMuDQo+IA0KPiBCdXQgYWZlODk5OTYyZWUwNzkgKGlmIEkndmUgdHlwZWQgaXQgcmlnaHQpIGNo
+YW5nZWQNCj4gdGhlIHZhbHVlcyBTQ1RQX0lORk8gcmVwb3J0ZWQuDQo+IEFwcGFyYW50bHkgYWRk
+aW5nICdzY3RwIHJlY29uZmlnJyBoYWQgY2hhbmdlZCB0aGluZ3MuDQo+IA0KPiBTbyBJIHN1c3Bl
+Y3QgdGhpcyBoYXMgYWxsIGJlZW4gYnJva2VuIGZvciBvdmVyIDMgeWVhcnMuDQoNCkl0IGxvb2tz
+IGxpa2UgdGhlIGNoYW5nZXMgdGhhdCBicm9rZSBpdCB3ZW50IGludG8gNC4xMS4NCkkndmUganVz
+dCBjaGVja2VkIGEgMy44IGtlcm5lbCBhbmQgdGhhdCBuZWdvdGlhdGVzIHRoZQ0KdmFsdWVzIGRv
+d24gaW4gYm90aCBkaXJlY3Rpb25zLg0KDQpJIGRvbid0IGhhdmUgYW55IGtlcm5lbHMgbHVya2lu
+ZyBiZXR3ZWVuIDMuOCBhbmQgNC4xNS4NCihZZXMsIEkgY291bGQgYnVpbGQgb25lLCBidXQgaXQg
+ZG9lc24ndCByZWFsbHkgaGVscC4pDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3Mg
+TGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQ
+VCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
