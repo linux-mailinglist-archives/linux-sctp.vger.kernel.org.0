@@ -2,35 +2,39 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1AC7244A88
-	for <lists+linux-sctp@lfdr.de>; Fri, 14 Aug 2020 15:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3143244C89
+	for <lists+linux-sctp@lfdr.de>; Fri, 14 Aug 2020 18:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728659AbgHNNgj (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 14 Aug 2020 09:36:39 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:24150 "EHLO
+        id S1728244AbgHNQSK (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 14 Aug 2020 12:18:10 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:20044 "EHLO
         eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728650AbgHNNgi (ORCPT
+        by vger.kernel.org with ESMTP id S1728238AbgHNQSK (ORCPT
         <rfc822;linux-sctp@vger.kernel.org>);
-        Fri, 14 Aug 2020 09:36:38 -0400
+        Fri, 14 Aug 2020 12:18:10 -0400
 Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
  TLS) by relay.mimecast.com with ESMTP id
- uk-mta-28-rZh65QU-OKmx5mJW_6SZ7w-1; Fri, 14 Aug 2020 14:36:34 +0100
-X-MC-Unique: rZh65QU-OKmx5mJW_6SZ7w-1
+ uk-mta-58-GBcrWMuKP5mavZ544X16Wg-1; Fri, 14 Aug 2020 17:18:05 +0100
+X-MC-Unique: GBcrWMuKP5mavZ544X16Wg-1
 Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
  AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Fri, 14 Aug 2020 14:36:34 +0100
+ Server (TLS) id 15.0.1347.2; Fri, 14 Aug 2020 17:18:05 +0100
 Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
  AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Fri, 14 Aug 2020 14:36:34 +0100
+ Fri, 14 Aug 2020 17:18:05 +0100
 From:   David Laight <David.Laight@ACULAB.COM>
-To:     "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        Neil Horman <nhorman@tuxdriver.com>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+To:     "'linux-sctp@vger.kernel.org'" <linux-sctp@vger.kernel.org>,
+        'Neil Horman' <nhorman@tuxdriver.com>,
+        "'kent.overstreet@gmail.com'" <kent.overstreet@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     "'netdev@vger.kernel.org'" <netdev@vger.kernel.org>
 Subject: RE: sctp: num_ostreams and max_instreams negotiation
 Thread-Topic: sctp: num_ostreams and max_instreams negotiation
-Thread-Index: AdZyPjABix+HSvLeTmG2b9Vg1HRq1A==
-Date:   Fri, 14 Aug 2020 13:36:34 +0000
-Message-ID: <9a1bfa6085854387bf98b6171c879b37@AcuMS.aculab.com>
+Thread-Index: AdZyPjABix+HSvLeTmG2b9Vg1HRq1AAFgglg
+Date:   Fri, 14 Aug 2020 16:18:05 +0000
+Message-ID: <868bd24b536345e6a5596f856a0ebe90@AcuMS.aculab.com>
+References: <9a1bfa6085854387bf98b6171c879b37@AcuMS.aculab.com>
+In-Reply-To: <9a1bfa6085854387bf98b6171c879b37@AcuMS.aculab.com>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -40,7 +44,7 @@ x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
 Authentication-Results: relay.mimecast.com;
         auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 1.001
+X-Mimecast-Spam-Score: 0.002
 X-Mimecast-Originator: aculab.com
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: base64
@@ -49,25 +53,44 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-PiA+IEF0IHNvbWUgcG9pbnQgdGhlIG5lZ290aWF0aW9uIG9mIHRoZSBudW1iZXIgb2YgU0NUUCBz
-dHJlYW1zDQo+ID4gc2VlbXMgdG8gaGF2ZSBnb3QgYnJva2VuLg0KPiA+IEkndmUgZGVmaW5pdGVs
-eSB0ZXN0ZWQgaXQgaW4gdGhlIHBhc3QgKHByb2JhYmx5IDEwIHllYXJzIGFnbyEpDQo+ID4gYnV0
-IG9uIGEgNS44LjAga2VybmVsIGdldHNvY2tvcHQoU0NUUF9JTkZPKSBzZWVtcyB0byBiZQ0KPiA+
-IHJldHVybmluZyB0aGUgJ251bV9vc3RyZWFtcycgc2V0IGJ5IHNldHNvY2tvcHQoU0NUUF9JTklU
-KQ0KPiA+IHJhdGhlciB0aGFuIHRoZSBzbWFsbGVyIG9mIHRoYXQgdmFsdWUgYW5kIHRoYXQgY29u
-ZmlndXJlZA0KPiA+IGF0IHRoZSBvdGhlciBlbmQgb2YgdGhlIGNvbm5lY3Rpb24uDQo+ID4NCj4g
-PiBJJ2xsIGRvIGEgYml0IG9mIGRpZ2dpbmcuDQo+IA0KPiBJIGNhbid0IGZpbmQgdGhlIGNvZGUg
-dGhhdCBwcm9jZXNzZXMgdGhlIGluaXRfYWNrLg0KPiBCdXQgd2hlbiBzY3RwX3Byb2Nzc19pbnQo
-KSBzYXZlcyB0aGUgc21hbGxlciB2YWx1ZQ0KPiBpbiBhc29jLT5jLnNpbmludF9tYXhfb3N0cmVh
-bXMuDQo+IA0KPiBCdXQgYWZlODk5OTYyZWUwNzkgKGlmIEkndmUgdHlwZWQgaXQgcmlnaHQpIGNo
-YW5nZWQNCj4gdGhlIHZhbHVlcyBTQ1RQX0lORk8gcmVwb3J0ZWQuDQo+IEFwcGFyYW50bHkgYWRk
-aW5nICdzY3RwIHJlY29uZmlnJyBoYWQgY2hhbmdlZCB0aGluZ3MuDQo+IA0KPiBTbyBJIHN1c3Bl
-Y3QgdGhpcyBoYXMgYWxsIGJlZW4gYnJva2VuIGZvciBvdmVyIDMgeWVhcnMuDQoNCkl0IGxvb2tz
-IGxpa2UgdGhlIGNoYW5nZXMgdGhhdCBicm9rZSBpdCB3ZW50IGludG8gNC4xMS4NCkkndmUganVz
-dCBjaGVja2VkIGEgMy44IGtlcm5lbCBhbmQgdGhhdCBuZWdvdGlhdGVzIHRoZQ0KdmFsdWVzIGRv
-d24gaW4gYm90aCBkaXJlY3Rpb25zLg0KDQpJIGRvbid0IGhhdmUgYW55IGtlcm5lbHMgbHVya2lu
-ZyBiZXR3ZWVuIDMuOCBhbmQgNC4xNS4NCihZZXMsIEkgY291bGQgYnVpbGQgb25lLCBidXQgaXQg
-ZG9lc24ndCByZWFsbHkgaGVscC4pDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3Mg
-TGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQ
-VCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+PiA+ID4gQXQgc29tZSBwb2ludCB0aGUgbmVnb3RpYXRpb24gb2YgdGhlIG51bWJlciBvZiBTQ1RQ
+IHN0cmVhbXMNCj4gPiA+IHNlZW1zIHRvIGhhdmUgZ290IGJyb2tlbi4NCj4gPiA+IEkndmUgZGVm
+aW5pdGVseSB0ZXN0ZWQgaXQgaW4gdGhlIHBhc3QgKHByb2JhYmx5IDEwIHllYXJzIGFnbyEpDQo+
+ID4gPiBidXQgb24gYSA1LjguMCBrZXJuZWwgZ2V0c29ja29wdChTQ1RQX0lORk8pIHNlZW1zIHRv
+IGJlDQo+ID4gPiByZXR1cm5pbmcgdGhlICdudW1fb3N0cmVhbXMnIHNldCBieSBzZXRzb2Nrb3B0
+KFNDVFBfSU5JVCkNCj4gPiA+IHJhdGhlciB0aGFuIHRoZSBzbWFsbGVyIG9mIHRoYXQgdmFsdWUg
+YW5kIHRoYXQgY29uZmlndXJlZA0KPiA+ID4gYXQgdGhlIG90aGVyIGVuZCBvZiB0aGUgY29ubmVj
+dGlvbi4NCj4gPiA+DQo+ID4gPiBJJ2xsIGRvIGEgYml0IG9mIGRpZ2dpbmcuDQo+ID4NCj4gPiBJ
+IGNhbid0IGZpbmQgdGhlIGNvZGUgdGhhdCBwcm9jZXNzZXMgdGhlIGluaXRfYWNrLg0KPiA+IEJ1
+dCB3aGVuIHNjdHBfcHJvY3NzX2ludCgpIHNhdmVzIHRoZSBzbWFsbGVyIHZhbHVlDQo+ID4gaW4g
+YXNvYy0+Yy5zaW5pbnRfbWF4X29zdHJlYW1zLg0KPiA+DQo+ID4gQnV0IGFmZTg5OTk2MmVlMDc5
+IChpZiBJJ3ZlIHR5cGVkIGl0IHJpZ2h0KSBjaGFuZ2VkDQo+ID4gdGhlIHZhbHVlcyBTQ1RQX0lO
+Rk8gcmVwb3J0ZWQuDQo+ID4gQXBwYXJhbnRseSBhZGRpbmcgJ3NjdHAgcmVjb25maWcnIGhhZCBj
+aGFuZ2VkIHRoaW5ncy4NCj4gPg0KPiA+IFNvIEkgc3VzcGVjdCB0aGlzIGhhcyBhbGwgYmVlbiBi
+cm9rZW4gZm9yIG92ZXIgMyB5ZWFycy4NCj4gDQo+IEl0IGxvb2tzIGxpa2UgdGhlIGNoYW5nZXMg
+dGhhdCBicm9rZSBpdCB3ZW50IGludG8gNC4xMS4NCj4gSSd2ZSBqdXN0IGNoZWNrZWQgYSAzLjgg
+a2VybmVsIGFuZCB0aGF0IG5lZ290aWF0ZXMgdGhlDQo+IHZhbHVlcyBkb3duIGluIGJvdGggZGly
+ZWN0aW9ucy4NCj4gDQo+IEkgZG9uJ3QgaGF2ZSBhbnkga2VybmVscyBsdXJraW5nIGJldHdlZW4g
+My44IGFuZCA0LjE1Lg0KPiAoWWVzLCBJIGNvdWxkIGJ1aWxkIG9uZSwgYnV0IGl0IGRvZXNuJ3Qg
+cmVhbGx5IGhlbHAuKQ0KDQpPaywgYnVnIGxvY2F0ZWQgLSBwcmV0dHkgb2J2aW91cyByZWFsbHku
+DQpuZXQvc2N0cC9zdHJlYW0uIGhhcyB0aGUgZm9sbG93aW5nIGNvZGU6DQoNCnN0YXRpYyBpbnQg
+c2N0cF9zdHJlYW1fYWxsb2Nfb3V0KHN0cnVjdCBzY3RwX3N0cmVhbSAqc3RyZWFtLCBfX3UxNiBv
+dXRjbnQsDQoJCQkJIGdmcF90IGdmcCkNCnsNCglpbnQgcmV0Ow0KDQoJaWYgKG91dGNudCA8PSBz
+dHJlYW0tPm91dGNudCkNCgkJcmV0dXJuIDA7DQoNCglyZXQgPSBnZW5yYWRpeF9wcmVhbGxvYygm
+c3RyZWFtLT5vdXQsIG91dGNudCwgZ2ZwKTsNCglpZiAocmV0KQ0KCQlyZXR1cm4gcmV0Ow0KDQoJ
+c3RyZWFtLT5vdXRjbnQgPSBvdXRjbnQ7DQoJcmV0dXJuIDA7DQp9DQoNCnNjdHBfc3RyZWFtX2Fs
+bG9jX2luKCkgaXMgdGhlIHNhbWUuDQoNClRoaXMgaXMgY2FsbGVkIHRvIHJlZHVjZSB0aGUgbnVt
+YmVyIG9mIHN0cmVhbXMuDQpCdXQgaW4gdGhhdCBjYXNlIGl0IGRvZXMgbm90aGluZyBhdCBhbGwu
+DQoNCldoaWNoIG1lYW5zIHRoYXQgdGhlICdjb252ZXJ0IHRvIGdlbnJhZGl4JyBjaGFuZ2UgYnJv
+a2UgaXQuDQpUYWcgMjA3NWU1MGNhZjVlYS4NCg0KSSBkb24ndCBrbm93IHdoYXQgJ2dlbnJhZGl4
+JyBhcnJheXMgb3IgdGhlIGVhcmxpZXIgJ2ZsZXhfYXJyYXknDQphY3R1YWxseSBsb29rIGxpa2Uu
+DQpCdXQgaWYgJ2dlbnJhZGl4JyBpcyBzb21lIGtpbmQgb2YgcmFkaXgtdHJlZSBpdCBpcyBwcm9i
+YWJseSB0aGUNCndyb25nIGJlYXN0IGZvciBTQ1RQIHN0cmVhbXMuDQpMb3RzIG9mIGNvZGUgbG9v
+cHMgdGhyb3VnaCBhbGwgb2YgdGhlbS4NCg0KVGhpcyBkb2VzIG1lYW4gdGhhdCBpdCBoYXMgb25s
+eSBiZWVuIGJyb2tlbiBzaW5jZSB0aGUgNS4xDQptZXJnZSB3aW5kb3cuDQoNCldoaWxlIGp1c3Qg
+YXNzaWduaW5nIHRvIHN0cmVhbS0+b3V0Y250IHdoZW4gdGhlIHZhbHVlDQppcyByZWR1Y2VkIHdp
+bGwgZml4IHRoZSBuZWdvdGlhdGlvbiwgSSd2ZSBubyBpZGVhDQp3aGF0IHNpZGUtZWZmZWN0cyB0
+aGF0IGhhcy4NCg0KCURhdmlkDQoNCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBM
+YWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBU
+LCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
