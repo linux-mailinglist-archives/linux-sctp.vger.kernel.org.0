@@ -2,114 +2,96 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B9D245305
-	for <lists+linux-sctp@lfdr.de>; Sat, 15 Aug 2020 23:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27131245813
+	for <lists+linux-sctp@lfdr.de>; Sun, 16 Aug 2020 16:31:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729473AbgHOV51 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sat, 15 Aug 2020 17:57:27 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:50677 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728965AbgHOVwF (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>);
-        Sat, 15 Aug 2020 17:52:05 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-268-OMTNH1z9M3WH3llN6ul8QQ-1; Sat, 15 Aug 2020 15:49:32 +0100
-X-MC-Unique: OMTNH1z9M3WH3llN6ul8QQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Sat, 15 Aug 2020 15:49:31 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Sat, 15 Aug 2020 15:49:31 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'linux-sctp@vger.kernel.org'" <linux-sctp@vger.kernel.org>,
-        'Neil Horman' <nhorman@tuxdriver.com>,
-        "'kent.overstreet@gmail.com'" <kent.overstreet@gmail.com>,
-        'Andrew Morton' <akpm@linux-foundation.org>
-CC:     "'netdev@vger.kernel.org'" <netdev@vger.kernel.org>
-Subject: RE: sctp: num_ostreams and max_instreams negotiation
-Thread-Topic: sctp: num_ostreams and max_instreams negotiation
-Thread-Index: AdZyPjABix+HSvLeTmG2b9Vg1HRq1AAFgglgAC9e6TA=
-Date:   Sat, 15 Aug 2020 14:49:31 +0000
-Message-ID: <0c1621e5da2e41e8905762d0208f9d40@AcuMS.aculab.com>
-References: <9a1bfa6085854387bf98b6171c879b37@AcuMS.aculab.com>
- <868bd24b536345e6a5596f856a0ebe90@AcuMS.aculab.com>
-In-Reply-To: <868bd24b536345e6a5596f856a0ebe90@AcuMS.aculab.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1728365AbgHPObq (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 16 Aug 2020 10:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729531AbgHPOaz (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sun, 16 Aug 2020 10:30:55 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26AA4C06137A
+        for <linux-sctp@vger.kernel.org>; Sun, 16 Aug 2020 07:28:38 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id p14so11270175wmg.1
+        for <linux-sctp@vger.kernel.org>; Sun, 16 Aug 2020 07:28:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Duxa+mmNF3T3C2WDKsmzowR2OzvdY892XFjTPp0RWRI=;
+        b=NAKDDu3zYGlp6/1rTFA3zLXzfLNUWElMFpld1DGXTqZ3f2C1G5vMMGgQBtzYdv61gR
+         j0gW2VjYzcAEQEK9JcrA+yGSHFEXNhE9RNkaz3uxkanP37gacJrIVytgT7/c7zGkA2Dy
+         XJB3L8ToVDoWAD9Rvm7U849RIrxncLk9xI9S/Uu5ZGT/cXsim2IUQmYeZsKFSBsv6kJT
+         3kDR9KLYjND6JPpx0YTAndrQaTelzP3558OkivI4ykhj79/nak1F6z80uX1/EQIXmTKV
+         I+kUa6Zt2XAbNuMItIuLndMdaWWyo32PYvWKoOywYCMLUV2UDlYdbpJ66arhF+MiPCa0
+         yMKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=Duxa+mmNF3T3C2WDKsmzowR2OzvdY892XFjTPp0RWRI=;
+        b=DXAdSKu898klvFq34QvsYQ4WT5Myyo5LnSVTlOch4JniKG/+hR/aaDA9QbWHVOgBQs
+         TKK9zaCdOXjWRuyFKC0XKh3riTP3Az+df+5AOVGCK8h2eYZF4ghKdj40d555J9p9/84p
+         bWfBwdvdVvJIybiJ6IkofKjBXyjD04Zz9QsK14OCW023uOS2TdtRh8fmaew6WsDx/2Lu
+         ZH4kA/J9gEbVcktQbealJneoMfKCmWzK0Zog3EEH6/mdJD6sT2O59BTu7z273Wk/4wq3
+         kcRtkQAYA8Nq++QacMDMWUcyG6JzvHx1Ic9D4Drf/Qw1983eAmTZvPz0fEP6QJkin9uR
+         8fGw==
+X-Gm-Message-State: AOAM532MlzBj7+ASMWAlVlGzYoKvwhm39IuSrLUVgLDV3nS+8FcAPAxm
+        MbRHkC42s9Mi2eb/SzdJ4j7qAE+QjZ66gpSBz85O+oG6/9Q=
+X-Google-Smtp-Source: ABdhPJydZZ8FQlFGmrB/EDLy0Z8gH5X03F6EFXypW4K1vf8iv94WhLhI3iwPKgeJEaRZZocHWED4lUmYPOBkTFPeX+4=
+X-Received: by 2002:a1c:a1c7:: with SMTP id k190mr10461870wme.1.1597588111746;
+ Sun, 16 Aug 2020 07:28:31 -0700 (PDT)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0.002
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Received: by 2002:a5d:6cd3:0:0:0:0:0 with HTTP; Sun, 16 Aug 2020 07:28:30
+ -0700 (PDT)
+Reply-To: sctnld11170@tlen.pl
+From:   "Mr. Scott Donald" <confianzayrentabilidad@gmail.com>
+Date:   Sun, 16 Aug 2020 07:28:30 -0700
+Message-ID: <CANrrfX7wwL97G=jb--8nb9jH8oRO8T90L6NGSfg1HfnzMyyHcw@mail.gmail.com>
+Subject: Hello, Please
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-RnJvbTogRGF2aWQgTGFpZ2h0DQo+IFNlbnQ6IDE0IEF1Z3VzdCAyMDIwIDE3OjE4DQo+IA0KPiA+
-ID4gPiBBdCBzb21lIHBvaW50IHRoZSBuZWdvdGlhdGlvbiBvZiB0aGUgbnVtYmVyIG9mIFNDVFAg
-c3RyZWFtcw0KPiA+ID4gPiBzZWVtcyB0byBoYXZlIGdvdCBicm9rZW4uDQo+ID4gPiA+IEkndmUg
-ZGVmaW5pdGVseSB0ZXN0ZWQgaXQgaW4gdGhlIHBhc3QgKHByb2JhYmx5IDEwIHllYXJzIGFnbyEp
-DQo+ID4gPiA+IGJ1dCBvbiBhIDUuOC4wIGtlcm5lbCBnZXRzb2Nrb3B0KFNDVFBfSU5GTykgc2Vl
-bXMgdG8gYmUNCj4gPiA+ID4gcmV0dXJuaW5nIHRoZSAnbnVtX29zdHJlYW1zJyBzZXQgYnkgc2V0
-c29ja29wdChTQ1RQX0lOSVQpDQo+ID4gPiA+IHJhdGhlciB0aGFuIHRoZSBzbWFsbGVyIG9mIHRo
-YXQgdmFsdWUgYW5kIHRoYXQgY29uZmlndXJlZA0KPiA+ID4gPiBhdCB0aGUgb3RoZXIgZW5kIG9m
-IHRoZSBjb25uZWN0aW9uLg0KPiA+ID4gPg0KPiA+ID4gPiBJJ2xsIGRvIGEgYml0IG9mIGRpZ2dp
-bmcuDQo+ID4gPg0KPiA+ID4gSSBjYW4ndCBmaW5kIHRoZSBjb2RlIHRoYXQgcHJvY2Vzc2VzIHRo
-ZSBpbml0X2Fjay4NCj4gPiA+IEJ1dCB3aGVuIHNjdHBfcHJvY3NzX2ludCgpIHNhdmVzIHRoZSBz
-bWFsbGVyIHZhbHVlDQo+ID4gPiBpbiBhc29jLT5jLnNpbmludF9tYXhfb3N0cmVhbXMuDQo+ID4g
-Pg0KPiA+ID4gQnV0IGFmZTg5OTk2MmVlMDc5IChpZiBJJ3ZlIHR5cGVkIGl0IHJpZ2h0KSBjaGFu
-Z2VkDQo+ID4gPiB0aGUgdmFsdWVzIFNDVFBfSU5GTyByZXBvcnRlZC4NCj4gPiA+IEFwcGFyYW50
-bHkgYWRkaW5nICdzY3RwIHJlY29uZmlnJyBoYWQgY2hhbmdlZCB0aGluZ3MuDQo+ID4gPg0KPiA+
-ID4gU28gSSBzdXNwZWN0IHRoaXMgaGFzIGFsbCBiZWVuIGJyb2tlbiBmb3Igb3ZlciAzIHllYXJz
-Lg0KPiA+DQo+ID4gSXQgbG9va3MgbGlrZSB0aGUgY2hhbmdlcyB0aGF0IGJyb2tlIGl0IHdlbnQg
-aW50byA0LjExLg0KPiA+IEkndmUganVzdCBjaGVja2VkIGEgMy44IGtlcm5lbCBhbmQgdGhhdCBu
-ZWdvdGlhdGVzIHRoZQ0KPiA+IHZhbHVlcyBkb3duIGluIGJvdGggZGlyZWN0aW9ucy4NCj4gPg0K
-PiA+IEkgZG9uJ3QgaGF2ZSBhbnkga2VybmVscyBsdXJraW5nIGJldHdlZW4gMy44IGFuZCA0LjE1
-Lg0KPiA+IChZZXMsIEkgY291bGQgYnVpbGQgb25lLCBidXQgaXQgZG9lc24ndCByZWFsbHkgaGVs
-cC4pDQo+IA0KPiBPaywgYnVnIGxvY2F0ZWQgLSBwcmV0dHkgb2J2aW91cyByZWFsbHkuDQo+IG5l
-dC9zY3RwL3N0cmVhbS4gaGFzIHRoZSBmb2xsb3dpbmcgY29kZToNCj4gDQo+IHN0YXRpYyBpbnQg
-c2N0cF9zdHJlYW1fYWxsb2Nfb3V0KHN0cnVjdCBzY3RwX3N0cmVhbSAqc3RyZWFtLCBfX3UxNiBv
-dXRjbnQsDQo+IAkJCQkgZ2ZwX3QgZ2ZwKQ0KPiB7DQo+IAlpbnQgcmV0Ow0KPiANCj4gCWlmIChv
-dXRjbnQgPD0gc3RyZWFtLT5vdXRjbnQpDQo+IAkJcmV0dXJuIDA7DQoNCkRlbGV0aW5nIHRoaXMg
-Y2hlY2sgaXMgc3VmZmljaWVudCB0byBmaXggdGhlIGNvZGUuDQpBbG9uZyB3aXRoIHRoZSBlcXVp
-dmFsZW50IGNoZWNrIGluIHNjdHBfc3RyZWFtLWFsbG9jX2luKCkuDQoNCg0KPiBUaGlzIGRvZXMg
-bWVhbiB0aGF0IGl0IGhhcyBvbmx5IGJlZW4gYnJva2VuIHNpbmNlIHRoZSA1LjENCj4gbWVyZ2Ug
-d2luZG93Lg0KDQpBbmQgaXMgYSBnb29kIGNhbmRpZGF0ZSBmb3IgdGhlIGJhY2stcG9ydHMuDQoN
-Cj4gCXJldCA9IGdlbnJhZGl4X3ByZWFsbG9jKCZzdHJlYW0tPm91dCwgb3V0Y250LCBnZnApOw0K
-PiAJaWYgKHJldCkNCj4gCQlyZXR1cm4gcmV0Ow0KPiANCj4gCXN0cmVhbS0+b3V0Y250ID0gb3V0
-Y250Ow0KPiAJcmV0dXJuIDA7DQo+IH0NCj4gDQo+IHNjdHBfc3RyZWFtX2FsbG9jX2luKCkgaXMg
-dGhlIHNhbWUuDQo+IA0KPiBUaGlzIGlzIGNhbGxlZCB0byByZWR1Y2UgdGhlIG51bWJlciBvZiBz
-dHJlYW1zLg0KPiBCdXQgaW4gdGhhdCBjYXNlIGl0IGRvZXMgbm90aGluZyBhdCBhbGwuDQo+IA0K
-PiBXaGljaCBtZWFucyB0aGF0IHRoZSAnY29udmVydCB0byBnZW5yYWRpeCcgY2hhbmdlIGJyb2tl
-IGl0Lg0KPiBUYWcgMjA3NWU1MGNhZjVlYS4NCj4gDQo+IEkgZG9uJ3Qga25vdyB3aGF0ICdnZW5y
-YWRpeCcgYXJyYXlzIG9yIHRoZSBlYXJsaWVyICdmbGV4X2FycmF5Jw0KPiBhY3R1YWxseSBsb29r
-IGxpa2UuDQo+IEJ1dCBpZiAnZ2VucmFkaXgnIGlzIHNvbWUga2luZCBvZiByYWRpeC10cmVlIGl0
-IGlzIHByb2JhYmx5IHRoZQ0KPiB3cm9uZyBiZWFzdCBmb3IgU0NUUCBzdHJlYW1zLg0KPiBMb3Rz
-IG9mIGNvZGUgbG9vcHMgdGhyb3VnaCBhbGwgb2YgdGhlbS4NCg0KWWVwLCBJJ20gcHJldHR5IHN1
-cmUgYSBrdm1hbGxvYygpIHdvdWxkIGJlIGJlc3QuDQoNCj4gV2hpbGUganVzdCBhc3NpZ25pbmcg
-dG8gc3RyZWFtLT5vdXRjbnQgd2hlbiB0aGUgdmFsdWUNCj4gaXMgcmVkdWNlZCB3aWxsIGZpeCB0
-aGUgbmVnb3RpYXRpb24sIEkndmUgbm8gaWRlYQ0KPiB3aGF0IHNpZGUtZWZmZWN0cyB0aGF0IGhh
-cy4NCg0KSSd2ZSBkb25lIHNvbWUgY2hlY2tzLg0KVGhlIGFycmF5cyBhcmUgYWxsb2NhdGVkIHdo
-ZW4gYW4gSU5JVCBpcyBzZW50IGFuZCBhbHNvIGJlZm9yZQ0KYSByZWNlaXZlZCBJTklUIGlzIHBy
-b2Nlc3NlZC4NClNvIGlmIG9uZSBzaWRlIChlZyB0aGUgcmVzcG9uZGVyKSBhbGxvY2F0ZXMgYSB2
-ZXJ5IGJpZyB2YWx1ZQ0KdGhlbiB0aGUgYXNzb2NpYXRlZCBtZW1vcnkgaXMgbmV2ZXIgZnJlZWQg
-d2hlbiB0aGUgdmFsdWUNCmlzIG5lZ290aWF0ZWQgZG93bi4NClRoZXJlIGlzIGEgY29tbWVudCB0
-byB0aGUgZWZmZWN0IHRoYXQgdGhpcyBpcyBkZXNpcmFibGUuDQoNCklmIG15IHF1aWNrIGNhbGN1
-bGF0aW9ucyBhcmUgY29ycmVjdCB0aGVuIGVhY2ggJ2luJyBpcyAyMCBieXRlcw0KYW5kIGVhY2gg
-J291dCcgMjQgKHdpdGggYSBsb3Qgb2YgcGFkIGJ5dGVzKS4NClNvIHRoZSBtYXggc2l6ZXMgYXJl
-IDMyMiBhbmQgMzg2IDRrIHBhZ2VzLg0KDQpJIGhhdmVuJ3QgbG9va2VkIGF0IGhvdyBtYW55IG9m
-IHRoZSAnb3V0JyBzdHJlYW1zIGdldHMgdGhlDQpleHRyYSwgc2VwYXJhdGVseSBhbGxvY2F0ZWQs
-IHN0cnVjdHVyZS4NCkkgc3VzcGVjdCB0aGUgbWVtb3J5IGZvb3RwcmludCBmb3IgYSBzaW5nbGUg
-U0NUUCBjb25uZWN0aW9uDQppcyBwb3RlbnRpYWxseSBodWdlLg0KDQoJRGF2aWQNCg0KLQ0KUmVn
-aXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRv
-biBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+--=20
+Dear Friend,
 
+I'm Mr. Scott Donald a Successful businessMan dealing with
+Exportation, I got your mail contact through search to let you know my
+intension and my Ugly Situation Am a dying Man here in Los Angeles
+California Hospital Bed in (USA), I Lost my Wife and my only Daughter
+for Covid-19 and I also have a problem in my Health and I can die
+anytime I Know,
+
+I have a project that I am about to hand over to you. and I already
+instructed the Bankia S.A. Madrid, Spain(BSA) to transfer my fund sum
+of =C2=A33,7M GBP. Equivalent to =E2=82=AC4,077,033.91 EUR, to you as to en=
+able you
+to give 50% of this fund to Charitable Home in your State and take 50%
+don't think otherwise and why would anybody send someone you barely
+know to help you deliver a message, help me do this for the happiness
+of my soul and for God to mercy me and my Family and give Us a good
+place.
+
+please, do as I said there was someone from your State that I deeply
+love so very very much and I miss her so badly I have no means to
+reach any Charitable Home there. that is why I go for a personal
+search of the Country and State and I got your mail contact through
+search to let you know my Bitterness and please, help me is getting
+Dark I ask my Doctor to help me keep you notice failure for me to
+reach you in person Your urgent Response, here is my Doctor Whats-app
+Number for urgent notice +13019692737
+
+Hope To Hear From You. I'm sending this email to you for the second
+time yet no response from you.
+
+My Regards.
+
+Mr. Scott Donald
+CEO
