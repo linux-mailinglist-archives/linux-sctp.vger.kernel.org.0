@@ -2,36 +2,35 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E352487BB
-	for <lists+linux-sctp@lfdr.de>; Tue, 18 Aug 2020 16:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7614248A03
+	for <lists+linux-sctp@lfdr.de>; Tue, 18 Aug 2020 17:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726709AbgHROhE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Tue, 18 Aug 2020 10:37:04 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:33240 "EHLO
+        id S1727056AbgHRPiO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Tue, 18 Aug 2020 11:38:14 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:27588 "EHLO
         eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726569AbgHROhD (ORCPT
+        by vger.kernel.org with ESMTP id S1726694AbgHRPiN (ORCPT
         <rfc822;linux-sctp@vger.kernel.org>);
-        Tue, 18 Aug 2020 10:37:03 -0400
+        Tue, 18 Aug 2020 11:38:13 -0400
 Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
  TLS) by relay.mimecast.com with ESMTP id
- uk-mta-92-_7XL0jprNV6MUUr_p6I3ng-1; Tue, 18 Aug 2020 15:36:59 +0100
-X-MC-Unique: _7XL0jprNV6MUUr_p6I3ng-1
+ uk-mta-46-sOLneJyYMye81YaMlQPUsg-1; Tue, 18 Aug 2020 16:38:09 +0100
+X-MC-Unique: sOLneJyYMye81YaMlQPUsg-1
 Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
  AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Tue, 18 Aug 2020 15:36:58 +0100
+ Server (TLS) id 15.0.1347.2; Tue, 18 Aug 2020 16:38:09 +0100
 Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
  AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Tue, 18 Aug 2020 15:36:58 +0100
+ Tue, 18 Aug 2020 16:38:09 +0100
 From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'netdev@vger.kernel.org'" <netdev@vger.kernel.org>,
-        "'linux-sctp@vger.kernel.org'" <linux-sctp@vger.kernel.org>
-CC:     'Marcelo Ricardo Leitner' <marcelo.leitner@gmail.com>
-Subject: [PATCH] net: sctp: Fix negotiation of the number of data streams.
-Thread-Topic: [PATCH] net: sctp: Fix negotiation of the number of data
- streams.
-Thread-Index: AdZ1bPXrgdZCqbhgQru55h+86tsQbg==
-Date:   Tue, 18 Aug 2020 14:36:58 +0000
-Message-ID: <46079a126ad542d380add5f9ba6ffa85@AcuMS.aculab.com>
+To:     "'linux-sctp@vger.kernel.org'" <linux-sctp@vger.kernel.org>,
+        "'Marcelo Ricardo Leitner'" <marcelo.leitner@gmail.com>
+CC:     "'netdev@vger.kernel.org'" <netdev@vger.kernel.org>
+Subject: Use of genradix in sctp
+Thread-Topic: Use of genradix in sctp
+Thread-Index: AdZ1ckZAY2qe63tNS/O9MsxVdvHiSA==
+Date:   Tue, 18 Aug 2020 15:38:09 +0000
+Message-ID: <2ffb7752d3e8403ebb220e0a5e2cf3cd@AcuMS.aculab.com>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -41,7 +40,7 @@ x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
 Authentication-Results: relay.mimecast.com;
         auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0.002
+X-Mimecast-Spam-Score: 0.001
 X-Mimecast-Originator: aculab.com
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8BIT
@@ -50,54 +49,42 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-The number of streams offered by the remote system was being ignored.
-Any data sent on those streams would get discarded by the remote system.
+A few years ago (for 5.1) the 'arrays' that sctp uses for
+info about data streams was changed to use the 'genradix'
+functions.
 
-Fixes 2075e50caf5ea.
+I'm not sure of the reason for the change, but I don't
+thing anyone looked at the performance implications.
 
-Signed-off-by: David Laight <david.laight@aculab.com>
----
- net/sctp/stream.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+The code contains lots of SCTP_SI(stream, i) with the
+probable expectation that the expansion is basically
+stream->foo[i] (a pointer to a big memory array).
 
-This needs backporting to 5.1 and all later kernels.
+However the genradix functions are far more complicated.
+Basically it is a list of pointers to pages, each of
+which is split into the maximum number of items.
+(With the page pointers being in a tree of pages
+for large numbers of large items.)
 
-diff --git a/net/sctp/stream.c b/net/sctp/stream.c
-index bda2536dd740..6dc95dcc0ff4 100644
---- a/net/sctp/stream.c
-+++ b/net/sctp/stream.c
-@@ -88,12 +88,13 @@ static int sctp_stream_alloc_out(struct sctp_stream *stream, __u16 outcnt,
- 	int ret;
- 
- 	if (outcnt <= stream->outcnt)
--		return 0;
-+		goto out;
- 
- 	ret = genradix_prealloc(&stream->out, outcnt, gfp);
- 	if (ret)
- 		return ret;
- 
-+out:
- 	stream->outcnt = outcnt;
- 	return 0;
- }
-@@ -104,12 +105,13 @@ static int sctp_stream_alloc_in(struct sctp_stream *stream, __u16 incnt,
- 	int ret;
- 
- 	if (incnt <= stream->incnt)
--		return 0;
-+		goto out;
- 
- 	ret = genradix_prealloc(&stream->in, incnt, gfp);
- 	if (ret)
- 		return ret;
- 
-+out:
- 	stream->incnt = incnt;
- 	return 0;
- }
--- 
-2.25.1
+So every SCTP_S[IO]() has inline code to calculate
+the byte offset:
+	idx / objs_per_page * PAGE_SIZE + idx % objs_per_page * obj_size
+(objs_per_page and obj_size are compile time constants)
+and then calls a function to do the actual lookup.
+
+This is all rather horrid when the array isn't even sparse.
+
+I also doubt it really helps if anyone is trying to allow
+a lot of streams. For 64k streams you might be trying to
+allocate ~700 pages in atomic context.
+
+For example look at the object code for sctp_stream_clear()
+(__genradix_ptr() is in lib/generic-radix-tree.c).
+
+There is only one other piece of code that uses genradix.
+All it needs is a fifo list.
+
+	David
 
 -
 Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
