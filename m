@@ -2,37 +2,39 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04435249E7C
-	for <lists+linux-sctp@lfdr.de>; Wed, 19 Aug 2020 14:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3633824A1EC
+	for <lists+linux-sctp@lfdr.de>; Wed, 19 Aug 2020 16:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728564AbgHSMqG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Wed, 19 Aug 2020 08:46:06 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:35565 "EHLO
+        id S1727072AbgHSOk5 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 19 Aug 2020 10:40:57 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:45270 "EHLO
         eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728560AbgHSMqA (ORCPT
+        by vger.kernel.org with ESMTP id S1726578AbgHSOk5 (ORCPT
         <rfc822;linux-sctp@vger.kernel.org>);
-        Wed, 19 Aug 2020 08:46:00 -0400
+        Wed, 19 Aug 2020 10:40:57 -0400
 Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
  TLS) by relay.mimecast.com with ESMTP id
- uk-mta-20-1_dRjE57NPqksr6P6Xk02Q-1; Wed, 19 Aug 2020 13:45:53 +0100
-X-MC-Unique: 1_dRjE57NPqksr6P6Xk02Q-1
+ uk-mta-125-HuSPjOQMPXi6MMV9atWoQQ-1; Wed, 19 Aug 2020 15:40:53 +0100
+X-MC-Unique: HuSPjOQMPXi6MMV9atWoQQ-1
 Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
  AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Wed, 19 Aug 2020 13:45:52 +0100
+ Server (TLS) id 15.0.1347.2; Wed, 19 Aug 2020 15:40:52 +0100
 Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
  AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Wed, 19 Aug 2020 13:45:52 +0100
+ Wed, 19 Aug 2020 15:40:52 +0100
 From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'netdev@vger.kernel.org'" <netdev@vger.kernel.org>,
+To:     David Laight <David.Laight@ACULAB.COM>,
+        "'netdev@vger.kernel.org'" <netdev@vger.kernel.org>,
         "'linux-sctp@vger.kernel.org'" <linux-sctp@vger.kernel.org>
 CC:     'Marcelo Ricardo Leitner' <marcelo.leitner@gmail.com>
-Subject: RE: [PATCH v2] net: sctp: Fix negotiation of the number of data
- streams.
+Subject: [PATCH v2] net: sctp: Fix negotiation of the number of data streams.
 Thread-Topic: [PATCH v2] net: sctp: Fix negotiation of the number of data
  streams.
-Thread-Index: AdZ2Jpt5uFDQ+GlJS8asoZmPH8fG2Q==
-Date:   Wed, 19 Aug 2020 12:45:52 +0000
-Message-ID: <3aef12f2fdbb4ee6b885719f5561a997@AcuMS.aculab.com>
+Thread-Index: AdZ2Jpt5uFDQ+GlJS8asoZmPH8fG2QAD/p2w
+Date:   Wed, 19 Aug 2020 14:40:52 +0000
+Message-ID: <1f2ffcb1180e4080aab114683b06efab@AcuMS.aculab.com>
+References: <3aef12f2fdbb4ee6b885719f5561a997@AcuMS.aculab.com>
+In-Reply-To: <3aef12f2fdbb4ee6b885719f5561a997@AcuMS.aculab.com>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -42,70 +44,39 @@ x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
 Authentication-Results: relay.mimecast.com;
         auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 1.001999
+X-Mimecast-Spam-Score: 0.002
 X-Mimecast-Originator: aculab.com
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: base64
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-The number of output and input streams was never being reduced, eg when
-processing received INIT or INIT_ACK chunks.
-The effect is that DATA chunks can be sent with invalid stream ids
-and then discarded by the remote system.
-
-Fixes: 2075e50caf5ea ("sctp: convert to genradix")
-Signed-off-by: David Laight <david.laight@aculab.com>
----
- net/sctp/stream.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-This needs backporting to 5.1 and all later kernels.
-
-Changes since v1:
-- Fix 'Fixes' tag.
-- Improve description.
-
-diff --git a/net/sctp/stream.c b/net/sctp/stream.c
-index bda2536dd740..6dc95dcc0ff4 100644
---- a/net/sctp/stream.c
-+++ b/net/sctp/stream.c
-@@ -88,12 +88,13 @@ static int sctp_stream_alloc_out(struct sctp_stream *stream, __u16 outcnt,
- 	int ret;
- 
- 	if (outcnt <= stream->outcnt)
--		return 0;
-+		goto out;
- 
- 	ret = genradix_prealloc(&stream->out, outcnt, gfp);
- 	if (ret)
- 		return ret;
- 
-+out:
- 	stream->outcnt = outcnt;
- 	return 0;
- }
-@@ -104,12 +105,13 @@ static int sctp_stream_alloc_in(struct sctp_stream *stream, __u16 incnt,
- 	int ret;
- 
- 	if (incnt <= stream->incnt)
--		return 0;
-+		goto out;
- 
- 	ret = genradix_prealloc(&stream->in, incnt, gfp);
- 	if (ret)
- 		return ret;
- 
-+out:
- 	stream->incnt = incnt;
- 	return 0;
- }
--- 
-2.25.1
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+DQpUaGUgbnVtYmVyIG9mIG91dHB1dCBhbmQgaW5wdXQgc3RyZWFtcyB3YXMgbmV2ZXIgYmVpbmcg
+cmVkdWNlZCwgZWcgd2hlbg0KcHJvY2Vzc2luZyByZWNlaXZlZCBJTklUIG9yIElOSVRfQUNLIGNo
+dW5rcy4NClRoZSBlZmZlY3QgaXMgdGhhdCBEQVRBIGNodW5rcyBjYW4gYmUgc2VudCB3aXRoIGlu
+dmFsaWQgc3RyZWFtIGlkcw0KYW5kIHRoZW4gZGlzY2FyZGVkIGJ5IHRoZSByZW1vdGUgc3lzdGVt
+Lg0KDQpGaXhlczogMjA3NWU1MGNhZjVlYSAoInNjdHA6IGNvbnZlcnQgdG8gZ2VucmFkaXgiKQ0K
+U2lnbmVkLW9mZi1ieTogRGF2aWQgTGFpZ2h0IDxkYXZpZC5sYWlnaHRAYWN1bGFiLmNvbT4NCi0t
+LQ0KIG5ldC9zY3RwL3N0cmVhbS5jIHwgNiArKysrLS0NCiAxIGZpbGUgY2hhbmdlZCwgNCBpbnNl
+cnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0KDQpUaGlzIG5lZWRzIGJhY2twb3J0aW5nIHRvIDUu
+MSBhbmQgYWxsIGxhdGVyIGtlcm5lbHMuDQoNCihSZXNlbmQgd2l0aG91dCB0aGUgUkU6KQ0KDQpD
+aGFuZ2VzIHNpbmNlIHYxOg0KLSBGaXggJ0ZpeGVzJyB0YWcuDQotIEltcHJvdmUgZGVzY3JpcHRp
+b24uDQoNCmRpZmYgLS1naXQgYS9uZXQvc2N0cC9zdHJlYW0uYyBiL25ldC9zY3RwL3N0cmVhbS5j
+DQppbmRleCBiZGEyNTM2ZGQ3NDAuLjZkYzk1ZGNjMGZmNCAxMDA2NDQNCi0tLSBhL25ldC9zY3Rw
+L3N0cmVhbS5jDQorKysgYi9uZXQvc2N0cC9zdHJlYW0uYw0KQEAgLTg4LDEyICs4OCwxMyBAQCBz
+dGF0aWMgaW50IHNjdHBfc3RyZWFtX2FsbG9jX291dChzdHJ1Y3Qgc2N0cF9zdHJlYW0gKnN0cmVh
+bSwgX191MTYgb3V0Y250LA0KIAlpbnQgcmV0Ow0KIA0KIAlpZiAob3V0Y250IDw9IHN0cmVhbS0+
+b3V0Y250KQ0KLQkJcmV0dXJuIDA7DQorCQlnb3RvIG91dDsNCiANCiAJcmV0ID0gZ2VucmFkaXhf
+cHJlYWxsb2MoJnN0cmVhbS0+b3V0LCBvdXRjbnQsIGdmcCk7DQogCWlmIChyZXQpDQogCQlyZXR1
+cm4gcmV0Ow0KIA0KK291dDoNCiAJc3RyZWFtLT5vdXRjbnQgPSBvdXRjbnQ7DQogCXJldHVybiAw
+Ow0KIH0NCkBAIC0xMDQsMTIgKzEwNSwxMyBAQCBzdGF0aWMgaW50IHNjdHBfc3RyZWFtX2FsbG9j
+X2luKHN0cnVjdCBzY3RwX3N0cmVhbSAqc3RyZWFtLCBfX3UxNiBpbmNudCwNCiAJaW50IHJldDsN
+CiANCiAJaWYgKGluY250IDw9IHN0cmVhbS0+aW5jbnQpDQotCQlyZXR1cm4gMDsNCisJCWdvdG8g
+b3V0Ow0KIA0KIAlyZXQgPSBnZW5yYWRpeF9wcmVhbGxvYygmc3RyZWFtLT5pbiwgaW5jbnQsIGdm
+cCk7DQogCWlmIChyZXQpDQogCQlyZXR1cm4gcmV0Ow0KIA0KK291dDoNCiAJc3RyZWFtLT5pbmNu
+dCA9IGluY250Ow0KIAlyZXR1cm4gMDsNCiB9DQotLSANCjIuMjUuMQ0KDQotDQpSZWdpc3RlcmVk
+IEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5l
+cywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
