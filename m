@@ -2,153 +2,84 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8506624AF6C
-	for <lists+linux-sctp@lfdr.de>; Thu, 20 Aug 2020 08:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A00CE24B87C
+	for <lists+linux-sctp@lfdr.de>; Thu, 20 Aug 2020 13:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725828AbgHTGst (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 20 Aug 2020 02:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725780AbgHTGss (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 20 Aug 2020 02:48:48 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA41C061757;
-        Wed, 19 Aug 2020 23:48:48 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id e4so559323pjd.0;
-        Wed, 19 Aug 2020 23:48:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=jm+uUDSmmx9X1srdhmuJqsAe+TT5/kJh3UlKWgVNgVw=;
-        b=HJn1uRjpGV0DhRy/Wceim0P9RIA4TesPYKX6RA6GTr6TtUBSWMRf4zuFwWLwn4anFf
-         g9AD4wbX4fYOXAb3y2KF6oB7gugTUi+UlY7zopLQXY1dz/aFPMNfyK/E6Zwf+MFCS58w
-         YHbXDecPPVi2AaBxe7aXEqvtxJVOpmp2VBuzclRYOG0NWrFIughBcKTyxfoL/G4NdYqX
-         H7WFKCisPljyaBVYQWZIpvlCSl0W5P6xSQuonxwmk2TZruEcvmLDTR6rGLiPFDk4CU5p
-         m7EffC8PtZoo7JCpm8Cju9Tu3j90FYuXziBsjJ0CVGshCcGQLpyPN4sPsyW/uM5lWfmP
-         e2YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=jm+uUDSmmx9X1srdhmuJqsAe+TT5/kJh3UlKWgVNgVw=;
-        b=RM3E3IwqgftloBqIkgQ6VGzQF71enYXkeQH1k9Cm2DfpX063ibtc3A5STCK3kJv04t
-         uMQPXPhL9UVQiuh5pwB7YcQENr1pEVlDH8JwdlE74LNFWuWniS8fcbgk2Bm6j8Oeb8i5
-         hfFsoMTkfPiRtbAMVm12sNmmNb1GUhJA3Xnw9Ew00x5Ims93zTk7cX6IzwfooTyhEOcY
-         JnWFVcLpeBCFwYMUgUjVPpEoCmiHrd66k0UMxNqNkiBGRBYBBFFoV81Dx7nFqnGbevdS
-         ZaIvUjaII/LVObW3re8DsrJ0g09eQ9NpxxMpc5BQ3/3YdCCJbMPq2QOsdAB0Pv4dlqdG
-         Y1Ew==
-X-Gm-Message-State: AOAM530bHFfEKmpLXhqbENMGbOzOjOVga8ATbebIUH6W5fSANT36TjO0
-        U9VwRBdaKlEQg5EpRONdne7CwA+Oatdtkg==
-X-Google-Smtp-Source: ABdhPJzyUsvupUEj90FwoqrcE1uxgomLzTTgJXrbMSN+Xm5wJgBh/5q7BepmiBAbbTKf5E/Sana1/Q==
-X-Received: by 2002:a17:90b:4b89:: with SMTP id lr9mr437065pjb.190.1597906127508;
-        Wed, 19 Aug 2020 23:48:47 -0700 (PDT)
-Received: from localhost ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id w7sm1454778pfi.164.2020.08.19.23.48.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 19 Aug 2020 23:48:46 -0700 (PDT)
-From:   Xin Long <lucien.xin@gmail.com>
-To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
-Cc:     davem@davemloft.net, Eric Dumazet <edumazet@google.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>
-Subject: [PATCH net] sctp: not disable bh in the whole sctp_get_port_local()
-Date:   Thu, 20 Aug 2020 14:48:39 +0800
-Message-Id: <b3da88b999373d2518ac52a9e1d0fcb935109ea8.1597906119.git.lucien.xin@gmail.com>
-X-Mailer: git-send-email 2.1.0
+        id S1729399AbgHTLWU (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 20 Aug 2020 07:22:20 -0400
+Received: from mail.sysmocom.de ([144.76.43.93]:41861 "EHLO mail.sysmocom.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730083AbgHTLU5 (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Thu, 20 Aug 2020 07:20:57 -0400
+X-Greylist: delayed 584 seconds by postgrey-1.27 at vger.kernel.org; Thu, 20 Aug 2020 07:20:53 EDT
+Received: from public-mail (mail.sysmocom.de [144.76.43.93])
+        by mail.sysmocom.de (Postfix) with ESMTP id 28DE968AF5C
+        for <linux-sctp@vger.kernel.org>; Thu, 20 Aug 2020 11:11:05 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at sysmocom.de
+Received: from mail.sysmocom.de ([144.76.43.93])
+        by public-mail (mail.sysmocom.de [144.76.43.93]) (amavisd-new, port 10024)
+        with ESMTP id MEEsOpRc4dtg for <linux-sctp@vger.kernel.org>;
+        Thu, 20 Aug 2020 11:11:02 +0000 (UTC)
+Received: from [192.168.1.130] (unknown [213.195.99.198])
+        by mail.sysmocom.de (Postfix) with ESMTPSA id A725468AF4A
+        for <linux-sctp@vger.kernel.org>; Thu, 20 Aug 2020 11:11:02 +0000 (UTC)
+To:     linux-sctp@vger.kernel.org
+From:   Pau Espin Pedrol <pespin@sysmocom.de>
+Subject: SCTP multi-homed association (::1)->(::1+127.0.0.1) attempting
+ HEARTBEAT on 127.0.0.1->127.0.0.1
+Autocrypt: addr=pespin@sysmocom.de; keydata=
+ mQENBEyY/q8BCAC5xl9nRLQTspgT1rZAvcDYJXLbXdYvJ54bqKns0wv8akF0OyWuhT+me4bV
+ LnksGhhHWKmCJgprDlt9XZ/jPUKwBX9vX48B+XxSmQ3HvFJE67HFJAtj7CIK81+BuV5YoPNJ
+ h6XiIqiv3BCrsvQg0pnP4GWlaA+DC818vk61WzekOJxx7voi7UOZIgyQ8zXkRKHygfQ+6myk
+ jqY0/v7bvAy9bg3zyYI9MgXnLJ+9e7XJ1zmtdwAoU9ks0KVcpKi2uMd+ctcRGEhUI4kPR2BO
+ WpvQwy8gAUoVXO6+T+aK/4DK+MmGbgEfiVro1tjnpIdeGkVIcic9L9peVSq0gPsEc1CXABEB
+ AAG0MVBhdSBFc3BpbiBQZWRyb2wgKHBlc3BpbikgPHBlc3Bpbi5zaGFyQGdtYWlsLmNvbT6J
+ ATgEEwECACIFAkyY/q8CGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEOpAdL3zrPYP
+ hn0H/25exWBCI7ziVDKdrosWgSsTFfgA0GhLl4nD16Bg7ou685yYqqRNyczu1Lj+50f9/aMG
+ 1yHhKOhHD/CmwviQDGejqksUnQojfBJnyfZE+jIz9RPm60PwYaukL9E8lhbWJagunGHq2+Xl
+ 6DmoFEYBDZ77jkZ/xviLTUof/9/KAK+7PldCsVJ/Z9RINBDKobXPnaISUYsf29b9Gwc0QVdW
+ nUt6tLSrMIi+8Q7qZIALuVTZIfLbK0//wX9YzTKxxm0xZKs0dyCSxwcRK3Ru3z72/diBs1jy
+ n9sPX4hKJWMNkqX1f675n9CV5yh1l1WjoUeWHLqu87a6VVTuNVTTGnD8sQK5AQ0ETJj+rwEI
+ AMMFhCM2ACj0DVFYl3npR6fbzTFgetO5nYOOh+YGD+Fjj5GZ3XxdJvv0k3fZRsFnc1CYNnuB
+ SdI21WlTrzrK8+dqOn8N83aq5y/vezha9kZU0shuA0LKFJMROCGfkSCXsmvrWiCjA7goyHOE
+ pHeOZcBq93crGgoiCMiAN0ToAb88LWtWg5IxcfdhtVdfWnzSAQVoLbdIVth7xueLRF/oRPe7
+ T/sUUjMORvHF+S0L2D9Rc7MQTApNRwUrlWPz5+gEtZDJ+WMC0QOpACofCWQ0CWBmUft0c8hh
+ Ar9JT5j4fI3DCDdM4cWNI9FTYaWwkcjlK+OajrJxTLnXt7S7n5/ihLkAEQEAAYkBHwQYAQIA
+ CQUCTJj+rwIbDAAKCRDqQHS986z2D1FeB/9stgex4eBqf7D+8a3I7UkpwaIsaeRCdJf8VAvS
+ fMB7Z+ez3UTr7IAql24/tgcTy2ofrdsiS88BCGRBM0eC2tTyH8hHWVN6wcB7DF8HXv4PhL1O
+ TKmgSm5YiEDpxzZMd2cNH0onjHg4fSJue7C6bsGGQYMre7Akaze6gMaO7qLeIhsduDPwrwwi
+ soOHxc/G4ZEdrEsV5Dopx4UJeOmmywFpVstcvB7EctQb8nk+PEV1wtUwGSp7M9gf4lCeSPle
+ XC9SENRy7pFmoRtE6o4LBFmrWSBsrwM2izP3KNtw5M56zUVpLQC0mwgjFySwKFh8ryURkBI1
+ Sqp+/hKID+0ivlyS
+Message-ID: <552de663-8aeb-ff84-a425-988da88ca5cd@sysmocom.de>
+Date:   Thu, 20 Aug 2020 13:11:02 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-With disabling bh in the whole sctp_get_port_local(), when
-snum == 0 and too many ports have been used, the do-while
-loop will take the cpu for a long time and cause cpu stuck:
+Hi all,
 
-  [ ] watchdog: BUG: soft lockup - CPU#11 stuck for 22s!
-  [ ] RIP: 0010:native_queued_spin_lock_slowpath+0x4de/0x940
-  [ ] Call Trace:
-  [ ]  _raw_spin_lock+0xc1/0xd0
-  [ ]  sctp_get_port_local+0x527/0x650 [sctp]
-  [ ]  sctp_do_bind+0x208/0x5e0 [sctp]
-  [ ]  sctp_autobind+0x165/0x1e0 [sctp]
-  [ ]  sctp_connect_new_asoc+0x355/0x480 [sctp]
-  [ ]  __sctp_connect+0x360/0xb10 [sctp]
+I just submitted the following SCTP bug in the kernel bugtracker. I
+placed it under "IPV6" category since there's no "SCTP" category
+available there. It may be worth asking whoever is in charge to add the
+category so the relevant maintainer is assigned?
 
-There's no need to disable bh in the whole function of
-sctp_get_port_local. So fix this cpu stuck by removing
-local_bh_disable() called at the beginning, and using
-spin_lock_bh() instead.
+https://bugzilla.kernel.org/show_bug.cgi?id=208969
 
-The same thing was actually done for inet_csk_get_port() in
-Commit ea8add2b1903 ("tcp/dccp: better use of ephemeral
-ports in bind()").
+PS: I'm not registered to the ML, plese keep me in CC.
 
-Thanks to Marcelo for pointing the buggy code out.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Reported-by: Ying Xu <yinxu@redhat.com>
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
----
- net/sctp/socket.c | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
-
-diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-index ec1fba1..f0f9956 100644
---- a/net/sctp/socket.c
-+++ b/net/sctp/socket.c
-@@ -8060,8 +8060,6 @@ static int sctp_get_port_local(struct sock *sk, union sctp_addr *addr)
- 
- 	pr_debug("%s: begins, snum:%d\n", __func__, snum);
- 
--	local_bh_disable();
--
- 	if (snum == 0) {
- 		/* Search for an available port. */
- 		int low, high, remaining, index;
-@@ -8079,20 +8077,20 @@ static int sctp_get_port_local(struct sock *sk, union sctp_addr *addr)
- 				continue;
- 			index = sctp_phashfn(net, rover);
- 			head = &sctp_port_hashtable[index];
--			spin_lock(&head->lock);
-+			spin_lock_bh(&head->lock);
- 			sctp_for_each_hentry(pp, &head->chain)
- 				if ((pp->port == rover) &&
- 				    net_eq(net, pp->net))
- 					goto next;
- 			break;
- 		next:
--			spin_unlock(&head->lock);
-+			spin_unlock_bh(&head->lock);
- 		} while (--remaining > 0);
- 
- 		/* Exhausted local port range during search? */
- 		ret = 1;
- 		if (remaining <= 0)
--			goto fail;
-+			return ret;
- 
- 		/* OK, here is the one we will use.  HEAD (the port
- 		 * hash table list entry) is non-NULL and we hold it's
-@@ -8107,7 +8105,7 @@ static int sctp_get_port_local(struct sock *sk, union sctp_addr *addr)
- 		 * port iterator, pp being NULL.
- 		 */
- 		head = &sctp_port_hashtable[sctp_phashfn(net, snum)];
--		spin_lock(&head->lock);
-+		spin_lock_bh(&head->lock);
- 		sctp_for_each_hentry(pp, &head->chain) {
- 			if ((pp->port == snum) && net_eq(pp->net, net))
- 				goto pp_found;
-@@ -8207,10 +8205,7 @@ static int sctp_get_port_local(struct sock *sk, union sctp_addr *addr)
- 	ret = 0;
- 
- fail_unlock:
--	spin_unlock(&head->lock);
--
--fail:
--	local_bh_enable();
-+	spin_unlock_bh(&head->lock);
- 	return ret;
- }
- 
 -- 
-2.1.0
-
+- Pau Espin Pedrol <pespin@sysmocom.de>         http://www.sysmocom.de/
+=======================================================================
+* sysmocom - systems for mobile communications GmbH
+* Alt-Moabit 93
+* 10559 Berlin, Germany
+* Sitz / Registered office: Berlin, HRB 134158 B
+* Geschaeftsfuehrer / Managing Director: Harald Welte
