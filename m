@@ -2,60 +2,68 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A00CE24B87C
-	for <lists+linux-sctp@lfdr.de>; Thu, 20 Aug 2020 13:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF0A224BDC6
+	for <lists+linux-sctp@lfdr.de>; Thu, 20 Aug 2020 15:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729399AbgHTLWU (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 20 Aug 2020 07:22:20 -0400
-Received: from mail.sysmocom.de ([144.76.43.93]:41861 "EHLO mail.sysmocom.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730083AbgHTLU5 (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 20 Aug 2020 07:20:57 -0400
-X-Greylist: delayed 584 seconds by postgrey-1.27 at vger.kernel.org; Thu, 20 Aug 2020 07:20:53 EDT
-Received: from public-mail (mail.sysmocom.de [144.76.43.93])
-        by mail.sysmocom.de (Postfix) with ESMTP id 28DE968AF5C
-        for <linux-sctp@vger.kernel.org>; Thu, 20 Aug 2020 11:11:05 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at sysmocom.de
-Received: from mail.sysmocom.de ([144.76.43.93])
-        by public-mail (mail.sysmocom.de [144.76.43.93]) (amavisd-new, port 10024)
-        with ESMTP id MEEsOpRc4dtg for <linux-sctp@vger.kernel.org>;
-        Thu, 20 Aug 2020 11:11:02 +0000 (UTC)
-Received: from [192.168.1.130] (unknown [213.195.99.198])
-        by mail.sysmocom.de (Postfix) with ESMTPSA id A725468AF4A
-        for <linux-sctp@vger.kernel.org>; Thu, 20 Aug 2020 11:11:02 +0000 (UTC)
-To:     linux-sctp@vger.kernel.org
-From:   Pau Espin Pedrol <pespin@sysmocom.de>
-Subject: SCTP multi-homed association (::1)->(::1+127.0.0.1) attempting
- HEARTBEAT on 127.0.0.1->127.0.0.1
-Autocrypt: addr=pespin@sysmocom.de; keydata=
- mQENBEyY/q8BCAC5xl9nRLQTspgT1rZAvcDYJXLbXdYvJ54bqKns0wv8akF0OyWuhT+me4bV
- LnksGhhHWKmCJgprDlt9XZ/jPUKwBX9vX48B+XxSmQ3HvFJE67HFJAtj7CIK81+BuV5YoPNJ
- h6XiIqiv3BCrsvQg0pnP4GWlaA+DC818vk61WzekOJxx7voi7UOZIgyQ8zXkRKHygfQ+6myk
- jqY0/v7bvAy9bg3zyYI9MgXnLJ+9e7XJ1zmtdwAoU9ks0KVcpKi2uMd+ctcRGEhUI4kPR2BO
- WpvQwy8gAUoVXO6+T+aK/4DK+MmGbgEfiVro1tjnpIdeGkVIcic9L9peVSq0gPsEc1CXABEB
- AAG0MVBhdSBFc3BpbiBQZWRyb2wgKHBlc3BpbikgPHBlc3Bpbi5zaGFyQGdtYWlsLmNvbT6J
- ATgEEwECACIFAkyY/q8CGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEOpAdL3zrPYP
- hn0H/25exWBCI7ziVDKdrosWgSsTFfgA0GhLl4nD16Bg7ou685yYqqRNyczu1Lj+50f9/aMG
- 1yHhKOhHD/CmwviQDGejqksUnQojfBJnyfZE+jIz9RPm60PwYaukL9E8lhbWJagunGHq2+Xl
- 6DmoFEYBDZ77jkZ/xviLTUof/9/KAK+7PldCsVJ/Z9RINBDKobXPnaISUYsf29b9Gwc0QVdW
- nUt6tLSrMIi+8Q7qZIALuVTZIfLbK0//wX9YzTKxxm0xZKs0dyCSxwcRK3Ru3z72/diBs1jy
- n9sPX4hKJWMNkqX1f675n9CV5yh1l1WjoUeWHLqu87a6VVTuNVTTGnD8sQK5AQ0ETJj+rwEI
- AMMFhCM2ACj0DVFYl3npR6fbzTFgetO5nYOOh+YGD+Fjj5GZ3XxdJvv0k3fZRsFnc1CYNnuB
- SdI21WlTrzrK8+dqOn8N83aq5y/vezha9kZU0shuA0LKFJMROCGfkSCXsmvrWiCjA7goyHOE
- pHeOZcBq93crGgoiCMiAN0ToAb88LWtWg5IxcfdhtVdfWnzSAQVoLbdIVth7xueLRF/oRPe7
- T/sUUjMORvHF+S0L2D9Rc7MQTApNRwUrlWPz5+gEtZDJ+WMC0QOpACofCWQ0CWBmUft0c8hh
- Ar9JT5j4fI3DCDdM4cWNI9FTYaWwkcjlK+OajrJxTLnXt7S7n5/ihLkAEQEAAYkBHwQYAQIA
- CQUCTJj+rwIbDAAKCRDqQHS986z2D1FeB/9stgex4eBqf7D+8a3I7UkpwaIsaeRCdJf8VAvS
- fMB7Z+ez3UTr7IAql24/tgcTy2ofrdsiS88BCGRBM0eC2tTyH8hHWVN6wcB7DF8HXv4PhL1O
- TKmgSm5YiEDpxzZMd2cNH0onjHg4fSJue7C6bsGGQYMre7Akaze6gMaO7qLeIhsduDPwrwwi
- soOHxc/G4ZEdrEsV5Dopx4UJeOmmywFpVstcvB7EctQb8nk+PEV1wtUwGSp7M9gf4lCeSPle
- XC9SENRy7pFmoRtE6o4LBFmrWSBsrwM2izP3KNtw5M56zUVpLQC0mwgjFySwKFh8ryURkBI1
- Sqp+/hKID+0ivlyS
-Message-ID: <552de663-8aeb-ff84-a425-988da88ca5cd@sysmocom.de>
-Date:   Thu, 20 Aug 2020 13:11:02 +0200
+        id S1728752AbgHTNN0 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 20 Aug 2020 09:13:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35130 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728821AbgHTNNM (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 20 Aug 2020 09:13:12 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A092C061385;
+        Thu, 20 Aug 2020 06:13:07 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id o5so1124847pgb.2;
+        Thu, 20 Aug 2020 06:13:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=y98i18O2foTJlu6H0XakJVtjdpESc2Ki2h/a3V/WzHg=;
+        b=AwjcyWB+fnfZsiELE1LughLq2XItPYPUVGJ9cIYN+lvC2lOWqbERVFNY0MkOTz1XmY
+         e6fRrH9Irc8zjH2kSFr443jAEqAhKvO0g5ARrJZWo//fFwIUjdZaGKrux7bFsGbGKi1C
+         WgjLC3nBad3EqHBaQ8xMhSzWXa1G4ltMPHuSc7xUwY+395qqk3KGpbaOqbMbcIFaV/zy
+         GqZ9txVzPkL0xlz5ZxM0zmMKRYch8GqJf0YgAlxlPYU5leVwiymW+QM/J2YwgwzqzTAq
+         +e1UMxQBflKQBDjIXF/nuBfUB/JJ5YacchBpRTuEP6U09xviEPGqfUOWILLo95oSeaIY
+         iXNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=y98i18O2foTJlu6H0XakJVtjdpESc2Ki2h/a3V/WzHg=;
+        b=McVGNrt5wQ3rbEvQUqPN7NN2Wfov8TfuwYrzMGQFkbggPzfefFOQT0Sk5Ql/mxoFYU
+         LilgL6VyjjtBmrA6MJVtFNywUTXVuukxU6mZenErP/eMMFvX2pABcZeq7eEWB2ROAVnE
+         ihJf3BhrdngYYk9FUmmHgVboZRvxPzQNXmk33nXWdqYa59BYa//jChQxGhCIeEj92gvW
+         njlK+hTNuklmShbPAQJpN7iRT7kHKy3UYKkQHZjexHoXk93oDfjGhfifXFStKRe8iVeH
+         7214fhFIm5dno6oFZjPrjrWOJ0PRM6y3uT+iCvitgSP27HpPUlSZzuZU2M1jssedK5JS
+         WFhg==
+X-Gm-Message-State: AOAM533lhj9zGDocZ7zI1C3hnvLSC/iY0qOeaAURR2zU9HsCd/IGgqH6
+        G9TKj97q/rh4L0hYxR9NRr/lqhNsymg=
+X-Google-Smtp-Source: ABdhPJz58ZOO/VQcLaiqe8bwVjSNTLTElTvKI3954cG/wMh0ryR5800ct+xVhLeNqQAu4pU5wApR/Q==
+X-Received: by 2002:a63:7a19:: with SMTP id v25mr1243261pgc.386.1597929184100;
+        Thu, 20 Aug 2020 06:13:04 -0700 (PDT)
+Received: from [192.168.86.235] (c-73-241-150-58.hsd1.ca.comcast.net. [73.241.150.58])
+        by smtp.gmail.com with ESMTPSA id x136sm2974292pfc.28.2020.08.20.06.13.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Aug 2020 06:13:03 -0700 (PDT)
+Subject: Re: [PATCH net] sctp: not disable bh in the whole
+ sctp_get_port_local()
+To:     Xin Long <lucien.xin@gmail.com>,
+        network dev <netdev@vger.kernel.org>,
+        linux-sctp@vger.kernel.org
+Cc:     davem@davemloft.net, Eric Dumazet <edumazet@google.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>
+References: <b3da88b999373d2518ac52a9e1d0fcb935109ea8.1597906119.git.lucien.xin@gmail.com>
+From:   Eric Dumazet <eric.dumazet@gmail.com>
+Message-ID: <661ff148-627d-3b1f-f450-015dafefd137@gmail.com>
+Date:   Thu, 20 Aug 2020 06:13:01 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.11.0
 MIME-Version: 1.0
+In-Reply-To: <b3da88b999373d2518ac52a9e1d0fcb935109ea8.1597906119.git.lucien.xin@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -64,22 +72,41 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hi all,
 
-I just submitted the following SCTP bug in the kernel bugtracker. I
-placed it under "IPV6" category since there's no "SCTP" category
-available there. It may be worth asking whoever is in charge to add the
-category so the relevant maintainer is assigned?
 
-https://bugzilla.kernel.org/show_bug.cgi?id=208969
+On 8/19/20 11:48 PM, Xin Long wrote:
+> With disabling bh in the whole sctp_get_port_local(), when
+> snum == 0 and too many ports have been used, the do-while
+> loop will take the cpu for a long time and cause cpu stuck:
+> 
+>   [ ] watchdog: BUG: soft lockup - CPU#11 stuck for 22s!
+>   [ ] RIP: 0010:native_queued_spin_lock_slowpath+0x4de/0x940
+>   [ ] Call Trace:
+>   [ ]  _raw_spin_lock+0xc1/0xd0
+>   [ ]  sctp_get_port_local+0x527/0x650 [sctp]
+>   [ ]  sctp_do_bind+0x208/0x5e0 [sctp]
+>   [ ]  sctp_autobind+0x165/0x1e0 [sctp]
+>   [ ]  sctp_connect_new_asoc+0x355/0x480 [sctp]
+>   [ ]  __sctp_connect+0x360/0xb10 [sctp]
+> 
+> There's no need to disable bh in the whole function of
+> sctp_get_port_local. So fix this cpu stuck by removing
+> local_bh_disable() called at the beginning, and using
+> spin_lock_bh() instead.
+> 
+> The same thing was actually done for inet_csk_get_port() in
+> Commit ea8add2b1903 ("tcp/dccp: better use of ephemeral
+> ports in bind()").
+> 
+> Thanks to Marcelo for pointing the buggy code out.
+> 
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Reported-by: Ying Xu <yinxu@redhat.com>
+> Signed-off-by: Xin Long <lucien.xin@gmail.com>
+> ---
 
-PS: I'm not registered to the ML, plese keep me in CC.
 
--- 
-- Pau Espin Pedrol <pespin@sysmocom.de>         http://www.sysmocom.de/
-=======================================================================
-* sysmocom - systems for mobile communications GmbH
-* Alt-Moabit 93
-* 10559 Berlin, Germany
-* Sitz / Registered office: Berlin, HRB 134158 B
-* Geschaeftsfuehrer / Managing Director: Harald Welte
+Any reason you chose to not use a cond_resched() then ?
+
+Clearly this function needs to yield, not only BH, but to other threads.
+
