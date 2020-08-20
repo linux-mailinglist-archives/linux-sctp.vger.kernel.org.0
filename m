@@ -2,111 +2,139 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0A224BDC6
-	for <lists+linux-sctp@lfdr.de>; Thu, 20 Aug 2020 15:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A05DA24BEA9
+	for <lists+linux-sctp@lfdr.de>; Thu, 20 Aug 2020 15:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728752AbgHTNN0 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 20 Aug 2020 09:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35130 "EHLO
+        id S1728405AbgHTN3z (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 20 Aug 2020 09:29:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728821AbgHTNNM (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 20 Aug 2020 09:13:12 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A092C061385;
-        Thu, 20 Aug 2020 06:13:07 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id o5so1124847pgb.2;
-        Thu, 20 Aug 2020 06:13:04 -0700 (PDT)
+        with ESMTP id S1729035AbgHTN3P (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 20 Aug 2020 09:29:15 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF12EC061385;
+        Thu, 20 Aug 2020 06:29:14 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id p25so1499514qkp.2;
+        Thu, 20 Aug 2020 06:29:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=y98i18O2foTJlu6H0XakJVtjdpESc2Ki2h/a3V/WzHg=;
-        b=AwjcyWB+fnfZsiELE1LughLq2XItPYPUVGJ9cIYN+lvC2lOWqbERVFNY0MkOTz1XmY
-         e6fRrH9Irc8zjH2kSFr443jAEqAhKvO0g5ARrJZWo//fFwIUjdZaGKrux7bFsGbGKi1C
-         WgjLC3nBad3EqHBaQ8xMhSzWXa1G4ltMPHuSc7xUwY+395qqk3KGpbaOqbMbcIFaV/zy
-         GqZ9txVzPkL0xlz5ZxM0zmMKRYch8GqJf0YgAlxlPYU5leVwiymW+QM/J2YwgwzqzTAq
-         +e1UMxQBflKQBDjIXF/nuBfUB/JJ5YacchBpRTuEP6U09xviEPGqfUOWILLo95oSeaIY
-         iXNg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=NJlPxByGZ4WZhAkynFej/mh+RMtilImvZkFQgBD/C0g=;
+        b=f2thofSJ+Y8TZYCpg+jRj2SZuEOKiFKTf6HceJnlrJx9y/XyqKMbo3wiqU/aszLgYU
+         IQS1xITJxKjcdaLzV3jbjPdNVitJBuqZvG+dSU65YNk+d0X8UpIStqbXp7Plszbi6Pi2
+         GHxoN6irFBO8csBfUitUhv8y/fPkoDqEnZBi8n/jRZfdJAxkhALYtCfgllRzcA3S3cPa
+         pKLC3s7UhPG2PS11+roFpN7FlG+xs6IUA9hBVPePzvTRReQ59qIrHuDHxc86S51qVAum
+         q6vpT/dak14+tGBuBP1G+XQgRm9+uYRnnAcXgJNkkmhEmNJsUrPDY2zrNG4o4xUcEnv8
+         xbkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=y98i18O2foTJlu6H0XakJVtjdpESc2Ki2h/a3V/WzHg=;
-        b=McVGNrt5wQ3rbEvQUqPN7NN2Wfov8TfuwYrzMGQFkbggPzfefFOQT0Sk5Ql/mxoFYU
-         LilgL6VyjjtBmrA6MJVtFNywUTXVuukxU6mZenErP/eMMFvX2pABcZeq7eEWB2ROAVnE
-         ihJf3BhrdngYYk9FUmmHgVboZRvxPzQNXmk33nXWdqYa59BYa//jChQxGhCIeEj92gvW
-         njlK+hTNuklmShbPAQJpN7iRT7kHKy3UYKkQHZjexHoXk93oDfjGhfifXFStKRe8iVeH
-         7214fhFIm5dno6oFZjPrjrWOJ0PRM6y3uT+iCvitgSP27HpPUlSZzuZU2M1jssedK5JS
-         WFhg==
-X-Gm-Message-State: AOAM533lhj9zGDocZ7zI1C3hnvLSC/iY0qOeaAURR2zU9HsCd/IGgqH6
-        G9TKj97q/rh4L0hYxR9NRr/lqhNsymg=
-X-Google-Smtp-Source: ABdhPJz58ZOO/VQcLaiqe8bwVjSNTLTElTvKI3954cG/wMh0ryR5800ct+xVhLeNqQAu4pU5wApR/Q==
-X-Received: by 2002:a63:7a19:: with SMTP id v25mr1243261pgc.386.1597929184100;
-        Thu, 20 Aug 2020 06:13:04 -0700 (PDT)
-Received: from [192.168.86.235] (c-73-241-150-58.hsd1.ca.comcast.net. [73.241.150.58])
-        by smtp.gmail.com with ESMTPSA id x136sm2974292pfc.28.2020.08.20.06.13.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Aug 2020 06:13:03 -0700 (PDT)
-Subject: Re: [PATCH net] sctp: not disable bh in the whole
- sctp_get_port_local()
-To:     Xin Long <lucien.xin@gmail.com>,
-        network dev <netdev@vger.kernel.org>,
-        linux-sctp@vger.kernel.org
-Cc:     davem@davemloft.net, Eric Dumazet <edumazet@google.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>
-References: <b3da88b999373d2518ac52a9e1d0fcb935109ea8.1597906119.git.lucien.xin@gmail.com>
-From:   Eric Dumazet <eric.dumazet@gmail.com>
-Message-ID: <661ff148-627d-3b1f-f450-015dafefd137@gmail.com>
-Date:   Thu, 20 Aug 2020 06:13:01 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NJlPxByGZ4WZhAkynFej/mh+RMtilImvZkFQgBD/C0g=;
+        b=pzIJXOhxR/bqZ+GkSqndd5rsR76lcHy7BuA5dzkj/w6iM0FDwHUfZXOxGRz8jiaQ8u
+         rywgHbxJQflPu2HX3PTDUZ3PtK3/kMFlZ9Q2Nx6uYJhkR4EmFmqwPy4If9qLlJu6gi0K
+         ISav50v3/F8suN3Xgy+A+m1ry4LL7m0/5Rjuvbe64DZkXQLKj6O9hzEiOmxDgBiaRHup
+         DEeqn20twKFf9FAZRVRPnUQ8I47e5PcAdI9Mkq0UHeAf7YFCvvLaQVe4l6nFLat2CcED
+         xeAIoWrCNsYAIo6hvRz0Nz6D/raXPkluMlxJ+l6rg4TF9YD2ySNIJARJvzael4x7af1C
+         fqpQ==
+X-Gm-Message-State: AOAM531cAH1df0cTEfAvhJa3gcvmFBmthvo0rwD6ZUDQKeHh+rw6c5cx
+        4XP1FrnsDr4ZH6UixS20EgbCEZ8tqq33zw==
+X-Google-Smtp-Source: ABdhPJwr9emjU2mlyMIMr5MuZzuOuHkouQmBGDscZorqaDtkl6i1EEJvAM6AhjdGpTxZn7319aoVHA==
+X-Received: by 2002:a05:620a:1285:: with SMTP id w5mr2528506qki.21.1597930153758;
+        Thu, 20 Aug 2020 06:29:13 -0700 (PDT)
+Received: from localhost.localdomain ([2001:1284:f016:8002:1323:e13e:9d76:7bc8])
+        by smtp.gmail.com with ESMTPSA id g11sm2077970qke.128.2020.08.20.06.29.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Aug 2020 06:29:12 -0700 (PDT)
+Received: by localhost.localdomain (Postfix, from userid 1000)
+        id A8A27C35FC; Thu, 20 Aug 2020 10:29:10 -0300 (-03)
+Date:   Thu, 20 Aug 2020 10:29:10 -0300
+From:   'Marcelo Ricardo Leitner' <marcelo.leitner@gmail.com>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     "'netdev@vger.kernel.org'" <netdev@vger.kernel.org>,
+        "'linux-sctp@vger.kernel.org'" <linux-sctp@vger.kernel.org>
+Subject: Re: [PATCH v2] net: sctp: Fix negotiation of the number of data
+ streams.
+Message-ID: <20200820132910.GK3399@localhost.localdomain>
+References: <3aef12f2fdbb4ee6b885719f5561a997@AcuMS.aculab.com>
+ <1f2ffcb1180e4080aab114683b06efab@AcuMS.aculab.com>
 MIME-Version: 1.0
-In-Reply-To: <b3da88b999373d2518ac52a9e1d0fcb935109ea8.1597906119.git.lucien.xin@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1f2ffcb1180e4080aab114683b06efab@AcuMS.aculab.com>
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-
-
-On 8/19/20 11:48 PM, Xin Long wrote:
-> With disabling bh in the whole sctp_get_port_local(), when
-> snum == 0 and too many ports have been used, the do-while
-> loop will take the cpu for a long time and cause cpu stuck:
+On Wed, Aug 19, 2020 at 02:40:52PM +0000, David Laight wrote:
 > 
->   [ ] watchdog: BUG: soft lockup - CPU#11 stuck for 22s!
->   [ ] RIP: 0010:native_queued_spin_lock_slowpath+0x4de/0x940
->   [ ] Call Trace:
->   [ ]  _raw_spin_lock+0xc1/0xd0
->   [ ]  sctp_get_port_local+0x527/0x650 [sctp]
->   [ ]  sctp_do_bind+0x208/0x5e0 [sctp]
->   [ ]  sctp_autobind+0x165/0x1e0 [sctp]
->   [ ]  sctp_connect_new_asoc+0x355/0x480 [sctp]
->   [ ]  __sctp_connect+0x360/0xb10 [sctp]
+> The number of output and input streams was never being reduced, eg when
+> processing received INIT or INIT_ACK chunks.
+> The effect is that DATA chunks can be sent with invalid stream ids
+> and then discarded by the remote system.
 > 
-> There's no need to disable bh in the whole function of
-> sctp_get_port_local. So fix this cpu stuck by removing
-> local_bh_disable() called at the beginning, and using
-> spin_lock_bh() instead.
-> 
-> The same thing was actually done for inet_csk_get_port() in
-> Commit ea8add2b1903 ("tcp/dccp: better use of ephemeral
-> ports in bind()").
-> 
-> Thanks to Marcelo for pointing the buggy code out.
-> 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Reported-by: Ying Xu <yinxu@redhat.com>
-> Signed-off-by: Xin Long <lucien.xin@gmail.com>
+> Fixes: 2075e50caf5ea ("sctp: convert to genradix")
+> Signed-off-by: David Laight <david.laight@aculab.com>
 > ---
+>  net/sctp/stream.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> This needs backporting to 5.1 and all later kernels.
+> 
+> (Resend without the RE:)
+> 
+> Changes since v1:
+> - Fix 'Fixes' tag.
+> - Improve description.
+>
 
+"[PATCH net v2] ..."
+        ^^^-- the tree tag I had mentioned :-)
 
-Any reason you chose to not use a cond_resched() then ?
+Anyhow, the rest looks fine.
+Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 
-Clearly this function needs to yield, not only BH, but to other threads.
+Thanks David.
 
+> diff --git a/net/sctp/stream.c b/net/sctp/stream.c
+> index bda2536dd740..6dc95dcc0ff4 100644
+> --- a/net/sctp/stream.c
+> +++ b/net/sctp/stream.c
+> @@ -88,12 +88,13 @@ static int sctp_stream_alloc_out(struct sctp_stream *stream, __u16 outcnt,
+>  	int ret;
+>  
+>  	if (outcnt <= stream->outcnt)
+> -		return 0;
+> +		goto out;
+>  
+>  	ret = genradix_prealloc(&stream->out, outcnt, gfp);
+>  	if (ret)
+>  		return ret;
+>  
+> +out:
+>  	stream->outcnt = outcnt;
+>  	return 0;
+>  }
+> @@ -104,12 +105,13 @@ static int sctp_stream_alloc_in(struct sctp_stream *stream, __u16 incnt,
+>  	int ret;
+>  
+>  	if (incnt <= stream->incnt)
+> -		return 0;
+> +		goto out;
+>  
+>  	ret = genradix_prealloc(&stream->in, incnt, gfp);
+>  	if (ret)
+>  		return ret;
+>  
+> +out:
+>  	stream->incnt = incnt;
+>  	return 0;
+>  }
+> -- 
+> 2.25.1
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
