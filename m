@@ -2,108 +2,79 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3F9624CE51
-	for <lists+linux-sctp@lfdr.de>; Fri, 21 Aug 2020 08:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 632A524CFB2
+	for <lists+linux-sctp@lfdr.de>; Fri, 21 Aug 2020 09:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726765AbgHUG5Z (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 21 Aug 2020 02:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58434 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726138AbgHUG5X (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 21 Aug 2020 02:57:23 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3022C061385;
-        Thu, 20 Aug 2020 23:57:22 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id p14so797506wmg.1;
-        Thu, 20 Aug 2020 23:57:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WQbGwBfdWXsvcQzcjVztT8AVf5cOUGQA7jlczn2Olyw=;
-        b=gV+R8BU8PO3KdU3PmAaMIIpnWeNYAkmMzFZNyREALN972DhMEaN7RtCzbS6ULbYid1
-         v0lPAUEjJdDp8mkBkquU/1OZbxWP6vP7uAS7hvTAJNBGcEzXBkaP0eOrxbknXUipZbyG
-         dtp4GvDql2IMTmPstK5HTt7sAWQrWQRMeSJIYi9uSkDP2YqAH3vWTLCuR0hRrtRTbctO
-         NCXnsqdGLtS6mR3BfMcvDBbHMIhuJ4GfefD7h3ymNoFNQg5pBE5/IL7Bv0JqLYk/k47W
-         Z5kYpL0yiMjEIVfMdAENIaGimqzMNL0oBze5/1PUnRMywtEy6k4c/9KUZRWWpDfjmbmE
-         jhSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WQbGwBfdWXsvcQzcjVztT8AVf5cOUGQA7jlczn2Olyw=;
-        b=DQhr8AnqnjCX8A60/LfaCpya8faF8pM5gR1Mrp20bcMoACsjcrVUMmNjvZSTxLYlNI
-         xfEkTkhnc5BgYni4GdFLfZIVHDnIHGD//kc/eHyajPTncEakkd+gtn+DFKXU99pykV99
-         tuh6VWXziQ7Qhz23Ks8OrMNyWNEHtRhXtW7HDGdFxKsf6VJ3aUrbrOYrVzwqOEfbd9wg
-         xnHNjASJGj4p0di/t8cZMdkVwy2wSR4VHSruou13XFiS7HTHqSJz+RueOjc3B21senJE
-         s7ggrHGOUxFNE39wuJzwvXlD/fpxcYBvbQMGWN96EwPW2HzSLazEuGqA48pvH+aWWDli
-         9K0Q==
-X-Gm-Message-State: AOAM530F3nX9TWj76PLHBO2vN/iSb+AQfE1pHDT2+NGD0f6vACZE9+t2
-        NVEHOOe5KxYMGY8W6/IbgNDPB3gpwJH/Pp0fmy0=
-X-Google-Smtp-Source: ABdhPJz/ANNy9QL95DCXGYJycO1D2lszuBpJUNDWhaUd3aS014D4OEHzKuvf9BMw+7Jvj+tsbr//61LpHADxejCOWSY=
-X-Received: by 2002:a1c:e302:: with SMTP id a2mr2298185wmh.110.1597993041374;
- Thu, 20 Aug 2020 23:57:21 -0700 (PDT)
+        id S1728018AbgHUHlf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Fri, 21 Aug 2020 03:41:35 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:49590 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728024AbgHUHlF (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Fri, 21 Aug 2020 03:41:05 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mtapsc-8-fn6uvl5FOH6NC0zfgMsnLQ-1; Fri, 21 Aug 2020 08:41:00 +0100
+X-MC-Unique: fn6uvl5FOH6NC0zfgMsnLQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Fri, 21 Aug 2020 08:41:00 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Fri, 21 Aug 2020 08:41:00 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'David Miller' <davem@davemloft.net>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        "marcelo.leitner@gmail.com" <marcelo.leitner@gmail.com>
+Subject: RE: [PATCH v2] net: sctp: Fix negotiation of the number of data
+ streams.
+Thread-Topic: [PATCH v2] net: sctp: Fix negotiation of the number of data
+ streams.
+Thread-Index: AdZ2Jpt5uFDQ+GlJS8asoZmPH8fG2QAD/p2wAEMD3AAAEu3KMA==
+Date:   Fri, 21 Aug 2020 07:41:00 +0000
+Message-ID: <abecfca0ee6d4fa1835e9f0a0338a04a@AcuMS.aculab.com>
+References: <3aef12f2fdbb4ee6b885719f5561a997@AcuMS.aculab.com>
+        <1f2ffcb1180e4080aab114683b06efab@AcuMS.aculab.com>
+ <20200820.163838.2031881871934638484.davem@davemloft.net>
+In-Reply-To: <20200820.163838.2031881871934638484.davem@davemloft.net>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <b3da88b999373d2518ac52a9e1d0fcb935109ea8.1597906119.git.lucien.xin@gmail.com>
- <661ff148-627d-3b1f-f450-015dafefd137@gmail.com>
-In-Reply-To: <661ff148-627d-3b1f-f450-015dafefd137@gmail.com>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Fri, 21 Aug 2020 15:10:04 +0800
-Message-ID: <CADvbK_eej9URRLMrN=nLTAdcmaHJAmT+69-Ghk7i8JLcSmzENg@mail.gmail.com>
-Subject: Re: [PATCH net] sctp: not disable bh in the whole sctp_get_port_local()
-To:     Eric Dumazet <eric.dumazet@gmail.com>
-Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
-        davem <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>
-Content-Type: text/plain; charset="UTF-8"
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0.001
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, Aug 20, 2020 at 9:13 PM Eric Dumazet <eric.dumazet@gmail.com> wrote:
->
->
->
-> On 8/19/20 11:48 PM, Xin Long wrote:
-> > With disabling bh in the whole sctp_get_port_local(), when
-> > snum == 0 and too many ports have been used, the do-while
-> > loop will take the cpu for a long time and cause cpu stuck:
+From: David Miller
+> Sent: 21 August 2020 00:39
+> 
 > >
-> >   [ ] watchdog: BUG: soft lockup - CPU#11 stuck for 22s!
-> >   [ ] RIP: 0010:native_queued_spin_lock_slowpath+0x4de/0x940
-> >   [ ] Call Trace:
-> >   [ ]  _raw_spin_lock+0xc1/0xd0
-> >   [ ]  sctp_get_port_local+0x527/0x650 [sctp]
-> >   [ ]  sctp_do_bind+0x208/0x5e0 [sctp]
-> >   [ ]  sctp_autobind+0x165/0x1e0 [sctp]
-> >   [ ]  sctp_connect_new_asoc+0x355/0x480 [sctp]
-> >   [ ]  __sctp_connect+0x360/0xb10 [sctp]
+> > The number of output and input streams was never being reduced, eg when
+> > processing received INIT or INIT_ACK chunks.
+> > The effect is that DATA chunks can be sent with invalid stream ids
+> > and then discarded by the remote system.
 > >
-> > There's no need to disable bh in the whole function of
-> > sctp_get_port_local. So fix this cpu stuck by removing
-> > local_bh_disable() called at the beginning, and using
-> > spin_lock_bh() instead.
-> >
-> > The same thing was actually done for inet_csk_get_port() in
-> > Commit ea8add2b1903 ("tcp/dccp: better use of ephemeral
-> > ports in bind()").
-> >
-> > Thanks to Marcelo for pointing the buggy code out.
-> >
-> > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> > Reported-by: Ying Xu <yinxu@redhat.com>
-> > Signed-off-by: Xin Long <lucien.xin@gmail.com>
-> > ---
->
->
-> Any reason you chose to not use a cond_resched() then ?
->
-> Clearly this function needs to yield, not only BH, but to other threads.
->
-Right, it explains why the cpu stuck is gone, but sctp_get_port_local()
-still use the cpu quite a lot:
+> > Fixes: 2075e50caf5ea ("sctp: convert to genradix")
+> > Signed-off-by: David Laight <david.laight@aculab.com>
+> 
+> Applied and queued up for -stable, thanks David.
 
+Thank you.
 
-Thanks, will post v2.
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
