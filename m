@@ -2,37 +2,40 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4767E24E261
-	for <lists+linux-sctp@lfdr.de>; Fri, 21 Aug 2020 23:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB3724E289
+	for <lists+linux-sctp@lfdr.de>; Fri, 21 Aug 2020 23:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726705AbgHUVDw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Fri, 21 Aug 2020 17:03:52 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:24363 "EHLO
+        id S1726630AbgHUVSr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Fri, 21 Aug 2020 17:18:47 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:30589 "EHLO
         eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726243AbgHUVDv (ORCPT
+        by vger.kernel.org with ESMTP id S1726599AbgHUVSq (ORCPT
         <rfc822;linux-sctp@vger.kernel.org>);
-        Fri, 21 Aug 2020 17:03:51 -0400
+        Fri, 21 Aug 2020 17:18:46 -0400
 Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
  TLS) by relay.mimecast.com with ESMTP id
- uk-mta-187-gUvL8McVPIOXIZEftXaLtA-1; Fri, 21 Aug 2020 22:03:47 +0100
-X-MC-Unique: gUvL8McVPIOXIZEftXaLtA-1
+ uk-mta-180-nRitbC59MfCis-3-n_PeQw-1; Fri, 21 Aug 2020 22:18:43 +0100
+X-MC-Unique: nRitbC59MfCis-3-n_PeQw-1
 Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
  AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Fri, 21 Aug 2020 22:03:46 +0100
+ Server (TLS) id 15.0.1347.2; Fri, 21 Aug 2020 22:18:42 +0100
 Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
  AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Fri, 21 Aug 2020 22:03:46 +0100
+ Fri, 21 Aug 2020 22:18:42 +0100
 From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Michael Tuexen' <Michael.Tuexen@lurchi.franken.de>
-CC:     "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>
-Subject: RE: 64k streams not supported
-Thread-Topic: 64k streams not supported
-Thread-Index: AdZ304CTRD4hQQAhQWucKVTj4yro3gAGzXQAAAPjOoA=
-Date:   Fri, 21 Aug 2020 21:03:46 +0000
-Message-ID: <8737d07930a34da3b0c91f8268793ce1@AcuMS.aculab.com>
-References: <bedd13a72afd427ca4dbbdfa61985533@AcuMS.aculab.com>
- <B2A8B53A-9704-4C42-84C7-05CD9615FC28@lurchi.franken.de>
-In-Reply-To: <B2A8B53A-9704-4C42-84C7-05CD9615FC28@lurchi.franken.de>
+To:     'Marcelo Ricardo Leitner' <marcelo.leitner@gmail.com>
+CC:     "'linux-sctp@vger.kernel.org'" <linux-sctp@vger.kernel.org>,
+        "'netdev@vger.kernel.org'" <netdev@vger.kernel.org>
+Subject: RE: Use of genradix in sctp
+Thread-Topic: Use of genradix in sctp
+Thread-Index: AdZ1ckZAY2qe63tNS/O9MsxVdvHiSAALTAcAAANIG8AAkcwnAAACvT6A
+Date:   Fri, 21 Aug 2020 21:18:42 +0000
+Message-ID: <9f5b892bcf4f41f9b32990fb6049fce2@AcuMS.aculab.com>
+References: <2ffb7752d3e8403ebb220e0a5e2cf3cd@AcuMS.aculab.com>
+ <20200818213800.GJ906397@localhost.localdomain>
+ <357ded60999a4957addb766a29431ad7@AcuMS.aculab.com>
+ <20200821204636.GO3399@localhost.localdomain>
+In-Reply-To: <20200821204636.GO3399@localhost.localdomain>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -51,21 +54,42 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Michael Tuexen
-> Sent: 21 August 2020 21:10
-> > On 21. Aug 2020, at 17:59, David Laight <David.Laight@ACULAB.COM> wrote:
+From: 'Marcelo Ricardo Leitner'
+> Sent: 21 August 2020 21:47
+...
 > >
-> > Isn't SCTP supposed to support 65536 data streams?
->
-> Since the number of streams is exchanged in the INIT and INIT-ACK chunks
-> and encoded in a uint16_t, the number is 65535, not 65536.
-> So an implementation should be able to use up to 65535 incoming and
-> outgoing streams.
+> > 2) Optimise the genradix lookup for the case where there
+> >    is a single page - it can be completely inlined.
+> 
+> And/or our struct sizes.
+> 
+> __idx_to_offset() will basically do:
+>         if (!is_power_of_2(obj_size)) {
+>                 return (idx / objs_per_page) * PAGE_SIZE +
+>                         (idx % objs_per_page) * obj_size;
+>         } else {
+>                 return idx * obj_size;
+> 
+> if we can get it to his the else block, it saves some CPU cycles already (at
+> the expense of memory).
 
-Ah, I'd assumed that because the stream number was encoded
-in 16 bits you could use stream numbers 0 through 65535.
+I'm penning some changes to the genradix code:
+That expression can be written:
+	idx * obj_size + (idx / objs_per_page) * (PAGE_SIZE % obj_size)
+which is simpler and doesn't need the is_power_of_2() test.
 
-At least no one needs to write the patch :-)
+You can then do the early test:
+	if (idx * obj_size <= PAGE_SIZE - obj_size) && root && !llevel)
+		return root + idx * obj_size;
+in the inline function.
+A slight increase in code size, but a reduction in code path.
+(Better still if you increment 'level'.)
+Which catches most SCTP uses and the only other place I've found it used.
+
+There is actually a nasty bug in the genradix code.
+If the cmpxchg 'fails' when adding extra root levels then the page
+can get reused later - but child[0] has been set.
+This could add a loop to the tree!
 
 	David
 
