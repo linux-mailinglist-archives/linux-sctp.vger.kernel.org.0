@@ -2,91 +2,66 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE02A24E2C5
-	for <lists+linux-sctp@lfdr.de>; Fri, 21 Aug 2020 23:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F60524EA47
+	for <lists+linux-sctp@lfdr.de>; Sun, 23 Aug 2020 01:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726731AbgHUVj2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Fri, 21 Aug 2020 17:39:28 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:31462 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725948AbgHUVj2 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>);
-        Fri, 21 Aug 2020 17:39:28 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-221-Ovfv65qLMDOzSh5mErwndw-1; Fri, 21 Aug 2020 22:39:24 +0100
-X-MC-Unique: Ovfv65qLMDOzSh5mErwndw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Fri, 21 Aug 2020 22:39:23 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Fri, 21 Aug 2020 22:39:23 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Marcelo Ricardo Leitner' <marcelo.leitner@gmail.com>
-CC:     "'linux-sctp@vger.kernel.org'" <linux-sctp@vger.kernel.org>,
-        "'netdev@vger.kernel.org'" <netdev@vger.kernel.org>
-Subject: RE: Use of genradix in sctp
-Thread-Topic: Use of genradix in sctp
-Thread-Index: AdZ1ckZAY2qe63tNS/O9MsxVdvHiSAALTAcAAANIG8AAkcwnAAADgzyw
-Date:   Fri, 21 Aug 2020 21:39:23 +0000
-Message-ID: <11eafe393bc640a8bbddf33d0e784901@AcuMS.aculab.com>
-References: <2ffb7752d3e8403ebb220e0a5e2cf3cd@AcuMS.aculab.com>
- <20200818213800.GJ906397@localhost.localdomain>
- <357ded60999a4957addb766a29431ad7@AcuMS.aculab.com>
- <20200821204636.GO3399@localhost.localdomain>
-In-Reply-To: <20200821204636.GO3399@localhost.localdomain>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1727776AbgHVXQL (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sat, 22 Aug 2020 19:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37764 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727115AbgHVXQL (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sat, 22 Aug 2020 19:16:11 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A3FC061573;
+        Sat, 22 Aug 2020 16:16:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=1DaLBWDRNGrft4F1MDGX2ruiGpGJOJTjcKpZcnTIK6Q=; b=e8C+TAj22wRjAWi15ZcM7CAjr7
+        VDrJMNdYsaS4ZTCZ+6TnA2y5GzFWXmu+NymNhno7RjX6ptbt2vSZN7FoDbBojRm3r/bJBEALBuvEl
+        u/R4D/BwuMCb5Iq3Oy2K/yxG4FayHHuEs1iXQAIe3fRxyhJHBf9bWXZ8QBgOf4k4SYtt30n5Da4rY
+        ZY+gKx9z66Mb1sHHGb5ggUu694VStX+LycXVUSm+nvNcIGhAyKE6oPskHjQgqfNDgG4jCA7FUTvhX
+        h4LGLLR3qiTQJeshNwL0pABjKmN2HnRIAGxKCldxXIYxsQjqJOQ0jTXVgby8q05LTPheQM0NHUelp
+        I1N9NEvw==;
+Received: from [2601:1c0:6280:3f0::19c2] (helo=smtpauth.infradead.org)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1k9ck2-0006VD-0d; Sat, 22 Aug 2020 23:16:06 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     netdev@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        linux-sctp@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 0/7] net: sctp: delete duplicated words + other fixes
+Date:   Sat, 22 Aug 2020 16:15:54 -0700
+Message-Id: <20200822231601.32125-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0.001
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: 'Marcelo Ricardo Leitner'
-> Sent: 21 August 2020 21:47
-...
-> > 3) Defer the allocation until the stream is used.
-> >    for outbound streams this could remove the extra buffer.
-> 
-> This can be tricky. What should happen if it gets a packet on a stream
-> that it couldn't allocate, and then another on a stream that was
-> already allocated? Just a drop, it will retransmit and recover, and
-> then again.. While, OTOH, if the application requested such amount of
-> streams, it is likely going to use it. If not, that's an application
-> bug.
+Drop or fix repeated words in net/sctp/.
 
-You'd probably need to (effectively) drop the ethernet frame
-that contained the chunk.
+Cc: Vlad Yasevich <vyasevich@gmail.com>
+Cc: Neil Horman <nhorman@tuxdriver.com>
+Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc: linux-sctp@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
 
-But the problem I see is that GFP flags are passed in.
-So there must me a path where the allocation can't sleep.
-Now allocating a couple of pages is fine but if the
-maximum is just over 300 for each of 'in' and 'out'.
-I can well imagine that is likely to fail.
-I suspect this happens because the remote system can
-(if my quick scan of the code is right) negotiate a
-much larger number on an active connection.
 
-I don't know what applications might be doing such things.
-But I can imagine someone will try to negotiate 64k-1
-streams just because that is the maximum.
-And/or deciding to use stream 65535 for 'special' traffic.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+ net/sctp/associola.c     |    4 ++--
+ net/sctp/auth.c          |    4 ++--
+ net/sctp/bind_addr.c     |    2 +-
+ net/sctp/chunk.c         |    2 +-
+ net/sctp/protocol.c      |    8 ++++----
+ net/sctp/sm_make_chunk.c |    6 +++---
+ net/sctp/ulpqueue.c      |    2 +-
+ 7 files changed, 14 insertions(+), 14 deletions(-)
