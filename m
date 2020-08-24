@@ -2,31 +2,34 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D481124FAE0
-	for <lists+linux-sctp@lfdr.de>; Mon, 24 Aug 2020 12:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67AF924FB42
+	for <lists+linux-sctp@lfdr.de>; Mon, 24 Aug 2020 12:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726838AbgHXKAy (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 24 Aug 2020 06:00:54 -0400
-Received: from mail.sysmocom.de ([144.76.43.93]:29573 "EHLO mail.sysmocom.de"
+        id S1726504AbgHXKXx (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 24 Aug 2020 06:23:53 -0400
+Received: from mail.sysmocom.de ([144.76.43.93]:16099 "EHLO mail.sysmocom.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728298AbgHXKAr (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Mon, 24 Aug 2020 06:00:47 -0400
+        id S1725962AbgHXKXw (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Mon, 24 Aug 2020 06:23:52 -0400
 Received: from public-mail (mail.sysmocom.de [144.76.43.93])
-        by mail.sysmocom.de (Postfix) with ESMTP id DC6E1695740;
-        Mon, 24 Aug 2020 10:00:30 +0000 (UTC)
+        by mail.sysmocom.de (Postfix) with ESMTP id B403D695B84;
+        Mon, 24 Aug 2020 10:23:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at sysmocom.de
 Received: from mail.sysmocom.de ([144.76.43.93])
         by public-mail (mail.sysmocom.de [144.76.43.93]) (amavisd-new, port 10024)
-        with ESMTP id UCPHfjGJ6BCy; Mon, 24 Aug 2020 10:00:29 +0000 (UTC)
+        with ESMTP id ThjmKI-Ctftz; Mon, 24 Aug 2020 10:23:48 +0000 (UTC)
 Received: from [192.168.1.130] (unknown [213.195.99.198])
-        by mail.sysmocom.de (Postfix) with ESMTPSA id 36185695730;
-        Mon, 24 Aug 2020 10:00:28 +0000 (UTC)
+        by mail.sysmocom.de (Postfix) with ESMTPSA id AF010695B75;
+        Mon, 24 Aug 2020 10:23:47 +0000 (UTC)
 Subject: Re: SCTP multi-homed association (::1)->(::1+127.0.0.1) attempting
  HEARTBEAT on 127.0.0.1->127.0.0.1
-To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Andreas Fink <afink@list.fink.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 Cc:     linux-sctp@vger.kernel.org
 References: <552de663-8aeb-ff84-a425-988da88ca5cd@sysmocom.de>
  <20200821201704.GN3399@localhost.localdomain>
+ <44227020-4061-9fc9-0175-e64de5c22e15@sysmocom.de>
+ <b1d44399-100d-476f-a608-40cf318c4f1b@Canary>
 From:   Pau Espin Pedrol <pespin@sysmocom.de>
 Autocrypt: addr=pespin@sysmocom.de; keydata=
  mQENBEyY/q8BCAC5xl9nRLQTspgT1rZAvcDYJXLbXdYvJ54bqKns0wv8akF0OyWuhT+me4bV
@@ -52,12 +55,12 @@ Autocrypt: addr=pespin@sysmocom.de; keydata=
  soOHxc/G4ZEdrEsV5Dopx4UJeOmmywFpVstcvB7EctQb8nk+PEV1wtUwGSp7M9gf4lCeSPle
  XC9SENRy7pFmoRtE6o4LBFmrWSBsrwM2izP3KNtw5M56zUVpLQC0mwgjFySwKFh8ryURkBI1
  Sqp+/hKID+0ivlyS
-Message-ID: <44227020-4061-9fc9-0175-e64de5c22e15@sysmocom.de>
-Date:   Mon, 24 Aug 2020 12:00:27 +0200
+Message-ID: <8d6bafce-225b-32b3-93c2-48640251bac2@sysmocom.de>
+Date:   Mon, 24 Aug 2020 12:23:47 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.11.0
 MIME-Version: 1.0
-In-Reply-To: <20200821201704.GN3399@localhost.localdomain>
+In-Reply-To: <b1d44399-100d-476f-a608-40cf318c4f1b@Canary>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -66,40 +69,37 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hi Marcelo,
+Hi Andreas,
 
-Between my initial message and your response I updated my kernel to
-Archlinux latest package version (5.8.3-arch1-1,
-https://git.archlinux.org/linux.git/), which still shows the same bug I
-mentioned in my previous message.
+My point is that the failure is in the client, which is creating an
+AF_INET6 socket and only binding on ::1, so it should never try to use
+"127.0.0.1" as local IP imho. Your comments may apply to the server,
+which is actually behaving fine.
 
-The commit you described is already contained in the kernel (it was
-included upstream during v5.8-rc3).
+On 8/24/20 12:12 PM, Andreas Fink wrote:
+> The problem might be that your socket(AF_INET6,SCTP,STREAM) gives you an
+> IPv6 only socket
+> but you are binding an IPv4 address to it with sctp_bindx. This will
+> probably fail and thus you are binding to "any".
 
-Moreover, the description of the commit you shared doesn't seem to match
-the issue I described. The issue I explained is about the kernel trying
-to create further connections on an already ongoing association using a
-local IPv4 address it was never bound to; the issue has nothing to do
-with advertising of addresses (advertising is working correctly here IMHO).
+It doesn't fail, I'm checking the result of sctp_bindx() and
+/proc/net/sctp/eps I initially attached to the bug tracker shows it's
+binding fine as expected.
 
-Quick similar scenario setup would be something like:
+> 
+> If you want IPv4+IPv6 in one socket, you need to specify a IPv4 address
+> in  IPv6 compatibility format
+> So you should sctp_bindx to   "::ffff:127.0.0.1" not to  "127.0.0.1"
+>  (well in any case you should pass a struck sockaddr_in6 and not a
+> struct sockaddr_in)
 
-SERVER:
-server_fd = socket(AF_INET6, SCTP, STREAM);
-sctp_bindx(server_fd, "127.0.0.1", "::1");
-listen(server_fd); accept(server_fd);
+Not really. I'm creating an addr buffer containing both struct
+sockaddr_in and struct sockaddr_in6 (see [1] if interested) after having
+looked at how libsctp and the kernel handle the sctp_bindx call, and
+it's working fine as backed by what /proc/net/sctp/eps shows.
 
-CLIENT:
-client_fd = socket(AF_INET6, SCTP, STREAM);
-sctp_bindx(client_fd, "::1");
-sctp_connectx(client_fd, "::1");
-
-And then after client connects ::1<->::1 and gains info about server's
-127.0.0.1 address, it tries to INIT 127.0.0.1->127.0.0.1 despite it was
-never bound to 127.0.0.1.
-
-Regards,
-Pau
+[1]
+https://git.osmocom.org/libosmocore/tree/src/socket.c?id=ed42a889004730beb26ce61ee462244b2bad6be9#n470
 
 -- 
 - Pau Espin Pedrol <pespin@sysmocom.de>         http://www.sysmocom.de/
