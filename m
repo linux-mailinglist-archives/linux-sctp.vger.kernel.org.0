@@ -2,79 +2,79 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 603C924FC37
-	for <lists+linux-sctp@lfdr.de>; Mon, 24 Aug 2020 13:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 729D7250BE5
+	for <lists+linux-sctp@lfdr.de>; Tue, 25 Aug 2020 00:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726475AbgHXLCj (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 24 Aug 2020 07:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57974 "EHLO
+        id S1728044AbgHXWvL (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 24 Aug 2020 18:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726354AbgHXLCi (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 24 Aug 2020 07:02:38 -0400
-X-Greylist: delayed 931 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Aug 2020 04:02:38 PDT
-Received: from ganesha.gnumonks.org (ganesha.gnumonks.org [IPv6:2001:780:45:1d:225:90ff:fe52:c662])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAFD5C061573
-        for <linux-sctp@vger.kernel.org>; Mon, 24 Aug 2020 04:02:38 -0700 (PDT)
-Received: from uucp by ganesha.gnumonks.org with local-bsmtp (Exim 4.89)
-        (envelope-from <laforge@gnumonks.org>)
-        id 1kAA0A-00010P-Aj; Mon, 24 Aug 2020 12:46:58 +0200
-Received: from laforge by localhost.localdomain with local (Exim 4.94)
-        (envelope-from <laforge@gnumonks.org>)
-        id 1kAA02-00GAtC-8C; Mon, 24 Aug 2020 12:46:50 +0200
-Date:   Mon, 24 Aug 2020 12:46:50 +0200
-From:   Harald Welte <laforge@gnumonks.org>
-To:     Pau Espin Pedrol <pespin@sysmocom.de>
-Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        linux-sctp@vger.kernel.org
-Subject: Re: SCTP multi-homed association (::1)->(::1+127.0.0.1) attempting
- HEARTBEAT on 127.0.0.1->127.0.0.1
-Message-ID: <20200824104650.GC3822842@nataraja>
-References: <552de663-8aeb-ff84-a425-988da88ca5cd@sysmocom.de>
- <20200821201704.GN3399@localhost.localdomain>
- <44227020-4061-9fc9-0175-e64de5c22e15@sysmocom.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <44227020-4061-9fc9-0175-e64de5c22e15@sysmocom.de>
+        with ESMTP id S1726664AbgHXWvL (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 24 Aug 2020 18:51:11 -0400
+Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0543DC061574;
+        Mon, 24 Aug 2020 15:51:11 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id BBC351290EBA8;
+        Mon, 24 Aug 2020 15:34:23 -0700 (PDT)
+Date:   Mon, 24 Aug 2020 15:51:08 -0700 (PDT)
+Message-Id: <20200824.155108.8657858310039234.davem@davemloft.net>
+To:     lucien.xin@gmail.com
+Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
+        edumazet@google.com, marcelo.leitner@gmail.com,
+        nhorman@tuxdriver.com
+Subject: Re: [PATCHv2 net] sctp: not disable bh in the whole
+ sctp_get_port_local()
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <08a14c2f087153c18c67965cc37ed2ac22da18ed.1597993178.git.lucien.xin@gmail.com>
+References: <08a14c2f087153c18c67965cc37ed2ac22da18ed.1597993178.git.lucien.xin@gmail.com>
+X-Mailer: Mew version 6.8 on Emacs 26.3
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 24 Aug 2020 15:34:24 -0700 (PDT)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hi Pau and list,
+From: Xin Long <lucien.xin@gmail.com>
+Date: Fri, 21 Aug 2020 14:59:38 +0800
 
-On Mon, Aug 24, 2020 at 12:00:27PM +0200, Pau Espin Pedrol wrote:
-
-> Quick similar scenario setup would be something like:
+> With disabling bh in the whole sctp_get_port_local(), when
+> snum == 0 and too many ports have been used, the do-while
+> loop will take the cpu for a long time and cause cpu stuck:
 > 
-> SERVER:
-> server_fd = socket(AF_INET6, SCTP, STREAM);
-> sctp_bindx(server_fd, "127.0.0.1", "::1");
-> listen(server_fd); accept(server_fd);
+>   [ ] watchdog: BUG: soft lockup - CPU#11 stuck for 22s!
+>   [ ] RIP: 0010:native_queued_spin_lock_slowpath+0x4de/0x940
+>   [ ] Call Trace:
+>   [ ]  _raw_spin_lock+0xc1/0xd0
+>   [ ]  sctp_get_port_local+0x527/0x650 [sctp]
+>   [ ]  sctp_do_bind+0x208/0x5e0 [sctp]
+>   [ ]  sctp_autobind+0x165/0x1e0 [sctp]
+>   [ ]  sctp_connect_new_asoc+0x355/0x480 [sctp]
+>   [ ]  __sctp_connect+0x360/0xb10 [sctp]
 > 
-> CLIENT:
-> client_fd = socket(AF_INET6, SCTP, STREAM);
-> sctp_bindx(client_fd, "::1");
-> sctp_connectx(client_fd, "::1");
+> There's no need to disable bh in the whole function of
+> sctp_get_port_local. So fix this cpu stuck by removing
+> local_bh_disable() called at the beginning, and using
+> spin_lock_bh() instead.
 > 
-> And then after client connects ::1<->::1 and gains info about server's
-> 127.0.0.1 address, it tries to INIT 127.0.0.1->127.0.0.1 despite it was
-> never bound to 127.0.0.1.
+> The same thing was actually done for inet_csk_get_port() in
+> Commit ea8add2b1903 ("tcp/dccp: better use of ephemeral
+> ports in bind()").
+> 
+> Thanks to Marcelo for pointing the buggy code out.
+> 
+> v1->v2:
+>   - use cond_resched() to yield cpu to other tasks if needed,
+>     as Eric noticed.
+> 
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Reported-by: Ying Xu <yinxu@redhat.com>
+> Signed-off-by: Xin Long <lucien.xin@gmail.com>
 
-Thanks for reducing the example to the above.  I think it should be pretty
-clear now.  The client side kernel SCTP is misbehaving here.
-
-One minor amendment:  I don't think it's a question of whether or not the client
-side socket ever was bound to 127.0.0.1.  The key issue here is that the client side
-socket was not bound to any IPv4 address at all.
-
-Sidenote: What I also find puzzling is that both sockets in your example are
-created as AF_INET6 sockets, not as AF_UNSPEC.  But let's stay focused on the 
-actual problem here: A client-side socket being exclusively bound to IPv6 adresses
-attempting to send INIT chunks from an IPv4 address!
-
--- 
-- Harald Welte <laforge@gnumonks.org>           http://laforge.gnumonks.org/
-============================================================================
-"Privacy in residential applications is a desirable marketing option."
-                                                  (ETSI EN 300 175-7 Ch. A6)
+Applied and queued up for -stable, thank you.
