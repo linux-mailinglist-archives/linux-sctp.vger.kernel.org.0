@@ -2,25 +2,25 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67AF924FB42
-	for <lists+linux-sctp@lfdr.de>; Mon, 24 Aug 2020 12:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B4C24FB8D
+	for <lists+linux-sctp@lfdr.de>; Mon, 24 Aug 2020 12:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726504AbgHXKXx (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 24 Aug 2020 06:23:53 -0400
-Received: from mail.sysmocom.de ([144.76.43.93]:16099 "EHLO mail.sysmocom.de"
+        id S1726113AbgHXKeU (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 24 Aug 2020 06:34:20 -0400
+Received: from mail.sysmocom.de ([144.76.43.93]:27426 "EHLO mail.sysmocom.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725962AbgHXKXw (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Mon, 24 Aug 2020 06:23:52 -0400
+        id S1727813AbgHXKeP (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Mon, 24 Aug 2020 06:34:15 -0400
 Received: from public-mail (mail.sysmocom.de [144.76.43.93])
-        by mail.sysmocom.de (Postfix) with ESMTP id B403D695B84;
-        Mon, 24 Aug 2020 10:23:49 +0000 (UTC)
+        by mail.sysmocom.de (Postfix) with ESMTP id A5B96695DD3;
+        Mon, 24 Aug 2020 10:33:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at sysmocom.de
 Received: from mail.sysmocom.de ([144.76.43.93])
         by public-mail (mail.sysmocom.de [144.76.43.93]) (amavisd-new, port 10024)
-        with ESMTP id ThjmKI-Ctftz; Mon, 24 Aug 2020 10:23:48 +0000 (UTC)
+        with ESMTP id FQ3BQ7J9V5Bz; Mon, 24 Aug 2020 10:33:40 +0000 (UTC)
 Received: from [192.168.1.130] (unknown [213.195.99.198])
-        by mail.sysmocom.de (Postfix) with ESMTPSA id AF010695B75;
-        Mon, 24 Aug 2020 10:23:47 +0000 (UTC)
+        by mail.sysmocom.de (Postfix) with ESMTPSA id 3DD78695DBE;
+        Mon, 24 Aug 2020 10:33:40 +0000 (UTC)
 Subject: Re: SCTP multi-homed association (::1)->(::1+127.0.0.1) attempting
  HEARTBEAT on 127.0.0.1->127.0.0.1
 To:     Andreas Fink <afink@list.fink.org>,
@@ -30,6 +30,8 @@ References: <552de663-8aeb-ff84-a425-988da88ca5cd@sysmocom.de>
  <20200821201704.GN3399@localhost.localdomain>
  <44227020-4061-9fc9-0175-e64de5c22e15@sysmocom.de>
  <b1d44399-100d-476f-a608-40cf318c4f1b@Canary>
+ <8d6bafce-225b-32b3-93c2-48640251bac2@sysmocom.de>
+ <ce7240de-191e-417f-a405-4cdd9d212f3a@Canary>
 From:   Pau Espin Pedrol <pespin@sysmocom.de>
 Autocrypt: addr=pespin@sysmocom.de; keydata=
  mQENBEyY/q8BCAC5xl9nRLQTspgT1rZAvcDYJXLbXdYvJ54bqKns0wv8akF0OyWuhT+me4bV
@@ -55,51 +57,33 @@ Autocrypt: addr=pespin@sysmocom.de; keydata=
  soOHxc/G4ZEdrEsV5Dopx4UJeOmmywFpVstcvB7EctQb8nk+PEV1wtUwGSp7M9gf4lCeSPle
  XC9SENRy7pFmoRtE6o4LBFmrWSBsrwM2izP3KNtw5M56zUVpLQC0mwgjFySwKFh8ryURkBI1
  Sqp+/hKID+0ivlyS
-Message-ID: <8d6bafce-225b-32b3-93c2-48640251bac2@sysmocom.de>
-Date:   Mon, 24 Aug 2020 12:23:47 +0200
+Message-ID: <3596ba07-a130-3aac-0be0-02cab6a1817e@sysmocom.de>
+Date:   Mon, 24 Aug 2020 12:33:39 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.11.0
 MIME-Version: 1.0
-In-Reply-To: <b1d44399-100d-476f-a608-40cf318c4f1b@Canary>
+In-Reply-To: <ce7240de-191e-417f-a405-4cdd9d212f3a@Canary>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hi Andreas,
+Hi,
 
-My point is that the failure is in the client, which is creating an
-AF_INET6 socket and only binding on ::1, so it should never try to use
-"127.0.0.1" as local IP imho. Your comments may apply to the server,
-which is actually behaving fine.
-
-On 8/24/20 12:12 PM, Andreas Fink wrote:
-> The problem might be that your socket(AF_INET6,SCTP,STREAM) gives you an
-> IPv6 only socket
-> but you are binding an IPv4 address to it with sctp_bindx. This will
-> probably fail and thus you are binding to "any".
-
-It doesn't fail, I'm checking the result of sctp_bindx() and
-/proc/net/sctp/eps I initially attached to the bug tracker shows it's
-binding fine as expected.
-
+On 8/24/20 12:28 PM, Andreas Fink wrote:
+> the server might tell it that it can also connect on 127.0.0.1 because
+> of the advertized IPs maybe?
 > 
-> If you want IPv4+IPv6 in one socket, you need to specify a IPv4 address
-> in  IPv6 compatibility format
-> So you should sctp_bindx to   "::ffff:127.0.0.1" not to  "127.0.0.1"
->  (well in any case you should pass a struck sockaddr_in6 and not a
-> struct sockaddr_in)
 
-Not really. I'm creating an addr buffer containing both struct
-sockaddr_in and struct sockaddr_in6 (see [1] if interested) after having
-looked at how libsctp and the kernel handle the sctp_bindx call, and
-it's working fine as backed by what /proc/net/sctp/eps shows.
+Yes sure, that's happening, the server is advertising the 127.0.0.1 over
+the conn established in ::1<->::1 because it is bound to that address
+too, but that's fine imho.
 
-[1]
-https://git.osmocom.org/libosmocore/tree/src/socket.c?id=ed42a889004730beb26ce61ee462244b2bad6be9#n470
+The problem is the client attempting to connect to server's 127.0.0.1
+despite being not bound to any IPv4 address, and specifically to 127.0.0.1.
 
 -- 
 - Pau Espin Pedrol <pespin@sysmocom.de>         http://www.sysmocom.de/
