@@ -2,26 +2,26 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CBF2251B5E
-	for <lists+linux-sctp@lfdr.de>; Tue, 25 Aug 2020 16:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B33251B61
+	for <lists+linux-sctp@lfdr.de>; Tue, 25 Aug 2020 16:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726851AbgHYOxL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Tue, 25 Aug 2020 10:53:11 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:60353 "EHLO
+        id S1726863AbgHYOx0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Tue, 25 Aug 2020 10:53:26 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:34149 "EHLO
         eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726838AbgHYOxJ (ORCPT
+        by vger.kernel.org with ESMTP id S1726843AbgHYOxM (ORCPT
         <rfc822;linux-sctp@vger.kernel.org>);
-        Tue, 25 Aug 2020 10:53:09 -0400
+        Tue, 25 Aug 2020 10:53:12 -0400
 Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
  TLS) by relay.mimecast.com with ESMTP id
- uk-mta-71-L3-xON11PtOLEe4CqjcDXQ-1; Tue, 25 Aug 2020 15:53:05 +0100
-X-MC-Unique: L3-xON11PtOLEe4CqjcDXQ-1
+ uk-mtapsc-5-RxTbYGO7PkKmaiFzaObIVg-1; Tue, 25 Aug 2020 15:53:08 +0100
+X-MC-Unique: RxTbYGO7PkKmaiFzaObIVg-1
 Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
  AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Tue, 25 Aug 2020 15:53:04 +0100
+ Server (TLS) id 15.0.1347.2; Tue, 25 Aug 2020 15:53:07 +0100
 Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
  AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Tue, 25 Aug 2020 15:53:04 +0100
+ Tue, 25 Aug 2020 15:53:07 +0100
 From:   David Laight <David.Laight@ACULAB.COM>
 To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "'linux-sctp@vger.kernel.org'" <linux-sctp@vger.kernel.org>,
@@ -31,13 +31,12 @@ To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "'kent.overstreet@gmail.com'" <kent.overstreet@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         "'Neil Horman'" <nhorman@tuxdriver.com>
-Subject: [PATCH 03/13] lib/generic-radix-tree: Always use low 8 bits of 'root'
- for depth.
-Thread-Topic: [PATCH 03/13] lib/generic-radix-tree: Always use low 8 bits of
- 'root' for depth.
-Thread-Index: AdZ67sMOiNwc769vS+ykdMxOWsTznA==
-Date:   Tue, 25 Aug 2020 14:53:04 +0000
-Message-ID: <c91557f439854e4997e807a5215d4763@AcuMS.aculab.com>
+Subject: [PATCH 02/13] lib/generic-radix-tree: Optimise out ilog2(variable).
+Thread-Topic: [PATCH 02/13] lib/generic-radix-tree: Optimise out
+ ilog2(variable).
+Thread-Index: AdZ67g1pvtP34U3MSIWqv3fjlqtq2w==
+Date:   Tue, 25 Aug 2020 14:53:07 +0000
+Message-ID: <5a4d1a42f61d4fd28e7ef177efd958af@AcuMS.aculab.com>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -56,43 +55,45 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-There is no need to calculate the minimum number of bits needed for the
-depth (stored in the low bits of the pointer to the root).
-Since the root is PAGE_SIZE aligned and we can't need more than 64bits
-just use the low 8 bits for the depth.
-This (probably) generates better code on x86 then using (say) 6 bits.
+ilog2() is relatively expensive (especially without bit-scan instructions).
+Replace the comparisons 'ilog2(x) >= y' with '(x >> y) != 0'.
 
 Signed-off-by: David Laight <david.laight@aculab.com>
 ---
- lib/generic-radix-tree.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ lib/generic-radix-tree.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/lib/generic-radix-tree.c b/lib/generic-radix-tree.c
-index d5e97b51308d..12dcaf891af9 100644
+index 5695fe547f9d..d5e97b51308d 100644
 --- a/lib/generic-radix-tree.c
 +++ b/lib/generic-radix-tree.c
-@@ -30,12 +30,15 @@ static inline size_t genradix_depth_size(unsigned depth)
- 	return 1UL << genradix_depth_shift(depth);
- }
+@@ -57,7 +57,7 @@ void *__genradix_ptr(struct __genradix *radix, size_t offset)
+ 	struct genradix_node *n = genradix_root_to_node(r);
+ 	unsigned level		= genradix_root_to_depth(r);
  
--/* depth that's needed for a genradix that can address up to ULONG_MAX: */
--#define GENRADIX_MAX_DEPTH	\
--	DIV_ROUND_UP(BITS_PER_LONG - PAGE_SHIFT, GENRADIX_ARY_SHIFT)
--
--#define GENRADIX_DEPTH_MASK				\
--	((unsigned long) (roundup_pow_of_two(GENRADIX_MAX_DEPTH + 1) - 1))
-+/*
-+ * The 'depth' of the tree is held in the low bits of the 'root'.
-+ * Since all the buffers are allocated as pages lots of low bits are zero.
-+ * To support a genradix that can address up to ULONG_MAX items the
-+ * maximum depth/shift we can possibly need is 64.
-+ * However using the low 8 bits for the depth may give better code
-+ * on some archectures (eg x86).
-+ */
-+#define GENRADIX_DEPTH_MASK 0xff
+-	if (ilog2(offset) >= genradix_depth_shift(level))
++	if (offset >> genradix_depth_shift(level))
+ 		return NULL;
  
- static inline unsigned genradix_root_to_depth(struct genradix_root *r)
- {
+ 	while (1) {
+@@ -115,7 +115,7 @@ void *__genradix_ptr_alloc(struct __genradix *radix, size_t offset,
+ 		n	= genradix_root_to_node(r);
+ 		level	= genradix_root_to_depth(r);
+ 
+-		if (n && ilog2(offset) < genradix_depth_shift(level))
++		if (n && !(offset >> genradix_depth_shift(level)))
+ 			break;
+ 
+ 		new_node = genradix_alloc_node(gfp_mask);
+@@ -171,7 +171,7 @@ void *__genradix_iter_peek(struct genradix_iter *iter,
+ 	n	= genradix_root_to_node(r);
+ 	level	= genradix_root_to_depth(r);
+ 
+-	if (ilog2(iter->offset) >= genradix_depth_shift(level))
++	if (iter->offset >> genradix_depth_shift(level))
+ 		return NULL;
+ 
+ 	while (level) {
 -- 
 2.25.1
 
