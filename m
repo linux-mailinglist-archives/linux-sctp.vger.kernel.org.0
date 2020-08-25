@@ -2,26 +2,26 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E266A251B54
-	for <lists+linux-sctp@lfdr.de>; Tue, 25 Aug 2020 16:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93137251B99
+	for <lists+linux-sctp@lfdr.de>; Tue, 25 Aug 2020 16:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726391AbgHYOwj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Tue, 25 Aug 2020 10:52:39 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:43212 "EHLO
+        id S1726230AbgHYO5z convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Tue, 25 Aug 2020 10:57:55 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:41459 "EHLO
         eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726222AbgHYOwj (ORCPT
+        by vger.kernel.org with ESMTP id S1726351AbgHYOwk (ORCPT
         <rfc822;linux-sctp@vger.kernel.org>);
-        Tue, 25 Aug 2020 10:52:39 -0400
+        Tue, 25 Aug 2020 10:52:40 -0400
 Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
  TLS) by relay.mimecast.com with ESMTP id
- uk-mta-163-BWui7J3WNwSfPV_ZLU2-Dg-1; Tue, 25 Aug 2020 15:52:35 +0100
-X-MC-Unique: BWui7J3WNwSfPV_ZLU2-Dg-1
+ uk-mta-229-XTGr5FjFOiOuMkOxNdlKew-1; Tue, 25 Aug 2020 15:52:36 +0100
+X-MC-Unique: XTGr5FjFOiOuMkOxNdlKew-1
 Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
  AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Tue, 25 Aug 2020 15:52:34 +0100
+ Server (TLS) id 15.0.1347.2; Tue, 25 Aug 2020 15:52:35 +0100
 Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
  AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Tue, 25 Aug 2020 15:52:34 +0100
+ Tue, 25 Aug 2020 15:52:35 +0100
 From:   David Laight <David.Laight@ACULAB.COM>
 To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "'linux-sctp@vger.kernel.org'" <linux-sctp@vger.kernel.org>,
@@ -31,13 +31,12 @@ To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "'kent.overstreet@gmail.com'" <kent.overstreet@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         "'Neil Horman'" <nhorman@tuxdriver.com>
-Subject: [PATCH 00/13] lib/generic-radix-tree: genradix bug fix and
- optimisations.
-Thread-Topic: [PATCH 00/13] lib/generic-radix-tree: genradix bug fix and
- optimisations.
-Thread-Index: AdZ67b0yl7qlbV/xQHyOe3+CAeHrEg==
-Date:   Tue, 25 Aug 2020 14:52:34 +0000
-Message-ID: <21289d79b0474811b21ed8478c465159@AcuMS.aculab.com>
+Subject: [PATCH 07/13] lib/generic-radix-tree: Optimise __genradix_iter_peek()
+Thread-Topic: [PATCH 07/13] lib/generic-radix-tree: Optimise
+ __genradix_iter_peek()
+Thread-Index: AdZ67z36LdYIWMqoTRCrizJoKBNmVA==
+Date:   Tue, 25 Aug 2020 14:52:35 +0000
+Message-ID: <d606b3e29ec3407f98d4deb20bc29662@AcuMS.aculab.com>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -56,46 +55,71 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-The genradix code is used by SCTP for accessing per-stream data.
-This means there are quite a lot of lookups but the code wasn't
-really optimised at all.
+Use the the 'shift' rather than the 'level'.
+NB There are exactly zero users of this code.
 
-Patch 1 fixes a rather nasty bug that could cause all sorts of oddities
-including having a loop in a tree.
-Fortunately the only 2 users of the genradix code in the kernel source
-tree and neither can possibly hit the bug.
+Signed-off-by: David Laight <david.laight@aculab.com>
+---
+ lib/generic-radix-tree.c | 24 ++++++++----------------
+ 1 file changed, 8 insertions(+), 16 deletions(-)
 
-Patches 2 through 11 all reduce codepath. Especially for the common
-case (for both users) where all the data fits in one page.
-
-Patch 12 inlines the common lookup function for 1 page trees.
-This also remove the '% constant' calcuation from the lookups.
-However it will increase code size (but not codepath) because
-of the number of callers.
-
-Patch 13 removes part of the optimisation for 1 page tress
-under the assumption that the lookup will have been inlined.
-The code still works even if inlining didn't happen.
-
-David Laight (13):
-    01/13: Fix potentially corrupt tree
-    02/13: Optimise out ilog2(variable).
-    03/13: Always use low 8 bits of 'root' for depth.
-    04/13: Optimise __genradix_ptr()
-    05/13: Optimise __genradix_ptr_alloc()
-    06/13: Rename gfp_mask to gfp to shorten lines.
-    07/13: Optimise __genradix_iter_peek()
-    08/13: Save number of bits to shift instead of tree level.
-    09/13: Check sizeof(_type) when defining a tree.
-    10/13: Simplify offset calculation:
-    11/13: Pass the root pointer to __genradix_ptr.
-    12/13: Inline genradix_ptr() for simple trees.
-    13/13: Simplify __genradix_ptr()
-
- include/linux/generic-radix-tree.h |  54 ++++---
- lib/generic-radix-tree.c           | 224 ++++++++++++++++-------------
- 2 files changed, 162 insertions(+), 116 deletions(-)
-
+diff --git a/lib/generic-radix-tree.c b/lib/generic-radix-tree.c
+index 219b43250a06..0df99ee428d8 100644
+--- a/lib/generic-radix-tree.c
++++ b/lib/generic-radix-tree.c
+@@ -22,14 +22,6 @@ static inline int genradix_depth_shift(unsigned depth)
+ 	return PAGE_SHIFT + GENRADIX_ARY_SHIFT * depth;
+ }
+ 
+-/*
+- * Returns size (of data, in bytes) that a tree of a given depth holds:
+- */
+-static inline size_t genradix_depth_size(unsigned depth)
+-{
+-	return 1UL << genradix_depth_shift(depth);
+-}
+-
+ /*
+  * The 'depth' of the tree is held in the low bits of the 'root'.
+  * Since all the buffers are allocated as pages lots of low bits are zero.
+@@ -209,7 +201,7 @@ void *__genradix_iter_peek(struct genradix_iter *iter,
+ {
+ 	struct genradix_root *r;
+ 	struct genradix_node *n;
+-	unsigned level, i;
++	unsigned int shift, level, i;
+ restart:
+ 	r = READ_ONCE(radix->root);
+ 	if (!r)
+@@ -217,21 +209,21 @@ void *__genradix_iter_peek(struct genradix_iter *iter,
+ 
+ 	n	= genradix_root_to_node(r);
+ 	level	= genradix_root_to_depth(r);
++	shift = genradix_depth_shift(level);
+ 
+-	if (iter->offset >> genradix_depth_shift(level))
++	if (iter->offset >> shift)
+ 		return NULL;
+ 
+-	while (level) {
+-		level--;
++	while (shift > GENRADIX_ARY_SHIFT) {
++		shift -= GENRADIX_ARY_SHIFT;
+ 
+-		i = (iter->offset >> genradix_depth_shift(level)) &
+-			(GENRADIX_ARY - 1);
++		i = (iter->offset >> shift) % GENRADIX_ARY;
+ 
+ 		while (!n->children[i]) {
+ 			i++;
+ 			iter->offset = round_down(iter->offset +
+-					   genradix_depth_size(level),
+-					   genradix_depth_size(level));
++					   (1u << shift),
++					   1u << shift);
+ 			iter->pos = (iter->offset >> PAGE_SHIFT) *
+ 				objs_per_page;
+ 			if (i == GENRADIX_ARY)
 -- 
 2.25.1
 
