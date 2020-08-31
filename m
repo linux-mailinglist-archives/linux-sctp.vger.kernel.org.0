@@ -2,93 +2,94 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13A0C252ADF
-	for <lists+linux-sctp@lfdr.de>; Wed, 26 Aug 2020 11:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 413EC257A7D
+	for <lists+linux-sctp@lfdr.de>; Mon, 31 Aug 2020 15:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728276AbgHZJ5A convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Wed, 26 Aug 2020 05:57:00 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:26078 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728072AbgHZJ5A (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>);
-        Wed, 26 Aug 2020 05:57:00 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-284-9K-l9__PNqGXuC3Fiyhmng-1; Wed, 26 Aug 2020 10:56:57 +0100
-X-MC-Unique: 9K-l9__PNqGXuC3Fiyhmng-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Wed, 26 Aug 2020 10:56:56 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Wed, 26 Aug 2020 10:56:56 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Marcelo Ricardo Leitner' <marcelo.leitner@gmail.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "'linux-sctp@vger.kernel.org'" <linux-sctp@vger.kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        'Catalin Marinas' <catalin.marinas@arm.com>,
-        "'kent.overstreet@gmail.com'" <kent.overstreet@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        'Neil Horman' <nhorman@tuxdriver.com>
-Subject: RE: [PATCH 00/13] lib/generic-radix-tree: genradix bug fix and
- optimisations.
-Thread-Topic: [PATCH 00/13] lib/generic-radix-tree: genradix bug fix and
- optimisations.
-Thread-Index: AdZ67b0yl7qlbV/xQHyOe3+CAeHrEgAABLWAACe8Y3A=
-Date:   Wed, 26 Aug 2020 09:56:56 +0000
-Message-ID: <7894f0bc41764c0a8cb87f1482df7679@AcuMS.aculab.com>
-References: <21289d79b0474811b21ed8478c465159@AcuMS.aculab.com>
- <20200825154127.GB2444@localhost.localdomain>
-In-Reply-To: <20200825154127.GB2444@localhost.localdomain>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1727929AbgHaNdV (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 31 Aug 2020 09:33:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35962 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727053AbgHaN21 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 31 Aug 2020 09:28:27 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B59C0619F2
+        for <linux-sctp@vger.kernel.org>; Mon, 31 Aug 2020 06:26:41 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id k25so3665799ljg.9
+        for <linux-sctp@vger.kernel.org>; Mon, 31 Aug 2020 06:26:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=o69Nac3LLMj5CDhyPqLcnP7WGq46U4gQb9HzFdG/MvE=;
+        b=kc8b/w+wOTtF7zLYRjvrR1jPT/ZK7Vk2mKpv3jAxE9VT67C9fVlpfW9Y+phL1vuGxq
+         Hb3x1FpXZuW578gvCk5O04B73B4LZoP7kKsmw9UxgkoXE6gTVKzovNHYGFhIYhijFRil
+         nl0JSzi7hR74DeD8nMnyt6lcP4qNdUY/Lc8F+58ZXu/CzzOM7yUQDtVLUEwdsGkyt5VA
+         d9qEgMSd8orYp0jlQehk7NI5qh7PWtCoIKmsR98GatwAE0LmWdvtpQ20BCG/6na9SXJC
+         dRhbpFzqkzfoYJgpg/F8CGs3itwyW4e/YfM/kFooNAjpi/4QSH5iWMSkHbbwXEQIlTwE
+         oN6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=o69Nac3LLMj5CDhyPqLcnP7WGq46U4gQb9HzFdG/MvE=;
+        b=iAYo5Mz8+bGEIVoG6tmlcYaCWyqiGv15gaXwwdby5tdCQZxPGSayZzV0/4pxHkNLfI
+         a1eRFe1Gq9fRpcGAWhzB81tCwaU0hs1vyOHeSPiRsMDTLY3LQbwx8hA+qp38NIcek+rM
+         +W0tJqPNL0D0UlcSMoi737VcthEUqJ9pdWKEuA08l66g/zIAUsgS/ZV2k+wojgtPuc66
+         CYkrci0nSkXNevXI8J1/2mHqiUCuEuj0DO8vw9+BZA4osCVj1k8unlvtgXBZt1205C2R
+         h/n4T6jMBRMjT6eWkDScAZmai3EFO/j1jtT0oQtgMDbSG4gXGS6UjDwklatnMCkdxIb5
+         H6ag==
+X-Gm-Message-State: AOAM530fuogSQWXp8pjuukQCV1BkXcqNHfrKKWdFGQh4sn32iXEQcvdB
+        wY7OB19sqn2NGnT6oVCM+RyGxBdkGnzAQDgCHx8=
+X-Google-Smtp-Source: ABdhPJwwxnLJ+boQ5AWjXxG674YSv8HYua8cHn0ffhUvKkWm/U6sy8uO7QhVk0w3Z6JDIeHHrXTyb5x5hxbubByOKbo=
+X-Received: by 2002:a2e:1511:: with SMTP id s17mr724722ljd.81.1598880399293;
+ Mon, 31 Aug 2020 06:26:39 -0700 (PDT)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0.001
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Reply-To: marie_avis12@yahoo.com
+Received: by 2002:a2e:9817:0:0:0:0:0 with HTTP; Mon, 31 Aug 2020 06:26:38
+ -0700 (PDT)
+From:   Miss Maris Avis <marie.avis11@gmail.com>
+Date:   Mon, 31 Aug 2020 13:26:38 +0000
+X-Google-Sender-Auth: FfeQe1Uhq_bzJWJ1eFQ7t2v5C-w
+Message-ID: <CADTVshP+AqENJRYaXa3w3RXtbFi9dvwrKoG-vr=u5b93NO3RnQ@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: 'Marcelo Ricardo Leitner'
-> Sent: 25 August 2020 16:41
-> 
-> On Tue, Aug 25, 2020 at 02:52:34PM +0000, David Laight wrote:
-> > The genradix code is used by SCTP for accessing per-stream data.
-> > This means there are quite a lot of lookups but the code wasn't
-> > really optimised at all.
-> 
-> My test box is down for the moment and will bring it on later today or
-> tomorrow, so I can't test it yet. What should we expect as performance
-> gains here?
+My Dear,
 
-I've just done quick test that shows ~1% improvement on an MTP3+M2PA
-'double reflect' test using the 'test' userpart and a test program.
-So there is quite a lot of extra protocol stack in the way.
+My name is Miss Marie Avis the only daughter of Mr. Gabriel Avis, my
+Father was dealing in Cocoa and Timber in this country before his
+death,  It is my pleasure to contact you for a business venture which
+I intend to establish in your country. Though I have not met with you
+before but I believe one has to risk confiding before you can succeed
+sometimes in life.
 
-The test is running ~200k very small data chunks/sec (tx and rx)
-on a poor little 2.4GHz 8 core atom C2758.
+I can confide in you for my brighter future since you are a human
+being like me. There is this huge amount of Ten Million five hundred
+thousand United States dollars. ($10.500.000.00) which my late Father
+kept for me in a suspense account with one of the bank here in Abidjan
+Cote d'Ivoire before he was assassinated by unknown persons, Now I
+have decided to invest these money in your country or anywhere safe
+enough for me.
 
-However the 'baseline' kernel just locked up.
-(Reports 5.8.0+ so must be late in the merge for rc1).
+I want you to help me claim this fund from the bank and have it
+transfer into your personal account in your country for investment
+purposes in your country in these areas:
 
-Annoyingly the Ubuntu 20.04 userspace won't show the kernel messages
-(only a graphical login) - so I can see any kernel ooops messages.
-I'm going to have to setup a serial console.
-That'll need a trip into the office.
+1). Telecommunication
+2). The transport Industry
+3). Five Star Hotel
+4). Tourism
+5). Real Estate
 
-	David
+If you can be of assistance to me I will be pleased to offer you 20%
+of the total fund.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+I await your soonest response.
 
+Respectfully yours,
+Miss Marie Evis
+Tel: +225597438528
