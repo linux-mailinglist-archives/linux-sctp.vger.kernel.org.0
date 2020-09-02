@@ -2,136 +2,85 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 247C4258AE4
-	for <lists+linux-sctp@lfdr.de>; Tue,  1 Sep 2020 11:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A73CB25AE12
+	for <lists+linux-sctp@lfdr.de>; Wed,  2 Sep 2020 16:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725949AbgIAJA3 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 1 Sep 2020 05:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50452 "EHLO
+        id S1726895AbgIBO6z (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 2 Sep 2020 10:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725848AbgIAJA2 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 1 Sep 2020 05:00:28 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3B6C061244
-        for <linux-sctp@vger.kernel.org>; Tue,  1 Sep 2020 02:00:28 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id s13so359233wmh.4
-        for <linux-sctp@vger.kernel.org>; Tue, 01 Sep 2020 02:00:28 -0700 (PDT)
+        with ESMTP id S1726269AbgIBO6k (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 2 Sep 2020 10:58:40 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E409C061244
+        for <linux-sctp@vger.kernel.org>; Wed,  2 Sep 2020 07:58:39 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id d20so4608498qka.5
+        for <linux-sctp@vger.kernel.org>; Wed, 02 Sep 2020 07:58:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=malat-biz.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XQkx8fUG8mwQIi4m4nThh8XuyNKND7WiqTo03rOQoiQ=;
-        b=BBVyXvKb4FwZE0yDkzb1CNGgDTLXNI0L0YbqvLpF52oDfaQ1wl43gi5hTteW/c68Qj
-         hjZ7BGXFUBmckvySUJgp9jeXeoL4a4lVeet80NCa9hexAp6Q4yI87Ja2Pyo6LBzti22s
-         nZ6bOSspj9bE5TdQyk5rfZO6bUGXU+F2kGGI8LD4XzdB6fWk7/RBSx+PMVeSTlJtm4qR
-         DbNCMlsc039Pw7VzCNAo9zN6+qDE+osvM4jc/45kt7a03uWb0LS1V02eIfZbVlKbtmcg
-         hACdnskItzA1danuDub71PLyu13desZ/qxlV7fETdlqVJPYr29H0eg46YbWTx4CX0TaB
-         76VA==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=S1RiOa55yyVLjjH/PtR3Ei3JtyaYp4I2Cs/IjJAIRZ8=;
+        b=KVIco+kIEDJ0xT2+dTU/S5fz3T70uezeOIxxHLfmEdQCe4m/8lItM5/I3sXl0IAnUb
+         K0RP9dbLaU//bH8/HKQt5YEuxD8rdXaFGYs6bdQlHdemXoxcD5p8yAHO3pf4UryoNTZx
+         qivODFvExD3mFRWdLaidMx3eJZjXgWt5mbMzLEkLBx431FJxSTz3eAO8G7XcgLpx2ERo
+         KDuv0Y946Yox2K5LylE9kvI4m+p1hb4FlbtJQ+JrX+v4Q2i/p2K6hDXxsNRCT5as4I+Y
+         Wj+7A5ZNnZpBnZETv7nYgnxu/tDSDGbTpqbu66Tj/dqxa/w1fz4P23DAHX9T4BsnMFY0
+         4ANQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XQkx8fUG8mwQIi4m4nThh8XuyNKND7WiqTo03rOQoiQ=;
-        b=MZgLZP+DRYAzdsayvtX92UpPs5BfvGq/Sgvo3mxQwSsGsJfzWIzZDUIuNusAAqK7dm
-         un/hIHInnEV2+/NDnsP1TOpSfEdFGetey84gCTVn7pCTW97t2FTostKPJmkSDmgtHGk1
-         zSokCNPiwzpxmjUiHSm647niIMyV7DMP3iLO7NAIWm5bZi6GvZAZ3oF7vOy/elHRgLBV
-         4dZb6pwCHWBL7hiJhDOxH61mYmiqm5tCNql4TbGB8pPNFsGmvsZaZsXf8egz6FdlxFwK
-         vjEXMhnz4FrzXn6TzTOTCwExLWFfuOY4JH55iq5eCBvOmYS/HLUILawDSYGo2/XNUay0
-         ZzVg==
-X-Gm-Message-State: AOAM533HbDyhsrTxSe9/hijgQCAR/01YzFy+cfRFDgbx5/1JdIeeBy4p
-        y7H9s7tO+Pg5/QLb3XQb5yVMcLiXTKVMBjoW
-X-Google-Smtp-Source: ABdhPJw4peF/jYTpY5uLnJmb/rtRjhz/58Rri+AFrPOhLSCvueuDLf3qpNHK5YGfRt6/IbcNk+0EyQ==
-X-Received: by 2002:a1c:a90a:: with SMTP id s10mr760397wme.11.1598950826537;
-        Tue, 01 Sep 2020 02:00:26 -0700 (PDT)
-Received: from ntb.petris.klfree.cz (snat2.klfree.cz. [81.201.48.25])
-        by smtp.googlemail.com with ESMTPSA id j7sm1337591wrs.11.2020.09.01.02.00.25
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=S1RiOa55yyVLjjH/PtR3Ei3JtyaYp4I2Cs/IjJAIRZ8=;
+        b=gOsgOk1CUhKaZS3tCwoMw/k2EKSm5uWwwL7WJQ7+Ai+nPo3GFP1IFN7ClqFgeIPVuC
+         fvxldaO+9DLYXmEqVF5ZVlmepgTyQOBPuiwyQoohzcqeDmzXiAelop/eGClWRb43gP/B
+         vMiYpONuE3sUw0zAolAkqA0jWpwCoGZYuKfh8q2wxD49NY8BcCXKO+lxf9I61JokqUwe
+         4HXEYTztGhpifoi++as/6eHxzUgT8KxAv7er3ma2JzwpLcYw39XSD5mWQI86RgXg2NSl
+         dh0tsntQxkPPA2+RpryoSgE1NwzzUMf5YEjkG4jOOhA8BJzknBplKIDkysnZIOCPZRDg
+         VhcA==
+X-Gm-Message-State: AOAM532jUtOzyoWmutuv9CMceP9kWGyM7KgcK982WT4IbxQhAth0d7jT
+        NR/Kbm+tW1gtKY3EXqEcNbY=
+X-Google-Smtp-Source: ABdhPJwfELS8T6WF+LdWrhaeM3XBiErRTJJ5YBD9jgGXg9aXvWqUvc4LlXJ0uCOelRa4NAk0ZBoVww==
+X-Received: by 2002:a05:620a:7e9:: with SMTP id k9mr7581350qkk.415.1599058718186;
+        Wed, 02 Sep 2020 07:58:38 -0700 (PDT)
+Received: from localhost.localdomain ([177.220.174.181])
+        by smtp.gmail.com with ESMTPSA id r21sm4571617qtj.80.2020.09.02.07.58.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2020 02:00:25 -0700 (PDT)
-From:   Petr Malat <oss@malat.biz>
-To:     linux-sctp@vger.kernel.org
-Cc:     vyasevich@gmail.com, nhorman@tuxdriver.com,
-        marcelo.leitner@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        Petr Malat <oss@malat.biz>
-Subject: [PATCH] sctp: Honour SCTP_PARTIAL_DELIVERY_POINT even under memory pressure
-Date:   Tue,  1 Sep 2020 11:00:07 +0200
-Message-Id: <20200901090007.31061-1-oss@malat.biz>
-X-Mailer: git-send-email 2.20.1
+        Wed, 02 Sep 2020 07:58:37 -0700 (PDT)
+Received: by localhost.localdomain (Postfix, from userid 1000)
+        id 48C44C5F36; Wed,  2 Sep 2020 11:58:35 -0300 (-03)
+Date:   Wed, 2 Sep 2020 11:58:35 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Petr Malat <oss@malat.biz>
+Cc:     linux-sctp@vger.kernel.org, vyasevich@gmail.com,
+        nhorman@tuxdriver.com, davem@davemloft.net, kuba@kernel.org
+Subject: Re: [PATCH] sctp: Honour SCTP_PARTIAL_DELIVERY_POINT even under
+ memory pressure
+Message-ID: <20200902145835.GC2444@localhost.localdomain>
+References: <20200901090007.31061-1-oss@malat.biz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200901090007.31061-1-oss@malat.biz>
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Command SCTP_CMD_PART_DELIVER issued under memory pressure calls
-sctp_ulpq_partial_delivery(), which tries to fetch and partially deliver
-the first message it finds without checking if the message is longer than
-SCTP_PARTIAL_DELIVERY_POINT. According to the RFC 6458 paragraph 8.1.21.
-such a behavior is invalid. Fix it by returning the first message only if
-its part currently available is longer than SCTP_PARTIAL_DELIVERY_POINT.
+On Tue, Sep 01, 2020 at 11:00:07AM +0200, Petr Malat wrote:
+> Command SCTP_CMD_PART_DELIVER issued under memory pressure calls
+> sctp_ulpq_partial_delivery(), which tries to fetch and partially deliver
+> the first message it finds without checking if the message is longer than
+> SCTP_PARTIAL_DELIVERY_POINT. According to the RFC 6458 paragraph 8.1.21.
+> such a behavior is invalid. Fix it by returning the first message only if
+> its part currently available is longer than SCTP_PARTIAL_DELIVERY_POINT.
 
-Signed-off-by: Petr Malat <oss@malat.biz>
----
- net/sctp/ulpqueue.c | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+Okay but AFAICT this patch then violates the basic idea behind partial
+delivery. It will cause such small message to just not be delivered
+anymore, and keep using the receive buffer which it is trying to free
+some bits at this moment.
 
-diff --git a/net/sctp/ulpqueue.c b/net/sctp/ulpqueue.c
-index 1c6c640607c5..cada0b7f1548 100644
---- a/net/sctp/ulpqueue.c
-+++ b/net/sctp/ulpqueue.c
-@@ -610,6 +610,7 @@ static struct sctp_ulpevent *sctp_ulpq_retrieve_first(struct sctp_ulpq *ulpq)
- 	struct sctp_ulpevent *cevent;
- 	__u32 ctsn, next_tsn;
- 	struct sctp_ulpevent *retval;
-+	size_t pd_point, pd_len = 0;
- 
- 	/* The chunks are held in the reasm queue sorted by TSN.
- 	 * Walk through the queue sequentially and look for a sequence of
-@@ -633,8 +634,9 @@ static struct sctp_ulpevent *sctp_ulpq_retrieve_first(struct sctp_ulpq *ulpq)
- 				first_frag = pos;
- 				next_tsn = ctsn + 1;
- 				last_frag = pos;
-+				pd_len = pos->len;
- 			} else
--				goto done;
-+				goto check;
- 			break;
- 
- 		case SCTP_DATA_MIDDLE_FRAG:
-@@ -643,15 +645,19 @@ static struct sctp_ulpevent *sctp_ulpq_retrieve_first(struct sctp_ulpq *ulpq)
- 			if (ctsn == next_tsn) {
- 				next_tsn++;
- 				last_frag = pos;
-+				pd_len += pos->len;
- 			} else
--				goto done;
-+				goto check;
- 			break;
- 
- 		case SCTP_DATA_LAST_FRAG:
- 			if (!first_frag)
- 				return NULL;
--			else
-+			if (ctsn == next_tsn) {
-+				last_frag = pos;
- 				goto done;
-+			} else
-+				goto check;
- 			break;
- 
- 		default:
-@@ -659,6 +665,11 @@ static struct sctp_ulpevent *sctp_ulpq_retrieve_first(struct sctp_ulpq *ulpq)
- 		}
- 	}
- 
-+check:
-+	pd_point = sctp_sk(ulpq->asoc->base.sk)->pd_point;
-+	if (pd_point && pd_point > pd_len)
-+		return NULL;
-+
- 	/* We have the reassembled event. There is no need to look
- 	 * further.
- 	 */
--- 
-2.20.1
+Btw, you also need to Cc netdev@vger.kernel.org for patches to
+actually get applied by DaveM.
 
+  Marcelo
