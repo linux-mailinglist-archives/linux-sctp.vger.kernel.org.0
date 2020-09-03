@@ -2,95 +2,104 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC51325C041
-	for <lists+linux-sctp@lfdr.de>; Thu,  3 Sep 2020 13:25:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2353325C7F5
+	for <lists+linux-sctp@lfdr.de>; Thu,  3 Sep 2020 19:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728501AbgICLY3 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 3 Sep 2020 07:24:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35216 "EHLO
+        id S1726368AbgICRSw (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 3 Sep 2020 13:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728304AbgICLWj (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 3 Sep 2020 07:22:39 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3918EC06125C
-        for <linux-sctp@vger.kernel.org>; Thu,  3 Sep 2020 04:21:56 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id c18so2769278wrm.9
-        for <linux-sctp@vger.kernel.org>; Thu, 03 Sep 2020 04:21:56 -0700 (PDT)
+        with ESMTP id S1726327AbgICRSv (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 3 Sep 2020 13:18:51 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480ABC061244;
+        Thu,  3 Sep 2020 10:18:51 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id 19so1010926qtp.1;
+        Thu, 03 Sep 2020 10:18:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=malat-biz.20150623.gappssmtp.com; s=20150623;
+        d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=hbNg0lhyPXp69bpZHsx7gZI55ROs64ocYKP1AbhwAMk=;
-        b=jPbIFL3Cxz8mezbzV5ci3K6P8wxEZ+Z5ETFl7ZodsHQYdgW9se9y6RQ7nZTzgRj9dH
-         kX7BWvNLF/sShvWqhEj4QVTDitNRMLmdqVGd/nxg5uaa98kBa1fwtsZ9115KsxKhvETh
-         S3Xi/DAV16NjNhbXsXMjl+lg+Nukv2XEfpa5ua+VLM0m40otR1kWHLeydWld1zXTtBPP
-         9YY2zmn3gc8mIBiVN/0/zHSZZeoYX9Zo5Svoxv1pwtCe0wtm8JXv1nVObEqK6ZMt0ryJ
-         3WVPB0li51X9mRYfKWiyBLZD/4DCoqntiWmlCcno8A6NOkcPldpC/CPOqbmnwStQbbpS
-         0QCQ==
+         :content-disposition:in-reply-to;
+        bh=OC6IAwyfPw1L9yvFikovbkI6XXtokUDw7EIRshZgX6c=;
+        b=aVZHk5TSTqqpGJDhQdYLjQcBa2e4NXVNattZqnz2SvzWlJHD03ZT7cI/Bo+wdxP+pI
+         zRFyajZG1A5NBk5SLtcKdCtaFyJ1msmXwP2VWZHYbB1hG7ucaaW1NCz4oHgz0D/Q2aUD
+         7iggJkiZicLtBTzwxhNywDJpUaupTt5yWeXtjD7+jYo6uIJq37Mg6lGst0TExHUY9EUN
+         8i7SkA8bVkJL9H2Rc5NtM7D2IpFJ4ZN1OPre5g7oBpWPgvKsOO9uL9DwvCbcm8GsgNod
+         XuCowO6b+kU7iPuaX3ykvNzg6Xd+VLbskLkRkhigCkkRIEaVtOriWlHGgIW+eDD3SqhF
+         6ZkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=hbNg0lhyPXp69bpZHsx7gZI55ROs64ocYKP1AbhwAMk=;
-        b=cq2nRvAX+d/hhctxtrkWzKghPOul/Z4eIfEDRK0SxbvsA2CK4wvxwxf45KZmsZSKIE
-         G5Xk7L/PVm8VFqAd+DcWKcZnpT4BHab14q+hDofYLV2spFfvzDfmy2ikv1OrP0bFA7nh
-         I81KYV9mw25KtkeuvRpi4hpGWvFIY07l6HCSERlHgDvT7vavVNy3LyYlsQTMmrT6fTyK
-         13or577yeTDITPjmvlDzz8EIQh2ZyfGGfVqAfT/+blB+2PB3UIMkyeP4VjXU103AD6eK
-         yOYkXvQG6KzmbI/2juVrTb8cYIpS3JvybFLsUUX6BzZqlahm51tSO49SpDZdskAC8z3z
-         tj5w==
-X-Gm-Message-State: AOAM530ttW6Y5z4Qpt5kLk6+n8MuUp5Wx2bfMBGIN+ht77D/oVnt6gBj
-        G/EmhiVHzQIUW0aT8ApDTSl74LI69lpBMg==
-X-Google-Smtp-Source: ABdhPJyMNtNHfX6PRWjWh2bWV5FHyFx3wX54Okf3jOP1Zdv1fMZPJ10ybryF0lr29QT5RMlcWVUhKA==
-X-Received: by 2002:adf:a443:: with SMTP id e3mr1847298wra.146.1599132114371;
-        Thu, 03 Sep 2020 04:21:54 -0700 (PDT)
-Received: from bordel.klfree.net (bordel.klfree.cz. [81.201.48.42])
-        by smtp.gmail.com with ESMTPSA id y1sm4012236wru.87.2020.09.03.04.21.53
+         :mime-version:content-disposition:in-reply-to;
+        bh=OC6IAwyfPw1L9yvFikovbkI6XXtokUDw7EIRshZgX6c=;
+        b=tNyEvTT4MTPQE5i1EIDvPg/owgVATGICPLgqniQ9dQUOz0ZgUs9j5IQtSJSORsnsre
+         vhQ8+del7U9YgYhfpvqiyXcHxeose1usZJiLWXLY0YC66n+6VlKMoiEQBmMiMuUyn2mM
+         LpIaNshBc8+8PCOU5ZtK1tR7CdnfGIswFGTNrD8/U5pkHpo7UZgycAwno0/WZE8XnrO9
+         Bto80Nh1+UoC8A0iyUDnX320YFUAS/aYlVeeRacewoTjY9o6P4eyTjIAz910uCJ5y94D
+         mZ8OSHMw171QrQFSSJLdETzJDBrmnwxJ9NCW2DLPDfal63TDqaj4sEGmQVIKbBOycQXc
+         Bcyg==
+X-Gm-Message-State: AOAM533Tjw4heLgm6bgE/3fG3pgpKUI6JOAHAHgvsH3hkTfQaX2BrJjM
+        CWu8qg4+I6hh8YZ1IXOVFxI=
+X-Google-Smtp-Source: ABdhPJzGDvwiwRO3GDSmewCA9oibFMfRestqjYGRIvw/pH2aqqzdwZH4mdsFPmKWYreMPkKadfWC6A==
+X-Received: by 2002:ac8:fb3:: with SMTP id b48mr4706359qtk.16.1599153530393;
+        Thu, 03 Sep 2020 10:18:50 -0700 (PDT)
+Received: from localhost.localdomain ([2001:1284:f016:5ccb:a3f8:9d8c:beb:7674])
+        by smtp.gmail.com with ESMTPSA id j31sm2545455qta.6.2020.09.03.10.18.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2020 04:21:53 -0700 (PDT)
-Date:   Thu, 3 Sep 2020 13:21:48 +0200
-From:   Petr Malat <oss@malat.biz>
-To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+        Thu, 03 Sep 2020 10:18:49 -0700 (PDT)
+Received: by localhost.localdomain (Postfix, from userid 1000)
+        id 61780C5F36; Thu,  3 Sep 2020 14:18:47 -0300 (-03)
+Date:   Thu, 3 Sep 2020 14:18:47 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Petr Malat <oss@malat.biz>
 Cc:     linux-sctp@vger.kernel.org, vyasevich@gmail.com,
         nhorman@tuxdriver.com, davem@davemloft.net, kuba@kernel.org,
         netdev@vger.kernel.org
 Subject: Re: [PATCH] sctp: Honour SCTP_PARTIAL_DELIVERY_POINT even under
  memory pressure
-Message-ID: <20200903112147.GA17627@bordel.klfree.net>
+Message-ID: <20200903171847.GD2444@localhost.localdomain>
 References: <20200901090007.31061-1-oss@malat.biz>
  <20200902145835.GC2444@localhost.localdomain>
+ <20200903112147.GA17627@bordel.klfree.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200902145835.GC2444@localhost.localdomain>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200903112147.GA17627@bordel.klfree.net>
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
 Hi!
-On Wed, Sep 02, 2020 at 11:58:35AM -0300, Marcelo Ricardo Leitner wrote:
-> On Tue, Sep 01, 2020 at 11:00:07AM +0200, Petr Malat wrote:
-> > Command SCTP_CMD_PART_DELIVER issued under memory pressure calls
-> > sctp_ulpq_partial_delivery(), which tries to fetch and partially deliver
-> > the first message it finds without checking if the message is longer than
-> > SCTP_PARTIAL_DELIVERY_POINT. According to the RFC 6458 paragraph 8.1.21.
-> > such a behavior is invalid. Fix it by returning the first message only if
-> > its part currently available is longer than SCTP_PARTIAL_DELIVERY_POINT.
-> 
-> Okay but AFAICT this patch then violates the basic idea behind partial
-> delivery. It will cause such small message to just not be delivered
-> anymore, and keep using the receive buffer which it is trying to free
-> some bits at this moment.
-By default the pd_point is set to 0, so there will not be a change in the
-behavior, but if the user changes it to some other value, it should be
-respected by the stack - for example when the largest message the user
-exchanges is 1kB and the user sets it to 1kB, his application is not
-prepared to handle fragmented messages at all and it's not a good idea to
-pass such a message to the app.
- 
-> Btw, you also need to Cc netdev@vger.kernel.org for patches to
-> actually get applied by DaveM.
-Thanks, I will add it to this message and bounce the original patch message
-as well.
-  Petr
+
+On Thu, Sep 03, 2020 at 01:21:48PM +0200, Petr Malat wrote:
+> Hi!
+> On Wed, Sep 02, 2020 at 11:58:35AM -0300, Marcelo Ricardo Leitner wrote:
+> > On Tue, Sep 01, 2020 at 11:00:07AM +0200, Petr Malat wrote:
+> > > Command SCTP_CMD_PART_DELIVER issued under memory pressure calls
+> > > sctp_ulpq_partial_delivery(), which tries to fetch and partially deliver
+> > > the first message it finds without checking if the message is longer than
+> > > SCTP_PARTIAL_DELIVERY_POINT. According to the RFC 6458 paragraph 8.1.21.
+> > > such a behavior is invalid. Fix it by returning the first message only if
+> > > its part currently available is longer than SCTP_PARTIAL_DELIVERY_POINT.
+> > 
+> > Okay but AFAICT this patch then violates the basic idea behind partial
+> > delivery. It will cause such small message to just not be delivered
+> > anymore, and keep using the receive buffer which it is trying to free
+> > some bits at this moment.
+> By default the pd_point is set to 0, so there will not be a change in the
+> behavior, but if the user changes it to some other value, it should be
+> respected by the stack - for example when the largest message the user
+> exchanges is 1kB and the user sets it to 1kB, his application is not
+> prepared to handle fragmented messages at all and it's not a good idea to
+> pass such a message to the app.
+
+Then, if it doesn't support fragmented messages at all, the app just
+shouldn't be setting pd_point at all. :-) Anyhow, I see how the patch
+works now.
+
+The fix is also needed on sctp_intl_retrieve_first() and
+sctp_intl_retrieve_first_uo(). Same issue is in there, but for stream
+interleaving.
+
+Thanks.
