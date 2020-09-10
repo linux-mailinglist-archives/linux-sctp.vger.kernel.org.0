@@ -2,29 +2,29 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC13263D58
-	for <lists+linux-sctp@lfdr.de>; Thu, 10 Sep 2020 08:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CEA3263DAE
+	for <lists+linux-sctp@lfdr.de>; Thu, 10 Sep 2020 08:53:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730021AbgIJG2e (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 10 Sep 2020 02:28:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52524 "EHLO mail.kernel.org"
+        id S1730082AbgIJGxW (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 10 Sep 2020 02:53:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33088 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726440AbgIJG21 (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 10 Sep 2020 02:28:27 -0400
-Received: from coco.lan (ip5f5ad5ac.dynamic.kabel-deutschland.de [95.90.213.172])
+        id S1726961AbgIJGxQ (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Thu, 10 Sep 2020 02:53:16 -0400
+Received: from localhost (p5486ceec.dip0.t-ipconnect.de [84.134.206.236])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 79CF6206A1;
-        Thu, 10 Sep 2020 06:28:16 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 93A222078E;
+        Thu, 10 Sep 2020 06:53:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599719306;
-        bh=DjrBPnz1BgCnBYG/64IiUxKEJrMJGKb1A3mRWVpncJk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KppkCOGGex5Td4qsjLzCFk1NCf4XHbXpibLJsQYMVVaT0bkaAFQjn+ZuEeXf2o77m
-         UyE3jBNOXTpotfoeco2l+h7jkiCeDQm7I+A6v3H6sCfl0zDTboY8/bNQu+oaB5Un+6
-         r8LmWMYkPZepovOPOzqdHyn81ea3fXGQ2O9gVUL8=
-Date:   Thu, 10 Sep 2020 08:28:12 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+        s=default; t=1599720795;
+        bh=/LOePKGDUR83plqAhx1ySvpBeTmOBTt4AYD41Ar10p8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e3Jk9M7ZKtsnsBd892ykDqq6ldjJyX23IqJ7DyDWgKOR2vkDHWpTUx3L4W3ZSGRl8
+         gbJ25CK/q4T0DRgLEQdFDMLfOBf9AoSauHV2UkWklXje0SfXK1Ub2yM0Bl5ncgFE73
+         tRqSbJwVN+gRudxLpTtOTt3VxbQSMkA19oVYS08w=
+Date:   Thu, 10 Sep 2020 08:53:12 +0200
+From:   Wolfram Sang <wsa@kernel.org>
 To:     Joe Perches <joe@perches.com>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Jiri Kosina <trivial@kernel.org>,
@@ -54,55 +54,63 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         alsa-devel <alsa-devel@alsa-project.org>
 Subject: Re: [trivial PATCH] treewide: Convert switch/case fallthrough; to
  break;
-Message-ID: <20200910082812.057a04e6@coco.lan>
-In-Reply-To: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
+Message-ID: <20200910065312.GH1031@ninjato>
 References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
-X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="OpLPJvDmhXTZE4Lg"
+Content-Disposition: inline
+In-Reply-To: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Em Wed, 09 Sep 2020 13:06:39 -0700
-Joe Perches <joe@perches.com> escreveu:
 
-> fallthrough to a separate case/default label break; isn't very readable.
-> 
-> Convert pseudo-keyword fallthrough; statements to a simple break; when
-> the next label is case or default and the only statement in the next
-> label block is break;
-> 
-> Found using:
-> 
-> $ grep-2.5.4 -rP --include=*.[ch] -n "fallthrough;(\s*(case\s+\w+|default)\s*:\s*){1,7}break;" *
-> 
-> Miscellanea:
-> 
-> o Move or coalesce a couple label blocks above a default: block.
-> 
-> Signed-off-by: Joe Perches <joe@perches.com>
-> ---
-> 
-> Compiled allyesconfig x86-64 only.
-> A few files for other arches were not compiled.
-> 
+--OpLPJvDmhXTZE4Lg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 
->  drivers/media/dvb-frontends/drxd_hard.c                   |  2 +-
->  drivers/media/i2c/ov5640.c                                |  2 +-
->  drivers/media/i2c/ov6650.c                                |  5 ++---
->  drivers/media/i2c/smiapp/smiapp-core.c                    |  2 +-
->  drivers/media/i2c/tvp5150.c                               |  2 +-
->  drivers/media/pci/ddbridge/ddbridge-core.c                |  2 +-
->  drivers/media/usb/cpia2/cpia2_core.c                      |  2 +-
+> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> index e32ef3f01fe8..b13b1cbcac29 100644
+> --- a/drivers/i2c/busses/i2c-i801.c
+> +++ b/drivers/i2c/busses/i2c-i801.c
+> @@ -1785,7 +1785,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>  		fallthrough;
+>  	case PCI_DEVICE_ID_INTEL_82801CA_3:
+>  		priv->features |= FEATURE_HOST_NOTIFY;
+> -		fallthrough;
+> +		break;
+>  	case PCI_DEVICE_ID_INTEL_82801BA_2:
+>  	case PCI_DEVICE_ID_INTEL_82801AB_3:
+>  	case PCI_DEVICE_ID_INTEL_82801AA_3:
 
-For media drivers:
+I am not the maintainer (Jean is) but I suggest to drop this hunk. The
+code is more complex with multiple 'fallthrough', so this change alone
+actually makes the code inconsistent. A rework would need a seperate
+patch.
 
-Reviewed-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
+--OpLPJvDmhXTZE4Lg
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks,
-Mauro
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9ZzVQACgkQFA3kzBSg
+KbYNuA//cymFe0KsFqywRHv3eBWJhoqwvWN2Xhwrx5/b6N3kkKGTo61aOo1ZI2gU
+55rQoGusy8OzGXaxlyhNS8Ea9ztPZc/tHEohOHKPYr52ErUMXlbMo3I3q7sZAZEI
+O/bRlnPKUCKqKOpZBin0ri6NE3FNYybTW30HgIk/LFUeCuaup10cUcxCmPfXHlNc
+M/2M2tBVyyBOqlVVsPxIfEZ4jGDaikxt7mBZDj4QMJnivnuMFuuz8U7gYzkXIHfO
+4ahGx+dBLCCInwFNFjEIPr+biq6Bgt/Vl9bbgN/BYbzdgbbJcikEhWHd9FxEoxQ5
+Y4M6/HxLDuCwTLIoFHjVifsFHK4Emk5ECc0xBWjHu3CJDunZSmy6yS5gbD1BrstW
+Djf0Ue1kyqnVPBDKE0EwFmwz1z1V14bhhXVC1fkiJjTpYRA6g3zMwH1oan6XIbGj
+v4OuWFDkQLEfzCCBIASGS849HtQ4rNafKxX3KQ3qxngh7XBrK7X92SLf3qRJurdt
+h5Ozd/zYDzyKQ1nOf/XWAOP5SKZH2ANjTrFKgIZE8MRkTmbzrlZkCnDnFD0pKPlB
+Z9h9uPZ7kifAejwaRPfsTu6/B9XJafMKfLa3hKTg2kgO+p67ItBEQ0W8wrXLE1/1
+c5FW5PqdkjKnx/9yUqosjEsHV2goh1guE4cziLkF1pZXcrElbtk=
+=ZP3J
+-----END PGP SIGNATURE-----
+
+--OpLPJvDmhXTZE4Lg--
