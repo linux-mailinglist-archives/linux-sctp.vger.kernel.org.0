@@ -2,34 +2,26 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C975126A18C
-	for <lists+linux-sctp@lfdr.de>; Tue, 15 Sep 2020 11:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB02D26A1FA
+	for <lists+linux-sctp@lfdr.de>; Tue, 15 Sep 2020 11:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726425AbgIOJGj (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 15 Sep 2020 05:06:39 -0400
-Received: from mga03.intel.com ([134.134.136.65]:35019 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726269AbgIOJGe (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Tue, 15 Sep 2020 05:06:34 -0400
-IronPort-SDR: RZD/fFWTjvWyaYIJCtNMDzEdl4brC47SlQmB8DC403Dr6vIA5u/jFu0AFJj/JoHYnbKKWwa4bw
- iw1Jurkpfvfw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9744"; a="159272034"
-X-IronPort-AV: E=Sophos;i="5.76,429,1592895600"; 
-   d="scan'208";a="159272034"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2020 02:06:31 -0700
-IronPort-SDR: JN6muYTQqB3wm3kCXqk1xsORqKL94poqyPOQLwwV9SSOFBG1M/RLedvNq9ruyR1KSefDfAWvPJ
- brvH/uTc728w==
-X-IronPort-AV: E=Sophos;i="5.76,429,1592895600"; 
-   d="scan'208";a="482690707"
-Received: from emoriart-mobl.ger.corp.intel.com (HELO localhost) ([10.252.7.208])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2020 02:06:16 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Joe Perches <joe@perches.com>, LKML <linux-kernel@vger.kernel.org>,
-        Jiri Kosina <trivial@kernel.org>
-Cc:     linux-wireless@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        id S1726402AbgIOJTu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Tue, 15 Sep 2020 05:19:50 -0400
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:59441 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726185AbgIOJTo (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 15 Sep 2020 05:19:44 -0400
+X-Originating-IP: 91.224.148.103
+Received: from xps13 (unknown [91.224.148.103])
+        (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id A7B9F60004;
+        Tue, 15 Sep 2020 09:19:26 +0000 (UTC)
+Date:   Tue, 15 Sep 2020 11:19:25 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Joe Perches <joe@perches.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Jiri Kosina <trivial@kernel.org>,
+        linux-wireless@vger.kernel.org, linux-fbdev@vger.kernel.org,
         oss-drivers@netronome.com, nouveau@lists.freedesktop.org,
         alsa-devel <alsa-devel@alsa-project.org>,
         dri-devel@lists.freedesktop.org, linux-ide@vger.kernel.org,
@@ -54,41 +46,29 @@ Cc:     linux-wireless@vger.kernel.org, linux-fbdev@vger.kernel.org,
         linux-mips@vger.kernel.org, iommu@lists.linux-foundation.org,
         netfilter-devel@vger.kernel.org, linux-crypto@vger.kernel.org,
         bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [Intel-gfx] [trivial PATCH] treewide: Convert switch/case fallthrough; to break;
+Subject: Re: [trivial PATCH] treewide: Convert switch/case fallthrough; to
+ break;
+Message-ID: <20200915111925.475dd3f1@xps13>
 In-Reply-To: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
-Date:   Tue, 15 Sep 2020 12:06:21 +0300
-Message-ID: <87d02nxvci.fsf@intel.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-sctp-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, 09 Sep 2020, Joe Perches <joe@perches.com> wrote:
-> diff --git a/drivers/gpu/drm/i915/display/intel_sprite.c b/drivers/gpu/drm/i915/display/intel_sprite.c
-> index 5ac0dbf0e03d..35ac539cc2b1 100644
-> --- a/drivers/gpu/drm/i915/display/intel_sprite.c
-> +++ b/drivers/gpu/drm/i915/display/intel_sprite.c
-> @@ -2861,7 +2861,7 @@ static bool gen12_plane_format_mod_supported(struct drm_plane *_plane,
->  	case I915_FORMAT_MOD_Y_TILED_GEN12_MC_CCS:
->  		if (!gen12_plane_supports_mc_ccs(dev_priv, plane->id))
->  			return false;
-> -		fallthrough;
-> +		break;
->  	case DRM_FORMAT_MOD_LINEAR:
->  	case I915_FORMAT_MOD_X_TILED:
->  	case I915_FORMAT_MOD_Y_TILED:
+Hi Joe,
 
-Acked-by: Jani Nikula <jani.nikula@intel.com>
+For MTD:
 
-for merging via whichever tree seems best.
+>  drivers/mtd/nand/raw/nandsim.c                            |  2 +-
 
-BR,
-Jani.
+Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
 
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+Thanks,
+Miquèl
