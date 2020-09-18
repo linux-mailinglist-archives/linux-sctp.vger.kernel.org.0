@@ -2,221 +2,135 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F175426F3D1
-	for <lists+linux-sctp@lfdr.de>; Fri, 18 Sep 2020 05:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A43326FE7C
+	for <lists+linux-sctp@lfdr.de>; Fri, 18 Sep 2020 15:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730450AbgIRDJi (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 17 Sep 2020 23:09:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48794 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726923AbgIRCC7 (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 17 Sep 2020 22:02:59 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 74422235F8;
-        Fri, 18 Sep 2020 02:02:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600394579;
-        bh=z3cq8uP5j9vPCTvW5PJyOHpJbQY4CZsfSa+iok3AV/c=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yxTKIhM2ewUenkX4sH6z0f0A9gkvMKUMmThaEL7PsEYoE6qUyGIUSOsoloh8ZQ5sB
-         GPg6IpnIEcX9j5EnRVhZ/1NU5GvkCtU3hJA6xKG5zjXV+t242cHaz6H8zA4Salcf3i
-         0eKG7uMDrLB3ftTHfywu+kcQE4dWNzk3lihXkdnw=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kevin Kou <qdkevin.kou@gmail.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        id S1726354AbgIRNaC (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 18 Sep 2020 09:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726126AbgIRNaC (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 18 Sep 2020 09:30:02 -0400
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08894C0613CE;
+        Fri, 18 Sep 2020 06:30:02 -0700 (PDT)
+Received: by mail-qt1-x844.google.com with SMTP id n10so4923297qtv.3;
+        Fri, 18 Sep 2020 06:30:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vASDjEll6360SujAnjlOkOkT4JdvbE9lhOhXWeoPleE=;
+        b=iaE8JMtgxMFET5j8BgD9mRCKX/eq0V3KVrnKyozizQNZ/SK2gOuiy9LuDCcd5wN9yo
+         ZiYisPuSzE/UqpsvLSxzY7O/J0x+MCPvX/9+kLqhkoqljp38LRLoFFnkaax1TtE8bVof
+         pVLq0q0gY+yuypZK42If1I+/HfvlPUvypPQYZG/AX/Ko929il5wWQXDijPvUzgWO9YMl
+         nzChB4l2bH9/YXxDoN72CKoM9/hIcifgZ7GPxQecPmcKF78/PFbUzl1ib0JM+Mj4zz1T
+         c90HOkfg3+k+fuiDt8WMpHvcM8+PCKlVNKFlaCwNMvIhlAOJNpTzAcbqiDjGnaNHyiu7
+         H15g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vASDjEll6360SujAnjlOkOkT4JdvbE9lhOhXWeoPleE=;
+        b=NVMH+zNvBs+eVauhg8f2mONNvFMAs+3Rg43MvRu2VPxCpTytD5NxAeBa6GMubsCCw6
+         HPqgDHT3wgnP78ZqyntMaO7AmKPdOivzIFAGL0Xz1CjJQiOGiizC8a7enkTx08qn5tjM
+         gndKqIH6ph1//AIBpnQjoUEPH9R2T/4nFrpIcGo7AZHPGx1iS9dMMWudN3R8s7Uuw84W
+         CFmwRW9BwslFZw9Eja6ubvZ5bGOMUDOFRlQ35ZjWVR4tZgtlQxYn9J1FK+Gk4Mk1u2st
+         dnYkroM4+/iqnS3OJ/gUxCr3hpkABYn8yAdm5pA9ogztXZY3GFBt7Xv2Y8uyuH6j05wN
+         jSMQ==
+X-Gm-Message-State: AOAM530k3rxTfmHZ3bACOx7Zwf/EpCu3KLk3OkhvVhSuEDTsDMzULHVK
+        U/+u98BuOUdZi3Drtwsl6t8=
+X-Google-Smtp-Source: ABdhPJwP89l58R0b0P2ljD2Q/hpiLcFOLGbgRZjclDShsIg/UelGnTmLNnAFslgB0yxcJKURjsYOeg==
+X-Received: by 2002:ac8:1488:: with SMTP id l8mr33223704qtj.131.1600435801141;
+        Fri, 18 Sep 2020 06:30:01 -0700 (PDT)
+Received: from localhost.localdomain ([2001:1284:f013:eda9:8c35:6fe5:a04c:832])
+        by smtp.gmail.com with ESMTPSA id p3sm1996690qkj.113.2020.09.18.06.29.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Sep 2020 06:30:00 -0700 (PDT)
+Received: by localhost.localdomain (Postfix, from userid 1000)
+        id C354BC1D68; Fri, 18 Sep 2020 10:29:57 -0300 (-03)
+Date:   Fri, 18 Sep 2020 10:29:57 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Henry Ptasinski <hptasinski@google.com>
+Cc:     linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
         "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 090/330] sctp: move trace_sctp_probe_path into sctp_outq_sack
-Date:   Thu, 17 Sep 2020 21:57:10 -0400
-Message-Id: <20200918020110.2063155-90-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200918020110.2063155-1-sashal@kernel.org>
-References: <20200918020110.2063155-1-sashal@kernel.org>
+        Jakub Kicinski <kuba@kernel.org>,
+        Corey Minyard <cminyard@mvista.com>
+Subject: Re: [PATCH] net: sctp: Fix IPv6 ancestor_size calc in
+ sctp_copy_descendant
+Message-ID: <20200918132957.GB82043@localhost.localdomain>
+References: <20200918015610.3596417-1-hptasinski@google.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200918015610.3596417-1-hptasinski@google.com>
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Kevin Kou <qdkevin.kou@gmail.com>
+On Fri, Sep 18, 2020 at 01:56:10AM +0000, Henry Ptasinski wrote:
+> When calculating ancestor_size with IPv6 enabled, simply using
+> sizeof(struct ipv6_pinfo) doesn't account for extra bytes needed for
+> alignment in the struct sctp6_sock. On x86, there aren't any extra
+> bytes, but on ARM the ipv6_pinfo structure is aligned on an 8-byte
+> boundary so there were 4 pad bytes that were omitted from the
+> ancestor_size calculation.  This would lead to corruption of the
+> pd_lobby pointers, causing an oops when trying to free the sctp
+> structure on socket close.
 
-[ Upstream commit f643ee295c1c63bc117fb052d4da681354d6f732 ]
+Makes sense.
 
-The original patch bringed in the "SCTP ACK tracking trace event"
-feature was committed at Dec.20, 2017, it replaced jprobe usage
-with trace events, and bringed in two trace events, one is
-TRACE_EVENT(sctp_probe), another one is TRACE_EVENT(sctp_probe_path).
-The original patch intended to trigger the trace_sctp_probe_path in
-TRACE_EVENT(sctp_probe) as below code,
+> 
+> Signed-off-by: Henry Ptasinski <hptasinski@google.com>
 
-+TRACE_EVENT(sctp_probe,
-+
-+	TP_PROTO(const struct sctp_endpoint *ep,
-+		 const struct sctp_association *asoc,
-+		 struct sctp_chunk *chunk),
-+
-+	TP_ARGS(ep, asoc, chunk),
-+
-+	TP_STRUCT__entry(
-+		__field(__u64, asoc)
-+		__field(__u32, mark)
-+		__field(__u16, bind_port)
-+		__field(__u16, peer_port)
-+		__field(__u32, pathmtu)
-+		__field(__u32, rwnd)
-+		__field(__u16, unack_data)
-+	),
-+
-+	TP_fast_assign(
-+		struct sk_buff *skb = chunk->skb;
-+
-+		__entry->asoc = (unsigned long)asoc;
-+		__entry->mark = skb->mark;
-+		__entry->bind_port = ep->base.bind_addr.port;
-+		__entry->peer_port = asoc->peer.port;
-+		__entry->pathmtu = asoc->pathmtu;
-+		__entry->rwnd = asoc->peer.rwnd;
-+		__entry->unack_data = asoc->unack_data;
-+
-+		if (trace_sctp_probe_path_enabled()) {
-+			struct sctp_transport *sp;
-+
-+			list_for_each_entry(sp, &asoc->peer.transport_addr_list,
-+					    transports) {
-+				trace_sctp_probe_path(sp, asoc);
-+			}
-+		}
-+	),
+Please add a:
+Fixes: 636d25d557d1 ("sctp: not copy sctp_sock pd_lobby in sctp_copy_descendant")
 
-But I found it did not work when I did testing, and trace_sctp_probe_path
-had no output, I finally found that there is trace buffer lock
-operation(trace_event_buffer_reserve) in include/trace/trace_events.h:
+> ---
+>  net/sctp/socket.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+> index 836615f71a7d..a6358c81f087 100644
+> --- a/net/sctp/socket.c
+> +++ b/net/sctp/socket.c
+> @@ -9220,12 +9220,14 @@ void sctp_copy_sock(struct sock *newsk, struct sock *sk,
+>  static inline void sctp_copy_descendant(struct sock *sk_to,
+          ^^^^^^  I'll send a patch to fix/remove this.
 
-static notrace void							\
-trace_event_raw_event_##call(void *__data, proto)			\
-{									\
-	struct trace_event_file *trace_file = __data;			\
-	struct trace_event_data_offsets_##call __maybe_unused __data_offsets;\
-	struct trace_event_buffer fbuffer;				\
-	struct trace_event_raw_##call *entry;				\
-	int __data_size;						\
-									\
-	if (trace_trigger_soft_disabled(trace_file))			\
-		return;							\
-									\
-	__data_size = trace_event_get_offsets_##call(&__data_offsets, args); \
-									\
-	entry = trace_event_buffer_reserve(&fbuffer, trace_file,	\
-				 sizeof(*entry) + __data_size);		\
-									\
-	if (!entry)							\
-		return;							\
-									\
-	tstruct								\
-									\
-	{ assign; }							\
-									\
-	trace_event_buffer_commit(&fbuffer);				\
-}
+>  					const struct sock *sk_from)
+>  {
+> -	int ancestor_size = sizeof(struct inet_sock) +
+> -			    sizeof(struct sctp_sock) -
+> -			    offsetof(struct sctp_sock, pd_lobby);
+                                                       ^^^^^^^^
 
-The reason caused no output of trace_sctp_probe_path is that
-trace_sctp_probe_path written in TP_fast_assign part of
-TRACE_EVENT(sctp_probe), and it will be placed( { assign; } ) after the
-trace_event_buffer_reserve() when compiler expands Macro,
+Then, as this patch is actually fixing the aforementioned commit,
+please also update the comment on sctp_sock definition, as pd_lobby
+now is also skipped.
 
-        entry = trace_event_buffer_reserve(&fbuffer, trace_file,        \
-                                 sizeof(*entry) + __data_size);         \
-                                                                        \
-        if (!entry)                                                     \
-                return;                                                 \
-                                                                        \
-        tstruct                                                         \
-                                                                        \
-        { assign; }                                                     \
+> +	size_t ancestor_size = sizeof(struct inet_sock);
+>  
+>  	if (sk_from->sk_family == PF_INET6)
+> -		ancestor_size += sizeof(struct ipv6_pinfo);
+> +		ancestor_size += sizeof(struct sctp6_sock);
 
-so trace_sctp_probe_path finally can not acquire trace_event_buffer
-and return no output, that is to say the nest of tracepoint entry function
-is not allowed. The function call flow is:
+As you probably noticed by the build bot email already, there need to
+be some protection to building without IPv6 enabled.
 
-trace_sctp_probe()
--> trace_event_raw_event_sctp_probe()
- -> lock buffer
- -> trace_sctp_probe_path()
-   -> trace_event_raw_event_sctp_probe_path()  --nested
-   -> buffer has been locked and return no output.
+To avoid ifdefs here, something similar to how
+inet_sk_copy_descendant() is done is probably welcomed, but please
+feel free to be creative. :-)
 
-This patch is to remove trace_sctp_probe_path from the TP_fast_assign
-part of TRACE_EVENT(sctp_probe) to avoid the nest of entry function,
-and trigger sctp_probe_path_trace in sctp_outq_sack.
-
-After this patch, you can enable both events individually,
-  # cd /sys/kernel/debug/tracing
-  # echo 1 > events/sctp/sctp_probe/enable
-  # echo 1 > events/sctp/sctp_probe_path/enable
-
-Or, you can enable all the events under sctp.
-
-  # echo 1 > events/sctp/enable
-
-Signed-off-by: Kevin Kou <qdkevin.kou@gmail.com>
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- include/trace/events/sctp.h | 9 ---------
- net/sctp/outqueue.c         | 6 ++++++
- 2 files changed, 6 insertions(+), 9 deletions(-)
-
-diff --git a/include/trace/events/sctp.h b/include/trace/events/sctp.h
-index 7475c7be165aa..d4aac34365955 100644
---- a/include/trace/events/sctp.h
-+++ b/include/trace/events/sctp.h
-@@ -75,15 +75,6 @@ TRACE_EVENT(sctp_probe,
- 		__entry->pathmtu = asoc->pathmtu;
- 		__entry->rwnd = asoc->peer.rwnd;
- 		__entry->unack_data = asoc->unack_data;
--
--		if (trace_sctp_probe_path_enabled()) {
--			struct sctp_transport *sp;
--
--			list_for_each_entry(sp, &asoc->peer.transport_addr_list,
--					    transports) {
--				trace_sctp_probe_path(sp, asoc);
--			}
--		}
- 	),
- 
- 	TP_printk("asoc=%#llx mark=%#x bind_port=%d peer_port=%d pathmtu=%d "
-diff --git a/net/sctp/outqueue.c b/net/sctp/outqueue.c
-index 0dab62b67b9a4..adceb226ffab3 100644
---- a/net/sctp/outqueue.c
-+++ b/net/sctp/outqueue.c
-@@ -36,6 +36,7 @@
- #include <net/sctp/sctp.h>
- #include <net/sctp/sm.h>
- #include <net/sctp/stream_sched.h>
-+#include <trace/events/sctp.h>
- 
- /* Declare internal functions here.  */
- static int sctp_acked(struct sctp_sackhdr *sack, __u32 tsn);
-@@ -1238,6 +1239,11 @@ int sctp_outq_sack(struct sctp_outq *q, struct sctp_chunk *chunk)
- 	/* Grab the association's destination address list. */
- 	transport_list = &asoc->peer.transport_addr_list;
- 
-+	/* SCTP path tracepoint for congestion control debugging. */
-+	list_for_each_entry(transport, transport_list, transports) {
-+		trace_sctp_probe_path(transport, asoc);
-+	}
-+
- 	sack_ctsn = ntohl(sack->cum_tsn_ack);
- 	gap_ack_blocks = ntohs(sack->num_gap_ack_blocks);
- 	asoc->stats.gapcnt += gap_ack_blocks;
--- 
-2.25.1
-
+> +	else
+> +		ancestor_size += sizeof(struct sctp_sock);
+> +
+> +	ancestor_size -= offsetof(struct sctp_sock, pd_lobby);
+>  
+>  	__inet_sk_copy_descendant(sk_to, sk_from, ancestor_size);
+>  }
+> -- 
+> 2.28.0.681.g6f77f65b4e-goog
+> 
