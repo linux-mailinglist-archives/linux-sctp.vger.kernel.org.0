@@ -2,27 +2,27 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C36CF26F134
-	for <lists+linux-sctp@lfdr.de>; Fri, 18 Sep 2020 04:49:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F175426F3D1
+	for <lists+linux-sctp@lfdr.de>; Fri, 18 Sep 2020 05:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728208AbgIRCJB (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 17 Sep 2020 22:09:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60660 "EHLO mail.kernel.org"
+        id S1730450AbgIRDJi (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 17 Sep 2020 23:09:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48794 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726759AbgIRCJA (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 17 Sep 2020 22:09:00 -0400
+        id S1726923AbgIRCC7 (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Thu, 17 Sep 2020 22:02:59 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 58E562389E;
-        Fri, 18 Sep 2020 02:08:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 74422235F8;
+        Fri, 18 Sep 2020 02:02:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600394939;
-        bh=1S77m4row9Ck+TBXx2z25Pwb64xZDCNkJSlX5PfCtF4=;
+        s=default; t=1600394579;
+        bh=z3cq8uP5j9vPCTvW5PJyOHpJbQY4CZsfSa+iok3AV/c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b54frm6rigxi28dU+rKEl+uD59iPOg/gn8qVMEsNymRG/dy8EefTne35Gr8C3dw4U
-         MjYrvjY/TL+ldGdFeRSu0JTNcn6d6hYPT9+Isxtb8nBKI0UVc80F0HvhtOCNOYfRez
-         QM7r9mzpLS9/THgnjNoSKKHRYMoxWBvAE1E1D+Nk=
+        b=yxTKIhM2ewUenkX4sH6z0f0A9gkvMKUMmThaEL7PsEYoE6qUyGIUSOsoloh8ZQ5sB
+         GPg6IpnIEcX9j5EnRVhZ/1NU5GvkCtU3hJA6xKG5zjXV+t242cHaz6H8zA4Salcf3i
+         0eKG7uMDrLB3ftTHfywu+kcQE4dWNzk3lihXkdnw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Kevin Kou <qdkevin.kou@gmail.com>,
@@ -30,12 +30,12 @@ Cc:     Kevin Kou <qdkevin.kou@gmail.com>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, linux-sctp@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 048/206] sctp: move trace_sctp_probe_path into sctp_outq_sack
-Date:   Thu, 17 Sep 2020 22:05:24 -0400
-Message-Id: <20200918020802.2065198-48-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 090/330] sctp: move trace_sctp_probe_path into sctp_outq_sack
+Date:   Thu, 17 Sep 2020 21:57:10 -0400
+Message-Id: <20200918020110.2063155-90-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200918020802.2065198-1-sashal@kernel.org>
-References: <20200918020802.2065198-1-sashal@kernel.org>
+In-Reply-To: <20200918020110.2063155-1-sashal@kernel.org>
+References: <20200918020110.2063155-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -194,10 +194,10 @@ index 7475c7be165aa..d4aac34365955 100644
  
  	TP_printk("asoc=%#llx mark=%#x bind_port=%d peer_port=%d pathmtu=%d "
 diff --git a/net/sctp/outqueue.c b/net/sctp/outqueue.c
-index 7bb8e5603298d..d6e83a37a1adf 100644
+index 0dab62b67b9a4..adceb226ffab3 100644
 --- a/net/sctp/outqueue.c
 +++ b/net/sctp/outqueue.c
-@@ -51,6 +51,7 @@
+@@ -36,6 +36,7 @@
  #include <net/sctp/sctp.h>
  #include <net/sctp/sm.h>
  #include <net/sctp/stream_sched.h>
@@ -205,7 +205,7 @@ index 7bb8e5603298d..d6e83a37a1adf 100644
  
  /* Declare internal functions here.  */
  static int sctp_acked(struct sctp_sackhdr *sack, __u32 tsn);
-@@ -1257,6 +1258,11 @@ int sctp_outq_sack(struct sctp_outq *q, struct sctp_chunk *chunk)
+@@ -1238,6 +1239,11 @@ int sctp_outq_sack(struct sctp_outq *q, struct sctp_chunk *chunk)
  	/* Grab the association's destination address list. */
  	transport_list = &asoc->peer.transport_addr_list;
  
