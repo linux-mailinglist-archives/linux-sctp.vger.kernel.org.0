@@ -2,135 +2,159 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A43326FE7C
-	for <lists+linux-sctp@lfdr.de>; Fri, 18 Sep 2020 15:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BED4270459
+	for <lists+linux-sctp@lfdr.de>; Fri, 18 Sep 2020 20:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726354AbgIRNaC (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 18 Sep 2020 09:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46736 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726126AbgIRNaC (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 18 Sep 2020 09:30:02 -0400
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08894C0613CE;
-        Fri, 18 Sep 2020 06:30:02 -0700 (PDT)
-Received: by mail-qt1-x844.google.com with SMTP id n10so4923297qtv.3;
-        Fri, 18 Sep 2020 06:30:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vASDjEll6360SujAnjlOkOkT4JdvbE9lhOhXWeoPleE=;
-        b=iaE8JMtgxMFET5j8BgD9mRCKX/eq0V3KVrnKyozizQNZ/SK2gOuiy9LuDCcd5wN9yo
-         ZiYisPuSzE/UqpsvLSxzY7O/J0x+MCPvX/9+kLqhkoqljp38LRLoFFnkaax1TtE8bVof
-         pVLq0q0gY+yuypZK42If1I+/HfvlPUvypPQYZG/AX/Ko929il5wWQXDijPvUzgWO9YMl
-         nzChB4l2bH9/YXxDoN72CKoM9/hIcifgZ7GPxQecPmcKF78/PFbUzl1ib0JM+Mj4zz1T
-         c90HOkfg3+k+fuiDt8WMpHvcM8+PCKlVNKFlaCwNMvIhlAOJNpTzAcbqiDjGnaNHyiu7
-         H15g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vASDjEll6360SujAnjlOkOkT4JdvbE9lhOhXWeoPleE=;
-        b=NVMH+zNvBs+eVauhg8f2mONNvFMAs+3Rg43MvRu2VPxCpTytD5NxAeBa6GMubsCCw6
-         HPqgDHT3wgnP78ZqyntMaO7AmKPdOivzIFAGL0Xz1CjJQiOGiizC8a7enkTx08qn5tjM
-         gndKqIH6ph1//AIBpnQjoUEPH9R2T/4nFrpIcGo7AZHPGx1iS9dMMWudN3R8s7Uuw84W
-         CFmwRW9BwslFZw9Eja6ubvZ5bGOMUDOFRlQ35ZjWVR4tZgtlQxYn9J1FK+Gk4Mk1u2st
-         dnYkroM4+/iqnS3OJ/gUxCr3hpkABYn8yAdm5pA9ogztXZY3GFBt7Xv2Y8uyuH6j05wN
-         jSMQ==
-X-Gm-Message-State: AOAM530k3rxTfmHZ3bACOx7Zwf/EpCu3KLk3OkhvVhSuEDTsDMzULHVK
-        U/+u98BuOUdZi3Drtwsl6t8=
-X-Google-Smtp-Source: ABdhPJwP89l58R0b0P2ljD2Q/hpiLcFOLGbgRZjclDShsIg/UelGnTmLNnAFslgB0yxcJKURjsYOeg==
-X-Received: by 2002:ac8:1488:: with SMTP id l8mr33223704qtj.131.1600435801141;
-        Fri, 18 Sep 2020 06:30:01 -0700 (PDT)
-Received: from localhost.localdomain ([2001:1284:f013:eda9:8c35:6fe5:a04c:832])
-        by smtp.gmail.com with ESMTPSA id p3sm1996690qkj.113.2020.09.18.06.29.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2020 06:30:00 -0700 (PDT)
-Received: by localhost.localdomain (Postfix, from userid 1000)
-        id C354BC1D68; Fri, 18 Sep 2020 10:29:57 -0300 (-03)
-Date:   Fri, 18 Sep 2020 10:29:57 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Henry Ptasinski <hptasinski@google.com>
-Cc:     linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Corey Minyard <cminyard@mvista.com>
-Subject: Re: [PATCH] net: sctp: Fix IPv6 ancestor_size calc in
- sctp_copy_descendant
-Message-ID: <20200918132957.GB82043@localhost.localdomain>
-References: <20200918015610.3596417-1-hptasinski@google.com>
+        id S1726185AbgIRStD (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 18 Sep 2020 14:49:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:54825 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726168AbgIRStD (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Fri, 18 Sep 2020 14:49:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1600454941;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4+ZF05WY4dPUCcgrjX91HKnfPEVSP++uIh0CVFrL8Jk=;
+        b=St0b4VcRWFvuabK+8x7/ripkoJX9ozXjYbQx7zoiFFK7ftvs8UPqyXmlwsq+BAP/nCDjgb
+        RvKgk3uYUFupLR34GFDuHC8dmC3zf1BdIo55AJnUxusYPuRmDXJu8+hsrdoNFPZSMqUJdb
+        eel+XFlRAmarYvkBhFlz63LEKEOcxOU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-520-UxQXIpsEO0K1norap5g-2A-1; Fri, 18 Sep 2020 14:48:44 -0400
+X-MC-Unique: UxQXIpsEO0K1norap5g-2A-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 804551084C9D
+        for <linux-sctp@vger.kernel.org>; Fri, 18 Sep 2020 18:48:43 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.192.253])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id ABFEE60FC2;
+        Fri, 18 Sep 2020 18:48:42 +0000 (UTC)
+From:   Petr Lautrbach <plautrba@redhat.com>
+To:     linux-sctp@vger.kernel.org
+Cc:     Petr Lautrbach <plautrba@redhat.com>
+Subject: [PATCH lksctp-tools] Use symvmer attribute, not asms for symbol versioning
+Date:   Fri, 18 Sep 2020 20:48:30 +0200
+Message-Id: <20200918184830.469979-1-plautrba@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200918015610.3596417-1-hptasinski@google.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=plautrba@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Fri, Sep 18, 2020 at 01:56:10AM +0000, Henry Ptasinski wrote:
-> When calculating ancestor_size with IPv6 enabled, simply using
-> sizeof(struct ipv6_pinfo) doesn't account for extra bytes needed for
-> alignment in the struct sctp6_sock. On x86, there aren't any extra
-> bytes, but on ARM the ipv6_pinfo structure is aligned on an 8-byte
-> boundary so there were 4 pad bytes that were omitted from the
-> ancestor_size calculation.  This would lead to corruption of the
-> pd_lobby pointers, causing an oops when trying to free the sctp
-> structure on socket close.
+This project could not be built with LTO as it uses ASMs to implement
+symbol versioning. ASMs like this are fundamentally incompatible with
+LTO because GCC does not look inside the ASM string to find symbol
+references. Starting with gcc-10 there is a new symbol attribute for
+implementing symbol versioning.
 
-Makes sense.
+A fallback to the old way of implementing symbol versioning via asms is
+included, so it should work with clang as well as gcc-9 and
+earlier.
 
-> 
-> Signed-off-by: Henry Ptasinski <hptasinski@google.com>
+Fixes: https://github.com/sctp/lksctp-tools/issues/35
 
-Please add a:
-Fixes: 636d25d557d1 ("sctp: not copy sctp_sock pd_lobby in sctp_copy_descendant")
+Author: Jeff Law <law@redhat.com>
+Signed-off-by: Petr Lautrbach <plautrba@redhat.com>
+---
+ configure.ac       |  8 ++++++++
+ src/lib/connectx.c | 25 ++++++++++++++++---------
+ 2 files changed, 24 insertions(+), 9 deletions(-)
 
-> ---
->  net/sctp/socket.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-> index 836615f71a7d..a6358c81f087 100644
-> --- a/net/sctp/socket.c
-> +++ b/net/sctp/socket.c
-> @@ -9220,12 +9220,14 @@ void sctp_copy_sock(struct sock *newsk, struct sock *sk,
->  static inline void sctp_copy_descendant(struct sock *sk_to,
-          ^^^^^^  I'll send a patch to fix/remove this.
+diff --git a/configure.ac b/configure.ac
+index 5de5c763005e..d3e31c35e6bb 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -130,4 +130,12 @@ AC_ARG_ENABLE(tests,
+ 	[enable_tests=yes])
+ AM_CONDITIONAL(BUILD_TESTS, [test $enable_tests != no])
+ 
++# GCC tries to be "helpful" and only issue a warning for unrecognized
++# attributes.  So we compile the test with Werror, so that if the
++# attribute is not recognized the compilation fails
++AC_LANG(C)
++AC_LANG_WERROR
++AC_COMPILE_IFELSE([AC_LANG_SOURCE([[__attribute__ ((symver ("foo@foo_1"))) void frob (void) { }]])],
++                  [AC_DEFINE([HAVE_ATTRIBUTE_SYMVER], [1], [Checking for symver attribute])], [])
++
+ AC_OUTPUT
+diff --git a/src/lib/connectx.c b/src/lib/connectx.c
+index 5f4552bd011b..2a21e3abe58d 100644
+--- a/src/lib/connectx.c
++++ b/src/lib/connectx.c
+@@ -26,6 +26,18 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <fcntl.h>
++#include "config.h"
++
++#define __SYMPFX(pfx, sym) #pfx sym
++#define _SYMPFX(pfx, sym) __SYMPFX(pfx, sym)
++#define SYMPFX(sym) _SYMPFX(__USER_LABEL_PREFIX__, #sym)
++
++#if HAVE_ATTRIBUTE_SYMVER
++#define SYMVER(name, name2) __attribute__ ((symver (SYMPFX(name2))))
++#else
++#define SYMVER(name, name2) __asm__(".symver " SYMPFX(name) "," SYMPFX(name2));
++#endif
++
+ 
+ /* Support the sctp_connectx() interface.
+  *
+@@ -64,6 +76,7 @@ static int __connectx_addrsize(const struct sockaddr *addrs,
+ }
+ 			
+ 
++SYMVER(__sctp_connectx, sctp_connectx@)
+ int __sctp_connectx(int fd, struct sockaddr *addrs, int addrcnt)
+ {
+ 	int addrs_size = __connectx_addrsize(addrs, addrcnt);
+@@ -75,6 +88,7 @@ int __sctp_connectx(int fd, struct sockaddr *addrs, int addrcnt)
+ 			    addrs_size);
+ }
+ 
++SYMVER(sctp_connectx_orig, sctp_connectx@VERS_1)
+ extern int sctp_connectx_orig (int)
+ 	__attribute ((alias ("__sctp_connectx")));
+ 
+@@ -114,6 +128,7 @@ static int __connectx(int fd, struct sockaddr *addrs, socklen_t addrs_size,
+ 			  addrs, addrs_size);
+ }
+ 
++SYMVER(sctp_connectx2, sctp_connectx@VERS_2)
+ int sctp_connectx2(int fd, struct sockaddr *addrs, int addrcnt,
+ 		      sctp_assoc_t *id)
+ {
+@@ -125,6 +140,7 @@ int sctp_connectx2(int fd, struct sockaddr *addrs, int addrcnt,
+ 	return __connectx(fd, addrs, addrs_size, id);
+ }
+ 
++SYMVER(sctp_connectx3, sctp_connectx@@VERS_3)
+ int sctp_connectx3(int fd, struct sockaddr *addrs, int addrcnt,
+ 		      sctp_assoc_t *id)
+ {
+@@ -179,12 +195,3 @@ int sctp_connectx3(int fd, struct sockaddr *addrs, int addrcnt,
+ 	return __connectx(fd, addrs, addrs_size, id);
+ }
+ 
+-#define __SYMPFX(pfx, sym) #pfx sym
+-#define _SYMPFX(pfx, sym) __SYMPFX(pfx, sym)
+-#define SYMPFX(sym) _SYMPFX(__USER_LABEL_PREFIX__, #sym)
+-#define SYMVER(name, name2) __asm__(".symver " SYMPFX(name) "," SYMPFX(name2))
+-
+-SYMVER(__sctp_connectx, sctp_connectx@);
+-SYMVER(sctp_connectx_orig, sctp_connectx@VERS_1);
+-SYMVER(sctp_connectx2, sctp_connectx@VERS_2);
+-SYMVER(sctp_connectx3, sctp_connectx@@VERS_3);
+-- 
+2.28.0
 
->  					const struct sock *sk_from)
->  {
-> -	int ancestor_size = sizeof(struct inet_sock) +
-> -			    sizeof(struct sctp_sock) -
-> -			    offsetof(struct sctp_sock, pd_lobby);
-                                                       ^^^^^^^^
-
-Then, as this patch is actually fixing the aforementioned commit,
-please also update the comment on sctp_sock definition, as pd_lobby
-now is also skipped.
-
-> +	size_t ancestor_size = sizeof(struct inet_sock);
->  
->  	if (sk_from->sk_family == PF_INET6)
-> -		ancestor_size += sizeof(struct ipv6_pinfo);
-> +		ancestor_size += sizeof(struct sctp6_sock);
-
-As you probably noticed by the build bot email already, there need to
-be some protection to building without IPv6 enabled.
-
-To avoid ifdefs here, something similar to how
-inet_sk_copy_descendant() is done is probably welcomed, but please
-feel free to be creative. :-)
-
-> +	else
-> +		ancestor_size += sizeof(struct sctp_sock);
-> +
-> +	ancestor_size -= offsetof(struct sctp_sock, pd_lobby);
->  
->  	__inet_sk_copy_descendant(sk_to, sk_from, ancestor_size);
->  }
-> -- 
-> 2.28.0.681.g6f77f65b4e-goog
-> 
