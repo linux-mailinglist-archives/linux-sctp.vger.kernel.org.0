@@ -2,92 +2,167 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD4DC27A25F
-	for <lists+linux-sctp@lfdr.de>; Sun, 27 Sep 2020 20:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C34D27CFCB
+	for <lists+linux-sctp@lfdr.de>; Tue, 29 Sep 2020 15:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726265AbgI0So2 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 27 Sep 2020 14:44:28 -0400
-Received: from sonic304-9.consmr.mail.bf2.yahoo.com ([74.6.128.32]:42410 "EHLO
-        sonic304-9.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726239AbgI0So2 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>);
-        Sun, 27 Sep 2020 14:44:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1601232267; bh=Ruh8whhsLaTTwjIXmzA3PCfAl+J0v/p4XdxCHWadIAE=; h=Date:From:Reply-To:Subject:References:From:Subject; b=OefH0+p25bbgpybsL1Ir18TEvaJKkdiE8jVs7MJGMKOmNFWhyqcYYb6ET3uB2ypUA66UpoSMKPDAdNLWDL6OT5UvU1G/qjFxULOxPzcMPaeyrYVLjxJtLJv97Vv6L5ygZf5n14ff/AUUL9uC94yDozsTMpPyMd8jPa4Q2Ek2DJh3EwcKlzGg0sjrIeOJcTWWAT4Yffb/9eTTmNuISNVRnshKEDlAJz85NHvtxxMyI+5ikbFmLbBEl/xnI89eKIZV7w2c7VtWxTt66tTrD7PiAACj9KDhbqYs8MVz9tN29pNBiX+l3FnQNWeJgbsYtiw3zyLO+fG0nkg8DecgIDHT/g==
-X-YMail-OSG: gZ8zbg0VM1mL6oFsYpyoZgyvE1guSiGvj0aO_3.93XpTJ8yHBeJpXWfUg0ciqM8
- 07eP8E4nBN1bKQfsT3h9Z1Z3i2KVsP9OwMq.pkK.32AwXqmofk4AxntL42p.z5QVAlSIX_KjJDTD
- B82pZNC5pBaOsFgeQHU9_c24wl6d8PytylX5yD2edJNjnl3.tkcLj0nQ1TOnIi2qxbcePlvMkoEV
- EgCDx059cZcbAqWnfkR3MoKgWhzaWWzVyvyJbDrMPtSIymbnV7F2RW8Yx5ThCTt_ZlW611tBdnUH
- IRA1FBvsVJ_3fwYpLrNQHLmFo5qWZj_Hp6FvKgI37i9Q7m0pgNuU.XiadWop3T3LUhKkhRvPrl4b
- GYgtU_c7XIMJOdOQgFNheMOC.D3RlMBk9m92pgnpZi_M.HUKl_1J8o_3piUJzT6cqZDWAqu0FuvF
- ncq2q_ReNa83yp4FCQV5nOYC0G7jzH7LuDwAFZp2wHxOuUclmURSxHw8ANkZcoe7jjxK0WS8wDd4
- s9vcZSIiq9QgILlm1Uyex2SI2a87cu2.szVYTipGI.bQ33w47mD9hQa1wP71OMyrf0yIYYjFUEpH
- qANyOP_Ne9ZJNN3LEe2Odszg20rt0eTgJw9FDuPs5oN8IJByrc6z_Zv7yB71NyPrH1dBWysmnzAk
- 7klGFnl48W7hdug6jKBcf4PEjaek2z5t7GBv_YgC3Ya3Fqom3vSqwOqHsi7MNVf5XSauXvx2Fz08
- mWDcvgnqJRDCEkMnNnzwnizEPDd9UIlceoIbtel98W3IKpl5q3spXunNXvmEbvWRwnrRcGVrRREB
- RY1Y1LrmqoxmYMxAkjPwDanhSVOIW1nrW7b0u9_p_Jrw.CsCHBJxZBO.v50CaWFhZtFy3tG3Kqbo
- GLA7wMMjRaYRDaMa5w6xrh5DFjtqj3E2PuzuD4AVo9y07DCkK9A00AGnjBMA3lmT0XZ.5smvxEuS
- ZnLIVyQLVqPgqf4i.hIqj.3.9fpDzLrRXMyqUfR55B9JOEU9ekSDQCTWjiz_c5ypkpy5xoq5cPLc
- d69.gGwcmKGxtwKMvTkfFgYyqqsdCjwwPFJZr2Ew.FgDFqAw1tJgcwiDYulr0D_0JSGZYp0l5P0C
- 8GsppN7HseTCEXKP0c2sp8_8yOUWMSGvZjAfRF.9BIcnfd1QlaNC.OxWUJazT2WfrS5ISQjGwDN_
- lsSHryQST76pabVCTMcvnFVXLET.0E4FinTDI0JXai189CPRCD3yRTX0gB_8H9lhOetew33As4pj
- .IPO7tll_hB235SHwjWakthXPRZHB51PsH5.dudTX6Q5VxZDe4VnAiqgwSpwvEfTKbq3dc7juZ8c
- FeU5gF3dFuOX5bCft_L2lvW1bO.l5HaRku.SPoeoV5FJU_olyJXrkY4OL.utMplZGf2Frn3qiRN3
- OUXsHyQTy1UoYXXeRY9Hgb.E5NWauStVJu05iERXn37k7
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic304.consmr.mail.bf2.yahoo.com with HTTP; Sun, 27 Sep 2020 18:44:27 +0000
-Date:   Sun, 27 Sep 2020 18:44:24 +0000 (UTC)
-From:   Ms Theresa Heidi <james29234@gmail.com>
-Reply-To: mstheresaaheidi@yahoo.com
-Message-ID: <357417391.1234662.1601232264865@mail.yahoo.com>
-Subject: =?UTF-8?B?5Yy76Zmi55qE57Sn5oCl5biu5Yqp77yB?=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-References: <357417391.1234662.1601232264865.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16674 YMailNodin Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+        id S1729098AbgI2NtT (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 29 Sep 2020 09:49:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58984 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728487AbgI2NtT (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 29 Sep 2020 09:49:19 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC59C061755;
+        Tue, 29 Sep 2020 06:49:18 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id j19so1540232pjl.4;
+        Tue, 29 Sep 2020 06:49:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=Uejk8bq5YwYgJrQjV7qbZZOHir+mrgZTfhTCuObO9uk=;
+        b=Tc3XP710csc641IUcjlFtSHxj7Il3FpT7AbGw3UVH7cfYZlekp+fDRLLTyxjkWxS+D
+         sD3lFcyLx7G1PURmLk0jArG5dxyGe/5hmJPLFKPIspiAE0ppD73EXpMRPRar1L2mOxk8
+         GvBJNBHRVZhHwmqchUVKokm5JGI9PLR6eXvzeuOgW4xVkyCdKxczpzSLVzhpX884U5IG
+         makx5BIkPsWEkT6TNKXrt6VV/ozMKBRSQ81MEJjfjunAmSjzXlq6j7AROdPoaTlH0TfU
+         nziqDTd613r+gs3QC8y4TAhUmIt0eENthtYR1u9soyWigLI6LjiFmz7mYF2r/2BlN2Yd
+         6OlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Uejk8bq5YwYgJrQjV7qbZZOHir+mrgZTfhTCuObO9uk=;
+        b=iWS3AvOYhz0y+SVEdZ/Tw+Gvz0FUOmQnFDu8nH0+lEOK6BN0WCsRgQcenxBBu1wlq9
+         cKOvacAakb9X6u7jXnBfQ7YDzmCdDtAYN+iUuTSI6oPT9e1CtkRvGuDnr/XteH6+E/bO
+         C+NF/WyJGjv5KR26x1leR12IrPh3vHdRHAMi4djKkrdYXxrJhSBGTOuS4GnRu/YGk/YS
+         xejsl5gznAwDcpgDahzgKNdxPJt8Fjyunw8VwNcSR2tUt4wlV4ctvii/favCtLZQLQvt
+         FEaYW+5uyJqV/Af1SE8hGhQQDGA/xCJdDPTRNW8WKWpK2IyFY4lipTBMzZtTJ0Z7q9mn
+         IKmA==
+X-Gm-Message-State: AOAM530hlzYx6U6yHvgLW7sAQC2ALs7ciAOO/7NMSbTafaBY4ce37Xs2
+        xGnC/jAnun9UkdsGS9txpZFhX56YHMI=
+X-Google-Smtp-Source: ABdhPJyXJush1XadIHr5opMPEgtl+N/tHFVW4aELBrVXGdgOzGUsfLsyVmYlp7gGyrMEXVB05QdL9g==
+X-Received: by 2002:a17:90a:3984:: with SMTP id z4mr3832166pjb.131.1601387357111;
+        Tue, 29 Sep 2020 06:49:17 -0700 (PDT)
+Received: from localhost ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id q4sm5582463pjl.28.2020.09.29.06.49.14
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 29 Sep 2020 06:49:15 -0700 (PDT)
+From:   Xin Long <lucien.xin@gmail.com>
+To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
+Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Michael Tuexen <tuexen@fh-muenster.de>,
+        Tom Herbert <therbert@google.com>, davem@davemloft.net
+Subject: [PATCH net-next 00/15] sctp: Implement RFC6951: UDP Encapsulation of SCTP
+Date:   Tue, 29 Sep 2020 21:48:52 +0800
+Message-Id: <cover.1601387231.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.1.0
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Dear Beloved One,=20
+Description From the RFC:
 
- CHARITY DONATION Please read carefully, I know it is true that this letter=
- may come to you as a surprise. nevertheless,i humbly ask you to give me yo=
-ur attention and hear me, i am writing this mail to you with heavy sorrow i=
-n my heart,i have chose to reach you through Internet because it still rema=
-ins the fastest medium of communication after going through your profile.
+   The Main Reasons:
 
-My name is Mrs Theresa Heidi i am native France currently hospitalized in a=
- private hospital here in Israel as a result of lungs cancer I am 62 years =
-old and I was diagnosed of lungs cancer for about 4 years ago, immediately =
-after the death of my husband, who has left me everything he worked for. I'=
-m with my laptop in a hospital here in where I have been undergoing treatme=
-nt for cancer of the lungs
+   o  To allow SCTP traffic to pass through legacy NATs, which do not
+      provide native SCTP support as specified in [BEHAVE] and
+      [NATSUPP].
 
-Now that is clear that I=E2=80=99m approaching the last-days of my life and=
- i don't even need the money again for any thing and because my doctor told=
- me that i would not last for the period of one year due to Lungs cancer pr=
-oblem.I have some funds inherited from my late husband, the sum of $15 Mill=
-ion United State Dollars ( US$15,000,000,00 ),This money is still with the =
-foreign bank and the management just wrote me as the true owner to come for=
-ward to receive the money for keeping it so long or rather issue a letter o=
-f authorization to somebody to receive it on my behalf since I can't come o=
-ver because of my illness or they may get it confiscated.
+   o  To allow SCTP to be implemented on hosts that do not provide
+      direct access to the IP layer.  In particular, applications can
+      use their own SCTP implementation if the operating system does not
+      provide one.
 
-I need you to help me withdraw this money from the foreign bank then use th=
-e funds for Charity works/assistance to less privileged people in the socie=
-ty.It is my last wish to see that this money is invested to any organizatio=
-n of your choice.
+   Implementation Notes:
 
-I decided to contact you if you may be willing and interested to handle the=
-se trust funds in good faith before anything happens to me.This is not a st=
-olen money and there are no dangers involved, is 100% risk free with full l=
-egal proof.
+   UDP-encapsulated SCTP is normally communicated between SCTP stacks
+   using the IANA-assigned UDP port number 9899 (sctp-tunneling) on both
+   ends.  There are circumstances where other ports may be used on
+   either end, and it might be required to use ports other than the
+   registered port.
 
-I want you to take 45 percent of the total money for your personal use whil=
-e 55% of the money will go to charity. I will appreciate your utmost confid=
-entiality and trust in this matter to accomplish my heart desire, as I don'=
-t want anything that will jeopardize my last wish.
-       =20
-Yours Beloved Sister.
-Mrs Theresa Heidi
+   Each SCTP stack uses a single local UDP encapsulation port number as
+   the destination port for all its incoming SCTP packets, this greatly
+   simplifies implementation design.
+
+   An SCTP implementation supporting UDP encapsulation MUST maintain a
+   remote UDP encapsulation port number per destination address for each
+   SCTP association.  Again, because the remote stack may be using ports
+   other than the well-known port, each port may be different from each
+   stack.  However, because of remapping of ports by NATs, the remote
+   ports associated with different remote IP addresses may not be
+   identical, even if they are associated with the same stack.
+
+   Because the well-known port might not be used, implementations need
+   to allow other port numbers to be specified as a local or remote UDP
+   encapsulation port number through APIs.
+
+Patches:
+
+   This patchset is using the udp4/6 tunnel APIs to implement the UDP
+   Encapsulation of SCTP with not much change in SCTP protocol stack
+   and with all current SCTP features keeped in Linux Kernel.
+
+   1 - 4: Fix some UDP issues that may be triggered by SCTP over UDP.
+   5 - 7: Process incoming UDP encapsulated packets and ICMP packets.
+   8 -10: Remote encap port's update by sysctl, sockopt and packets.
+   11-14: Process outgoing pakects with UDP encapsulated and its GSO.
+      15: Enable this feature.
+
+Tests:
+
+  - lksctp-tools/src/func_tests with UDP Encapsulation enabled/disabled:
+
+      Both make v4test and v6test passed.
+
+  - sctp-tests with UDP Encapsulation enabled/disabled:
+
+      repeatability/procdumps/sctpdiag/gsomtuchange/extoverflow/
+      sctphashtable passed. Others failed as expected due to those
+      "iptables -p sctp" rules.
+
+  - netperf on lo/netns/virtio_net, with gso enabled/disabled and
+    with ip_checksum enabled/disabled, with UDP Encapsulation
+    enabled/disabled:
+
+      No clear performance dropped.
+
+Xin Long (15):
+  udp: check udp sock encap_type in __udp_lib_err
+  udp6: move the mss check after udp gso tunnel processing
+  udp: do checksum properly in skb_udp_tunnel_segment
+  udp: support sctp over udp in skb_udp_tunnel_segment
+  sctp: create udp4 sock and add its encap_rcv
+  sctp: create udp6 sock and set its encap_rcv
+  sctp: add encap_err_lookup for udp encap socks
+  sctp: add encap_port for netns sock asoc and transport
+  sctp: add SCTP_REMOTE_UDP_ENCAPS_PORT sockopt
+  sctp: allow changing transport encap_port by peer packets
+  sctp: add udphdr to overhead when udp_port is set
+  sctp: call sk_setup_caps in sctp_packet_transmit instead
+  sctp: support for sending packet over udp4 sock
+  sctp: support for sending packet over udp6 sock
+  sctp: enable udp tunneling socks
+
+ include/net/netns/sctp.h     |   8 +++
+ include/net/sctp/constants.h |   2 +
+ include/net/sctp/sctp.h      |   9 ++-
+ include/net/sctp/sm.h        |   1 +
+ include/net/sctp/structs.h   |  13 ++--
+ include/uapi/linux/sctp.h    |   7 ++
+ net/ipv4/udp.c               |   2 +-
+ net/ipv4/udp_offload.c       |  16 +++--
+ net/ipv6/udp.c               |   2 +-
+ net/ipv6/udp_offload.c       | 154 +++++++++++++++++++++----------------------
+ net/sctp/associola.c         |   4 ++
+ net/sctp/ipv6.c              |  48 ++++++++++----
+ net/sctp/output.c            |  22 +++----
+ net/sctp/protocol.c          | 145 ++++++++++++++++++++++++++++++++++++----
+ net/sctp/sm_make_chunk.c     |   1 +
+ net/sctp/sm_statefuns.c      |   2 +
+ net/sctp/socket.c            | 111 +++++++++++++++++++++++++++++++
+ net/sctp/sysctl.c            |  53 +++++++++++++++
+ 18 files changed, 471 insertions(+), 129 deletions(-)
+
+-- 
+2.1.0
+
