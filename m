@@ -2,112 +2,109 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 614E227CFD5
-	for <lists+linux-sctp@lfdr.de>; Tue, 29 Sep 2020 15:49:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4894327CFD7
+	for <lists+linux-sctp@lfdr.de>; Tue, 29 Sep 2020 15:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729984AbgI2Ntq (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 29 Sep 2020 09:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59060 "EHLO
+        id S1730547AbgI2Nty (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 29 Sep 2020 09:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730501AbgI2Ntp (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 29 Sep 2020 09:49:45 -0400
+        with ESMTP id S1730546AbgI2Ntx (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 29 Sep 2020 09:49:53 -0400
 Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527CAC061755;
-        Tue, 29 Sep 2020 06:49:45 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id n14so4596807pff.6;
-        Tue, 29 Sep 2020 06:49:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4579C061755;
+        Tue, 29 Sep 2020 06:49:53 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id d6so4587824pfn.9;
+        Tue, 29 Sep 2020 06:49:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :in-reply-to:references;
-        bh=F9gzu4ux1/gIDa9kBXORz7PWDK9PRGfbQUFqQq4SV/k=;
-        b=TKKUR2owYbVnPKq6L/2bqdFncahUX2SllZzrr+291d644txwI6k5PJcACFDEuJChyP
-         bgQHIPv1epPp+Coc5axdDjeXhsVvgEhB7mZuJjrUkRcqBYsDsV1BVF8HwQtkw9rgw40E
-         MPyLZs/NE9NQePSC8g0I8siYQGBjoO7NAGAQcMen9V4cwk+oewNG1MHmWlLRNsWyFB2f
-         VDUyMfZFfQzU/5y5GD3GKOAKYBVZ9PrTRTU8nbMN/yLH3i5ZZBjdO1SdUZugl2TPKdCh
-         BGpyQ028YVkg86mefK+6nFaI5uC0RQEy20bqk8Ulxxdbmu4BLtNrQOzYJZQO6JDSQKf5
-         s67Q==
+        bh=DEGAv+/TL4OwKmD7pxgq0o5h8o/m1hgKFquGraoWa10=;
+        b=Od+22kLyLfZGF1lUP20MY0VPBN51cMfn9C2QJiJBRbjnHnyOfDceh8eZvVzrDEPxxg
+         AeCDj+MJ0YGbI7c/jBa9V2cjUUMgU8YP4ydnffWoQGhjBL3Oku2Y0zL3BGqudhdUugS3
+         OAnng6Ushsx6cBWFAtCmWdgQ0DvLRNo0KLwPpvSkMhGdQRBn+w3q3dkjfTT5P6u7qfys
+         UHogQsR4qq84QJ6wMnG4fD/MFKIEi/U4N0+0Om7izRLfxkNXYx+sUPJwW6a0omVyP/BW
+         TPvzEwFRwawHCW3a15WctmN93LJtxhtxqrA+iMZAS+2s4GB31CCMKsBBIT75ozjbsR68
+         /MVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:in-reply-to:references;
-        bh=F9gzu4ux1/gIDa9kBXORz7PWDK9PRGfbQUFqQq4SV/k=;
-        b=Q9yMafJ/RkqT4MoXWhJ6aZ4LXHpnF4Skw6fSv8aN+2D7DoclFtLbPji6D4nnnNDehe
-         at9nnIeWuKwBm9CH0tmwKreSwPCQT1pRWk3wN48tWzY7VNyybOmdauK4+Tq/dBYuNpne
-         EH4raToUjriMcczWUwXgK6Z2GuRnD5O/wyMjqo3XYTBBYQi18+n569Xsf5YGUgcDE3Mm
-         yQyM3WssO8gp9uSrkTow8EVhi4aSIWJQqZwlZ5PbI3eFlBc6urAKB6Ry7F3PTE3oFirE
-         C/ghdHOU/AESqwFALCE1+iWgSBiXqWsoiER9BA1VXiEhLnVvX5CxXrzDZ8J8vqOB//sJ
-         FMbA==
-X-Gm-Message-State: AOAM5328DCvQokSYUtfcRx1DpPginGWXQPCPibFFl4YKbnG3w1a+8Bub
-        YsMQ27CEBjRylPpDWeHPZRIyRPEkjko=
-X-Google-Smtp-Source: ABdhPJxPP4YAHkG6xMFycUU8aMW8/TXDPNMrEtXWDIzd5xgH5MWAHr3LfzHxBNbEcwji7bt08YHozA==
-X-Received: by 2002:a63:1d5c:: with SMTP id d28mr3217268pgm.82.1601387384298;
-        Tue, 29 Sep 2020 06:49:44 -0700 (PDT)
+        bh=DEGAv+/TL4OwKmD7pxgq0o5h8o/m1hgKFquGraoWa10=;
+        b=muLz4iDmulW4VlMo+32ajPaq5zv0X+uUyiu4xO35Esyvgo0vcu/0KJnVM9EZVDdCIC
+         AtnTbOEasTInCoOSYM+zOx2FqPOro5PslBbOsda8hx0bk997RQHP3Znpa+7dXcdbboEC
+         95ZLCGnXS0N95c/pj0YXxw8XBh9B01fJDah8g8ZiyRmlr/+Jy0N9x9BIWrijPKe8ee9m
+         qIhzOiPuBcB+Je8UIrYmZsw0xDnCUp/SHQq2haKFC2qz8JMUvWGjNYPz9QVQP2PCPyr+
+         FlHbpySMFpVgGAe6OuhibC+mxEDpcTGRnDqhhB9OtDi0cZR7vUdTX8SXbX7IllDfgY93
+         ls3Q==
+X-Gm-Message-State: AOAM531E+y3TTXdBsQ/HQdpt4NbyA1p7Co5BM7SRPJtM5aZErcy/hMfT
+        qdbaYDtOtM06kjeEQLJCCiTFjkscWu0=
+X-Google-Smtp-Source: ABdhPJxHR7k0IzIpzEzM2dHN/rE7gpjlXoELLo37dLXPL5/Wi9D6ymrLEjlZq2RgKt2Sqbrfhx/ZTQ==
+X-Received: by 2002:a63:e252:: with SMTP id y18mr3334454pgj.93.1601387392947;
+        Tue, 29 Sep 2020 06:49:52 -0700 (PDT)
 Received: from localhost ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id h12sm5393320pfo.68.2020.09.29.06.49.42
+        by smtp.gmail.com with ESMTPSA id gm17sm4672531pjb.46.2020.09.29.06.49.51
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 29 Sep 2020 06:49:43 -0700 (PDT)
+        Tue, 29 Sep 2020 06:49:52 -0700 (PDT)
 From:   Xin Long <lucien.xin@gmail.com>
 To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
 Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
         Michael Tuexen <tuexen@fh-muenster.de>,
         Tom Herbert <therbert@google.com>, davem@davemloft.net
-Subject: [PATCH net-next 03/15] udp: do checksum properly in skb_udp_tunnel_segment
-Date:   Tue, 29 Sep 2020 21:48:55 +0800
-Message-Id: <49a1cbb99341f50304b514aeaace078d0b065248.1601387231.git.lucien.xin@gmail.com>
+Subject: [PATCH net-next 04/15] udp: support sctp over udp in skb_udp_tunnel_segment
+Date:   Tue, 29 Sep 2020 21:48:56 +0800
+Message-Id: <97963ca7171b92486f46477b55928182abe44806.1601387231.git.lucien.xin@gmail.com>
 X-Mailer: git-send-email 2.1.0
-In-Reply-To: <65f713004ab546e0b6ec793572c72c1d0399f0fe.1601387231.git.lucien.xin@gmail.com>
+In-Reply-To: <49a1cbb99341f50304b514aeaace078d0b065248.1601387231.git.lucien.xin@gmail.com>
 References: <cover.1601387231.git.lucien.xin@gmail.com>
  <51c1fdad515076f3014476711aec1c0a81c18d36.1601387231.git.lucien.xin@gmail.com>
  <65f713004ab546e0b6ec793572c72c1d0399f0fe.1601387231.git.lucien.xin@gmail.com>
+ <49a1cbb99341f50304b514aeaace078d0b065248.1601387231.git.lucien.xin@gmail.com>
 In-Reply-To: <cover.1601387231.git.lucien.xin@gmail.com>
 References: <cover.1601387231.git.lucien.xin@gmail.com>
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-This patch fixes two things:
-
-  When skb->ip_summed == CHECKSUM_PARTIAL, skb_checksum_help() should be
-  called do the checksum, instead of gso_make_checksum(), which is used
-  to do the checksum for current proto after calling skb_segment(), not
-  after the inner proto's gso_segment().
-
-  When offload_csum is disabled, the hardware will not do the checksum
-  for the current proto, udp. So instead of calling gso_make_checksum(),
-  it should calculate checksum for udp itself.
+To call sctp_gso_segment() properly in skb_udp_tunnel_segment() for sctp
+over udp packets, we need to set transport_header to sctp header. When
+skb->ip_summed == CHECKSUM_PARTIAL, skb_crc32c_csum_help() should be
+called for the inner sctp packet.
 
 Signed-off-by: Xin Long <lucien.xin@gmail.com>
 ---
- net/ipv4/udp_offload.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ net/ipv4/udp_offload.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/net/ipv4/udp_offload.c b/net/ipv4/udp_offload.c
-index e67a66f..c0b010b 100644
+index c0b010b..a484405 100644
 --- a/net/ipv4/udp_offload.c
 +++ b/net/ipv4/udp_offload.c
-@@ -131,14 +131,15 @@ static struct sk_buff *__skb_udp_tunnel_segment(struct sk_buff *skb,
+@@ -49,6 +49,7 @@ static struct sk_buff *__skb_udp_tunnel_segment(struct sk_buff *skb,
+ 	__skb_pull(skb, tnl_hlen);
+ 	skb_reset_mac_header(skb);
+ 	skb_set_network_header(skb, skb_inner_network_offset(skb));
++	skb_set_transport_header(skb, skb_inner_transport_offset(skb));
+ 	skb->mac_len = skb_inner_network_offset(skb);
+ 	skb->protocol = new_protocol;
+ 
+@@ -131,8 +132,12 @@ static struct sk_buff *__skb_udp_tunnel_segment(struct sk_buff *skb,
  		uh->check = ~csum_fold(csum_add(partial,
  				       (__force __wsum)htonl(len)));
  
--		if (skb->encapsulation || !offload_csum) {
--			uh->check = gso_make_checksum(skb, ~uh->check);
--			if (uh->check == 0)
--				uh->check = CSUM_MANGLED_0;
--		} else {
-+		if (skb->encapsulation)
-+			skb_checksum_help(skb);
-+
-+		if (offload_csum) {
+-		if (skb->encapsulation)
+-			skb_checksum_help(skb);
++		if (skb->encapsulation) {
++			if (skb->csum_not_inet)
++				skb_crc32c_csum_help(skb);
++			else
++				skb_checksum_help(skb);
++		}
+ 
+ 		if (offload_csum) {
  			skb->ip_summed = CHECKSUM_PARTIAL;
- 			skb->csum_start = skb_transport_header(skb) - skb->head;
- 			skb->csum_offset = offsetof(struct udphdr, check);
-+		} else {
-+			uh->check = csum_fold(skb_checksum(skb, udp_offset, len, 0));
- 		}
- 	} while ((skb = skb->next));
- out:
 -- 
 2.1.0
 
