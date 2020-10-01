@@ -2,45 +2,73 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E7727FA88
-	for <lists+linux-sctp@lfdr.de>; Thu,  1 Oct 2020 09:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5D827FD7E
+	for <lists+linux-sctp@lfdr.de>; Thu,  1 Oct 2020 12:35:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731220AbgJAHrS (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 1 Oct 2020 03:47:18 -0400
-Received: from mail2.grupovidela.com ([212.31.54.87]:47588 "EHLO
-        grupovidela.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725938AbgJAHrF (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 1 Oct 2020 03:47:05 -0400
-X-Greylist: delayed 62085 seconds by postgrey-1.27 at vger.kernel.org; Thu, 01 Oct 2020 03:47:00 EDT
-Received: from User ([94.102.54.226])
-        (user=varios@grupovidela.com mech=LOGIN bits=0)
-        by fortimail.grupovidela.com  with ESMTP id 08UEUh9R015477-08UEUh9T015477;
-        Wed, 30 Sep 2020 16:30:44 +0200
-Message-Id: <202009301430.08UEUh9R015477-08UEUh9T015477@fortimail.grupovidela.com>
-Reply-To: <fulanlan28@gmail.com>
-From:   "Mr. Fu Lan" <aitor@coacan.es>
-Subject: YOUR EARLY REPLY
-Date:   Wed, 30 Sep 2020 07:30:48 -0700
+        id S1731884AbgJAKfw (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 1 Oct 2020 06:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731131AbgJAKfw (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 1 Oct 2020 06:35:52 -0400
+Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D092C0613D0
+        for <linux-sctp@vger.kernel.org>; Thu,  1 Oct 2020 03:35:52 -0700 (PDT)
+Received: by mail-qv1-xf41.google.com with SMTP id di5so2610838qvb.13
+        for <linux-sctp@vger.kernel.org>; Thu, 01 Oct 2020 03:35:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=ivYNVp7lUBpMPDHxW+4wA5ip2p/mMNQ/wEKabKKT/jc=;
+        b=HV2gpzN8Nc/QlU4hzzp+YhG+P2oi5v6Ug9pIED+arlkD6F1RF+JJxLlt6IlvIZ8GKg
+         T4jcsneGfWcZs13l7c7q7eUIy9DoQaK1FdX0TFjP4DiA9NZ6N8+jJOAz1BpVcPubeHB5
+         JtzKRxAZ5E//xn3u9XM1jOLxXV/bZQ9SISHBn9H6lj8IhaKaOpq1mv1yUb2GQ9HRll+5
+         izS4HK6AWmOhErk1RknHe9UgajAMaM/peStKl5OhN6uLHKKIAHwHXxuszgg+hTwBtBaF
+         UhGUhrgAAUrp82L0AoYwWEe0pncaNQUjXTBTBGPl0U67wkDwl1sSQmYyJcmFOaHRd/hf
+         QyMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=ivYNVp7lUBpMPDHxW+4wA5ip2p/mMNQ/wEKabKKT/jc=;
+        b=mHbWL/m3jQ3yHUn72yoYT8MBUrc2bZfrXvUTDSi5Dl3znN1zk4BIgy8YC0Qhw/CZY+
+         EuhnDXHRTZfLgZ29UtC26KXbdcOc/LiutaVtOe0mYgGNakJrnQuOGahIdiGOQjwwhkBf
+         W2u5PL1dmBwy+uq8pSz1T3oVUC9qVvT/lMGOJlsBLbrNC5z67AmfWWnFWROSR+BQKise
+         xuIC/r3Cp7SgpDJodxt5Vt5z+eNfSuR6Vu9vlkwMl/4W+MVj1ArCLVlAE+CKvo4+72ng
+         A7junrahInrYE/sI1DgBp/oxBdokQk3+ebm4gAEuQN8oNJs7ZZkC/CMpccwGn3LJ4kEo
+         9Wdg==
+X-Gm-Message-State: AOAM5329QJTfjnhyCMBML3jq0yNMXOfCwiXIj2TebIoVCuDQCOLVMOQU
+        yqj4TnHL5urerRA7ctZrBiZ3aTjxpP6uiUGrJ+c=
+X-Google-Smtp-Source: ABdhPJyc3uJVKA/gk5fdqeAx6xVVh/4TXG67akiWOS0mvgx9XGJcGFkYS8ifxhOlv46dY7bU38BYtp4y5PGgNAzHxoo=
+X-Received: by 2002:a0c:ee86:: with SMTP id u6mr7160174qvr.56.1601548551348;
+ Thu, 01 Oct 2020 03:35:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-FEAS-AUTH-USER: varios@grupovidela.com
-To:     unlisted-recipients:; (no To-header on input)
+Reply-To: madamrubytan@gmail.com
+Sender: mrmaxwellkojo@gmail.com
+Received: by 2002:a0c:8606:0:0:0:0:0 with HTTP; Thu, 1 Oct 2020 03:35:50 -0700 (PDT)
+From:   Mrs Ruby Tan <mrs.rubytan1960@gmail.com>
+Date:   Thu, 1 Oct 2020 12:35:50 +0200
+X-Google-Sender-Auth: 0q6nU5FpwspKXBe2srHqtnqTFC4
+Message-ID: <CAKYa8HavOrJ5X_SHm2_+H=PPocu7NGeo_1ku2wO2m3uoT42F1w@mail.gmail.com>
+Subject: Greetings,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-YOUR EARLY REPLY 
+Greetings,
 
-It is understandable that you might be a little bit apprehensive because
-you do not know me but I have a lucrative business proposal of mutual
-interest to share with you.$222,695.415.00 million United States dollars
-your earliest response will be appreciated.
-Email: fulanlan28@gmail.com
-Kind Regards,
-Mr. Fu Lan
+I am Mrs Ruby Tan an aging widow suffering from long time illness.I
+have some funds I inherited from my late husband, I needed a very
+honest and sincere Individual or cooperate organization that will use
+the fund for humanitarian and charities works, I found your email
+address from the Human ressources data base and decided to contact you.
+
+Please if you would be able to use the funds as have stated here To
+fulfilled my late husband wishes please, kindly reply me back through
+my private email address for more
+explanations;(mrs.rubytan1960@yahoo.com)
+
+Regards,
+Mrs Ruby Tan.
