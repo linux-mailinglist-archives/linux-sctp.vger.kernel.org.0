@@ -2,73 +2,77 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5D827FD7E
-	for <lists+linux-sctp@lfdr.de>; Thu,  1 Oct 2020 12:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D7627FF58
+	for <lists+linux-sctp@lfdr.de>; Thu,  1 Oct 2020 14:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731884AbgJAKfw (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 1 Oct 2020 06:35:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50224 "EHLO
+        id S1731891AbgJAMl0 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 1 Oct 2020 08:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731131AbgJAKfw (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 1 Oct 2020 06:35:52 -0400
-Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D092C0613D0
-        for <linux-sctp@vger.kernel.org>; Thu,  1 Oct 2020 03:35:52 -0700 (PDT)
-Received: by mail-qv1-xf41.google.com with SMTP id di5so2610838qvb.13
-        for <linux-sctp@vger.kernel.org>; Thu, 01 Oct 2020 03:35:52 -0700 (PDT)
+        with ESMTP id S1731828AbgJAMl0 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 1 Oct 2020 08:41:26 -0400
+Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF4AC0613D0;
+        Thu,  1 Oct 2020 05:41:26 -0700 (PDT)
+Received: by mail-qt1-x842.google.com with SMTP id d1so4151987qtr.6;
+        Thu, 01 Oct 2020 05:41:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=ivYNVp7lUBpMPDHxW+4wA5ip2p/mMNQ/wEKabKKT/jc=;
-        b=HV2gpzN8Nc/QlU4hzzp+YhG+P2oi5v6Ug9pIED+arlkD6F1RF+JJxLlt6IlvIZ8GKg
-         T4jcsneGfWcZs13l7c7q7eUIy9DoQaK1FdX0TFjP4DiA9NZ6N8+jJOAz1BpVcPubeHB5
-         JtzKRxAZ5E//xn3u9XM1jOLxXV/bZQ9SISHBn9H6lj8IhaKaOpq1mv1yUb2GQ9HRll+5
-         izS4HK6AWmOhErk1RknHe9UgajAMaM/peStKl5OhN6uLHKKIAHwHXxuszgg+hTwBtBaF
-         UhGUhrgAAUrp82L0AoYwWEe0pncaNQUjXTBTBGPl0U67wkDwl1sSQmYyJcmFOaHRd/hf
-         QyMw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eob6aliylOP56SVG/KL44/iJ0VOS5gnp/UrUcw5CeJc=;
+        b=SXwzKLKNRDqOjVIPGGkRyJCGqxgQRbhQkZ3hp/4aNqVBpD2sOiXKmq1w1brfSRLyQT
+         DlklZ/mWW6SRZKs2W0cynOcyDdS1U7tI3zJDjL9NFssgGkvrts+wawWEbhvCGzcv5NNK
+         XwgmnpJ/ZZGoP2E8oo4Lrcn4dLPPmBrLlFt4n6bHW8kUAWpR8yCNF9/CrJf+P1OU9Ykm
+         QitiCSaHGuD/npBZNNSQXnCpujtQ6axA//7JeHFXgdWZ/0h34MtUzegwWAHCSfo5kEpD
+         62b2d4wRHrDYm+0u0hVNA8SoSZP3e51RVdZZh07hQpQx8ohdMPVQyK9uHNRy5xR6RxXB
+         s00g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=ivYNVp7lUBpMPDHxW+4wA5ip2p/mMNQ/wEKabKKT/jc=;
-        b=mHbWL/m3jQ3yHUn72yoYT8MBUrc2bZfrXvUTDSi5Dl3znN1zk4BIgy8YC0Qhw/CZY+
-         EuhnDXHRTZfLgZ29UtC26KXbdcOc/LiutaVtOe0mYgGNakJrnQuOGahIdiGOQjwwhkBf
-         W2u5PL1dmBwy+uq8pSz1T3oVUC9qVvT/lMGOJlsBLbrNC5z67AmfWWnFWROSR+BQKise
-         xuIC/r3Cp7SgpDJodxt5Vt5z+eNfSuR6Vu9vlkwMl/4W+MVj1ArCLVlAE+CKvo4+72ng
-         A7junrahInrYE/sI1DgBp/oxBdokQk3+ebm4gAEuQN8oNJs7ZZkC/CMpccwGn3LJ4kEo
-         9Wdg==
-X-Gm-Message-State: AOAM5329QJTfjnhyCMBML3jq0yNMXOfCwiXIj2TebIoVCuDQCOLVMOQU
-        yqj4TnHL5urerRA7ctZrBiZ3aTjxpP6uiUGrJ+c=
-X-Google-Smtp-Source: ABdhPJyc3uJVKA/gk5fdqeAx6xVVh/4TXG67akiWOS0mvgx9XGJcGFkYS8ifxhOlv46dY7bU38BYtp4y5PGgNAzHxoo=
-X-Received: by 2002:a0c:ee86:: with SMTP id u6mr7160174qvr.56.1601548551348;
- Thu, 01 Oct 2020 03:35:51 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eob6aliylOP56SVG/KL44/iJ0VOS5gnp/UrUcw5CeJc=;
+        b=SZ0XT4BsES1fh7kaou+Am1ivb2VwgAh0ENiWvvYJSaY6RAN9e4dkTEy1zRafXdVyck
+         zogPB3P+ZSiPTN44ehTRFrheSq0sLrLzJxcE08YfKt5W7WI5v+6aVAGfNPqx3P0uguuw
+         LmK1BLNZsfWPxwWSwXsBtrjmiEoJuN65YcLfUIgigws2rR43CE+bwHgTvugzXCwtowpk
+         XhyilHgM/hIzm8Wf7RyN8CXagHhT/nMNUmdnBWg2L8N2AqkvnAgomv5tZPXUKgQ0ufBY
+         V5Jf5Eip85xPI1m6GhnCEWGL3TzfEV3SthIFw0IbrhHkDXBooiYaETSyrKMCXwSDHmrb
+         bNOg==
+X-Gm-Message-State: AOAM530nFPmoXflXXJlURLmXT8G59rBwDF1kH3WFndB+U3aCCrOG5LGS
+        Ey9HsM0woMJZJ9Ia+zZcE0XgG1AW2BA=
+X-Google-Smtp-Source: ABdhPJyB5PWorJxRCkn0qw1+HtsZGPXCZZRmeoxlPe+MRTZjAvISHfKGkaAu/Nfsxn+TDZfFV5FwUA==
+X-Received: by 2002:ac8:4e4e:: with SMTP id e14mr7331540qtw.49.1601556085360;
+        Thu, 01 Oct 2020 05:41:25 -0700 (PDT)
+Received: from localhost.localdomain ([177.220.174.180])
+        by smtp.gmail.com with ESMTPSA id 184sm5765131qkl.104.2020.10.01.05.41.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Oct 2020 05:41:24 -0700 (PDT)
+Received: by localhost.localdomain (Postfix, from userid 1000)
+        id 1FA45C6195; Thu,  1 Oct 2020 09:41:22 -0300 (-03)
+Date:   Thu, 1 Oct 2020 09:41:22 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Michael Tuexen <tuexen@fh-muenster.de>,
+        Tom Herbert <therbert@google.com>, davem@davemloft.net
+Subject: Re: [PATCH net-next 00/15] sctp: Implement RFC6951: UDP
+ Encapsulation of SCTP
+Message-ID: <20201001124122.GB70998@localhost.localdomain>
+References: <cover.1601387231.git.lucien.xin@gmail.com>
 MIME-Version: 1.0
-Reply-To: madamrubytan@gmail.com
-Sender: mrmaxwellkojo@gmail.com
-Received: by 2002:a0c:8606:0:0:0:0:0 with HTTP; Thu, 1 Oct 2020 03:35:50 -0700 (PDT)
-From:   Mrs Ruby Tan <mrs.rubytan1960@gmail.com>
-Date:   Thu, 1 Oct 2020 12:35:50 +0200
-X-Google-Sender-Auth: 0q6nU5FpwspKXBe2srHqtnqTFC4
-Message-ID: <CAKYa8HavOrJ5X_SHm2_+H=PPocu7NGeo_1ku2wO2m3uoT42F1w@mail.gmail.com>
-Subject: Greetings,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1601387231.git.lucien.xin@gmail.com>
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Greetings,
+On Tue, Sep 29, 2020 at 09:48:52PM +0800, Xin Long wrote:
+...
+> Patches:
 
-I am Mrs Ruby Tan an aging widow suffering from long time illness.I
-have some funds I inherited from my late husband, I needed a very
-honest and sincere Individual or cooperate organization that will use
-the fund for humanitarian and charities works, I found your email
-address from the Human ressources data base and decided to contact you.
+Please give me till tomorrow for revising this patchset.
 
-Please if you would be able to use the funds as have stated here To
-fulfilled my late husband wishes please, kindly reply me back through
-my private email address for more
-explanations;(mrs.rubytan1960@yahoo.com)
-
-Regards,
-Mrs Ruby Tan.
+Thanks,
+Marcelo
