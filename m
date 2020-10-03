@@ -2,100 +2,181 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8715728225F
-	for <lists+linux-sctp@lfdr.de>; Sat,  3 Oct 2020 10:04:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5321B2823CE
+	for <lists+linux-sctp@lfdr.de>; Sat,  3 Oct 2020 13:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725777AbgJCIEw (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sat, 3 Oct 2020 04:04:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
+        id S1725790AbgJCLXr (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sat, 3 Oct 2020 07:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725601AbgJCIEw (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sat, 3 Oct 2020 04:04:52 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309F3C0613D0;
-        Sat,  3 Oct 2020 01:04:52 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id e2so3955999wme.1;
-        Sat, 03 Oct 2020 01:04:52 -0700 (PDT)
+        with ESMTP id S1725788AbgJCLXr (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sat, 3 Oct 2020 07:23:47 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8329C0613D0;
+        Sat,  3 Oct 2020 04:23:46 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id j2so4553423wrx.7;
+        Sat, 03 Oct 2020 04:23:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=uERDiUyRuB9/cXeVySNK9NZF5n/XIJzp+wEEQOJF6iM=;
-        b=hiKi1GcGeqeFgFCCzgDiqEJETCZJ0/6Wt6USUGHUst7o+f8wiOabKrnvPhp8yRMnxk
-         C7SDqzX6EALmOofalx3EM2ueGcTXCe9WcqsWu/CUQPmuBogQykxd9AA591jzpsrWH+wd
-         JkmnsH92UFPMHJtZOHmLvRFu2FNZVnU0xUknOmYgleH2Iwc98i8ZJnBVGRIgqOMehWzR
-         UUwcxvWkWSQNPWrpvlVC/n3ohdMNpZYDrNigg0ubA2/3I91RDMm0FStzUWOnwDDLmWdj
-         ZRRIJJWqzaE0owgXUThdy1iSl0UO4HEQQCr3A/6RXGemcfAKH5JaO6tXyc4BSjZHPp6l
-         cFKg==
+        bh=RbIkL1MLggQpNrhEkO/nseBhlRz9oCOjUCnTTlflXxs=;
+        b=IkRrY80ig+Ex9uCTjlNV/kR/z7RpkUTO8iwy37gzo1i4Vm6Qh6uH9Ut8IYwqQRuyhY
+         /WunDlYH1FKDKsOwJdGuhDWOET66LlIKHDFMZqBG2E+Q4LpPKaHP/spn7XhET2dyY4FH
+         NwKGr5i7BFMiVd/Vpw0Swn1ady4xMI+fhWhsGPDd7U8hybQ27zLJEhT9S/Q9Civp4BEm
+         ikESkHXCxf2C1D+mC8e4zuxaAO+oUFGV/QdcsY+tkEKsX7evW1RTLt+hYWW0mvPQfWn3
+         dohunfB60iCeX5+7Ah35XeBGyR1S4qQZO6v8rbowUqP5S/vME6PY4iXop6uVUqF8zqs6
+         a4lQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=uERDiUyRuB9/cXeVySNK9NZF5n/XIJzp+wEEQOJF6iM=;
-        b=VUUt1W3cXAz08EvaW+nhjkgMV0cCFPTVLXIssPyworOux0sM5L5pRXtPEWyskpbCO+
-         LtODThYQ5YM6Op/pktWmLBsw0wowhPA4AUPzDdR9+b26bE/MQew+BysQTtULDioZOwcM
-         6Uv3BRza2p8b/3+iLqedBEQIi9Wn/OHqRuDVWxDc6YgapMzJVqoF7Q4muBtxLI2nqIet
-         GWUYiRyWAeqt+l2fCS9UWPSTe/3uelEUbR7p6W3HCFnj4s99Fe6KMaGriAJsTUFy+FZL
-         xsXKCNSTsvAUBXZxMLckUWJWvA3XuvFYEbfq+wWYfZ20rpeIr2LULN4a1bV5Zby5iJja
-         WhGw==
-X-Gm-Message-State: AOAM530yWg2lIZhrBIzgjujPt4KmmBKBwGkpHO16x2DJxvyHoEEbXCWK
-        MPEO7TQtV+YC1PNVarrGTKd4LMANXfKHDXveZjRarYMwqR8=
-X-Google-Smtp-Source: ABdhPJzG2umMi+blVZTV6zKXzBYYQdh1RC4KVltpBbCMJUl4t/c+j+xPTsnrwNHI+LdV0lNu392sBkJfkgzKCv8YtAY=
-X-Received: by 2002:a1c:4b04:: with SMTP id y4mr6570045wma.111.1601712290948;
- Sat, 03 Oct 2020 01:04:50 -0700 (PDT)
+        bh=RbIkL1MLggQpNrhEkO/nseBhlRz9oCOjUCnTTlflXxs=;
+        b=DTHCu4YhvcFb+W3vnxm37c1L9AfD7MMRBG8aPI6FgE5ONsL4n1O/6OK6aZzA/gCskY
+         SAs5TYIjEaUhqcjFgmMCxszpOZmSqFPefszpwAmbzQHLsupYkKGNUu9N0UBR96CceZbX
+         wjWmkhSfj3Z/sb34KeZXgj+56YcnQOy07VeWPahoArxukDiSDqUNcCOOpJjZz66RuYsl
+         zDcB57br2HgxaunOvNHtViwIWIcV4qRy31HOkZEWYDf6qcAW9YZiT4fN7a3vc1fEFSPJ
+         T71xbYm/+iC2sx6UW1v0FU7LK+RKMMrUyN3jtMEnvzGrUtAnRPryJcj/KGmgy5mQfML+
+         mwvg==
+X-Gm-Message-State: AOAM533JothEnaSpJLeuhNPDCXvJqj4cM2mSEqKw5Zhs1l7HSX9ZCnkq
+        KkI51xi2HBVgANCgJUE5y2cX1oN4UXbBtQnFVJ4=
+X-Google-Smtp-Source: ABdhPJyxMz8Yad3hb6WXtOH541uxpjRgz318d5HRrRpavvZVWx5166kOVN2sO2YbHOCJ7nfqwMll4vVa3g7DpNtITQI=
+X-Received: by 2002:adf:82ce:: with SMTP id 72mr7703948wrc.404.1601724225629;
+ Sat, 03 Oct 2020 04:23:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1601387231.git.lucien.xin@gmail.com> <780b235b6b4446f77cfcf167ba797ce1ae507cf1.1601387231.git.lucien.xin@gmail.com>
- <20201003041217.GI70998@localhost.localdomain>
-In-Reply-To: <20201003041217.GI70998@localhost.localdomain>
+References: <7ff312f910ada8893fa4db57d341c628d1122640.1601387231.git.lucien.xin@gmail.com>
+ <202009300218.2AcHEN0L-lkp@intel.com> <20201003040824.GG70998@localhost.localdomain>
+ <CADvbK_cPX1f5jrGsKuvya7ssOFPTsG7daBCkOP-NGN9hpzf5Vw@mail.gmail.com>
+In-Reply-To: <CADvbK_cPX1f5jrGsKuvya7ssOFPTsG7daBCkOP-NGN9hpzf5Vw@mail.gmail.com>
 From:   Xin Long <lucien.xin@gmail.com>
-Date:   Sat, 3 Oct 2020 16:20:17 +0800
-Message-ID: <CADvbK_cS1Zz3iraOy1gbU0=f3TxGAUqo_etabFkm=x7tazEBQA@mail.gmail.com>
-Subject: Re: [PATCH net-next 15/15] sctp: enable udp tunneling socks
+Date:   Sat, 3 Oct 2020 19:23:33 +0800
+Message-ID: <CADvbK_eXnzjDCypRkep9JqxBFV=cMXNkSZr4nyAaMiDc1VGXJg@mail.gmail.com>
+Subject: Re: [PATCH net-next 11/15] sctp: add udphdr to overhead when udp_port
+ is set
 To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
+Cc:     kernel test robot <lkp@intel.com>,
+        network dev <netdev@vger.kernel.org>,
+        linux-sctp@vger.kernel.org, kbuild-all@lists.01.org,
         Neil Horman <nhorman@tuxdriver.com>,
         Michael Tuexen <tuexen@fh-muenster.de>,
-        Tom Herbert <therbert@google.com>, davem <davem@davemloft.net>
+        davem <davem@davemloft.net>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Sat, Oct 3, 2020 at 12:12 PM Marcelo Ricardo Leitner
-<marcelo.leitner@gmail.com> wrote:
+On Sat, Oct 3, 2020 at 4:12 PM Xin Long <lucien.xin@gmail.com> wrote:
 >
-> On Tue, Sep 29, 2020 at 09:49:07PM +0800, Xin Long wrote:
-> > This patch is to enable udp tunneling socks by calling
-> > sctp_udp_sock_start() in sctp_ctrlsock_init(), and
-> > sctp_udp_sock_stop() in sctp_ctrlsock_exit().
+> On Sat, Oct 3, 2020 at 12:08 PM Marcelo Ricardo Leitner
+> <marcelo.leitner@gmail.com> wrote:
 > >
-> > Also add sysctl udp_port to allow changing the listening
-> > sock's port by users.
+> > On Wed, Sep 30, 2020 at 03:00:42AM +0800, kernel test robot wrote:
+> > > Hi Xin,
+> > >
+> > > Thank you for the patch! Yet something to improve:
 > >
-> > Wit this patch, the whole sctp over udp feature can be
->   With
+> > I wonder how are you planning to fix this. It is quite entangled.
+> > This is not performance critical. Maybe the cleanest way out is to
+> > move it to a .c file.
+> >
+> > Adding a
+> > #if defined(CONFIG_IP_SCTP) || defined(CONFIG_IP_SCTP_MODULE)
+> > in there doesn't seem good.
+> >
+> > >    In file included from include/net/sctp/checksum.h:27,
+> > >                     from net/netfilter/nf_nat_proto.c:16:
+> > >    include/net/sctp/sctp.h: In function 'sctp_mtu_payload':
+> > > >> include/net/sctp/sctp.h:583:31: error: 'struct net' has no member named 'sctp'; did you mean 'ct'?
+> > >      583 |   if (sock_net(&sp->inet.sk)->sctp.udp_port)
+> > >          |                               ^~~~
+> > >          |                               ct
+> > >
+> Here is actually another problem, I'm still thinking how to fix it.
 >
-> > enabled and used.
-> ...
-> > @@ -1466,6 +1466,10 @@ static int __net_init sctp_ctrlsock_init(struct net *net)
-> >       if (status)
-> >               pr_err("Failed to initialize the SCTP control sock\n");
-> >
-> > +     status = sctp_udp_sock_start(net);
+> Now sctp_mtu_payload() returns different value depending on
+> net->sctp.udp_port. but net->sctp.udp_port can be changed by
+> "sysctl -w" anytime. so:
 >
-> This can be masking the previous error.
-right, will add more logs in sctp_udp_sock_start().
+> In sctp_packet_config() it gets overhead/headroom by calling
+> sctp_mtu_payload(). When 'udp_port' is 0, it's IP+MAC header
+> size. Then if 'udp_port' is changed to 9899 by 'sysctl -w',
+> udphdr will also be added to the packet in sctp_v4_xmit(),
+> and later the headroom may not be enough for IP+MAC headers.
+>
+> I'm thinking to add sctp_sock->udp_port, and it'll be set when
+> the sock is created with net->udp_port. but not sure if we should
+> update sctp_sock->udp_port with  net->udp_port when sending packets?
+something like:
 
->
-> > +     if (status)
-> > +             pr_err("Failed to initialize the SCTP udp tunneling sock\n");
->                                                  SCTP UDP
->
-> > +
-> >       return status;
-> >  }
-> >
->
-> This is the last comment I had.
-> Thanks Xin! Nice patches.
-Thanks for checking so carefully!
+diff --git a/net/sctp/output.c b/net/sctp/output.c
+index 6614c9fdc51e..c379d805b9df 100644
+--- a/net/sctp/output.c
++++ b/net/sctp/output.c
+@@ -91,6 +91,7 @@ void sctp_packet_config(struct sctp_packet *packet,
+__u32 vtag,
+        if (asoc) {
+                sk = asoc->base.sk;
+                sp = sctp_sk(sk);
++               sctp_sock_check_udp_port(sock_net(sk), sp, asoc);
+        }
+        packet->overhead = sctp_mtu_payload(sp, 0, 0);
+        packet->size = packet->overhead;
+diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
+index 21d0ff1c6ab9..f5aba9086d33 100644
+--- a/net/sctp/sm_make_chunk.c
++++ b/net/sctp/sm_make_chunk.c
+@@ -1250,6 +1250,7 @@ static inline struct sctp_chunk
+*sctp_make_op_error_limited(
+        if (asoc) {
+                size = min_t(size_t, size, asoc->pathmtu);
+                sp = sctp_sk(asoc->base.sk);
++               sctp_sock_check_udp_port(sock_net(sk), sp, asoc);
+        }
+
+        size = sctp_mtu_payload(sp, size, sizeof(struct sctp_errhdr));
+diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
+index 8edab1533057..3e7f81d63d2e 100644
+--- a/net/sctp/sm_statefuns.c
++++ b/net/sctp/sm_statefuns.c
+@@ -6276,6 +6276,8 @@ static struct sctp_packet *sctp_ootb_pkt_new(
+        sctp_transport_route(transport, (union sctp_addr *)&chunk->dest,
+                             sctp_sk(net->sctp.ctl_sock));
+
++       sctp_sock_check_udp_port(net, net->sctp.ctl_sock, NULL);
++
+        packet = &transport->packet;
+        sctp_packet_init(packet, transport, sport, dport);
+        sctp_packet_config(packet, vtag, 0);
+diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+index d793dfa94682..e5de5f98be0c 100644
+--- a/net/sctp/socket.c
++++ b/net/sctp/socket.c
+@@ -1550,6 +1550,17 @@ static int sctp_error(struct sock *sk, int
+flags, int err)
+        return err;
+ }
+
++void sctp_sock_check_udp_port(struct net* net, struct sctp_sock *sp,
++                             struct sctp_association *asoc)
++{
++       if (likely(sp->udp_port == net->sctp.udp_port))
++               return;
++
++       if (asoc && (!sp->udp_port || !net->sctp.udp_port))
++               sctp_assoc_update_frag_point(asoc);
++       sp->udp_port = net->sctp.udp_port;
++}
++
+ /* API 3.1.3 sendmsg() - UDP Style Syntax
+  *
+  * An application uses sendmsg() and recvmsg() calls to transmit data to
+@@ -1795,6 +1806,8 @@ static int sctp_sendmsg_to_asoc(struct
+sctp_association *asoc,
+                        goto err;
+        }
+
++       sctp_sock_check_udp_port(net, sp, asoc);
++
+        if (sp->disable_fragments && msg_len > asoc->frag_point) {
+                err = -EMSGSIZE;
+                goto err;
