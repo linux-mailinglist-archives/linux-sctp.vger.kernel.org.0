@@ -2,96 +2,167 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2987283D2C
-	for <lists+linux-sctp@lfdr.de>; Mon,  5 Oct 2020 19:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A422283F39
+	for <lists+linux-sctp@lfdr.de>; Mon,  5 Oct 2020 21:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726823AbgJERQt (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 5 Oct 2020 13:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37236 "EHLO
+        id S1728357AbgJETBT (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 5 Oct 2020 15:01:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725973AbgJERQt (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 5 Oct 2020 13:16:49 -0400
-Received: from mail-qv1-xf44.google.com (mail-qv1-xf44.google.com [IPv6:2607:f8b0:4864:20::f44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29137C0613CE
-        for <linux-sctp@vger.kernel.org>; Mon,  5 Oct 2020 10:16:49 -0700 (PDT)
-Received: by mail-qv1-xf44.google.com with SMTP id di5so6351261qvb.13
-        for <linux-sctp@vger.kernel.org>; Mon, 05 Oct 2020 10:16:49 -0700 (PDT)
+        with ESMTP id S1727247AbgJETBT (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 5 Oct 2020 15:01:19 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3648C0613CE;
+        Mon,  5 Oct 2020 12:01:18 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id q63so13207748qkf.3;
+        Mon, 05 Oct 2020 12:01:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=aR37ED40uxPV/5pi9yJ7wpOkFqS0NpGvaU5UESZh1oY=;
-        b=jJ+WdrIC6cr/0vn3vHskjO4ageI6PwVXutcEylgqrI41JjoOJjQeu9EGrcM4mpwEsJ
-         PigZcvI6Et061IEl9zdyj/lyq87d1xiWHUfF7A7ZUNJ/de9iXGTI9tyb8XExbVS5ZcXj
-         kcnYv/6KtnxaSeHxnvHMPdhfE7cHpdGpA+xMng+EmqHJ7fQUU2eGOi9ntTf/UeitOlO2
-         ku+pkWybmsKhDktVBkqAEPuHLSIbejW2Zw4UcbGQuzNjdmqq7e0cTXAaKFckrMdjMNiq
-         XgPBW2ZGHHcrynNcuBu3eTw+txlKRJAmdScy40VAHUh8RQ1FsnccBoIPG7fkKqVKfG+6
-         8+/A==
+        bh=sRcdP6mMRIN2azjRHcAmgUX6oVyrHsuYRFmR/8uu+aI=;
+        b=QRU3KtuV80CCOCGmwH3GsxrhX3DkBlEc9HLmhtRRUaWe7+SY5jc8034jvxt35zrDRB
+         xBgrM2KBHIJA77KYLn6JdFo6kEZia5k4MarWHs9ibTHSXbhXQspv6zzFAUqiSbzQ93sr
+         1apE56URlfRdBuNm3G1s0DLlgeUYE4FWqoOm1uvnGyg3AoEQtJ9zDifG9NSBwKkdQLLI
+         tYilLgauAAaPBkgDwq1cVWShVNhZzfZNQoIm09BZaYggz/+YE+uW5V5hMcqfcCuZo6rK
+         kUOi5nK8cC3oPjDVkQSEA9BY5iFowZdtV/X258xgaxiOe3TX/ps9vWnv6IYnLh73fxAY
+         QtdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=aR37ED40uxPV/5pi9yJ7wpOkFqS0NpGvaU5UESZh1oY=;
-        b=dFvhcFzbUnmN+UlsTIQ5f86dhOxZ8+ht9YT9WDyrX2NKQsrBPOX5difUTlxNl4bWqQ
-         mP95kaQYMo5iRayJPSJzTJAECoAlawG+PR0RUGxDWvd1IoGnMaXEtpy4KYqqmQAzXUsX
-         iBYTkP2GY/NELrF0uXVVfaGrACNweO9ZlabbRHBZZ7NOxwBjzdzu9PNkS+gI/jh8OWI1
-         p5/jQiHpvll+W2VEuB/uIn5wTI3Ehwb5rwKFeu5cTHslRlG/tx5hviYEzLHS4UwRIngE
-         Kns4NzYzvUQf2vp2cnIpAzAXRaCbd2QYYGdLm7SJmq4qOLgiVL/T9Oq71CDCgnvv7SNu
-         /Grw==
-X-Gm-Message-State: AOAM531lqgE4mZBW/W2vp3OBoCNh9D30f2Mb0VrJgjxEPhFrEXcliRSF
-        wxdTfFQOPY0Dbn6QJJhzbqUNM8Hm91VK2Q==
-X-Google-Smtp-Source: ABdhPJyObRARN0eHDSoVj7XgrsE1PCm9A/C+5nssqwoD2cqn7pZFfB/G4Ac+H1ZcoFvSVI9MaEev+A==
-X-Received: by 2002:a0c:c407:: with SMTP id r7mr752393qvi.36.1601918208193;
-        Mon, 05 Oct 2020 10:16:48 -0700 (PDT)
-Received: from localhost.localdomain ([2001:1284:f016:baaa:60d4:792a:514f:982c])
-        by smtp.gmail.com with ESMTPSA id 7sm461838qkc.73.2020.10.05.10.16.46
+        bh=sRcdP6mMRIN2azjRHcAmgUX6oVyrHsuYRFmR/8uu+aI=;
+        b=DRY1JqBzO+gOt0UuInCcbRvhJ8XqmfOz+MKGcf2ON6ld1aW4aXoKEOSqoepeMHzFD+
+         ccldYH/OwuWb9v6gVgRFwkeWCPYPURN2b81rAPd9rfPmIA2mZhb0E0BqzjCCHrBAlZ0u
+         9DUc4Wf6BLUujJpoiKX1kxSfzHoy6h2fBv4sWM4Qp6JXWm2O1PH7BOyuY9DlwmykTSWH
+         ugI0XycswMCLOoU2xg28p2XYAHZFfXpe6VrYBXavqP703E7VL/9rCMmd8jl4vwvpIOEK
+         apsyuT8QQUTlcmKE6Fz8whStUuE5C2s79c+GCZd4sxqoOaYtkSHLbg4q62thUJxrPe4N
+         oiPw==
+X-Gm-Message-State: AOAM531WNB5gHUkg3w1Efn3rQKv7KzgK+di6V0ty9YiYVwIIpHFkEFjn
+        +pvh8VWM4du2ZUVgNZB8ukM=
+X-Google-Smtp-Source: ABdhPJxgqo2sgYZqAe3s1oYciV7YyilMx8K2ivm1zUmOTiVAbweCrK2g4GMZjqqMk8Mcka6Qey/blw==
+X-Received: by 2002:a37:4a57:: with SMTP id x84mr1495252qka.17.1601924477996;
+        Mon, 05 Oct 2020 12:01:17 -0700 (PDT)
+Received: from localhost.localdomain ([177.220.172.121])
+        by smtp.gmail.com with ESMTPSA id h4sm655782qkl.130.2020.10.05.12.01.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Oct 2020 10:16:46 -0700 (PDT)
+        Mon, 05 Oct 2020 12:01:17 -0700 (PDT)
 Received: by localhost.localdomain (Postfix, from userid 1000)
-        id DC483C619C; Mon,  5 Oct 2020 14:16:43 -0300 (-03)
-Date:   Mon, 5 Oct 2020 14:16:43 -0300
+        id 4B5E5C619C; Mon,  5 Oct 2020 16:01:14 -0300 (-03)
+Date:   Mon, 5 Oct 2020 16:01:14 -0300
 From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Andreas Fink <afink@list.fink.org>
-Cc:     linux-sctp@vger.kernel.org
-Subject: Re: Heartbeat on closed SCTP sockets?
-Message-ID: <20201005171643.GK70998@localhost.localdomain>
-References: <1FB70B30-857C-4CD9-A05C-4BA15F57B1D2@list.fink.org>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        network dev <netdev@vger.kernel.org>,
+        linux-sctp@vger.kernel.org, kbuild-all@lists.01.org,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Michael Tuexen <tuexen@fh-muenster.de>,
+        davem <davem@davemloft.net>
+Subject: Re: [PATCH net-next 11/15] sctp: add udphdr to overhead when
+ udp_port is set
+Message-ID: <20201005190114.GL70998@localhost.localdomain>
+References: <7ff312f910ada8893fa4db57d341c628d1122640.1601387231.git.lucien.xin@gmail.com>
+ <202009300218.2AcHEN0L-lkp@intel.com>
+ <20201003040824.GG70998@localhost.localdomain>
+ <CADvbK_cPX1f5jrGsKuvya7ssOFPTsG7daBCkOP-NGN9hpzf5Vw@mail.gmail.com>
+ <CADvbK_eXnzjDCypRkep9JqxBFV=cMXNkSZr4nyAaMiDc1VGXJg@mail.gmail.com>
+ <CADvbK_fzASk9dLbHLNtLLc+uS7hLz6nDi2CESgN55Yh-o92+rQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1FB70B30-857C-4CD9-A05C-4BA15F57B1D2@list.fink.org>
+In-Reply-To: <CADvbK_fzASk9dLbHLNtLLc+uS7hLz6nDi2CESgN55Yh-o92+rQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hi,
+On Sat, Oct 03, 2020 at 08:24:34PM +0800, Xin Long wrote:
+> On Sat, Oct 3, 2020 at 7:23 PM Xin Long <lucien.xin@gmail.com> wrote:
+> >
+> > On Sat, Oct 3, 2020 at 4:12 PM Xin Long <lucien.xin@gmail.com> wrote:
+> > >
+> > > On Sat, Oct 3, 2020 at 12:08 PM Marcelo Ricardo Leitner
+> > > <marcelo.leitner@gmail.com> wrote:
+> > > >
+> > > > On Wed, Sep 30, 2020 at 03:00:42AM +0800, kernel test robot wrote:
+> > > > > Hi Xin,
+> > > > >
+> > > > > Thank you for the patch! Yet something to improve:
+> > > >
+> > > > I wonder how are you planning to fix this. It is quite entangled.
+> > > > This is not performance critical. Maybe the cleanest way out is to
+> > > > move it to a .c file.
+> > > >
+> > > > Adding a
+> > > > #if defined(CONFIG_IP_SCTP) || defined(CONFIG_IP_SCTP_MODULE)
+> > > > in there doesn't seem good.
+> > > >
+> > > > >    In file included from include/net/sctp/checksum.h:27,
+> > > > >                     from net/netfilter/nf_nat_proto.c:16:
+> > > > >    include/net/sctp/sctp.h: In function 'sctp_mtu_payload':
+> > > > > >> include/net/sctp/sctp.h:583:31: error: 'struct net' has no member named 'sctp'; did you mean 'ct'?
+> > > > >      583 |   if (sock_net(&sp->inet.sk)->sctp.udp_port)
+> > > > >          |                               ^~~~
+> > > > >          |                               ct
+> > > > >
+> > > Here is actually another problem, I'm still thinking how to fix it.
+> > >
+> > > Now sctp_mtu_payload() returns different value depending on
+> > > net->sctp.udp_port. but net->sctp.udp_port can be changed by
+> > > "sysctl -w" anytime. so:
 
-On Mon, Oct 05, 2020 at 06:39:22PM +0200, Andreas Fink wrote:
+Good point.
+
+> > >
+> > > In sctp_packet_config() it gets overhead/headroom by calling
+> > > sctp_mtu_payload(). When 'udp_port' is 0, it's IP+MAC header
+> > > size. Then if 'udp_port' is changed to 9899 by 'sysctl -w',
+> > > udphdr will also be added to the packet in sctp_v4_xmit(),
+> > > and later the headroom may not be enough for IP+MAC headers.
+> > >
+> > > I'm thinking to add sctp_sock->udp_port, and it'll be set when
+> > > the sock is created with net->udp_port. but not sure if we should
+> > > update sctp_sock->udp_port with  net->udp_port when sending packets?
+
+I don't think so,
+
+> > something like:
 ...
-> What we now see in netstat --sctp is:
-> 
-> we have a LISTEN on port 2010
-> we have a  association from port 2010 to the remote in status CLOSED
-> 
-> in tcpdump we see packets coming in from the remote and heartbeat being acknowledged. However our application is not answering to these packets and the status of the application shows SCTP being down.
-> In other words, my application sees the association down. Netstat shows the association as being closed but the kernel seems to continue to entertain this association by continue to send heartbeat ACK and not sending ABORT.
+> diff --git a/net/sctp/output.c b/net/sctp/output.c
+> index 6614c9fdc51e..c96b13ec72f4 100644
+> --- a/net/sctp/output.c
+> +++ b/net/sctp/output.c
+> @@ -91,6 +91,14 @@ void sctp_packet_config(struct sctp_packet *packet,
+> __u32 vtag,
+>         if (asoc) {
+>                 sk = asoc->base.sk;
+>                 sp = sctp_sk(sk);
+> +
+> +               if (unlikely(sp->udp_port != sock_net(sk)->sctp.udp_port)) {
 
-That's weird. If it is in CLOSED, then the stack should be handling
-it as an OOTB packet and trigger an Abort.
+RFC6951 has:
 
-> 
-> We now kill the application
-> 
-> What we now see in netstat --sctp is:
-> we no longer listen on port 2010
-> we have a closed association from port 2010 to the remote.
-> 
-> in tcpdump we however we STILL see packets coming in from the remote and heartbeat being acknowledged, even though no application is listening on this port and no userspace application is using that port.
-> We do not see any SHUTDOWN or INIT even if we restart the application.
-> 
-> Can anyone explain how this can be?
+6.1.  Get or Set the Remote UDP Encapsulation Port Number
+      (SCTP_REMOTE_UDP_ENCAPS_PORT)
+...
+   sue_assoc_id:  This parameter is ignored for one-to-one style
+      sockets.  For one-to-many style sockets, the application may fill
+      in an association identifier or SCTP_FUTURE_ASSOC for this query.
+      It is an error to use SCTP_{CURRENT|ALL}_ASSOC in sue_assoc_id.
 
-Please check the assoc status as well, via 'ss -a --sctp' and
-/proc/net/sctp/assocs . Maybe it got out of sync of the socket status.
+   sue_address:  This specifies which address is of interest.  If a
+      wildcard address is provided, it applies only to future paths.
 
-  Marcelo
+So I'm not seeing a reason to have a system wide knob that takes
+effect in run time like this.
+Enable, start apps, and they keep behaving as initially configured.
+Need to disable? Restart the apps/sockets.
+
+Thoughts?
+
+> +                       __u16 port = sock_net(sk)->sctp.udp_port;
+> +
+> +                       if (!sp->udp_port || !port)
+> +                               sctp_assoc_update_frag_point(asoc);
+> +                       sp->udp_port = port;
+> +               }
+>         }
