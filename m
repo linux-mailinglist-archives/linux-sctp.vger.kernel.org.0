@@ -2,78 +2,106 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 797CA2864A6
-	for <lists+linux-sctp@lfdr.de>; Wed,  7 Oct 2020 18:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38EAB286EC6
+	for <lists+linux-sctp@lfdr.de>; Thu,  8 Oct 2020 08:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726105AbgJGQjK (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 7 Oct 2020 12:39:10 -0400
-Received: from sonic313-13.consmr.mail.bf2.yahoo.com ([74.6.133.123]:43041
-        "EHLO sonic313-13.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726702AbgJGQjK (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 7 Oct 2020 12:39:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1602088749; bh=PxMwWzXvs+dqOoH0/FHvFmQpYH2JguaCUHYAVLLmaiw=; h=Date:From:Reply-To:Subject:References:From:Subject; b=kEBe5ef967GP9yrskeDYdZ1ZX/Cz4jyaRScS+UBSUjCDxn5op3+BG8aQEk55M2h6QzMDX+M3F+0e2R/RbJLQwcQ6Zf6JvNN6wMK2qQwbI+Dz+OJVk6afUmLxhPtdJNUbcCTnVjf9GZ1+dfH4fG1pEv8gC4db+4Ot5AqsW+r3BpyFDNsXqYSV46tGi8L2F7ZxNj92P9YhwC+0gqMh01tXwAmdJCL5Z15PoRBFH7OzyOAZjt9fY8u6sD8OLGZcB5oi6XEe2v91WQ9h8A52HykV+nvpYiL/KVdeGyZdkmuoSHvf+EQxIEzHc1RTAHrcyqOViYNeNCWpwJmcxwagrmG5Pg==
-X-YMail-OSG: jQ5dwBIVM1ktYTu_8OzAsAoQEgdn3aAgWr7JwM_xhc.ssTEuT1lVS_Ags4EI9dl
- MyAIIDH_IL9o21Y.kzkiaCDjNrOjnaStalbRKLnueBBaqfRXaxbOZ6.B.3krteoozdlQkkxWgKRE
- LAYDqypyK8hnuTMz9AL4xAloPvi9901m_1vaAw6KToM9BApXXntZIDLWCWVE5dlUBs9h_OxAkC9y
- IEw2JmpUclIQDdYbZdjm0gQA2MVkSEfa9TuYgSiS8ff57NmzFjpaW2x75NBiJ0dezA059hz03kV4
- .0gxuKqAH7a9IEOf07jptnENQQZqbPj_jBjMrRBML5O79klYvQE..j7rLm2lZ76g.LHGUl7oYsVR
- M4ECFVTVy2a4iKqM7XuKVxY7CS1089dojfaYZ8l3vRJZEZeZ3vT9GRm8YFgeXDr3UuU69ojxM9iv
- JS7njJa0k8arfH2Bz8.b0NuefM96UE2W3whJj_PX2faMa2.IQb.xwffNaFsoXn6RTrbp9I3lIGlA
- IvsEhlC_lHFH2iuVatMQkcVT_TCTOCrZnQ6mw8bYO84njf2sdWOt9zPS8BEYKAiB5oIC.Z57SFjY
- P48_G3NgDa7cJ8cxNxfNvXIEDmEtDs78h.6MM1Kt4ZbogzVAO9q2K5azX14Z2kaQcxhO16Jlnksf
- 5Tfl8WlKElA8xPIidL1_ZHCiGHPQoUVRkcjuNPDkdo9MEMdZLWh7uvXzWxXwAef9SdXxM5jDUjb9
- NEPW.o.M3I4FT856eamKIVIWRpuPE8zm_qT05OlRsN2DIVDd36vxuS5Wf5pK2cWGXLL7Th.61Uij
- upkAmxREIOzFbyFut9fkpPRFPphZoBo3vx5hQK5U8VtaVWknzPYzLwhJI6BysG8OIJos04KEbPks
- UvJmHYsOVk.TqPX_0FkTuIMMdEOu1iIOkHYZikCAwAr5lo8AAOcbHH_cqWgrq1lB0sCbUnTMT3Gx
- 6TJ34GDvKKP34TSyEqSrC.LJbSb3NOClUnXW0dgHgbhh0NJjQvHnULUGceJA6x1foMXWcSXYHfzX
- ADs2RoHx8CM.RVZlrEbLgeM2zw7gIit_k.K.JiVHtQTNPMa5sBplU8Ek9z.OK.qHPN7OqGj2N23o
- WYe0jJJgBz8vpbH71PlrVv5fUB5vd9cVwj6ZN81uS.F0edLlUow3iSeL4RUpjBN6IJfrEbH18mhR
- pYfAJKn75u5uDXQ4kRpUPku0ZwoMCshQkXx6qFpl.cJ_8kX8wBDL5ODN3Wy6aA9PMdFukHyNXw20
- pdm0SLHJLks.byFKxHttKZRvCzuja3MZ.B9HG1FkNvxO0DbVU2lfxJ1biaCW4A8urHeWoro1a6Jm
- 8glxx8ezwb6zCNcrhHJwkfR7Wj7nExq9htIGw.hy0wsgMKgmmAggFBOEq_GJ4baTcFoPFepSte2D
- jqDP2TI72_jKvwOFOjACXUKf0RRm4uoJxnx8-
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic313.consmr.mail.bf2.yahoo.com with HTTP; Wed, 7 Oct 2020 16:39:09 +0000
-Date:   Wed, 7 Oct 2020 16:39:07 +0000 (UTC)
-From:   Mrs Marilyn Robert <fredodinga22@gmail.com>
-Reply-To: marilyobert@gmail.com
-Message-ID: <885096625.152433.1602088747948@mail.yahoo.com>
-Subject: =?UTF-8?B?0J3QsNGY0LzQuNC70LAg0LrQsNGYINCz0L7RgdC/0L7QtNCw0YDQvtGC?=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-References: <885096625.152433.1602088747948.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16795 YMailNodin Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+        id S1726222AbgJHGkM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Thu, 8 Oct 2020 02:40:12 -0400
+Received: from mail.fink.org ([79.134.252.20]:45918 "EHLO mail.fink.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726013AbgJHGkM (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Thu, 8 Oct 2020 02:40:12 -0400
+X-Footer: Zmluay5vcmc=
+Received: from macropolis-wlan.fink.org ([79.134.238.31])
+        (authenticated user list@fink.org)
+        by mail.fink.org (Kerio Connect 9.2.12 patch 1) with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Thu, 8 Oct 2020 08:40:03 +0200
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.1\))
+Subject: Re: Heartbeat on closed SCTP sockets?
+From:   Andreas Fink <afink@list.fink.org>
+In-Reply-To: <20201005171643.GK70998@localhost.localdomain>
+Date:   Thu, 8 Oct 2020 08:40:01 +0200
+Cc:     linux-sctp@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <A95BC0CF-7C1D-4BB2-B9EF-8222C5BE9B49@list.fink.org>
+References: <1FB70B30-857C-4CD9-A05C-4BA15F57B1D2@list.fink.org>
+ <20201005171643.GK70998@localhost.localdomain>
+To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+X-Mailer: Apple Mail (2.3608.120.23.2.1)
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-DQoNCtCd0LDRmNC80LjQu9CwINC60LDRmCDQs9C+0YHQv9C+0LTQsNGA0L7Rgg0KDQrQiNCw0YEg
-0YHRg9C8IDY4LdCz0L7QtNC40YjQvdCwINC20LXQvdCwLCDQutC+0ZjQsCDRgdGC0YDQsNC00LAg
-0L7QtCDQv9GA0L7QtNC+0LvQttC10L0g0LrQsNGA0YbQuNC90L7QvCDQvdCwINC00L7RmNC60LAs
-INC+0LQg0YHQuNGC0LUg0LzQtdC00LjRhtC40L3RgdC60Lgg0LjQvdC00LjQutCw0YbQuNC4LCDQ
-vNC+0ZjQsNGC0LAg0YHQvtGB0YLQvtGY0LHQsCDQvdCw0LLQuNGB0YLQuNC90LAg0YHQtSDQstC7
-0L7RiNC4INC4INC+0YfQuNCz0LvQtdC00L3QviDQtSDQtNC10LrQsCDQvNC+0LbQtdCx0Lgg0L3Q
-tdC80LAg0LTQsCDQttC40LLQtdCw0Lwg0L/QvtCy0LXRnNC1INC+0LQg0YjQtdGB0YIg0LzQtdGB
-0LXRhtC4INC60LDQutC+INGA0LXQt9GD0LvRgtCw0YIg0L3QsCDQsdGA0LfQuNC+0YIg0YDQsNGB
-0YIg0Lgg0LHQvtC70LrQsNGC0LAg0YjRgtC+INGB0LUg0ZjQsNCy0YPQstCwINC60LDRmCDQvdC1
-0LAuINCc0L7RmNC+0YIg0YHQvtC/0YDRg9CzINC/0L7Rh9C40L3QsCDQvdC10LrQvtC70LrRgyDQ
-s9C+0LTQuNC90Lgg0L3QsNC90LDQt9Cw0LQg0Lgg0L3QsNGI0LjRgtC1INC00L7Qu9Cz0Lgg0LPQ
-vtC00LjQvdC4INCx0YDQsNC6INC90LUg0LHQtdCwINCx0LvQsNCz0L7RgdC70L7QstC10L3QuCDR
-gdC+INC90LjRgtGDINC10LTQvdC+INC00LXRgtC1LCDQv9C+INC90LXQs9C+0LLQsNGC0LAg0YHQ
-vNGA0YIg0LPQviDQvdCw0YHQu9C10LTQuNCyINGG0LXQu9C+0YLQviDQvdC10LPQvtCy0L4g0LHQ
-vtCz0LDRgtGB0YLQstC+Lg0KDQrQlNC+0LDRk9Cw0Lwg0LrQsNGYINCy0LDRgSDQvtGC0LrQsNC6
-0L4g0YHQtSDQv9C+0LzQvtC70LjQsiDQt9CwINGC0L7QsCwg0L/QvtC00LPQvtGC0LLQtdC9INGB
-0YPQvCDQtNCwINC00L7QvdC40YDQsNC8INGB0YPQvNCwINC+0LQgMiwgMzAwLCAwMDAg0LXQstGA
-0LAg0LfQsCDQv9C+0LzQvtGIINC90LAg0YHQuNGA0L7QvNCw0YjQvdC40YLQtSwg0YHQuNGA0L7Q
-vNCw0YjQvdC40YLQtSDQuCDQv9C+0LzQsNC70LrRgyDQv9GA0LjQstC40LvQtdCz0LjRgNCw0L3Q
-uNGC0LUg0LzQtdGT0YMg0LLQsNGI0LjRgtC1INGB0L7QsdGA0LDQvdC40ZjQsCAvINC+0L/RiNGC
-0LXRgdGC0LLQvi4g0JfQsNCx0LXQu9C10LbQtdGC0LUg0LTQtdC60LAg0L7QstC+0Zgg0YTQvtC9
-0LQg0LUg0LTQtdC/0L7QvdC40YDQsNC9INCy0L4g0LHQsNC90LrQsCDQutCw0LTQtSDRiNGC0L4g
-0YDQsNCx0L7RgtC10YjQtSDQvNC+0ZjQvtGCINGB0L7Qv9GA0YPQsy4gQXBwcmVjaWF0ZdC1INGG
-0LXQvdCw0Lwg0LDQutC+INC+0LHRgNC90LXRgtC1INCy0L3QuNC80LDQvdC40LUg0L3QsCDQvNC+
-0LXRgtC+INCx0LDRgNCw0ZrQtSDQt9CwINC/0YDQvtC/0LDQs9C40YDQsNGa0LUg0L3QsCDQvNCw
-0YHQsNC20LDRgtCwINC90LAg0LrRgNCw0LvRgdGC0LLQvtGC0L4sINGc0LUg0LLQuCDQtNCw0LTQ
-sNC8INC/0L7QstC10ZzQtSDQtNC10YLQsNC70Lgg0LfQsCDRgtC+0LAg0LrQsNC60L4g0LTQsCDQ
-v9C+0YHRgtCw0L/QuNGC0LUuDQoNCtCR0LvQsNCz0L7QtNCw0YDQsNC8DQrQky3Rk9CwINCc0LXR
-gNC40LvQuNC9INCg0L7QsdC10YDRgg==
+by reading the linux diver source I discovered this code segment in input.c around line 188
+
+
+/*
+	 * RFC 2960, 8.4 - Handle "Out of the blue" Packets.
+	 * An SCTP packet is called an "out of the blue" (OOTB)
+	 * packet if it is correctly formed, i.e., passed the
+	 * receiver's checksum check, but the receiver is not
+	 * able to identify the association to which this
+	 * packet belongs.
+	 */
+	
+if (!asoc) {
+	if (sctp_rcv_ootb(skb)) {
+		__SCTP_INC_STATS(net, SCTP_MIB_OUTOFBLUES);
+		goto discard_release;
+	}
+}
+
+This means out of the blue packets are always ignored and dropped.
+
+the RFC however says:
+
+   8) The receiver should respond to the sender of the OOTB packet with
+      an ABORT.  When sending the ABORT, the receiver of the OOTB packet
+      MUST fill in the Verification Tag field of the outbound packet
+      with the value found in the Verification Tag field of the OOTB
+      packet and set the T-bit in the Chunk Flags to indicate that no
+      TCB was found.  After sending this ABORT, the receiver of the OOTB
+      packet shall discard the OOTB packet and take no further action.
+
+I think this is what I am seeing. The remote sends OOTB messages, we dont reply with abort which means the remote doesnt reset the connection.
+There must be a second issue that the socket structures are not in sync up.
+
+
+> On 5 Oct 2020, at 19:16, Marcelo Ricardo Leitner <marcelo.leitner@gmail.com> wrote:
+> 
+> Hi,
+> 
+> On Mon, Oct 05, 2020 at 06:39:22PM +0200, Andreas Fink wrote:
+> ...
+>> What we now see in netstat --sctp is:
+>> 
+>> we have a LISTEN on port 2010
+>> we have a  association from port 2010 to the remote in status CLOSED
+>> 
+>> in tcpdump we see packets coming in from the remote and heartbeat being acknowledged. However our application is not answering to these packets and the status of the application shows SCTP being down.
+>> In other words, my application sees the association down. Netstat shows the association as being closed but the kernel seems to continue to entertain this association by continue to send heartbeat ACK and not sending ABORT.
+> 
+> That's weird. If it is in CLOSED, then the stack should be handling
+> it as an OOTB packet and trigger an Abort.
+> 
+>> 
+>> We now kill the application
+>> 
+>> What we now see in netstat --sctp is:
+>> we no longer listen on port 2010
+>> we have a closed association from port 2010 to the remote.
+>> 
+>> in tcpdump we however we STILL see packets coming in from the remote and heartbeat being acknowledged, even though no application is listening on this port and no userspace application is using that port.
+>> We do not see any SHUTDOWN or INIT even if we restart the application.
+>> 
+>> Can anyone explain how this can be?
+> 
+> Please check the assoc status as well, via 'ss -a --sctp' and
+> /proc/net/sctp/assocs . Maybe it got out of sync of the socket status.
+> 
+>  Marcelo
+
+
