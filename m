@@ -2,36 +2,36 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2B8287BB5
-	for <lists+linux-sctp@lfdr.de>; Thu,  8 Oct 2020 20:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37961287DDE
+	for <lists+linux-sctp@lfdr.de>; Thu,  8 Oct 2020 23:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726118AbgJHSaK (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 8 Oct 2020 14:30:10 -0400
-Received: from mga04.intel.com ([192.55.52.120]:56290 "EHLO mga04.intel.com"
+        id S1726831AbgJHVUB (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 8 Oct 2020 17:20:01 -0400
+Received: from mga05.intel.com ([192.55.52.43]:47514 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725874AbgJHSaK (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 8 Oct 2020 14:30:10 -0400
-IronPort-SDR: gKou63sFtyT65wR3624YPvvRLuST39d/o9ouL68dwHf7rdXckUd9SKU9LxJSwB2DfaHhtDLyQL
- bf5WpfZAqRkw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9768"; a="162747988"
-X-IronPort-AV: E=Sophos;i="5.77,351,1596524400"; 
-   d="gz'50?scan'50,208,50";a="162747988"
+        id S1726766AbgJHVUB (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Thu, 8 Oct 2020 17:20:01 -0400
+IronPort-SDR: l+WjzPNbqt42DT8nfUw8K3sWiDiQP3grZZnqWKaFx276acUNIoNYqcl1N3YnfCOvuVeeiVD1uM
+ jP3/HFTvbOGw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9768"; a="250100894"
+X-IronPort-AV: E=Sophos;i="5.77,352,1596524400"; 
+   d="gz'50?scan'50,208,50";a="250100894"
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2020 11:30:08 -0700
-IronPort-SDR: E+yf+PDvCmthKYFANi91Dm3xYewY9nj4JfIQJDrmgsEDFaWHcTwKa8AzJApI1L7jRGeTsW5CM2
- 6J8VfngEmCIQ==
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2020 14:19:59 -0700
+IronPort-SDR: p7Oh4IZaJMgMpb2C977hqVDpxkMtU5yYAs99iQfFB6wlhC2qJxSO2HBzoOdFbeY4hpaLFvrYJB
+ Fs3HDFt2DHiw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,351,1596524400"; 
-   d="gz'50?scan'50,208,50";a="518395953"
+X-IronPort-AV: E=Sophos;i="5.77,352,1596524400"; 
+   d="gz'50?scan'50,208,50";a="349614617"
 Received: from lkp-server02.sh.intel.com (HELO b5ae2f167493) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 08 Oct 2020 11:30:05 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 08 Oct 2020 14:19:57 -0700
 Received: from kbuild by b5ae2f167493 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1kQag1-0002H3-5E; Thu, 08 Oct 2020 18:30:05 +0000
-Date:   Fri, 9 Oct 2020 02:29:05 +0800
+        id 1kQdK4-0002Kv-LV; Thu, 08 Oct 2020 21:19:36 +0000
+Date:   Fri, 9 Oct 2020 05:18:37 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Xin Long <lucien.xin@gmail.com>,
         network dev <netdev@vger.kernel.org>,
@@ -40,21 +40,21 @@ Cc:     kbuild-all@lists.01.org,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
         Michael Tuexen <tuexen@fh-muenster.de>, davem@davemloft.net
-Subject: Re: [PATCHv2 net-next 05/17] sctp: create udp4 sock and add its
+Subject: Re: [PATCHv2 net-next 06/17] sctp: create udp6 sock and set its
  encap_rcv
-Message-ID: <202010090235.YqoHRhHI-lkp@intel.com>
-References: <6f5a15bba0e2b5d3da6be90fd222c5ee41691d32.1602150362.git.lucien.xin@gmail.com>
+Message-ID: <202010090541.hDe5mdXB-lkp@intel.com>
+References: <af7bd8219b32d7f864eaef8ed8e970fc9bde928c.1602150362.git.lucien.xin@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8t9RHnE3ZwKMSgU+"
+Content-Type: multipart/mixed; boundary="C7zPtVaVf+AK4Oqc"
 Content-Disposition: inline
-In-Reply-To: <6f5a15bba0e2b5d3da6be90fd222c5ee41691d32.1602150362.git.lucien.xin@gmail.com>
+In-Reply-To: <af7bd8219b32d7f864eaef8ed8e970fc9bde928c.1602150362.git.lucien.xin@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
 
---8t9RHnE3ZwKMSgU+
+--C7zPtVaVf+AK4Oqc
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
@@ -71,10 +71,10 @@ compiler: arm-linux-gnueabi-gcc (GCC) 9.3.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/55d6ef371ddfab66c7767da14b490f7576262f1a
+        # https://github.com/0day-ci/linux/commit/60851a8f9ae9fd55f1199581dd78f6030bed63c7
         git remote add linux-review https://github.com/0day-ci/linux
         git fetch --no-tags linux-review Xin-Long/sctp-Implement-RFC6951-UDP-Encapsulation-of-SCTP/20201008-175211
-        git checkout 55d6ef371ddfab66c7767da14b490f7576262f1a
+        git checkout 60851a8f9ae9fd55f1199581dd78f6030bed63c7
         # save the attached .config to linux build tree
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross ARCH=arm 
 
@@ -84,21 +84,25 @@ Reported-by: kernel test robot <lkp@intel.com>
 All errors (new ones prefixed by >>):
 
    arm-linux-gnueabi-ld: net/sctp/protocol.o: in function `sctp_udp_sock_start':
->> protocol.c:(.text+0x1084): undefined reference to `udp_sock_create4'
->> arm-linux-gnueabi-ld: protocol.c:(.text+0x10b0): undefined reference to `setup_udp_tunnel_sock'
+   protocol.c:(.text+0x108c): undefined reference to `udp_sock_create4'
+   arm-linux-gnueabi-ld: protocol.c:(.text+0x10b8): undefined reference to `setup_udp_tunnel_sock'
+>> arm-linux-gnueabi-ld: protocol.c:(.text+0x111c): undefined reference to `udp_sock_create6'
+   arm-linux-gnueabi-ld: protocol.c:(.text+0x113c): undefined reference to `setup_udp_tunnel_sock'
+>> arm-linux-gnueabi-ld: protocol.c:(.text+0x1180): undefined reference to `udp_tunnel_sock_release'
    arm-linux-gnueabi-ld: net/sctp/protocol.o: in function `sctp_udp_sock_stop':
->> protocol.c:(.text+0x1108): undefined reference to `udp_tunnel_sock_release'
+   protocol.c:(.text+0x11b4): undefined reference to `udp_tunnel_sock_release'
+   arm-linux-gnueabi-ld: protocol.c:(.text+0x11d0): undefined reference to `udp_tunnel_sock_release'
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---8t9RHnE3ZwKMSgU+
+--C7zPtVaVf+AK4Oqc
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICOZOf18AAy5jb25maWcAjDzJcuM4svf5CkX1ZebQ3ZblpRwvfIBIUMITSaAIUIsvDJVL
+H4sICMx1f18AAy5jb25maWcAjDzJcuM4svf5CkX1ZebQ3ZblpRwvfIBIUMITSaAIUIsvDJVL
 VeMYL/Vkuafr718muAEgQLuiDiYykdhyR0K//eO3CXk7vTztTw/3+8fHX5Mfh+fDcX86fJt8
 f3g8/M8k5pOcqwmNmfoDkNOH57e//9wfnyaXf9z8cfb78f7zZHU4Ph8eJ9HL8/eHH2/Q+eHl
 +R+//SPiecIWVRRVa1pIxvNK0a26/QSdf39EMr//eH477L8+/P7j/n7yz0UU/Wty88fsj7NP
@@ -551,4 +555,4 @@ WR4hUFdAOgke6HBO71hSIyZkrloRTFgb3fqMEbVJ+izhL+qqc1DLjbU8U2XkQ8MTw1KZZpLB
 ok0NxrDfYz1PHdEqrKZI4Eo90JHKC85Ae/jHqGbCSkM51kZQTdokG5gxcLL6wHIOrh6pAsVs
 0zoTFgA0VnQxeEj0LMXUi+P/AQfbtKCcmgEA
 
---8t9RHnE3ZwKMSgU+--
+--C7zPtVaVf+AK4Oqc--
