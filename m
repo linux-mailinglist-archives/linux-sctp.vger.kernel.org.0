@@ -2,127 +2,108 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F8B28730E
-	for <lists+linux-sctp@lfdr.de>; Thu,  8 Oct 2020 13:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5617828747A
+	for <lists+linux-sctp@lfdr.de>; Thu,  8 Oct 2020 14:45:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728633AbgJHLCm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Thu, 8 Oct 2020 07:02:42 -0400
-Received: from mail.fink.org ([79.134.252.20]:51094 "EHLO mail.fink.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726273AbgJHLCm (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 8 Oct 2020 07:02:42 -0400
-X-Footer: Zmluay5vcmc=
-Received: from protopia.fink.org ([79.134.238.50])
-        (authenticated user list@fink.org)
-        by mail.fink.org (Kerio Connect 9.2.12 patch 1) with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Thu, 8 Oct 2020 13:02:25 +0200
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
-Subject: Re: Heartbeat on closed SCTP sockets?
-From:   Andreas Fink <afink@list.fink.org>
-In-Reply-To: <E00505E6-B988-475D-86C7-F18A77E9AB7A@lurchi.franken.de>
-Date:   Thu, 8 Oct 2020 13:02:25 +0200
-Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        linux-sctp@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <35B9E584-4755-4B24-BE5E-54FE9ED51809@list.fink.org>
-References: <1FB70B30-857C-4CD9-A05C-4BA15F57B1D2@list.fink.org>
- <20201005171643.GK70998@localhost.localdomain>
- <A95BC0CF-7C1D-4BB2-B9EF-8222C5BE9B49@list.fink.org>
- <E00505E6-B988-475D-86C7-F18A77E9AB7A@lurchi.franken.de>
-To:     Michael Tuexen <michael.tuexen@lurchi.franken.de>
-X-Mailer: Apple Mail (2.3608.120.23.2.4)
+        id S1730083AbgJHMpU (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 8 Oct 2020 08:45:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40512 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729937AbgJHMpR (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 8 Oct 2020 08:45:17 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C09C061755
+        for <linux-sctp@vger.kernel.org>; Thu,  8 Oct 2020 05:45:15 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id 5so2955057vsu.5
+        for <linux-sctp@vger.kernel.org>; Thu, 08 Oct 2020 05:45:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XLAQaD2M+nJNhEZROwfZpa9TK59bniuYCfAuCfjl0D0=;
+        b=o+025g4UoxRpmdvbRAQW+QMGUVTiOhnVE9PLA7rds1yYR9Zyq2mrXtiMY8cpcmD9x2
+         sDa1Q3O1x74I8H0p0/C6KMYvJ2/oaPs/WL+h75maZjw5ey2Yvc6ocCCaRyByouGWQhpx
+         TUMaEqEfQ+ONohY2UX3zEhKD7YYxQ+MdXAmmCyA/AgZpaj5dhWM7n8A98HVO7OTyhICT
+         ZW/LnXwaIfFM6INoajp28wnSkmX6OzTN+LVI9UASJKUfDFD9PkmIgiPEJhwuJjbNn7kb
+         vPDoUhJ5CNZC2TXOUK9vIo7vc/IkkB3aALhMsKyIUMl1YKvjgk3peukHX5sJhecxdd+M
+         RP4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XLAQaD2M+nJNhEZROwfZpa9TK59bniuYCfAuCfjl0D0=;
+        b=Na+Alw2WgSvnBM8uNlUmQs1uQ/9oW+GgvMwFvHWiQE+KOqmktrBUDh5xjJoWRDvQ18
+         46vV2vMTA6QQyF2GOAEgfg9cXw8+amJNq0Vp7N3V0z9srDOWNr/bHYrWYYZxPGlim+Uw
+         pJrispwmXTb9G9tnc84buikzHDozpdt8rVmE3R6dKJ7HoxNx/bKHyxk7E2NNvf9iA2eB
+         wH3B2zAntcRtJ/CQ2Hp+B9rfYHEGweGT+g3EeV78YD/4SkLSBQ+LZK0sgHLV9uGCToVz
+         k6t1oGEEeFJ7pet7JknMvBTM74sT2pBCh8MME/tML3QeXy2T5oxk9TS28a4xdax4NqjL
+         EOeg==
+X-Gm-Message-State: AOAM532V3N857rxCFvm81AtiFsWNnCC3xXiImURI60cjpaBfs02ZtSiA
+        ZhxaaK9GMpWH5Yd6D+cA5Yvo+2cW7tA=
+X-Google-Smtp-Source: ABdhPJzaVVKy3kzgmjD3J6so6imRoKViTMsAgULbw3w+d93gaZkearjVG31aAUp+BPyeBFj3dJJMpA==
+X-Received: by 2002:a67:6c86:: with SMTP id h128mr4310325vsc.42.1602161114265;
+        Thu, 08 Oct 2020 05:45:14 -0700 (PDT)
+Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com. [209.85.222.43])
+        by smtp.gmail.com with ESMTPSA id r18sm410069vsq.15.2020.10.08.05.45.12
+        for <linux-sctp@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Oct 2020 05:45:13 -0700 (PDT)
+Received: by mail-ua1-f43.google.com with SMTP id z19so1838986uap.2
+        for <linux-sctp@vger.kernel.org>; Thu, 08 Oct 2020 05:45:12 -0700 (PDT)
+X-Received: by 2002:ab0:c11:: with SMTP id a17mr4225733uak.141.1602161112470;
+ Thu, 08 Oct 2020 05:45:12 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1602150362.git.lucien.xin@gmail.com> <052acb63198c44df41c5db17f8397eeb7c8bacfe.1602150362.git.lucien.xin@gmail.com>
+ <c36b016ee429980b9585144f4f9af31bcda467ee.1602150362.git.lucien.xin@gmail.com>
+In-Reply-To: <c36b016ee429980b9585144f4f9af31bcda467ee.1602150362.git.lucien.xin@gmail.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Thu, 8 Oct 2020 08:44:36 -0400
+X-Gmail-Original-Message-ID: <CA+FuTScNHkYu2F2xPBjLj9ivfLRXVbTPypgjvtEZrebatpJJfQ@mail.gmail.com>
+Message-ID: <CA+FuTScNHkYu2F2xPBjLj9ivfLRXVbTPypgjvtEZrebatpJJfQ@mail.gmail.com>
+Subject: Re: [PATCHv2 net-next 02/17] udp6: move the mss check after udp gso
+ tunnel processing
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Michael Tuexen <tuexen@fh-muenster.de>,
+        David Miller <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-PS wheres the repo of the latest version hosted?
-I want to check it out and do some debugging
+On Thu, Oct 8, 2020 at 5:48 AM Xin Long <lucien.xin@gmail.com> wrote:
+>
+> For some protocol's gso, like SCTP, it's using GSO_BY_FRAGS for
+> gso_size. When using UDP to encapsulate its packet, it will
+> return error in udp6_ufo_fragment() as skb->len < gso_size,
+> and it will never go to the gso tunnel processing.
+>
+> So we should move this check after udp gso tunnel processing,
+> the same as udp4_ufo_fragment() does. While at it, also tidy
+> the variables up.
 
-> On 8 Oct 2020, at 11:08, Michael Tuexen <michael.tuexen@lurchi.franken.de> wrote:
-> 
->> On 8. Oct 2020, at 08:40, Andreas Fink <afink@list.fink.org> wrote:
->> 
->> by reading the linux diver source I discovered this code segment in input.c around line 188
->> 
->> 
->> /*
->> 	 * RFC 2960, 8.4 - Handle "Out of the blue" Packets.
->> 	 * An SCTP packet is called an "out of the blue" (OOTB)
->> 	 * packet if it is correctly formed, i.e., passed the
->> 	 * receiver's checksum check, but the receiver is not
->> 	 * able to identify the association to which this
->> 	 * packet belongs.
->> 	 */
->> 	
->> if (!asoc) {
->> 	if (sctp_rcv_ootb(skb)) {
->> 		__SCTP_INC_STATS(net, SCTP_MIB_OUTOFBLUES);
->> 		goto discard_release;
->> 	}
->> }
-> The above code looks good. Have a look at
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/sctp/input.c?h=v5.9-rc8#n666
-> 
-> RFC 4960 requires also to drop some OOTB packets. This is what sctp_rcv_ootb() checks for.
->> 
->> This means out of the blue packets are always ignored and dropped.
->> 
->> the RFC however says:
->> 
->>  8) The receiver should respond to the sender of the OOTB packet with
->>     an ABORT.  When sending the ABORT, the receiver of the OOTB packet
->>     MUST fill in the Verification Tag field of the outbound packet
->>     with the value found in the Verification Tag field of the OOTB
->>     packet and set the T-bit in the Chunk Flags to indicate that no
->>     TCB was found.  After sending this ABORT, the receiver of the OOTB
->>     packet shall discard the OOTB packet and take no further action.
->> 
->> I think this is what I am seeing. The remote sends OOTB messages, we dont reply with abort which means the remote doesnt reset the connection.
-> What are those OOTB messages? Which chunks do they contain?
-> 
-> Bes regards
-> Michael
->> There must be a second issue that the socket structures are not in sync up.
->> 
->> 
->>> On 5 Oct 2020, at 19:16, Marcelo Ricardo Leitner <marcelo.leitner@gmail.com> wrote:
->>> 
->>> Hi,
->>> 
->>> On Mon, Oct 05, 2020 at 06:39:22PM +0200, Andreas Fink wrote:
->>> ...
->>>> What we now see in netstat --sctp is:
->>>> 
->>>> we have a LISTEN on port 2010
->>>> we have a  association from port 2010 to the remote in status CLOSED
->>>> 
->>>> in tcpdump we see packets coming in from the remote and heartbeat being acknowledged. However our application is not answering to these packets and the status of the application shows SCTP being down.
->>>> In other words, my application sees the association down. Netstat shows the association as being closed but the kernel seems to continue to entertain this association by continue to send heartbeat ACK and not sending ABORT.
->>> 
->>> That's weird. If it is in CLOSED, then the stack should be handling
->>> it as an OOTB packet and trigger an Abort.
->>> 
->>>> 
->>>> We now kill the application
->>>> 
->>>> What we now see in netstat --sctp is:
->>>> we no longer listen on port 2010
->>>> we have a closed association from port 2010 to the remote.
->>>> 
->>>> in tcpdump we however we STILL see packets coming in from the remote and heartbeat being acknowledged, even though no application is listening on this port and no userspace application is using that port.
->>>> We do not see any SHUTDOWN or INIT even if we restart the application.
->>>> 
->>>> Can anyone explain how this can be?
->>> 
->>> Please check the assoc status as well, via 'ss -a --sctp' and
->>> /proc/net/sctp/assocs . Maybe it got out of sync of the socket status.
->>> 
->>> Marcelo
->> 
->> 
-> 
+Please don't mix a new feature and code cleanup.
 
+This patch changes almost every line of the function due to
+indentation changes. But the only relevant part is
 
+"
+        mss = skb_shinfo(skb)->gso_size;
+        if (unlikely(skb->len <= mss))
+                goto out;
+
+        if (skb->encapsulation && skb_shinfo(skb)->gso_type &
+            (SKB_GSO_UDP_TUNNEL|SKB_GSO_UDP_TUNNEL_CSUM))
+                segs = skb_udp_tunnel_segment(skb, features, true);
+        else {
+                /* irrelevant here */
+        }
+
+out:
+        return segs;
+}
+"
+
+Is it a sufficient change to just skip the mss check if mss == GSO_BY_FRAGS?
