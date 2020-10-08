@@ -2,36 +2,36 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8D828761E
-	for <lists+linux-sctp@lfdr.de>; Thu,  8 Oct 2020 16:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F8E2877C8
+	for <lists+linux-sctp@lfdr.de>; Thu,  8 Oct 2020 17:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730496AbgJHOeM (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 8 Oct 2020 10:34:12 -0400
-Received: from mga14.intel.com ([192.55.52.115]:16652 "EHLO mga14.intel.com"
+        id S1729164AbgJHPqk (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 8 Oct 2020 11:46:40 -0400
+Received: from mga04.intel.com ([192.55.52.120]:39466 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729992AbgJHOeM (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 8 Oct 2020 10:34:12 -0400
-IronPort-SDR: KAUxmdKUuEQiSqALde0OJvdbFPA50LJWm1dyXOScpOZZ1AwVaEAyyR15HHISy8mVzrjsX84h1x
- oj1DPi2s4sAg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9768"; a="164554534"
+        id S1725912AbgJHPqk (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Thu, 8 Oct 2020 11:46:40 -0400
+IronPort-SDR: HqB9SeRyl5RGu9ulx7QkrDyhNQuyyNYf9Zi0wo0Bq9vAQ7vkgDBOl7tSBGcWSqYy/mTnapwAIM
+ ejIk0HB1QsNg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9768"; a="162721110"
 X-IronPort-AV: E=Sophos;i="5.77,351,1596524400"; 
-   d="gz'50?scan'50,208,50";a="164554534"
+   d="gz'50?scan'50,208,50";a="162721110"
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2020 07:34:09 -0700
-IronPort-SDR: U723nVU0bDSY2nZ79esCgB33XSlq/el8Kdc8jw276CLaGX6j7/E19y3gq1nEYT4tqHJKL8uOxo
- m20c7zhBNRag==
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2020 08:46:37 -0700
+IronPort-SDR: SDfZZtotgJzbkCj0r1O68XeaQrWTlXuvaoVAl+3K93ElwYpzs1fvc1kboNkF4TkPzJ1/0j4ZP7
+ 8aMJZ0un3sGQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,351,1596524400"; 
-   d="gz'50?scan'50,208,50";a="298112022"
+   d="gz'50?scan'50,208,50";a="297989427"
 Received: from lkp-server02.sh.intel.com (HELO b5ae2f167493) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 08 Oct 2020 07:34:05 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 08 Oct 2020 08:46:34 -0700
 Received: from kbuild by b5ae2f167493 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1kQWzd-00026S-3F; Thu, 08 Oct 2020 14:34:05 +0000
-Date:   Thu, 8 Oct 2020 22:33:06 +0800
+        id 1kQY7l-00027W-Iu; Thu, 08 Oct 2020 15:46:33 +0000
+Date:   Thu, 8 Oct 2020 23:46:07 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Xin Long <lucien.xin@gmail.com>,
         network dev <netdev@vger.kernel.org>,
@@ -40,21 +40,20 @@ Cc:     kbuild-all@lists.01.org,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
         Michael Tuexen <tuexen@fh-muenster.de>, davem@davemloft.net
-Subject: Re: [PATCHv2 net-next 15/17] sctp: add the error cause for new
- encapsulation port restart
-Message-ID: <202010082237.zpvcVDj7-lkp@intel.com>
-References: <8815067eea44ffd7274b0038e48c2618c2e77916.1602150362.git.lucien.xin@gmail.com>
+Subject: Re: [PATCHv2 net-next 17/17] sctp: enable udp tunneling socks
+Message-ID: <202010082357.BLEOWVCz-lkp@intel.com>
+References: <8ce0fde0d093d62e8969d1788a13921ed1516ad6.1602150362.git.lucien.xin@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="r5Pyd7+fXNt84Ff3"
+Content-Type: multipart/mixed; boundary="XsQoSWH+UP9D9v3l"
 Content-Disposition: inline
-In-Reply-To: <8815067eea44ffd7274b0038e48c2618c2e77916.1602150362.git.lucien.xin@gmail.com>
+In-Reply-To: <8ce0fde0d093d62e8969d1788a13921ed1516ad6.1602150362.git.lucien.xin@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
 
---r5Pyd7+fXNt84Ff3
+--XsQoSWH+UP9D9v3l
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
@@ -71,10 +70,10 @@ compiler: gcc-9 (Debian 9.3.0-15) 9.3.0
 reproduce:
         # apt-get install sparse
         # sparse version: v0.6.2-218-gc0e96d6d-dirty
-        # https://github.com/0day-ci/linux/commit/9119d2be86deb6950b26b152a51ddad0a95182a5
+        # https://github.com/0day-ci/linux/commit/7dab31e8c96fab2089a651d5a6d06bcf92b011ad
         git remote add linux-review https://github.com/0day-ci/linux
         git fetch --no-tags linux-review Xin-Long/sctp-Implement-RFC6951-UDP-Encapsulation-of-SCTP/20201008-175211
-        git checkout 9119d2be86deb6950b26b152a51ddad0a95182a5
+        git checkout 7dab31e8c96fab2089a651d5a6d06bcf92b011ad
         # save the attached .config to linux build tree
         make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' ARCH=i386 
 
@@ -84,61 +83,62 @@ Reported-by: kernel test robot <lkp@intel.com>
 echo
 echo "sparse warnings: (new ones prefixed by >>)"
 echo
-   net/sctp/sm_make_chunk.c: note: in included file (through include/net/sctp/sctp.h):
-   include/net/sctp/structs.h:334:41: sparse: sparse: array of flexible structures
->> net/sctp/sm_make_chunk.c:1157:24: sparse: sparse: cast from restricted __be16
->> net/sctp/sm_make_chunk.c:1157:24: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] val @@     got restricted __be16 [usertype] encap_port @@
->> net/sctp/sm_make_chunk.c:1157:24: sparse:     expected unsigned short [usertype] val
->> net/sctp/sm_make_chunk.c:1157:24: sparse:     got restricted __be16 [usertype] encap_port
->> net/sctp/sm_make_chunk.c:1157:24: sparse: sparse: cast from restricted __be16
->> net/sctp/sm_make_chunk.c:1157:24: sparse: sparse: cast from restricted __be16
-   net/sctp/sm_make_chunk.c:1158:24: sparse: sparse: cast from restricted __be16
-   net/sctp/sm_make_chunk.c:1158:24: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] val @@     got restricted __be16 [usertype] encap_port @@
-   net/sctp/sm_make_chunk.c:1158:24: sparse:     expected unsigned short [usertype] val
-   net/sctp/sm_make_chunk.c:1158:24: sparse:     got restricted __be16 [usertype] encap_port
-   net/sctp/sm_make_chunk.c:1158:24: sparse: sparse: cast from restricted __be16
-   net/sctp/sm_make_chunk.c:1158:24: sparse: sparse: cast from restricted __be16
-   net/sctp/sm_make_chunk.c:3081:48: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected int optname @@     got restricted __be16 @@
-   net/sctp/sm_make_chunk.c:3081:48: sparse:     expected int optname
-   net/sctp/sm_make_chunk.c:3081:48: sparse:     got restricted __be16
-   net/sctp/sm_make_chunk.c:3153:48: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected int optname @@     got restricted __be16 @@
-   net/sctp/sm_make_chunk.c:3153:48: sparse:     expected int optname
-   net/sctp/sm_make_chunk.c:3153:48: sparse:     got restricted __be16
+>> net/sctp/sysctl.c:532:39: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be16 [usertype] udp_port @@     got int udp_port @@
+>> net/sctp/sysctl.c:532:39: sparse:     expected restricted __be16 [usertype] udp_port
+>> net/sctp/sysctl.c:532:39: sparse:     got int udp_port
 
-vim +1157 net/sctp/sm_make_chunk.c
+vim +532 net/sctp/sysctl.c
 
-  1144	
-  1145	struct sctp_chunk *sctp_make_new_encap_port(const struct sctp_association *asoc,
-  1146						    const struct sctp_chunk *chunk)
-  1147	{
-  1148		struct sctp_new_encap_port_hdr nep;
-  1149		struct sctp_chunk *retval;
-  1150	
-  1151		retval = sctp_make_abort(asoc, chunk,
-  1152					 sizeof(struct sctp_errhdr) + sizeof(nep));
-  1153		if (!retval)
-  1154			goto nodata;
-  1155	
-  1156		sctp_init_cause(retval, SCTP_ERROR_NEW_ENCAP_PORT, sizeof(nep));
-> 1157		nep.cur_port = htons(SCTP_INPUT_CB(chunk->skb)->encap_port);
-  1158		nep.new_port = htons(chunk->transport->encap_port);
-  1159		sctp_addto_chunk(retval, sizeof(nep), &nep);
-  1160	
-  1161	nodata:
-  1162		return retval;
-  1163	}
-  1164	
+   500	
+   501	static int proc_sctp_do_udp_port(struct ctl_table *ctl, int write,
+   502					 void *buffer, size_t *lenp, loff_t *ppos)
+   503	{
+   504		struct net *net = current->nsproxy->net_ns;
+   505		unsigned int min = *(unsigned int *)ctl->extra1;
+   506		unsigned int max = *(unsigned int *)ctl->extra2;
+   507		struct ctl_table tbl;
+   508		int ret, new_value;
+   509	
+   510		memset(&tbl, 0, sizeof(struct ctl_table));
+   511		tbl.maxlen = sizeof(unsigned int);
+   512	
+   513		if (write)
+   514			tbl.data = &new_value;
+   515		else
+   516			tbl.data = &net->sctp.udp_port;
+   517	
+   518		ret = proc_dointvec(&tbl, write, buffer, lenp, ppos);
+   519		if (write && ret == 0) {
+   520			struct sock *sk = net->sctp.ctl_sock;
+   521	
+   522			if (new_value > max || new_value < min)
+   523				return -EINVAL;
+   524	
+   525			net->sctp.udp_port = new_value;
+   526			sctp_udp_sock_stop(net);
+   527			ret = sctp_udp_sock_start(net);
+   528			if (ret)
+   529				net->sctp.udp_port = 0;
+   530	
+   531			lock_sock(sk);
+ > 532			sctp_sk(sk)->udp_port = net->sctp.udp_port;
+   533			release_sock(sk);
+   534		}
+   535	
+   536		return ret;
+   537	}
+   538	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---r5Pyd7+fXNt84Ff3
+--XsQoSWH+UP9D9v3l
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICEAZf18AAy5jb25maWcAlDzLdtw2svt8RR9nkyzi0cPWOOceLUAQZCNNEDQA9kMbHkVu
+H4sICCkqf18AAy5jb25maWcAlDzLdtw2svt8RR9nkyzi0cPWOOceLUAQZCNNEDQA9kMbHkVu
 e3RGlnxb0kz897cK4ANAg+3cLBx1VeFdbxT4808/L8jry9PX25f7u9uHh++LL/vH/eH2Zf9p
 8fn+Yf8/i1wuamkWLOfmLRBX94+vf/3j/vLD1eL929/fnv12uPuwWO0Pj/uHBX16/Hz/5RVa
 3z89/vTzT1TWBS87Srs1U5rLujNsa67ffLm7++33xS/5/s/728fF728voZvz97+6v954zbju
@@ -706,4 +706,4 @@ MxAHU8U20hRm4+dMJO6toYVUt8be1bRJkbIV196wbtnyOFKSdujzOepwhhhiN5Z4nFCVphFd
 p/21IfcC26fvWLv7qgqO1nzdsRjbbKYEIVDKQVCbPPB4Rvl2A6PzuPYORIS1/pBcHKMrwXOd
 VG/G/w/UwxIDfN0BAA==
 
---r5Pyd7+fXNt84Ff3--
+--XsQoSWH+UP9D9v3l--
