@@ -2,55 +2,55 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1783288025
-	for <lists+linux-sctp@lfdr.de>; Fri,  9 Oct 2020 03:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF81288031
+	for <lists+linux-sctp@lfdr.de>; Fri,  9 Oct 2020 04:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730814AbgJIB7v (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 8 Oct 2020 21:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
+        id S1728766AbgJICCW (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 8 Oct 2020 22:02:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729285AbgJIB7u (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 8 Oct 2020 21:59:50 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7187CC0613D2;
-        Thu,  8 Oct 2020 18:59:50 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id v12so8281432wmh.3;
-        Thu, 08 Oct 2020 18:59:50 -0700 (PDT)
+        with ESMTP id S1727781AbgJICCW (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 8 Oct 2020 22:02:22 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C52C0613D2;
+        Thu,  8 Oct 2020 19:02:21 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id z1so8571686wrt.3;
+        Thu, 08 Oct 2020 19:02:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=DoFqJFIxavJSoKhccIwLtfmVgpVXYVJLyinAOFpfL1E=;
-        b=XpCPypviMymEXCkmhl6/mIWPstM//L5uRvLIU/K56Oi3g0OBDyhpKiBRHuy8OYG6jn
-         sI7RIbPFt2grhSaTrVSt8xze+2hrX1tmypg4U7TSNfbMo6t855oVkjWGt1/pCfLfnMF3
-         THIjPimDeLeWwewqC/32GZMVFfUzRwE5O5qHNE5xvFkuZnLPzkIEFVoePyYoK/2tDhau
-         7CPeZEAOTum+DCwcAatySYKG/iT4I6OTlQHpt/6uH3N7Q/EnO30ZCUO3aV5JrkMfZ6Q1
-         9Hq7DEUuwqbQ3sHhLt9iMBCjsjhiQVR5X4Hv87q3oygZgPvodRr4pviCkM+PoNWnOvhT
-         a6YA==
+        bh=jtYY0usC4ljvjDt/q/Hq+d0qiu79u2ckTDddE32ZHjw=;
+        b=RIHjFwmyGjrOsoT8lGz36rK6jDa2e/iPgXesMm212sc/MFFTHw1Nj+Z9ZdvZbwz+pM
+         IrU1/rDRsZY02AWYAmkGLpgZrdEz/W4YMlQRoV217nO25HIuEWENg8ABOXMDGLV4b4kM
+         Bc4D5r21ktBWhOUJC382QRZ/sgFJ3hUjc8G/6k8mmSYjCRUsYIcMTGRPjJuyTibYIrwp
+         14lvMEGUfIesxgUASCfedJ129DuIcb4ElXsfAmwlK0vgDoZKMhVar+TB/5ewGaz99f5f
+         uU+0nxwFZp0BAYO+xI7KpKbXGqJHGw8mjH+Zg8/BlpEXwmYR9PwdsTvuvprXr8PjIjsW
+         82yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DoFqJFIxavJSoKhccIwLtfmVgpVXYVJLyinAOFpfL1E=;
-        b=J/DXLZA1mhW5AcE+c62LQJMozV7IdNjTPcV+ANKs05OTGoAQSGcqhxFAAIY1ktfYTr
-         OihRTlqNSvM2mEYKhb2wewUnMEKqEZnVGU+18ayHk47t/ygzcCgm+uDk3Hg4xMLLYMnY
-         wBGo+WXGGcFAzuSnhSCDW0ww/KltDRIVXWOlRbRGoZn5rB0b1PgrDAa4gjG3kKprU3Ng
-         DIkVCfHdCORmRo5K7H40K0vxbitFOjSN0DAKa+7wp00x5RxK9Ha0FaI0RzGTph48nnkX
-         PblaKOngPIGlKzM5kVAzDkRsHu/0Jr1IMdofWKX6GCkscPsKJkeivTgkzeS85tt9CVyK
-         EyuQ==
-X-Gm-Message-State: AOAM53296N1vINpzBYLkh9HUt8J+fDmy0LpMIw7wWeYGJlmmR+aWeeu7
-        OvrTFUiaKNW6LQVzGlVw/SmUDRFtPEnIDkdAjPY=
-X-Google-Smtp-Source: ABdhPJxRhTmOi+QC4G5S+r0+/VePOxoulpuO1XpwBVa7w2b+o8XcgVKGCDF0IcUDmJDfwebajo6IXf1tukhKIlovlIg=
-X-Received: by 2002:a1c:7e90:: with SMTP id z138mr11321204wmc.122.1602208789095;
- Thu, 08 Oct 2020 18:59:49 -0700 (PDT)
+        bh=jtYY0usC4ljvjDt/q/Hq+d0qiu79u2ckTDddE32ZHjw=;
+        b=N4bVPCbA+wX9Ld1j3VCDK/95O28ITNkzhRg7OPgZGEW1tyl983sDtO9G73hP1ck/jL
+         4i2evFjzS+XvUnMSGNDc4sjkJYKp9bEABX0w1YqXXMa4EMNNJtvveEG8vTX0woawxSut
+         2LpIfk5dy3uaAz+UF1Ht5LSaFy3HDMyY1O5u8Rc0W1/A99gTzMfDShNEuJiyhoXl9uKs
+         fYV1rk2rIi5sJB/QXj4Uq+IGk1AoREmWI9j6y4vgbX9AC5uS6XgKc7exh588BVwQ1tC1
+         /Uf6/rdwXopTmhCnYpgl4xvMeQ2gbd8fRLA9ckQsTyMkTvsvwh7uk56U0+NoAhW+VGtI
+         P0KA==
+X-Gm-Message-State: AOAM5326cXSBhP3ih/OnppziMQEg7Mc/Sxf1ID0fnBP1qKS/qZ7zr/8+
+        KtsQKVueP8t3ljyZykMAZCGS6xZO63HF1Oe/1UA=
+X-Google-Smtp-Source: ABdhPJwXoxRECHBAaMj+m9L79cv79U241ZDeb1isq+pP0tAtESZH4F6XdACagBkvhV+r3Bo1ZN9RagyV7gpBAwlG6pU=
+X-Received: by 2002:adf:ec06:: with SMTP id x6mr12042381wrn.404.1602208940667;
+ Thu, 08 Oct 2020 19:02:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <af7bd8219b32d7f864eaef8ed8e970fc9bde928c.1602150362.git.lucien.xin@gmail.com>
- <202010090541.hDe5mdXB-lkp@intel.com>
-In-Reply-To: <202010090541.hDe5mdXB-lkp@intel.com>
+References: <8ce0fde0d093d62e8969d1788a13921ed1516ad6.1602150362.git.lucien.xin@gmail.com>
+ <202010082357.BLEOWVCz-lkp@intel.com>
+In-Reply-To: <202010082357.BLEOWVCz-lkp@intel.com>
 From:   Xin Long <lucien.xin@gmail.com>
-Date:   Fri, 9 Oct 2020 09:59:37 +0800
-Message-ID: <CADvbK_d3u=M6BwLRDeiPVkCT7awix+Lcw=GOy4UcD=s9FPtpHA@mail.gmail.com>
-Subject: Re: [PATCHv2 net-next 06/17] sctp: create udp6 sock and set its encap_rcv
+Date:   Fri, 9 Oct 2020 10:02:09 +0800
+Message-ID: <CADvbK_f+Z=Z72bHuf0tGbQBAw4+hq5R=r7buxV_dGDgJTt632Q@mail.gmail.com>
+Subject: Re: [PATCHv2 net-next 17/17] sctp: enable udp tunneling socks
 To:     kernel test robot <lkp@intel.com>
 Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
         kbuild-all@lists.01.org,
@@ -63,55 +63,83 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Fri, Oct 9, 2020 at 5:20 AM kernel test robot <lkp@intel.com> wrote:
+On Thu, Oct 8, 2020 at 11:46 PM kernel test robot <lkp@intel.com> wrote:
 >
 > Hi Xin,
 >
-> Thank you for the patch! Yet something to improve:
+> Thank you for the patch! Perhaps something to improve:
 >
-> [auto build test ERROR on net-next/master]
+> [auto build test WARNING on net-next/master]
 >
 > url:    https://github.com/0day-ci/linux/commits/Xin-Long/sctp-Implement-RFC6951-UDP-Encapsulation-of-SCTP/20201008-175211
 > base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 9faebeb2d80065926dfbc09cb73b1bb7779a89cd
-> config: arm-keystone_defconfig (attached as .config)
-> compiler: arm-linux-gnueabi-gcc (GCC) 9.3.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/0day-ci/linux/commit/60851a8f9ae9fd55f1199581dd78f6030bed63c7
+> config: i386-randconfig-s002-20201008 (attached as .config)
+> compiler: gcc-9 (Debian 9.3.0-15) 9.3.0
+> reproduce:
+>         # apt-get install sparse
+>         # sparse version: v0.6.2-218-gc0e96d6d-dirty
+>         # https://github.com/0day-ci/linux/commit/7dab31e8c96fab2089a651d5a6d06bcf92b011ad
 >         git remote add linux-review https://github.com/0day-ci/linux
 >         git fetch --no-tags linux-review Xin-Long/sctp-Implement-RFC6951-UDP-Encapsulation-of-SCTP/20201008-175211
->         git checkout 60851a8f9ae9fd55f1199581dd78f6030bed63c7
+>         git checkout 7dab31e8c96fab2089a651d5a6d06bcf92b011ad
 >         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross ARCH=arm
+>         make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' ARCH=i386
 >
 > If you fix the issue, kindly add following tag as appropriate
 > Reported-by: kernel test robot <lkp@intel.com>
 >
-> All errors (new ones prefixed by >>):
+> echo
+> echo "sparse warnings: (new ones prefixed by >>)"
+> echo
+> >> net/sctp/sysctl.c:532:39: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be16 [usertype] udp_port @@     got int udp_port @@
+> >> net/sctp/sysctl.c:532:39: sparse:     expected restricted __be16 [usertype] udp_port
+> >> net/sctp/sysctl.c:532:39: sparse:     got int udp_port
 >
->    arm-linux-gnueabi-ld: net/sctp/protocol.o: in function `sctp_udp_sock_start':
->    protocol.c:(.text+0x108c): undefined reference to `udp_sock_create4'
->    arm-linux-gnueabi-ld: protocol.c:(.text+0x10b8): undefined reference to `setup_udp_tunnel_sock'
-> >> arm-linux-gnueabi-ld: protocol.c:(.text+0x111c): undefined reference to `udp_sock_create6'
->    arm-linux-gnueabi-ld: protocol.c:(.text+0x113c): undefined reference to `setup_udp_tunnel_sock'
-> >> arm-linux-gnueabi-ld: protocol.c:(.text+0x1180): undefined reference to `udp_tunnel_sock_release'
->    arm-linux-gnueabi-ld: net/sctp/protocol.o: in function `sctp_udp_sock_stop':
->    protocol.c:(.text+0x11b4): undefined reference to `udp_tunnel_sock_release'
->    arm-linux-gnueabi-ld: protocol.c:(.text+0x11d0): undefined reference to `udp_tunnel_sock_release'
+> vim +532 net/sctp/sysctl.c
 >
-diff --git a/net/sctp/Kconfig b/net/sctp/Kconfig
-index 39d7fa9569f8..5da599ff84a9 100644
---- a/net/sctp/Kconfig
-+++ b/net/sctp/Kconfig
-@@ -11,6 +11,7 @@ menuconfig IP_SCTP
-        select CRYPTO_HMAC
-        select CRYPTO_SHA1
-        select LIBCRC32C
-+       select NET_UDP_TUNNEL
-        help
-          Stream Control Transmission Protocol
+>    500
+>    501  static int proc_sctp_do_udp_port(struct ctl_table *ctl, int write,
+>    502                                   void *buffer, size_t *lenp, loff_t *ppos)
+>    503  {
+>    504          struct net *net = current->nsproxy->net_ns;
+>    505          unsigned int min = *(unsigned int *)ctl->extra1;
+>    506          unsigned int max = *(unsigned int *)ctl->extra2;
+>    507          struct ctl_table tbl;
+>    508          int ret, new_value;
+>    509
+>    510          memset(&tbl, 0, sizeof(struct ctl_table));
+>    511          tbl.maxlen = sizeof(unsigned int);
+>    512
+>    513          if (write)
+>    514                  tbl.data = &new_value;
+>    515          else
+>    516                  tbl.data = &net->sctp.udp_port;
+>    517
+>    518          ret = proc_dointvec(&tbl, write, buffer, lenp, ppos);
+>    519          if (write && ret == 0) {
+>    520                  struct sock *sk = net->sctp.ctl_sock;
+>    521
+>    522                  if (new_value > max || new_value < min)
+>    523                          return -EINVAL;
+>    524
+>    525                  net->sctp.udp_port = new_value;
+>    526                  sctp_udp_sock_stop(net);
+>    527                  ret = sctp_udp_sock_start(net);
+>    528                  if (ret)
+>    529                          net->sctp.udp_port = 0;
+>    530
+>    531                  lock_sock(sk);
+>  > 532                  sctp_sk(sk)->udp_port = net->sctp.udp_port;
+>    533                  release_sock(sk);
+>    534          }
+>    535
+>    536          return ret;
+>    537  }
+>    538
+I will add the restricted __be16 in these 3 patches.
 
+Thanks.
+>
 > ---
 > 0-DAY CI Kernel Test Service, Intel Corporation
 > https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
