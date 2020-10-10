@@ -2,100 +2,106 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A1E289DA4
-	for <lists+linux-sctp@lfdr.de>; Sat, 10 Oct 2020 04:45:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4E128A408
+	for <lists+linux-sctp@lfdr.de>; Sun, 11 Oct 2020 01:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730239AbgJJCoh (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 9 Oct 2020 22:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52726 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729538AbgJJCfg (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 9 Oct 2020 22:35:36 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6024C0613CF
-        for <linux-sctp@vger.kernel.org>; Fri,  9 Oct 2020 19:35:35 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id f21so11519657wml.3
-        for <linux-sctp@vger.kernel.org>; Fri, 09 Oct 2020 19:35:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CF8TFg3kapIW2S+MkNZ9J56TkPBmpKUJ25XIxAx9AQ0=;
-        b=VuqTZrzKBpORgGMw48Ggx/wIC4Ut9dghjl1JefAQ5ckz9Y9q1z5ANaGeSWJFDFgoMM
-         5uYxHts9dEN+Ph+s/9xhHC6hqYCH371A8f9PmycTsB65WXPIOwwWAsWMdh+LueYwkfSO
-         noIimFgrlchF/exatdzRg08dyHy34mphhxvjCkOcznQJiHQMTSlT2Onu+uwC6kCkAx45
-         mgnM2CR4z0HQ5IM1gTY46idgLLqNVyOYYhfIFZJzK5fC2LpV8+zWkBwsJSRAPJQmUBkH
-         SSCp69lzd+tQFm52KlRqnoQN7VAqFb8PXnOL8s+87JjMrspJiMdihvjyKhENo2MknZwg
-         mRFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CF8TFg3kapIW2S+MkNZ9J56TkPBmpKUJ25XIxAx9AQ0=;
-        b=ETx5UFHNBV2c4TccJR8Bd8E/sYB84LW/KtW95vGIqwNSgFwKEpIuQpZYXhJap4dswr
-         emt+QFQD++BZ1Zfl+T5ing0F4N4hwpgh8s300E48MxmA0l5Sir2ZNyQjv2aqTMatcmYI
-         ulWTNCrUZ1pfqB82VOJwiSOARqzznBII4nDhnMuxr3ZIbEETcfKHZKgdfXT2gunBmjvY
-         aiXfhnQFX536tb+y+FlD17fRP2KPBN3iXNvmyD5VKHBGFIyy9M1FnP4y8AK1yFLe6GEV
-         c189hhb8r23am/CpOAFj8M6WuNyV/YCsPaC0NiIdMB2SjuTBN3yxqXjVIp5IKFYXtdKh
-         lrcw==
-X-Gm-Message-State: AOAM533cjBSexZIE48O7bHqm5G3FIvN7AMgUwjHZqp86qaT9Kp7T/EjS
-        7HdTLremSZhcjRY0yIB3xQTsJ9YmpJHgExNaZeI=
-X-Google-Smtp-Source: ABdhPJxtqBInF/XMY+vl246CN69RT+P4baoFaw5PWd8VmIMVUuw9HsGnb1DSeAat8TCAXZ3kC4ZgZb4pWEtoRR3VCzk=
-X-Received: by 2002:a1c:1905:: with SMTP id 5mr747891wmz.32.1602297333456;
- Fri, 09 Oct 2020 19:35:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <e377e7e2a87e4f078e7a6d82992cfda0@AcuMS.aculab.com>
- <CC1FDC9B-F273-475A-98C5-000ADC395BB0@list.fink.org> <73434b87932e46a89dd1b5b5132b3196@AcuMS.aculab.com>
- <766ffacb7d4c48df81aea64204ff37d9@AcuMS.aculab.com>
-In-Reply-To: <766ffacb7d4c48df81aea64204ff37d9@AcuMS.aculab.com>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Sat, 10 Oct 2020 10:35:22 +0800
-Message-ID: <CADvbK_farVU-bB9NeLSDfmCgPcdG2Oe44-odeU0o+b2BwfRA0g@mail.gmail.com>
-Subject: Re: sctp discarding received data chunks
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Andreas Fink <afink@list.fink.org>,
+        id S2389197AbgJJWz1 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sat, 10 Oct 2020 18:55:27 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:28385 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730133AbgJJSpW (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Sat, 10 Oct 2020 14:45:22 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-29-quXr8J0PN6md3-vqkAh3xQ-1; Sat, 10 Oct 2020 16:10:56 +0100
+X-MC-Unique: quXr8J0PN6md3-vqkAh3xQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Sat, 10 Oct 2020 16:10:56 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Sat, 10 Oct 2020 16:10:55 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Xin Long' <lucien.xin@gmail.com>
+CC:     Andreas Fink <afink@list.fink.org>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
         "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: RE: sctp discarding received data chunks
+Thread-Topic: sctp discarding received data chunks
+Thread-Index: AQHWng1GnBiC92Jzi0usTZn0U2V7p6mPGcdwgAAhfiCAANPdAIAA4KSw
+Date:   Sat, 10 Oct 2020 15:10:55 +0000
+Message-ID: <5af24669b72c4bbb9456b53c397489a4@AcuMS.aculab.com>
+References: <e377e7e2a87e4f078e7a6d82992cfda0@AcuMS.aculab.com>
+ <CC1FDC9B-F273-475A-98C5-000ADC395BB0@list.fink.org>
+ <73434b87932e46a89dd1b5b5132b3196@AcuMS.aculab.com>
+ <766ffacb7d4c48df81aea64204ff37d9@AcuMS.aculab.com>
+ <CADvbK_farVU-bB9NeLSDfmCgPcdG2Oe44-odeU0o+b2BwfRA0g@mail.gmail.com>
+In-Reply-To: <CADvbK_farVU-bB9NeLSDfmCgPcdG2Oe44-odeU0o+b2BwfRA0g@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Fri, Oct 9, 2020 at 9:03 PM David Laight <David.Laight@aculab.com> wrote:
->
-> From: David Laight
-> > Sent: 09 October 2020 12:14
-> >
-> > From: Andreas Fink
-> > > Sent: 09 October 2020 08:25
-> > >
-> > > Can you see this issue with the 5.4 kernel too?
-> > >
-> > > I did yesterday some testing by upgrading kernel from 5.4 to 5.7 and I run into all sorts of links
-> > > going off after a while so I had to revert back.
-> > > 5.4 is stable for me. 5.7 is not. And I have lots of M2PA and M3UA connections like you
-> >
-> > I've just spent hours digging through my traces.
-> > It is only some messages through the connection that get lost!
-> >
-> > Now SCTP_MIN_IN_DATA_CHUNK_DISCARDS is only incremented in two
-> > adjacent places in sm_statefuncs.c.
-> >
-> > Either for bad TSN (unlikely when everything is using "lo")
-> > and bad STREAM.
-> > I suspect it is the 'bad stream' case.
-> > I've not double-checked but I bet the discarded packets
-> > all have a large stream number.
-> ...
->
-> If I dump out /proc/net/sctp/assocs and look way over to the right
-> (on the next monitor but 1) there are two columns INS and OUTS.
-> I've just realised that these are the number of streams.
-> Now all my connections are loopback - so I see both sockets for each.
-> So I'd expect the INS to match the OUTS of the peer.
-> This isn't true.
-> When the value should be negotiated down the OUTS value is unchanged.
-> So the kernel is sending packets with illegal stream numbers.
-> These are acked and then silently discarded.
-did it do addstream reconfig or receive any duplicate COOKIE-ECHO in your case?
+RnJvbTogWGluIExvbmcNCj4gU2VudDogMTAgT2N0b2JlciAyMDIwIDAzOjM1DQo+IE9uIEZyaSwg
+T2N0IDksIDIwMjAgYXQgOTowMyBQTSBEYXZpZCBMYWlnaHQgPERhdmlkLkxhaWdodEBhY3VsYWIu
+Y29tPiB3cm90ZToNCj4gPg0KPiA+IEZyb206IERhdmlkIExhaWdodA0KPiA+ID4gU2VudDogMDkg
+T2N0b2JlciAyMDIwIDEyOjE0DQo+ID4gPg0KPiA+ID4gRnJvbTogQW5kcmVhcyBGaW5rDQo+ID4g
+PiA+IFNlbnQ6IDA5IE9jdG9iZXIgMjAyMCAwODoyNQ0KPiA+ID4gPg0KPiA+ID4gPiBDYW4geW91
+IHNlZSB0aGlzIGlzc3VlIHdpdGggdGhlIDUuNCBrZXJuZWwgdG9vPw0KPiA+ID4gPg0KPiA+ID4g
+PiBJIGRpZCB5ZXN0ZXJkYXkgc29tZSB0ZXN0aW5nIGJ5IHVwZ3JhZGluZyBrZXJuZWwgZnJvbSA1
+LjQgdG8gNS43IGFuZCBJIHJ1biBpbnRvIGFsbCBzb3J0cyBvZg0KPiBsaW5rcw0KPiA+ID4gPiBn
+b2luZyBvZmYgYWZ0ZXIgYSB3aGlsZSBzbyBJIGhhZCB0byByZXZlcnQgYmFjay4NCj4gPiA+ID4g
+NS40IGlzIHN0YWJsZSBmb3IgbWUuIDUuNyBpcyBub3QuIEFuZCBJIGhhdmUgbG90cyBvZiBNMlBB
+IGFuZCBNM1VBIGNvbm5lY3Rpb25zIGxpa2UgeW91DQo+ID4gPg0KPiA+ID4gSSd2ZSBqdXN0IHNw
+ZW50IGhvdXJzIGRpZ2dpbmcgdGhyb3VnaCBteSB0cmFjZXMuDQo+ID4gPiBJdCBpcyBvbmx5IHNv
+bWUgbWVzc2FnZXMgdGhyb3VnaCB0aGUgY29ubmVjdGlvbiB0aGF0IGdldCBsb3N0IQ0KPiA+ID4N
+Cj4gPiA+IE5vdyBTQ1RQX01JTl9JTl9EQVRBX0NIVU5LX0RJU0NBUkRTIGlzIG9ubHkgaW5jcmVt
+ZW50ZWQgaW4gdHdvDQo+ID4gPiBhZGphY2VudCBwbGFjZXMgaW4gc21fc3RhdGVmdW5jcy5jLg0K
+PiA+ID4NCj4gPiA+IEVpdGhlciBmb3IgYmFkIFRTTiAodW5saWtlbHkgd2hlbiBldmVyeXRoaW5n
+IGlzIHVzaW5nICJsbyIpDQo+ID4gPiBhbmQgYmFkIFNUUkVBTS4NCj4gPiA+IEkgc3VzcGVjdCBp
+dCBpcyB0aGUgJ2JhZCBzdHJlYW0nIGNhc2UuDQo+ID4gPiBJJ3ZlIG5vdCBkb3VibGUtY2hlY2tl
+ZCBidXQgSSBiZXQgdGhlIGRpc2NhcmRlZCBwYWNrZXRzDQo+ID4gPiBhbGwgaGF2ZSBhIGxhcmdl
+IHN0cmVhbSBudW1iZXIuDQo+ID4gLi4uDQo+ID4NCj4gPiBJZiBJIGR1bXAgb3V0IC9wcm9jL25l
+dC9zY3RwL2Fzc29jcyBhbmQgbG9vayB3YXkgb3ZlciB0byB0aGUgcmlnaHQNCj4gPiAob24gdGhl
+IG5leHQgbW9uaXRvciBidXQgMSkgdGhlcmUgYXJlIHR3byBjb2x1bW5zIElOUyBhbmQgT1VUUy4N
+Cj4gPiBJJ3ZlIGp1c3QgcmVhbGlzZWQgdGhhdCB0aGVzZSBhcmUgdGhlIG51bWJlciBvZiBzdHJl
+YW1zLg0KPiA+IE5vdyBhbGwgbXkgY29ubmVjdGlvbnMgYXJlIGxvb3BiYWNrIC0gc28gSSBzZWUg
+Ym90aCBzb2NrZXRzIGZvciBlYWNoLg0KPiA+IFNvIEknZCBleHBlY3QgdGhlIElOUyB0byBtYXRj
+aCB0aGUgT1VUUyBvZiB0aGUgcGVlci4NCj4gPiBUaGlzIGlzbid0IHRydWUuDQo+ID4gV2hlbiB0
+aGUgdmFsdWUgc2hvdWxkIGJlIG5lZ290aWF0ZWQgZG93biB0aGUgT1VUUyB2YWx1ZSBpcyB1bmNo
+YW5nZWQuDQo+ID4gU28gdGhlIGtlcm5lbCBpcyBzZW5kaW5nIHBhY2tldHMgd2l0aCBpbGxlZ2Fs
+IHN0cmVhbSBudW1iZXJzLg0KPiA+IFRoZXNlIGFyZSBhY2tlZCBhbmQgdGhlbiBzaWxlbnRseSBk
+aXNjYXJkZWQuDQoNCj4gZGlkIGl0IGRvIGFkZHN0cmVhbSByZWNvbmZpZyBvciByZWNlaXZlIGFu
+eSBkdXBsaWNhdGUgQ09PS0lFLUVDSE8gaW4geW91ciBjYXNlPw0KDQpFeHRyZW1lbHkgdW5saWtl
+bHkuDQoNCkxvb2tpbmcgYXQgdGhlIGxhdGVzdCB2ZXJzaW9uIG9mIG15IGRyaXZlciBjb2RlDQoo
+d2hpY2ggSSB3YXNuJ3QgdXNpbmcpIEkgd3JvdGUgdGhlIGZvbGxvd2luZzoNCg0KICogU2luY2Ug
+dGhlIGNvZGUgdGhhdCBuZWdvdGlhdGVzIHRoZSBudW1iZXIgb2Ygc3RyZWFtcyBnb3QgYnJva2Vu
+DQogKiBpbiB2ZXJzaW9uIDUuMSB3ZSBuZWVkIHRvIGV4dHJhY3QgdGhlIGNvcnJlY3QgdmFsdWUg
+ZnJvbSB0aGUNCiAqIGludGVybmFsIHN0cnVjdHVyZXMgdG8gYXZvaWQgU0NUUCBzZW5kaW5nIG1l
+c3NhZ2VzIHRoZSByZW1vdGUNCiAqIHN5c3RlbSB3aWxsIGRpc2NhcmQuDQoNCiAgICAvKiBzdHJl
+YW0ub3V0Y250IGlzIHRoZSB2YWx1ZSB3ZSBzaG91bGQgYmUgdXNpbmcuDQogICAgICogQnV0IGtl
+cm5lbHMgNS4xIHRvIDUuOCBmYWlsIHRvIHJlZHVjZSBpdCBiYXNlZCBvbiB0aGUgbnVtYmVyDQog
+ICAgICogcmVjZWl2ZWQgZnJvbSB0aGUgcmVtb3RlIHN5c3RlbS4NCiAgICAgKiBTbyBib3VuZCBo
+ZXJlIHNvIHRoYXQgdHJhbnNtaXR0ZWQgbWVzc2FnZXMgZG9uJ3QgZ2V0IGRpc2NhcmRlZC4gKi8N
+CiAgICBvdXRjbnQgPSBhc29jLT5zdHJlYW0ub3V0Y250Ow0KICAgIG51bV9vc3RyZWFtcyA9IGFz
+b2MtPmMuc2luaXRfbnVtX29zdHJlYW1zOw0KDQpJIHRoaW5rIHRoZXJlIHdhcyBhIHBhdGNoIGRv
+bmUgZm9yIDUuOS4NCkl0IG5lZWRzIGJhY2stcG9ydGluZy4NCg0KQWx0aG91Z2ggQW5kcmVhcyBz
+YWlkIDUuNCB3b3JrZWQgZm9yIGhpbS4NClNvIG1heWJlIGhlIGhhcyBhIGRpZmZlcmVudCBwcm9i
+bGVtLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5
+IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRp
+b24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+
