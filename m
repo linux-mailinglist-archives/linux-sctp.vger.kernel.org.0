@@ -2,120 +2,98 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A78297872
-	for <lists+linux-sctp@lfdr.de>; Fri, 23 Oct 2020 22:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 586362986A8
+	for <lists+linux-sctp@lfdr.de>; Mon, 26 Oct 2020 06:58:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1756413AbgJWUw3 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 23 Oct 2020 16:52:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:55369 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1756412AbgJWUw2 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>);
-        Fri, 23 Oct 2020 16:52:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603486347;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=BkkVwPtn1DQdSlrc077BWPrlkRKWINT920vgmPR1Boo=;
-        b=C5oUi8q1OrV9+hE5/K/MW3iPdfVCB28SvoWWpH7XtIf5lZnY4sCDWFNtBTN+sffk6zre6Z
-        IcVX8KOGKmPNnT2o7ec3sF8mr+WIdkTnz/KbbOracfzT+dkA+wStsPd+CdlYzTeEAXPeXM
-        1Sn8JB/6s90dGFa4+1FEw0fiIdgMOpw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-210-FUIcEZqGNQONvMFFJezMcw-1; Fri, 23 Oct 2020 16:52:25 -0400
-X-MC-Unique: FUIcEZqGNQONvMFFJezMcw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2DA931009E2D;
-        Fri, 23 Oct 2020 20:52:24 +0000 (UTC)
-Received: from new-host-6.station (unknown [10.40.192.164])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C954719C66;
-        Fri, 23 Oct 2020 20:52:22 +0000 (UTC)
-From:   Davide Caratti <dcaratti@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>, linux-sctp@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [RFC PATCH net-next] net: use a dedicated tracepoint for kfree_skb_list()
-Date:   Fri, 23 Oct 2020 22:52:14 +0200
-Message-Id: <d4c179f46d00016ec418f6bf58ed01afedacd123.1603486318.git.dcaratti@redhat.com>
+        id S1770113AbgJZF6Q (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 26 Oct 2020 01:58:16 -0400
+Received: from mail-wr1-f52.google.com ([209.85.221.52]:35595 "EHLO
+        mail-wr1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1770109AbgJZF6Q (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 26 Oct 2020 01:58:16 -0400
+Received: by mail-wr1-f52.google.com with SMTP id n15so11007567wrq.2;
+        Sun, 25 Oct 2020 22:58:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CKVG20c6o237CUyhCCGYjgzodFcI4lwb/+jy6XdBe+k=;
+        b=iqz4/KnVtU8iMD2GOjKAnm/JP/sI1dcLLhpY7sVJ3Vax/bEZ26JmIL2ogJ+iYXxPMb
+         rdRA4kL9yiYdMkFigZB0mwfpx2WO13gcLA7itBc5x/UdJb34uN/uRYAzdQQxIPx4CY0Q
+         uD2hodQ626wLrJM+i7BZqucqjm9FpclTT6XuYAzKdQcgAG+ecJ9y5kZGFyRb0s2U3WXf
+         W0oD4nyoHX1ap2fiO6GwPll4cdL7tJdOF29fO5KtiCBFs+3wVUi6IC/jbq1ytHGAH3qu
+         wGfvsxPScYLrf7dPK3oB5xvKhHCX9VBCGHdMnPoxmK60dV+xn3Qt+q7FboH8X0jWFHY7
+         8cwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CKVG20c6o237CUyhCCGYjgzodFcI4lwb/+jy6XdBe+k=;
+        b=g/YNGXKVyB6zgjhXRoRsXOJwgfj/GbrOe1Ay+fOQhXIrSm8SJcDHJ31WaGtOYGwlvT
+         3n04GGaOF5tepwdw+zpiST1yIsnKU8B9yufXlxe4gfwoYnd8dI816bLjhQXNHtESgQpm
+         wt+UPQRQIcnzL1grNcD4+LbpkfNVViLogD6ylC6IHABQW0T5ao9cxe7uOX6SwTXrsVQL
+         1Ed7yTbcoW74C0XJlh8zsnt2hV8y1igXSkGHJ0yJLy0EK0n0wl+SgPz2Lokf6357NC9S
+         sO1dxvrL22V3y945hbX37N5HTQnbrOvGlRXK6rTXHUSU/I1Hz3BW8mXSF3B+OZVNAuLk
+         A1eA==
+X-Gm-Message-State: AOAM531TSflDh72jr1xv6LTfQSNxx97iYpG34t+KVuHP639JBnmqUOPq
+        f4bCRpGBQdPdrStLmxDXJRlaTC2SkSVowW2DiPI=
+X-Google-Smtp-Source: ABdhPJxuK5xrMpzX3Y19K7NBzo/k1VAmR4Emro9UtLH3WyZesMBrp1ZQ4ycvRJi9vCRdL2RzOCcljxqWdaEJrz0OL5Y=
+X-Received: by 2002:adf:f043:: with SMTP id t3mr15100249wro.234.1603691893764;
+ Sun, 25 Oct 2020 22:58:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+References: <cover.1603110316.git.lucien.xin@gmail.com> <b65bdc11e5a17e328227676ea283cee617f973fb.1603110316.git.lucien.xin@gmail.com>
+ <20201019221545.GD11030@localhost.localdomain> <CADvbK_ezWXMxpKkt3kxbXhcgu73PTJ1zpChb_sCgDu38xcROtA@mail.gmail.com>
+ <20201020211108.GF11030@localhost.localdomain> <3BC2D946-9EA7-4847-9C6E-B3C9DA6A6618@fh-muenster.de>
+ <20201020212338.GG11030@localhost.localdomain> <CADvbK_csZzHwQ04rMnCDw6=4meY-rrH--19VWm8ROafYSQWWeQ@mail.gmail.com>
+ <5EE3969E-CE57-4D9E-99E9-9A9D39C60425@fh-muenster.de> <CADvbK_cZua_+2e=u--cV4jH5tR=24DvcEtwcHfAp1kyq9sYofA@mail.gmail.com>
+ <d36e186fd50c44a29adb07f16242f3fd@AcuMS.aculab.com>
+In-Reply-To: <d36e186fd50c44a29adb07f16242f3fd@AcuMS.aculab.com>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Mon, 26 Oct 2020 13:58:02 +0800
+Message-ID: <CADvbK_fqqzJjm38Hv4BrpQwPdXmPojKE6RQWsowdh7AQ8Ha00Q@mail.gmail.com>
+Subject: Re: [PATCHv4 net-next 16/16] sctp: enable udp tunneling socks
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Michael Tuexen <tuexen@fh-muenster.de>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        network dev <netdev@vger.kernel.org>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        davem <davem@davemloft.net>, Guillaume Nault <gnault@redhat.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-kfree_skb_list() calls kfree_skb(), thus triggering as many dropwatch
-events as the number of skbs in the list. This can disturb the analysis
-of packet drops, e.g. with fragmented echo requests generated by ICMP
-sockets, or with regular SCTP packets: when consume_skb() frees them,
-the kernel's drop monitor may wrongly account for several packet drops:
+On Thu, Oct 22, 2020 at 4:47 PM David Laight <David.Laight@aculab.com> wrote:
+>
+> From: Xin Long
+> > Sent: 22 October 2020 04:13
+> ...
+> > I was thinking that by leaving it to 9899 by default users don't need to
+> > know the port when want to use it, and yet I didn't want to add another
+> > sysctl member. :D
+>
+> Could you make 1 mean 9899?
+still feel not good, since it's called 'udp_port'.
 
- consume skb()
-   skb_release_data()
-     kfree_skb_list()
-       kfree_skb() <-- false dropwatch event
+I will add a note in ip-sysctl.rst:
 
-don't call kfree_skb() when freeing a skb list, use a dedicated
-tracepoint instead. By printing "cur" and "next", it also becomes
-possible to reconstruct the skb list from its members.
+udp_port - INTEGER
+        The listening port for the local UDP tunneling sock. Normally it's
+        using the IANA-assigned UDP port number 9899 (sctp-tunneling).
+        ...
 
-Signed-off-by: Davide Caratti <dcaratti@redhat.com>
----
- include/trace/events/skb.h | 19 +++++++++++++++++++
- net/core/skbuff.c          |  6 +++++-
- 2 files changed, 24 insertions(+), 1 deletion(-)
-
-diff --git a/include/trace/events/skb.h b/include/trace/events/skb.h
-index 9e92f22eb086..b16e3544bbbe 100644
---- a/include/trace/events/skb.h
-+++ b/include/trace/events/skb.h
-@@ -51,6 +51,25 @@ TRACE_EVENT(consume_skb,
- 	TP_printk("skbaddr=%p", __entry->skbaddr)
- );
- 
-+TRACE_EVENT(kfree_skb_list,
-+
-+	TP_PROTO(struct sk_buff *cur, struct sk_buff *next),
-+
-+	TP_ARGS(cur, next),
-+
-+	TP_STRUCT__entry(
-+		__field(	void *,	cur_addr	)
-+		__field(	void *,	next_addr	)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->cur_addr = cur;
-+		__entry->next_addr = next;
-+	),
-+
-+	TP_printk("cur=%p next=%p", __entry->cur_addr, __entry->next_addr)
-+);
-+
- TRACE_EVENT(skb_copy_datagram_iovec,
- 
- 	TP_PROTO(const struct sk_buff *skb, int len),
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 1ba8f0163744..7ed6bfc5dfd0 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -702,7 +702,11 @@ void kfree_skb_list(struct sk_buff *segs)
- 	while (segs) {
- 		struct sk_buff *next = segs->next;
- 
--		kfree_skb(segs);
-+		if (!skb_unref(segs))
-+			continue;
-+
-+		trace_kfree_skb_list(segs, next);
-+		__kfree_skb(segs);
- 		segs = next;
- 	}
- }
--- 
-2.26.2
-
+Thanks.
+> So:
+>   0 => disabled
+>   1 => default port
+>   n => use port n
+> I doubt that disallowing port 1 is a problem!
+>
+>         David
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
