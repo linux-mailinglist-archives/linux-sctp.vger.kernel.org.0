@@ -2,98 +2,98 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 586362986A8
-	for <lists+linux-sctp@lfdr.de>; Mon, 26 Oct 2020 06:58:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A6829CC0E
+	for <lists+linux-sctp@lfdr.de>; Tue, 27 Oct 2020 23:35:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1770113AbgJZF6Q (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 26 Oct 2020 01:58:16 -0400
-Received: from mail-wr1-f52.google.com ([209.85.221.52]:35595 "EHLO
-        mail-wr1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1770109AbgJZF6Q (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 26 Oct 2020 01:58:16 -0400
-Received: by mail-wr1-f52.google.com with SMTP id n15so11007567wrq.2;
-        Sun, 25 Oct 2020 22:58:14 -0700 (PDT)
+        id S1832506AbgJ0WfY (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 27 Oct 2020 18:35:24 -0400
+Received: from mail-qv1-f68.google.com ([209.85.219.68]:37568 "EHLO
+        mail-qv1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1832504AbgJ0WfX (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 27 Oct 2020 18:35:23 -0400
+Received: by mail-qv1-f68.google.com with SMTP id t6so1515405qvz.4;
+        Tue, 27 Oct 2020 15:35:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CKVG20c6o237CUyhCCGYjgzodFcI4lwb/+jy6XdBe+k=;
-        b=iqz4/KnVtU8iMD2GOjKAnm/JP/sI1dcLLhpY7sVJ3Vax/bEZ26JmIL2ogJ+iYXxPMb
-         rdRA4kL9yiYdMkFigZB0mwfpx2WO13gcLA7itBc5x/UdJb34uN/uRYAzdQQxIPx4CY0Q
-         uD2hodQ626wLrJM+i7BZqucqjm9FpclTT6XuYAzKdQcgAG+ecJ9y5kZGFyRb0s2U3WXf
-         W0oD4nyoHX1ap2fiO6GwPll4cdL7tJdOF29fO5KtiCBFs+3wVUi6IC/jbq1ytHGAH3qu
-         wGfvsxPScYLrf7dPK3oB5xvKhHCX9VBCGHdMnPoxmK60dV+xn3Qt+q7FboH8X0jWFHY7
-         8cwQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+6EqPkxS+upEiFHF3tvQSMAgw2qIzQnOXTK/To17+kY=;
+        b=SNyucDBDUkPKJgqOZFbfKItm4OfZnYC8Ul6z6WOHPrLuc9KTawUpbRNm0tU4B6oDJP
+         YD/4nm2tlWRgjcKf6mvXe9TpjG513UdmmOTM35WjSPU+HyE5ZbIGqWsWcEWEkhOWR+aU
+         MxaT90pgMFAbS7frrhOHbRPh3cjupAk1+epWJT9+of8bxRSKtrrih9nHy4IJfQ883Kqt
+         5xt+drTAfZ1vK0DUYZdtD35M7ZvvFLZgfsJNLvqlM7U9fCuO2mu3rQxSjXrJI/otnxss
+         iK0Iv4pc4NeGtTKWXsBsgjdMiASL6Ujcg27qJC/C0NwZnq40dSsS6P5RTH69V7lHk3/a
+         3Nug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CKVG20c6o237CUyhCCGYjgzodFcI4lwb/+jy6XdBe+k=;
-        b=g/YNGXKVyB6zgjhXRoRsXOJwgfj/GbrOe1Ay+fOQhXIrSm8SJcDHJ31WaGtOYGwlvT
-         3n04GGaOF5tepwdw+zpiST1yIsnKU8B9yufXlxe4gfwoYnd8dI816bLjhQXNHtESgQpm
-         wt+UPQRQIcnzL1grNcD4+LbpkfNVViLogD6ylC6IHABQW0T5ao9cxe7uOX6SwTXrsVQL
-         1Ed7yTbcoW74C0XJlh8zsnt2hV8y1igXSkGHJ0yJLy0EK0n0wl+SgPz2Lokf6357NC9S
-         sO1dxvrL22V3y945hbX37N5HTQnbrOvGlRXK6rTXHUSU/I1Hz3BW8mXSF3B+OZVNAuLk
-         A1eA==
-X-Gm-Message-State: AOAM531TSflDh72jr1xv6LTfQSNxx97iYpG34t+KVuHP639JBnmqUOPq
-        f4bCRpGBQdPdrStLmxDXJRlaTC2SkSVowW2DiPI=
-X-Google-Smtp-Source: ABdhPJxuK5xrMpzX3Y19K7NBzo/k1VAmR4Emro9UtLH3WyZesMBrp1ZQ4ycvRJi9vCRdL2RzOCcljxqWdaEJrz0OL5Y=
-X-Received: by 2002:adf:f043:: with SMTP id t3mr15100249wro.234.1603691893764;
- Sun, 25 Oct 2020 22:58:13 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+6EqPkxS+upEiFHF3tvQSMAgw2qIzQnOXTK/To17+kY=;
+        b=mcKUpvEmuQxnbxKNBWmoCjs+tBxL4zda810TFBvtZN0puXBOMoItoh8BUiOySL8rNJ
+         aL68zJuOtaztlrlR3Edp89bAyHix8pSINNcZ7AkuIGHST4SotvPDJXWu7VLL3vni2tV9
+         qbB8k5FLZJLjZfJ6Gdmrl1chvpef0NwbdccTVpVth+a0HWiNREBbfJ/0kIKaZGwZT2Zs
+         tz8D2NktG+0a5aBjFstLgIfHpc5W2GdCdWFe3SjPp/CTprYLL/oqorHpw5DbJqBHi+T/
+         gyITW4RO7BEVWBOGpiOzTxwksXU2E6mDoJ0naLQbWy6Q5cNjE+eKuNV6coHY8OirG810
+         4anw==
+X-Gm-Message-State: AOAM530efPGMM21OAn8Yke43NgmSBsMNt0vPeJC3jsTdaKMpUUqRWMxJ
+        vJMwc1CgNHTBlop1t4bbOsgukzhS94hdRg==
+X-Google-Smtp-Source: ABdhPJxIpnV9Q0G2RlTLWA2MHRww8vneSGB6xL09l4Kv3rvTZd5r5rC/C70NU7bILKd9iPEkfQb0Qg==
+X-Received: by 2002:a05:6214:1586:: with SMTP id m6mr5069113qvw.15.1603838121669;
+        Tue, 27 Oct 2020 15:35:21 -0700 (PDT)
+Received: from localhost.localdomain ([177.220.172.74])
+        by smtp.gmail.com with ESMTPSA id 63sm1757415qkn.9.2020.10.27.15.35.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Oct 2020 15:35:20 -0700 (PDT)
+Received: by localhost.localdomain (Postfix, from userid 1000)
+        id 52303C3155; Tue, 27 Oct 2020 19:35:18 -0300 (-03)
+Date:   Tue, 27 Oct 2020 19:35:18 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Davide Caratti <dcaratti@redhat.com>
+Cc:     netdev@vger.kernel.org, Xin Long <lucien.xin@gmail.com>,
+        linux-sctp@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [RFC PATCH net-next] net: use a dedicated tracepoint for
+ kfree_skb_list()
+Message-ID: <20201027223518.GA11029@localhost.localdomain>
+References: <d4c179f46d00016ec418f6bf58ed01afedacd123.1603486318.git.dcaratti@redhat.com>
 MIME-Version: 1.0
-References: <cover.1603110316.git.lucien.xin@gmail.com> <b65bdc11e5a17e328227676ea283cee617f973fb.1603110316.git.lucien.xin@gmail.com>
- <20201019221545.GD11030@localhost.localdomain> <CADvbK_ezWXMxpKkt3kxbXhcgu73PTJ1zpChb_sCgDu38xcROtA@mail.gmail.com>
- <20201020211108.GF11030@localhost.localdomain> <3BC2D946-9EA7-4847-9C6E-B3C9DA6A6618@fh-muenster.de>
- <20201020212338.GG11030@localhost.localdomain> <CADvbK_csZzHwQ04rMnCDw6=4meY-rrH--19VWm8ROafYSQWWeQ@mail.gmail.com>
- <5EE3969E-CE57-4D9E-99E9-9A9D39C60425@fh-muenster.de> <CADvbK_cZua_+2e=u--cV4jH5tR=24DvcEtwcHfAp1kyq9sYofA@mail.gmail.com>
- <d36e186fd50c44a29adb07f16242f3fd@AcuMS.aculab.com>
-In-Reply-To: <d36e186fd50c44a29adb07f16242f3fd@AcuMS.aculab.com>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Mon, 26 Oct 2020 13:58:02 +0800
-Message-ID: <CADvbK_fqqzJjm38Hv4BrpQwPdXmPojKE6RQWsowdh7AQ8Ha00Q@mail.gmail.com>
-Subject: Re: [PATCHv4 net-next 16/16] sctp: enable udp tunneling socks
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Michael Tuexen <tuexen@fh-muenster.de>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        network dev <netdev@vger.kernel.org>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        davem <davem@davemloft.net>, Guillaume Nault <gnault@redhat.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d4c179f46d00016ec418f6bf58ed01afedacd123.1603486318.git.dcaratti@redhat.com>
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, Oct 22, 2020 at 4:47 PM David Laight <David.Laight@aculab.com> wrote:
->
-> From: Xin Long
-> > Sent: 22 October 2020 04:13
-> ...
-> > I was thinking that by leaving it to 9899 by default users don't need to
-> > know the port when want to use it, and yet I didn't want to add another
-> > sysctl member. :D
->
-> Could you make 1 mean 9899?
-still feel not good, since it's called 'udp_port'.
+On Fri, Oct 23, 2020 at 10:52:14PM +0200, Davide Caratti wrote:
+> kfree_skb_list() calls kfree_skb(), thus triggering as many dropwatch
+> events as the number of skbs in the list. This can disturb the analysis
+> of packet drops, e.g. with fragmented echo requests generated by ICMP
+> sockets, or with regular SCTP packets: when consume_skb() frees them,
+> the kernel's drop monitor may wrongly account for several packet drops:
+> 
+>  consume skb()
+>    skb_release_data()
+>      kfree_skb_list()
+>        kfree_skb() <-- false dropwatch event
 
-I will add a note in ip-sysctl.rst:
+Seems the problem lies with skb_release_data() calling
+kfree_skb_list() while it should have been a, say, consume_skb_list(),
+and not generate further kfree_skb calls.
 
-udp_port - INTEGER
-        The listening port for the local UDP tunneling sock. Normally it's
-        using the IANA-assigned UDP port number 9899 (sctp-tunneling).
-        ...
+Maybe a bool parameter on skb_release_data to signal that it should
+call consume_skb_list (which doesn't exist) instead?
 
-Thanks.
-> So:
->   0 => disabled
->   1 => default port
->   n => use port n
-> I doubt that disallowing port 1 is a problem!
->
->         David
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+> 
+> don't call kfree_skb() when freeing a skb list, use a dedicated
+> tracepoint instead. By printing "cur" and "next", it also becomes
+> possible to reconstruct the skb list from its members.
+
+I like the new probe alone. It helps to have more visibility on drops
+such as those from __dev_xmit_skb() and how they happen.
+
+But as a solution to the problem stated, seems it can be confusing.
+Say one is debugging a tx drop issue. AFAICT one would have to watch
+both probe points anyway, as the drop could be on a layer below than
+SCTP. So I'm not seeing how it helps much, other than possibly causing
+drop_watch to miss drops (by not listening to the new trace point).
+
+  Marcelo
