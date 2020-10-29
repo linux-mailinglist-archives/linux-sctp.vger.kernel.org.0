@@ -2,98 +2,195 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00A6829CC0E
-	for <lists+linux-sctp@lfdr.de>; Tue, 27 Oct 2020 23:35:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 086EE29E3DF
+	for <lists+linux-sctp@lfdr.de>; Thu, 29 Oct 2020 08:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1832506AbgJ0WfY (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 27 Oct 2020 18:35:24 -0400
-Received: from mail-qv1-f68.google.com ([209.85.219.68]:37568 "EHLO
-        mail-qv1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1832504AbgJ0WfX (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 27 Oct 2020 18:35:23 -0400
-Received: by mail-qv1-f68.google.com with SMTP id t6so1515405qvz.4;
-        Tue, 27 Oct 2020 15:35:22 -0700 (PDT)
+        id S1725973AbgJ2HVT (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 29 Oct 2020 03:21:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54764 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725980AbgJ2HVB (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 29 Oct 2020 03:21:01 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C24C08E89B;
+        Thu, 29 Oct 2020 00:05:20 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id x13so1575114pgp.7;
+        Thu, 29 Oct 2020 00:05:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+6EqPkxS+upEiFHF3tvQSMAgw2qIzQnOXTK/To17+kY=;
-        b=SNyucDBDUkPKJgqOZFbfKItm4OfZnYC8Ul6z6WOHPrLuc9KTawUpbRNm0tU4B6oDJP
-         YD/4nm2tlWRgjcKf6mvXe9TpjG513UdmmOTM35WjSPU+HyE5ZbIGqWsWcEWEkhOWR+aU
-         MxaT90pgMFAbS7frrhOHbRPh3cjupAk1+epWJT9+of8bxRSKtrrih9nHy4IJfQ883Kqt
-         5xt+drTAfZ1vK0DUYZdtD35M7ZvvFLZgfsJNLvqlM7U9fCuO2mu3rQxSjXrJI/otnxss
-         iK0Iv4pc4NeGtTKWXsBsgjdMiASL6Ujcg27qJC/C0NwZnq40dSsS6P5RTH69V7lHk3/a
-         3Nug==
+        h=from:to:cc:subject:date:message-id;
+        bh=XhPZ+7DUQwlRDaSu5lv7OXg3Gcfc+hMYdwSPQo1kNA4=;
+        b=GCSJeAwBt1IDwsGpWUUH/GLbcfmUUQAAGeKn7lvd5Kxdmd2KKI+UzNmf7Z9s1oO3rP
+         sQ7t9hFtBDdcEdm5RPwu3vUDgqTJj9fu5fa0Fo01g8ISG+qCbvTAvI6GbX3KiZfZZvjQ
+         W58CMfw9sQUblhvn+gVfcP8sDrAIG8ASS7quSQ3b7IAxMCDd7f/qNACACJJ+ZQXugEMI
+         McM9ymrv8+FWLAEtvUIj4QUiEg0V24keQmoo0p6SpqMltgOeyVdSOUZnQSnDTO9/7IIW
+         kVOKkS5MCWXigtrxJjzPIQz3xinzYxy4n2HFXy0ig1//7WOdf/qP6xXOyuDcKMsUwERY
+         KYSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+6EqPkxS+upEiFHF3tvQSMAgw2qIzQnOXTK/To17+kY=;
-        b=mcKUpvEmuQxnbxKNBWmoCjs+tBxL4zda810TFBvtZN0puXBOMoItoh8BUiOySL8rNJ
-         aL68zJuOtaztlrlR3Edp89bAyHix8pSINNcZ7AkuIGHST4SotvPDJXWu7VLL3vni2tV9
-         qbB8k5FLZJLjZfJ6Gdmrl1chvpef0NwbdccTVpVth+a0HWiNREBbfJ/0kIKaZGwZT2Zs
-         tz8D2NktG+0a5aBjFstLgIfHpc5W2GdCdWFe3SjPp/CTprYLL/oqorHpw5DbJqBHi+T/
-         gyITW4RO7BEVWBOGpiOzTxwksXU2E6mDoJ0naLQbWy6Q5cNjE+eKuNV6coHY8OirG810
-         4anw==
-X-Gm-Message-State: AOAM530efPGMM21OAn8Yke43NgmSBsMNt0vPeJC3jsTdaKMpUUqRWMxJ
-        vJMwc1CgNHTBlop1t4bbOsgukzhS94hdRg==
-X-Google-Smtp-Source: ABdhPJxIpnV9Q0G2RlTLWA2MHRww8vneSGB6xL09l4Kv3rvTZd5r5rC/C70NU7bILKd9iPEkfQb0Qg==
-X-Received: by 2002:a05:6214:1586:: with SMTP id m6mr5069113qvw.15.1603838121669;
-        Tue, 27 Oct 2020 15:35:21 -0700 (PDT)
-Received: from localhost.localdomain ([177.220.172.74])
-        by smtp.gmail.com with ESMTPSA id 63sm1757415qkn.9.2020.10.27.15.35.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2020 15:35:20 -0700 (PDT)
-Received: by localhost.localdomain (Postfix, from userid 1000)
-        id 52303C3155; Tue, 27 Oct 2020 19:35:18 -0300 (-03)
-Date:   Tue, 27 Oct 2020 19:35:18 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Davide Caratti <dcaratti@redhat.com>
-Cc:     netdev@vger.kernel.org, Xin Long <lucien.xin@gmail.com>,
-        linux-sctp@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [RFC PATCH net-next] net: use a dedicated tracepoint for
- kfree_skb_list()
-Message-ID: <20201027223518.GA11029@localhost.localdomain>
-References: <d4c179f46d00016ec418f6bf58ed01afedacd123.1603486318.git.dcaratti@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d4c179f46d00016ec418f6bf58ed01afedacd123.1603486318.git.dcaratti@redhat.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=XhPZ+7DUQwlRDaSu5lv7OXg3Gcfc+hMYdwSPQo1kNA4=;
+        b=kQA83pMx6TiwD2R0s9ywCiHHZ3sk/J5cj7ZYAIoa/HIGycguywAt62YuruslP2m0KY
+         9kUpXGkYEcOdxDfrX8SPTFPjnY1uXzNXetIEWE9ZuYqzOnU8N7ymhzdpkw3NHZgmmUDc
+         UwpjSOGDrV5s5Q8meOLOXVVjiWGd9Azi9afiqyT4uBlBViXUy9iaJ4HEVYvZUT5f7LTk
+         C+s9PymZCOZqSTM8RXsuyH98T/CE7vbNWqpiifyuBeYYXs0BK02W4LPHF3wZz+H0Dp2C
+         Ip3d6UPIXLMHT/hYf9RWP/01lIaTis1beR25Mc4JtLEXjfwnD0uFmokyZ6RGEfPvWe82
+         sVsQ==
+X-Gm-Message-State: AOAM531tV7eJqRjX9MLI9rVzH8ItparBaTEsIRPAwWwp6QP6K+BXfxTG
+        UkZqskSwJxnSv5B7nAZLy8l4f+kgMJg=
+X-Google-Smtp-Source: ABdhPJz/5TEGhQUu2sGpjVz71NQISEfuWzK5n4l6V8Ug2pcvFnR7RHYPqOZlTCLSkDue16cExMXE8Q==
+X-Received: by 2002:a17:90a:2ec1:: with SMTP id h1mr2959377pjs.51.1603955119142;
+        Thu, 29 Oct 2020 00:05:19 -0700 (PDT)
+Received: from localhost ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id v66sm1664558pfb.139.2020.10.29.00.05.17
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 29 Oct 2020 00:05:18 -0700 (PDT)
+From:   Xin Long <lucien.xin@gmail.com>
+To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
+Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Michael Tuexen <tuexen@fh-muenster.de>, davem@davemloft.net,
+        Jakub Kicinski <kuba@kernel.org>, gnault@redhat.com,
+        pabeni@redhat.com, willemdebruijn.kernel@gmail.com
+Subject: [PATCHv5 net-next 00/16] sctp: Implement RFC6951: UDP Encapsulation of SCTP
+Date:   Thu, 29 Oct 2020 15:04:54 +0800
+Message-Id: <cover.1603955040.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.1.0
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Fri, Oct 23, 2020 at 10:52:14PM +0200, Davide Caratti wrote:
-> kfree_skb_list() calls kfree_skb(), thus triggering as many dropwatch
-> events as the number of skbs in the list. This can disturb the analysis
-> of packet drops, e.g. with fragmented echo requests generated by ICMP
-> sockets, or with regular SCTP packets: when consume_skb() frees them,
-> the kernel's drop monitor may wrongly account for several packet drops:
-> 
->  consume skb()
->    skb_release_data()
->      kfree_skb_list()
->        kfree_skb() <-- false dropwatch event
+Description From the RFC:
 
-Seems the problem lies with skb_release_data() calling
-kfree_skb_list() while it should have been a, say, consume_skb_list(),
-and not generate further kfree_skb calls.
+   The Main Reasons:
 
-Maybe a bool parameter on skb_release_data to signal that it should
-call consume_skb_list (which doesn't exist) instead?
+   o  To allow SCTP traffic to pass through legacy NATs, which do not
+      provide native SCTP support as specified in [BEHAVE] and
+      [NATSUPP].
 
-> 
-> don't call kfree_skb() when freeing a skb list, use a dedicated
-> tracepoint instead. By printing "cur" and "next", it also becomes
-> possible to reconstruct the skb list from its members.
+   o  To allow SCTP to be implemented on hosts that do not provide
+      direct access to the IP layer.  In particular, applications can
+      use their own SCTP implementation if the operating system does not
+      provide one.
 
-I like the new probe alone. It helps to have more visibility on drops
-such as those from __dev_xmit_skb() and how they happen.
+   Implementation Notes:
 
-But as a solution to the problem stated, seems it can be confusing.
-Say one is debugging a tx drop issue. AFAICT one would have to watch
-both probe points anyway, as the drop could be on a layer below than
-SCTP. So I'm not seeing how it helps much, other than possibly causing
-drop_watch to miss drops (by not listening to the new trace point).
+   UDP-encapsulated SCTP is normally communicated between SCTP stacks
+   using the IANA-assigned UDP port number 9899 (sctp-tunneling) on both
+   ends.  There are circumstances where other ports may be used on
+   either end, and it might be required to use ports other than the
+   registered port.
 
-  Marcelo
+   Each SCTP stack uses a single local UDP encapsulation port number as
+   the destination port for all its incoming SCTP packets, this greatly
+   simplifies implementation design.
+
+   An SCTP implementation supporting UDP encapsulation MUST maintain a
+   remote UDP encapsulation port number per destination address for each
+   SCTP association.  Again, because the remote stack may be using ports
+   other than the well-known port, each port may be different from each
+   stack.  However, because of remapping of ports by NATs, the remote
+   ports associated with different remote IP addresses may not be
+   identical, even if they are associated with the same stack.
+
+   Because the well-known port might not be used, implementations need
+   to allow other port numbers to be specified as a local or remote UDP
+   encapsulation port number through APIs.
+
+Patches:
+
+   This patchset is using the udp4/6 tunnel APIs to implement the UDP
+   Encapsulation of SCTP with not much change in SCTP protocol stack
+   and with all current SCTP features keeped in Linux Kernel.
+
+   1 - 4: Fix some UDP issues that may be triggered by SCTP over UDP.
+   5 - 7: Process incoming UDP encapsulated packets and ICMP packets.
+   8 -10: Remote encap port's update by sysctl, sockopt and packets.
+   11-14: Process outgoing pakects with UDP encapsulated and its GSO.
+   15-16: Add the part from draft-tuexen-tsvwg-sctp-udp-encaps-cons-03.
+      17: Enable this feature.
+
+Tests:
+
+  - lksctp-tools/src/func_tests with UDP Encapsulation enabled/disabled:
+
+      Both make v4test and v6test passed.
+
+  - sctp-tests with UDP Encapsulation enabled/disabled:
+
+      repeatability/procdumps/sctpdiag/gsomtuchange/extoverflow/
+      sctphashtable passed. Others failed as expected due to those
+      "iptables -p sctp" rules.
+
+  - netperf on lo/netns/virtio_net, with gso enabled/disabled and
+    with ip_checksum enabled/disabled, with UDP Encapsulation
+    enabled/disabled:
+
+      No clear performance dropped.
+
+v1->v2:
+  - Fix some incorrect code in the patches 5,6,8,10,11,13,14,17, suggested
+    by Marcelo.
+  - Append two patches 15-16 to add the Additional Considerations for UDP
+    Encapsulation of SCTP from draft-tuexen-tsvwg-sctp-udp-encaps-cons-03.
+v2->v3:
+  - remove the cleanup code in patch 2, suggested by Willem.
+  - remove the patch 3 and fix the checksum in the new patch 3 after
+    talking with Paolo, Marcelo and Guillaume.
+  - add 'select NET_UDP_TUNNEL' in patch 4 to solve a compiling error.
+  - fix __be16 type cast warning in patch 8.
+  - fix the wrong endian orders when setting values in 14,16.
+v3->v4:
+  - add entries in ip-sysctl.rst in patch 7,16, as Marcelo Suggested.
+  - not create udp socks when udp_port is set to 0 in patch 16, as
+    Marcelo noticed.
+v4->v5:
+  - improve the description for udp_port and encap_port entries in patch
+    7, 16.
+  - use 0 as the default udp_port.
+
+Xin Long (16):
+  udp: check udp sock encap_type in __udp_lib_err
+  udp6: move the mss check after udp gso tunnel processing
+  udp: support sctp over udp in skb_udp_tunnel_segment
+  sctp: create udp4 sock and add its encap_rcv
+  sctp: create udp6 sock and set its encap_rcv
+  sctp: add encap_err_lookup for udp encap socks
+  sctp: add encap_port for netns sock asoc and transport
+  sctp: add SCTP_REMOTE_UDP_ENCAPS_PORT sockopt
+  sctp: allow changing transport encap_port by peer packets
+  sctp: add udphdr to overhead when udp_port is set
+  sctp: call sk_setup_caps in sctp_packet_transmit instead
+  sctp: support for sending packet over udp4 sock
+  sctp: support for sending packet over udp6 sock
+  sctp: add the error cause for new encapsulation port restart
+  sctp: handle the init chunk matching an existing asoc
+  sctp: enable udp tunneling socks
+
+ Documentation/networking/ip-sysctl.rst |  31 +++++++
+ include/linux/sctp.h                   |  20 +++++
+ include/net/netns/sctp.h               |   8 ++
+ include/net/sctp/constants.h           |   2 +
+ include/net/sctp/sctp.h                |   9 ++-
+ include/net/sctp/sm.h                  |   4 +
+ include/net/sctp/structs.h             |  14 ++--
+ include/uapi/linux/sctp.h              |   7 ++
+ net/ipv4/udp.c                         |   2 +-
+ net/ipv4/udp_offload.c                 |   3 +
+ net/ipv6/udp.c                         |   2 +-
+ net/ipv6/udp_offload.c                 |   8 +-
+ net/sctp/Kconfig                       |   1 +
+ net/sctp/associola.c                   |   4 +
+ net/sctp/ipv6.c                        |  44 +++++++---
+ net/sctp/offload.c                     |   6 +-
+ net/sctp/output.c                      |  22 +++--
+ net/sctp/protocol.c                    | 143 ++++++++++++++++++++++++++++++---
+ net/sctp/sm_make_chunk.c               |  21 +++++
+ net/sctp/sm_statefuns.c                |  52 ++++++++++++
+ net/sctp/socket.c                      | 116 ++++++++++++++++++++++++++
+ net/sctp/sysctl.c                      |  62 ++++++++++++++
+ 22 files changed, 531 insertions(+), 50 deletions(-)
+
+-- 
+2.1.0
+
