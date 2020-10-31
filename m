@@ -2,58 +2,48 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A332A11BF
-	for <lists+linux-sctp@lfdr.de>; Sat, 31 Oct 2020 00:46:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C27502A1285
+	for <lists+linux-sctp@lfdr.de>; Sat, 31 Oct 2020 02:27:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725787AbgJ3Xqm (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 30 Oct 2020 19:46:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50402 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725446AbgJ3Xqm (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Fri, 30 Oct 2020 19:46:42 -0400
-Received: from kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net (unknown [163.114.132.7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 71AB9208B6;
-        Fri, 30 Oct 2020 23:46:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604101602;
-        bh=voJHJOf9dPBy4fxAMBhVgDxcGEaN2P+DHs0ps8ovIr8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FJdKogOYBw22C9CQ4xTuDRutEHcr9iI1uO1Xg2FQcBhiXnj8qPvB1zNgu2ubo0lP9
-         uApQW7c0V58yT78WSf1xtyLLjRXXMgBVYy9FDGQOheiaRghFG1ULAZXCF1iGuk98K5
-         iO6RVL9il2esFPCrtTuW1FBfwhTCrOOnWy/5kFcU=
-Date:   Fri, 30 Oct 2020 16:46:40 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Michael Tuexen <tuexen@fh-muenster.de>, davem@davemloft.net,
-        gnault@redhat.com, pabeni@redhat.com,
-        willemdebruijn.kernel@gmail.com
-Subject: Re: [PATCHv5 net-next 00/16] sctp: Implement RFC6951: UDP
- Encapsulation of SCTP
-Message-ID: <20201030164640.4e89902f@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <cover.1603955040.git.lucien.xin@gmail.com>
-References: <cover.1603955040.git.lucien.xin@gmail.com>
+        id S1726229AbgJaB1A (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 30 Oct 2020 21:27:00 -0400
+Received: from 93804.cloudwaysapps.com ([178.62.255.238]:56412 "EHLO
+        93804.cloudwaysapps.com" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726209AbgJaB07 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Fri, 30 Oct 2020 21:26:59 -0400
+X-Greylist: delayed 12135 seconds by postgrey-1.27 at vger.kernel.org; Fri, 30 Oct 2020 21:26:55 EDT
+Received: from 127.0.0.1 (93804.cloudwaysapps.com [127.0.0.1])
+        by 93804.cloudwaysapps.com (Postfix) with SMTP id B7E2222075;
+        Fri, 30 Oct 2020 19:28:42 +0000 (UTC)
+Received: from [205.230.2.174] by 127.0.0.1 id <5950496-65746>; Sat, 31 Oct 2020 00:24:59 +0400
+Message-ID: <ur-dehw$u-v8-$q8xj2j$n5t4uc@bcyg0.39fe.ck7>
+From:   "JOHN PHIL" <gerradfinancialplanning@gmail.com>
+Reply-To: "JOHN PHIL" <gerradfinancialplanning@gmail.com>
+To:     linux-raid@vger.kernel.org
+Subject: November Equity Investment 20-20 
+Date:   Sat, 31 Oct 20 00:24:59 GMT
+X-Mailer: AOL 7.0 for Windows US sub 118
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/alternative;
+        boundary="07B_9ED_4_"
+X-Priority: 1
+X-MSMail-Priority: High
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, 29 Oct 2020 15:04:54 +0800 Xin Long wrote:
->    This patchset is using the udp4/6 tunnel APIs to implement the UDP
->    Encapsulation of SCTP with not much change in SCTP protocol stack
->    and with all current SCTP features keeped in Linux Kernel.
-> 
->    1 - 4: Fix some UDP issues that may be triggered by SCTP over UDP.
->    5 - 7: Process incoming UDP encapsulated packets and ICMP packets.
->    8 -10: Remote encap port's update by sysctl, sockopt and packets.
->    11-14: Process outgoing pakects with UDP encapsulated and its GSO.
->    15-16: Add the part from draft-tuexen-tsvwg-sctp-udp-encaps-cons-03.
->       17: Enable this feature.
 
-Applied, thanks!
+--07B_9ED_4_
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
+
+How are you doing today I have a proposal which i think may interest you a=
+nd benefit you.I will like to give you full details of this via email:  ge=
+rradfinancialplanning@gmail.com
+Thanks.
+
+John PHIL
+
+--07B_9ED_4_--
+
