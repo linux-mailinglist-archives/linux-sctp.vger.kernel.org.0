@@ -2,56 +2,54 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F22252A91BF
-	for <lists+linux-sctp@lfdr.de>; Fri,  6 Nov 2020 09:46:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0492A9364
+	for <lists+linux-sctp@lfdr.de>; Fri,  6 Nov 2020 10:51:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726242AbgKFIqj (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 6 Nov 2020 03:46:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46368 "EHLO
+        id S1726422AbgKFJvd (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 6 Nov 2020 04:51:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725830AbgKFIqj (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 6 Nov 2020 03:46:39 -0500
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85B4C0613CF;
-        Fri,  6 Nov 2020 00:46:38 -0800 (PST)
-Received: by mail-qk1-x742.google.com with SMTP id c27so407818qko.10;
-        Fri, 06 Nov 2020 00:46:38 -0800 (PST)
+        with ESMTP id S1726139AbgKFJvc (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 6 Nov 2020 04:51:32 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357DDC0613CF
+        for <linux-sctp@vger.kernel.org>; Fri,  6 Nov 2020 01:51:32 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id gn41so1061508ejc.4
+        for <linux-sctp@vger.kernel.org>; Fri, 06 Nov 2020 01:51:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=malat-biz.20150623.gappssmtp.com; s=20150623;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=d3ntAnKa8/mYLGzPmrDnpX+SS9nceIT0yXThvuLk7dA=;
-        b=PeMII59gOf7WuG2rlMrNUnfKKkKYzZ7Ef8+qFoNOUO1MT13N9+2o8BRfkNPlszNr9Z
-         pUtu9jzfVSLgV9O956BWD4k45Wz8Z2stMnaWCKoL9EdO0aEszica/DCfev6sTb1BAknl
-         pfkRrR6MtV/tYlny/Cy2cujiB6W7qiviGEdZq42BeYry0fGG9FUqjgZaBhZWNZDo0GhR
-         fGbn1lLLCLAWHz9sUD9A3YrCWOsvbc4QziPEbqREM4W3QswdwGk1vtqcMw2TU5LhGbI7
-         kwEpMh/EzjhIS0R5uJFZ3WTVTja9+7L6htx4c18BL3Znpfu3aGTf3h7FGXLy9VBKnVwE
-         U5RA==
+         :content-disposition:in-reply-to:user-agent;
+        bh=9IBtvz1xb0AHqlIyVvrG0wyMkGPT2R1uF6Ltx4fuS1Q=;
+        b=SAtXTf1XTB2iVd5TsH8z3gKUSMvhnZmXeL+fzOMchO4JYyHTivLWInorPoNF1DFORj
+         j8lXfXmgtXu+LcfNo4JD7X/kZD5JqBa5Sf75iYnWT1zVOVCVhwDLvnHBJQIRBo0PEPpR
+         2R/cJBBtyoU1IKHW2m2J9wLN0y1SldbIzR4n6eyWustw2bynhVWuiSODN6OzGbBkequZ
+         UYTantj+YB5gOLlQtB/RipsFf4kztiwyb1ksnx/etvPWbpL2Sb/hBy1qM3ryYc2fsIhr
+         sv1si2l3sOINQX3318hskJopCjJYeJ7xWUMTKwi1DyB3OvrKJMzCkm66nBD9cX2p+Lrx
+         jObw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=d3ntAnKa8/mYLGzPmrDnpX+SS9nceIT0yXThvuLk7dA=;
-        b=loC1CQgHFdATcGwriiIJJLkk4g0KICNBW08Pp74t/fdOcaf7RVV3LVou48dkbWDnzR
-         2wWfEqZw+TNXJ/mYmkmNrb0QO7dBQ8ZMHd3XiwGAMj8LPBpe64ztgoPY8OdO08Dcf9fx
-         mdv8euzjvqpakR1QBs19xf7TxoDX0pCUt06TgXmHm7BgtWgUe0lCHtzb71RF7eJNaziU
-         0wtiWzVlOrvJETE6RG1P2rq2m89f98WdVas1qodtW99kznRIdg8DUBteGgxS185ARoNZ
-         0ilfxp1mzepaaEGZ51BA/2/7ZQGR7ypD2wnpNAUjid81aU1C31FFVl1IrpWrzfHDOcPF
-         D+vg==
-X-Gm-Message-State: AOAM532qw91QUMMmruwuqGUeUBpkCAxa8y1Q4D+FsoD1UEnx1FtKa7lV
-        fuxnGfi++fBq2Zky9IKSH3AGp6QuExoBrQ==
-X-Google-Smtp-Source: ABdhPJzGjNx6q1Eui0yJdJ24MIkr65ePf5mdy58YV3RH3FKIUM0P+k+G7LaUPxrniWQj+SXrwj/UZg==
-X-Received: by 2002:a37:9b48:: with SMTP id d69mr544640qke.435.1604652397999;
-        Fri, 06 Nov 2020 00:46:37 -0800 (PST)
-Received: from localhost.localdomain ([177.220.172.74])
-        by smtp.gmail.com with ESMTPSA id r8sm188681qkm.115.2020.11.06.00.46.36
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=9IBtvz1xb0AHqlIyVvrG0wyMkGPT2R1uF6Ltx4fuS1Q=;
+        b=XYUPcDD0K3/kBxuuG9leFznzp5YjR6NAsvIWAEA4fUaJStwT+0vnU0NTN0kx6JhtVF
+         h0QnTLB+u0QzZTY8cCJsDpsnck0klmDNOwd4W+iRxpeZ/msg82GOrMOFGRbbfFdrajYo
+         QfSk9g2rzWX4j9IlbQORT4UlcZhxx8PjW5w74dtR0gxWSRV91/Xp+vQxfpx+QMiHXoVm
+         2HVKfbHPJrdBjFSWBu4AD1wZXucpRb+LZskF3JYMtGiWHqxhgwt1ilNuQfCW01IGmDpS
+         u9PYUb9cRPqxsuu1MW4jrozJlzSHAb6Mdd3RTdLCZr+ZVPZRZ4YpEAGrd905oZjPyZfR
+         kyPQ==
+X-Gm-Message-State: AOAM530SZB50oEX+tSTQaBHBXZFHkGhmF2HRk6n65ZeWmpaBmo56jpEG
+        pjvbHXB2dGh9vs4ZIyY8WulDjg==
+X-Google-Smtp-Source: ABdhPJw46RbOpExLWqlAV9SWFLIsfa1kfttjTMIHD/W89boZnOgzyIxJi3jf6mmoTPl+/LfXcidpuQ==
+X-Received: by 2002:a17:907:264d:: with SMTP id ar13mr1167369ejc.207.1604656290864;
+        Fri, 06 Nov 2020 01:51:30 -0800 (PST)
+Received: from bordel.klfree.net (bordel.klfree.cz. [81.201.48.42])
+        by smtp.gmail.com with ESMTPSA id k11sm603182edh.72.2020.11.06.01.51.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2020 00:46:37 -0800 (PST)
-Received: by localhost.localdomain (Postfix, from userid 1000)
-        id D4BF4C1B80; Fri,  6 Nov 2020 05:46:34 -0300 (-03)
-Date:   Fri, 6 Nov 2020 05:46:34 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Petr Malat <oss@malat.biz>
+        Fri, 06 Nov 2020 01:51:30 -0800 (PST)
+Date:   Fri, 6 Nov 2020 10:48:24 +0100
+From:   Petr Malat <oss@malat.biz>
+To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 Cc:     linux-sctp@vger.kernel.org, Vlad Yasevich <vyasevich@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
         "David S. Miller" <davem@davemloft.net>,
@@ -59,47 +57,58 @@ Cc:     linux-sctp@vger.kernel.org, Vlad Yasevich <vyasevich@gmail.com>,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] sctp: Fix sending when PMTU is less than
  SCTP_DEFAULT_MINSEGMENT
-Message-ID: <20201106084634.GA3556@localhost.localdomain>
+Message-ID: <20201106094824.GA7570@bordel.klfree.net>
 References: <20201105103946.18771-1-oss@malat.biz>
+ <20201106084634.GA3556@localhost.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201105103946.18771-1-oss@malat.biz>
+In-Reply-To: <20201106084634.GA3556@localhost.localdomain>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, Nov 05, 2020 at 11:39:47AM +0100, Petr Malat wrote:
-> Function sctp_dst_mtu() never returns lower MTU than
-> SCTP_TRUNC4(SCTP_DEFAULT_MINSEGMENT) even when the actual MTU is less,
-> in which case we rely on the IP fragmentation and must enable it.
+On Fri, Nov 06, 2020 at 05:46:34AM -0300, Marcelo Ricardo Leitner wrote:
+> On Thu, Nov 05, 2020 at 11:39:47AM +0100, Petr Malat wrote:
+> > Function sctp_dst_mtu() never returns lower MTU than
+> > SCTP_TRUNC4(SCTP_DEFAULT_MINSEGMENT) even when the actual MTU is less,
+> > in which case we rely on the IP fragmentation and must enable it.
+> 
+> This should be being handled at sctp_packet_will_fit():
 
-This should be being handled at sctp_packet_will_fit():
+sctp_packet_will_fit() does something a little bit different, it
+allows fragmentation, if the packet must be longer than the pathmtu
+set in SCTP structures, which is never less than 512 (see
+sctp_dst_mtu()) even when the actual mtu is less than 512.
 
-          psize = packet->size;
-          if (packet->transport->asoc)
-                  pmtu = packet->transport->asoc->pathmtu;
-          else
-                  pmtu = packet->transport->pathmtu;
+One can test it by setting mtu of an interface to e.g. 300,
+and sending a longer packet (e.g. 400B):
+>           psize = packet->size;
+>           if (packet->transport->asoc)
+>                   pmtu = packet->transport->asoc->pathmtu;
+>           else
+>                   pmtu = packet->transport->pathmtu;
+here the returned pmtu will be 512
 
-          /* Decide if we need to fragment or resubmit later. */
-          if (psize + chunk_len > pmtu) {
-                  /* It's OK to fragment at IP level if any one of the following
-                   * is true:
-                   *      1. The packet is empty (meaning this chunk is greater
-                   *         the MTU)
-                   *      2. The packet doesn't have any data in it yet and data
-                   *         requires authentication.
-                   */
-                  if (sctp_packet_empty(packet) ||
-                      (!packet->has_data && chunk->auth)) {
-                          /* We no longer do re-fragmentation.
-                           * Just fragment at the IP layer, if we
-                           * actually hit this condition
-                           */
-                          packet->ipfragok = 1;
-                          goto out;
-                  }
+> 
+>           /* Decide if we need to fragment or resubmit later. */
+>           if (psize + chunk_len > pmtu) {
+This branch will not be taken as the packet length is less then 512
 
-Why the above doesn't handle it already?
+>            }
+> 
+And the whole function will return SCTP_XMIT_OK without setting
+ipfragok.
 
+I think the idea of never going bellow 512 in sctp_dst_mtu() is to
+reduce overhead of SCTP headers, which is fine, but when we do that,
+we must be sure to allow the IP fragmentation, which is currently
+missing.
+
+The other option would be to keep track of the real MTU in pathmtu
+and perform max(512, pathmtu) in sctp_packet_will_fit() function.
+
+Not sure when exactly this got broken, but using MTU less than 512
+used to work in 4.9.
+  Petr
