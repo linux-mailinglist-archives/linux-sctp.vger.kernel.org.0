@@ -2,80 +2,104 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D458A2A89CC
-	for <lists+linux-sctp@lfdr.de>; Thu,  5 Nov 2020 23:29:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F22252A91BF
+	for <lists+linux-sctp@lfdr.de>; Fri,  6 Nov 2020 09:46:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732086AbgKEW3c (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 5 Nov 2020 17:29:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47512 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726996AbgKEW3b (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 5 Nov 2020 17:29:31 -0500
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C15FA206CA;
-        Thu,  5 Nov 2020 22:29:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604615371;
-        bh=DobVJld3XOD8+niF6lsRIvou3qGiaczfo6HD3Wwn9Yo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=zkfizXwJpxLPmDsNoAYb/Usn4nFHEY42fMDSUCL3uRmIFknA8GC7awJejdsCaew1t
-         76hrCQF7Uom4o2KyBDjafsfse0ejX0bUEyJ5mCeooiBCBqYInG9UGrBWFghtMynM2m
-         J3wvcAO+ghtyPZgf1hN4aLamnMPBvTqPmrYSuSoQ=
-Date:   Thu, 5 Nov 2020 14:29:27 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     Xin Long <lucien.xin@gmail.com>,
-        network dev <netdev@vger.kernel.org>,
-        linux-sctp@vger.kernel.org, Neil Horman <nhorman@tuxdriver.com>,
-        davem@davemloft.net
-Subject: Re: [PATCH net-next] sctp: bring inet(6)_skb_parm back to
- sctp_input_cb
-Message-ID: <20201105142927.521f323a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201105034909.GJ11030@localhost.localdomain>
-References: <136c1a7a419341487c504be6d1996928d9d16e02.1604472932.git.lucien.xin@gmail.com>
-        <20201105034909.GJ11030@localhost.localdomain>
+        id S1726242AbgKFIqj (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 6 Nov 2020 03:46:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46368 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725830AbgKFIqj (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 6 Nov 2020 03:46:39 -0500
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85B4C0613CF;
+        Fri,  6 Nov 2020 00:46:38 -0800 (PST)
+Received: by mail-qk1-x742.google.com with SMTP id c27so407818qko.10;
+        Fri, 06 Nov 2020 00:46:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=d3ntAnKa8/mYLGzPmrDnpX+SS9nceIT0yXThvuLk7dA=;
+        b=PeMII59gOf7WuG2rlMrNUnfKKkKYzZ7Ef8+qFoNOUO1MT13N9+2o8BRfkNPlszNr9Z
+         pUtu9jzfVSLgV9O956BWD4k45Wz8Z2stMnaWCKoL9EdO0aEszica/DCfev6sTb1BAknl
+         pfkRrR6MtV/tYlny/Cy2cujiB6W7qiviGEdZq42BeYry0fGG9FUqjgZaBhZWNZDo0GhR
+         fGbn1lLLCLAWHz9sUD9A3YrCWOsvbc4QziPEbqREM4W3QswdwGk1vtqcMw2TU5LhGbI7
+         kwEpMh/EzjhIS0R5uJFZ3WTVTja9+7L6htx4c18BL3Znpfu3aGTf3h7FGXLy9VBKnVwE
+         U5RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=d3ntAnKa8/mYLGzPmrDnpX+SS9nceIT0yXThvuLk7dA=;
+        b=loC1CQgHFdATcGwriiIJJLkk4g0KICNBW08Pp74t/fdOcaf7RVV3LVou48dkbWDnzR
+         2wWfEqZw+TNXJ/mYmkmNrb0QO7dBQ8ZMHd3XiwGAMj8LPBpe64ztgoPY8OdO08Dcf9fx
+         mdv8euzjvqpakR1QBs19xf7TxoDX0pCUt06TgXmHm7BgtWgUe0lCHtzb71RF7eJNaziU
+         0wtiWzVlOrvJETE6RG1P2rq2m89f98WdVas1qodtW99kznRIdg8DUBteGgxS185ARoNZ
+         0ilfxp1mzepaaEGZ51BA/2/7ZQGR7ypD2wnpNAUjid81aU1C31FFVl1IrpWrzfHDOcPF
+         D+vg==
+X-Gm-Message-State: AOAM532qw91QUMMmruwuqGUeUBpkCAxa8y1Q4D+FsoD1UEnx1FtKa7lV
+        fuxnGfi++fBq2Zky9IKSH3AGp6QuExoBrQ==
+X-Google-Smtp-Source: ABdhPJzGjNx6q1Eui0yJdJ24MIkr65ePf5mdy58YV3RH3FKIUM0P+k+G7LaUPxrniWQj+SXrwj/UZg==
+X-Received: by 2002:a37:9b48:: with SMTP id d69mr544640qke.435.1604652397999;
+        Fri, 06 Nov 2020 00:46:37 -0800 (PST)
+Received: from localhost.localdomain ([177.220.172.74])
+        by smtp.gmail.com with ESMTPSA id r8sm188681qkm.115.2020.11.06.00.46.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Nov 2020 00:46:37 -0800 (PST)
+Received: by localhost.localdomain (Postfix, from userid 1000)
+        id D4BF4C1B80; Fri,  6 Nov 2020 05:46:34 -0300 (-03)
+Date:   Fri, 6 Nov 2020 05:46:34 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Petr Malat <oss@malat.biz>
+Cc:     linux-sctp@vger.kernel.org, Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sctp: Fix sending when PMTU is less than
+ SCTP_DEFAULT_MINSEGMENT
+Message-ID: <20201106084634.GA3556@localhost.localdomain>
+References: <20201105103946.18771-1-oss@malat.biz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201105103946.18771-1-oss@malat.biz>
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, 5 Nov 2020 00:49:09 -0300 Marcelo Ricardo Leitner wrote:
-> On Wed, Nov 04, 2020 at 02:55:32PM +0800, Xin Long wrote:
-> > inet(6)_skb_parm was removed from sctp_input_cb by Commit a1dd2cf2f1ae
-> > ("sctp: allow changing transport encap_port by peer packets"), as it
-> > thought sctp_input_cb->header is not used any more in SCTP.
-> > 
-> > syzbot reported a crash:
-> > 
-> >   [ ] BUG: KASAN: use-after-free in decode_session6+0xe7c/0x1580
-> >   [ ]
-> >   [ ] Call Trace:
-> >   [ ]  <IRQ>
-> >   [ ]  dump_stack+0x107/0x163
-> >   [ ]  kasan_report.cold+0x1f/0x37
-> >   [ ]  decode_session6+0xe7c/0x1580
-> >   [ ]  __xfrm_policy_check+0x2fa/0x2850
-> >   [ ]  sctp_rcv+0x12b0/0x2e30
-> >   [ ]  sctp6_rcv+0x22/0x40
-> >   [ ]  ip6_protocol_deliver_rcu+0x2e8/0x1680
-> >   [ ]  ip6_input_finish+0x7f/0x160
-> >   [ ]  ip6_input+0x9c/0xd0
-> >   [ ]  ipv6_rcv+0x28e/0x3c0
-> > 
-> > It was caused by sctp_input_cb->header/IP6CB(skb) still used in sctp rx
-> > path decode_session6() but some members overwritten by sctp6_rcv().
-> > 
-> > This patch is to fix it by bring inet(6)_skb_parm back to sctp_input_cb
-> > and not overwriting it in sctp4/6_rcv() and sctp_udp_rcv().
-> > 
-> > Reported-by: syzbot+5be8aebb1b7dfa90ef31@syzkaller.appspotmail.com
-> > Fixes: a1dd2cf2f1ae ("sctp: allow changing transport encap_port by peer packets")
-> > Signed-off-by: Xin Long <lucien.xin@gmail.com>  
-> 
-> Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+On Thu, Nov 05, 2020 at 11:39:47AM +0100, Petr Malat wrote:
+> Function sctp_dst_mtu() never returns lower MTU than
+> SCTP_TRUNC4(SCTP_DEFAULT_MINSEGMENT) even when the actual MTU is less,
+> in which case we rely on the IP fragmentation and must enable it.
 
-Applied, thanks!
+This should be being handled at sctp_packet_will_fit():
+
+          psize = packet->size;
+          if (packet->transport->asoc)
+                  pmtu = packet->transport->asoc->pathmtu;
+          else
+                  pmtu = packet->transport->pathmtu;
+
+          /* Decide if we need to fragment or resubmit later. */
+          if (psize + chunk_len > pmtu) {
+                  /* It's OK to fragment at IP level if any one of the following
+                   * is true:
+                   *      1. The packet is empty (meaning this chunk is greater
+                   *         the MTU)
+                   *      2. The packet doesn't have any data in it yet and data
+                   *         requires authentication.
+                   */
+                  if (sctp_packet_empty(packet) ||
+                      (!packet->has_data && chunk->auth)) {
+                          /* We no longer do re-fragmentation.
+                           * Just fragment at the IP layer, if we
+                           * actually hit this condition
+                           */
+                          packet->ipfragok = 1;
+                          goto out;
+                  }
+
+Why the above doesn't handle it already?
+
