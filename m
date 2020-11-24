@@ -2,22 +2,33 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E8F2C1A70
-	for <lists+linux-sctp@lfdr.de>; Tue, 24 Nov 2020 02:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 356FA2C1AAC
+	for <lists+linux-sctp@lfdr.de>; Tue, 24 Nov 2020 02:12:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729220AbgKXA6t (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 23 Nov 2020 19:58:49 -0500
-Received: from kvm5.telegraphics.com.au ([98.124.60.144]:51159 "EHLO
-        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726803AbgKXA6q (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 23 Nov 2020 19:58:46 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by kvm5.telegraphics.com.au (Postfix) with ESMTP id 0EF842A8E0;
-        Mon, 23 Nov 2020 19:58:39 -0500 (EST)
-Date:   Tue, 24 Nov 2020 11:58:37 +1100 (AEDT)
-From:   Finn Thain <fthain@telegraphics.com.au>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        id S1728796AbgKXBFu (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 23 Nov 2020 20:05:50 -0500
+Received: from smtprelay0070.hostedemail.com ([216.40.44.70]:34022 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728137AbgKXBFq (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Mon, 23 Nov 2020 20:05:46 -0500
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay08.hostedemail.com (Postfix) with ESMTP id C6794182CED28;
+        Tue, 24 Nov 2020 01:05:42 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1538:1567:1593:1594:1711:1714:1730:1747:1777:1792:2393:2559:2562:2828:3138:3139:3140:3141:3142:3622:3865:3867:3868:3872:3874:4321:5007:6119:6742:6743:7903:10004:10400:10848:11658:11914:12297:12740:12760:12895:13069:13311:13357:13439:14659:21080:21627:30012:30054:30060:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: sea70_4d178da27369
+X-Filterd-Recvd-Size: 4565
+Received: from XPS-9350.home (unknown [47.151.128.180])
+        (Authenticated sender: joe@perches.com)
+        by omf04.hostedemail.com (Postfix) with ESMTPA;
+        Tue, 24 Nov 2020 01:05:31 +0000 (UTC)
+Message-ID: <e72a1aaef8673553a3ee9dfa033d6e893e00abcd.camel@perches.com>
+Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
+From:   Joe Perches <joe@perches.com>
+To:     Finn Thain <fthain@telegraphics.com.au>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
         Kees Cook <keescook@chromium.org>,
         Jakub Kicinski <kuba@kernel.org>,
         "Gustavo A. R. Silva" <gustavoars@kernel.org>,
@@ -69,119 +80,35 @@ cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
         xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
         Nick Desaulniers <ndesaulniers@google.com>,
         Nathan Chancellor <natechancellor@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>
-Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
-In-Reply-To: <CANiq72=z+tmuey9wj3Kk7wX5s0hTHpsQdLhAqcOVNrHon6xn5Q@mail.gmail.com>
-Message-ID: <alpine.LNX.2.23.453.2011241036520.7@nippy.intranet>
-References: <cover.1605896059.git.gustavoars@kernel.org> <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com> <202011201129.B13FDB3C@keescook> <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com> <202011220816.8B6591A@keescook>
- <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com> <CANiq72nZrHWTA4_Msg6MP9snTyenC6-eGfD27CyfNSu7QoVZbw@mail.gmail.com> <alpine.LNX.2.23.453.2011230938390.7@nippy.intranet>
- <CANiq72=z+tmuey9wj3Kk7wX5s0hTHpsQdLhAqcOVNrHon6xn5Q@mail.gmail.com>
+        Miguel Ojeda <ojeda@kernel.org>
+Date:   Mon, 23 Nov 2020 17:05:30 -0800
+In-Reply-To: <alpine.LNX.2.23.453.2011241036520.7@nippy.intranet>
+References: <cover.1605896059.git.gustavoars@kernel.org>
+         <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+         <202011201129.B13FDB3C@keescook>
+         <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+         <202011220816.8B6591A@keescook>
+         <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
+         <CANiq72nZrHWTA4_Msg6MP9snTyenC6-eGfD27CyfNSu7QoVZbw@mail.gmail.com>
+         <alpine.LNX.2.23.453.2011230938390.7@nippy.intranet>
+         <CANiq72=z+tmuey9wj3Kk7wX5s0hTHpsQdLhAqcOVNrHon6xn5Q@mail.gmail.com>
+         <alpine.LNX.2.23.453.2011241036520.7@nippy.intranet>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.38.1-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
+On Tue, 2020-11-24 at 11:58 +1100, Finn Thain wrote:
+> it's not for me to prove that such patches don't affect code 
+> generation. That's for the patch author and (unfortunately) for reviewers.
 
-On Mon, 23 Nov 2020, Miguel Ojeda wrote:
+Ideally, that proof would be provided by the compilation system itself
+and not patch authors nor reviewers nor maintainers.
 
-> On Mon, 23 Nov 2020, Finn Thain wrote:
-> 
-> > On Sun, 22 Nov 2020, Miguel Ojeda wrote:
-> > 
-> > > 
-> > > It isn't that much effort, isn't it? Plus we need to take into 
-> > > account the future mistakes that it might prevent, too.
-> > 
-> > We should also take into account optimisim about future improvements 
-> > in tooling.
-> > 
-> Not sure what you mean here. There is no reliable way to guess what the 
-> intention was with a missing fallthrough, even if you parsed whitespace 
-> and indentation.
-> 
+Unfortunately gcc does not guarantee repeatability or deterministic output.
+To my knowledge, neither does clang.
 
-What I meant was that you've used pessimism as if it was fact.
 
-For example, "There is no way to guess what the effect would be if the 
-compiler trained programmers to add a knee-jerk 'break' statement to avoid 
-a warning".
-
-Moreover, what I meant was that preventing programmer mistakes is a 
-problem to be solved by development tools. The idea that retro-fitting new 
-language constructs onto mature code is somehow necessary to "prevent 
-future mistakes" is entirely questionable.
-
-> > > So even if there were zero problems found so far, it is still a 
-> > > positive change.
-> > > 
-> > 
-> > It is if you want to spin it that way.
-> > 
-> How is that a "spin"? It is a fact that we won't get *implicit* 
-> fallthrough mistakes anymore (in particular if we make it a hard error).
-> 
-
-Perhaps "handwaving" is a better term?
-
-> > > I would agree if these changes were high risk, though; but they are 
-> > > almost trivial.
-> > > 
-> > 
-> > This is trivial:
-> > 
-> >  case 1:
-> >         this();
-> > +       fallthrough;
-> >  case 2:
-> >         that();
-> > 
-> > But what we inevitably get is changes like this:
-> > 
-> >  case 3:
-> >         this();
-> > +       break;
-> >  case 4:
-> >         hmmm();
-> > 
-> > Why? Mainly to silence the compiler. Also because the patch author 
-> > argued successfully that they had found a theoretical bug, often in 
-> > mature code.
-> > 
-> If someone changes control flow, that is on them. Every kernel developer 
-> knows what `break` does.
-> 
-
-Sure. And if you put -Wimplicit-fallthrough into the Makefile and if that 
-leads to well-intentioned patches that cause regressions, it is partly on 
-you.
-
-Have you ever considered the overall cost of the countless 
--Wpresume-incompetence flags?
-
-Perhaps you pay the power bill for a build farm that produces logs that 
-no-one reads? Perhaps you've run git bisect, knowing that the compiler 
-messages are not interesting? Or compiled software in using a language 
-that generates impenetrable messages? If so, here's a tip:
-
-# grep CFLAGS /etc/portage/make.conf 
-CFLAGS="... -Wno-all -Wno-extra ..."
-CXXFLAGS="${CFLAGS}"
-
-Now allow me some pessimism: the hardware upgrades, gigawatt hours and 
-wait time attributable to obligatory static analyses are a net loss.
-
-> > But is anyone keeping score of the regressions? If unreported bugs 
-> > count, what about unreported regressions?
-> > 
-> Introducing `fallthrough` does not change semantics. If you are really 
-> keen, you can always compare the objects because the generated code 
-> shouldn't change.
-> 
-
-No, it's not for me to prove that such patches don't affect code 
-generation. That's for the patch author and (unfortunately) for reviewers.
-
-> Cheers,
-> Miguel
-> 
