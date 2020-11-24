@@ -2,145 +2,177 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C082C3473
-	for <lists+linux-sctp@lfdr.de>; Wed, 25 Nov 2020 00:17:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C512C34EA
+	for <lists+linux-sctp@lfdr.de>; Wed, 25 Nov 2020 00:47:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730736AbgKXXQ0 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 24 Nov 2020 18:16:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40360 "EHLO
+        id S2389670AbgKXXqm (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 24 Nov 2020 18:46:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732568AbgKXXQG (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 24 Nov 2020 18:16:06 -0500
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA23C0613D6;
-        Tue, 24 Nov 2020 15:16:05 -0800 (PST)
-Received: by mail-qk1-x744.google.com with SMTP id d9so1044435qke.8;
-        Tue, 24 Nov 2020 15:16:05 -0800 (PST)
+        with ESMTP id S2389467AbgKXXqh (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 24 Nov 2020 18:46:37 -0500
+Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16964C0613D6;
+        Tue, 24 Nov 2020 15:46:35 -0800 (PST)
+Received: by mail-qk1-x743.google.com with SMTP id v143so1231304qkb.2;
+        Tue, 24 Nov 2020 15:46:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Jbdr1BEjJUZERXYDOU4Gv/mlbgAbUhdHLiICpsfXV1E=;
-        b=l+vUmSI7i0l7fGuVwLPE5fOuxSSHusFrOEG0e9vJ5rcmJlRUOrCYTNMgOLszTPHVi8
-         kkm8fDq5tpugZyKejz3uk0cqdmJQS1mRaMRBkOrvbAyI5fs/P/fRtiJLDz+N02sHzTn9
-         5/inSz1Fbn+KfojwxtYTlcXPJfmsrqKqTBJHlwr9t4EjDd547DXA4VcN7evdsnVsuQ6p
-         BBfcG3FVJZcSml9If1GSG7EsdjE7zI8hFJDY7AHsK/qRYVzYo+XeozyqqdAfx+vCyNIu
-         chiyZGm6NoHt+eS3/xbHVpbDRehhnbGG6wOdrUeu9OVynRP4/UUYeZuXMpT7icG9n0vb
-         4oYg==
+        bh=H+rGPaoJ9R3rr7zK4cuxMwlBlLpdlGUAwlQnvIZjZd8=;
+        b=rGjC6KnGzC9NIfLo6IfoTM7C5TiZmv4q08vYNRt8cewMWpFhbX886WW47/gIiopas/
+         e2jKhT73QJs/dRAIbILcJdQSFnVW9dal1rOBoIKd0ECBe+nqcukIgJrBRfX2wbZlPbrR
+         27L+0GE9CXpbAta7TZEIdoDweQHp+sEvmypYMH9hyutdrnRkkklGbspFfFiZY+HYfDHj
+         jsH/8tjPy+0JiTdJWitSDoQxXZntWXoEWL0cWLR+fmdpM332GBoSCjfuWUHY88IWDiPh
+         04ztpEPYlCjpB7IXy1yQhW/otwe7DgKcwtOpyIrk5XdAw3ZKiOAkll08YWpT8S+NhzMx
+         e/Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Jbdr1BEjJUZERXYDOU4Gv/mlbgAbUhdHLiICpsfXV1E=;
-        b=lGxD+AO9Nt5RWTiUaNZ3nVX/cc00oVL/4cRagJbcpoK2zQUtc+Uryf2wVhH/gbwTjZ
-         h0cFnOEmPgl+Wpr0jIyynL5M9LYUq89uy6uyCha+tbEO/AnIQcauCGqvegZBmcWsKqHS
-         kRxhEFIdgmRR7ePxM7GD7I02bxt4A1ua/yfjHqOgXN7a3tYxqBlqMKsSeQ12Vjpt3Tfy
-         KHvrVeZ9OsMEx/86dV5OA7hfqNdK3MmLCTeZb5lsHmNal/RsWxiFozp2WAIxqGEWMXzk
-         jzL9nqHngOC/DpGh/Zo7uhnA9jYYK6NNTrimLl8ZYIrbf3r+YMVZwq3GwM5fv8ZNI9w2
-         LsFw==
-X-Gm-Message-State: AOAM530miFMuN0ApWHzqgCYSqXOCtnUVKs6LuJ8zi2LA+UD/1kUMzlFl
-        nGvGnVrBZa1jX8BhgCkikif6yU5i4IkQbYlsmhw=
-X-Google-Smtp-Source: ABdhPJzk8nFL+kqPtl4RF6lmqD43KwMnT4A8Oapd7ArTtvgjfEhtR30+WEgNSraaEzhK8tG/u1tJxvxiaOrV9LODN+o=
-X-Received: by 2002:a25:61c5:: with SMTP id v188mr748702ybb.422.1606259765056;
- Tue, 24 Nov 2020 15:16:05 -0800 (PST)
+        bh=H+rGPaoJ9R3rr7zK4cuxMwlBlLpdlGUAwlQnvIZjZd8=;
+        b=Q8UP4W0HGBkwtYdUGzC4W5wcRfwkwmxV+LOTgIizLDL5whLBTS7f/iGqJfniyi7Eup
+         Nn2GfgcTCPceWkSJ/IvDKZFFGlv6fhp+hZaqbyhJI23N/ZwqigiporL4NWPjuCb4ZS7A
+         EAtybcUExkAb/B6dJA3G82Hk//AYkujwJxt32VnH4pw4CR5mJRSof0VpsVxqzuU8aooF
+         LiGDuCP8YKA8aAwdVdriWK2cfIz8e5RbegXYl/ESyf2kqhnsVmq8AAAEVpLiC8z/wDRl
+         yscoc8UmTOdkDFQeFa/SfUpKXwbNyFCnm7+49/6OLggkhv87Zg2av0811qHAVU8Glu6n
+         QgBQ==
+X-Gm-Message-State: AOAM530z1OU9XtXekfaDmI3PfjVfPfIFfgfSBH3Y94eu0TmaXEbhTxDG
+        lrKRLphCsfWXGphZYVjvP7GkPNXxftvFO8I+bac=
+X-Google-Smtp-Source: ABdhPJzOwu2wFsHHn8A1YNPfZeoFLdmnMgNDFogUYxSXdSyfkKR4RJ+IXZpEdbdh4p7RHhstmUROclNZOq0Hltp8jFg=
+X-Received: by 2002:a5b:40e:: with SMTP id m14mr627984ybp.33.1606261594309;
+ Tue, 24 Nov 2020 15:46:34 -0800 (PST)
 MIME-Version: 1.0
-References: <202011201129.B13FDB3C@keescook> <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+References: <cover.1605896059.git.gustavoars@kernel.org> <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011201129.B13FDB3C@keescook> <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
  <202011220816.8B6591A@keescook> <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
- <ca071decb87cc7e905411423c05a48f9fd2f58d7.camel@perches.com>
- <0147972a72bc13f3629de8a32dee6f1f308994b5.camel@HansenPartnership.com>
- <d8d1e9add08cdd4158405e77762d4946037208f8.camel@perches.com>
- <dbd2cb703ed9eefa7dde9281ea26ab0f7acc8afe.camel@HansenPartnership.com>
- <20201123130348.GA3119@embeddedor> <8f5611bb015e044fa1c0a48147293923c2d904e4.camel@HansenPartnership.com>
- <202011241327.BB28F12F6@keescook> <alpine.LNX.2.23.453.2011250859290.15@nippy.intranet>
-In-Reply-To: <alpine.LNX.2.23.453.2011250859290.15@nippy.intranet>
+ <CANiq72nZrHWTA4_Msg6MP9snTyenC6-eGfD27CyfNSu7QoVZbw@mail.gmail.com>
+ <alpine.LNX.2.23.453.2011230938390.7@nippy.intranet> <CANiq72=z+tmuey9wj3Kk7wX5s0hTHpsQdLhAqcOVNrHon6xn5Q@mail.gmail.com>
+ <alpine.LNX.2.23.453.2011241036520.7@nippy.intranet>
+In-Reply-To: <alpine.LNX.2.23.453.2011241036520.7@nippy.intranet>
 From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 25 Nov 2020 00:15:54 +0100
-Message-ID: <CANiq72nUt57u5DG9rH=DB0DzQH7U6-QbG-2Ou+PyCY=p=_Ggag@mail.gmail.com>
-Subject: Re: [Intel-wired-lan] [PATCH 000/141] Fix fall-through warnings for Clang
+Date:   Wed, 25 Nov 2020 00:46:23 +0100
+Message-ID: <CANiq72=Ybm2MHmOizo1xQ_QYGuvbthtnLbwCkr8AFb8PcfmuQw@mail.gmail.com>
+Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
 To:     Finn Thain <fthain@telegraphics.com.au>
-Cc:     Kees Cook <keescook@chromium.org>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Kees Cook <keescook@chromium.org>,
+        Jakub Kicinski <kuba@kernel.org>,
         "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Joe Perches <joe@perches.com>,
-        Jakub Kicinski <kuba@kernel.org>, alsa-devel@alsa-project.org,
-        linux-atm-general@lists.sourceforge.net,
-        reiserfs-devel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-kernel <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        linux-ide@vger.kernel.org, dm-devel@redhat.com,
-        keyrings@vger.kernel.org, linux-mtd@lists.infradead.org,
-        GR-everest-linux-l2@marvell.com, wcn36xx@lists.infradead.org,
-        samba-technical@lists.samba.org, linux-i3c@lists.infradead.org,
-        linux1394-devel@lists.sourceforge.net,
-        linux-afs@lists.infradead.org,
-        usb-storage@lists.one-eyed-alien.net, drbd-dev@lists.linbit.com,
-        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
-        rds-devel@oss.oracle.com,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-scsi@vger.kernel.org, linux-rdma@vger.kernel.org,
-        oss-drivers@netronome.com, bridge@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org,
-        linux-stm32@st-md-mailman.stormreply.com, cluster-devel@redhat.com,
-        linux-acpi@vger.kernel.org, coreteam@netfilter.org,
-        intel-wired-lan@lists.osuosl.org,
-        linux-input <linux-input@vger.kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        tipc-discussion@lists.sourceforge.net,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-watchdog@vger.kernel.org, selinux@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        linux-geode@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-gpio@vger.kernel.org,
-        op-tee@lists.trustedfirmware.org,
-        linux-mediatek@lists.infradead.org, xen-devel@lists.xenproject.org,
-        nouveau@lists.freedesktop.org, linux-hams@vger.kernel.org,
-        ceph-devel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
+        alsa-devel@alsa-project.org, amd-gfx@lists.freedesktop.org,
+        bridge@lists.linux-foundation.org, ceph-devel@vger.kernel.org,
+        cluster-devel@redhat.com, coreteam@netfilter.org,
+        devel@driverdev.osuosl.org, dm-devel@redhat.com,
+        drbd-dev@lists.linbit.com, dri-devel@lists.freedesktop.org,
+        GR-everest-linux-l2@marvell.com, GR-Linux-NIC-Dev@marvell.com,
+        intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
+        keyrings@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        linux-acpi@vger.kernel.org, linux-afs@lists.infradead.org,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-hwmon@vger.kernel.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        linux-nfs@vger.kernel.org, GR-Linux-NIC-Dev@marvell.com,
-        Linux-MM <linux-mm@kvack.org>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-decnet-user@lists.sourceforge.net, linux-mmc@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-usb@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net,
+        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-cifs@vger.kernel.org,
         Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-integrity@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>
+        linux-decnet-user@lists.sourceforge.net,
+        Ext4 Developers List <linux-ext4@vger.kernel.org>,
+        linux-fbdev@vger.kernel.org, linux-geode@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-hams@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
+        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input <linux-input@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-mmc@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
+        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
+        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
+        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
+        selinux@vger.kernel.org, target-devel@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net,
+        usb-storage@lists.one-eyed-alien.net,
+        virtualization@lists.linux-foundation.org,
+        wcn36xx@lists.infradead.org,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Nov 24, 2020 at 11:24 PM Finn Thain <fthain@telegraphics.com.au> wrote:
+On Tue, Nov 24, 2020 at 1:58 AM Finn Thain <fthain@telegraphics.com.au> wrote:
 >
-> These statements are not "missing" unless you presume that code written
-> before the latest de facto language spec was written should somehow be
-> held to that spec.
+> What I meant was that you've used pessimism as if it was fact.
 
-There is no "language spec" the kernel adheres to. Even if it did,
-kernel code is not frozen. If an improvement is found, it should be
-applied.
+"future mistakes that it might prevent" is neither pessimism nor states a fact.
 
-> If the 'fallthrough' statement is not part of the latest draft spec then
-> we should ask why not before we embrace it. Being that the kernel still
-> prefers -std=gnu89 you might want to consider what has prevented
-> -std=gnu99 or -std=gnu2x etc.
+> For example, "There is no way to guess what the effect would be if the
+> compiler trained programmers to add a knee-jerk 'break' statement to avoid
+> a warning".
 
-The C standard has nothing to do with this. We use compiler extensions
-of several kinds, for many years. Even discounting those extensions,
-the kernel is not even conforming to C due to e.g. strict aliasing. I
-am not sure what you are trying to argue here.
+It is only knee-jerk if you think you are infallible.
 
-But, since you insist: yes, the `fallthrough` attribute is in the
-current C2x draft.
+> Moreover, what I meant was that preventing programmer mistakes is a
+> problem to be solved by development tools
+
+This warning comes from a development tool -- the compiler.
+
+> The idea that retro-fitting new
+> language constructs onto mature code is somehow necessary to "prevent
+> future mistakes" is entirely questionable.
+
+The kernel is not a frozen codebase.
+
+Further, "mature code vs. risk of change" arguments don't apply here
+because the semantics of the program and binary output isn't changing.
+
+> Sure. And if you put -Wimplicit-fallthrough into the Makefile and if that
+> leads to well-intentioned patches that cause regressions, it is partly on
+> you.
+
+Again: adding a `fallthrough` does not change the program semantics.
+If you are a maintainer and want to cross-check, compare the codegen.
+
+> Have you ever considered the overall cost of the countless
+> -Wpresume-incompetence flags?
+
+Yeah: negative. On the other hand, the overall cost of the countless
+-fI-am-infallible flags is very noticeable.
+
+> Perhaps you pay the power bill for a build farm that produces logs that
+> no-one reads? Perhaps you've run git bisect, knowing that the compiler
+> messages are not interesting? Or compiled software in using a language
+> that generates impenetrable messages? If so, here's a tip:
+>
+> # grep CFLAGS /etc/portage/make.conf
+> CFLAGS="... -Wno-all -Wno-extra ..."
+> CXXFLAGS="${CFLAGS}"
+>
+> Now allow me some pessimism: the hardware upgrades, gigawatt hours and
+> wait time attributable to obligatory static analyses are a net loss.
+
+If you really believe compiler warnings and static analysis are
+useless and costly, I think there is not much point in continuing the
+discussion.
+
+> No, it's not for me to prove that such patches don't affect code
+> generation. That's for the patch author and (unfortunately) for reviewers.
+
+I was not asking you to prove it. I am stating that proving it is very easy.
 
 Cheers,
 Miguel
