@@ -2,107 +2,143 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 957FF2C2A4F
-	for <lists+linux-sctp@lfdr.de>; Tue, 24 Nov 2020 15:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 539C92C32D6
+	for <lists+linux-sctp@lfdr.de>; Tue, 24 Nov 2020 22:27:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389370AbgKXOrv (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 24 Nov 2020 09:47:51 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58484 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388174AbgKXOrt (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Tue, 24 Nov 2020 09:47:49 -0500
-Received: from embeddedor (187-162-31-110.static.axtel.net [187.162.31.110])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A5073206F9;
-        Tue, 24 Nov 2020 14:47:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606229266;
-        bh=KHWIOvsVxIgxzJ3ANvrXr+IcifXvCH3d9eC+5p4MJwo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tWoPDQgvsKVPCfxibPNl9c0zBQ9NfBrnsDyv8UIAtPJxHLfF4o1CuP3vwUt19y/P8
-         Y66kkjj2Cim4kMyRQiiYzb1whNr+v/N+nMKfcHqv3RaX8mBnUDrFmNddDbw9/dIVnH
-         xirANyC4hb8bYXXRvxw8qG9eYp8JWf8UX9D38PQM=
-Date:   Tue, 24 Nov 2020 08:47:54 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-sctp@vger.kernel.org,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        linux-hardening@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net, linux-block@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        bridge@lists.linux-foundation.org, GR-Linux-NIC-Dev@marvell.com,
-        rds-devel@oss.oracle.com, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, wcn36xx@lists.infradead.org,
-        linux-wireless@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        reiserfs-devel@vger.kernel.org, oss-drivers@netronome.com,
-        linux-arm-kernel@lists.infradead.org, alsa-devel@alsa-project.org,
-        virtualization@lists.linux-foundation.org,
-        Joe Perches <joe@perches.com>, patches@opensource.cirrus.com,
-        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-cifs@vger.kernel.org, coreteam@netfilter.org,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-scsi@vger.kernel.org, linux-afs@lists.infradead.org,
-        netfilter-devel@vger.kernel.org, linux-geode@lists.infradead.org,
-        drbd-dev@lists.linbit.com, linux-ext4@vger.kernel.org,
-        linux-hams@vger.kernel.org, target-devel@vger.kernel.org,
-        samba-technical@lists.samba.org,
-        tipc-discussion@lists.sourceforge.net,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-renesas-soc@vger.kernel.org, linux-input@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, linux-nfs@vger.kernel.org,
-        devel@driverdev.osuosl.org, selinux@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net, linux-iio@vger.kernel.org,
-        linux-i3c@lists.infradead.org, Miguel Ojeda <ojeda@kernel.org>,
-        linux-can@vger.kernel.org, linux-integrity@vger.kernel.org,
-        GR-everest-linux-l2@marvell.com, keyrings@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-usb@vger.kernel.org,
-        nouveau@lists.freedesktop.org, x86@kernel.org,
-        xen-devel@lists.xenproject.org, linux-mm@kvack.org,
-        cluster-devel@redhat.com, linux1394-devel@lists.sourceforge.net,
+        id S1732069AbgKXV0A (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 24 Nov 2020 16:26:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731592AbgKXVZo (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 24 Nov 2020 16:25:44 -0500
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2D9C08C5F2
+        for <linux-sctp@vger.kernel.org>; Tue, 24 Nov 2020 13:25:44 -0800 (PST)
+Received: by mail-pg1-x541.google.com with SMTP id 62so321085pgg.12
+        for <linux-sctp@vger.kernel.org>; Tue, 24 Nov 2020 13:25:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Hc7xHQdcWqcI1RL6yWHK3qM7+D3PcB+9wJ1f+Y4kOZ8=;
+        b=oKmDT/E0BiqfYtxGd9S8VgvaixpTRLnYMRrsUV9kaRuJo3R/5oNlOHAboaJA72rvz5
+         cPy+dYNpKpp/tW1abpWiBH/rmtZxXE/MLGj7m5uMt/n+RU1YTE1Rw6QIxNLzAajuHLbW
+         OV/WWZm28UqOigi5ggHh0BMVZishCwQGNb1Ns=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Hc7xHQdcWqcI1RL6yWHK3qM7+D3PcB+9wJ1f+Y4kOZ8=;
+        b=F9yIXhDunqdhhXMi+DLwO9fhGZ+pbQdszVUPSAdp2AFAoLN9yJtWCuoC5vJdsvMTde
+         MMFAkHNyqJCtR7LswPpSQ3zVngu1QyCzvICuUcTx/bXXOaD+G5unnIvlWQVbPzPSEiPe
+         8FGkq4cr2pTD1s2gPAq9eejezkR5z7zFYgtNCbY+H1xIq9fIoW6htoUwn3WM/sj4U9NM
+         TSpIPuTSEaqAwizWJGArPleLnrQQ3MV0RDjXchMm2OURM3nUEqiq/BAfKz5+/fsJhBcZ
+         9QJ4NqgaCyUKLdceSAUyzH3Ud7V8RlyuwS9PfgTz8xqitHHTjiDZlPMMmAf9MnNdukq3
+         6cJA==
+X-Gm-Message-State: AOAM53336QCrOkGESf7Yr2p9GyJp/42j0NV7kUiGFk5lxf4J4ArXpG+C
+        W3XTRm7fm5cl8iaDu4bUQ7YC/Q==
+X-Google-Smtp-Source: ABdhPJxsDEVO/Xg3mAfgqSRlRs3zdio+GHjlgjpaUz/oJCQVSbFGge5HhgP1eTMpBX6raLsCCheJTQ==
+X-Received: by 2002:a17:90a:c695:: with SMTP id n21mr214694pjt.86.1606253143481;
+        Tue, 24 Nov 2020 13:25:43 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id l10sm163395pjg.3.2020.11.24.13.25.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Nov 2020 13:25:41 -0800 (PST)
+Date:   Tue, 24 Nov 2020 13:25:40 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, alsa-devel@alsa-project.org,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        bridge@lists.linux-foundation.org, ceph-devel@vger.kernel.org,
+        cluster-devel@redhat.com, coreteam@netfilter.org,
+        devel@driverdev.osuosl.org, dm-devel@redhat.com,
+        drbd-dev@lists.linbit.com,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        GR-everest-linux-l2@marvell.com, GR-Linux-NIC-Dev@marvell.com,
+        intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
+        keyrings@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        linux-acpi@vger.kernel.org, linux-afs@lists.infradead.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-atm-general@lists.sourceforge.net,
+        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-cifs@vger.kernel.org,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
         linux-decnet-user@lists.sourceforge.net,
-        op-tee@lists.trustedfirmware.org, linux-ide@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, linux-acpi@vger.kernel.org,
-        dm-devel@redhat.com, linux-watchdog@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-mtd@lists.infradead.org,
-        ceph-devel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        netdev@vger.kernel.org
+        linux-ext4@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-geode@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-hams@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-i3c@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-rdma@vger.kernel.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
+        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
+        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
+        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
+        selinux@vger.kernel.org, target-devel@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net,
+        usb-storage@lists.one-eyed-alien.net,
+        virtualization@lists.linux-foundation.org,
+        wcn36xx@lists.infradead.org,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>
 Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
-Message-ID: <20201124144754.GL16084@embeddedor>
+Message-ID: <202011241324.B3439A2@keescook>
 References: <cover.1605896059.git.gustavoars@kernel.org>
- <160616392671.21180.16517492185091399884.b4-ty@kernel.org>
+ <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011201129.B13FDB3C@keescook>
+ <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011220816.8B6591A@keescook>
+ <CAKwvOdntVfXj2WRR5n6Kw7BfG7FdKpTeHeh5nPu5AzwVMhOHTg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <160616392671.21180.16517492185091399884.b4-ty@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CAKwvOdntVfXj2WRR5n6Kw7BfG7FdKpTeHeh5nPu5AzwVMhOHTg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Mon, Nov 23, 2020 at 08:38:46PM +0000, Mark Brown wrote:
-> On Fri, 20 Nov 2020 12:21:39 -0600, Gustavo A. R. Silva wrote:
-> > This series aims to fix almost all remaining fall-through warnings in
-> > order to enable -Wimplicit-fallthrough for Clang.
-> > 
-> > In preparation to enable -Wimplicit-fallthrough for Clang, explicitly
-> > add multiple break/goto/return/fallthrough statements instead of just
-> > letting the code fall through to the next case.
-> > 
-> > [...]
+On Mon, Nov 23, 2020 at 05:32:51PM -0800, Nick Desaulniers wrote:
+> On Sun, Nov 22, 2020 at 8:17 AM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > On Fri, Nov 20, 2020 at 11:51:42AM -0800, Jakub Kicinski wrote:
+> > > If none of the 140 patches here fix a real bug, and there is no change
+> > > to machine code then it sounds to me like a W=2 kind of a warning.
+> >
+> > FWIW, this series has found at least one bug so far:
+> > https://lore.kernel.org/lkml/CAFCwf11izHF=g1mGry1fE5kvFFFrxzhPSM6qKAO8gxSp=Kr_CQ@mail.gmail.com/
 > 
-> Applied to
+> So looks like the bulk of these are:
+> switch (x) {
+>   case 0:
+>     ++x;
+>   default:
+>     break;
+> }
 > 
->    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
-> 
-> Thanks!
-> 
-> [1/1] regulator: as3722: Fix fall-through warnings for Clang
->       commit: b52b417ccac4fae5b1f2ec4f1d46eb91e4493dc5
+> I have a patch that fixes those up for clang:
+> https://reviews.llvm.org/D91895
 
-Thank you, Mark.
---
-Gustavo
+I still think this isn't right -- it's a case statement that runs off
+the end without an explicit flow control determination. I think Clang is
+right to warn for these, and GCC should also warn.
+
+-- 
+Kees Cook
