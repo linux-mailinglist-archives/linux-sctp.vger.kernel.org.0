@@ -2,95 +2,134 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC32A2F1285
-	for <lists+linux-sctp@lfdr.de>; Mon, 11 Jan 2021 13:46:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D08BB2F1449
+	for <lists+linux-sctp@lfdr.de>; Mon, 11 Jan 2021 14:23:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727180AbhAKMqU (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 11 Jan 2021 07:46:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43540 "EHLO
+        id S1728923AbhAKNWy (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 11 Jan 2021 08:22:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727113AbhAKMqU (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 11 Jan 2021 07:46:20 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C3EC061795;
-        Mon, 11 Jan 2021 04:45:40 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id j1so9466506pld.3;
-        Mon, 11 Jan 2021 04:45:40 -0800 (PST)
+        with ESMTP id S1728572AbhAKNWx (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 11 Jan 2021 08:22:53 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B982EC061786;
+        Mon, 11 Jan 2021 05:22:12 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id b5so10577276pjl.0;
+        Mon, 11 Jan 2021 05:22:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=6y2PAyUtL03Nbrmo9xCdhafDQCYKT4PC/qS4knYVGiM=;
-        b=SaBbLSbGW8fO/ng0tqWOzQ/i6ZcO94hAHvzLzOapfxzlSJwlNeFl+34uiqEtESjC6Y
-         EPqn5eXO9AWR7JyLHMNwvW6QGYeI4BcLOrHhDijJmfTc8dOr7C5JhR9kdw/BXB9uR1zM
-         p8aCqc43jDZ4w9yNSXF/tQCbLoOZQ9FO/bHZl1kmuHxrtvXlvvuVBnMIZ9L5Ef1nPlU6
-         9PqDhzTbf7B18xEaaRPnigNO4FMbtn8BqjV3Zd+LZe9T9kGzH9S9NuSXj8tuKcF6bOMn
-         xVPwp11QrhZZNBKhPPKThWZ4xh8zMPP7HZ5HeE4W16hLP18P9+fIRw0aAL82gNg83ui3
-         VrKA==
+        h=from:to:cc:subject:date:message-id;
+        bh=ZsvKyfZNbkUgZwQwTqVunivVNEpXtGZADbSXAlyFMts=;
+        b=O+kOVPocTQiFP5uAY0rAPaiG1ktXsBYFDCqJZIA/ufTaPCZW+lVtwsHgoafjfxlOAn
+         dKrLcLmb23Bkss0lTf9GcmaBmsevpPOxq6/GyBXVyN4SYCQ9hH+kwff494PJJ20S+sKw
+         ftoY+wnNRpL0xL8eAIQ/tPbIJ0JpgNVLoOY5LNK+RPK303OCPuLDFKR9TNpuxXZ23aCx
+         DDOYHMkIHghCXS++kCUOXFuFHz1W4yJCf/xQUXhXFaqcxvL/7C5nKV4sOSsjNiS5bYcq
+         L5bY4+1f0RFyava4yGQ8D85yw+sWdh1i3YOr0Z4yU69xz2zjsrvpYA/bTDmZ5Ntmp1yb
+         NgpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=6y2PAyUtL03Nbrmo9xCdhafDQCYKT4PC/qS4knYVGiM=;
-        b=DCBmHae/xxmXRFDImxO86S3IUfBDeOKCJO+ssZ78B8IVsDviXe8STDadQNub6ALkGg
-         GtTf+3mwfBjRQaOM41iHeASqhEjq6oLGj69BAMCSt8kzCjplumbjL0ZE36NDeS1VP3Cj
-         lCFpoFlfqfN7KEQlgRuzMIh77JYu8/DjunsQCP2yX6pvynPXGi4nB+M1a6z2oxBOunYv
-         e9fcpiuaYT92+VDKXDpU5grQYBwx1gQ5GzlSm8wi8L5SsxVjWrDsuRNxIbEEziuy2d+S
-         NPyxCzO1bX7hzPJKXS96Epae5vBpfEy4V2Uo4vDnpZVjiWmlZ2YJx52No7qkqCXdqTL8
-         Uriw==
-X-Gm-Message-State: AOAM531Ceknlh6KVCn4pYDGrMqqsxnSM3sX9sQa0DyxCfzpsytC2IScG
-        QTiiaJk5JueHEbnSFCQBm2bg9sYL+K5NLQ==
-X-Google-Smtp-Source: ABdhPJyYj1jFb3xl7ksgoIqUaL1y+e3+P7qDNWrdpWE2a69OWDd8cmg+bKsKdC+3R9BUaZS2ctXoYQ==
-X-Received: by 2002:a17:902:830a:b029:da:df3b:459a with SMTP id bd10-20020a170902830ab02900dadf3b459amr19621583plb.75.1610369139638;
-        Mon, 11 Jan 2021 04:45:39 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=ZsvKyfZNbkUgZwQwTqVunivVNEpXtGZADbSXAlyFMts=;
+        b=At74iuxS2mFZ5pg3eUGF1gvVPmZFefmkyIZKvtPW99vuSrI3cjcFV8ugUv+sos23Hc
+         XM19OJvXtUPQ39KdUFitVwlFYuvIA0W6MEba++8C4b8oltLiRPx8ecU3scWGPyZwvNgd
+         KwE3DzJ2an1/LYpwLh6FNJwtDhEXWRz/ga971NkPsP6OpmMRHR+dRNPO44jOfo7OslrT
+         PxPQK+V1woAK5AlK44oOdhhGBLQKovMhRYwHCrDDf1LqZcropO9CKaBBjzhJNfMYJ5PN
+         bnJO5GFhJBAaci5JxRs6ljrGPyhycY3PcZGE5oB/jI3dz/IGziKxZqyeGkGAFf3nMwD1
+         8bCg==
+X-Gm-Message-State: AOAM533B0OjdjZJB8N+JgQ4QxwaaVgfh1iRnALU4NcyrSiYhj4nBQuyd
+        +UikFDJC913fB6SjUtBcdjNLQJcsTPAbbg==
+X-Google-Smtp-Source: ABdhPJzmavXf20PlEM3SVp+u//KzX75TlBzbSSXfFfwcpJRXqIEWQnACcz/Mstxt0lqUENsfZFTB4Q==
+X-Received: by 2002:a17:90a:4817:: with SMTP id a23mr17840061pjh.16.1610371331893;
+        Mon, 11 Jan 2021 05:22:11 -0800 (PST)
 Received: from localhost ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id 22sm18883235pfn.190.2021.01.11.04.45.38
+        by smtp.gmail.com with ESMTPSA id 193sm19373926pfz.36.2021.01.11.05.22.10
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 11 Jan 2021 04:45:39 -0800 (PST)
+        Mon, 11 Jan 2021 05:22:11 -0800 (PST)
 From:   Xin Long <lucien.xin@gmail.com>
 To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
 Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>, davem@davemloft.net,
         Jakub Kicinski <kuba@kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>
-Subject: [PATCH net-next 2/2] sctp: remove the NETIF_F_SG flag before calling skb_segment
-Date:   Mon, 11 Jan 2021 20:45:14 +0800
-Message-Id: <813eca10a6e21151b5d18a9fe7087ab906b689c7.1610368919.git.lucien.xin@gmail.com>
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>
+Subject: [PATCHv2 net-next] ip_gre: remove CRC flag from dev features in gre_gso_segment
+Date:   Mon, 11 Jan 2021 21:22:03 +0800
+Message-Id: <d8dc3cd362915974426d8274bb8ac6970a2096bb.1610371323.git.lucien.xin@gmail.com>
 X-Mailer: git-send-email 2.1.0
-In-Reply-To: <a34a8dcde6a158c64b0478c7098da757a6690f0b.1610368918.git.lucien.xin@gmail.com>
-References: <cover.1610368918.git.lucien.xin@gmail.com>
- <a34a8dcde6a158c64b0478c7098da757a6690f0b.1610368918.git.lucien.xin@gmail.com>
-In-Reply-To: <cover.1610368918.git.lucien.xin@gmail.com>
-References: <cover.1610368918.git.lucien.xin@gmail.com>
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-It makes more sense to clear NETIF_F_SG instead of set it when
-calling skb_segment() in sctp_gso_segment(), since SCTP GSO is
-using head_skb's fraglist, of which all frags are linear skbs.
+This patch is to let it always do CRC checksum in sctp_gso_segment()
+by removing CRC flag from the dev features in gre_gso_segment() for
+SCTP over GRE, just as it does in Commit 527beb8ef9c0 ("udp: support
+sctp over udp in skb_udp_tunnel_segment") for SCTP over UDP.
 
-This will make SCTP GSO code more understandable.
+It could set csum/csum_start in GSO CB properly in sctp_gso_segment()
+after that commit, so it would do checksum with gso_make_checksum()
+in gre_gso_segment(), and Commit 622e32b7d4a6 ("net: gre: recompute
+gre csum for sctp over gre tunnels") can be reverted now.
 
-Suggested-by: Alexander Duyck <alexander.duyck@gmail.com>
+Note that the current HWs like igb NIC can only handle the SCTP CRC
+when it's in the outer packet, not in the inner packet like in this
+case, so here it removes CRC flag from the dev features even when
+need_csum is false.
+
+v1->v2:
+  - improve the changelog.
+  - fix "rev xmas tree" in varibles declaration.
+
 Signed-off-by: Xin Long <lucien.xin@gmail.com>
 ---
- net/sctp/offload.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/ipv4/gre_offload.c | 15 ++++-----------
+ 1 file changed, 4 insertions(+), 11 deletions(-)
 
-diff --git a/net/sctp/offload.c b/net/sctp/offload.c
-index ce281a9..eb874e3 100644
---- a/net/sctp/offload.c
-+++ b/net/sctp/offload.c
-@@ -68,7 +68,7 @@ static struct sk_buff *sctp_gso_segment(struct sk_buff *skb,
- 		goto out;
- 	}
+diff --git a/net/ipv4/gre_offload.c b/net/ipv4/gre_offload.c
+index e0a2465..a681306 100644
+--- a/net/ipv4/gre_offload.c
++++ b/net/ipv4/gre_offload.c
+@@ -15,10 +15,10 @@ static struct sk_buff *gre_gso_segment(struct sk_buff *skb,
+ 				       netdev_features_t features)
+ {
+ 	int tnl_hlen = skb_inner_mac_header(skb) - skb_transport_header(skb);
+-	bool need_csum, need_recompute_csum, gso_partial;
+ 	struct sk_buff *segs = ERR_PTR(-EINVAL);
+ 	u16 mac_offset = skb->mac_header;
+ 	__be16 protocol = skb->protocol;
++	bool need_csum, gso_partial;
+ 	u16 mac_len = skb->mac_len;
+ 	int gre_offset, outer_hlen;
  
--	segs = skb_segment(skb, features | NETIF_F_HW_CSUM | NETIF_F_SG);
-+	segs = skb_segment(skb, (features | NETIF_F_HW_CSUM) & ~NETIF_F_SG);
- 	if (IS_ERR(segs))
- 		goto out;
+@@ -41,10 +41,11 @@ static struct sk_buff *gre_gso_segment(struct sk_buff *skb,
+ 	skb->protocol = skb->inner_protocol;
  
+ 	need_csum = !!(skb_shinfo(skb)->gso_type & SKB_GSO_GRE_CSUM);
+-	need_recompute_csum = skb->csum_not_inet;
+ 	skb->encap_hdr_csum = need_csum;
+ 
+ 	features &= skb->dev->hw_enc_features;
++	/* CRC checksum can't be handled by HW when SCTP is the inner proto. */
++	features &= ~NETIF_F_SCTP_CRC;
+ 
+ 	/* segment inner packet. */
+ 	segs = skb_mac_gso_segment(skb, features);
+@@ -99,15 +100,7 @@ static struct sk_buff *gre_gso_segment(struct sk_buff *skb,
+ 		}
+ 
+ 		*(pcsum + 1) = 0;
+-		if (need_recompute_csum && !skb_is_gso(skb)) {
+-			__wsum csum;
+-
+-			csum = skb_checksum(skb, gre_offset,
+-					    skb->len - gre_offset, 0);
+-			*pcsum = csum_fold(csum);
+-		} else {
+-			*pcsum = gso_make_checksum(skb, 0);
+-		}
++		*pcsum = gso_make_checksum(skb, 0);
+ 	} while ((skb = skb->next));
+ out:
+ 	return segs;
 -- 
 2.1.0
 
