@@ -2,113 +2,190 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 895A62F2734
-	for <lists+linux-sctp@lfdr.de>; Tue, 12 Jan 2021 05:40:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 173172F2795
+	for <lists+linux-sctp@lfdr.de>; Tue, 12 Jan 2021 06:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730106AbhALEkk (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 11 Jan 2021 23:40:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
+        id S2388049AbhALFO4 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 12 Jan 2021 00:14:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729988AbhALEkk (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 11 Jan 2021 23:40:40 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7955C061575;
-        Mon, 11 Jan 2021 20:39:59 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id d37so990549ybi.4;
-        Mon, 11 Jan 2021 20:39:59 -0800 (PST)
+        with ESMTP id S1730568AbhALFO4 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 12 Jan 2021 00:14:56 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13FAC061575;
+        Mon, 11 Jan 2021 21:14:15 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id q18so1102794wrn.1;
+        Mon, 11 Jan 2021 21:14:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=tGZClHUpaj3Cm/gs9dDdIPBw4DYUZttzUeth9TUTOKc=;
-        b=D58cdCKfLXyaUNVojpEvgJqfjWt11W5JTvHcqLp6/qketMD8EsQwfGqQxHVF1o4gd7
-         s9VqM6UVlQvttf8ZnitstC+teOq63QHCxeOamyPl2XS2nGJgq00lLpL2bUjAAtCmb3/2
-         es7nOslgha1HvUrXPo2mPN3DzazJ+3rWUlM0x8/wHs5+/QBYdW2iOc7pEp93RPfeqZvR
-         T4Mlf4eQ3Sq0WMWBO5mePL9hlwYwEeosHdoX88FfhoNB3W+Dpn037JCuYxpUTZYhTbl6
-         8JTD3Ycbkuu59eXrijz+5bH3e/KHNSzclrXHKarr/dieRpdEea/tupmxoE/Q/QIeUKse
-         lhIw==
+         :cc;
+        bh=vp3jpumNfTANvMHmUWs99QCkazh7SVXBE91SzQo7bxA=;
+        b=P3mZIljPJzEv/3XCFkU8l5XR3RNmvFLvWGo/YDD9D/tKeJ+r4SNwh79FBkHpoRcdH7
+         ltlHBlvFZnf80xb06pIcPpzS+w3zBex4CPLVrsnu0Cr0w0JIXDHvuTOBUQB+cSickEkx
+         V06y9w5BNaZS09GzrvayLbuw4GZ/VB6vtma9ICK6aECkf1Xj1kP5MWeqJdJL+d9ITdWq
+         QWm44R4zvjJLkHdSGzxzUiRllaAndlLBD+6v2E4hW9NMOEAhzOGS8aFlXcEr0PNqFWxs
+         RRmCFuy5RPxEp4IXJhLTWl8k6I+xqIDWmiCyhyG8ZrkR70bX3UQZCjmQg654rMFoRYOw
+         nT+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=tGZClHUpaj3Cm/gs9dDdIPBw4DYUZttzUeth9TUTOKc=;
-        b=ZkcE3iANQElt9IM5gLS7HV8yBrUCDDbroiSoUsTspuJFzB7avdFRz2CI3Ig8SxYUOa
-         lIQjCBR19kagueuTWR17sNxo6ASuQxG0mxe63bQ+kXnHplg+uqvuQ7ZVBtkBg67Wyv3Y
-         ZMkjtuZTTlhQjyMV8Yzfa+pJX+DO8eTPh2b2B0RpXFsa6v3mThgxhZCYUn0gZXBzLoMf
-         nKekAOMiCO5Z8MsvyYdzd6cr7DcswjhCTClkvZ5Crss8TUF8XNd7EkCiDOETa7O684LV
-         9pVhxJqltkWkNQjAbw7tw6bKpczdYDYkbUAxlkKEeuEectn6t26w9UZXnOJ2VJFsbl8L
-         vzfA==
-X-Gm-Message-State: AOAM533c8vpiZ0rDasmrdkZfYtlEFiXDoFL+EERgoAzAWAixJD24s4yU
-        gno+8Gljb4HRrIhJdPo7dcgdePVpc5AZp4BySI1hbBDKP0G/BH4Z
-X-Google-Smtp-Source: ABdhPJzwnAVKcwOnr1e+p/BrL8XtIrv1gNtL4nnHrOLh/rkuCQ3pRU0yvQj6om2KRGt8+9cDCn7M9o3m/6HyTbURKjU=
-X-Received: by 2002:a25:df05:: with SMTP id w5mr4554207ybg.477.1610426399217;
- Mon, 11 Jan 2021 20:39:59 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=vp3jpumNfTANvMHmUWs99QCkazh7SVXBE91SzQo7bxA=;
+        b=kI1BmiANeFqscWvTJrCLQgbNyM9pUSXnVx97D8AxUTdbb3+6vlnrKJAL7/PB+/h778
+         FbnyEj9Y8J2xK6Ov404DjOsIs4kaioHK5g1YWDdHv+paNgtyIAqY7gLY+vwhO7rFqJ5n
+         VGu4r+a3s7PeH6CDnC0387uJ8amdSwzJnUY1pSJv61tbtNOm7O30oOY1h372vCUSoF4k
+         RdSWkjbhrz0sYYxr3l04JtHJpgtcndSW9RYF744o5axQmpNK1a7nKIzj+P7v4rJo1r2a
+         2WGcjrNBtIaIz5akB8G/eS0nSolZ/WZyHw/91As3HikPpQy/ujqyfLjiNvzblSBztZzw
+         vDzQ==
+X-Gm-Message-State: AOAM5303PmvxHIGYjDI9NAbwI/b/M+W00tXcqUWzL6KNGLCIf0dgJJy2
+        DTAHML+lwMe0DqU6caXSDYWGg0N8B9oMo7Ivx2w4muFsHm3Y5g==
+X-Google-Smtp-Source: ABdhPJyC+jsAMjOLWX2rLW9aO/5PHWHMQEnuPy/TQUJTT5Q1lSV7r+YoS5tzM5lpdg937uCG8eNfHoV4I8qHX5yHfR8=
+X-Received: by 2002:a5d:6749:: with SMTP id l9mr2228745wrw.395.1610428454527;
+ Mon, 11 Jan 2021 21:14:14 -0800 (PST)
 MIME-Version: 1.0
-References: <CAD-N9QWDdRDiud42D8HMeRabqVvQ+Pbz=qgbOYrvpUvjRFp05Q@mail.gmail.com>
- <20210112032713.GB2677@horizon.localdomain>
-In-Reply-To: <20210112032713.GB2677@horizon.localdomain>
-From:   =?UTF-8?B?5oWV5Yas5Lqu?= <mudongliangabcd@gmail.com>
-Date:   Tue, 12 Jan 2021 12:39:33 +0800
-Message-ID: <CAD-N9QUap9JpVe3Fm=dAxe6EeHHh99MJctisSyE=JSNutk=xKA@mail.gmail.com>
-Subject: Re: "general protection fault in sctp_ulpevent_notify_peer_addr_change"
- and "general protection fault in sctp_ulpevent_nofity_peer_addr_change"
- should share the same root cause
-To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-        nhorman@tuxdriver.com, vyasevich@gmail.com, rkovhaev@gmail.com,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+References: <d8dc3cd362915974426d8274bb8ac6970a2096bb.1610371323.git.lucien.xin@gmail.com>
+ <CAKgT0UeEkqQjSU_t1wp3_k4pRYxM=FE-rTk2sBa-mdSwPnAstw@mail.gmail.com>
+In-Reply-To: <CAKgT0UeEkqQjSU_t1wp3_k4pRYxM=FE-rTk2sBa-mdSwPnAstw@mail.gmail.com>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Tue, 12 Jan 2021 13:14:03 +0800
+Message-ID: <CADvbK_cr1bYUjUi-FrcDZwPX9nBkUqP3LZNx06b4sKrO3kdVdw@mail.gmail.com>
+Subject: Re: [PATCHv2 net-next] ip_gre: remove CRC flag from dev features in gre_gso_segment
+To:     Alexander Duyck <alexander.duyck@gmail.com>
+Cc:     network dev <netdev@vger.kernel.org>,
+        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Jan 12, 2021 at 11:27 AM Marcelo Ricardo Leitner
-<marcelo.leitner@gmail.com> wrote:
+On Tue, Jan 12, 2021 at 12:48 AM Alexander Duyck
+<alexander.duyck@gmail.com> wrote:
 >
-> On Tue, Jan 12, 2021 at 10:18:00AM +0800, =E6=85=95=E5=86=AC=E4=BA=AE wro=
-te:
-> > Dear developers,
+> On Mon, Jan 11, 2021 at 5:22 AM Xin Long <lucien.xin@gmail.com> wrote:
 > >
-> > I find that "general protection fault in l2cap_sock_getsockopt" and
-> > "general protection fault in sco_sock_getsockopt" may be duplicated
-> > bugs from the same root cause.
+> > This patch is to let it always do CRC checksum in sctp_gso_segment()
+> > by removing CRC flag from the dev features in gre_gso_segment() for
+> > SCTP over GRE, just as it does in Commit 527beb8ef9c0 ("udp: support
+> > sctp over udp in skb_udp_tunnel_segment") for SCTP over UDP.
 > >
-
-I am sorry that the above description is for another bug group -
-https://groups.google.com/g/syzkaller-bugs/c/csbAcYWGd2I. I forget to
-modify this paragraph. Embarrassing :(
-
-The correct description here should be, "I find that general
-protection fault in sctp_ulpevent_notify_peer_addr_change" and
-"general protection fault in sctp_ulpevent_nofity_peer_addr_change"
-should share the same root cause, like the title.
-
-> > First, by comparing the PoC similarity after own minimization, we find
-> > they share the same PoC. Second, the stack traces for both bug reports
-> > are the same except for the last function. And the different last
-> > functions are due to a function name change (typo fix) from
-> > "sctp_ulpevent_nofity_peer_addr_change" to
-> > "sctp_ulpevent_notify_peer_addr_change"
+> > It could set csum/csum_start in GSO CB properly in sctp_gso_segment()
+> > after that commit, so it would do checksum with gso_make_checksum()
+> > in gre_gso_segment(), and Commit 622e32b7d4a6 ("net: gre: recompute
+> > gre csum for sctp over gre tunnels") can be reverted now.
+> >
+> > Note that the current HWs like igb NIC can only handle the SCTP CRC
+> > when it's in the outer packet, not in the inner packet like in this
+> > case, so here it removes CRC flag from the dev features even when
+> > need_csum is false.
 >
-> Not sure where you saw stack traces with this sctp function in it, but
-> the syzkaller reports from 17 Feb 2020 are not related to SCTP.
+> So the limitation in igb is not the hardware but the driver
+> configuration. When I had coded things up I put in a limitation on the
+> igb_tx_csum code that it would have to validate that the protocol we
+> are requesting an SCTP CRC offload since it is a different calculation
+> than a 1's complement checksum. Since igb doesn't support tunnels we
+> limited that check to the outer headers.
+Ah.. I see, thanks.
 >
-> The one on sco_sock_getsockopt() seems to be lack of parameter
-> validation: it doesn't check if optval is big enough when handling
-> BT_PHY (which has the same value as SCTP_STATUS). It seems also miss a
-> check on if level !=3D SOL_BLUETOOTH, but I may be wrong here.
+> We could probably enable this for tunnels as long as the tunnel isn't
+> requesting an outer checksum offload from the driver.
+I think in igb_tx_csum(), by checking skb->csum_not_inet would be enough
+to validate that is a SCTP request:
+-               if (((first->protocol == htons(ETH_P_IP)) &&
+-                    (ip_hdr(skb)->protocol == IPPROTO_SCTP)) ||
+-                   ((first->protocol == htons(ETH_P_IPV6)) &&
+-                    igb_ipv6_csum_is_sctp(skb))) {
++               if (skb->csum_not_inet) {
+                        type_tucmd = E1000_ADVTXD_TUCMD_L4T_SCTP;
+                        break;
+                }
+
+Otherwise, we will need to parse the packet a little bit, as it does in
+hns3_get_l4_protocol().
+
 >
-> l2cap_sock_getsockopt also lacks checking optlen.
+> > v1->v2:
+> >   - improve the changelog.
+> >   - fix "rev xmas tree" in varibles declaration.
+> >
+> > Signed-off-by: Xin Long <lucien.xin@gmail.com>
+> > ---
+> >  net/ipv4/gre_offload.c | 15 ++++-----------
+> >  1 file changed, 4 insertions(+), 11 deletions(-)
+> >
+> > diff --git a/net/ipv4/gre_offload.c b/net/ipv4/gre_offload.c
+> > index e0a2465..a681306 100644
+> > --- a/net/ipv4/gre_offload.c
+> > +++ b/net/ipv4/gre_offload.c
+> > @@ -15,10 +15,10 @@ static struct sk_buff *gre_gso_segment(struct sk_buff *skb,
+> >                                        netdev_features_t features)
+> >  {
+> >         int tnl_hlen = skb_inner_mac_header(skb) - skb_transport_header(skb);
+> > -       bool need_csum, need_recompute_csum, gso_partial;
+> >         struct sk_buff *segs = ERR_PTR(-EINVAL);
+> >         u16 mac_offset = skb->mac_header;
+> >         __be16 protocol = skb->protocol;
+> > +       bool need_csum, gso_partial;
+> >         u16 mac_len = skb->mac_len;
+> >         int gre_offset, outer_hlen;
+> >
+> > @@ -41,10 +41,11 @@ static struct sk_buff *gre_gso_segment(struct sk_buff *skb,
+> >         skb->protocol = skb->inner_protocol;
+> >
+> >         need_csum = !!(skb_shinfo(skb)->gso_type & SKB_GSO_GRE_CSUM);
+> > -       need_recompute_csum = skb->csum_not_inet;
+> >         skb->encap_hdr_csum = need_csum;
+> >
+> >         features &= skb->dev->hw_enc_features;
+> > +       /* CRC checksum can't be handled by HW when SCTP is the inner proto. */
+> > +       features &= ~NETIF_F_SCTP_CRC;
+> >
+> >         /* segment inner packet. */
+> >         segs = skb_mac_gso_segment(skb, features);
 >
+> Do we have NICs that are advertising NETIF_S_SCTP_CRC as part of their
+> hw_enc_features and then not supporting it? Based on your comment
+Yes, igb/igbvf/igc/ixgbe/ixgbevf, they have a similar code of SCTP
+proto validation.
 
-Please ignore my mistake, and discuss the issue of
-sco/l2tp_sock_getsockopt in the thread - "general protection fault in
-l2cap_sock_getsockopt" and "general protection fault in
-sco_sock_getsockopt" may share the same root cause
-(https://groups.google.com/g/syzkaller-bugs/c/csbAcYWGd2I)
+> above it seems like you are masking this out because hardware is
+> advertising features it doesn't actually support. I'm just wondering
+> if that is the case or if this is something where this should be
+> cleared if need_csum is set since we only support one level of
+> checksum offload.
+Since only these drivers only do SCTP proto validation, and "only
+one level checksum offload" issue only exists when inner packet
+is SCTP packet, clearing NETIF_F_SCTP_CRC should be enough.
 
+But seems to fix the drivers will be better, as hw_enc_features should
+tell the correct features for inner proto. wdyt?
 
->   Marcelo
+(Just note udp tunneling SCTP doesn't have this issue, as the outer
+ udp checksum is always required by RFC)
+
+>
+> > @@ -99,15 +100,7 @@ static struct sk_buff *gre_gso_segment(struct sk_buff *skb,
+> >                 }
+> >
+> >                 *(pcsum + 1) = 0;
+> > -               if (need_recompute_csum && !skb_is_gso(skb)) {
+> > -                       __wsum csum;
+> > -
+> > -                       csum = skb_checksum(skb, gre_offset,
+> > -                                           skb->len - gre_offset, 0);
+> > -                       *pcsum = csum_fold(csum);
+> > -               } else {
+> > -                       *pcsum = gso_make_checksum(skb, 0);
+> > -               }
+> > +               *pcsum = gso_make_checksum(skb, 0);
+> >         } while ((skb = skb->next));
+> >  out:
+> >         return segs;
+> > --
+> > 2.1.0
+> >
