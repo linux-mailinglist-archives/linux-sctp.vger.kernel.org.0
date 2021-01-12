@@ -2,190 +2,125 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 173172F2795
-	for <lists+linux-sctp@lfdr.de>; Tue, 12 Jan 2021 06:15:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C0042F28D9
+	for <lists+linux-sctp@lfdr.de>; Tue, 12 Jan 2021 08:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388049AbhALFO4 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 12 Jan 2021 00:14:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
+        id S1728415AbhALHVi (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 12 Jan 2021 02:21:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730568AbhALFO4 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 12 Jan 2021 00:14:56 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13FAC061575;
-        Mon, 11 Jan 2021 21:14:15 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id q18so1102794wrn.1;
-        Mon, 11 Jan 2021 21:14:15 -0800 (PST)
+        with ESMTP id S1726949AbhALHVi (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 12 Jan 2021 02:21:38 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E65DC061575;
+        Mon, 11 Jan 2021 23:20:58 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id s26so1818447lfc.8;
+        Mon, 11 Jan 2021 23:20:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=vp3jpumNfTANvMHmUWs99QCkazh7SVXBE91SzQo7bxA=;
-        b=P3mZIljPJzEv/3XCFkU8l5XR3RNmvFLvWGo/YDD9D/tKeJ+r4SNwh79FBkHpoRcdH7
-         ltlHBlvFZnf80xb06pIcPpzS+w3zBex4CPLVrsnu0Cr0w0JIXDHvuTOBUQB+cSickEkx
-         V06y9w5BNaZS09GzrvayLbuw4GZ/VB6vtma9ICK6aECkf1Xj1kP5MWeqJdJL+d9ITdWq
-         QWm44R4zvjJLkHdSGzxzUiRllaAndlLBD+6v2E4hW9NMOEAhzOGS8aFlXcEr0PNqFWxs
-         RRmCFuy5RPxEp4IXJhLTWl8k6I+xqIDWmiCyhyG8ZrkR70bX3UQZCjmQg654rMFoRYOw
-         nT+w==
+        bh=7ygf0+sa9FROZR6Ry1uOnT1Kwi/qXO3Bcb7rJvLV/HE=;
+        b=RceFeGlOIQUrR6aTdNaqAtGJdZhNGjTC16zDNqczl/JTEH9avUESxNdf5BUpWN1uf1
+         ET0yH9LTDlB+8gbNRZUgaA3uyVC1zZkKwXVKaRc/wdS3n4dAQwcEUuRNnpH8DPp5xkXs
+         VW38p3CP/7oT5DBi24z4DvGRkvwMz4baUB6TKdgSbCYOH8OADY66CklunOrN4Fy+LrAs
+         ioz6pbEcyhxzSl6F2cTr81xjznh39csQHFZqoAoO7T7Mw2O4GnFWXqwJIvKsAJgQl3Af
+         ckowkPjYUJNFYWTJPOWlmbu9nDx5SKvCVfEt23QFMDAK0Gd4oQKah9/agtMvn3aGGZ2h
+         CUsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=vp3jpumNfTANvMHmUWs99QCkazh7SVXBE91SzQo7bxA=;
-        b=kI1BmiANeFqscWvTJrCLQgbNyM9pUSXnVx97D8AxUTdbb3+6vlnrKJAL7/PB+/h778
-         FbnyEj9Y8J2xK6Ov404DjOsIs4kaioHK5g1YWDdHv+paNgtyIAqY7gLY+vwhO7rFqJ5n
-         VGu4r+a3s7PeH6CDnC0387uJ8amdSwzJnUY1pSJv61tbtNOm7O30oOY1h372vCUSoF4k
-         RdSWkjbhrz0sYYxr3l04JtHJpgtcndSW9RYF744o5axQmpNK1a7nKIzj+P7v4rJo1r2a
-         2WGcjrNBtIaIz5akB8G/eS0nSolZ/WZyHw/91As3HikPpQy/ujqyfLjiNvzblSBztZzw
-         vDzQ==
-X-Gm-Message-State: AOAM5303PmvxHIGYjDI9NAbwI/b/M+W00tXcqUWzL6KNGLCIf0dgJJy2
-        DTAHML+lwMe0DqU6caXSDYWGg0N8B9oMo7Ivx2w4muFsHm3Y5g==
-X-Google-Smtp-Source: ABdhPJyC+jsAMjOLWX2rLW9aO/5PHWHMQEnuPy/TQUJTT5Q1lSV7r+YoS5tzM5lpdg937uCG8eNfHoV4I8qHX5yHfR8=
-X-Received: by 2002:a5d:6749:: with SMTP id l9mr2228745wrw.395.1610428454527;
- Mon, 11 Jan 2021 21:14:14 -0800 (PST)
+        bh=7ygf0+sa9FROZR6Ry1uOnT1Kwi/qXO3Bcb7rJvLV/HE=;
+        b=lEnBeCAmCksaVH9OTrHODg6jRbAMrsU0dO740lD5RuMD6DdJP8QVKL0itY7/kLm8m3
+         CpD1XUCyCfkg6WCZmcsRX/CekJfJjk+hvwn4fSbw217BuyLWy/uOLaObWjyA6TGSJN7g
+         nAG2mkSDflFF1NovUeDK/r3/I11EDkadYcQCdiSajy123pOC2JYilqt8aDRKcnNiMN1Q
+         DFVeICiLhUfi3iXKpZ4guzdOX4EHF6GVL/d63zr0Lh2raxpmvD4bHzDo8ptcYlQfA3Zg
+         0LeGDYyuDTUgvXRZvn1gioNoJvMHpZ3jzMQn6ayzAMJxl3sQrHPbxHf2mL2++8y4nQ41
+         n8yg==
+X-Gm-Message-State: AOAM531J9SZOyNxWwBJINdg2BY4LCJp+dZBJBKC6+MaISDu+C4I1akO0
+        Mh4oz+Asa5SNCojCckc52YB/qlGBBGc2HEIC2ig=
+X-Google-Smtp-Source: ABdhPJxUfvi4aqUZrI/dJUMcoENOauvcsxX+RWTuWTuqL7cOSSjaUWaSGQaV6+LxK99561d7A9bhl7yXytLfVS1lRtw=
+X-Received: by 2002:a19:716:: with SMTP id 22mr1620843lfh.390.1610436056586;
+ Mon, 11 Jan 2021 23:20:56 -0800 (PST)
 MIME-Version: 1.0
-References: <d8dc3cd362915974426d8274bb8ac6970a2096bb.1610371323.git.lucien.xin@gmail.com>
- <CAKgT0UeEkqQjSU_t1wp3_k4pRYxM=FE-rTk2sBa-mdSwPnAstw@mail.gmail.com>
-In-Reply-To: <CAKgT0UeEkqQjSU_t1wp3_k4pRYxM=FE-rTk2sBa-mdSwPnAstw@mail.gmail.com>
+References: <cover.1610368918.git.lucien.xin@gmail.com> <a34a8dcde6a158c64b0478c7098da757a6690f0b.1610368918.git.lucien.xin@gmail.com>
+ <CAKgT0UdgL-aYGUfeYVRoqLpDFhPzko26z7mxvi2HyTdrLpCF5A@mail.gmail.com>
+In-Reply-To: <CAKgT0UdgL-aYGUfeYVRoqLpDFhPzko26z7mxvi2HyTdrLpCF5A@mail.gmail.com>
 From:   Xin Long <lucien.xin@gmail.com>
-Date:   Tue, 12 Jan 2021 13:14:03 +0800
-Message-ID: <CADvbK_cr1bYUjUi-FrcDZwPX9nBkUqP3LZNx06b4sKrO3kdVdw@mail.gmail.com>
-Subject: Re: [PATCHv2 net-next] ip_gre: remove CRC flag from dev features in gre_gso_segment
+Date:   Tue, 12 Jan 2021 15:20:44 +0800
+Message-ID: <CADvbK_c4wUUp0We=Cv9jczzACAurZnu0_pRen7Oa=4k8bKcCMw@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/2] net: move the hsize check to the else block
+ in skb_segment
 To:     Alexander Duyck <alexander.duyck@gmail.com>
 Cc:     network dev <netdev@vger.kernel.org>,
         "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
         David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>
+        Jakub Kicinski <kuba@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Jan 12, 2021 at 12:48 AM Alexander Duyck
+On Tue, Jan 12, 2021 at 12:26 AM Alexander Duyck
 <alexander.duyck@gmail.com> wrote:
 >
-> On Mon, Jan 11, 2021 at 5:22 AM Xin Long <lucien.xin@gmail.com> wrote:
+> On Mon, Jan 11, 2021 at 4:45 AM Xin Long <lucien.xin@gmail.com> wrote:
 > >
-> > This patch is to let it always do CRC checksum in sctp_gso_segment()
-> > by removing CRC flag from the dev features in gre_gso_segment() for
-> > SCTP over GRE, just as it does in Commit 527beb8ef9c0 ("udp: support
-> > sctp over udp in skb_udp_tunnel_segment") for SCTP over UDP.
+> > After commit 89319d3801d1 ("net: Add frag_list support to skb_segment"),
+> > it goes to process frag_list when !hsize in skb_segment(). However, when
+> > using skb frag_list, sg normally should not be set. In this case, hsize
+> > will be set with len right before !hsize check, then it won't go to
+> > frag_list processing code.
 > >
-> > It could set csum/csum_start in GSO CB properly in sctp_gso_segment()
-> > after that commit, so it would do checksum with gso_make_checksum()
-> > in gre_gso_segment(), and Commit 622e32b7d4a6 ("net: gre: recompute
-> > gre csum for sctp over gre tunnels") can be reverted now.
-> >
-> > Note that the current HWs like igb NIC can only handle the SCTP CRC
-> > when it's in the outer packet, not in the inner packet like in this
-> > case, so here it removes CRC flag from the dev features even when
-> > need_csum is false.
->
-> So the limitation in igb is not the hardware but the driver
-> configuration. When I had coded things up I put in a limitation on the
-> igb_tx_csum code that it would have to validate that the protocol we
-> are requesting an SCTP CRC offload since it is a different calculation
-> than a 1's complement checksum. Since igb doesn't support tunnels we
-> limited that check to the outer headers.
-Ah.. I see, thanks.
->
-> We could probably enable this for tunnels as long as the tunnel isn't
-> requesting an outer checksum offload from the driver.
-I think in igb_tx_csum(), by checking skb->csum_not_inet would be enough
-to validate that is a SCTP request:
--               if (((first->protocol == htons(ETH_P_IP)) &&
--                    (ip_hdr(skb)->protocol == IPPROTO_SCTP)) ||
--                   ((first->protocol == htons(ETH_P_IPV6)) &&
--                    igb_ipv6_csum_is_sctp(skb))) {
-+               if (skb->csum_not_inet) {
-                        type_tucmd = E1000_ADVTXD_TUCMD_L4T_SCTP;
-                        break;
-                }
-
-Otherwise, we will need to parse the packet a little bit, as it does in
-hns3_get_l4_protocol().
-
->
-> > v1->v2:
-> >   - improve the changelog.
-> >   - fix "rev xmas tree" in varibles declaration.
+> > So the right thing to do is move the hsize check to the else block, so
+> > that it won't affect the !hsize check for frag_list processing.
 > >
 > > Signed-off-by: Xin Long <lucien.xin@gmail.com>
 > > ---
-> >  net/ipv4/gre_offload.c | 15 ++++-----------
-> >  1 file changed, 4 insertions(+), 11 deletions(-)
+> >  net/core/skbuff.c | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
 > >
-> > diff --git a/net/ipv4/gre_offload.c b/net/ipv4/gre_offload.c
-> > index e0a2465..a681306 100644
-> > --- a/net/ipv4/gre_offload.c
-> > +++ b/net/ipv4/gre_offload.c
-> > @@ -15,10 +15,10 @@ static struct sk_buff *gre_gso_segment(struct sk_buff *skb,
-> >                                        netdev_features_t features)
-> >  {
-> >         int tnl_hlen = skb_inner_mac_header(skb) - skb_transport_header(skb);
-> > -       bool need_csum, need_recompute_csum, gso_partial;
-> >         struct sk_buff *segs = ERR_PTR(-EINVAL);
-> >         u16 mac_offset = skb->mac_header;
-> >         __be16 protocol = skb->protocol;
-> > +       bool need_csum, gso_partial;
-> >         u16 mac_len = skb->mac_len;
-> >         int gre_offset, outer_hlen;
+> > diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> > index 7626a33..ea79359 100644
+> > --- a/net/core/skbuff.c
+> > +++ b/net/core/skbuff.c
+> > @@ -3855,8 +3855,6 @@ struct sk_buff *skb_segment(struct sk_buff *head_skb,
+> >                 hsize = skb_headlen(head_skb) - offset;
+> >                 if (hsize < 0)
+> >                         hsize = 0;
+> > -               if (hsize > len || !sg)
+> > -                       hsize = len;
 > >
-> > @@ -41,10 +41,11 @@ static struct sk_buff *gre_gso_segment(struct sk_buff *skb,
-> >         skb->protocol = skb->inner_protocol;
-> >
-> >         need_csum = !!(skb_shinfo(skb)->gso_type & SKB_GSO_GRE_CSUM);
-> > -       need_recompute_csum = skb->csum_not_inet;
-> >         skb->encap_hdr_csum = need_csum;
-> >
-> >         features &= skb->dev->hw_enc_features;
-> > +       /* CRC checksum can't be handled by HW when SCTP is the inner proto. */
-> > +       features &= ~NETIF_F_SCTP_CRC;
-> >
-> >         /* segment inner packet. */
-> >         segs = skb_mac_gso_segment(skb, features);
+> >                 if (!hsize && i >= nfrags && skb_headlen(list_skb) &&
+> >                     (skb_headlen(list_skb) == len || sg)) {
 >
-> Do we have NICs that are advertising NETIF_S_SCTP_CRC as part of their
-> hw_enc_features and then not supporting it? Based on your comment
-Yes, igb/igbvf/igc/ixgbe/ixgbevf, they have a similar code of SCTP
-proto validation.
-
-> above it seems like you are masking this out because hardware is
-> advertising features it doesn't actually support. I'm just wondering
-> if that is the case or if this is something where this should be
-> cleared if need_csum is set since we only support one level of
-> checksum offload.
-Since only these drivers only do SCTP proto validation, and "only
-one level checksum offload" issue only exists when inner packet
-is SCTP packet, clearing NETIF_F_SCTP_CRC should be enough.
-
-But seems to fix the drivers will be better, as hw_enc_features should
-tell the correct features for inner proto. wdyt?
-
-(Just note udp tunneling SCTP doesn't have this issue, as the outer
- udp checksum is always required by RFC)
+> So looking at the function it seems like the only spot where the
+> standard path actually reads the hsize value is right here, and it is
+> overwritten before we exit the non-error portion of the if statement.
+> I wonder if we couldn't save ourselves a few cycles and avoid an
+> unnecessary assignment by replacing the "!hsize" with a check for
+> "hsize <= 0" and just move the entire set of checks above down into
+> the lower block.
+>
+> > @@ -3901,6 +3899,9 @@ struct sk_buff *skb_segment(struct sk_buff *head_skb,
+> >                         skb_release_head_state(nskb);
+> >                         __skb_push(nskb, doffset);
+> >                 } else {
+> > +                       if (hsize > len || !sg)
+> > +                               hsize = len;
+> > +
+>
+> Then you could essentially just add the "if (hsize < 0)" piece here as
+> an "else if" check and avoid the check if it isn't needed.
+Look correct, will post v2. Thanks!
 
 >
-> > @@ -99,15 +100,7 @@ static struct sk_buff *gre_gso_segment(struct sk_buff *skb,
-> >                 }
-> >
-> >                 *(pcsum + 1) = 0;
-> > -               if (need_recompute_csum && !skb_is_gso(skb)) {
-> > -                       __wsum csum;
-> > -
-> > -                       csum = skb_checksum(skb, gre_offset,
-> > -                                           skb->len - gre_offset, 0);
-> > -                       *pcsum = csum_fold(csum);
-> > -               } else {
-> > -                       *pcsum = gso_make_checksum(skb, 0);
-> > -               }
-> > +               *pcsum = gso_make_checksum(skb, 0);
-> >         } while ((skb = skb->next));
-> >  out:
-> >         return segs;
+> >                         nskb = __alloc_skb(hsize + doffset + headroom,
+> >                                            GFP_ATOMIC, skb_alloc_rx_flag(head_skb),
+> >                                            NUMA_NO_NODE);
 > > --
 > > 2.1.0
 > >
