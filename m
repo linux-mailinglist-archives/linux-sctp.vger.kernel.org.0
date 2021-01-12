@@ -2,97 +2,98 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E36EC2F262E
-	for <lists+linux-sctp@lfdr.de>; Tue, 12 Jan 2021 03:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D7052F26AF
+	for <lists+linux-sctp@lfdr.de>; Tue, 12 Jan 2021 04:30:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729879AbhALCS4 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 11 Jan 2021 21:18:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
+        id S1726881AbhALD16 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 11 Jan 2021 22:27:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728989AbhALCSz (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 11 Jan 2021 21:18:55 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F494C061575
-        for <linux-sctp@vger.kernel.org>; Mon, 11 Jan 2021 18:18:15 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id y15so692581qtv.5
-        for <linux-sctp@vger.kernel.org>; Mon, 11 Jan 2021 18:18:15 -0800 (PST)
+        with ESMTP id S1726875AbhALD15 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 11 Jan 2021 22:27:57 -0500
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68193C061575;
+        Mon, 11 Jan 2021 19:27:17 -0800 (PST)
+Received: by mail-qk1-x729.google.com with SMTP id b64so752430qkc.12;
+        Mon, 11 Jan 2021 19:27:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=32AmM+qBABeVUD37ELNJ3R8T9CwvieE4sxIcwjl7PNU=;
-        b=GQQuY8RSpWBc3h52L3n9f7JhWPRM9OcgMsOSz3I4P+0Sb7YwtJGvnRaKH0SIbF9p7/
-         9ipTgQcUWElo8onw7EfZ+a7o9JQXW/RsZMMvP8pygOvXnElN7DE+DDrQqojsmp5pHhgb
-         +zkoN1H4uD95LZq0EpSPaE9tD/6H9FMXz2UM5BfEkHKI7ymsagMdPAydV1Z4gZj2r+d0
-         mYUVy9+goYpSSCme+SCTHJ83QTa1YTGvDLWzP+CkWj0gcc5VNLk6lokirAVWu9xqFkRl
-         p+QtkCUv49u+u95mTBQT9J7mXWASEyDMTcCg1ELuHr14s1lrQzHJOgkv18UENiOaLVJL
-         Nhsw==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=W1IEn1o6eWOwCU+LqSBLdPY2mzZjKp1Qh5GWlNBzenQ=;
+        b=WWfaItCu7eMkjGNiBic3Iz+khFM6SaikBC7i6LdeJiOODc6bg6MDvC2ShCF3Hl5ZTt
+         jp/mlgW3trjRXruymsuSs5uLWwCrp2y+jViZ3gUFA888SdZSItK60yG3VAniBByGDhyG
+         bG2ZnjURgWPbdagnrZtndw2zKRRQlXrRJpFK/wUx35Cxkgz+xcJJE4aC5tXchkO18zA/
+         lfJU3P7BiCbdEAKhDbDHK+4SL2sVBCTpiB5kI1acpizjfT84MgCE/0X96lrLsQT/Movh
+         Eh6ZsRGrg8pY+4RMQyn2Ri6ONsdbf6ZXe22v81MTxe+iibq3qhPVHXWVftY2k+gGdlAM
+         /QhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=32AmM+qBABeVUD37ELNJ3R8T9CwvieE4sxIcwjl7PNU=;
-        b=PXLCYhZr1fjzwcUZP8tpTmn/iMkh9EgVTIoVb1VLbx/xXe/ZJgAj8B85NgvbOxIoE1
-         DfLI1Wh5dLgfxRYIKsOyW5ZHm18dJ7HxkQ6B9qMUmsFtS7C/P8TZNge/G9rO9w/PR+MF
-         ZenKXoDfVxCTfU3J4fTgCRH2XJFRWym3hBQtVXt2PjjTJ836ziDyDdip+Ud8JWqq84c2
-         G3f3NY4EA5HYl9CVuBoAZ8oKIvbPuNfUGu2J13pmueZzYhz1ImIJF6/z8RMKHMqakjSc
-         4ZSP7440uKaz+2tBqzrW9Ift7hXY/ASdrIkCuzWwTrSyoU5Dn8OXRAr8ObUKog2nfGfO
-         zoXw==
-X-Gm-Message-State: AOAM531tnrV7G/N0uGaLJ+FgKUOxtsPYPap3+BEQ6zs1JOgmG0ZMwEYb
-        /DAZ+c/wkRZTlPCWidX7Dk0=
-X-Google-Smtp-Source: ABdhPJxWUCga0Z76wfNrqGOV2+ZrSPFpShINNegk0ytkxdpfQxSDjeS47Nrk7ZBLLaB07iZoEfCU9A==
-X-Received: by 2002:ac8:5359:: with SMTP id d25mr2669754qto.132.1610417894684;
-        Mon, 11 Jan 2021 18:18:14 -0800 (PST)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=W1IEn1o6eWOwCU+LqSBLdPY2mzZjKp1Qh5GWlNBzenQ=;
+        b=fvGAaixF/4V+aKW2fIEhWgIaC3YurcpienRgnG3ALGiSepR4IHsZdW87+Coc3SFa4X
+         kxssUGhGadoNL5KPLbhdW5RN1mXbwmEh6uf/GlPKnaVwW93qPArk0ZY+6O1qcjlNWY2C
+         sW/9qtAiBX6llJg3bJ18pkC3TK2y211sHo/zB2VV7ENVNpSYDI7TxID1fbPNPWHuA3ge
+         ywQpzOR3OQKp68KJwxh/UNMwcfZt/FymF0LDUDPko/uVynW54/MUqBXIwqJb/oABFFQ8
+         JxT5l6U5BAWDmo83HKjwlUEioQBs6MJeN6cSNehqXZcO00yIuNF7tG0rBz6mSD5Z097e
+         HtUQ==
+X-Gm-Message-State: AOAM53216ar5qH4fP3vPnuJTujOVUnSD5SGwi2kuDBrFjl15lJhD5M1D
+        EHsdYjUlPayp6BuKWSokq2s=
+X-Google-Smtp-Source: ABdhPJx5nCMD87uewGRBxnMpYljToVWREtfHtWs5iE9Z7JifFyPmgvQlgl0/wDDsfBqJjvSpEoTHKQ==
+X-Received: by 2002:a05:620a:1256:: with SMTP id a22mr2542089qkl.484.1610422036661;
+        Mon, 11 Jan 2021 19:27:16 -0800 (PST)
 Received: from horizon.localdomain ([2001:1284:f016:2182:69ea:afba:d188:e39c])
-        by smtp.gmail.com with ESMTPSA id i17sm620008qtg.77.2021.01.11.18.18.13
+        by smtp.gmail.com with ESMTPSA id n5sm829838qkh.126.2021.01.11.19.27.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jan 2021 18:18:14 -0800 (PST)
+        Mon, 11 Jan 2021 19:27:16 -0800 (PST)
 Received: by horizon.localdomain (Postfix, from userid 1000)
-        id EA0E9C085D; Mon, 11 Jan 2021 23:18:11 -0300 (-03)
-Date:   Mon, 11 Jan 2021 23:18:11 -0300
+        id B3840C085D; Tue, 12 Jan 2021 00:27:13 -0300 (-03)
+Date:   Tue, 12 Jan 2021 00:27:13 -0300
 From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Sergei Trofimovich <slyfox@gentoo.org>
-Cc:     linux-sctp@vger.kernel.org
-Subject: Re: [PATCH] m4/sctp.m4: make conpatible to autoconf-2.70
-Message-ID: <20210112021811.GA2677@horizon.localdomain>
-References: <20210108222252.95123-1-slyfox@gentoo.org>
+To:     =?utf-8?B?5oWV5Yas5Lqu?= <mudongliangabcd@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        nhorman@tuxdriver.com, vyasevich@gmail.com, rkovhaev@gmail.com,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Subject: Re: "general protection fault in
+ sctp_ulpevent_notify_peer_addr_change" and "general protection fault in
+ sctp_ulpevent_nofity_peer_addr_change" should share the same root cause
+Message-ID: <20210112032713.GB2677@horizon.localdomain>
+References: <CAD-N9QWDdRDiud42D8HMeRabqVvQ+Pbz=qgbOYrvpUvjRFp05Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210108222252.95123-1-slyfox@gentoo.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAD-N9QWDdRDiud42D8HMeRabqVvQ+Pbz=qgbOYrvpUvjRFp05Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Fri, Jan 08, 2021 at 10:22:52PM +0000, Sergei Trofimovich wrote:
-> On recently released `autoconf-2.70` generated `./configure`
-> fails as:
+On Tue, Jan 12, 2021 at 10:18:00AM +0800, 慕冬亮 wrote:
+> Dear developers,
 > 
-> ```
-> $ ./configure
-> ...
-> checking for struct sctp_event_subscribe.sctp_stream_reset_event... yes
-> checking for gcc options needed to detect all undeclared functions... none needed
-> ./configure: line 16464: syntax error: unexpected end of file
-> ```
+> I find that "general protection fault in l2cap_sock_getsockopt" and
+> "general protection fault in sco_sock_getsockopt" may be duplicated
+> bugs from the same root cause.
 > 
-> This happens becuase new autoconf generates less whitespace:
-> 
-> ```
-> {
-> if ...
-> ...
-> fi}
-> ```
-> 
-> It requires at least whitespace between `fi` and `}`.
-> 
-> As input already has newlines the change just drops extra `{}`.
-> 
-> Tested on `autoconf-2.69` and `autoconf-2.70`.
-> 
-> Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
+> First, by comparing the PoC similarity after own minimization, we find
+> they share the same PoC. Second, the stack traces for both bug reports
+> are the same except for the last function. And the different last
+> functions are due to a function name change (typo fix) from
+> "sctp_ulpevent_nofity_peer_addr_change" to
+> "sctp_ulpevent_notify_peer_addr_change"
 
-Applied. Thanks Sergei.
+Not sure where you saw stack traces with this sctp function in it, but
+the syzkaller reports from 17 Feb 2020 are not related to SCTP.
+
+The one on sco_sock_getsockopt() seems to be lack of parameter
+validation: it doesn't check if optval is big enough when handling
+BT_PHY (which has the same value as SCTP_STATUS). It seems also miss a
+check on if level != SOL_BLUETOOTH, but I may be wrong here.
+
+l2cap_sock_getsockopt also lacks checking optlen.
 
   Marcelo
