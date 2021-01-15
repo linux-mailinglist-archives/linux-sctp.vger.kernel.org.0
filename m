@@ -2,95 +2,79 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED492F7593
-	for <lists+linux-sctp@lfdr.de>; Fri, 15 Jan 2021 10:37:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 287F62F75CA
+	for <lists+linux-sctp@lfdr.de>; Fri, 15 Jan 2021 10:50:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727204AbhAOJhh (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 15 Jan 2021 04:37:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57636 "EHLO
+        id S1727754AbhAOJs2 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 15 Jan 2021 04:48:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726691AbhAOJhg (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 15 Jan 2021 04:37:36 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4699C0613D3;
-        Fri, 15 Jan 2021 01:37:04 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id x18so4412862pln.6;
-        Fri, 15 Jan 2021 01:37:04 -0800 (PST)
+        with ESMTP id S1726439AbhAOJs2 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 15 Jan 2021 04:48:28 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2E5C061757;
+        Fri, 15 Jan 2021 01:47:57 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id ce17so2599065pjb.5;
+        Fri, 15 Jan 2021 01:47:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=6y2PAyUtL03Nbrmo9xCdhafDQCYKT4PC/qS4knYVGiM=;
-        b=hwltHPYFd2W+GcK7Vzqd6MSZF6ZrtrHJPAyvYuEOZID3gI6rcpRwdHNIhm2sMxTRIb
-         rNUbhnpJ4H4psQblSK3w26bafNsfQQYiJh+dxNh/QktdwcvENqJ6jn+CWDB1m4wvyc2N
-         QrNkccRLn7ZEPC9S9ypmDawMvb6jywu5mZY9yDcRUJq66UZ8jbB/EmLqLNRhoyvVmpl6
-         aJAgyu54fUInL2XO+spe2ve3bdYHRdLqICcWZsgah2ChIvA+EVLHrjQ/cHvi7aBE0LRS
-         CuG9SuM/Y3VQ3NHbI87l+TBJ79XHGiYidrZrQzTvzQxDKcSiImWX23cguyw50QAL3eWY
-         TmNQ==
+        h=from:to:cc:subject:date:message-id;
+        bh=xn4WkMY3sHm5WK+mVkDs3GEV0ZAFPAF055qZPyRV3So=;
+        b=AUDAtDvh6zjSMRFvRSFt8Ec+khvmrbdgH7XjopbIpawLwa5g1eMAJqePDHepuaEAcy
+         GoVSE07hdPSagTEvYBRAeDzDseoJrNrRZspyPdDGpUk7b5NU0DsD7cgR4/691wNLiduz
+         X7O8rJtvJEDGGtizjBeZ+K2klBgCbN8crAN69zLZs8+HtW9XvWH/oTF/lmueetHGrrnm
+         J5awBpLoOig4DLrOB0Q9TWNjl/g6/OZ2iQVia5LUVOgInU4PpZZfUtMrOcPWk5cI1Mpj
+         9pBFI/a/Sj3+bRFd28MbK2sD/+cxdhOv9EHswvDJCo/C3joCb0kQ6Y7HTJ7VlkJE/kvw
+         8v+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=6y2PAyUtL03Nbrmo9xCdhafDQCYKT4PC/qS4knYVGiM=;
-        b=YCz5x/ec2O7Md2lbPPdCpMlnNBBkKnOtU9GkrP0PxfSE3Qlrk6cUFbLhIjmT77ElFi
-         sWMrZ61N6iCVg/CdOokWONM4F9QEi0tCJGQl36iEmQQikCSvDL+Fcdv/kvE4zDsdRzMU
-         afuSllwXc0+6YwPOVR2JCUjA1WesnWZDLHuVXfFAERi8AD9Kl9mB8evDjxyvnuIjBeYM
-         5eaA5JvcB6cd0J5lZGCdRgcJQqnE/PXqmZWK9ld7gV55w1duIhjeSjl8zlR2uPlxXrF0
-         OV+56dqpGvlGSJxj/WVevmTEgfkdJBh/Ak2Cmc3T1keLJQ6N9f3/5dfDeErj3LeqfAdo
-         AsDw==
-X-Gm-Message-State: AOAM531NaAhBN0KsFT+SmzYqK1VMZgYftyVYILyQNvqMEzEnyoIoQ/GF
-        WISqgFBwsXiOqt6x12Qzt8gJEiyUM/5lQg==
-X-Google-Smtp-Source: ABdhPJzGP5v9Rj+D1hzOSXYgAbwpN47Hhs5WJWWg07+//oaPf9hFN0Q9md7Kx1RhCg+mM8/d8ba1oQ==
-X-Received: by 2002:a17:902:a517:b029:de:79a7:48d9 with SMTP id s23-20020a170902a517b02900de79a748d9mr692150plq.45.1610703424148;
-        Fri, 15 Jan 2021 01:37:04 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=xn4WkMY3sHm5WK+mVkDs3GEV0ZAFPAF055qZPyRV3So=;
+        b=N4/Bt6tCZSznwH/v1flBZQ+3vrY3gU/T3GfkSR5rG+WJ9QbYuusFSFYLFu8dlAr/xS
+         MpswF8mNFMZ56HtznQ87pnyetWDyvJfd7AeoV1ZzzD6aOBHDg40lhHSTd7Yx2I1wpVsm
+         csYGOnakReU1NFg9rZqyjekkyhzpIHKOGvAYMDbi6V2cF4zHwPBYGoOOe9cueD6FLJl/
+         /55hw2/2nFgeBAUE2W1mrR/YOP3BpeBQpGLGix1OmG89SMemTtmISYT/Cvzy0D5N45Hc
+         3G99ADKkTbYorptegqgY+sk5d3aGixed+JXnvabUhobE5F3Nmv2v53F7eoZqF6P4gxX/
+         eqPw==
+X-Gm-Message-State: AOAM531hM/elkdOkZyKVnC+CcY59fEXVHoS4mm3GLbzoyv8rCXpkORuI
+        zbeuyAI42WR5ZVjCiRJYE/CE0wlUrvcliA==
+X-Google-Smtp-Source: ABdhPJzE7cFpoR4xlxF5tZq/pvPuuqRrp5Rx1HbeV51U/Y5PB3ZIvgcEVGHr1gJv6OeHYJl6HWoGYQ==
+X-Received: by 2002:a17:902:b904:b029:dc:18f2:9419 with SMTP id bf4-20020a170902b904b02900dc18f29419mr11732389plb.66.1610704076492;
+        Fri, 15 Jan 2021 01:47:56 -0800 (PST)
 Received: from localhost ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id g2sm8669740pjd.18.2021.01.15.01.37.03
+        by smtp.gmail.com with ESMTPSA id l8sm7456762pjt.32.2021.01.15.01.47.55
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 15 Jan 2021 01:37:03 -0800 (PST)
+        Fri, 15 Jan 2021 01:47:55 -0800 (PST)
 From:   Xin Long <lucien.xin@gmail.com>
 To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
 Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>, davem@davemloft.net,
         Jakub Kicinski <kuba@kernel.org>,
+        Martin Varghese <martin.varghese@nokia.com>,
         Alexander Duyck <alexander.duyck@gmail.com>
-Subject: [PATCHv3 net-next 2/2] sctp: remove the NETIF_F_SG flag before calling skb_segment
-Date:   Fri, 15 Jan 2021 17:36:39 +0800
-Message-Id: <0aeb3e215c9e47a0bdd87c9d5cc81560e2f71d23.1610703289.git.lucien.xin@gmail.com>
+Subject: [PATCH net-next 0/3] net: make udp tunnel devices support fraglist
+Date:   Fri, 15 Jan 2021 17:47:44 +0800
+Message-Id: <cover.1610704037.git.lucien.xin@gmail.com>
 X-Mailer: git-send-email 2.1.0
-In-Reply-To: <bfecc76748f5dc64eaddf501c258dca9efb92bdf.1610703289.git.lucien.xin@gmail.com>
-References: <cover.1610703289.git.lucien.xin@gmail.com>
- <bfecc76748f5dc64eaddf501c258dca9efb92bdf.1610703289.git.lucien.xin@gmail.com>
-In-Reply-To: <cover.1610703289.git.lucien.xin@gmail.com>
-References: <cover.1610703289.git.lucien.xin@gmail.com>
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-It makes more sense to clear NETIF_F_SG instead of set it when
-calling skb_segment() in sctp_gso_segment(), since SCTP GSO is
-using head_skb's fraglist, of which all frags are linear skbs.
+Like GRE device, UDP tunnel devices should also support fraglist, so
+that some protocol (like SCTP) HW GSO that requires NETIF_F_FRAGLIST
+in the dev can work. Especially when the lower device support both
+NETIF_F_GSO_UDP_TUNNEL and NETIF_F_GSO_SCTP.
 
-This will make SCTP GSO code more understandable.
+Xin Long (3):
+  vxlan: add NETIF_F_FRAGLIST flag for dev features
+  geneve: add NETIF_F_FRAGLIST flag for dev features
+  bareudp: add NETIF_F_FRAGLIST flag for dev features
 
-Suggested-by: Alexander Duyck <alexander.duyck@gmail.com>
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
----
- net/sctp/offload.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/bareudp.c | 5 +++--
+ drivers/net/geneve.c  | 5 +++--
+ drivers/net/vxlan.c   | 5 +++--
+ 3 files changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/net/sctp/offload.c b/net/sctp/offload.c
-index ce281a9..eb874e3 100644
---- a/net/sctp/offload.c
-+++ b/net/sctp/offload.c
-@@ -68,7 +68,7 @@ static struct sk_buff *sctp_gso_segment(struct sk_buff *skb,
- 		goto out;
- 	}
- 
--	segs = skb_segment(skb, features | NETIF_F_HW_CSUM | NETIF_F_SG);
-+	segs = skb_segment(skb, (features | NETIF_F_HW_CSUM) & ~NETIF_F_SG);
- 	if (IS_ERR(segs))
- 		goto out;
- 
 -- 
 2.1.0
 
