@@ -2,69 +2,76 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D46DE2F904F
-	for <lists+linux-sctp@lfdr.de>; Sun, 17 Jan 2021 04:14:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED10C2FAF7D
+	for <lists+linux-sctp@lfdr.de>; Tue, 19 Jan 2021 05:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728042AbhAQDNo (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sat, 16 Jan 2021 22:13:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49018 "EHLO mail.kernel.org"
+        id S1730804AbhASEdj (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 18 Jan 2021 23:33:39 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38328 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728149AbhAQDNm (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Sat, 16 Jan 2021 22:13:42 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 859A422CB8;
-        Sun, 17 Jan 2021 03:13:01 +0000 (UTC)
+        id S1731400AbhASEat (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Mon, 18 Jan 2021 23:30:49 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 3F35A22252;
+        Tue, 19 Jan 2021 04:30:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610853181;
-        bh=aSE/5fa+/d6n/5dgf7LQQDIvMYJeA4lIqvsklDX7xuw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=q3QCkijLqDohihaw+k6eP2uGnxVreQQvwiTvk2YnxR0M8fI1veBZkFRFLqGq1Cu70
-         1mt5k8X3kdPLWorfdGScU7Evr+MX8ywST/Y3ITncbpJQT2TR+9bSg5HRoxnimupAdM
-         1EPN2N8i25edTn8DK3aKunGir4qXIPEbDNx2l9plnJ9PDu3RT5gM5n4TjmNnVpZ9W8
-         RyYighelTxsqM2kfxXAN8D7vIFwDi1/y06mE8A11qkpDE3GfbhLpqCOIPLBkg/ibTx
-         mL5PDoNMfzI+avmODnEJzgYYVXgSW0UtSc00iWjvZwTyD8d0gHOm6JCabXjE0oUMse
-         jiorbGp66xkgw==
-Date:   Sat, 16 Jan 2021 19:13:00 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Alexander Duyck <alexander.duyck@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>
-Cc:     network dev <netdev@vger.kernel.org>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>
-Subject: Re: [PATCHv3 net-next 1/2] net: move the hsize check to the else
- block in skb_segment
-Message-ID: <20210116191300.25c2bf27@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <CAKgT0Uc1iObzmeFL8G91jxKxvWARb4z2bJJxv6yJ+5QOYPJQsQ@mail.gmail.com>
-References: <cover.1610703289.git.lucien.xin@gmail.com>
-        <bfecc76748f5dc64eaddf501c258dca9efb92bdf.1610703289.git.lucien.xin@gmail.com>
-        <CAKgT0Uc1iObzmeFL8G91jxKxvWARb4z2bJJxv6yJ+5QOYPJQsQ@mail.gmail.com>
+        s=k20201202; t=1611030609;
+        bh=KKrrHJRxceyv9NCnsP7zhyWC+fZs+HpkgzYcPPKcac4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=jTlyMPINDoflRgJGE5tGandoDoBMtm5Pw2WzLZ4K3aSmlBa01XUrXXH6S/lznQ29n
+         TOgkEcssisrcfwFHhnnCikEvFynueRyQc8mZ6+0Vb5sPXsFjQYEmgmduqvvUcut4vJ
+         S6HfTXIq7w91+N1cY7U57AZk9Gdw5dNoQ1IxmDYfnesDx0EgTbiyzovL+c/c7eCAbk
+         kIA4Jp1OrhcM92YUaW/9ayveI0aL5jOcW4TgDE9dRUwB2VnUJRVEXZku56B10YpnH6
+         FClnFOF//Vg0xLcDRbgyaPZaiuFeE7GnxVZetM7fwV3R90LE9Q3pM6oBwb+Jeg1S4G
+         5OlunaDu3cTBw==
+Received: from pdx-korg-docbuild-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-1.ci.codeaurora.org (Postfix) with ESMTP id 31765601A5;
+        Tue, 19 Jan 2021 04:30:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/3] net: make udp tunnel devices support fraglist
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <161103060919.4335.7926202532790955178.git-patchwork-notify@kernel.org>
+Date:   Tue, 19 Jan 2021 04:30:09 +0000
+References: <cover.1610704037.git.lucien.xin@gmail.com>
+In-Reply-To: <cover.1610704037.git.lucien.xin@gmail.com>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
+        marcelo.leitner@gmail.com, nhorman@tuxdriver.com,
+        davem@davemloft.net, kuba@kernel.org, martin.varghese@nokia.com,
+        alexander.duyck@gmail.com
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Fri, 15 Jan 2021 17:39:02 -0800 Alexander Duyck wrote:
-> On Fri, Jan 15, 2021 at 1:36 AM Xin Long <lucien.xin@gmail.com> wrote:
-> >
-> > After commit 89319d3801d1 ("net: Add frag_list support to skb_segment"),
-> > it goes to process frag_list when !hsize in skb_segment(). However, when
-> > using skb frag_list, sg normally should not be set. In this case, hsize
-> > will be set with len right before !hsize check, then it won't go to
-> > frag_list processing code.
-> >
-> > So the right thing to do is move the hsize check to the else block, so
-> > that it won't affect the !hsize check for frag_list processing.
-> >
-> > v1->v2:
-> >   - change to do "hsize <= 0" check instead of "!hsize", and also move
-> >     "hsize < 0" into else block, to save some cycles, as Alex suggested.
-> >
-> > Signed-off-by: Xin Long <lucien.xin@gmail.com>  
-> 
-> Looks good to me.
-> 
-> Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
+Hello:
 
-Applied, thanks!
+This series was applied to netdev/net-next.git (refs/heads/master):
+
+On Fri, 15 Jan 2021 17:47:44 +0800 you wrote:
+> Like GRE device, UDP tunnel devices should also support fraglist, so
+> that some protocol (like SCTP) HW GSO that requires NETIF_F_FRAGLIST
+> in the dev can work. Especially when the lower device support both
+> NETIF_F_GSO_UDP_TUNNEL and NETIF_F_GSO_SCTP.
+> 
+> Xin Long (3):
+>   vxlan: add NETIF_F_FRAGLIST flag for dev features
+>   geneve: add NETIF_F_FRAGLIST flag for dev features
+>   bareudp: add NETIF_F_FRAGLIST flag for dev features
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,1/3] vxlan: add NETIF_F_FRAGLIST flag for dev features
+    https://git.kernel.org/netdev/net-next/c/cb2c57112432
+  - [net-next,2/3] geneve: add NETIF_F_FRAGLIST flag for dev features
+    https://git.kernel.org/netdev/net-next/c/18423e1a9d7d
+  - [net-next,3/3] bareudp: add NETIF_F_FRAGLIST flag for dev features
+    https://git.kernel.org/netdev/net-next/c/3224dcfd850f
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
