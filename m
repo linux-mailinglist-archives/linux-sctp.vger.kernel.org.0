@@ -2,76 +2,133 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED10C2FAF7D
-	for <lists+linux-sctp@lfdr.de>; Tue, 19 Jan 2021 05:37:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3A652FC352
+	for <lists+linux-sctp@lfdr.de>; Tue, 19 Jan 2021 23:25:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730804AbhASEdj (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 18 Jan 2021 23:33:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38328 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731400AbhASEat (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Mon, 18 Jan 2021 23:30:49 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 3F35A22252;
-        Tue, 19 Jan 2021 04:30:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611030609;
-        bh=KKrrHJRxceyv9NCnsP7zhyWC+fZs+HpkgzYcPPKcac4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=jTlyMPINDoflRgJGE5tGandoDoBMtm5Pw2WzLZ4K3aSmlBa01XUrXXH6S/lznQ29n
-         TOgkEcssisrcfwFHhnnCikEvFynueRyQc8mZ6+0Vb5sPXsFjQYEmgmduqvvUcut4vJ
-         S6HfTXIq7w91+N1cY7U57AZk9Gdw5dNoQ1IxmDYfnesDx0EgTbiyzovL+c/c7eCAbk
-         kIA4Jp1OrhcM92YUaW/9ayveI0aL5jOcW4TgDE9dRUwB2VnUJRVEXZku56B10YpnH6
-         FClnFOF//Vg0xLcDRbgyaPZaiuFeE7GnxVZetM7fwV3R90LE9Q3pM6oBwb+Jeg1S4G
-         5OlunaDu3cTBw==
-Received: from pdx-korg-docbuild-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-1.ci.codeaurora.org (Postfix) with ESMTP id 31765601A5;
-        Tue, 19 Jan 2021 04:30:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S1728855AbhASWYc (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 19 Jan 2021 17:24:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42440 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728883AbhASWYY (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 19 Jan 2021 17:24:24 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4114AC061575;
+        Tue, 19 Jan 2021 14:23:43 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id p72so18211526iod.12;
+        Tue, 19 Jan 2021 14:23:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WMd4G6Vw+iokzlycIBszbMWea4hqYJQXqXCw+KiiIAo=;
+        b=vONKQuqSeYLNbI0hx++5jXZ9CVRE4w+KkUnZYocBO8H0WtHln+qkHIzoY+EDJ0ck1P
+         SO1GdgosqsPYY6kejJkbnFKYDuMwJmVGUOXtwjkiU8Xt9x2bPX0C0hOZabO5jJoB2Qim
+         n85Qd2XJHrmEGFAgHjsOEQcT6RiydxnJ7uzSNjDn2O7DoRdAbRA7l9du4ueWlCkK+1Cb
+         mTkPz4YYAC6B/bFqnPAfd7f4DHiesxoTy9sVQqxME137nxLS5Ug+EoKAuMP7i9hU2bOu
+         YpzWeWS8JA21ZUrscWb0YogjsRanzFXc08DlNpRpQ0kcU8uqpj2f8QPyB9iQwLlmK2ZP
+         Rahg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WMd4G6Vw+iokzlycIBszbMWea4hqYJQXqXCw+KiiIAo=;
+        b=nVBzf/ZYO8cExPWaiet+Oj9g8KL4bmiysIMXv0Cc4gTOcVe+SgYLFmR+dfNGdIeeqf
+         pLAjZRiywfD7rFAHjBr3PWJrEZzwEnwedAWKsmGJYJOz+g+GDHgKeIwlsZtSmgQ9JQBg
+         2SLdS49pA2xAOKcXvhinkXU3JWX7lsXhHp1N+uHUVkdmD/lWos5k8k6VHucBF9jq/Ded
+         UQnFUUJ8MbW6grOkVqn6hfWG/PBwc28nIC5PxIGSaKze//cwCeK3NGFuR1cadnYEjLzo
+         Dm06a3FWEytyTQUsqAo01zGlSZcJfj1YEzo0PZmN+6gGTgsCjDoLzxkR+5tSG9ublYEe
+         LF+g==
+X-Gm-Message-State: AOAM532Ial1P07FhnYSYjnsYfyWQAy8DHy0yQgOKGHUze0dfjpEM84Cz
+        CQGXjPM9OxEB1cbEntlsWZBKfhd4rrmDahoyz/4=
+X-Google-Smtp-Source: ABdhPJwQqyhnQXHUQZu0t9aXfZLVUu9i99yt3aQohHcdEu+bmP71nZHwmE+1DwfmULPKfKxtFsUpF3mGkdFdXl3dcao=
+X-Received: by 2002:a05:6e02:929:: with SMTP id o9mr5146752ilt.42.1611095022624;
+ Tue, 19 Jan 2021 14:23:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/3] net: make udp tunnel devices support fraglist
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161103060919.4335.7926202532790955178.git-patchwork-notify@kernel.org>
-Date:   Tue, 19 Jan 2021 04:30:09 +0000
-References: <cover.1610704037.git.lucien.xin@gmail.com>
-In-Reply-To: <cover.1610704037.git.lucien.xin@gmail.com>
+References: <cover.1610777159.git.lucien.xin@gmail.com> <34c9f5b8c31610687925d9db1f151d5bc87deba7.1610777159.git.lucien.xin@gmail.com>
+In-Reply-To: <34c9f5b8c31610687925d9db1f151d5bc87deba7.1610777159.git.lucien.xin@gmail.com>
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Tue, 19 Jan 2021 14:23:31 -0800
+Message-ID: <CAKgT0UduX4M-N1Kyo-M2=05EO_rAs2c_CDrUwWMKk2oDOgxd2Q@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/6] net: add inline function skb_csum_is_sctp
 To:     Xin Long <lucien.xin@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
-        marcelo.leitner@gmail.com, nhorman@tuxdriver.com,
-        davem@davemloft.net, kuba@kernel.org, martin.varghese@nokia.com,
-        alexander.duyck@gmail.com
+Cc:     network dev <netdev@vger.kernel.org>,
+        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        intel-wired-lan <intel-wired-lan@lists.osuosl.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello:
+On Fri, Jan 15, 2021 at 10:13 PM Xin Long <lucien.xin@gmail.com> wrote:
+>
+> This patch is to define a inline function skb_csum_is_sctp(), and
+> also replace all places where it checks if it's a SCTP CSUM skb.
+> This function would be used later in many networking drivers in
+> the following patches.
+>
+> Suggested-by: Alexander Duyck <alexander.duyck@gmail.com>
+> Signed-off-by: Xin Long <lucien.xin@gmail.com>
 
-This series was applied to netdev/net-next.git (refs/heads/master):
+One minor nit. If you had to resubmit this I might move the ionic
+driver code into a separate patch. However It can probably be accepted
+as is.
 
-On Fri, 15 Jan 2021 17:47:44 +0800 you wrote:
-> Like GRE device, UDP tunnel devices should also support fraglist, so
-> that some protocol (like SCTP) HW GSO that requires NETIF_F_FRAGLIST
-> in the dev can work. Especially when the lower device support both
-> NETIF_F_GSO_UDP_TUNNEL and NETIF_F_GSO_SCTP.
-> 
-> Xin Long (3):
->   vxlan: add NETIF_F_FRAGLIST flag for dev features
->   geneve: add NETIF_F_FRAGLIST flag for dev features
->   bareudp: add NETIF_F_FRAGLIST flag for dev features
-> 
-> [...]
+Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
 
-Here is the summary with links:
-  - [net-next,1/3] vxlan: add NETIF_F_FRAGLIST flag for dev features
-    https://git.kernel.org/netdev/net-next/c/cb2c57112432
-  - [net-next,2/3] geneve: add NETIF_F_FRAGLIST flag for dev features
-    https://git.kernel.org/netdev/net-next/c/18423e1a9d7d
-  - [net-next,3/3] bareudp: add NETIF_F_FRAGLIST flag for dev features
-    https://git.kernel.org/netdev/net-next/c/3224dcfd850f
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> ---
+>  drivers/net/ethernet/pensando/ionic/ionic_txrx.c | 2 +-
+>  include/linux/skbuff.h                           | 5 +++++
+>  net/core/dev.c                                   | 2 +-
+>  3 files changed, 7 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/net/ethernet/pensando/ionic/ionic_txrx.c b/drivers/net/ethernet/pensando/ionic/ionic_txrx.c
+> index ac4cd5d..162a1ff 100644
+> --- a/drivers/net/ethernet/pensando/ionic/ionic_txrx.c
+> +++ b/drivers/net/ethernet/pensando/ionic/ionic_txrx.c
+> @@ -979,7 +979,7 @@ static int ionic_tx_calc_csum(struct ionic_queue *q, struct sk_buff *skb)
+>                 stats->vlan_inserted++;
+>         }
+>
+> -       if (skb->csum_not_inet)
+> +       if (skb_csum_is_sctp(skb))
+>                 stats->crc32_csum++;
+>         else
+>                 stats->csum++;
+> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> index c9568cf..46f901a 100644
+> --- a/include/linux/skbuff.h
+> +++ b/include/linux/skbuff.h
+> @@ -4621,6 +4621,11 @@ static inline void skb_reset_redirect(struct sk_buff *skb)
+>  #endif
+>  }
+>
+> +static inline bool skb_csum_is_sctp(struct sk_buff *skb)
+> +{
+> +       return skb->csum_not_inet;
+> +}
+> +
+>  static inline void skb_set_kcov_handle(struct sk_buff *skb,
+>                                        const u64 kcov_handle)
+>  {
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 0a31d4e..bbd306f 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -3617,7 +3617,7 @@ static struct sk_buff *validate_xmit_vlan(struct sk_buff *skb,
+>  int skb_csum_hwoffload_help(struct sk_buff *skb,
+>                             const netdev_features_t features)
+>  {
+> -       if (unlikely(skb->csum_not_inet))
+> +       if (unlikely(skb_csum_is_sctp(skb)))
+>                 return !!(features & NETIF_F_SCTP_CRC) ? 0 :
+>                         skb_crc32c_csum_help(skb);
+>
+> --
+> 2.1.0
+>
