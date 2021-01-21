@@ -2,73 +2,83 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 845FF2FE2AF
-	for <lists+linux-sctp@lfdr.de>; Thu, 21 Jan 2021 07:24:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 552422FE8F6
+	for <lists+linux-sctp@lfdr.de>; Thu, 21 Jan 2021 12:39:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726024AbhAUGWq (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 21 Jan 2021 01:22:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56150 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726317AbhAUGUt (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 21 Jan 2021 01:20:49 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 968D8238EF;
-        Thu, 21 Jan 2021 06:20:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611210008;
-        bh=8FE7KSgHlbHUXfjNJOeuXK0ZRoy9n5aV0wuYEKHYw0I=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=DG6cKIfJfR9Kz3FAec1MTPvh4z+ZnC+UV9liZ1Z/eCHMWey3mA/lGxT7/jczEgfCj
-         HQvLXsP0Jfxt8VAdp0Ryg22v9gET++zfP1iYsZziMrLku8fRMxQfYFedTdTbDX1Q5H
-         CelrAnZgUrFjrVMATfusPD4YEEL6EBJE7blwtDYW77xnknyOFILDDVr8c9Y2dC6vke
-         EeYfMmM1+MKQNuKpuXgUzZeF/6w8ovxwKX/at0AtJZNNxlV+8nuTx0F9clsKgOKh4X
-         58uj+89Tg8f0oqymWCRyhsC5vWjC+T3jMbG/CpZ2J0ZhYr/VWNcydjblufB95498fs
-         LD/CfCjopruNw==
-Received: from pdx-korg-docbuild-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-1.ci.codeaurora.org (Postfix) with ESMTP id 895E9600E0;
-        Thu, 21 Jan 2021 06:20:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S1730551AbhAULh6 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 21 Jan 2021 06:37:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43442 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729696AbhAULhy (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 21 Jan 2021 06:37:54 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6751C0613C1
+        for <linux-sctp@vger.kernel.org>; Thu, 21 Jan 2021 03:37:12 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id n11so2089722lji.5
+        for <linux-sctp@vger.kernel.org>; Thu, 21 Jan 2021 03:37:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=FZJxCH0OsqEzYmKuMeqKpZV0Tof/u9872jT4sxBx5JI=;
+        b=WQ6l0VPSKZK3Kci3aUSh+N/QnOmbtV0Wzvjo0p5h7WlHdkDtilalcoHyYCrul2Z3bi
+         cdCAtFcV3OMLukiQ9ZJBbPjEEL+SisKPP8T1Hm+Zx7ae6ew+tDllOPe8UEUJtFGDMU5h
+         TjN5zCgphcN/aQezaSswGvSzVDeH7BLuBcUzprqpYQUnec+wPNFG32Yz0YcoacghEskh
+         C1ny5LPVGLaWpfwTYKtKuMIj6SWWCmS6VL6efbvYZflDS01VPgA3JyXNCrJmm9NHZ9Hw
+         4FyS41IkrqkFgotn0EONSYIEozscEkTCLuXFYQMtezBo8NfHwNRWZmvpzHUOJyPYBwby
+         IkkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=FZJxCH0OsqEzYmKuMeqKpZV0Tof/u9872jT4sxBx5JI=;
+        b=ZQh06iDBxMUUvbmbah2iSeZJow5ZZpOFomjJX1lepZGQMirCVI7qT7ZvHSWuX0IU3Q
+         fWrSQ9Q0HTSrFf8JWcmqnawtgSpxDhodBl3Jf+7+Ig/D6lW3weAiLQ6s03G6NPx7tDy9
+         /3WU/+BCEh2b9Gk0hdVI4i25xi9dFALImYkB7j8cwjy00cQHehJueqacxcYpJ5PMFepm
+         f6PapFZ3hXt8ZUqRMxjkV3TN/kaDEORDi/vl/kVdQpo91l1FIYeBQltzDMbkTAuzcuQ7
+         PheQJoiOhcOEG8IeiyU1p6sRFnjFs/3HwE1v7A2ytJzWSkOpjkysoyofCtJPk49k0/aK
+         dYYA==
+X-Gm-Message-State: AOAM530JJH/8E/nQzaHAApi/eqMRuflF0S8xiAv+jRYm+nIMbzLkgreo
+        gSPLBKHC3mD4CeL9uBRelMtWCXIuynG+DlInN3w=
+X-Google-Smtp-Source: ABdhPJwulecW4pl7tbDonEdKSFBa5orC0FaMXZweKG4/NyGP+OIxPa+HVJujHc1ynk2AIERqUPV0mJBNQGXvjtAeYIE=
+X-Received: by 2002:a2e:6c0a:: with SMTP id h10mr6833396ljc.149.1611229031184;
+ Thu, 21 Jan 2021 03:37:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCHv3 net-next] ip_gre: remove CRC flag from dev features in
- gre_gso_segment
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161121000855.22302.10418362018948069217.git-patchwork-notify@kernel.org>
-Date:   Thu, 21 Jan 2021 06:20:08 +0000
-References: <00439f24d5f69e2c6fa2beadc681d056c15c258f.1610772251.git.lucien.xin@gmail.com>
-In-Reply-To: <00439f24d5f69e2c6fa2beadc681d056c15c258f.1610772251.git.lucien.xin@gmail.com>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
-        marcelo.leitner@gmail.com, nhorman@tuxdriver.com,
-        davem@davemloft.net, kuba@kernel.org, alexander.duyck@gmail.com,
-        lorenzo@kernel.org
+Received: by 2002:a2e:b5b7:0:0:0:0:0 with HTTP; Thu, 21 Jan 2021 03:37:10
+ -0800 (PST)
+Reply-To: mohamadazzam690@gmail.com
+From:   "Mr. Mohamad Azzam" <sophiathomas328@gmail.com>
+Date:   Wed, 20 Jan 2021 23:37:10 -1200
+Message-ID: <CAHOKbSwtehgc7X1H6Os7SZFO_aoAmSHGtH-=+Vd-Rb1-tuW8EQ@mail.gmail.com>
+Subject: Please i need your assistance,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello:
+I am contacting you independently of my investigation in my bank and
+no one is informed of this communication. I need your urgent
+assistance in transferring the sum of $13.5million dollars to Your
+private account, that belongs to one of our late foreign customer who
+died a longtime with his supposed NEXT OF KIN since the year 2008.
 
-This patch was applied to netdev/net-next.git (refs/heads/master):
+The money has been here in our Bank lying dormant for years now
+without anybody coming for the claim of it as the deceased relation. I
+want to release the money to you as the relative to our deceased
+customer, the Banking laws here does not allow such money to stay more
+than 15years, because the money will be recalled to the Bank Treasury
+account as unclaimed fund.
 
-On Sat, 16 Jan 2021 12:44:11 +0800 you wrote:
-> This patch is to let it always do CRC checksum in sctp_gso_segment()
-> by removing CRC flag from the dev features in gre_gso_segment() for
-> SCTP over GRE, just as it does in Commit 527beb8ef9c0 ("udp: support
-> sctp over udp in skb_udp_tunnel_segment") for SCTP over UDP.
-> 
-> It could set csum/csum_start in GSO CB properly in sctp_gso_segment()
-> after that commit, so it would do checksum with gso_make_checksum()
-> in gre_gso_segment(), and Commit 622e32b7d4a6 ("net: gre: recompute
-> gre csum for sctp over gre tunnels") can be reverted now.
-> 
-> [...]
+I am ready to share with you 40% for you and 60% for me, by indicating
+your interest I will send you the full details on how the business
+will be executed without any hitch.
 
-Here is the summary with links:
-  - [PATCHv3,net-next] ip_gre: remove CRC flag from dev features in gre_gso_segment
-    https://git.kernel.org/netdev/net-next/c/1a2367665ac2
+I will be waiting for your urgent response including your mobile that
+is in what sap for easy communication. Here is my Private Email
+address (mohamadazzam690@gmail.com)
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thanks.
+Here is my mobile number and whatsApp +0022669813005
 
-
+Best Regards,
+Mr. Mohamad Azzam
