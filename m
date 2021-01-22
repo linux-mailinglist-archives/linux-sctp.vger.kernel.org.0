@@ -2,83 +2,80 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 552422FE8F6
-	for <lists+linux-sctp@lfdr.de>; Thu, 21 Jan 2021 12:39:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA03300585
+	for <lists+linux-sctp@lfdr.de>; Fri, 22 Jan 2021 15:34:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730551AbhAULh6 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 21 Jan 2021 06:37:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43442 "EHLO
+        id S1728686AbhAVOdu (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 22 Jan 2021 09:33:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729696AbhAULhy (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 21 Jan 2021 06:37:54 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6751C0613C1
-        for <linux-sctp@vger.kernel.org>; Thu, 21 Jan 2021 03:37:12 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id n11so2089722lji.5
-        for <linux-sctp@vger.kernel.org>; Thu, 21 Jan 2021 03:37:12 -0800 (PST)
+        with ESMTP id S1728856AbhAVOdk (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 22 Jan 2021 09:33:40 -0500
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48B2C06174A
+        for <linux-sctp@vger.kernel.org>; Fri, 22 Jan 2021 06:32:58 -0800 (PST)
+Received: by mail-qk1-x729.google.com with SMTP id c7so5254671qke.1
+        for <linux-sctp@vger.kernel.org>; Fri, 22 Jan 2021 06:32:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=FZJxCH0OsqEzYmKuMeqKpZV0Tof/u9872jT4sxBx5JI=;
-        b=WQ6l0VPSKZK3Kci3aUSh+N/QnOmbtV0Wzvjo0p5h7WlHdkDtilalcoHyYCrul2Z3bi
-         cdCAtFcV3OMLukiQ9ZJBbPjEEL+SisKPP8T1Hm+Zx7ae6ew+tDllOPe8UEUJtFGDMU5h
-         TjN5zCgphcN/aQezaSswGvSzVDeH7BLuBcUzprqpYQUnec+wPNFG32Yz0YcoacghEskh
-         C1ny5LPVGLaWpfwTYKtKuMIj6SWWCmS6VL6efbvYZflDS01VPgA3JyXNCrJmm9NHZ9Hw
-         4FyS41IkrqkFgotn0EONSYIEozscEkTCLuXFYQMtezBo8NfHwNRWZmvpzHUOJyPYBwby
-         IkkA==
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=eX93HDCiTn1t2mRtI6NUO8MXGjFL47QX93LRRdApR/g=;
+        b=j8uTNgLcagm6wLoRHwbMYM6Eo5x5X+nmkqs9U0Qp/Xnm5kNYmMdEasciw+zJh9/IAj
+         guLkQg21H4Iw7TVJexmEH/yWEtcLM8VvAm3iix33y/iUlL8E8Pc0TAoXrAPvghL5OHWM
+         HrRGQ0nIadX/NJChFXbKTfdxXlPyx56WCWgx4WmuyZVlyEQx2DqBcz0k9oa178BjDyga
+         E+mLf6LmMO6/xlxaLM2QMNxtgr9zxb67KtpzQvgLMyYag3A/YgT/VnIf49budsv1r8ab
+         TEnypsKPrmYAgvamJWWMLubkIj/Xckvl122oVx8+MzXaMv+qHVYKrd2NJrY8biUz2ZGK
+         m6nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=FZJxCH0OsqEzYmKuMeqKpZV0Tof/u9872jT4sxBx5JI=;
-        b=ZQh06iDBxMUUvbmbah2iSeZJow5ZZpOFomjJX1lepZGQMirCVI7qT7ZvHSWuX0IU3Q
-         fWrSQ9Q0HTSrFf8JWcmqnawtgSpxDhodBl3Jf+7+Ig/D6lW3weAiLQ6s03G6NPx7tDy9
-         /3WU/+BCEh2b9Gk0hdVI4i25xi9dFALImYkB7j8cwjy00cQHehJueqacxcYpJ5PMFepm
-         f6PapFZ3hXt8ZUqRMxjkV3TN/kaDEORDi/vl/kVdQpo91l1FIYeBQltzDMbkTAuzcuQ7
-         PheQJoiOhcOEG8IeiyU1p6sRFnjFs/3HwE1v7A2ytJzWSkOpjkysoyofCtJPk49k0/aK
-         dYYA==
-X-Gm-Message-State: AOAM530JJH/8E/nQzaHAApi/eqMRuflF0S8xiAv+jRYm+nIMbzLkgreo
-        gSPLBKHC3mD4CeL9uBRelMtWCXIuynG+DlInN3w=
-X-Google-Smtp-Source: ABdhPJwulecW4pl7tbDonEdKSFBa5orC0FaMXZweKG4/NyGP+OIxPa+HVJujHc1ynk2AIERqUPV0mJBNQGXvjtAeYIE=
-X-Received: by 2002:a2e:6c0a:: with SMTP id h10mr6833396ljc.149.1611229031184;
- Thu, 21 Jan 2021 03:37:11 -0800 (PST)
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=eX93HDCiTn1t2mRtI6NUO8MXGjFL47QX93LRRdApR/g=;
+        b=AFhjrWvx/gLJR/aTfpNNB4quMB9pWn1hlusvzmLfjJIekaCZLQeXX6fRh/QrDvbor/
+         k4IkUjHQ+z+GwALxmArEGR6Ga/C5cE4c5XBN22Qlh+iGKeD7vEcbXZLx+VaI+5+EHV+G
+         jhknkA/oSUUiBK/oDFJl16OnDCnDKxgtEcbLrhnV3yZoPcsA+irinziqKUSpGyY6grGU
+         QSkALarpEMfPTnksgsbd1J0Z7oms4BOtcZ2se2CeHdsyT3JOyZJ1gmziHcLmhJLFPUDP
+         jTTt9lsv/PkHQRkCVQjPEU3pTcSvehPh+NDcfPnm9hcgZ/gu1ERCgFBfXsLSrnRtMGv1
+         WEsA==
+X-Gm-Message-State: AOAM531BXAFzmg5bEOfJMafxFKmqBwJteNcQa8VS+zzRwVqQ7BMMXklC
+        JCJmK6ImIlnvvm5H8xQwquMDJ6tcSsmWnqkCT4c=
+X-Google-Smtp-Source: ABdhPJxWt/7L63D8TUvlCWOgQaZtXrk98y3KiW3+SKU/BB+zt4ZYkFQKcdqpmD8rqyM0uLd8k45aIqth3C7bD4nfwQs=
+X-Received: by 2002:a37:63d6:: with SMTP id x205mr5148306qkb.21.1611325977861;
+ Fri, 22 Jan 2021 06:32:57 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a2e:b5b7:0:0:0:0:0 with HTTP; Thu, 21 Jan 2021 03:37:10
+Sender: tatuyak22@gmail.com
+Received: by 2002:a0c:e6e7:0:0:0:0:0 with HTTP; Fri, 22 Jan 2021 06:32:57
  -0800 (PST)
-Reply-To: mohamadazzam690@gmail.com
-From:   "Mr. Mohamad Azzam" <sophiathomas328@gmail.com>
-Date:   Wed, 20 Jan 2021 23:37:10 -1200
-Message-ID: <CAHOKbSwtehgc7X1H6Os7SZFO_aoAmSHGtH-=+Vd-Rb1-tuW8EQ@mail.gmail.com>
-Subject: Please i need your assistance,
+From:   Aisha Gaddafi <aishagddafi40@gmail.com>
+Date:   Fri, 22 Jan 2021 14:32:57 +0000
+X-Google-Sender-Auth: DMbfN_d65BiPIVvQuMxNAJKU5P4
+Message-ID: <CAA+mzvqQ1gGLbRQ5Nn6VZ23-c-Oh4V18BGYA5syUCubpggjO3w@mail.gmail.com>
+Subject: Greetings
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-I am contacting you independently of my investigation in my bank and
-no one is informed of this communication. I need your urgent
-assistance in transferring the sum of $13.5million dollars to Your
-private account, that belongs to one of our late foreign customer who
-died a longtime with his supposed NEXT OF KIN since the year 2008.
+Dear Friend (Assalamu Alaikum)
 
-The money has been here in our Bank lying dormant for years now
-without anybody coming for the claim of it as the deceased relation. I
-want to release the money to you as the relative to our deceased
-customer, the Banking laws here does not allow such money to stay more
-than 15years, because the money will be recalled to the Bank Treasury
-account as unclaimed fund.
+I send my greeting to you from the city of Muscat Oman.
 
-I am ready to share with you 40% for you and 60% for me, by indicating
-your interest I will send you the full details on how the business
-will be executed without any hitch.
+I am pleased to use this medium to open a mutual communication with
+you and to ask for your permission and acceptance to partner with you
+to invest in your country.
 
-I will be waiting for your urgent response including your mobile that
-is in what sap for easy communication. Here is my Private Email
-address (mohamadazzam690@gmail.com)
+My name is Aisha Gaddafi and presently living in Oman. I am a Widow
+and single Mother with three Children, the only biological Daughter of
+late Libyan President (Late Colonel Muammar Gaddafi) and presently i
+am under political asylum protection by the Omani Government.
 
-Thanks.
-Here is my mobile number and whatsApp +0022669813005
+I have funds worth $22.500.000.00 US Dollars "Twenty TWO Million
+Five Hundred Thousand United State Dollars" which I want to entrust on
+you for investment project assistance in your country. If you are
+willing to handle this project on my behalf I shall appreciate your
+urgent response to provide you more details to proceed further. Kindly
+get back to me for further discussion.
 
-Best Regards,
-Mr. Mohamad Azzam
+Best Regards
+Mrs. Aisha Gaddafi
