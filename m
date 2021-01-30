@@ -2,99 +2,64 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35C2D3080D2
-	for <lists+linux-sctp@lfdr.de>; Thu, 28 Jan 2021 22:54:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47DEA30CF0F
+	for <lists+linux-sctp@lfdr.de>; Tue,  2 Feb 2021 23:37:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbhA1Vx4 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 28 Jan 2021 16:53:56 -0500
-Received: from spe8-2.ucebox.co.za ([197.242.156.207]:39142 "EHLO
-        spe8-2.ucebox.co.za" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231403AbhA1Vxw (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 28 Jan 2021 16:53:52 -0500
-X-Greylist: delayed 6124 seconds by postgrey-1.27 at vger.kernel.org; Thu, 28 Jan 2021 16:53:45 EST
-Received: from cornucopia.aserv.co.za ([154.0.175.203])
-        by spe2.ucebox.co.za with esmtps (TLSv1.2:AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <manornutgrovemanor@gmail.com>)
-        id 1l5Bno-0001H8-2W; Thu, 28 Jan 2021 20:14:25 +0200
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by cornucopia.aserv.co.za (Postfix) with ESMTPA id 2C01EC1250;
-        Thu, 28 Jan 2021 20:12:38 +0200 (SAST)
+        id S235880AbhBBWec (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 2 Feb 2021 17:34:32 -0500
+Received: from [20.39.40.203] ([20.39.40.203]:61037 "EHLO optinix.in"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S230091AbhBBWeU (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Tue, 2 Feb 2021 17:34:20 -0500
+dkim-signature: v=1; a=rsa-sha256; d=digitalsol.in; s=dkim;
+        c=relaxed/relaxed; q=dns/txt; h=From:Reply-To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=wK2neTcOXNiSQ+RBxrnFed+mRrGUU/ndLGEgvo8IMCc=;
+        b=Z/qoYR5e93G/1E5Uh8tLreepyziGYShILI7fcXozE97A3DqZKBadv9kcBZBcmHZnqAUcLkt0g+COxgI6WqJ5gdfKqksQSW540KJaAE4DNiZ+EZYtErJhsiZnZCgjfp9yI8W2dpgN2EsH5zUvgVY6Bl2MWU8ziaGqy1DCXSk4DXXi+2CTtkJX9uQrf2ohPvP7bhav6zr4dJxTQjQYoopWjV3h9j7RqQq/UIXqX3VBjVDZARoXQTZUB0KN0A
+        F7X8DeijiSCFEdYkkdQwasjHi3K0B6KloKBXegK0TgQ39PHt5t2MVnmtmeZadY0DbdImfujjk25mqjLTG700JJRoTl9A==
+Received: from User (Unknown [52.231.31.5])
+        by optinix.in with ESMTP
+        ; Sat, 30 Jan 2021 02:14:15 +0000
+Message-ID: <B0CC978E-0149-4652-A2D0-17DE1F49BCC1@optinix.in>
+Reply-To: <ms.reem@yandex.com>
+From:   "Ms. Reem" <support@digitalsol.in>
+Subject: Re:read
+Date:   Sat, 30 Jan 2021 02:14:13 -0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+Content-Type: text/plain;
+        charset="Windows-1251"
 Content-Transfer-Encoding: 7bit
-Date:   Thu, 28 Jan 2021 20:12:38 +0200
-From:   Nut Grove Manor <manornutgrovemanor@gmail.com>
-To:     undisclosed-recipients:;
-Subject: Invitation To Quote
-User-Agent: Roundcube Webmail/1.4.1
-Message-ID: <bc9a5f43f3caae762f95ca676f59aca0@gmail.com>
-X-Sender: manornutgrovemanor@gmail.com
-X-Originating-IP: 154.0.175.203
-X-Afrihost-Domain: pesci.aserv.co.za
-X-Afrihost-Username: 154.0.175.203
-Authentication-Results: ucebox.co.za; auth=pass smtp.auth=154.0.175.203@pesci.aserv.co.za
-X-Afrihost-Outgoing-Class: unsure
-X-Afrihost-Outgoing-Evidence: Combined (0.71)
-X-Recommended-Action: accept
-X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT8eRvNAwxRJK5oS9B6sVnLtPUtbdvnXkggZ
- 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5w+ugTFm367kvXdl25hUJZX//jaqHS4NGlqk86PT/V0kACi
- aPd2rFJ2wWBs2MzNLJgNEiJF3SJuHcCrWjImurzO6lY3cfTem8rS9eDj7ehEn1oGhZjDYclncJzm
- aX1v3lP7IOYCwV4/Vt5MzRdTvATz9DdCq79l67r58fYeQG9Rrmx9Do0v+fVNY1JSJM3QfPDpFQ4x
- kfyeWAi50R8bbTvGumizu3ZqPmtuXauHGPleO6a2X0PnhJuG6olz2WDCLUbqnX5DXnliXbW34qKd
- BZWcaoGa59M9sQg7r511YAg9WE36gLvXrq00jX5Y/dcj0qpMQAbVh392Tjq+pWS31i1fk4n5KQoi
- dav2Zgrdb6zWD6nFgxxIj6c9YRO4bg9bUZssg4+AYbNZUBwyfITZ9btRtqexxOhY32oDxzRpjGzi
- hmCr0yKqo4Fkd02l9dlqDQaUkdoK6oBHBpMRbY9kH+9Lt8C9mOBdONdnsxgsk1D2pzjAgYZXLyz4
- CSqPxuGV1Aekm5MYOgR9Y2hlLZIqWnxguszgm0molhznb/Tdom3Q/JvKu1i/fd1inHINSuldsLKS
- 8HSb1S8iZ/PwMhk1xL2zTnSU8VPJvlzFIGLvyIVIHLaNWbCJVTFypk6brDwkbDXTa8K7cV5K1bqm
- 2M40Jj8iW4yEpPWYlspIIxdCrlZkvlYJaBmZyjQ/cIlQEay+Mhi3wL2Y4F0412ezGCyTUPanVH2v
- y8rdDTbJq8cub/isJWteZeQ2LEPpOpjpb2MQdQ+cM+l16lFlVwpEWiZH/ARZIJuesqThZR5PVwQm
- qUKbBkC8dKbVBQxHvK/EmTSeBxe7mXZXf42gq8a2VcXaaVYIvkOIIFfBgQWRjgd0wcTTj7JfaQUR
- lJFZU8bFGDBbOg/RT2gpysAMDN8FInQ7qSGPJgrLS5OEEqKO9og+uUyVNOISB0C6p1tRv+6ghL7M
- 9VXLrKQmKNPCcjTKBblk7zo841zrASH8uyZJtf0qyA9BhsyXc8qQcbnd54gSIgMxjn+Ss49q9YVu
- JEv+rNbKFfFR9pewK+r2G5n3jj3MaptU/cHPcNfLzPc3QNSpSEIQGUxfNopD1ARuOb8YbLy6L24L
- D1GEQv2epseWQzNCJZ8FfocX9TI6dyXDwYvtCUV9DpfpUfyqvyOMp3rU7r+f6jsrrqSItw0Wl9B2
- stYF7XqV3NA7/w+9HPDbLSZn/T9bbPe3lB4/uuZA8dzTr8BtCGby1lVZQ3zbrfs30EscvuiIBBLc
- 5SRsOHD9882c7PcbwOs1MfBaSSJ2YPKjMx/WAmZOJLSuq95ul8EUK7z2fHdzTRBv/+5nJSW+CEwZ
- IHGeTk4asNZLuHnMeaaa5NDo9ezU0U/cEjWmrSMaF8kk2DyT40ChxtWOFu8s0ZJ0jb/s2m9XVSkk
- /YH0NTnTFjISo+1p2AFqKHAlWjGjByXjKrCR9v/QRMnA1Aq1OqV3LnyOtbNhCuctqDIiTJTbEyB+
- 4px9psIokcV25yDYdjBtvlzHjORxCdxM8EUxS7/puSxo3ySytUEgsvfn51FDPMWVqOC0uHQt8ltM
- aEjv7Wg8816eUCmElHpxte8lPH1Ie4md7/GP5aT0DnVD2uQw1uJmNNUtLaavM3gmIA55PronAD37
- XNGCQng+W2Jvz3FUG0tTxkdeExBeRNpEgGejqtsqGXMIWmuNA8WTybi1JN85FSnfKemKXIiB2QoF
- HcOOEfrK6BLb9ZBKUrs5rWMGl8gURC3G9dubodEMFz0d1auZ+HgWOftpOePfOLHtewefuAHIFZ/b
- 2S2AaI9IazMmWAJYgdBF6KjEK6unuTVLOxAnQZICEBbs9bdymxr8KCm8KIBUrt6TxYSmeIBBSz5O
- Lp7L5TM8sreKYGNyWHIjfybJPZ1wvaz6jSRKyB+tbYTKU4qNgDB+kGPGm0Tb3RRl9AtdOI2Q7okN
- QtkkqMxn2vfFH+Zj1B8JVBcm+l5kwug4x5ET2+9NLJXkuFwy4Kw9ZT0V21XeQce+KoVxV2D9F9k8
- rGgcnTawzTiWlwtF4/Hzy2UIqv1POqgkgaiptCsvatR3J5bBkH3rSgkLLSOTOjqhdUprLF+9g1YB
- 7dyxZJUIYUFwhB+TGngkIp2qhBL61BeN3gX2MaHuM7hriVYRuEOs0O2VVoihEuNRwRV2VQK1UTko
- 9jHURhRzNSd+5KX9OcYEvN+IB5hQ6nsDvccjqgmDvD9Wh476/PWzfxnhE4uWEqAeuc6aAsrruuYJ
- yur/5rBYAzn59+GBoOIvAYGPgXgPpWQGeOTp737WcaX92j2ucmdyoWRF8yrdoOjqPkHYDR1+HhkO
- 6mG+Qxsx/9vp0ed6TVPrfnXC2cEKa+wuI1L1nVmLVoBc9aUV1oY4fX3W5eOCNA39IDnSIMEHeLaO
- TuH+5mgUdDWMASZ+GwTbn43WiLo1qgPGHQCJbkz7PfE+WKmHbQuntGH1ssNUJ86lmRYhjo4M7RF3
- 4+fPIq7ZKYAMWeZS89B0Ev19JtQieW5RtAnFYqGsk0InVFCxk1EuXNe0tArLUlaULMcSN+UauvTA
- MDhcPC5dJqtpZ5GosXYB9WV562W/MS+4ayUpOtEhdxekWDmK9g==
-X-Report-Abuse-To: spam@spe1.ucebox.co.za
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Good Day Sir
+Hello,
 
-We are please to invite you/your company to quote the following item
-listed
-below:
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (3) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home in Cambodia on their behalf and
+for our "Mutual Benefits".
 
-Product/Model No: TM9653 PRESSURE REGULATOR
-Product Name:MEKO
-Qty. 30 units
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Cambodian/Vietnam Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
 
-Compulsory,Kindly send your quotation
-for immediate approval.
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+ms.reem@yandex.com
 
-Kind Regards,
-Albert Bourla
-PFIZER B.V Supply Chain Manager
-Tel: +31(0)208080 880
-ADDRESS: Rivium Westlaan 142, 2909 LD
-Capelle aan den IJssel, Netherlands
+Regards,
+Ms. Reem.
+
