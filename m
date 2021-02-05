@@ -2,68 +2,72 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71F3130DE61
-	for <lists+linux-sctp@lfdr.de>; Wed,  3 Feb 2021 16:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67D5D3101D0
+	for <lists+linux-sctp@lfdr.de>; Fri,  5 Feb 2021 01:47:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234528AbhBCPhj (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 3 Feb 2021 10:37:39 -0500
-Received: from 198-20-226-115.unifiedlayer.com ([198.20.226.115]:56722 "EHLO
-        198-20-226-115.unifiedlayer.com" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S234512AbhBCPgR (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 3 Feb 2021 10:36:17 -0500
-X-Greylist: delayed 29383 seconds by postgrey-1.27 at vger.kernel.org; Wed, 03 Feb 2021 10:35:24 EST
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=carnivalassure.com.bd; s=default; h=Content-Transfer-Encoding:Content-Type:
-        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Sender:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=miRpAdBSO5eDo01VDX+EK9bqGCmqMjXHS3kO16T6iWw=; b=BeRp52iTZNZnIj6Yk4q4qmVg1o
-        TGW3OyQQDqdIygbFzrOvnb1VFlTwDZeYzPg7x0gcAhNqpY+RPOU8XZPJCHVzHp7N6NMkd40+DlrAZ
-        BxMd0S46HbScvjeaenOH3+S94exP2AbS+FzziGjhE87mUv7G1Yf3DGvnuFRQOMF8rB7m0VxjRMPDd
-        55/dxUiSnVbBa0JImuQYYXUpRt83SOvMPmEy3tm7HhC6eVNF+f6Wxow3WBSbpKE+vZC1jXRKKl9C1
-        bK6OQxLWFq7P4uMl6BygkP9QC4QklVZQU7qWYFjfzBfV8UP2ROnwJjNJGJIyClrEEjRpgcDNFfVIx
-        4EKHpC7g==;
-Received: from [127.0.0.1] (port=46990 helo=dot.dotlines.com.sg)
-        by dot.dotlines.com.sg with esmtpa (Exim 4.93)
-        (envelope-from <noreply@carnivalassure.com.bd>)
-        id 1l7CVy-0005dS-7D; Wed, 03 Feb 2021 01:23:50 -0600
+        id S232137AbhBEAr0 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 4 Feb 2021 19:47:26 -0500
+Received: from mx2.suse.de ([195.135.220.15]:37936 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232132AbhBEArZ (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Thu, 4 Feb 2021 19:47:25 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 376E8B06A;
+        Fri,  5 Feb 2021 00:46:43 +0000 (UTC)
+From:   NeilBrown <neilb@suse.de>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jonathan Corbet <corbet@lwn.net>
+Date:   Fri, 05 Feb 2021 11:36:30 +1100
+Subject: [PATCH 0/3] Fix some seq_file users that were recently broken
+Cc:     Xin Long <lucien.xin@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-sctp@vger.kernel.org, netdev@vger.kernel.org
+Message-ID: <161248518659.21478.2484341937387294998.stgit@noble1>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-Date:   Wed, 03 Feb 2021 01:23:49 -0600
-From:   Francois Pinault <noreply@carnivalassure.com.bd>
-To:     undisclosed-recipients:;
-Subject: Hello/Hallo
-Organization: Donation
-Reply-To: francoispinault1936@outlook.com
-Mail-Reply-To: francoispinault1936@outlook.com
-Message-ID: <6b70d71c493b5c027dd3ef878f38d028@carnivalassure.com.bd>
-X-Sender: noreply@carnivalassure.com.bd
-User-Agent: Roundcube Webmail/1.3.15
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - dot.dotlines.com.sg
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - carnivalassure.com.bd
-X-Get-Message-Sender-Via: dot.dotlines.com.sg: authenticated_id: noreply@carnivalassure.com.bd
-X-Authenticated-Sender: dot.dotlines.com.sg: noreply@carnivalassure.com.bd
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
+A recent change to seq_file broke some users which were using seq_file
+in a non-"standard" way ...  though the "standard" isn't documented, so
+they can be excused.  The result is a possible leak - of memory in one
+case, of references to a 'transport' in the other.
 
+These three patches:
+ 1/ document and explain the problem
+ 2/ fix the problem user in x86
+ 3/ fix the problem user in net/sctp
 
--- 
-Hallo, ich bin Herr Francois Pinault, ich habe Ihnen gespendet. Sie 
-können mein Profil auf Wikipedia, Google oder Forbes überprüfen.
+I suspect the patches should each go through the relevant subsystems,
+but I'm including akpm as the original went through him.
 
-Für Ihren Spendenanspruch und weitere Informationen kontaktieren Sie 
-mich umgehend unter francoispinault1936@outlook.com
+Thanks,
+NeilBrown
 
-Mit freundlichen Grüßen,
-Herr Francois Pinault
+---
+
+NeilBrown (3):
+      seq_file: document how per-entry resources are managed.
+      x86: fix seq_file iteration for pat/memtype.c
+      net: fix iteration for sctp transport seq_files
+
+ Documentation/filesystems/seq_file.rst |  6 ++++++
+ arch/x86/mm/pat/memtype.c              |  4 ++--
+ net/sctp/proc.c                        | 16 ++++++++++++----
+ 3 files changed, 20 insertions(+), 6 deletions(-)
+
+--
+Signature
+
