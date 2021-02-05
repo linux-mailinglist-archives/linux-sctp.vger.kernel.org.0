@@ -2,64 +2,69 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C20503111C6
-	for <lists+linux-sctp@lfdr.de>; Fri,  5 Feb 2021 21:01:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C09311958
+	for <lists+linux-sctp@lfdr.de>; Sat,  6 Feb 2021 04:03:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233581AbhBESRs (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 5 Feb 2021 13:17:48 -0500
-Received: from [20.39.40.203] ([20.39.40.203]:55697 "EHLO optinix.in"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S233183AbhBEPTk (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Fri, 5 Feb 2021 10:19:40 -0500
-dkim-signature: v=1; a=rsa-sha256; d=digitalsol.in; s=dkim;
-        c=relaxed/relaxed; q=dns/txt; h=From:Reply-To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=wK2neTcOXNiSQ+RBxrnFed+mRrGUU/ndLGEgvo8IMCc=;
-        b=JFt3cjfr2gf0oZFNAIkKMxcz4dJD/YGkc0fGvOoSd3DydZ6om7JzTU837vBFVq1NIPU0D2QA5BLHZXE1+7cBmkJlbZjYCUFmJkkaBVbP88e4KHnDVRcctmBLIZ1pL5VerRqjcciKkL4DSuyXFJlGk3Z0CRoskvUoLBM7ZhpxLeqIU2BKsbHQXJZ1h2qHQhaHiD+VrGx+bGKjZzbhmRvwLDQIByq6jRcjht5MzYCcxpzOzp/k+Dev9dQj7B
-        WId68CyP4XonlI4wIMRo1xiGfUtKZ+P3cZo2ejPWBjr+ynq3dK3OxibTTEKfmOc5W1zmJFMAPQ+ZKxsa3M4d1PiYxHmg==
-Received: from User (Unknown [52.231.31.5])
-        by optinix.in with ESMTP
-        ; Mon, 1 Feb 2021 08:50:14 +0000
-Message-ID: <D474448D-A325-42CC-A881-8334C6C84BA7@optinix.in>
-Reply-To: <ms.reem@yandex.com>
-From:   "Ms. Reem" <support@digitalsol.in>
-Subject: Re:read
-Date:   Mon, 1 Feb 2021 08:50:13 -0000
-MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
+        id S231326AbhBFDCj (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 5 Feb 2021 22:02:39 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39752 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231221AbhBFCvz (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Fri, 5 Feb 2021 21:51:55 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 04C2264F51;
+        Fri,  5 Feb 2021 22:35:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1612564551;
+        bh=/d7hyScWKy7rmoffTYVW8U8Hr6uQSMMsfR6pwjRMA6Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=eI5GH/v34mz5bxoyj0tyMgr4duFyxIKSgiuDVYXwI0Mw6RZO9YyoC/wwf+APLDn/D
+         IUIpI6af6qVqQQlAjixLznBHAhUVPlrFMgKED2ySuO/WFx18j1mpfLtq/bSUahZSEp
+         UqllQfm9SeE3k2A209qzOLjDabtsY7t9zsRpyV7w=
+Date:   Fri, 5 Feb 2021 14:35:50 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     NeilBrown <neilb@suse.de>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Xin Long <lucien.xin@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-sctp@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 0/3] Fix some seq_file users that were recently broken
+Message-Id: <20210205143550.58d3530918459eafa918ad0c@linux-foundation.org>
+In-Reply-To: <161248518659.21478.2484341937387294998.stgit@noble1>
+References: <161248518659.21478.2484341937387294998.stgit@noble1>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello,
+On Fri, 05 Feb 2021 11:36:30 +1100 NeilBrown <neilb@suse.de> wrote:
 
-My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
-and Petroleum" also "Minister of State for International Cooperation"
-in UAE. I write to you on behalf of my other "three (3) colleagues"
-who has approved me to solicit for your "partnership in claiming of
-{us$47=Million}" from a Financial Home in Cambodia on their behalf and
-for our "Mutual Benefits".
+> A recent change to seq_file broke some users which were using seq_file
+> in a non-"standard" way ...  though the "standard" isn't documented, so
+> they can be excused.  The result is a possible leak - of memory in one
+> case, of references to a 'transport' in the other.
+> 
+> These three patches:
+>  1/ document and explain the problem
+>  2/ fix the problem user in x86
+>  3/ fix the problem user in net/sctp
+> 
 
-The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
-deal with Cambodian/Vietnam Government within 2013/2014, however, we
-don't want our government to know about the fund. If this proposal
-interests you, let me know, by sending me an email and I will send to
-you detailed information on how this business would be successfully
-transacted. Be informed that nobody knows about the secret of this
-fund except us, and we know how to carry out the entire transaction.
-So I am compelled to ask, that you will stand on our behalf and
-receive this fund into any account that is solely controlled by you.
+1f4aace60b0e ("fs/seq_file.c: simplify seq_file iteration code and
+interface") was August 2018, so I don't think "recent" applies here?
 
-We will compensate you with 15% of the total amount involved as
-gratification for being our partner in this transaction. Reply to:
-ms.reem@yandex.com
+I didn't look closely, but it appears that the sctp procfs file is
+world-readable.  So we gave unprivileged userspace the ability to leak
+kernel memory?
 
-Regards,
-Ms. Reem.
-
+So I'm thinking that we aim for 5.12-rc1 on all three patches with a cc:stable?
