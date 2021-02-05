@@ -2,106 +2,67 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 683EB3101D8
-	for <lists+linux-sctp@lfdr.de>; Fri,  5 Feb 2021 01:49:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC6C6310353
+	for <lists+linux-sctp@lfdr.de>; Fri,  5 Feb 2021 04:12:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232211AbhBEArq (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 4 Feb 2021 19:47:46 -0500
-Received: from mx2.suse.de ([195.135.220.15]:38218 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232198AbhBEArm (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 4 Feb 2021 19:47:42 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 9246AAE3F;
-        Fri,  5 Feb 2021 00:47:00 +0000 (UTC)
-From:   NeilBrown <neilb@suse.de>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Date:   Fri, 05 Feb 2021 11:36:30 +1100
-Subject: [PATCH 3/3] net: fix iteration for sctp transport seq_files
-Cc:     Xin Long <lucien.xin@gmail.com>, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-sctp@vger.kernel.org, netdev@vger.kernel.org
-Message-ID: <161248539022.21478.17038123892954492263.stgit@noble1>
-In-Reply-To: <161248518659.21478.2484341937387294998.stgit@noble1>
-References: <161248518659.21478.2484341937387294998.stgit@noble1>
-User-Agent: StGit/0.23
+        id S230153AbhBEDKB (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 4 Feb 2021 22:10:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48630 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229692AbhBEDJ5 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 4 Feb 2021 22:09:57 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1BDC061797;
+        Thu,  4 Feb 2021 19:08:41 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id m13so5939544wro.12;
+        Thu, 04 Feb 2021 19:08:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:sender:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=hqf55dXwvcYwwL4sAkoYuOM6RPu6wxeec88n5sMRYiY=;
+        b=NRTh4M0Jcl6GH1vZx6tfehzdSRsMQorZISNOE9gHFCDnJ9pKqRA7GWrfGPHC6OgQqp
+         BRNYtYsNO5JT0lD1kYg6TcwP7Z8niz0b3VHWG8eQNg7Gc20C/neX86SKnRyzJOmIJrgJ
+         kB5eKRBOfoFLXDnIFwo/XdUtkMV34RBU3+TE/cotaoXGm7XnE6fg74/ybaXKyAQrS3qY
+         KYCwxSEiM6aUEaumxUCFfOeSc9ZItOxax77yIHpPnuIcGyYnAlYjctLHt3xL8zjfdYOc
+         sI13F+PxWTL2rp7sbp/7MJQs+zHp2JuW8LQkwb22UVWHPnAHhrkt9vKPACdqHBDoQIWh
+         Nbaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:sender:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=hqf55dXwvcYwwL4sAkoYuOM6RPu6wxeec88n5sMRYiY=;
+        b=NVCuMvsxLp7BVimjV0Z44wx+FECULNFIqMQwdZcE6UEl5/Hm8BvbggKj0WlwfYBuz1
+         Mlef7ZRLVx4u7l1cjzamBrkto5GB4BYFT8m9ZRWzfqtOoIjBRpWnxojss1VqHv6ifk9z
+         FxKv/uWLIZ27L4WV8Oqyyj1MawOp+lQWhgbgVKwrhENmw8fDcXxQYPK3RDh4SyqQo78v
+         oKIe4p9FoYWs0+lqERDR5mM5J+uf84a2N2xySHT+5MU3wfc8IFEN9ul8DXe4OucTw+1H
+         OAQwAu7BykzxcOMMNTdgviY4kgG7jp0slY5xfCshlz/EXyb7yDis9nonYuLPIugI3TtV
+         Bn+g==
+X-Gm-Message-State: AOAM531w+Vh5R5NeEdnHoOFbbruK9yQu4KYVVVbM11FsFGt+MwZvU+KF
+        J1njTpmimMzmwzo/FOtvcwmF+2FYWlHhGw==
+X-Google-Smtp-Source: ABdhPJyPEO5lhPU5Ki3tYUdHo7/A48MpSbIv/4vddJ3dvYDTD5o8YUiYoljvt6TQN6lCHXJY1Pc/sQ==
+X-Received: by 2002:adf:9f54:: with SMTP id f20mr2470551wrg.362.1612494519670;
+        Thu, 04 Feb 2021 19:08:39 -0800 (PST)
+Received: from [192.168.1.6] ([154.124.28.35])
+        by smtp.gmail.com with ESMTPSA id n9sm10836813wrq.41.2021.02.04.19.08.35
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Thu, 04 Feb 2021 19:08:38 -0800 (PST)
+Message-ID: <601cb6b6.1c69fb81.5ea54.2ead@mx.google.com>
+Sender: Skylar Anderson <barr.markimmbayie@gmail.com>
+From:   calantha camara <sgt.andersonskylar0@gmail.com>
+X-Google-Original-From: calantha camara
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: hi dear
+To:     Recipients <calantha@vger.kernel.org>
+Date:   Fri, 05 Feb 2021 03:08:31 +0000
+Reply-To: calanthac20@gmail.com
+X-Mailer: cdcaafe51be8cdb99a1c85906066cad3d0e60e273541515a58395093a7c4e1f0eefb01d7fc4e6278706e9fb8c4dad093c3263345202970888b6b4d817f9e998c032e7d59
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-The sctp transport seq_file iterators take a reference to the transport
-in the ->start and ->next functions and releases the reference in the
-->show function.  The preferred handling for such resources is to
-release them in the subsequent ->next or ->stop function call.
-
-Since Commit 1f4aace60b0e ("fs/seq_file.c: simplify seq_file iteration
-code and interface") there is no guarantee that ->show will be called
-after ->next, so this function can now leak references.
-
-So move the sctp_transport_put() call to ->next and ->stop.
-
-Fixes: 1f4aace60b0e ("fs/seq_file.c: simplify seq_file iteration code and interface")
-Reported-by: Xin Long <lucien.xin@gmail.com>
-Signed-off-by: NeilBrown <neilb@suse.de>
----
- net/sctp/proc.c |   16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
-
-diff --git a/net/sctp/proc.c b/net/sctp/proc.c
-index f7da88ae20a5..982a87b3e11f 100644
---- a/net/sctp/proc.c
-+++ b/net/sctp/proc.c
-@@ -215,6 +215,12 @@ static void sctp_transport_seq_stop(struct seq_file *seq, void *v)
- {
- 	struct sctp_ht_iter *iter = seq->private;
- 
-+	if (v && v != SEQ_START_TOKEN) {
-+		struct sctp_transport *transport = v;
-+
-+		sctp_transport_put(transport);
-+	}
-+
- 	sctp_transport_walk_stop(&iter->hti);
- }
- 
-@@ -222,6 +228,12 @@ static void *sctp_transport_seq_next(struct seq_file *seq, void *v, loff_t *pos)
- {
- 	struct sctp_ht_iter *iter = seq->private;
- 
-+	if (v && v != SEQ_START_TOKEN) {
-+		struct sctp_transport *transport = v;
-+
-+		sctp_transport_put(transport);
-+	}
-+
- 	++*pos;
- 
- 	return sctp_transport_get_next(seq_file_net(seq), &iter->hti);
-@@ -277,8 +289,6 @@ static int sctp_assocs_seq_show(struct seq_file *seq, void *v)
- 		sk->sk_rcvbuf);
- 	seq_printf(seq, "\n");
- 
--	sctp_transport_put(transport);
--
- 	return 0;
- }
- 
-@@ -354,8 +364,6 @@ static int sctp_remaddr_seq_show(struct seq_file *seq, void *v)
- 		seq_printf(seq, "\n");
- 	}
- 
--	sctp_transport_put(transport);
--
- 	return 0;
- }
- 
-
-
+do you speak Eglish
