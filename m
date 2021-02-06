@@ -2,69 +2,76 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04DFC311DFC
-	for <lists+linux-sctp@lfdr.de>; Sat,  6 Feb 2021 15:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10586312047
+	for <lists+linux-sctp@lfdr.de>; Sat,  6 Feb 2021 23:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbhBFOwT (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sat, 6 Feb 2021 09:52:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54596 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbhBFOwS (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sat, 6 Feb 2021 09:52:18 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D90C061786
-        for <linux-sctp@vger.kernel.org>; Sat,  6 Feb 2021 06:51:34 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id hs11so17698286ejc.1
-        for <linux-sctp@vger.kernel.org>; Sat, 06 Feb 2021 06:51:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
-        b=s8lW6YZWnvUK7Tvlt1e2xFgpS0A6CWOUAqjS+VtrtIak+UPdQ+7l+J3tP9UY5/KPS+
-         KEWFn4n6pllGZyrmGfSKElYIwDAKdjc2fmkMPe3ult5JJeZRuMDXiNsKbmA9mOrO+1Ow
-         V7G4xUZDBnJ1aF8lRuT9QFBbuDAyoV826qXGwnR1cPhR1hUo5PlVP7FHbHVjqnpB1GNP
-         eliTpXHEcIvx4uKGmK0JVzb3zQtQqfYXrL9q0JL/YTDEwu9TpmPAzNKmjQcQLlJ35puk
-         IpQ0mnN3Y5fPfNw5DevPEtHyquTKjCJI6MS758lOeTIDhLZl9lewdpZFN272Iq+rLlU2
-         +Now==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
-        b=NrW4KM8ko2DxEcj2ROXDz6LOiRjE+eYqXKZBsYV9ZhmnpIh0GPl7s0TfL/5qmw2spk
-         uWBq3tnNvl9s4epu8BcIbQg1n89SIP6D7l+KH+slbwom169W3zmN4H/LJSpKHqLQ10gu
-         nPHyMS531uAf731a/1ofKFqL32h2zBqZ5ZUZY54addXBDg4oHBYC9+boMRIjCAWU2XBm
-         9lsfgnBOD+0c8vxLLk51+dx/LZ1vKSbw/Rp8mVo3mw+V7vctBHca9D9dXQWBQwfThm5s
-         0+rDCfUvYODS0lD3C59pSIvCc7pawuI3J5K73SbrHBjyP+LnJwH/XwvBNRSLieBMQlXi
-         re3A==
-X-Gm-Message-State: AOAM533nBdKMqOCnYY27riUdXVlaoBSgPRG6+1jTBRdtLx4uMZ0BIi9m
-        nqF3B1EDh/UDBeTHLd98ivO30PtsfBQHNpEA0lA=
-X-Google-Smtp-Source: ABdhPJwKEibhtua8jTuLbkBXVOL+X0gFUYDNhWkJcrYB4bgtGKQCxUaLyaNWtnL7GvNWrjzndLfBs0zluDayTyISYGM=
-X-Received: by 2002:a17:906:af41:: with SMTP id ly1mr8910361ejb.525.1612623093139;
- Sat, 06 Feb 2021 06:51:33 -0800 (PST)
+        id S229562AbhBFWaH (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sat, 6 Feb 2021 17:30:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46898 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229522AbhBFWaG (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Sat, 6 Feb 2021 17:30:06 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DAB9C64DA1;
+        Sat,  6 Feb 2021 22:29:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612650565;
+        bh=5whCFGTXa3J1746EODCwZovMzZz+QDWnX+nqhWJoo8Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KVbBniO58u4QFUB32f9KRwF91AQ+EOH3Kx8zSld2dTKeS6bbVngC8lN72bAzfjChU
+         YUyZhRLKOKOXDO5gxQCDAz3mX29oH29sevZ8Uq7CBif+qhiyCNbQFVq2+7gS0lWpII
+         4OOIAnMrjzqqky0uF+yK1je0plwSI4cGz8QhkwRWJEnaulhQHOWyLAJE1L3uaSdWzt
+         pMjZse5mPqyzYrP+8JcAYBI/6qGeasmvWuDb5Qg4t3+daMlPMNbG/ULsmZwMHMmmBv
+         WoQRsmkyFf/9YN+81bLJKOeuDc7LqZ8GvFworFp2kV9jIXY7gtX9/lNMetjRU+CLPe
+         bWI29EbUd4ilg==
+Date:   Sat, 6 Feb 2021 14:29:24 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     NeilBrown <neilb@suse.de>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Xin Long <lucien.xin@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-sctp@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 0/3] Fix some seq_file users that were recently broken
+Message-ID: <20210206142924.2bfc3cf5@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20210205143550.58d3530918459eafa918ad0c@linux-foundation.org>
+References: <161248518659.21478.2484341937387294998.stgit@noble1>
+        <20210205143550.58d3530918459eafa918ad0c@linux-foundation.org>
 MIME-Version: 1.0
-Received: by 2002:a17:906:25d0:0:0:0:0 with HTTP; Sat, 6 Feb 2021 06:51:32
- -0800 (PST)
-Reply-To: lawyer.nba@gmail.com
-From:   Barrister Daven Bango <stephennbada9@gmail.com>
-Date:   Sat, 6 Feb 2021 15:51:32 +0100
-Message-ID: <CAGSHw-CwdZ7cob1JzomFz5dqEbMJRqn_+22Z35dNjvLGM3a-tg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
---=20
-Korisnik fonda =C4=8Destitanja, Va=C5=A1a sredstva za naknadu od 850.000,00
-ameri=C4=8Dkih dolara odobrila je Me=C4=91unarodna monetarna organizacija (=
-MMF)
-u suradnji s (FBI) nakon mnogo istraga. =C4=8Cekamo da se obratimo za
-dodatne informacije
+On Fri, 5 Feb 2021 14:35:50 -0800 Andrew Morton wrote:
+> On Fri, 05 Feb 2021 11:36:30 +1100 NeilBrown <neilb@suse.de> wrote:
+> 
+> > A recent change to seq_file broke some users which were using seq_file
+> > in a non-"standard" way ...  though the "standard" isn't documented, so
+> > they can be excused.  The result is a possible leak - of memory in one
+> > case, of references to a 'transport' in the other.
+> > 
+> > These three patches:
+> >  1/ document and explain the problem
+> >  2/ fix the problem user in x86
+> >  3/ fix the problem user in net/sctp
+> 
+> 1f4aace60b0e ("fs/seq_file.c: simplify seq_file iteration code and
+> interface") was August 2018, so I don't think "recent" applies here?
+> 
+> I didn't look closely, but it appears that the sctp procfs file is
+> world-readable.  So we gave unprivileged userspace the ability to leak
+> kernel memory?
+> 
+> So I'm thinking that we aim for 5.12-rc1 on all three patches with a cc:stable?
 
-Advokat: Daven Bango
-Telefon: +22891667276
-(URED MMF-a LOME TOGO)
+I'd rather take the sctp patch sooner, we'll send another batch 
+of networking fixes for 5.11, anyway. Would that be okay with you?
