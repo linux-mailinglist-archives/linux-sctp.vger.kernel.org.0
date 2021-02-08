@@ -2,107 +2,66 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9B43127F0
-	for <lists+linux-sctp@lfdr.de>; Sun,  7 Feb 2021 23:46:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 922FA312E65
+	for <lists+linux-sctp@lfdr.de>; Mon,  8 Feb 2021 11:06:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbhBGWqC (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 7 Feb 2021 17:46:02 -0500
-Received: from mx2.suse.de ([195.135.220.15]:51000 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229506AbhBGWqB (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Sun, 7 Feb 2021 17:46:01 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 229C2AD24;
-        Sun,  7 Feb 2021 22:45:20 +0000 (UTC)
-From:   NeilBrown <neilb@suse.de>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Date:   Mon, 08 Feb 2021 09:45:09 +1100
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Xin Long <lucien.xin@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-sctp@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 0/3] Fix some seq_file users that were recently broken
-In-Reply-To: <20210205143550.58d3530918459eafa918ad0c@linux-foundation.org>
-References: <161248518659.21478.2484341937387294998.stgit@noble1>
- <20210205143550.58d3530918459eafa918ad0c@linux-foundation.org>
-Message-ID: <87ft27ebuy.fsf@notabene.neil.brown.name>
+        id S230471AbhBHKAx (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 8 Feb 2021 05:00:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40064 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231785AbhBHJy6 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 8 Feb 2021 04:54:58 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672CDC0698DD
+        for <linux-sctp@vger.kernel.org>; Mon,  8 Feb 2021 01:46:30 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id t25so9865952pga.2
+        for <linux-sctp@vger.kernel.org>; Mon, 08 Feb 2021 01:46:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=z7Z/JdX0RhrlgqchmamXWMY47TIIKUp5Zm0+e0J1lMs=;
+        b=EBAN8kT/RdDTitIJIwHViEDhHzNJv4CIWk9rs6YltTkWZ458GA493YyOdSoiZ3kf2I
+         cdNbMkg2fZDvPvkuycg7WSARNJ/puPrDyOFIWKtgjChKMEIfkIP2Q2XVpBk+DA9Lhucn
+         6XQlMQaKQZVW2ZyZN5QBK8n9vbP0QwsOuCEl8YnAfifh/FxrfAzpfX38semmARrCGxh8
+         WFi+25A8lhFcplpes37lwhh0IayXXJWFPkoQ+knUplL4fyj/9WvmsAavsN2O11FqYU0q
+         sXGcgyuoksh1FLpl3IVpUWra/8A8W9zD+TSlCF6rCGoTQRx8E8R9VquYNvg3vN5bAAWe
+         XSXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=z7Z/JdX0RhrlgqchmamXWMY47TIIKUp5Zm0+e0J1lMs=;
+        b=pn9F2NJdGxEw9b7MhM85EusshAHA0GsmEJnpzbImkdrPRw5oZNJUGKWpEB7u5ioc5z
+         w2K/MKgzKZ5oMMg3cxnk+zUsGifQ0sGxzzipNeOdDt9/6c1QxfPCtW22pyf5Y6BPhDNm
+         bh/pphcV+GcZZ8y9fdMzLfmkcFJqSTWhIt6JgYQMiSaPuqcNtilLxFyeEFjjc01ha21z
+         1zIHWMzlxin67WrgsDY+CuQr+Qv1E+4RhgWU3TOf4fm435Oxb8VRqqYrT0Hul4tJLnNC
+         PpUxYfBeKT+SjtqpzNAN5SmxI94Gvb0w56XYvy7qmbIM+8OEZD8y9ZNDvuZWKjdDaI7y
+         VZMw==
+X-Gm-Message-State: AOAM531O5zX3t/QWb0IBanTcySB+WZnzaHDkDZ1flv8miRR+Txzr8rgA
+        dodq5SOUTH1Cov1NtSSdL8UuRT9Kli+AQPb4ghc=
+X-Google-Smtp-Source: ABdhPJybDL+KhCvXPDIs57vnx74bKnUW7LRfIk9mtYaX6Td3ETIAJUIor6BltYlrl2tm2rDxnhIvTg/8Y9D/vq+/hVc=
+X-Received: by 2002:a63:c84a:: with SMTP id l10mr16253996pgi.159.1612777589348;
+ Mon, 08 Feb 2021 01:46:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Received: by 2002:a17:90a:5d0a:0:0:0:0 with HTTP; Mon, 8 Feb 2021 01:46:29
+ -0800 (PST)
+Reply-To: richadtomm@qq.com
+From:   "Mr.Richard Thomas" <tommiirrrch@gmail.com>
+Date:   Mon, 8 Feb 2021 01:46:29 -0800
+Message-ID: <CAGbSTZMAc0EF+BT96=ag5apRs+Aauw-A-2pin2QX1dEQy+tMew@mail.gmail.com>
+Subject: Re Thanks.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Dear Friend,
+I will be pleased if you can allow me to invest $104M Dollars in
+Estate Management,in your company or any area you best that will be
+of good profit to both of us
 
-On Fri, Feb 05 2021, Andrew Morton wrote:
+Please do well to respond including your information for more details.
 
-> On Fri, 05 Feb 2021 11:36:30 +1100 NeilBrown <neilb@suse.de> wrote:
->
->> A recent change to seq_file broke some users which were using seq_file
->> in a non-"standard" way ...  though the "standard" isn't documented, so
->> they can be excused.  The result is a possible leak - of memory in one
->> case, of references to a 'transport' in the other.
->>=20
->> These three patches:
->>  1/ document and explain the problem
->>  2/ fix the problem user in x86
->>  3/ fix the problem user in net/sctp
->>=20
->
-> 1f4aace60b0e ("fs/seq_file.c: simplify seq_file iteration code and
-> interface") was August 2018, so I don't think "recent" applies here?
-
-I must be getting old :-(
-
->
-> I didn't look closely, but it appears that the sctp procfs file is
-> world-readable.  So we gave unprivileged userspace the ability to leak
-> kernel memory?
-
-Not quite that bad.  The x86 problem allows arbitrary memory to be
-leaked, but that is in debugfs (as I'm sure you saw) so is root-only.
-The sctp one only allows an sctp_transport to be pinned.  That is not
-good and would, e.g., prevent the module from being unloaded.  But
-unlike a simple memory leak it won't affect anything outside of sctp.
-
->
-> So I'm thinking that we aim for 5.12-rc1 on all three patches with a cc:s=
-table?
-
-Thanks for looking after these!
-
-NeilBrown
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJCBAEBCAAsFiEEG8Yp69OQ2HB7X0l6Oeye3VZigbkFAmAgbXYOHG5laWxiQHN1
-c2UuZGUACgkQOeye3VZigbmRIw/+L3opkKLyG2Hn5LtKCl8TV5atFOVnkNdg4u1/
-N7vs18opY/vMHwel8DJX3FKF1nZeiZVan1cUox774eoWmFjni/IGrVU9HjVowJhc
-zHqv17t60IuxAWl4YAYu1SEryAgLMtX6OlqJVrjQ1WRpMEqWN14SgJ2qbuQQW3Fp
-zuCEaR5/MMmWfHtVxthrlmqrPO4DdULJWd54S+OR9AdBTJ5iTP6GqbiT6E5500am
-DMlL9oaymdwILGK339a97BDkvo/GcXiU4I9Netwsn+dhE+iM0A6nfdpR2S+UkbLE
-fqIC4ICia5Cdd04cuMQxqjDqKqgWoj6q+j5BisfXu+VryUWPp+IKLJnljJ3HKOo1
-8HZ4M4ldc2c2fo0BZy8qLgld2Ky9yWfkWvFxD91fdLoW862hb4QSORaqeuOHCCxy
-TFEgOfgEXRS0y1YP1ue1TkvBCMlFlRQ/y4b0b7PKLcZmbQ8gZP/ZLtMcPVxS+uiW
-WtqvP8ED9uSbmDgZKWrkId0XN2qd/N2VeDqqaHLEm3AYBYKe6sjNRq/P2XhaJgvg
-fwgFf5HWbWRwpgdLtSpFdwobSZJoSfoqWPGfHw9qnldXXbLSuDrEHIFRywNCHODl
-SpL40dXvgMrkDtHYK7C9V7xPMCj9Ja0dnSR2KJQOJnWXw4NnHUXbVAf7VP+5MqpD
-WJxmMU8=
-=Gd5p
------END PGP SIGNATURE-----
---=-=-=--
+Thanks.
+Mr.Richard Thomas
