@@ -2,68 +2,79 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADDE632DCA3
-	for <lists+linux-sctp@lfdr.de>; Thu,  4 Mar 2021 23:02:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B0A32E454
+	for <lists+linux-sctp@lfdr.de>; Fri,  5 Mar 2021 10:08:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240672AbhCDWBP (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 4 Mar 2021 17:01:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50950 "EHLO mail.kernel.org"
+        id S229505AbhCEJHr (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 5 Mar 2021 04:07:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57446 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240113AbhCDWAs (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 4 Mar 2021 17:00:48 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id E1B8B64FF1;
-        Thu,  4 Mar 2021 22:00:07 +0000 (UTC)
+        id S229464AbhCEJHV (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Fri, 5 Mar 2021 04:07:21 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E4BDF64F44;
+        Fri,  5 Mar 2021 09:07:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614895207;
-        bh=kAdRuXURO3FsVryQQBu91lpf91+JpUniHKNGNZGdp58=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=JZe44fmlbPyZ5i6qefRl8w9bK2nfuRbE2yu0eueaWtvNpajUnFPxf5cR/1FuW/Ehd
-         H0CXcC8gk/dtcZjeGWXhDy4LxnI4z94CtwlqUpR8TdehL9jgWJp3c5y0HVL9/P0Eeq
-         YGCB7iAIKg2xUfvFxG81YGpfzk32HebWxuIVWyJoJCkNZfZ9AoaQOWv/hdzo6OeSN6
-         732rZ7dSsYbkgqSaliR8Brbzm3ncOMhZVs4tSAUgsZQ6W+qjXGDfFuvlL8x7nTQYwj
-         kUQqFaXyZpwIxea4vATZ7NfXzUm7UTnL/pdV6Mb0JU7QrMBF4K1sQSLmvKhJEhGEtX
-         k6sAsIW2BR7YA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id D5DE360139;
-        Thu,  4 Mar 2021 22:00:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1614935240;
+        bh=ikzpr71mS+z2zxKgVFU67kaIOGEN5DRSzKmf5wpQ0/0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=hF8wOGhhfZcgTpyJg8FQrwG4cd/T9gtCrHq0gVkhdt5FVk3h3dm8NfAP4LahvPFOA
+         pJikgwz6fb7eeNLODtRvWHcQQuTwxeG0tpBfv+XIWX2f7XTPyuOuaUX8/izfB7En42
+         xMLUZlAjHiEJmISQ3I0RWiahCJlDSM3gnUjIgzTFYF/qzVELUXkZDo7f9pUjUyaa1a
+         jDzvF/VVS/bghoK4czQgjzTz1n84TlQQ7VxeYUBt2hLIxpdnXkM4azrSGh/vun7ora
+         pxfJzT4wiTpRep3Zipkrwz2xY5GZyHfUEt7BzHiEktgfPxKHni624fxVHmEHmdft6K
+         1XUajEkQtO3Hg==
+Date:   Fri, 5 Mar 2021 03:07:17 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH RESEND][next] sctp: Fix fall-through warnings for Clang
+Message-ID: <20210305090717.GA139387@embeddedor>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: sctp: trivial: fix typo in comment
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161489520787.31844.6061045890075653097.git-patchwork-notify@kernel.org>
-Date:   Thu, 04 Mar 2021 22:00:07 +0000
-References: <20210304055548.56829-1-drew@beagleboard.org>
-In-Reply-To: <20210304055548.56829-1-drew@beagleboard.org>
-To:     Drew Fustini <drew@beagleboard.org>
-Cc:     vyasevich@gmail.com, nhorman@tuxdriver.com,
-        marcelo.leitner@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gustavoars@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello:
+In preparation to enable -Wimplicit-fallthrough for Clang, fix a couple
+of warnings by explicitly adding a break statement and replacing a
+comment with a goto statement instead of letting the code fall through
+to the next case.
 
-This patch was applied to netdev/net.git (refs/heads/master):
+Link: https://github.com/KSPP/linux/issues/115
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ net/sctp/input.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-On Wed,  3 Mar 2021 21:55:49 -0800 you wrote:
-> Fix typo of 'overflow' for comment in sctp_tsnmap_check().
-> 
-> Reported-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> Signed-off-by: Drew Fustini <drew@beagleboard.org>
-> ---
->  net/sctp/tsnmap.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Here is the summary with links:
-  - net: sctp: trivial: fix typo in comment
-    https://git.kernel.org/netdev/net/c/d93ef301644e
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+diff --git a/net/sctp/input.c b/net/sctp/input.c
+index d508f6f3dd08..5ceaf75105ba 100644
+--- a/net/sctp/input.c
++++ b/net/sctp/input.c
+@@ -633,7 +633,7 @@ int sctp_v4_err(struct sk_buff *skb, __u32 info)
+ 		break;
+ 	case ICMP_REDIRECT:
+ 		sctp_icmp_redirect(sk, transport, skb);
+-		/* Fall through to out_unlock. */
++		goto out_unlock;
+ 	default:
+ 		goto out_unlock;
+ 	}
+@@ -1236,6 +1236,7 @@ static struct sctp_association *__sctp_rcv_walk_lookup(struct net *net,
+ 						net, ch, laddr,
+ 						sctp_hdr(skb)->source,
+ 						transportp);
++			break;
+ 		default:
+ 			break;
+ 		}
+-- 
+2.27.0
 
