@@ -2,79 +2,46 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2440134C0C4
-	for <lists+linux-sctp@lfdr.de>; Mon, 29 Mar 2021 03:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3AF34FA3D
+	for <lists+linux-sctp@lfdr.de>; Wed, 31 Mar 2021 09:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231653AbhC2BAr (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 28 Mar 2021 21:00:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45952 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230252AbhC2BAR (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Sun, 28 Mar 2021 21:00:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 4CADF6193F;
-        Mon, 29 Mar 2021 01:00:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616979611;
-        bh=bSJHnkL0Y6HWWvXB/0i91Ys2z86pDibN1bNO3jpu7g0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Gfm6X4B70RVrxyZgXPVZgyBUN3LitUIBIHEUd2adt7SJNWWk3ICPEpgE4YM4N3vIr
-         uX5GaYSJ1H1zfalfbChqPgXOHXgCSVzpI+zoFiM5pnHtQc6K4c2gqvROhcDWnzBvjq
-         vYwM/y8kuYTb/x9ECns7SK5qkLJnXTpcvelHechjCu2NsD72F2g6OU4kp9wsZxeiaY
-         wW+OmeSuR5QPe/B8e8A6PpE3D0Yw+0Rxs8A71r5gwOuJ8yQaalTaksvC9XyKfOiA+d
-         MEaarF48TX4lF7pyJMdZWhgYl4AIwzq9FGawCVhQaYx8cQ9lAivHlRqRV6DfbJa+CN
-         E5Q8DKyQ5QGvw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 3D596609E8;
-        Mon, 29 Mar 2021 01:00:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S234155AbhCaHbS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Wed, 31 Mar 2021 03:31:18 -0400
+Received: from bizcloud-power.sawafuji.co.jp ([128.199.220.203]:47845 "EHLO
+        mta0.sawafuji.co.jp" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S234197AbhCaHaw (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 31 Mar 2021 03:30:52 -0400
+X-Greylist: delayed 671 seconds by postgrey-1.27 at vger.kernel.org; Wed, 31 Mar 2021 03:30:52 EDT
+From:   Albert Bourla <info@universalautomation.com.pk>
+To:     linux-sctp@vger.kernel.org
+Subject: Bidding invitation
+Date:   31 Mar 2021 09:16:01 +0200
+Message-ID: <20210331091601.AC997779011CABD4@universalautomation.com.pk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH -next 0/3] Fix some typos
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161697961124.31306.16406247961568026068.git-patchwork-notify@kernel.org>
-Date:   Mon, 29 Mar 2021 01:00:11 +0000
-References: <20210327022724.241376-1-luwei32@huawei.com>
-In-Reply-To: <20210327022724.241376-1-luwei32@huawei.com>
-To:     Lu Wei <luwei32@huawei.com>
-Cc:     vyasevich@gmail.com, nhorman@tuxdriver.com,
-        marcelo.leitner@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sgarzare@redhat.com,
-        jhansen@vmware.com, colin.king@canonical.com, nslusarek@gmx.net,
-        andraprs@amazon.com, alex.popov@linux.com,
-        santosh.shilimkar@oracle.com, linux-rdma@vger.kernel.org,
-        rds-devel@oss.oracle.com
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello:
+Good Day Sir/Ms,
 
-This series was applied to netdev/net-next.git (refs/heads/master):
-
-On Sat, 27 Mar 2021 10:27:21 +0800 you wrote:
-> Lu Wei (3):
->   net: rds: Fix a typo
->   net: sctp: Fix some typos
->   net: vsock: Fix a typo
-> 
->  net/rds/send.c           | 2 +-
->  net/sctp/sm_make_chunk.c | 2 +-
->  net/sctp/socket.c        | 2 +-
->  net/vmw_vsock/af_vsock.c | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
-
-Here is the summary with links:
-  - [-next,1/3] net: rds: Fix a typo
-    https://git.kernel.org/netdev/net-next/c/ebf893958c13
-  - [-next,2/3] net: sctp: Fix some typos
-    https://git.kernel.org/netdev/net-next/c/21c00a186fac
-  - [-next,3/3] net: vsock: Fix a typo
-    https://git.kernel.org/netdev/net-next/c/9195f06b2d0f
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+We are please to invite you or your company to quote the 
+following item listed below:
+ 
+Product/Model No: A702TH FYNE PRESSURE REGULATOR
+Model Number: A702TH
+Qty. 30 units
 
 
+Compulsory,Kindly send your quotation to: 
+quotation@pfizerbvsupply.com 
+for immediate approval.
+
+Kind Regards,
+Albert Bourla
+PFIZER B.V Supply Chain Manager
+Tel: +31(0)208080 880
+ADDRESS: Rivium Westlaan 142, 2909 LD
+Capelle aan den IJssel, Netherlands
