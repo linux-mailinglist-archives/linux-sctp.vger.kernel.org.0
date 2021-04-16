@@ -2,73 +2,76 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B4135E8C8
-	for <lists+linux-sctp@lfdr.de>; Wed, 14 Apr 2021 00:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B387362865
+	for <lists+linux-sctp@lfdr.de>; Fri, 16 Apr 2021 21:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232381AbhDMWK3 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 13 Apr 2021 18:10:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55244 "EHLO mail.kernel.org"
+        id S238073AbhDPTMy (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 16 Apr 2021 15:12:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57526 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231648AbhDMWK2 (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Tue, 13 Apr 2021 18:10:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 9AD5C61164;
-        Tue, 13 Apr 2021 22:10:08 +0000 (UTC)
+        id S235122AbhDPTMu (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Fri, 16 Apr 2021 15:12:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id ABDD9611AF;
+        Fri, 16 Apr 2021 19:12:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618351808;
-        bh=TJzecSdtqpqxQ3J+Jndv3DhFj2ALtOqMzU4mFfYuoac=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=i2RQ28x/lgUGyLHGUAjzoYoo3ISfwuvhoiuEXhlXQTCfPPR+O9ENSlq2YzoZR7/+m
-         /UQpEbV4I3c7Cm0JPHoH8xK3rjzMyRM4Qi9XFaqW+JA6gqtCzKizyXja/kWTtOAxs3
-         RGk8kZ1u3bU1GciexnCXF+5sxHGW8y3lAixL5I+XEQQmx9ITS3RG+m/olaXkaIyccr
-         PT4/HiA64HJuIhMBQSsR+KXGzlM4ATvwvocO2m7xXmv/5v/gJgZXWBqxWsok/9KIP2
-         yiViXjbJQCmWmcujLIiGE4IUERPAn8+VyFhGZlBHfSUSGGb5QLfZE6KDzhJ3seUdJ6
-         joO+gn3xP3Rfw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 8C7F960BD8;
-        Tue, 13 Apr 2021 22:10:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1618600344;
+        bh=Rv2GvndnTmtUHMieNY3HvaWYmPwe9OWiXSUMXa7ltaY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=psiL2cihVJWqJ4zI5xobZjykYKFmtbnwtlrYmaHfG8/g4dldrS/LkmyLKKU2dfQGM
+         6KoAD9m8etWHXBpXX1LPFVxX5lVGCtrovBRqt9UhYbyRydVvoKrxjtQvmm0NoYY+wm
+         I5O/E/2k7mZN258GuHAmNBpmWUTOh/kQhzfqoJmfOP8IShhGB1hDBcaWJka3aVyAox
+         +ChlnOQVPN5cjCMhxPKfJ43y2xY4pqaf1a58pHlgKGTM7c8cyyZC+35PxCUzNozLoA
+         iv9BppMsqbKmvtgZBqbQZmB618iwMIWgBvLCFCNcVf8ElsonHwYwxt9un33zmmHNs9
+         b2jR1Gf+2yP7A==
+Date:   Fri, 16 Apr 2021 14:12:36 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] sctp: Fix out-of-bounds warning in
+ sctp_process_asconf_param()
+Message-ID: <20210416191236.GA589296@embeddedor>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] net/sctp: fix race condition in sctp_destroy_sock
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161835180857.31494.15153605709607960746.git-patchwork-notify@kernel.org>
-Date:   Tue, 13 Apr 2021 22:10:08 +0000
-References: <20210413181031.27557-1-orcohen@paloaltonetworks.com>
-In-Reply-To: <20210413181031.27557-1-orcohen@paloaltonetworks.com>
-To:     Or Cohen <orcohen@paloaltonetworks.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        vyasevich@gmail.com, nhorman@tuxdriver.com,
-        marcelo.leitner@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        linux-sctp@vger.kernel.org, lucien.xin@gmail.com,
-        nmarkus@paloaltonetworks.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello:
+Fix the following out-of-bounds warning:
 
-This patch was applied to netdev/net.git (refs/heads/master):
+net/sctp/sm_make_chunk.c:3150:4: warning: 'memcpy' offset [17, 28] from the object at 'addr' is out of the bounds of referenced subobject 'v4' with type 'struct sockaddr_in' at offset 0 [-Warray-bounds]
 
-On Tue, 13 Apr 2021 21:10:31 +0300 you wrote:
-> If sctp_destroy_sock is called without sock_net(sk)->sctp.addr_wq_lock
-> held and sp->do_auto_asconf is true, then an element is removed
-> from the auto_asconf_splist without any proper locking.
-> 
-> This can happen in the following functions:
-> 1. In sctp_accept, if sctp_sock_migrate fails.
-> 2. In inet_create or inet6_create, if there is a bpf program
->    attached to BPF_CGROUP_INET_SOCK_CREATE which denies
->    creation of the sctp socket.
-> 
-> [...]
+This helps with the ongoing efforts to globally enable -Warray-bounds
+and get us closer to being able to tighten the FORTIFY_SOURCE routines
+on memcpy().
 
-Here is the summary with links:
-  - [v2] net/sctp: fix race condition in sctp_destroy_sock
-    https://git.kernel.org/netdev/net/c/b166a20b0738
+Link: https://github.com/KSPP/linux/issues/109
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ net/sctp/sm_make_chunk.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
+index 54e6a708d06e..5f9a7c028274 100644
+--- a/net/sctp/sm_make_chunk.c
++++ b/net/sctp/sm_make_chunk.c
+@@ -3147,7 +3147,7 @@ static __be16 sctp_process_asconf_param(struct sctp_association *asoc,
+ 		 * primary.
+ 		 */
+ 		if (af->is_any(&addr))
+-			memcpy(&addr.v4, sctp_source(asconf), sizeof(addr));
++			memcpy(&addr, sctp_source(asconf), sizeof(addr));
+ 
+ 		if (security_sctp_bind_connect(asoc->ep->base.sk,
+ 					       SCTP_PARAM_SET_PRIMARY,
+-- 
+2.27.0
 
