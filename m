@@ -2,93 +2,75 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA72368745
-	for <lists+linux-sctp@lfdr.de>; Thu, 22 Apr 2021 21:36:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B73AB36A26D
+	for <lists+linux-sctp@lfdr.de>; Sat, 24 Apr 2021 19:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236915AbhDVThF (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 22 Apr 2021 15:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48216 "EHLO
+        id S231814AbhDXRrh (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sat, 24 Apr 2021 13:47:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236668AbhDVThE (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 22 Apr 2021 15:37:04 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66E8C061756
-        for <linux-sctp@vger.kernel.org>; Thu, 22 Apr 2021 12:36:28 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id z2so10540839qkb.9
-        for <linux-sctp@vger.kernel.org>; Thu, 22 Apr 2021 12:36:28 -0700 (PDT)
+        with ESMTP id S231307AbhDXRrg (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sat, 24 Apr 2021 13:47:36 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD31C061574
+        for <linux-sctp@vger.kernel.org>; Sat, 24 Apr 2021 10:46:58 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id s7so51488925wru.6
+        for <linux-sctp@vger.kernel.org>; Sat, 24 Apr 2021 10:46:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=g7cwZdwPHtO98O1/vFSi4J+Xn26aWAZ2rf/uWbQBcag=;
-        b=ctxVH6E1YswhB6PzwgFoxqcT135cwbf8kvY614J+GA8p6vH/WaWc4MQgbALxitfv2R
-         xIj1IbbCVx/D0PqAU+MyASX1dxK/mTNJbfIhpqEQRNKgMTP+OTW25hDOyr79Ha287JK/
-         DpETMBCb29P5SHsLtof0RVtLwWzEZiZ8afh8u7bkyRHYtOBy5GnA760mQMytv13vy7ut
-         ljxHOoJ/m0kZNd+MSUf/sHQqiyVc8WQHjZ3cAiyHKWvBeucQ3rGpQncZQUSM47r0GiXd
-         uLP7GGbWgQq7Bz3dstSTNJMg/MD1xjQDjteSId7jEtHM7ye3DKH8IKgeCUVpiI3aJEVW
-         /fSQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=V3SIwL84c+aY7vkRMva+0Nw2r/K5cRkGFCKdCu9D5ac=;
+        b=f44XIYuxAPFsScEFGnoWBOINFNnrVH51aQe119t3feo7MDEi/sMfco61ZhaScxAF7e
+         8T8aoWLsl3OAvOMw1+EzZQQRw2Akq6rVG7ypRTAJM2FEjeGt64PM1IabJrDuCDefJ0vr
+         3awrWrxujXvUskjR8PS8xSykaK1jJ1fO8tRvawEccj7pk9Xh/3dQn8NWrnBIpK4u9JXo
+         V9+9pdLzSD+tH89qbJDn0Vsv19ev5usGZbyxNHiU+o/Kc6pbwGbDRnn805HtRjmnOxx/
+         Djo5uOKrBUEbpbDLEWr5lUmBBTs6Pg26u30mC/xPDwCiu5paXbCDYN7PxaHg8V1rROX0
+         pW0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=g7cwZdwPHtO98O1/vFSi4J+Xn26aWAZ2rf/uWbQBcag=;
-        b=KnQcXjV6fHVP2DMdmJmPSbODo1kscOS7UDnli8ChOTIqtCYFQ19yc6etXGt9/CoCBr
-         uWCFRYFE2KjCOurKc1FGa/4JBLmlNk/iPbC6Zz3CudgFrFD/oD4fJ9UEWeJQtRroIdkG
-         eVCPVzFVXcl8yyKzprN9dk69ch9z+VnvMB23iVYXvSib+yxsZbh2hZf+8w7K99DVZcw+
-         HhFXcSMIzV934Ad379elXWeame6d/F0iMIcJi7IDP3GnPHONTBg9DsLu0Yan+K88XoZ6
-         yZuiuBeA7snF57ECWlxlaGDDHEKJ/lFGXRdyNm8ZKAuYlaJpfVglTC0DJ8LAh+gPbdsc
-         K34Q==
-X-Gm-Message-State: AOAM531Zs3Fc6p7PvoWiwapauhQfB5nlwtq/5vtmbEJQlUAqYLAX/HZJ
-        tIMUntlYkxfese7z2f1L09k8cv6TTcAz/A==
-X-Google-Smtp-Source: ABdhPJySdG4IMcABlb/ExLeeNz3V3MG2elQDF6aePt84h8HE86HSqhoNc5RsOhGVFQmBLDoJkYyolg==
-X-Received: by 2002:a05:620a:49c:: with SMTP id 28mr382395qkr.39.1619120187938;
-        Thu, 22 Apr 2021 12:36:27 -0700 (PDT)
-Received: from horizon.localdomain ([2001:1284:f016:cf2c:418f:6a5d:9c7a:3723])
-        by smtp.gmail.com with ESMTPSA id i5sm2885894qka.0.2021.04.22.12.36.27
-        for <linux-sctp@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Apr 2021 12:36:27 -0700 (PDT)
-Received: by horizon.localdomain (Postfix, from userid 1000)
-        id 556EAC3C6F; Thu, 22 Apr 2021 16:36:25 -0300 (-03)
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     linux-sctp@vger.kernel.org
-Subject: [PATCH lksctp-tools 2/2] sctp_sendv: avoid explicit memset for var initialization
-Date:   Thu, 22 Apr 2021 16:36:19 -0300
-Message-Id: <5cb3b02a6061b6a11dba41e4feed3d80c5afd1d6.1619119690.git.marcelo.leitner@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <cover.1619119690.git.marcelo.leitner@gmail.com>
-References: <cover.1619119690.git.marcelo.leitner@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=V3SIwL84c+aY7vkRMva+0Nw2r/K5cRkGFCKdCu9D5ac=;
+        b=ibxDyr/NaCV2bTbkiOPkI6LTpcvaPsV7MfEGzi1XLQ//3VG2xqCF9Uq4cD8Ce8uaZC
+         K3f7To+654og2UwNupYkZWyJUUXWjKYC+8+EMsfP0R9uGu0hKSsTCVz8czPhKiMlp7AJ
+         F8ZVZMdpJDQBWzQSq1Vf04+WYgJQTlcSi0IEm6c10oS3rBmfERj9sCxoK+YwDibpe1y9
+         yuXYrxVq37rXyZanZm0f+9N74one0/A1PkKZr6eEpuj43/OhDDdx9v4VxF9DKkjGZYiY
+         li71Itp1yqgCdofgeKUNx7a/QDr3jtmLWeYKnJ/r4RXxKhNYpPyBeTaV0iTI6qxBDkhm
+         g/Tw==
+X-Gm-Message-State: AOAM531mKRbmtMAvslIz0ss01pMbwVO/txmiNYczum1VOANdSPDz4OF1
+        nS4VxUcTKd0IhBlb/r+3wcuHrVjh1Iahis/8nmQ=
+X-Google-Smtp-Source: ABdhPJyLlYpQ+gY7lCmGTouGVPDHagU2GgPlhzNv74HM2E8Xy061DG13voa8taWR53ouK4K0xlkaqHGXuzmogdsoz0E=
+X-Received: by 2002:a5d:50c7:: with SMTP id f7mr11887989wrt.120.1619286416861;
+ Sat, 24 Apr 2021 10:46:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1619119690.git.marcelo.leitner@gmail.com>
+In-Reply-To: <cover.1619119690.git.marcelo.leitner@gmail.com>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Sat, 24 Apr 2021 13:46:45 -0400
+Message-ID: <CADvbK_cBOz-wvRQweSn6oX4GZsouwPQdrbcGz_KDXWFc+dfncg@mail.gmail.com>
+Subject: Re: [PATCH lksctp-tools 0/2] sctp_send/v fixes
+To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc:     "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Signed-off-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
----
- src/lib/sendmsg.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/src/lib/sendmsg.c b/src/lib/sendmsg.c
-index c2bd51029964f3bf05a512ea61d479c086f6088c..bee492134e30cbc41ecfce7117444d17c8ab9089 100644
---- a/src/lib/sendmsg.c
-+++ b/src/lib/sendmsg.c
-@@ -125,14 +125,12 @@ int sctp_sendv(int s, const struct iovec *iov, int iovcnt,
- {
- 	char _cmsg[CMSG_SPACE(sizeof(struct sctp_sendv_spa))];
- 	struct cmsghdr *cmsg = (struct cmsghdr *)_cmsg;
-+	struct msghdr outmsg = {};
- 	struct sockaddr *addr;
--	struct msghdr outmsg;
- 	int len, cmsglen = 0;
- 	int err, type, i;
- 	char *addrbuf;
- 
--	/* set msg_iov, msg_iovlen, msg_flags */
--	memset(&outmsg, 0x00, sizeof(outmsg));
- 	outmsg.msg_iov = (struct iovec *)iov;
- 	outmsg.msg_iovlen = iovcnt;
- 	outmsg.msg_flags = flags;
--- 
-2.30.2
-
+On Thu, Apr 22, 2021 at 3:36 PM Marcelo Ricardo Leitner
+<marcelo.leitner@gmail.com> wrote:
+>
+> First one is more important. Identified by CovScan.
+> 2nd patch is just a cosmetic change.
+>
+> Marcelo Ricardo Leitner (2):
+>   sctp_send: fix ignored flags parameter
+>   sctp_sendv: avoid explicit memset for var initialization
+>
+>  src/lib/sendmsg.c | 12 +++---------
+>  1 file changed, 3 insertions(+), 9 deletions(-)
+>
+> --
+> 2.30.2
+>
+Series Reviewed-by: Xin Long <lucien.xin@gmail.com>
