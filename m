@@ -2,58 +2,118 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B9C36DF02
-	for <lists+linux-sctp@lfdr.de>; Wed, 28 Apr 2021 20:38:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 348B836E33C
+	for <lists+linux-sctp@lfdr.de>; Thu, 29 Apr 2021 04:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240090AbhD1SjS (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 28 Apr 2021 14:39:18 -0400
-Received: from xvfrhxqq.outbound-mail.sendgrid.net ([168.245.10.68]:29386 "EHLO
-        xvfrhxqq.outbound-mail.sendgrid.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235613AbhD1SjR (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>);
-        Wed, 28 Apr 2021 14:39:17 -0400
-X-Greylist: delayed 303 seconds by postgrey-1.27 at vger.kernel.org; Wed, 28 Apr 2021 14:39:17 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=coverity.com;
-        h=from:subject:mime-version:to:content-type:content-transfer-encoding;
-        s=sc; bh=WFRWLUYJSxoWaG8h/20bgaVlYkfTAjYl6KXRmXtGQUY=;
-        b=VaR2cI/xu9dXju3mYlDJdrWuqU9gOh/cs1a0dr4SN/XheRIBmdjEv5YFyj7MRqY3fK1L
-        7Im9bYGO7/9gGqk3MhggZezpp+xHRd20NckWCJCDRxCh3W/Jwhtm9GFd19zbPXGxHie+LH
-        zEMU/m+izWp+3+gZJaJjGwNvBD3hZEJLA=
-Received: by filterdrecv-5c7f9fdd98-7wzpz with SMTP id filterdrecv-5c7f9fdd98-7wzpz-1-6089AA79-12
-        2021-04-28 18:33:29.110165792 +0000 UTC m=+440056.664512765
-Received: from coverity.com (unknown)
-        by geopod-ismtpd-3-1 (SG) with ESMTP
-        id 5CLG3KasSjyE79d_20Kt6Q
-        Wed, 28 Apr 2021 18:33:29.056 +0000 (UTC)
-Date:   Wed, 28 Apr 2021 18:33:29 +0000 (UTC)
-From:   scan-admin@coverity.com
-Message-ID: <6089aa78bc6ab_36feb2af074c3799c409ac@prd-scan-dashboard-0.mail>
-Subject: Coverity Scan: Analysis completed for sctp/lksctp-tools
-Mime-Version: 1.0
-X-SG-EID: =?us-ascii?Q?HBOmY=2FE5MTYb8Mhr7ulQJIaFxcZEWpCD=2F7YwgOg+H8slIv9SzGhcRNH=2FgcIZra?=
- =?us-ascii?Q?w7rz3NL3U65H3DdSvbwHgZanQbnkU3LA0Olhy7C?=
- =?us-ascii?Q?DUalDsW2KtYGCLKMQazz144RcoD80oXd8um9Peq?=
- =?us-ascii?Q?sBQEzl8tGQ8EA0BfGY7aGBgEWBsup=2FC22BaCZyt?=
- =?us-ascii?Q?QG1zvKq++yZSnUUzXBw3P5PstS96qHwDieAyuXg?=
- =?us-ascii?Q?ttGEuuy5OQc2QKRSc=3D?=
+        id S231161AbhD2C26 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 28 Apr 2021 22:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50928 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229888AbhD2C26 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 28 Apr 2021 22:28:58 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F07C06138B
+        for <linux-sctp@vger.kernel.org>; Wed, 28 Apr 2021 19:28:05 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id h3so31114727qve.13
+        for <linux-sctp@vger.kernel.org>; Wed, 28 Apr 2021 19:28:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:subject:message-id:mime-version:content-disposition;
+        bh=dq1KnYAAYwxZbj9t5izA+J9jJ5pi8Scs637LfC0GcTI=;
+        b=bN8QWz7NKy7ekGNlvFLmn/VI5YQeG7M34AsE0x9Le1AQUdK76XQYDy+K30G11oaDJM
+         2x2Kbu6bneqtmmlcmUfYmDTBiirWvKXMAjUcNHTvTqMVlkrbS3wXWoWCrabu1OE5DVw2
+         qnQ1GXCjAU0ARdL3zM5P2uQ4038uGfnv+dnL6M+26fNCVyiVdHw7iHvXE+eAFCMAO+jK
+         yHrWmsFKJEJd2RmLh1Gs5s6d+Hn8lcMthExj5p4hu1kxGQ1a0TDGk/DFAvEwl0yCqrFp
+         bEauzUgzt6mFRXPvk5Qw3/akJAmW94mHMXcPvfcgqFNAAkRoRy9mGqIEaBkBNT3ZI1tq
+         34Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=dq1KnYAAYwxZbj9t5izA+J9jJ5pi8Scs637LfC0GcTI=;
+        b=KmJ57Q/LYlldT0dF3YUxVsPXu8XRD4IggrY4+PtlpJK/Ouh9Gekwm1NDTCMX1WFZwz
+         pPuELjPAXjI/nM6wH9dtIhUJW2ESfY10EpZd7N2CiH4u9G25K2q48nUMzh0v3rwfEAUg
+         LIA5KtvVp6jjMQdKhVj8kwok1VK7X916/ZUcZCr+CEdsBeCf0JzQLBolc3GLcBVhiFSk
+         fE85ELr5XYTiVW6NAIloxQzElKryKOu4eAUP6MGOIPY5smkkrWktI6qAEZO5mfK4mXB2
+         aFQt5DxOJ9qURfLZIf7WrAwuoiZncs4U2YwD9hF7IZFmZoxFQ1aYfcKzoVhzpwhdpQRH
+         T/5g==
+X-Gm-Message-State: AOAM5316DPIrhuybb0Ep5x0/u4l4d+/aWmcVVC16RG/XB7gZdBw53nCT
+        ZUxpZ1uMO+YdbzLOdUvJLclBut8kooo=
+X-Google-Smtp-Source: ABdhPJz0EyX6bVWnfbzVekWCXR8jeO4ac/kgopoOix6GDcf6i4dctgPmx7e11qP/fHj1Dz9BTR1qcg==
+X-Received: by 2002:ad4:5006:: with SMTP id s6mr6170001qvo.23.1619663284246;
+        Wed, 28 Apr 2021 19:28:04 -0700 (PDT)
+Received: from horizon.localdomain ([177.220.174.133])
+        by smtp.gmail.com with ESMTPSA id b8sm1211560qka.117.2021.04.28.19.28.03
+        for <linux-sctp@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Apr 2021 19:28:03 -0700 (PDT)
+Received: by horizon.localdomain (Postfix, from userid 1000)
+        id 4C3FEC0780; Wed, 28 Apr 2021 23:28:01 -0300 (-03)
+Date:   Wed, 28 Apr 2021 23:28:01 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 To:     linux-sctp@vger.kernel.org
-X-Entity-ID: S2cgcZKcMUFZg9Mweglhkg==
+Subject: New lksctp-tools release: 1.0.19
+Message-ID: <YIoZsYPHWFP3JgwO@horizon.localdomain>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
+Hello,
 
-    Your request for analysis of sctp/lksctp-tools has been completed successfully.
-    The results are available at https://u15810271.ct.sendgrid.net/ls/click?upn=HRESupC-2F2Czv4BOaCWWCy7my0P0qcxCbhZ31OYv50yriFws2PYNXLbw38om-2BXxC3MHa6ieg6Pli5Wl-2BHkpdSeQ-3D-3DqnH-_6pwKHJ8Ph1XTyv7ONZlOBPDi7SN7mHx8LzQAOEQ2e1FiLPEwSwojDs-2FjQfWdoR-2Ff9JyyvgjtCkhsEs7cBUZ2ww4xMdp1kQ44rEmknKQ5HXkbKLoK0bD-2Bk4jDuYk6wY5e1pDv94Eyfc5JyaoxB08f9sSTRPd-2FarsjMjA-2BcCieprCyDpoHENRC8KEe-2F1nC3sFPnJesxobTyq-2F6oD-2Fw18oxPMW-2BxzDiGCelUApV-2FYET6aA-3D
+A bit more than 2 years since last release, I'd like to announce the
+new release, 1.0.19. This one has more integration with Github GI, a
+couple of bug fixes and some build fixes.
 
-    Build ID: 383663
+Release: https://github.com/sctp/lksctp-tools/releases/tag/v1.0.19
+Build status: https://travis-ci.org/github/sctp/lksctp-tools/builds/768732641
+CovScan: https://scan.coverity.com/projects/sctp-lksctp-tools
+(not sure how to make the access more public, but please let me know
+if you want to have access)
 
-    Analysis Summary:
-       New defects found: 49
-       Defects eliminated: 15
+Thank you to all those who contributed to this release.
 
-    If you have difficulty understanding any defects, email us at scan-admin@coverity.com,
-    or post your question to StackOverflow
-    at https://u15810271.ct.sendgrid.net/ls/click?upn=CTPegkVN6peWFCMEieYYmPWIi1E4yUS9EoqKFcNAiqhRq8qmgeBE-2Bdt3uvFRAFXd-2FlwX83-2FVVdybfzIMOby0qA-3D-3D9V6N_6pwKHJ8Ph1XTyv7ONZlOBPDi7SN7mHx8LzQAOEQ2e1FiLPEwSwojDs-2FjQfWdoR-2Ff9JyyvgjtCkhsEs7cBUZ2ww-2BrKOAjIBQXwuNBmk-2BVAgGvOCzV2o-2BwIWHIAOd3Mp1IcLimdf3UjbgwIatuw-2BxlE-2FulKQJGdkcp-2FXig8btvNWuRzWvUJkmw0nd33FXwvFKzY13ShrIXgenr8rWQKFyXL5Fy7sG8hmI5pIAxHp6kkLU-3D
+Colin Ian King <colin.king@canonical.com> (1):
+      man: sctp.7: fix several typos and two formatting issues
+
+Damir Franusic <damir.franusic@gmail.com> (1):
+      sctp_recvmsg man update
+
+Jianwen Ji <jijianwen@gmail.com> (1):
+      Fix error->errno typos
+
+Marcelo Ricardo Leitner <marcelo.leitner@gmail.com> (19):
+      build: remove v4.12 secondary defines in favor of HAVE_SCTP_STREAM_RECONFIG
+      build: fix probing for HAVE_SCTP_SENDV
+      build: 0b0dce7a36fb actually belongs to v4.19
+      func_tests: fix use of unitialized var
+      withsctp: to not reuse PACKAGE_VERSION as lib version
+      automake: fix include dir for the now autogenerated header
+      travis: enable make distcheck check
+      travis: add tests for building using a build dir
+      travis: disable clang-5.0 test
+      func_tests: fix malloc size in test_1_to_1_connectx.c
+      travis: add compile test to 5.4 and 4.19
+      travis: integrate with Coverity Scan
+      travis: revert linux clone depth optimization
+      coverity: change it to master branch and our mailing list
+      travis: fix yml file identation
+      travis: re-enable clang
+      sctp_send: fix ignored flags parameter
+      sctp_sendv: avoid explicit memset for var initialization
+      Release lksctp-tools-1.0.19
+
+Petr Lautrbach <plautrba@redhat.com> (1):
+      Use symvmer attribute, not asms for symbol versioning
+
+Sergei Trofimovich <slyfox@gentoo.org> (1):
+      m4/sctp.m4: make conpatible to autoconf-2.70
+
+Xin Long <lucien.xin@gmail.com> (3):
+      withsctp: use @PACKAGE_VERSION@ in withsctp.h
+      configure.ac: add CURRENT REVISION and AGE for libsctp and libwithsctp
+      build: fix netinet/sctp.h not to be installed
+
+  Marcelo
