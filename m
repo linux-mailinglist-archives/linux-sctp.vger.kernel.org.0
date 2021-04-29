@@ -2,118 +2,72 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 348B836E33C
-	for <lists+linux-sctp@lfdr.de>; Thu, 29 Apr 2021 04:28:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A4036E890
+	for <lists+linux-sctp@lfdr.de>; Thu, 29 Apr 2021 12:19:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231161AbhD2C26 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 28 Apr 2021 22:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50928 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbhD2C26 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 28 Apr 2021 22:28:58 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F07C06138B
-        for <linux-sctp@vger.kernel.org>; Wed, 28 Apr 2021 19:28:05 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id h3so31114727qve.13
-        for <linux-sctp@vger.kernel.org>; Wed, 28 Apr 2021 19:28:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=dq1KnYAAYwxZbj9t5izA+J9jJ5pi8Scs637LfC0GcTI=;
-        b=bN8QWz7NKy7ekGNlvFLmn/VI5YQeG7M34AsE0x9Le1AQUdK76XQYDy+K30G11oaDJM
-         2x2Kbu6bneqtmmlcmUfYmDTBiirWvKXMAjUcNHTvTqMVlkrbS3wXWoWCrabu1OE5DVw2
-         qnQ1GXCjAU0ARdL3zM5P2uQ4038uGfnv+dnL6M+26fNCVyiVdHw7iHvXE+eAFCMAO+jK
-         yHrWmsFKJEJd2RmLh1Gs5s6d+Hn8lcMthExj5p4hu1kxGQ1a0TDGk/DFAvEwl0yCqrFp
-         bEauzUgzt6mFRXPvk5Qw3/akJAmW94mHMXcPvfcgqFNAAkRoRy9mGqIEaBkBNT3ZI1tq
-         34Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition;
-        bh=dq1KnYAAYwxZbj9t5izA+J9jJ5pi8Scs637LfC0GcTI=;
-        b=KmJ57Q/LYlldT0dF3YUxVsPXu8XRD4IggrY4+PtlpJK/Ouh9Gekwm1NDTCMX1WFZwz
-         pPuELjPAXjI/nM6wH9dtIhUJW2ESfY10EpZd7N2CiH4u9G25K2q48nUMzh0v3rwfEAUg
-         LIA5KtvVp6jjMQdKhVj8kwok1VK7X916/ZUcZCr+CEdsBeCf0JzQLBolc3GLcBVhiFSk
-         fE85ELr5XYTiVW6NAIloxQzElKryKOu4eAUP6MGOIPY5smkkrWktI6qAEZO5mfK4mXB2
-         aFQt5DxOJ9qURfLZIf7WrAwuoiZncs4U2YwD9hF7IZFmZoxFQ1aYfcKzoVhzpwhdpQRH
-         T/5g==
-X-Gm-Message-State: AOAM5316DPIrhuybb0Ep5x0/u4l4d+/aWmcVVC16RG/XB7gZdBw53nCT
-        ZUxpZ1uMO+YdbzLOdUvJLclBut8kooo=
-X-Google-Smtp-Source: ABdhPJz0EyX6bVWnfbzVekWCXR8jeO4ac/kgopoOix6GDcf6i4dctgPmx7e11qP/fHj1Dz9BTR1qcg==
-X-Received: by 2002:ad4:5006:: with SMTP id s6mr6170001qvo.23.1619663284246;
-        Wed, 28 Apr 2021 19:28:04 -0700 (PDT)
-Received: from horizon.localdomain ([177.220.174.133])
-        by smtp.gmail.com with ESMTPSA id b8sm1211560qka.117.2021.04.28.19.28.03
-        for <linux-sctp@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Apr 2021 19:28:03 -0700 (PDT)
-Received: by horizon.localdomain (Postfix, from userid 1000)
-        id 4C3FEC0780; Wed, 28 Apr 2021 23:28:01 -0300 (-03)
-Date:   Wed, 28 Apr 2021 23:28:01 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     linux-sctp@vger.kernel.org
-Subject: New lksctp-tools release: 1.0.19
-Message-ID: <YIoZsYPHWFP3JgwO@horizon.localdomain>
+        id S232261AbhD2KUk (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 29 Apr 2021 06:20:40 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:3095 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232629AbhD2KUj (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 29 Apr 2021 06:20:39 -0400
+Received: from dggeml708-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4FWBGc04XwzWcQ9;
+        Thu, 29 Apr 2021 18:15:52 +0800 (CST)
+Received: from dggpemm500008.china.huawei.com (7.185.36.136) by
+ dggeml708-chm.china.huawei.com (10.3.17.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.2; Thu, 29 Apr 2021 18:19:50 +0800
+Received: from localhost (10.174.242.151) by dggpemm500008.china.huawei.com
+ (7.185.36.136) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Thu, 29 Apr
+ 2021 18:19:50 +0800
+From:   wangyunjian <wangyunjian@huawei.com>
+To:     <kuba@kernel.org>, <davem@davemloft.net>
+CC:     <vyasevich@gmail.com>, <nhorman@tuxdriver.com>,
+        <marcelo.leitner@gmail.com>, <linux-sctp@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <dingxiaoxiong@huawei.com>,
+        Yunjian Wang <wangyunjian@huawei.com>
+Subject: [PATCH net-next] sctp: Remove redundant skb_list null check
+Date:   Thu, 29 Apr 2021 18:19:49 +0800
+Message-ID: <1619691589-4776-1-git-send-email-wangyunjian@huawei.com>
+X-Mailer: git-send-email 1.9.5.msysgit.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain
+X-Originating-IP: [10.174.242.151]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500008.china.huawei.com (7.185.36.136)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello,
+From: Yunjian Wang <wangyunjian@huawei.com>
 
-A bit more than 2 years since last release, I'd like to announce the
-new release, 1.0.19. This one has more integration with Github GI, a
-couple of bug fixes and some build fixes.
+The skb_list cannot be NULL here since its already being accessed
+before. Remove the redundant null check.
 
-Release: https://github.com/sctp/lksctp-tools/releases/tag/v1.0.19
-Build status: https://travis-ci.org/github/sctp/lksctp-tools/builds/768732641
-CovScan: https://scan.coverity.com/projects/sctp-lksctp-tools
-(not sure how to make the access more public, but please let me know
-if you want to have access)
+Signed-off-by: Yunjian Wang <wangyunjian@huawei.com>
+---
+ net/sctp/ulpqueue.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-Thank you to all those who contributed to this release.
+diff --git a/net/sctp/ulpqueue.c b/net/sctp/ulpqueue.c
+index 407fed46931b..6f3685f0e700 100644
+--- a/net/sctp/ulpqueue.c
++++ b/net/sctp/ulpqueue.c
+@@ -259,10 +259,7 @@ int sctp_ulpq_tail_event(struct sctp_ulpq *ulpq, struct sk_buff_head *skb_list)
+ 	return 1;
+ 
+ out_free:
+-	if (skb_list)
+-		sctp_queue_purge_ulpevents(skb_list);
+-	else
+-		sctp_ulpevent_free(event);
++	sctp_queue_purge_ulpevents(skb_list);
+ 
+ 	return 0;
+ }
+-- 
+2.23.0
 
-Colin Ian King <colin.king@canonical.com> (1):
-      man: sctp.7: fix several typos and two formatting issues
-
-Damir Franusic <damir.franusic@gmail.com> (1):
-      sctp_recvmsg man update
-
-Jianwen Ji <jijianwen@gmail.com> (1):
-      Fix error->errno typos
-
-Marcelo Ricardo Leitner <marcelo.leitner@gmail.com> (19):
-      build: remove v4.12 secondary defines in favor of HAVE_SCTP_STREAM_RECONFIG
-      build: fix probing for HAVE_SCTP_SENDV
-      build: 0b0dce7a36fb actually belongs to v4.19
-      func_tests: fix use of unitialized var
-      withsctp: to not reuse PACKAGE_VERSION as lib version
-      automake: fix include dir for the now autogenerated header
-      travis: enable make distcheck check
-      travis: add tests for building using a build dir
-      travis: disable clang-5.0 test
-      func_tests: fix malloc size in test_1_to_1_connectx.c
-      travis: add compile test to 5.4 and 4.19
-      travis: integrate with Coverity Scan
-      travis: revert linux clone depth optimization
-      coverity: change it to master branch and our mailing list
-      travis: fix yml file identation
-      travis: re-enable clang
-      sctp_send: fix ignored flags parameter
-      sctp_sendv: avoid explicit memset for var initialization
-      Release lksctp-tools-1.0.19
-
-Petr Lautrbach <plautrba@redhat.com> (1):
-      Use symvmer attribute, not asms for symbol versioning
-
-Sergei Trofimovich <slyfox@gentoo.org> (1):
-      m4/sctp.m4: make conpatible to autoconf-2.70
-
-Xin Long <lucien.xin@gmail.com> (3):
-      withsctp: use @PACKAGE_VERSION@ in withsctp.h
-      configure.ac: add CURRENT REVISION and AGE for libsctp and libwithsctp
-      build: fix netinet/sctp.h not to be installed
-
-  Marcelo
