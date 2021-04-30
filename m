@@ -2,253 +2,85 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B352370115
-	for <lists+linux-sctp@lfdr.de>; Fri, 30 Apr 2021 21:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CFA33701B6
+	for <lists+linux-sctp@lfdr.de>; Fri, 30 Apr 2021 22:05:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbhD3TTR (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 30 Apr 2021 15:19:17 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:34522 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbhD3TTK (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 30 Apr 2021 15:19:10 -0400
-Received: by mail-io1-f69.google.com with SMTP id v25-20020a0566020159b02904017f565b33so15485195iot.1
-        for <linux-sctp@vger.kernel.org>; Fri, 30 Apr 2021 12:18:21 -0700 (PDT)
+        id S235298AbhD3UD6 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 30 Apr 2021 16:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36584 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232976AbhD3UD5 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 30 Apr 2021 16:03:57 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C39FC06174A;
+        Fri, 30 Apr 2021 13:03:09 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id j6-20020a17090adc86b02900cbfe6f2c96so2348035pjv.1;
+        Fri, 30 Apr 2021 13:03:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=7jiq5BbN2CnQxL4Mk/7l29gw0yqYVUm0cKTtem2bcTA=;
+        b=ZWJd85a+XjeinbJFI2AdFKzxwSQ1UeNYHRDolHVJR4fadQ0gemCBZ3iRT8jwA28v2T
+         Sm+Bxw/gRJ16FCt23nZsnmJ/M0XIYen9rfkAwzz0/dHcwYoZqSDoUe9I06NoMCaVq7Ts
+         4ZhshJUc0EkaEksFMSSzgiTJtZO6eJA85MD8h/oapJvLpOxxuBnBl24o5fM5Rk8+EisC
+         TGaEuomNSn2/rbfd/Hw+vlyM+1OPJRXXPfUEKb7E90G0EGGJrruRm7c7Orqkdmp5co/Z
+         ZhdfDCG5pGgxFz6kHD87nGfODX4HWByZ8PYHbBHcJMgQU7FFhU516DbgETSZ+dtBWARE
+         d2sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=W21MpQbg2r+zNE3j8+vGWPwY3QTKyRcwFXVYnsEsdfk=;
-        b=Prsb8Inbpk/VnhZ+WtwNp3QcvxTN9h9Dgtu7ZXuekxOfMU3pauwPniRoElm5EN3Bk9
-         AwJ8jfdRG9NeWqt8Z2r5G2+UfC6p4xdqvlrVfVKU9rVJ+CrZzxEQOVt3i5TKNoT9LDTP
-         eptKv0fnBoGPba1XEAAlqrAbXzKEyEAeGJ8ZAjhh9HugDYXlZHtUkMlRyBICuc5MR4A7
-         mE8s++UYfd+C1SR1IkRr8a+KghHwWzcLcLctuLQXarUdl4e+BYgTnus9rZ9zppjJ3c6S
-         sVxDXNH9t0jqWI/MTINXW3nmRGFQXYPrp8lcvM7EVuOVWFRhomOx4dm5I4Wd9lz+LaOI
-         Id1A==
-X-Gm-Message-State: AOAM533Qgh23lB7fNb6Ab4MuVC/4XpA2aTXHq0Loyf1KR90uazpTR5Xc
-        7Gzz6IHrixW7JKOa9DH1NoUaFwqZTarRTACagF6hzLa+70vs
-X-Google-Smtp-Source: ABdhPJwZS0tfegh2Qqjc0QKn+UUcf4HfJCvapdjl8XTuTXzuiIOy0BxLLiudFD2SpuxKFLCBNFeorHCXet+FSN9BdOrQwf79BoUu
-MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1526:: with SMTP id i6mr5273750ilu.270.1619810301365;
- Fri, 30 Apr 2021 12:18:21 -0700 (PDT)
-Date:   Fri, 30 Apr 2021 12:18:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009dd35c05c135792d@google.com>
-Subject: [syzbot] possible deadlock in sctp_addr_wq_timeout_handler
-From:   syzbot <syzbot+959223586843e69a2674@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, bp@alien8.de, davem@davemloft.net,
-        hpa@zytor.com, jmattson@google.com, joro@8bytes.org,
-        kuba@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-sctp@vger.kernel.org, marcelo.leitner@gmail.com,
-        mark.rutland@arm.com, masahiroy@kernel.org, mingo@redhat.com,
-        netdev@vger.kernel.org, nhorman@tuxdriver.com, pbonzini@redhat.com,
-        peterz@infradead.org, rafael.j.wysocki@intel.com,
-        rostedt@goodmis.org, seanjc@google.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        vkuznets@redhat.com, vyasevich@gmail.com, wanpengli@tencent.com,
-        will@kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=7jiq5BbN2CnQxL4Mk/7l29gw0yqYVUm0cKTtem2bcTA=;
+        b=YLIJ9/DrHwaaOa7hJVIStgWAZgStuM94zSA4+qNe9aWnAszm9j8miWBRhGI6XhyAYs
+         BjTODoeIrfLG6JUPGGM7wNG4ZsYEvBlF5zju4J7O5KEGHCq+xxy2rJc4m019wDpYMRfB
+         ZilCI8exzNhJmjwzUka3RwYEilVfmPULNmEuqqPGrwKS1vmduJ28392M0m3joM4rZkxf
+         GFYyB4yIdrcLA/8xcQqdgbL4qtWHXhlVMriQdn7MJRMgZV6n+fk0m5qB2X1DCDVxesqp
+         z976KfcwbMrr4lxOH7lozjDwfg7iSy32voBM3pZlMbk5dxMzCB87Qv4qp7adl/INfxhM
+         fEiA==
+X-Gm-Message-State: AOAM5302XY+FgEFz+TBMpuyWpGmQLlG7kZrYO1918S5Rj8YwP2WsiHN8
+        HMa5ZKpIy4NtpCHH+WkB5eOCJrZwS6lutR35
+X-Google-Smtp-Source: ABdhPJxbnAttF2ojjICxQQsF3pUiCsyfB6Hiuq8JImxQbJ2nQH6nYhdeAkBPDgNx8eMQw8yO5vlBZQ==
+X-Received: by 2002:a17:90b:505:: with SMTP id r5mr6986760pjz.121.1619812988635;
+        Fri, 30 Apr 2021 13:03:08 -0700 (PDT)
+Received: from localhost ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id b6sm2848771pfb.27.2021.04.30.13.03.07
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 30 Apr 2021 13:03:07 -0700 (PDT)
+From:   Xin Long <lucien.xin@gmail.com>
+To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        jere.leppanen@nokia.com,
+        Alexander Sverdlin <alexander.sverdlin@nokia.com>
+Subject: [PATCHv2 net 0/3] sctp: always send a chunk with the asoc that it belongs to
+Date:   Sat,  1 May 2021 04:02:57 +0800
+Message-Id: <cover.1619812899.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.1.0
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello,
+Currently when processing a duplicate COOKIE-ECHO chunk, a new temp
+asoc would be created, then it creates the chunks with the new asoc.
+However, later on it uses the old asoc to send these chunks, which
+has caused quite a few issues.
 
-syzbot found the following issue on:
+This patchset is to fix this and make sure that the COOKIE-ACK and
+SHUTDOWN chunks are created with the same asoc that will be used to
+send them out.
 
-HEAD commit:    2a1d7946 Merge tag 'for-linus' of git://git.kernel.org/pub..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=159af1c1d00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9404cfa686df2c05
-dashboard link: https://syzkaller.appspot.com/bug?extid=959223586843e69a2674
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11613d71d00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12be674dd00000
+v1->v2:
+  - see Patch 3/3.
 
-The issue was bisected to:
+Xin Long (3):
+  sctp: do asoc update earlier in sctp_sf_do_dupcook_a
+  Revert "sctp: Fix bundling of SHUTDOWN with COOKIE-ACK"
+  sctp: do asoc update earlier in sctp_sf_do_dupcook_b
 
-commit 997acaf6b4b59c6a9c259740312a69ea549cc684
-Author: Mark Rutland <mark.rutland@arm.com>
-Date:   Mon Jan 11 15:37:07 2021 +0000
+ include/net/sctp/command.h |  1 -
+ net/sctp/sm_sideeffect.c   | 26 ------------------------
+ net/sctp/sm_statefuns.c    | 50 ++++++++++++++++++++++++++++++++++++----------
+ 3 files changed, 39 insertions(+), 38 deletions(-)
 
-    lockdep: report broken irq restoration
+-- 
+2.1.0
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17c36a5dd00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=14236a5dd00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=10236a5dd00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+959223586843e69a2674@syzkaller.appspotmail.com
-Fixes: 997acaf6b4b5 ("lockdep: report broken irq restoration")
-
-======================================================
-WARNING: possible circular locking dependency detected
-5.12.0-rc8-syzkaller #0 Not tainted
-------------------------------------------------------
-syz-executor044/8536 is trying to acquire lock:
-ffff8880183933a0 (slock-AF_INET6){+.-.}-{2:2}, at: spin_lock include/linux/spinlock.h:354 [inline]
-ffff8880183933a0 (slock-AF_INET6){+.-.}-{2:2}, at: sctp_addr_wq_timeout_handler+0x1a1/0x550 net/sctp/protocol.c:666
-
-but task is already holding lock:
-ffffffff8d659620 (&net->sctp.addr_wq_lock){+.-.}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:359 [inline]
-ffffffff8d659620 (&net->sctp.addr_wq_lock){+.-.}-{2:2}, at: sctp_addr_wq_timeout_handler+0x38/0x550 net/sctp/protocol.c:626
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (&net->sctp.addr_wq_lock){+.-.}-{2:2}:
-       __raw_spin_lock_bh include/linux/spinlock_api_smp.h:135 [inline]
-       _raw_spin_lock_bh+0x2f/0x40 kernel/locking/spinlock.c:175
-       spin_lock_bh include/linux/spinlock.h:359 [inline]
-       sctp_destroy_sock+0x204/0x440 net/sctp/socket.c:5028
-       sctp_v6_destroy_sock+0x11/0x20 net/sctp/socket.c:9528
-       sk_common_release+0x64/0x390 net/core/sock.c:3264
-       sctp_close+0x4da/0x940 net/sctp/socket.c:1531
-       inet_release+0x12e/0x280 net/ipv4/af_inet.c:431
-       inet6_release+0x4c/0x70 net/ipv6/af_inet6.c:478
-       __sock_release+0xcd/0x280 net/socket.c:599
-       sock_close+0x18/0x20 net/socket.c:1258
-       __fput+0x288/0x920 fs/file_table.c:280
-       task_work_run+0xdd/0x1a0 kernel/task_work.c:140
-       exit_task_work include/linux/task_work.h:30 [inline]
-       do_exit+0xbfc/0x2a60 kernel/exit.c:825
-       do_group_exit+0x125/0x310 kernel/exit.c:922
-       __do_sys_exit_group kernel/exit.c:933 [inline]
-       __se_sys_exit_group kernel/exit.c:931 [inline]
-       __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:931
-       do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
-
--> #0 (slock-AF_INET6){+.-.}-{2:2}:
-       check_prev_add kernel/locking/lockdep.c:2937 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3060 [inline]
-       validate_chain kernel/locking/lockdep.c:3675 [inline]
-       __lock_acquire+0x2b14/0x54c0 kernel/locking/lockdep.c:4901
-       lock_acquire kernel/locking/lockdep.c:5511 [inline]
-       lock_acquire+0x1ab/0x740 kernel/locking/lockdep.c:5476
-       __raw_spin_lock include/linux/spinlock_api_smp.h:142 [inline]
-       _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:151
-       spin_lock include/linux/spinlock.h:354 [inline]
-       sctp_addr_wq_timeout_handler+0x1a1/0x550 net/sctp/protocol.c:666
-       call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1431
-       expire_timers kernel/time/timer.c:1476 [inline]
-       __run_timers.part.0+0x67c/0xa50 kernel/time/timer.c:1745
-       __run_timers kernel/time/timer.c:1726 [inline]
-       run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1758
-       __do_softirq+0x29b/0x9f6 kernel/softirq.c:345
-       invoke_softirq kernel/softirq.c:221 [inline]
-       __irq_exit_rcu kernel/softirq.c:422 [inline]
-       irq_exit_rcu+0x134/0x200 kernel/softirq.c:434
-       sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1100
-       asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:632
-       __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:161 [inline]
-       _raw_spin_unlock_irqrestore+0x38/0x70 kernel/locking/spinlock.c:191
-       __debug_check_no_obj_freed lib/debugobjects.c:997 [inline]
-       debug_check_no_obj_freed+0x20c/0x420 lib/debugobjects.c:1018
-       slab_free_hook mm/slub.c:1554 [inline]
-       slab_free_freelist_hook+0x147/0x210 mm/slub.c:1600
-       slab_free mm/slub.c:3161 [inline]
-       kmem_cache_free+0x8a/0x740 mm/slub.c:3177
-       free_fs_struct fs/fs_struct.c:92 [inline]
-       exit_fs+0x123/0x170 fs/fs_struct.c:108
-       do_exit+0xbca/0x2a60 kernel/exit.c:821
-       do_group_exit+0x125/0x310 kernel/exit.c:922
-       __do_sys_exit_group kernel/exit.c:933 [inline]
-       __se_sys_exit_group kernel/exit.c:931 [inline]
-       __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:931
-       do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&net->sctp.addr_wq_lock);
-                               lock(slock-AF_INET6);
-                               lock(&net->sctp.addr_wq_lock);
-  lock(slock-AF_INET6);
-
- *** DEADLOCK ***
-
-2 locks held by syz-executor044/8536:
- #0: ffffc90000007d78 ((&net->sctp.addr_wq_timer)){+.-.}-{0:0}, at: lockdep_copy_map include/linux/lockdep.h:35 [inline]
- #0: ffffc90000007d78 ((&net->sctp.addr_wq_timer)){+.-.}-{0:0}, at: call_timer_fn+0xd5/0x6b0 kernel/time/timer.c:1421
- #1: ffffffff8d659620 (&net->sctp.addr_wq_lock){+.-.}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:359 [inline]
- #1: ffffffff8d659620 (&net->sctp.addr_wq_lock){+.-.}-{2:2}, at: sctp_addr_wq_timeout_handler+0x38/0x550 net/sctp/protocol.c:626
-
-stack backtrace:
-CPU: 0 PID: 8536 Comm: syz-executor044 Not tainted 5.12.0-rc8-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:79 [inline]
- dump_stack+0x141/0x1d7 lib/dump_stack.c:120
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2128
- check_prev_add kernel/locking/lockdep.c:2937 [inline]
- check_prevs_add kernel/locking/lockdep.c:3060 [inline]
- validate_chain kernel/locking/lockdep.c:3675 [inline]
- __lock_acquire+0x2b14/0x54c0 kernel/locking/lockdep.c:4901
- lock_acquire kernel/locking/lockdep.c:5511 [inline]
- lock_acquire+0x1ab/0x740 kernel/locking/lockdep.c:5476
- __raw_spin_lock include/linux/spinlock_api_smp.h:142 [inline]
- _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:151
- spin_lock include/linux/spinlock.h:354 [inline]
- sctp_addr_wq_timeout_handler+0x1a1/0x550 net/sctp/protocol.c:666
- call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1431
- expire_timers kernel/time/timer.c:1476 [inline]
- __run_timers.part.0+0x67c/0xa50 kernel/time/timer.c:1745
- __run_timers kernel/time/timer.c:1726 [inline]
- run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1758
- __do_softirq+0x29b/0x9f6 kernel/softirq.c:345
- invoke_softirq kernel/softirq.c:221 [inline]
- __irq_exit_rcu kernel/softirq.c:422 [inline]
- irq_exit_rcu+0x134/0x200 kernel/softirq.c:434
- sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1100
- </IRQ>
- asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:632
-RIP: 0010:__raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:161 [inline]
-RIP: 0010:_raw_spin_unlock_irqrestore+0x38/0x70 kernel/locking/spinlock.c:191
-Code: 74 24 10 e8 4a f9 53 f8 48 89 ef e8 82 af 54 f8 81 e3 00 02 00 00 75 25 9c 58 f6 c4 02 75 2d 48 85 db 74 01 fb bf 01 00 00 00 <e8> 63 7d 48 f8 65 8b 05 0c 48 fc 76 85 c0 74 0a 5b 5d c3 e8 d0 3c
-RSP: 0018:ffffc9000173fc50 EFLAGS: 00000206
-RAX: 0000000000000002 RBX: 0000000000000200 RCX: 1ffffffff1b89e11
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000001
-RBP: ffffffff9006cf00 R08: 0000000000000001 R09: 0000000000000001
-R10: ffffffff8179e4c8 R11: 000000000000003f R12: 1ffffffff200d9df
-R13: 0000000000000000 R14: dead000000000100 R15: dffffc0000000000
- __debug_check_no_obj_freed lib/debugobjects.c:997 [inline]
- debug_check_no_obj_freed+0x20c/0x420 lib/debugobjects.c:1018
- slab_free_hook mm/slub.c:1554 [inline]
- slab_free_freelist_hook+0x147/0x210 mm/slub.c:1600
- slab_free mm/slub.c:3161 [inline]
- kmem_cache_free+0x8a/0x740 mm/slub.c:3177
- free_fs_struct fs/fs_struct.c:92 [inline]
- exit_fs+0x123/0x170 fs/fs_struct.c:108
- do_exit+0xbca/0x2a60 kernel/exit.c:821
- do_group_exit+0x125/0x310 kernel/exit.c:922
- __do_sys_exit_group kernel/exit.c:933 [inline]
- __se_sys_exit_group kernel/exit.c:931 [inline]
- __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:931
- do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x43ea79
-Code: Unable to access opcode bytes at RIP 0x43ea4f.
-RSP: 002b:00007ffdbc348058 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00000000004b0330 RCX: 000000000043ea79
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 0000000000000001
-R10: 0000000000000001 R11: 0000000000000246 R12: 00000000004b0330
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
