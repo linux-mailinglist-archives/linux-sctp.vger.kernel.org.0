@@ -2,72 +2,76 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12A4036E890
-	for <lists+linux-sctp@lfdr.de>; Thu, 29 Apr 2021 12:19:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DD5C36F337
+	for <lists+linux-sctp@lfdr.de>; Fri, 30 Apr 2021 02:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232261AbhD2KUk (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 29 Apr 2021 06:20:40 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:3095 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232629AbhD2KUj (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 29 Apr 2021 06:20:39 -0400
-Received: from dggeml708-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4FWBGc04XwzWcQ9;
-        Thu, 29 Apr 2021 18:15:52 +0800 (CST)
-Received: from dggpemm500008.china.huawei.com (7.185.36.136) by
- dggeml708-chm.china.huawei.com (10.3.17.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Thu, 29 Apr 2021 18:19:50 +0800
-Received: from localhost (10.174.242.151) by dggpemm500008.china.huawei.com
- (7.185.36.136) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Thu, 29 Apr
- 2021 18:19:50 +0800
-From:   wangyunjian <wangyunjian@huawei.com>
-To:     <kuba@kernel.org>, <davem@davemloft.net>
-CC:     <vyasevich@gmail.com>, <nhorman@tuxdriver.com>,
-        <marcelo.leitner@gmail.com>, <linux-sctp@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <dingxiaoxiong@huawei.com>,
-        Yunjian Wang <wangyunjian@huawei.com>
-Subject: [PATCH net-next] sctp: Remove redundant skb_list null check
-Date:   Thu, 29 Apr 2021 18:19:49 +0800
-Message-ID: <1619691589-4776-1-git-send-email-wangyunjian@huawei.com>
-X-Mailer: git-send-email 1.9.5.msysgit.1
+        id S229577AbhD3Aq1 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 29 Apr 2021 20:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35748 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229519AbhD3Aq0 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 29 Apr 2021 20:46:26 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E753CC06138B;
+        Thu, 29 Apr 2021 17:45:37 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id d19so33451115qkk.12;
+        Thu, 29 Apr 2021 17:45:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xqlg0NQkL0tit0JFyT2/uizC4Jo87izc4FKzhw46Z50=;
+        b=Iu8H0cQXdM9Kn0DUDnk7IsuEf62oE35eCHT0rAMvUFXC03eWwDVVPJS6zdktxC89d1
+         KzlHC2dB4fJh6B8R+uMQ0iOpJ0WNgsH2ulzVyLIi+3tNwBQ8okMcoTH81e3UgbRBHlsj
+         KYl25rmMT6kB0OriRibFIBNIY1WR1gbNTa19aHyvFchgfYDL4AAZeKQh6phZmcliPZmc
+         dJP637ULyKhH+bWG/buWS9jkRP0Bulnwx0P4iTeKuwSXq0CZY1a7tQxHMx1GtKsB+nmL
+         NYmtYKHt+lOdjRQ7KyB5ra6PxH4E3Qj/mOFOnylwJXjHCRKauM+9TKoc8k/fmA02rJGf
+         RF4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xqlg0NQkL0tit0JFyT2/uizC4Jo87izc4FKzhw46Z50=;
+        b=svP7wn3JvHRsLJajVfYUz4Ztag1+z5WgKbVVKA+ByLDMccUVQRTqA9E4chqvVgBelL
+         EzXiViBFDdS3ShbPtIDbEI93OGyxjSQ9tHXSso8P4wlszlS2ivHkFP3/EXCKvD7550hv
+         tkDt6itp/XDCdyV1M8vtnruuD9cqc5cLNAD+BHxJ3QK1RsrDCrTO0Tp150WfIukLFZ9b
+         i631xf8FFIOnk15rBw2RMVX8hMmetKyskwc8m3CzWg+WFxQoPGWpBXRQ6Z5PCf2VYFqY
+         LXAloLpvBs1ANOENFD6T/2kDqrqq/LDeiszznmTsv1a2UbJUkEHNelQdLqusXIXxuY6F
+         /AUQ==
+X-Gm-Message-State: AOAM532mUaWT1+S7VkzDTg5YqVYJxlAFguKeeYBrU4/QAaqzMrMQtBoP
+        e/8Mg0Jbj4pid19XaXNFjF5eYVThdLQ=
+X-Google-Smtp-Source: ABdhPJx2iIe8EJOjWv0URjED6dvU978H0cHgGdNKi/jSbC1A69kqZOTpCFSyLdPR1Vvy5c7XwGaX0g==
+X-Received: by 2002:a05:620a:2947:: with SMTP id n7mr2636170qkp.450.1619743536729;
+        Thu, 29 Apr 2021 17:45:36 -0700 (PDT)
+Received: from horizon.localdomain ([2001:1284:f013:14fb:c088:46f:2a8:ad2])
+        by smtp.gmail.com with ESMTPSA id q28sm233766qkm.15.2021.04.29.17.45.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Apr 2021 17:45:36 -0700 (PDT)
+Received: by horizon.localdomain (Postfix, from userid 1000)
+        id 3745FC028B; Thu, 29 Apr 2021 21:45:34 -0300 (-03)
+Date:   Thu, 29 Apr 2021 21:45:34 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     wangyunjian <wangyunjian@huawei.com>
+Cc:     kuba@kernel.org, davem@davemloft.net, vyasevich@gmail.com,
+        nhorman@tuxdriver.com, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org, dingxiaoxiong@huawei.com
+Subject: Re: [PATCH net-next] sctp: Remove redundant skb_list null check
+Message-ID: <YItTLq2SoEno830E@horizon.localdomain>
+References: <1619691589-4776-1-git-send-email-wangyunjian@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.174.242.151]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500008.china.huawei.com (7.185.36.136)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1619691589-4776-1-git-send-email-wangyunjian@huawei.com>
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Yunjian Wang <wangyunjian@huawei.com>
+On Thu, Apr 29, 2021 at 06:19:49PM +0800, wangyunjian wrote:
+> From: Yunjian Wang <wangyunjian@huawei.com>
+> 
+> The skb_list cannot be NULL here since its already being accessed
+> before. Remove the redundant null check.
+> 
+> Signed-off-by: Yunjian Wang <wangyunjian@huawei.com>
 
-The skb_list cannot be NULL here since its already being accessed
-before. Remove the redundant null check.
-
-Signed-off-by: Yunjian Wang <wangyunjian@huawei.com>
----
- net/sctp/ulpqueue.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/net/sctp/ulpqueue.c b/net/sctp/ulpqueue.c
-index 407fed46931b..6f3685f0e700 100644
---- a/net/sctp/ulpqueue.c
-+++ b/net/sctp/ulpqueue.c
-@@ -259,10 +259,7 @@ int sctp_ulpq_tail_event(struct sctp_ulpq *ulpq, struct sk_buff_head *skb_list)
- 	return 1;
- 
- out_free:
--	if (skb_list)
--		sctp_queue_purge_ulpevents(skb_list);
--	else
--		sctp_ulpevent_free(event);
-+	sctp_queue_purge_ulpevents(skb_list);
- 
- 	return 0;
- }
--- 
-2.23.0
-
+Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
