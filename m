@@ -2,76 +2,82 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD5C36F337
-	for <lists+linux-sctp@lfdr.de>; Fri, 30 Apr 2021 02:45:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9998637004A
+	for <lists+linux-sctp@lfdr.de>; Fri, 30 Apr 2021 20:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbhD3Aq1 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 29 Apr 2021 20:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35748 "EHLO
+        id S231140AbhD3SQ5 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 30 Apr 2021 14:16:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbhD3Aq0 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 29 Apr 2021 20:46:26 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E753CC06138B;
-        Thu, 29 Apr 2021 17:45:37 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id d19so33451115qkk.12;
-        Thu, 29 Apr 2021 17:45:37 -0700 (PDT)
+        with ESMTP id S229990AbhD3SQz (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 30 Apr 2021 14:16:55 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E68C06174A;
+        Fri, 30 Apr 2021 11:16:06 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id j6so9665452pfh.5;
+        Fri, 30 Apr 2021 11:16:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xqlg0NQkL0tit0JFyT2/uizC4Jo87izc4FKzhw46Z50=;
-        b=Iu8H0cQXdM9Kn0DUDnk7IsuEf62oE35eCHT0rAMvUFXC03eWwDVVPJS6zdktxC89d1
-         KzlHC2dB4fJh6B8R+uMQ0iOpJ0WNgsH2ulzVyLIi+3tNwBQ8okMcoTH81e3UgbRBHlsj
-         KYl25rmMT6kB0OriRibFIBNIY1WR1gbNTa19aHyvFchgfYDL4AAZeKQh6phZmcliPZmc
-         dJP637ULyKhH+bWG/buWS9jkRP0Bulnwx0P4iTeKuwSXq0CZY1a7tQxHMx1GtKsB+nmL
-         NYmtYKHt+lOdjRQ7KyB5ra6PxH4E3Qj/mOFOnylwJXjHCRKauM+9TKoc8k/fmA02rJGf
-         RF4w==
+        h=from:to:cc:subject:date:message-id;
+        bh=KmcqyDJ2VQg7X8R17cfIVf5UMZAY471KiYxjT85/AL0=;
+        b=syhubJjb8+KFZFHqnzoHcpUub+lubOVyLGgEktYGQLSKv9kEu+N6xqWwMkpYyqrhz7
+         8f/PwiU9Yufz4u//G2HRzJEDh3wUC97DEBYxhRTPWqy1cUnHg06q8jNpYomUBGSSfukQ
+         3jQlGwPviYJtAyFMd713IL4T8lBfXjDSSd8fvIET8TBk4BY63JlxglyqyDGf66dfB5g1
+         Y4wIabdINlMHajA7qoXnUz4VruLN2TNUEii8XSqsdEc9VjduejiMiGrIHGTxdMxgBfyJ
+         YDb36xTRj7t0YTkDNf1J/7VM1VhiCti5JbWOBhz0S8nCOtwiPF+lAc1ngm8ekyomnEM/
+         IY/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xqlg0NQkL0tit0JFyT2/uizC4Jo87izc4FKzhw46Z50=;
-        b=svP7wn3JvHRsLJajVfYUz4Ztag1+z5WgKbVVKA+ByLDMccUVQRTqA9E4chqvVgBelL
-         EzXiViBFDdS3ShbPtIDbEI93OGyxjSQ9tHXSso8P4wlszlS2ivHkFP3/EXCKvD7550hv
-         tkDt6itp/XDCdyV1M8vtnruuD9cqc5cLNAD+BHxJ3QK1RsrDCrTO0Tp150WfIukLFZ9b
-         i631xf8FFIOnk15rBw2RMVX8hMmetKyskwc8m3CzWg+WFxQoPGWpBXRQ6Z5PCf2VYFqY
-         LXAloLpvBs1ANOENFD6T/2kDqrqq/LDeiszznmTsv1a2UbJUkEHNelQdLqusXIXxuY6F
-         /AUQ==
-X-Gm-Message-State: AOAM532mUaWT1+S7VkzDTg5YqVYJxlAFguKeeYBrU4/QAaqzMrMQtBoP
-        e/8Mg0Jbj4pid19XaXNFjF5eYVThdLQ=
-X-Google-Smtp-Source: ABdhPJx2iIe8EJOjWv0URjED6dvU978H0cHgGdNKi/jSbC1A69kqZOTpCFSyLdPR1Vvy5c7XwGaX0g==
-X-Received: by 2002:a05:620a:2947:: with SMTP id n7mr2636170qkp.450.1619743536729;
-        Thu, 29 Apr 2021 17:45:36 -0700 (PDT)
-Received: from horizon.localdomain ([2001:1284:f013:14fb:c088:46f:2a8:ad2])
-        by smtp.gmail.com with ESMTPSA id q28sm233766qkm.15.2021.04.29.17.45.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Apr 2021 17:45:36 -0700 (PDT)
-Received: by horizon.localdomain (Postfix, from userid 1000)
-        id 3745FC028B; Thu, 29 Apr 2021 21:45:34 -0300 (-03)
-Date:   Thu, 29 Apr 2021 21:45:34 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     wangyunjian <wangyunjian@huawei.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, vyasevich@gmail.com,
-        nhorman@tuxdriver.com, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org, dingxiaoxiong@huawei.com
-Subject: Re: [PATCH net-next] sctp: Remove redundant skb_list null check
-Message-ID: <YItTLq2SoEno830E@horizon.localdomain>
-References: <1619691589-4776-1-git-send-email-wangyunjian@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1619691589-4776-1-git-send-email-wangyunjian@huawei.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=KmcqyDJ2VQg7X8R17cfIVf5UMZAY471KiYxjT85/AL0=;
+        b=VTaW6CZPAf0gguVAFZIFkxqPZXvZG1bSMGJxtjjNb+FVHAih0Fckhj1inKr1oZ70dG
+         B9qlnvrBxxUYUselySt6DFUq+kD8qppuOIYUIHPYZ+0QU6tF+barnpfdLtqxAt+0ahzE
+         UA+8UYCiI+xyClpUuuv9AUrUXZhHNs9WHJBIX55iMDF5Me4y8HnNZ5Vj0yMupC6K+NXo
+         DDR3FXbt7Z43aAn3q756CPRLaoZJ1Q6CkRLUDaEvi98jZ+VvsR3iI7gltCyKT8ulRPOH
+         S8xHlckKI9b2ViRoxjBG1jtkgvXDBnjfqhs7nkgzlM35nV9Tub3CCm4V3j2v0iuFcHc7
+         LkZg==
+X-Gm-Message-State: AOAM530L0vonF3w9gyJ4UJe1+eoAS4s+71kaNK9qyahCG93vWhf5mNp+
+        8BiC+ycstsV6Gy91YJ42GzocZk2Xb4J6Tbcb
+X-Google-Smtp-Source: ABdhPJyU/RsvMVmlYmuNWDrQfOJdUhkBbNlCMGMfSIuGvat4II0f5y4IeKMNYL1e7l97ao9D2ilMkA==
+X-Received: by 2002:a63:ff66:: with SMTP id s38mr5685615pgk.154.1619806566189;
+        Fri, 30 Apr 2021 11:16:06 -0700 (PDT)
+Received: from localhost ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id t10sm8968166pju.18.2021.04.30.11.16.04
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 30 Apr 2021 11:16:05 -0700 (PDT)
+From:   Xin Long <lucien.xin@gmail.com>
+To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        jere.leppanen@nokia.com,
+        Alexander Sverdlin <alexander.sverdlin@nokia.com>
+Subject: [PATCH net 0/3] sctp: always send a chunk with the asoc that it belongs to
+Date:   Sat,  1 May 2021 02:15:54 +0800
+Message-Id: <cover.1619806333.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.1.0
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, Apr 29, 2021 at 06:19:49PM +0800, wangyunjian wrote:
-> From: Yunjian Wang <wangyunjian@huawei.com>
-> 
-> The skb_list cannot be NULL here since its already being accessed
-> before. Remove the redundant null check.
-> 
-> Signed-off-by: Yunjian Wang <wangyunjian@huawei.com>
+Currently when processing a duplicate COOKIE-ECHO chunk, a new temp
+asoc would be created, then it creates the chunks with the new asoc.
+However, later on it uses the old asoc to send these chunks, which
+has caused quite a few issues.
 
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+This patchset is to fix this and make sure that the COOKIE-ACK and
+SHUTDOWN chunks are created with the same asoc that will be used to
+send them out.
+
+Xin Long (3):
+  sctp: do asoc update earlier in sctp_sf_do_dupcook_a
+  Revert "sctp: Fix bundling of SHUTDOWN with COOKIE-ACK"
+  sctp: do asoc update earlier in sctp_sf_do_dupcook_b
+
+ include/net/sctp/command.h |  1 -
+ net/sctp/sm_sideeffect.c   | 26 ------------------------
+ net/sctp/sm_statefuns.c    | 50 ++++++++++++++++++++++++++++++++++++----------
+ 3 files changed, 39 insertions(+), 38 deletions(-)
+
+-- 
+2.1.0
+
