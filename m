@@ -2,95 +2,75 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F15C3702E4
-	for <lists+linux-sctp@lfdr.de>; Fri, 30 Apr 2021 23:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89495370379
+	for <lists+linux-sctp@lfdr.de>; Sat,  1 May 2021 00:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231194AbhD3VXJ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 30 Apr 2021 17:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54018 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231173AbhD3VXI (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 30 Apr 2021 17:23:08 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0C0C06174A;
-        Fri, 30 Apr 2021 14:22:19 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id d11so14195282wrw.8;
-        Fri, 30 Apr 2021 14:22:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EMdVb96Ebtl3ru83rtVmVeThVmQQhiSJu9hUSuKAPiE=;
-        b=Nkqo011c4MJ28xRL/bEr50uVHNQLHa0xUhTdHCypCOOWAJKhDxE9F8d8CGwr/NURzj
-         41xpYdM6PuV/1cDzkkQfydJfGgJrGhjl1vMfJd54LN1s+c6YIisyn+ELVah9cEwOjSj6
-         WTZX5asf16wAplvRn4KRnV3u9V/lIFJ8fvfmioDl3igKE0mL9jSmMWj6jPuY2uym+3dM
-         71xNB4ckNR45vntNYkXJ86j0sQ9G5cI5GrgFiXcWUe+A/k1ePjB11bITvpTV9Oo2bKxk
-         fY+oARIvg63PAV7R0bT3qAi1VKSgHWS+/8gV3NRTyvULhAadM9hKherItXujiPkX7MGw
-         YSmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EMdVb96Ebtl3ru83rtVmVeThVmQQhiSJu9hUSuKAPiE=;
-        b=RbzPfZeSHHmXMz3XqalVlms+GRx0kEaWOCrJehIUq2mCVOc5gTlbU22dKEwH3XzlWt
-         dqq93LRuMa2kUzAefyGXNP31CrJPmO+KIPDmY+4j3DNlI4v7tO9NRJBWLHRd7dJlY5Lf
-         l4IdvDR0yt9YTZXXQ1ZA8lh8+B/i/NGVArocp8ROiVhiJrFXxeDr5TeJN5wgjWIBHP6o
-         Ne0N8Urj1Zo5iillvrnad4F78nQep2xU7UAdKBN7GEPSRUzMNHdNB3wFTOa+A4BI3YHw
-         MkN9NHZZRaPZ2goprw+/XrHteYc+fDgetzDeayfwigQ/FvSkAeqpdoeRPhZOaQr3ZzWS
-         fxhQ==
-X-Gm-Message-State: AOAM531vKu3QkWYEMMP3GaB4bFwHXQWz8+J0YUgBJCavrSamo5EXMx5Q
-        rEOQOjbiEDNnXm14EVwWOqrTS7BwG4EscbgkqdY=
-X-Google-Smtp-Source: ABdhPJxaaXYC35dcTvz4io//xzoawObZxmOesdrLcNPGTVuE7cBAYh2mJ1Z0K2NHVCwTWxRUUqBAREqJrByUj3vQDOE=
-X-Received: by 2002:a5d:4c8a:: with SMTP id z10mr9799959wrs.395.1619817737810;
- Fri, 30 Apr 2021 14:22:17 -0700 (PDT)
+        id S231809AbhD3WbA (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 30 Apr 2021 18:31:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39776 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231416AbhD3Wa7 (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Fri, 30 Apr 2021 18:30:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 2234B6147E;
+        Fri, 30 Apr 2021 22:30:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1619821811;
+        bh=RRl6MM3D82GDe1ExZBBTvCuAXAL7NA+feHIUCR7ZbHU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=q3TEpG5FBMWJIDOcj/BDtmWnUu55ZD9RTnzAwRTnWnyM3u4ClRsXBuArZ+cs+WOd7
+         YnHKi5aCj8Q3UIFM8vH9Y54u4ZlaMtYFbYE+QERgwrnS9j+2QU7ea6s6bKc4rhcCjT
+         zF+QQB9g+O8wTVSZ+ocuvGBwxyHENx9ExoKYtMxu7IMlXn4jGrMGEulXJYFtzO4sCX
+         Z/vXT5SSnt7rbHBOuTxv8FWBI9O6JYZpYXHcuUkmjYRkADB12STtNFA9047B+UXFPv
+         wYRIo9PO3HogGLPksqPUT7tc7yfprHfWMzA5YQJa51wBZuVLKeFOvb2M06Y9CbSer2
+         jameo5bB5MbIg==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 137AD60A72;
+        Fri, 30 Apr 2021 22:30:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <1619691589-4776-1-git-send-email-wangyunjian@huawei.com>
-In-Reply-To: <1619691589-4776-1-git-send-email-wangyunjian@huawei.com>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Fri, 30 Apr 2021 17:22:06 -0400
-Message-ID: <CADvbK_d85SOS51oU6-a2HKm8Ammd2y+L0qiy+k3-wb9hEUNbkQ@mail.gmail.com>
-Subject: Re: [PATCH net-next] sctp: Remove redundant skb_list null check
-To:     wangyunjian <wangyunjian@huawei.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, davem <davem@davemloft.net>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        network dev <netdev@vger.kernel.org>, dingxiaoxiong@huawei.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCHv2 net 0/3] sctp: always send a chunk with the asoc that it
+ belongs to
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <161982181107.1234.530240717623635776.git-patchwork-notify@kernel.org>
+Date:   Fri, 30 Apr 2021 22:30:11 +0000
+References: <cover.1619812899.git.lucien.xin@gmail.com>
+In-Reply-To: <cover.1619812899.git.lucien.xin@gmail.com>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org, marcelo.leitner@gmail.com,
+        jere.leppanen@nokia.com, alexander.sverdlin@nokia.com
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, Apr 29, 2021 at 6:20 AM wangyunjian <wangyunjian@huawei.com> wrote:
->
-> From: Yunjian Wang <wangyunjian@huawei.com>
->
-> The skb_list cannot be NULL here since its already being accessed
-> before. Remove the redundant null check.
->
-> Signed-off-by: Yunjian Wang <wangyunjian@huawei.com>
-> ---
->  net/sctp/ulpqueue.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->
-> diff --git a/net/sctp/ulpqueue.c b/net/sctp/ulpqueue.c
-> index 407fed46931b..6f3685f0e700 100644
-> --- a/net/sctp/ulpqueue.c
-> +++ b/net/sctp/ulpqueue.c
-> @@ -259,10 +259,7 @@ int sctp_ulpq_tail_event(struct sctp_ulpq *ulpq, struct sk_buff_head *skb_list)
->         return 1;
->
->  out_free:
-> -       if (skb_list)
-> -               sctp_queue_purge_ulpevents(skb_list);
-> -       else
-> -               sctp_ulpevent_free(event);
-> +       sctp_queue_purge_ulpevents(skb_list);
->
->         return 0;
->  }
-> --
-> 2.23.0
->
-Reviewed-by: Xin Long <lucien.xin@gmail.com>
+Hello:
+
+This series was applied to netdev/net.git (refs/heads/master):
+
+On Sat,  1 May 2021 04:02:57 +0800 you wrote:
+> Currently when processing a duplicate COOKIE-ECHO chunk, a new temp
+> asoc would be created, then it creates the chunks with the new asoc.
+> However, later on it uses the old asoc to send these chunks, which
+> has caused quite a few issues.
+> 
+> This patchset is to fix this and make sure that the COOKIE-ACK and
+> SHUTDOWN chunks are created with the same asoc that will be used to
+> send them out.
+> 
+> [...]
+
+Here is the summary with links:
+  - [PATCHv2,net,1/3] sctp: do asoc update earlier in sctp_sf_do_dupcook_a
+    https://git.kernel.org/netdev/net/c/35b4f24415c8
+  - [PATCHv2,net,2/3] Revert "sctp: Fix bundling of SHUTDOWN with COOKIE-ACK"
+    https://git.kernel.org/netdev/net/c/7e9269a5acec
+  - [PATCHv2,net,3/3] sctp: do asoc update earlier in sctp_sf_do_dupcook_b
+    https://git.kernel.org/netdev/net/c/51eac7f2f06b
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
