@@ -2,99 +2,72 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E28A370F12
-	for <lists+linux-sctp@lfdr.de>; Sun,  2 May 2021 22:41:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4F3370F3B
+	for <lists+linux-sctp@lfdr.de>; Sun,  2 May 2021 23:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232374AbhEBUmV (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 2 May 2021 16:42:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42682 "EHLO
+        id S232427AbhEBVMo (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 2 May 2021 17:12:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232338AbhEBUmV (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sun, 2 May 2021 16:42:21 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D58AC06174A;
-        Sun,  2 May 2021 13:41:29 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id h14-20020a17090aea8eb02901553e1cc649so4630223pjz.0;
-        Sun, 02 May 2021 13:41:29 -0700 (PDT)
+        with ESMTP id S232338AbhEBVMn (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sun, 2 May 2021 17:12:43 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BEDC06174A;
+        Sun,  2 May 2021 14:11:51 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id p17so1955545pjz.3;
+        Sun, 02 May 2021 14:11:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id;
-        bh=aw7aqZtKf2/M8s/erFYFqJ+AMQB8zXKf4LYmpiXo9ec=;
-        b=SR6sxRm253n01t8fVsBSF1AEFl8xqkI6TUbCyiKYvNou9gKLZ1D669rj0XFnXYuQeL
-         uspVNsRbdlh7EVV/Og6eEg9dwtH3nLQ5aIICWTKxyOEauPQA5hyZVpiYCwXzPg7WQIFo
-         yMWxsWC5Qlsd1zhYfyb3jqPlGuxSfAYblFvUMJc4XfCk12GX1JTfLm4yLMn7NKqgLWBu
-         PTbyh3KR4GRCpnG7tmOnoFoMFY6zYLgG4+WNxioWwRjlhCRHHoYSx3zKg3GDtucJ/V2M
-         OAf994t0cQ+6nSu8IAD6wCh2LubruGyZFjnasufhHEJq+RjGNPOTnY6sM6njfVQEUB6n
-         35+w==
+        bh=Jv77pgq1Y7LM3XGObRm+OWJ3fXpqRB641MwUUwlIcCk=;
+        b=crBhwq7Yyifj0i1PjAlTBF8L5vqb1++8ZH0VgwCKJxGvtQ9TbHyQT0ETZlgsZqjqRY
+         G4MpZ3TeRyM52I76SE3dYa6d4lytrUlCnWSvtUB/lwo3aME9qGelQ8nLpvYMsVpIxfS2
+         7XFNwhDnFBa/xPo7xEfDMwP3/6yuX6G4ailaXT7mjBeeexg22mbHZSqc6iTORiR6tuVy
+         v08vzfYlhY/GQGTFcXd4yqagb9NRPuKWpgakgDZrkB7nQNPrAI7XsWPGCYwFrDNFvdtn
+         gNQci/+TpmFrWnbnnYbGE/xK+vpGi3qQnYq0eoG+efQkFax6T0s1XaVGIxwnJTpfQNiQ
+         PP9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=aw7aqZtKf2/M8s/erFYFqJ+AMQB8zXKf4LYmpiXo9ec=;
-        b=FEuvWGJL67UCm/VVwrTrGf+X/cXfFyYw+IK+RRaMJrB513A8q667huf6HTNPW2lY6s
-         HuAfDVz64PSMnao1kIIkfqqZmyecmB+dLekM+UA9y4HmNdiigX1Z07SNq61EU+vU/ESB
-         so1uOuBdYcUzC3t0rYZfpWwLhiQLw4ZyE78ayNb/1ZuIpXLOMWY47Rcsm0oEvPNMOc19
-         tfjeIM2W7iymJ0WYXvX19bGBfdPsFLEAclBY1J6k+PXbf5jyMxcmV6xMxURWniPolAhX
-         OosP14F8LeOYmdb/JJtnE/qOhazjtknqGjjJ/9meBmLz3ZIHHr1wUiDu5ZB+Ol2N2lZg
-         ZmNg==
-X-Gm-Message-State: AOAM530amR7RuK4V6Q2WMSCtGEDrWcpN5liT4l4pleD7HPfmR4JJfad1
-        tcKe1MfLeaB4RpX0BVHiBGPOb1YvnvstjXbx
-X-Google-Smtp-Source: ABdhPJwYzrTy+/LFPBAjW8mW9FLZ74lsmX+UxXXoqCWVSjbefsb2kzGU28eYKFZ8NKRpWGJD0n/H6A==
-X-Received: by 2002:a17:90b:17d1:: with SMTP id me17mr14343030pjb.143.1619988088402;
-        Sun, 02 May 2021 13:41:28 -0700 (PDT)
+        bh=Jv77pgq1Y7LM3XGObRm+OWJ3fXpqRB641MwUUwlIcCk=;
+        b=NxsrwDXyGwXQpY/r2M8yNOXRQOEyBs24ah/WhF0dtp2uFWLbgG7+Nfe2OREgBJdfE4
+         XQkDuZR+LaMXprUYIQ2WbOCbExD1vNHUM5tMhWMfiX1SVmue5CTCkcayfx0I5O3+N6G5
+         4Bkw/so8VqAytgQSIrNvAv22tAdpJVvpiNx4Ve5RRKKX3fzI/NgRCkgLrdgOZ7ZtWK7L
+         Z+R+FPlsXj9HyRapfsSUfvL4/9DSxTDu+D+xblqjpmEn7jco5DqtHbgVSUzUsfQK5R7i
+         TrfOA/ewqIPJGUdlG92E4wATlM1dYfM2bg8OvxMICX8LJ4ERvJkGOUWX6AU1kKByhwBi
+         0DOA==
+X-Gm-Message-State: AOAM531srbxDQo2RrgaMpnpGxsGzSA4nybulstg1WCciejFr0OkrxbBG
+        HHc1+GSpKUK/3j0JzZxvCRkWW/DK52zkBBsq
+X-Google-Smtp-Source: ABdhPJwJxnWwruD1zFVLC7neaUNUFds+fv2uHvxjs5aS6Y0qgJObcTdXZb1Nn/a54MXZVqk7mICVWw==
+X-Received: by 2002:a17:90a:77c8:: with SMTP id e8mr28026082pjs.69.1619989911090;
+        Sun, 02 May 2021 14:11:51 -0700 (PDT)
 Received: from localhost ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id j23sm7431086pfh.179.2021.05.02.13.41.27
+        by smtp.gmail.com with ESMTPSA id x12sm7066376pfn.138.2021.05.02.14.11.49
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 02 May 2021 13:41:27 -0700 (PDT)
+        Sun, 02 May 2021 14:11:50 -0700 (PDT)
 From:   Xin Long <lucien.xin@gmail.com>
 To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Subject: [PATCH net] sctp: fix a SCTP_MIB_CURRESTAB leak in sctp_sf_do_dupcook_b
-Date:   Mon,  3 May 2021 04:41:20 +0800
-Message-Id: <98b2f435ec48fba6c9bbb63908c887f15f67a98d.1619988080.git.lucien.xin@gmail.com>
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Or Cohen <orcohen@paloaltonetworks.com>
+Subject: [PATCH net 0/2] sctp: fix the race condition in sctp_destroy_sock in a proper way
+Date:   Mon,  3 May 2021 05:11:40 +0800
+Message-Id: <cover.1619989856.git.lucien.xin@gmail.com>
 X-Mailer: git-send-email 2.1.0
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Normally SCTP_MIB_CURRESTAB is always incremented once asoc enter into
-ESTABLISHED from the state < ESTABLISHED and decremented when the asoc
-is being deleted.
+The original fix introduced a dead lock, and has to be removed in
+Patch 1/2, and we will get a proper way to fix it in Patch 2/2.
 
-However, in sctp_sf_do_dupcook_b(), the asoc's state can be changed to
-ESTABLISHED from the state >= ESTABLISHED where it shouldn't increment
-SCTP_MIB_CURRESTAB. Otherwise, one asoc may increment MIB_CURRESTAB
-multiple times but only decrement once at the end.
+Xin Long (2):
+  Revert "net/sctp: fix race condition in sctp_destroy_sock"
+  sctp: delay auto_asconf init until binding the first addr
 
-I was able to reproduce it by using scapy to do the 4-way shakehands,
-after that I replayed the COOKIE-ECHO chunk with 'peer_vtag' field
-changed to different values, and SCTP_MIB_CURRESTAB was incremented
-multiple times and never went back to 0 even when the asoc was freed.
+ net/sctp/socket.c | 38 ++++++++++++++++++++++----------------
+ 1 file changed, 22 insertions(+), 16 deletions(-)
 
-This patch is to fix it by only incrementing SCTP_MIB_CURRESTAB when
-the state < ESTABLISHED in sctp_sf_do_dupcook_b().
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Reported-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
----
- net/sctp/sm_statefuns.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
-index 5fc3f3a..fd1e319 100644
---- a/net/sctp/sm_statefuns.c
-+++ b/net/sctp/sm_statefuns.c
-@@ -1953,7 +1953,8 @@ static enum sctp_disposition sctp_sf_do_dupcook_b(
- 
- 	sctp_add_cmd_sf(commands, SCTP_CMD_NEW_STATE,
- 			SCTP_STATE(SCTP_STATE_ESTABLISHED));
--	SCTP_INC_STATS(net, SCTP_MIB_CURRESTAB);
-+	if (asoc->state < SCTP_STATE_ESTABLISHED)
-+		SCTP_INC_STATS(net, SCTP_MIB_CURRESTAB);
- 	sctp_add_cmd_sf(commands, SCTP_CMD_HB_TIMERS_START, SCTP_NULL());
- 
- 	/* Update the content of current association.  */
 -- 
 2.1.0
 
