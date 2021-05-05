@@ -2,27 +2,27 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 640E93746B2
+	by mail.lfdr.de (Postfix) with ESMTP id AD6DC3746B3
 	for <lists+linux-sctp@lfdr.de>; Wed,  5 May 2021 19:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237818AbhEERWk (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 5 May 2021 13:22:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60668 "EHLO mail.kernel.org"
+        id S237869AbhEERWp (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 5 May 2021 13:22:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38464 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235052AbhEERBu (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Wed, 5 May 2021 13:01:50 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5EB50619BF;
-        Wed,  5 May 2021 16:41:16 +0000 (UTC)
+        id S236882AbhEERDj (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Wed, 5 May 2021 13:03:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A0DD661403;
+        Wed,  5 May 2021 16:41:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620232877;
-        bh=recimLpo3WjuFFmZLMMYsXitMOfVlnIcFRLsJAezPJU=;
+        s=k20201202; t=1620232911;
+        bh=pHtSuaRD9ECuqmij18bMGNVoZYyhXTDFP66B78+ACxY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pold6fxy6qEyEPDAPvUa2bhxETqIGatmIRTIYE/OXNWdiDfMbQl94Vd2qCVsy+40K
-         rm3WrssrdBXLhv3eyaVM7CZ1Hr87DwsqGXPU+la2pH5V34s2R6N3ZliG80MT+OO7kg
-         sY/6wlPKpawYLgI+ceV/CU+3S5CZ1wqhExuwdOOpon24IvHvWOLcQwX8aTGEIVdjjB
-         U+8V8f6K48VUGvH2hhKmesa6wERSKD7SZvyr7JpYKANbxoFcytWruYMv9VEPHGCzoI
-         Vttc0MhofNF3+2at86z0qbalLevpU1LFFvG9sDz58So1pKioD/ntGjmNDm5f2+nf6D
-         Oq0zWXHKLVJQQ==
+        b=ezOlnzw0ldE5GBcvKnPwcGllPHbPGxH/3oLz1v+53AljE3JGDuulTUrVvbQglSXr7
+         Yb2I+VjBlShi0moO0viOJvLFEKDlikThDHQCH42H7/hRKMNkTB+u0RYusptCBMYX70
+         18/uh7a6WTZ5nJC4TZHVwPpJM6ZCOrZV0FZL1O9VtlBmPZd2WesC1oukpKgBuRHBnh
+         Kc2Z+OH+j5Fbkl/N4ddZoxdiBV1VDe/Nj7PT+tE74ftL4RjEhz/90ZZk5uPj4EQSdh
+         BTmdyeHqoYx1xjiLDVapexibevZnrDqOpweQHHvc1qSsl23zr8u95fPLn32ldkT8DO
+         K/45OySr5gLxg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
@@ -32,12 +32,12 @@ Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, linux-sctp@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 17/25] sctp: Fix out-of-bounds warning in sctp_process_asconf_param()
-Date:   Wed,  5 May 2021 12:40:43 -0400
-Message-Id: <20210505164051.3464020-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 15/22] sctp: Fix out-of-bounds warning in sctp_process_asconf_param()
+Date:   Wed,  5 May 2021 12:41:22 -0400
+Message-Id: <20210505164129.3464277-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210505164051.3464020-1-sashal@kernel.org>
-References: <20210505164051.3464020-1-sashal@kernel.org>
+In-Reply-To: <20210505164129.3464277-1-sashal@kernel.org>
+References: <20210505164129.3464277-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -70,10 +70,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
-index e698edd56bd5..1cd22a38fe42 100644
+index acb0c2631c79..0c5aff3bb539 100644
 --- a/net/sctp/sm_make_chunk.c
 +++ b/net/sctp/sm_make_chunk.c
-@@ -3128,7 +3128,7 @@ static __be16 sctp_process_asconf_param(struct sctp_association *asoc,
+@@ -3129,7 +3129,7 @@ static __be16 sctp_process_asconf_param(struct sctp_association *asoc,
  		 * primary.
  		 */
  		if (af->is_any(&addr))
