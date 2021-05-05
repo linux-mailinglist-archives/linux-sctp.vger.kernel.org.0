@@ -2,70 +2,86 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 390FC3721B3
-	for <lists+linux-sctp@lfdr.de>; Mon,  3 May 2021 22:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A56737418A
+	for <lists+linux-sctp@lfdr.de>; Wed,  5 May 2021 18:45:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbhECUlL (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 3 May 2021 16:41:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46938 "EHLO mail.kernel.org"
+        id S234681AbhEEQjB (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 5 May 2021 12:39:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54520 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229931AbhECUlE (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Mon, 3 May 2021 16:41:04 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 5C87661244;
-        Mon,  3 May 2021 20:40:10 +0000 (UTC)
+        id S234783AbhEEQhE (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Wed, 5 May 2021 12:37:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 11A5661413;
+        Wed,  5 May 2021 16:33:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620074410;
-        bh=SIGGcbZNnoVNPQobUG6p/oD03o9TdcRVfYOzyFG+Acc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=rusvzxJvJp3Xak2yaUafUhih6+Dz444CP7pOtzxPkmN4pcS9BH/xQ9TX2Tut95MLG
-         R8L4T9bntnK2/VyKPVzxICpEDp/GxNzkKQRLSwrAIYYWukldpg07dQQYEfbS/gLLtx
-         kbKGLqWk04lfjsChMkk5Sh4enxOUpYEx7fUDLo8ae0iTGWPyDoazgQFn00ciqpcR31
-         POASQi4eNRgD9nDPqN0GSkLnp5riJGWjSRiPxzCbk0W5Auschya9sMuVqyHiKUTA8U
-         V0rqjOQEsuQ173bIeQS7ek3MX6RFRtjAjfgoFKv6EIsbBuah8Z9BpA9PdV2pXfUGT/
-         1omL/IoUKWteA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 4C47060ACA;
-        Mon,  3 May 2021 20:40:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1620232404;
+        bh=DPhJxbCGTKtKEJllav8XGEl/X87ke2S8d3c5qt4sdl0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=kCyAccX6DVbT+DHqjwPvZ28pBCio+VZZm2Qqi34l5oMi4t1qMLczWrlIwD3+z+MJh
+         3xpr9aHUvcUmVuYAIySsn0fetIFHqSvpEVw+n0bYfIPzaDa7pKV10ws2WHwI/3zRVT
+         mBb3kJIYCo0/9Dr9C4v7aYXysfOhy6a9dSkGf1MDql7RNA818BYxpVUIMDpAPcqFRy
+         sL/UFbZGbScHwDvpDoMxdh7CtxqIj4A7rh9qhnbmu9AxKEANk+IlVzCTsAi/L3zlzt
+         uTTSeD06DZPSxxHwVFX/vtwZ+XkbJIwKskouqDG7V6aKmac4UagErf5iSWGltbYnUZ
+         NH+GaUo3okLCQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.12 084/116] sctp: Fix out-of-bounds warning in sctp_process_asconf_param()
+Date:   Wed,  5 May 2021 12:30:52 -0400
+Message-Id: <20210505163125.3460440-84-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210505163125.3460440-1-sashal@kernel.org>
+References: <20210505163125.3460440-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] sctp: fix a SCTP_MIB_CURRESTAB leak in
- sctp_sf_do_dupcook_b
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162007441030.32677.12037671567310177974.git-patchwork-notify@kernel.org>
-Date:   Mon, 03 May 2021 20:40:10 +0000
-References: <98b2f435ec48fba6c9bbb63908c887f15f67a98d.1619988080.git.lucien.xin@gmail.com>
-In-Reply-To: <98b2f435ec48fba6c9bbb63908c887f15f67a98d.1619988080.git.lucien.xin@gmail.com>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
-        davem@davemloft.net, kuba@kernel.org, marcelo.leitner@gmail.com
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello:
+From: "Gustavo A. R. Silva" <gustavoars@kernel.org>
 
-This patch was applied to netdev/net.git (refs/heads/master):
+[ Upstream commit e5272ad4aab347dde5610c0aedb786219e3ff793 ]
 
-On Mon,  3 May 2021 04:41:20 +0800 you wrote:
-> Normally SCTP_MIB_CURRESTAB is always incremented once asoc enter into
-> ESTABLISHED from the state < ESTABLISHED and decremented when the asoc
-> is being deleted.
-> 
-> However, in sctp_sf_do_dupcook_b(), the asoc's state can be changed to
-> ESTABLISHED from the state >= ESTABLISHED where it shouldn't increment
-> SCTP_MIB_CURRESTAB. Otherwise, one asoc may increment MIB_CURRESTAB
-> multiple times but only decrement once at the end.
-> 
-> [...]
+Fix the following out-of-bounds warning:
 
-Here is the summary with links:
-  - [net] sctp: fix a SCTP_MIB_CURRESTAB leak in sctp_sf_do_dupcook_b
-    https://git.kernel.org/netdev/net/c/f282df039126
+net/sctp/sm_make_chunk.c:3150:4: warning: 'memcpy' offset [17, 28] from the object at 'addr' is out of the bounds of referenced subobject 'v4' with type 'struct sockaddr_in' at offset 0 [-Warray-bounds]
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+This helps with the ongoing efforts to globally enable -Warray-bounds
+and get us closer to being able to tighten the FORTIFY_SOURCE routines
+on memcpy().
 
+Link: https://github.com/KSPP/linux/issues/109
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ net/sctp/sm_make_chunk.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
+index f77484df097b..da4ce0947c3a 100644
+--- a/net/sctp/sm_make_chunk.c
++++ b/net/sctp/sm_make_chunk.c
+@@ -3147,7 +3147,7 @@ static __be16 sctp_process_asconf_param(struct sctp_association *asoc,
+ 		 * primary.
+ 		 */
+ 		if (af->is_any(&addr))
+-			memcpy(&addr.v4, sctp_source(asconf), sizeof(addr));
++			memcpy(&addr, sctp_source(asconf), sizeof(addr));
+ 
+ 		if (security_sctp_bind_connect(asoc->ep->base.sk,
+ 					       SCTP_PARAM_SET_PRIMARY,
+-- 
+2.30.2
 
