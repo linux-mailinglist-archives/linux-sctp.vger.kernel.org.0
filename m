@@ -2,79 +2,89 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DFDE377635
-	for <lists+linux-sctp@lfdr.de>; Sun,  9 May 2021 12:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EEC5379774
+	for <lists+linux-sctp@lfdr.de>; Mon, 10 May 2021 21:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbhEIKWI (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 9 May 2021 06:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33396 "EHLO
+        id S233133AbhEJTLm (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 10 May 2021 15:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbhEIKWH (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sun, 9 May 2021 06:22:07 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AD1C061573
-        for <linux-sctp@vger.kernel.org>; Sun,  9 May 2021 03:20:44 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id 36-20020a9d0ba70000b02902e0a0a8fe36so5576959oth.8
-        for <linux-sctp@vger.kernel.org>; Sun, 09 May 2021 03:20:44 -0700 (PDT)
+        with ESMTP id S232133AbhEJTLm (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 10 May 2021 15:11:42 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023CAC061574;
+        Mon, 10 May 2021 12:10:37 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id v12so17715436wrq.6;
+        Mon, 10 May 2021 12:10:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=hldrX7DaK3vtFLdkulHs1OmsyUauWlphuBrfoAtGxSU=;
-        b=tLEVO1cgj+TC4lzlFEW8u5AMOLNOY8c0P9N2dsKEl1PvZ6F3Q3caCHSpVqvp4Hqf0I
-         tJy9vvMHHaO0mgQXBuU6G61R9685+oGZV965wiKqlD5Qqngn2ncDd+W0j+vFOZ8n2bku
-         wK2c68LQ8O8WT1o40pIbgSsTxVMF2Pc7srCQ1BPI/7b0aGb9b/erCphtXvglQx+/Mhks
-         K29cVUsUDecPXcGHc8g2q0FhEdTCwB1GSVmbGFk7Ho94X+HpVYyAxKwxPg3InZYQu8CR
-         gFoacRbAmdOYYtb6vm3Bayu8zc9oj+liD/7S8MHHOtMaVId3llfxWApNjzvrFp36Bbdb
-         qNmg==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6+bq4nz+rZlWKieQDXLrXiknC/+/2IQfRO3qKHir+Kg=;
+        b=LY9p9K5BwwB2LmZt6kOYadgROb/UJxgjqG81lSxqcud8iouZ8881V9Gxhpwg7SgH5W
+         VPW/j9lg0ijIENiHjFPFkE2cnTQ2alcttpOxvs23v6e6ZpOYLosDWYoJ6rAN4hNZ44AK
+         st/RPe2W1HlhkYDrYIUUIy75w5krEcITdq5pHlTKUFBxx5Fy1o3wz38kqKGWmTsGUIzb
+         rbQMqUmfkED6mXQUvWJXF7z2KDBX36XiUbXjSugZUqVY6y71MqlKUJByxxvycOGOEN9b
+         VOZk9R5lIsggTTQ3ENpUq4I6xbPT/rs3yrir6sHRbDIbvSVDKvaS9M0QL1u1iCvX/ILm
+         K5SQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=hldrX7DaK3vtFLdkulHs1OmsyUauWlphuBrfoAtGxSU=;
-        b=Ca/1i+jBGv06z7KYJznMtRZxojqJrsdNiJp0M3Did3Rgl0aGTEMGCWQPRCFfKcXQn6
-         cRfwWqXllJ2bWyD8r/hisMz3Yh8tljJKDFJeED/IDWyesjiAOrreSqkOyxOq4iHWohrW
-         iDFx9Y5KYLOp/uJ3qX23HEPjZy/m8S2bDVwCM7PyRPX7P7ytvhV7F6X/nDftapa1FZHp
-         QYBAbKXmef+XT7Hm7Okfie9ZIlvP5sV4Dcl7fTzJHPhzQ7WlvpTQRp5zZuxdOIvaGXvs
-         lJfE6VRnlAV2ve82AwnJ6y2EYkpj6081iEu0E58x5qUvnngwZNqYfjTN3Z3WWZzcuhN7
-         gk8g==
-X-Gm-Message-State: AOAM531z3F9+tzDPxGwRpZbuNuN+N8bzirqWnS91PPU2tMwJSCG3FPJS
-        7CW8MMVTh7Uv1HT38NPnf3lsWJX+5sFwNgrT2zE=
-X-Google-Smtp-Source: ABdhPJzwa2/nE5WTPctOwf6rqV4f6H5weh+7xmbjV2GVB3dEpYTcHuw0/ttYso2x+zAk3sJUdGZNLUpGS2TGhMpmZ/U=
-X-Received: by 2002:a9d:6081:: with SMTP id m1mr16765854otj.226.1620555644160;
- Sun, 09 May 2021 03:20:44 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=6+bq4nz+rZlWKieQDXLrXiknC/+/2IQfRO3qKHir+Kg=;
+        b=qiHDwFGgIcZRO75C7IoZtaLpuPYUoIVJTxs7Q+tGrlZ4QLBfUPVp4LtF+GsA9nvZiF
+         Z6DLI0Rd/+B1Twzyv+alKr9tUtKxW41DAPL+BJjXMCdF0KV/GkxXZYAHlvkbw/oMbf3t
+         kUSTpWZ0ckUfLPKQVRPYh1GBUJlboEGI+HJjH6U4cyFAr2sh+cZuNXTregNU8TeHe7kM
+         a974KQbVPPC6z8qbT+q7mZSVmcsElxQI4nKR4s1PiZB8ODgSEGR2V5AdMdUH2uJNYevh
+         tlAnu1h1soO1R1pZnIJo6p/R8j44+53LXUEf0W+7+zFoazJ+abSD020Zst6frBCAEhg6
+         cbcA==
+X-Gm-Message-State: AOAM5315Mukkvk8uXGpvpYWPVumAaRqdhcVxq4H5/kM1nZPFMLtKra6l
+        Eq7a7TN9WdahLMUaTjFinLU=
+X-Google-Smtp-Source: ABdhPJzj0blzMZ1JdWdOAIGXMGxRDJTwHcz2f80yGo3HTnWvcTU04b2Mm8+c9uY/GSdGQQL8+wpHoA==
+X-Received: by 2002:adf:e40c:: with SMTP id g12mr31973827wrm.11.1620673835643;
+        Mon, 10 May 2021 12:10:35 -0700 (PDT)
+Received: from eldamar (80-218-24-251.dclient.hispeed.ch. [80.218.24.251])
+        by smtp.gmail.com with ESMTPSA id r7sm19251571wmq.18.2021.05.10.12.10.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 May 2021 12:10:34 -0700 (PDT)
+Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
+Date:   Mon, 10 May 2021 21:10:33 +0200
+From:   Salvatore Bonaccorso <carnil@debian.org>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Or Cohen <orcohen@paloaltonetworks.com>
+Subject: Re: [PATCH net 0/2] sctp: fix the race condition in
+ sctp_destroy_sock in a proper way
+Message-ID: <YJmFKVqZWDRe5Rzn@eldamar.lan>
+References: <cover.1619989856.git.lucien.xin@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:ac9:1522:0:0:0:0:0 with HTTP; Sun, 9 May 2021 03:20:43 -0700 (PDT)
-Reply-To: drdunawattara@gmail.com
-From:   Mr Duna Wattara <drhajizongod@gmail.com>
-Date:   Sun, 9 May 2021 02:20:43 -0800
-Message-ID: <CA+aQzqxu8MUFpxxi0JgtiUxYEXbZ6g0oOHzb9d5QMrSd+ODmeA@mail.gmail.com>
-Subject: with due respect
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1619989856.git.lucien.xin@gmail.com>
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Dear Friend,
+Hi Xin,
 
-I know that this mail will come to you as a surprise as we have never
-met before, but need not to worry as I am contacting you independently
-of my investigation and no one is informed of this communication.
+On Mon, May 03, 2021 at 05:11:40AM +0800, Xin Long wrote:
+> The original fix introduced a dead lock, and has to be removed in
+> Patch 1/2, and we will get a proper way to fix it in Patch 2/2.
+> 
+> Xin Long (2):
+>   Revert "net/sctp: fix race condition in sctp_destroy_sock"
+>   sctp: delay auto_asconf init until binding the first addr
+> 
+>  net/sctp/socket.c | 38 ++++++++++++++++++++++----------------
+>  1 file changed, 22 insertions(+), 16 deletions(-)
 
-I need your urgent assistance in transferring the sum of $11.3million
-immediately to your private account.The money has been here in our
-Bank lying dormant for years now without anybody coming for the claim of it.
+The original commit which got reverted in this series, was already
+applied to several stable series, namely all of 4.4.268, 4.9.268,
+4.14.232, 4.19.189, 5.4.114, 5.10.32, 5.11.16.
 
-I want to release the money to you as the relative to our deceased
-customer (the account owner) who died a long with his supposed NEXT OF
-KIN since 16th October 2005. The Banking laws here does not allow such
-money to stay more than 16 years, because the money will be recalled
-to the Bank treasury account as unclaimed fund.
+Is it planned to do the revert and bugfix in those as well?
 
-By indicating your interest I will send you the full details on how
-the business will be executed.
-
-Please respond urgently and delete if you are not interested.
-
-Best Regards,
-Mr. Duna Wattara.
+Regards,
+Salvatore
