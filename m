@@ -2,201 +2,277 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F1C37CFC3
-	for <lists+linux-sctp@lfdr.de>; Wed, 12 May 2021 19:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7B9382BFD
+	for <lists+linux-sctp@lfdr.de>; Mon, 17 May 2021 14:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236238AbhELRRz (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 12 May 2021 13:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60654 "EHLO
+        id S236973AbhEQMXp (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 17 May 2021 08:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241005AbhELQde (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 12 May 2021 12:33:34 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EE3C061242
-        for <linux-sctp@vger.kernel.org>; Wed, 12 May 2021 09:08:35 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id u5-20020a7bc0450000b02901480e40338bso3102634wmc.1
-        for <linux-sctp@vger.kernel.org>; Wed, 12 May 2021 09:08:35 -0700 (PDT)
+        with ESMTP id S235039AbhEQMXo (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 17 May 2021 08:23:44 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE6FC061573;
+        Mon, 17 May 2021 05:22:28 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id gc22-20020a17090b3116b02901558435aec1so3595154pjb.4;
+        Mon, 17 May 2021 05:22:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/Zb8Z1MMBHH1GDzI2/MHx2aqkliA2vrBibF8r3xnq9g=;
-        b=BrMRUT9BVbfzYXCL1R7JqOinDFhET5B7ApIwSPFdK+RSgvFN207oJO657OLx9d+Lqn
-         VoBwDqufEiRXlbccBpOrzWJhIOZqe1hUaI0wV7EzNxmQouaC9JNtLV+Gdljz2tTP724M
-         OseGPkUYILzGYN7RUu3DVOoRfVHkMfMcrAuZpBVYO5EJqa7iiCnwMMABdmHf9ACu3M+g
-         RR/1deO5mygmGXztBDjUWppXF0LlXsgAM/d2362XhC8dkmkbWp30eIHuFe6TmOviIEdq
-         oCmmXb4tHFwJ8biDzwVWnKTkMdfVJtlVG6paHRiVcjwpWkPAnwGnV3q8wZdffWWptKQO
-         4q6Q==
+        h=from:to:cc:subject:date:message-id;
+        bh=pmtOpzqls0v/g8o8UmNm35xKnZImhknJV+CPfOBnR2I=;
+        b=ZSWDGwnAxGrYQr6RXUC+qdahlBpjYA7g/2VB/7Fk1AkXx6J5OVoJFGLyW9mTzLCl8U
+         86E+m8ChsCyJkvPyJc/C+/Vzc2vh1zMnMRHVGseOupql/aB8ZWSYT7i9CK1KkyGYZ9+E
+         saUhBUVgl+3M8iKLZ2T2cwFS/FL3pDKW8lLEcASZ2YeJ3mIncURhY1cOJJ5ejgGGqW1t
+         S4Tf7IvlDpwBSPSoCidLlMMIO68tK6Nx44uoE8UI9tx9yNt55p6it6CfypRrNhObDsdz
+         w5dkmFvVUUXpYatVK15wp+nBLdhdRMSZhO+Og/vnC3kWcMQlgneK5Btmc7mIQOHqsFEm
+         Gh8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/Zb8Z1MMBHH1GDzI2/MHx2aqkliA2vrBibF8r3xnq9g=;
-        b=UsxLEI8JTEj+kVdeiYgI+zqlaP/TsPjPY0KW+S4xwGKPcj5lTloowsYXjMaT/IH3Zo
-         yfFIpc09SzsavUEt2Gi/NYo0UkyGqQ5kmORBQbkWpxy8pcVaITc9tHe5UTiec8hhgJ7j
-         b9NJ7InthhOh8extr0IJUU3O5VUy99h8MbmW15DY2OydaLTvn7en/DavYITYN7wKuPby
-         Dc/Pb9bteQAWQnp012Iwx5ISVrzJGxnUw95etKkhsyp/K1Y+ztx/IaEpnLxaxZSCJcWJ
-         27R/MnoKFolOKvRu0U+8M7Hiz6yuHNqd+wJDjZxQO/CUH6RqlidqFwjIBPQlT7Hf0XCz
-         aHxw==
-X-Gm-Message-State: AOAM531E8NRtJ4pieUpSb4+Mqh/gtlYBQnw8zYXNDUeFtda7Hh9TA1RF
-        4v9+ZP0ZmgRohIy+R2GfBvFvD1t2kiucJ9jUQnE=
-X-Google-Smtp-Source: ABdhPJxeObGwLzbLW/Oy5cCZs5DMshSShTb5zkcweuGf0pmQNbPT7PIV8KgHiunAiUI1vgO6IuXqi2XSLaxosXqm0YE=
-X-Received: by 2002:a7b:ca42:: with SMTP id m2mr39933166wml.67.1620835714140;
- Wed, 12 May 2021 09:08:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <86d2a00b-7fba-a539-b1bf-5bacf0443542@nokia.com>
-In-Reply-To: <86d2a00b-7fba-a539-b1bf-5bacf0443542@nokia.com>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Wed, 12 May 2021 12:08:22 -0400
-Message-ID: <CADvbK_dtTAxy=kYhbxHc6b1AKVc+vQm=h1tnWHbCizihFSm30w@mail.gmail.com>
-Subject: Re: Race of sctp_assoc_control_transport() against
- sctp_assoc_rm_peer() ?
-To:     Alexander Sverdlin <alexander.sverdlin@nokia.com>
-Cc:     "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Petr Malat <oss@malat.biz>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=pmtOpzqls0v/g8o8UmNm35xKnZImhknJV+CPfOBnR2I=;
+        b=QaHXgFfI8HXcGEX9koRKogJEK1yC3HQtIJ+KpFNFOGnPhx9Btul9ly1/F1UeKD/ZvK
+         d92+BmP508MjDDRtLv87nvc9czYl+tAWSSpQMrM97zy/T1ocUpRYXkJ6YXEdbKryDpa9
+         MEjL8LjDa2uUdCoNubPdqf9sRb6Ujv8xeoDW2xIcmKwjkD7PmyDr5uwgyjE80jAkSChv
+         mfJ88gWRcy/5n+qLpKi3jVpuyM8qomBetPemwSgHQOR+aOBgl4QGDEhsJRKcMDSt91Ue
+         09iK6K/OgKcP9S+Ru/2duyMjBzrf50KUY6KUA4kXH1n+nWyuew/5mgts9QOwNkf0Jj6l
+         YqKg==
+X-Gm-Message-State: AOAM533ysFwqJp/g9Z9LIzRVSVPCjjS+g48FWvsosK0LDyWMHlUxybf3
+        SKE82L1gs4K+f36NmaRbwO4=
+X-Google-Smtp-Source: ABdhPJyY5B0QcOE1jsXz7him0KPOunpY/NeoUHNK0q33VZMgEdlMR4/O6K2+jGqiQrJFZ0wUbJmunw==
+X-Received: by 2002:a17:90a:aa0b:: with SMTP id k11mr26433295pjq.153.1621254147878;
+        Mon, 17 May 2021 05:22:27 -0700 (PDT)
+Received: from sz-dl-056.autox.sz ([45.67.53.159])
+        by smtp.gmail.com with ESMTPSA id x13sm10854990pjl.22.2021.05.17.05.22.17
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 17 May 2021 05:22:27 -0700 (PDT)
+From:   Yejune Deng <yejune.deng@gmail.com>
+X-Google-Original-From: Yejune Deng <yejunedeng@gmail.com>
+To:     davem@davemloft.net, kuba@kernel.org, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org, xeb@mail.ru, steffen.klassert@secunet.com,
+        herbert@gondor.apana.org.au, vyasevich@gmail.com,
+        nhorman@tuxdriver.com, marcelo.leitner@gmail.com,
+        edumazet@google.com, yejunedeng@gmail.com, weiwan@google.com,
+        paul@paul-moore.com, rdunlap@infradead.org, rdias@singlestore.com,
+        fw@strlen.de, andrew@lunn.ch, tparkin@katalix.com,
+        stefan@datenfreihafen.org, matthieu.baerts@tessares.net
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dccp@vger.kernel.org, linux-sctp@vger.kernel.org
+Subject: [PATCH] net: Remove the member netns_ok
+Date:   Mon, 17 May 2021 20:22:05 +0800
+Message-Id: <1621254125-21588-1-git-send-email-yejunedeng@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-This should be fixed by:
+Every protocol has the 'netns_ok' member and it is euqal to 1. The
+'if (!prot->netns_ok)' always false in inet_add_protocol().
 
-commit 35b4f24415c854cd718ccdf38dbea6297f010aae
-Author: Xin Long <lucien.xin@gmail.com>
-Date:   Sat May 1 04:02:58 2021 +0800
+Signed-off-by: Yejune Deng <yejunedeng@gmail.com>
+---
+ include/net/protocol.h    | 1 -
+ net/dccp/ipv4.c           | 1 -
+ net/ipv4/af_inet.c        | 4 ----
+ net/ipv4/gre_demux.c      | 1 -
+ net/ipv4/ipmr.c           | 1 -
+ net/ipv4/protocol.c       | 6 ------
+ net/ipv4/tunnel4.c        | 3 ---
+ net/ipv4/udplite.c        | 1 -
+ net/ipv4/xfrm4_protocol.c | 3 ---
+ net/l2tp/l2tp_ip.c        | 1 -
+ net/sctp/protocol.c       | 1 -
+ 11 files changed, 23 deletions(-)
 
-    sctp: do asoc update earlier in sctp_sf_do_dupcook_a
+diff --git a/include/net/protocol.h b/include/net/protocol.h
+index 2b778e1..f51c06a 100644
+--- a/include/net/protocol.h
++++ b/include/net/protocol.h
+@@ -43,7 +43,6 @@ struct net_protocol {
+ 	int			(*err_handler)(struct sk_buff *skb, u32 info);
+ 
+ 	unsigned int		no_policy:1,
+-				netns_ok:1,
+ 				/* does the protocol do more stringent
+ 				 * icmp tag validation than simple
+ 				 * socket lookup?
+diff --git a/net/dccp/ipv4.c b/net/dccp/ipv4.c
+index ffc601a..f81c1df 100644
+--- a/net/dccp/ipv4.c
++++ b/net/dccp/ipv4.c
+@@ -977,7 +977,6 @@ static const struct net_protocol dccp_v4_protocol = {
+ 	.handler	= dccp_v4_rcv,
+ 	.err_handler	= dccp_v4_err,
+ 	.no_policy	= 1,
+-	.netns_ok	= 1,
+ 	.icmp_strict_tag_validation = 1,
+ };
+ 
+diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+index f17870e..d9bccad6 100644
+--- a/net/ipv4/af_inet.c
++++ b/net/ipv4/af_inet.c
+@@ -1720,7 +1720,6 @@ EXPORT_SYMBOL_GPL(snmp_fold_field64);
+ #ifdef CONFIG_IP_MULTICAST
+ static const struct net_protocol igmp_protocol = {
+ 	.handler =	igmp_rcv,
+-	.netns_ok =	1,
+ };
+ #endif
+ 
+@@ -1733,7 +1732,6 @@ static struct net_protocol tcp_protocol = {
+ 	.handler	=	tcp_v4_rcv,
+ 	.err_handler	=	tcp_v4_err,
+ 	.no_policy	=	1,
+-	.netns_ok	=	1,
+ 	.icmp_strict_tag_validation = 1,
+ };
+ 
+@@ -1746,14 +1744,12 @@ static struct net_protocol udp_protocol = {
+ 	.handler =	udp_rcv,
+ 	.err_handler =	udp_err,
+ 	.no_policy =	1,
+-	.netns_ok =	1,
+ };
+ 
+ static const struct net_protocol icmp_protocol = {
+ 	.handler =	icmp_rcv,
+ 	.err_handler =	icmp_err,
+ 	.no_policy =	1,
+-	.netns_ok =	1,
+ };
+ 
+ static __net_init int ipv4_mib_init_net(struct net *net)
+diff --git a/net/ipv4/gre_demux.c b/net/ipv4/gre_demux.c
+index 5d1e6fe..cbb2b4b 100644
+--- a/net/ipv4/gre_demux.c
++++ b/net/ipv4/gre_demux.c
+@@ -195,7 +195,6 @@ static int gre_err(struct sk_buff *skb, u32 info)
+ static const struct net_protocol net_gre_protocol = {
+ 	.handler     = gre_rcv,
+ 	.err_handler = gre_err,
+-	.netns_ok    = 1,
+ };
+ 
+ static int __init gre_init(void)
+diff --git a/net/ipv4/ipmr.c b/net/ipv4/ipmr.c
+index 939792a..12b564b 100644
+--- a/net/ipv4/ipmr.c
++++ b/net/ipv4/ipmr.c
+@@ -3007,7 +3007,6 @@ static const struct seq_operations ipmr_mfc_seq_ops = {
+ #ifdef CONFIG_IP_PIMSM_V2
+ static const struct net_protocol pim_protocol = {
+ 	.handler	=	pim_rcv,
+-	.netns_ok	=	1,
+ };
+ #endif
+ 
+diff --git a/net/ipv4/protocol.c b/net/ipv4/protocol.c
+index 9a8c089..6913979 100644
+--- a/net/ipv4/protocol.c
++++ b/net/ipv4/protocol.c
+@@ -31,12 +31,6 @@ EXPORT_SYMBOL(inet_offloads);
+ 
+ int inet_add_protocol(const struct net_protocol *prot, unsigned char protocol)
+ {
+-	if (!prot->netns_ok) {
+-		pr_err("Protocol %u is not namespace aware, cannot register.\n",
+-			protocol);
+-		return -EINVAL;
+-	}
+-
+ 	return !cmpxchg((const struct net_protocol **)&inet_protos[protocol],
+ 			NULL, prot) ? 0 : -1;
+ }
+diff --git a/net/ipv4/tunnel4.c b/net/ipv4/tunnel4.c
+index e44aaf4..5048c47 100644
+--- a/net/ipv4/tunnel4.c
++++ b/net/ipv4/tunnel4.c
+@@ -218,7 +218,6 @@ static const struct net_protocol tunnel4_protocol = {
+ 	.handler	=	tunnel4_rcv,
+ 	.err_handler	=	tunnel4_err,
+ 	.no_policy	=	1,
+-	.netns_ok	=	1,
+ };
+ 
+ #if IS_ENABLED(CONFIG_IPV6)
+@@ -226,7 +225,6 @@ static const struct net_protocol tunnel64_protocol = {
+ 	.handler	=	tunnel64_rcv,
+ 	.err_handler	=	tunnel64_err,
+ 	.no_policy	=	1,
+-	.netns_ok	=	1,
+ };
+ #endif
+ 
+@@ -235,7 +233,6 @@ static const struct net_protocol tunnelmpls4_protocol = {
+ 	.handler	=	tunnelmpls4_rcv,
+ 	.err_handler	=	tunnelmpls4_err,
+ 	.no_policy	=	1,
+-	.netns_ok	=	1,
+ };
+ #endif
+ 
+diff --git a/net/ipv4/udplite.c b/net/ipv4/udplite.c
+index bd8773b..cd1cd68 100644
+--- a/net/ipv4/udplite.c
++++ b/net/ipv4/udplite.c
+@@ -31,7 +31,6 @@ static const struct net_protocol udplite_protocol = {
+ 	.handler	= udplite_rcv,
+ 	.err_handler	= udplite_err,
+ 	.no_policy	= 1,
+-	.netns_ok	= 1,
+ };
+ 
+ struct proto 	udplite_prot = {
+diff --git a/net/ipv4/xfrm4_protocol.c b/net/ipv4/xfrm4_protocol.c
+index ea595c8..2fe5860 100644
+--- a/net/ipv4/xfrm4_protocol.c
++++ b/net/ipv4/xfrm4_protocol.c
+@@ -181,21 +181,18 @@ static const struct net_protocol esp4_protocol = {
+ 	.handler	=	xfrm4_esp_rcv,
+ 	.err_handler	=	xfrm4_esp_err,
+ 	.no_policy	=	1,
+-	.netns_ok	=	1,
+ };
+ 
+ static const struct net_protocol ah4_protocol = {
+ 	.handler	=	xfrm4_ah_rcv,
+ 	.err_handler	=	xfrm4_ah_err,
+ 	.no_policy	=	1,
+-	.netns_ok	=	1,
+ };
+ 
+ static const struct net_protocol ipcomp4_protocol = {
+ 	.handler	=	xfrm4_ipcomp_rcv,
+ 	.err_handler	=	xfrm4_ipcomp_err,
+ 	.no_policy	=	1,
+-	.netns_ok	=	1,
+ };
+ 
+ static const struct xfrm_input_afinfo xfrm4_input_afinfo = {
+diff --git a/net/l2tp/l2tp_ip.c b/net/l2tp/l2tp_ip.c
+index 97ae125..536c30d 100644
+--- a/net/l2tp/l2tp_ip.c
++++ b/net/l2tp/l2tp_ip.c
+@@ -635,7 +635,6 @@ static struct inet_protosw l2tp_ip_protosw = {
+ 
+ static struct net_protocol l2tp_ip_protocol __read_mostly = {
+ 	.handler	= l2tp_ip_recv,
+-	.netns_ok	= 1,
+ };
+ 
+ static int __init l2tp_ip_init(void)
+diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
+index 6f2bbfe..baa4e77 100644
+--- a/net/sctp/protocol.c
++++ b/net/sctp/protocol.c
+@@ -1171,7 +1171,6 @@ static const struct net_protocol sctp_protocol = {
+ 	.handler     = sctp4_rcv,
+ 	.err_handler = sctp_v4_err,
+ 	.no_policy   = 1,
+-	.netns_ok    = 1,
+ 	.icmp_strict_tag_validation = 1,
+ };
+ 
+-- 
+2.7.4
 
-On Tue, Dec 8, 2020 at 4:12 PM Alexander Sverdlin
-<alexander.sverdlin@nokia.com> wrote:
->
-> Hello!
->
-> I'm trying to understand the crash we experience with Linux v4.19
-> (sorry for the ancient codebase, but actually the affected code is largely
-> unchanged up to now).
->
-> This is hard but reproducible:
->
-> general protection fault: 0000 [#1] PREEMPT SMP NOPTI
-> CPU: 1 PID: 0 Comm: swapper/1 Tainted: G           O      4.19.155-g...
-> ...
-> RIP: 0010:sctp_assoc_control_transport+0x1db/0x290 [sctp]
-> Code: 01 00 00 00 00 00 00 bd 01 00 00 00 31 c0 48 89 e7 b9 10 00 00 00 f3 48 ab 48 8b 86 a8 00 00 00 48 89 e7 48 81 c6 88 00 00 00 <48> 63 90 bc 00 00 00 e8 29 61 2b e1 31 d2 41 b9 20 00 48 00 41 89
-> RSP: 0018:ffff88846fc43ba8 EFLAGS: 00010286
-> RAX: 7070682e72656d69 RBX: 0000000000000000 RCX: 0000000000000000
-> RDX: 0000000000000001 RSI: ffff8882984b3888 RDI: ffff88846fc43ba8
-> RBP: 0000000000000001 R08: 0000000000022e80 R09: ffff88846fc43cd8
-> R10: ffffffffa0562cf0 R11: 0000000000000007 R12: 0000000000000000
-> R13: ffff88846fc43cd8 R14: ffff8881bd588000 R15: ffff88846fc43e18
-> FS:  0000000000000000(0000) GS:ffff88846fc40000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00000000024b3160 CR3: 000000000320a006 CR4: 00000000003607e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <IRQ>
->  sctp_do_8_2_transport_strike.isra.10+0xd3/0x1a0 [sctp]
->  ? sctp_oname+0x20/0x20 [sctp]
->  sctp_do_sm+0x15fb/0x1d00 [sctp]
->  ? try_to_wake_up+0x226/0x4b0
->  ? __update_load_avg_se+0x219/0x2c0
->  ? enqueue_entity+0xc4/0x850
->  ? enqueue_entity+0x17f/0x850
->  ? enqueue_task_fair+0xe5/0x950
->  ? __update_load_avg_cfs_rq+0x1e2/0x280
->  ? resched_curr+0x20/0xd0
->  ? check_preempt_curr+0x4e/0x90
->  ? ttwu_do_wakeup.isra.21+0x19/0x170
->  sctp_generate_timeout_event+0xa8/0xf0 [sctp]
->  ? sctp_generate_t4_rto_event+0x20/0x20 [sctp]
->  ? sctp_generate_t4_rto_event+0x20/0x20 [sctp]
->  call_timer_fn+0x32/0x170
->  expire_timers+0x9d/0x110
->  run_timer_softirq+0x8a/0x160
->  ? __hrtimer_run_queues+0x156/0x2e0
->  __do_softirq+0xaf/0x33e
->  irq_exit+0xbf/0xe0
->  smp_apic_timer_interrupt+0x7d/0x170
->  apic_timer_interrupt+0xf/0x20
->  </IRQ>
->
-> The exploding code in sctp_assoc_control_transport() is:
->
->         /* Generate and send a SCTP_PEER_ADDR_CHANGE notification
->          * to the user.
->          */
->         if (ulp_notify) {
->                 memset(&addr, 0, sizeof(struct sockaddr_storage));
->                 memcpy(&addr, &transport->ipaddr,
->                        transport->af_specific->sockaddr_len);
->
-> where "transport" pointer seems to be freed and re-used, so the dereference
-> to obtain "af_specific" leads to the dump above. This memset/memcpy pair
-> has been factored out into sctp_ulpevent_notify_peer_addr_change(), but
-> this most probably doesn't solve the problem.
->
-> According to the stack above, the race seems to be between this code:
->
-> enum sctp_disposition sctp_sf_t4_timer_expire(
->                                         struct net *net,
->                                         const struct sctp_endpoint *ep,
->                                         const struct sctp_association *asoc,
->                                         const union sctp_subtype type,
->                                         void *arg,
->                                         struct sctp_cmd_seq *commands)
-> {
->         struct sctp_chunk *chunk = asoc->addip_last_asconf;
->         struct sctp_transport *transport = chunk->transport;
->
->         SCTP_INC_STATS(net, SCTP_MIB_T4_RTO_EXPIREDS);
->
->         /* ADDIP 4.1 B1) Increment the error counters and perform path failure
->          * detection on the appropriate destination address as defined in
->          * RFC2960 [5] section 8.1 and 8.2.
->          */
->         if (transport)
->                 sctp_add_cmd_sf(commands, SCTP_CMD_STRIKE,
->                                 SCTP_TRANSPORT(transport));
->
->
-> and
->
-> void sctp_assoc_rm_peer(struct sctp_association *asoc,
->                         struct sctp_transport *peer)
-> {
-> ...
->         /* If we remove the transport an ASCONF was last sent to, set it to
->          * NULL.
->          */
->         if (asoc->addip_last_asconf &&
->             asoc->addip_last_asconf->transport == peer)
->                 asoc->addip_last_asconf->transport = NULL;
->
-> ...
->         asoc->peer.transport_count--;
->
->         sctp_transport_free(peer);
-> }
->
-> So instead of doing sctp_transport_hold() on the addip_last_asconf->transport,
-> the code relies on the NULL assignment to be propagated.
->
-> As I do not see any memory barrier or lock here, I have several questions:
->
-> - Is it possible that sctp_assoc_control_transport() runs in a timer handler
->   in parallel to sctp_assoc_rm_peer() running on a different core?
->   In this case there would be no guarantee, that NULL assignment will reach
->   another core.
->
-> - What was the designed guarantee, that sctp_assoc_control_transport() will see
->   the change to asoc->addip_last_asconf->transport = NULL ?
->
-> - What about all the similar NULL assignments in sctp_assoc_rm_peer()?
->
-> --
-> Best regards,
-> Alexander Sverdlin.
