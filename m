@@ -2,111 +2,72 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91595386F23
-	for <lists+linux-sctp@lfdr.de>; Tue, 18 May 2021 03:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B2F387DDC
+	for <lists+linux-sctp@lfdr.de>; Tue, 18 May 2021 18:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238786AbhERBa1 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 17 May 2021 21:30:27 -0400
-Received: from gateway34.websitewelcome.com ([192.185.148.212]:48560 "EHLO
-        gateway34.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238790AbhERBa1 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>);
-        Mon, 17 May 2021 21:30:27 -0400
-X-Greylist: delayed 1334 seconds by postgrey-1.27 at vger.kernel.org; Mon, 17 May 2021 21:30:27 EDT
-Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id 06312AE92B
-        for <linux-sctp@vger.kernel.org>; Mon, 17 May 2021 20:06:54 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id ioCDly0VjMGeEioCDl0R4k; Mon, 17 May 2021 20:06:54 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=4jO4QIVBW/kvv+vPdher+98IyRZOp0HseicLcBinFUg=; b=PAUn55/gRUTa5zNOp/cSe31JAK
-        DDwzmeAH+uV3j9PNPEJIHfiPuD1muz6oDn+rYchEY14J54851og6blRkkBL62n31gV9ObmhNjnlab
-        zODPEwiJAputNTq8xYO8R4Y3RmkGRTUcDHt7dA5+76XvFpAEht+sfYC19u7GrquZZXDbdX5ezZx9T
-        B24g6VqKpQ6kfgySKtNqYucpKDmW3p2yd+aVTgUTKTfmh2DtaIIIqdEMA6je73j7B/PJr1UMoeZ6K
-        /+fycDj/pRrVCzg32ajaOL3lSyFMhuNF2prWVatFkJhZEqZWbbQ6Yf58+GKW4ef1jczP3DHbg2Whq
-        bwutR+1A==;
-Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:53610 helo=[192.168.15.8])
-        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1lioCA-0038PH-Ef; Mon, 17 May 2021 20:06:50 -0500
-Subject: Re: [PATCH RESEND][next] sctp: Fix fall-through warnings for Clang
-To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <20210305090717.GA139387@embeddedor>
- <91fcca0d-c986-f88e-4a0d-4590de6a5985@embeddedor.com>
- <YH83PToOAiYfHPH3@horizon.localdomain>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Message-ID: <8abc977a-05f9-dc56-fe98-ee274621172b@embeddedor.com>
-Date:   Mon, 17 May 2021 20:07:32 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S1350903AbhERQpS (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 18 May 2021 12:45:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57866 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350897AbhERQpR (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 18 May 2021 12:45:17 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE288C06175F
+        for <linux-sctp@vger.kernel.org>; Tue, 18 May 2021 09:43:57 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id o6-20020a05600c4fc6b029015ec06d5269so1845835wmq.0
+        for <linux-sctp@vger.kernel.org>; Tue, 18 May 2021 09:43:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=dIaiC40+daKRdCy2ptJvgkC1A5nug9Ngz8WU/6RpNW4=;
+        b=b0yP+nWYOqqWsmVOV0rwxsnIOjHjjOjxWBVb6ydoQ7V7fU8zJ+HG2Luwq2JxLWPuGu
+         kLymrrmYAl30akHQQrnY79FvsqfqsMUka4DK4nrm3lndBTBXHv9YdWVsXjQ0PGFsIfSv
+         SsAC2oYXbNH5N4I782n/ym/ZVmhxAFzNVc76XX52n1Jl9x8RmXjyYK8MVkY63TXwsdl9
+         uEHImqtkE5Cazjf5V0o1n9ZJ/VqbZT/atYUGHTlBOKJpTKY4ZdBlgYYdrJKSuc6t7p/7
+         INYEcfRV1qLKDkKklBY/hCZO8NP9FC8qqqsbp4PurS3rrr4vC9yUedF4iNI3cNl6mqNG
+         1/3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=dIaiC40+daKRdCy2ptJvgkC1A5nug9Ngz8WU/6RpNW4=;
+        b=nfI8FgWRtb/AVbjgdKCKcywwheW0eWpNuUimHxb46yXl/IsgM32w7E1HMScxjQrvoy
+         22QUnzSmMkrwzBJ8y8PhoVvVmpXRFQn1MOdSFeuk0FfgSSAEfj5Niab+dHVyVccyh7fi
+         Hc+esB7hQxq7rax9ah+/RF1QEA8ANx2ZNmueutnsGyBeW7wFK7rDRdaWdj/RCpgjrtj9
+         AA9WX8vT05bx623idcScXNJcN+N4c4O0+2+VESozClPY3IjKfkFfkuTGghgYwwkDpuxg
+         Sz2s8URmx99Jp0S6SR7MlbGyx1E1jJr01G/FYCMZAITCkXttrVMCHzADWvJ0iQ7kMfNy
+         wg4w==
+X-Gm-Message-State: AOAM532LUAl5ForPk/cg6J3khuVRQT+EDVbZWGLMfInMnBwBXOJCXUZe
+        UJKfcJSsQYLdcs4Y3NVETLvOXg7hPStulIBTif3klSVH4ONVlC5H
+X-Google-Smtp-Source: ABdhPJxP65HyyNkVMhbJH/sTKfV1J9s7/S0mCcA7XyPBJCWinqokKrK8WhlfKKRbCQXSCVLzWQq89ULSWcY06l1KoO0=
+X-Received: by 2002:a1c:7402:: with SMTP id p2mr5842476wmc.88.1621356236684;
+ Tue, 18 May 2021 09:43:56 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YH83PToOAiYfHPH3@horizon.localdomain>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.162.31.110
-X-Source-L: No
-X-Exim-ID: 1lioCA-0038PH-Ef
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.8]) [187.162.31.110]:53610
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 17
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Tue, 18 May 2021 12:43:45 -0400
+Message-ID: <CADvbK_dqs84c7Yr_eUuENe9Y9HQXwG3AXh-0EcKFD3mjPwfpQQ@mail.gmail.com>
+Subject: add SPP_PLPMTUD_ENABLE/DISABLE flag for spp_flags
+To:     Michael Tuexen <tuexen@freebsd.org>,
+        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
+Hi, Michael,
 
-Thanks, Marcelo.
+We're implementing RFC8899 (PLPMTUD) on Linux SCTP recently,
+and to make this be controlled by setsockopt with
+SCTP_PEER_ADDR_PARAMS, as in
 
-I'm taking this in my -next[1] branch for v5.14.
+  https://datatracker.ietf.org/doc/html/rfc6458#section-8.1.12:
 
-Thanks
---
-Gustavo
+we need another two flags to add for spp_flags:
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/log/?h=for-next/kspp
+  SPP_PLPMTUD_ENABLE
+  SPP_PLPMTUD_DISABLE
 
-On 4/20/21 15:19, Marcelo Ricardo Leitner wrote:
-> On Tue, Apr 20, 2021 at 03:09:24PM -0500, Gustavo A. R. Silva wrote:
->> Hi all,
->>
->> Friendly ping: who can take this, please?
-> 
-> It would go via net/net-next tree, but I can't find this one on
-> patchwork. Just the previous version.
-> 
-> http://patchwork.ozlabs.org/project/netdev/list/?series=&submitter=&state=*&q=sctp%3A+Fix+fall-through+warnings+for+Clang&archive=both&delegate=
-> 
-> I can, however, find it in the archives.
-> 
-> https://lore.kernel.org/netdev/20210305090717.GA139387%40embeddedor/T/
-> 
-> Dave and Jakub will know better.
-> 
->   Marcelo
-> 
+Do you think it makes sense? if yes, does the RFC6458 need to update?
+if not, do you have a better suggestion for it?
+
+Thanks.
