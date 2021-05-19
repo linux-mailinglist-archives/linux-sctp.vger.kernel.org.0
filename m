@@ -2,37 +2,36 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5651538A547
-	for <lists+linux-sctp@lfdr.de>; Thu, 20 May 2021 12:14:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5409538A936
+	for <lists+linux-sctp@lfdr.de>; Thu, 20 May 2021 12:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235181AbhETKPh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Thu, 20 May 2021 06:15:37 -0400
-Received: from mail-n.franken.de ([193.175.24.27]:42981 "EHLO drew.franken.de"
+        id S239785AbhETLA2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Thu, 20 May 2021 07:00:28 -0400
+Received: from mail-n.franken.de ([193.175.24.27]:38870 "EHLO drew.franken.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235753AbhETKMU (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 20 May 2021 06:12:20 -0400
-Received: from smtpclient.apple (ip-109-40-2-100.web.vodafone.de [109.40.2.100])
+        id S239033AbhETK5P (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Thu, 20 May 2021 06:57:15 -0400
+Received: from smtpclient.apple (ip4d15f626.dynamic.kabel-deutschland.de [77.21.246.38])
         (Authenticated sender: macmic)
-        by mail-n.franken.de (Postfix) with ESMTPSA id B18F9721A5A83;
-        Thu, 20 May 2021 09:06:14 +0200 (CEST)
+        by mail-n.franken.de (Postfix) with ESMTPSA id 3A358721A5A7E;
+        Thu, 20 May 2021 01:10:24 +0200 (CEST)
 Content-Type: text/plain;
         charset=us-ascii
 Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.80.0.2.43\))
 Subject: Re: add SPP_PLPMTUD_ENABLE/DISABLE flag for spp_flags
-From:   tuexen@freebsd.org
-In-Reply-To: <CADvbK_eBn7taHnLDNy9B3qbqnzh8UwTJMv8eDPDOdW0MtqOE1A@mail.gmail.com>
-Date:   Thu, 20 May 2021 09:06:13 +0200
-Cc:     Marcelo Ricardo Leitner <mleitner@redhat.com>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        =?utf-8?Q?Timo_V=C3=B6lker?= <timo.voelker@fh-muenster.de>
+From:   Michael Tuexen <tuexen@freebsd.org>
+In-Reply-To: <CADvbK_eujoHWiM88VDRHmtfXLWrBaBtUBjD2wYqQcQ=VssdaoQ@mail.gmail.com>
+Date:   Thu, 20 May 2021 01:10:23 +0200
+Cc:     "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 Content-Transfer-Encoding: 8BIT
-Message-Id: <364C37C5-5828-401C-BDD0-F345B288CE81@freebsd.org>
+Message-Id: <2C01CE13-6562-4B7C-A49B-4ADD2B6017A4@freebsd.org>
 References: <CADvbK_dqs84c7Yr_eUuENe9Y9HQXwG3AXh-0EcKFD3mjPwfpQQ@mail.gmail.com>
  <81B0ED00-D281-445B-83C7-7BE65DC0FD8E@freebsd.org>
  <CADvbK_eKp+1OUT1+DLdv5w5_Azsh7W3F46p=3hCoiP8c13bEFg@mail.gmail.com>
- <DE8A113C-DF80-412E-A5C1-C0731E1757E2@freebsd.org>
- <CALnP8ZZd5B-S_jDtCeqbVqZNg5snnEs1v+uiGFc06FkMSk=BdA@mail.gmail.com>
- <CADvbK_eBn7taHnLDNy9B3qbqnzh8UwTJMv8eDPDOdW0MtqOE1A@mail.gmail.com>
+ <CADvbK_dVWjzi-w0JqvuGz7SsBUpvhUBQ5mew3kOQ0OymCwvh=w@mail.gmail.com>
+ <8C3219EB-1BEF-4F96-B881-8BDCA2EC98EE@freebsd.org>
+ <CADvbK_eujoHWiM88VDRHmtfXLWrBaBtUBjD2wYqQcQ=VssdaoQ@mail.gmail.com>
 To:     Xin Long <lucien.xin@gmail.com>
 X-Mailer: Apple Mail (2.3654.80.0.2.43)
 X-Spam-Status: No, score=-2.9 required=5.0 tests=ALL_TRUSTED,BAYES_00
@@ -42,14 +41,13 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-> On 20. May 2021, at 04:05, Xin Long <lucien.xin@gmail.com> wrote:
+> On 19. May 2021, at 20:44, Xin Long <lucien.xin@gmail.com> wrote:
 > 
-> On Wed, May 19, 2021 at 6:24 PM <mleitner@redhat.com> wrote:
+> On Wed, May 19, 2021 at 2:15 PM Michael Tuexen <tuexen@freebsd.org> wrote:
 >> 
->> On Tue, May 18, 2021 at 09:19:21PM +0200, Michael Tuexen wrote:
+>>> On 19. May 2021, at 18:18, Xin Long <lucien.xin@gmail.com> wrote:
 >>> 
->>> 
->>>> On 18. May 2021, at 20:33, Xin Long <lucien.xin@gmail.com> wrote:
+>>> On Tue, May 18, 2021 at 2:33 PM Xin Long <lucien.xin@gmail.com> wrote:
 >>>> 
 >>>> On Tue, May 18, 2021 at 1:38 PM Michael Tuexen <tuexen@freebsd.org> wrote:
 >>>>> 
@@ -84,73 +82,51 @@ X-Mailing-List: linux-sctp@vger.kernel.org
 >>>>> sysctl.
 >>>>> 
 >>>>> So in my view, there is no need to extend the socket API. What do you think?
+>>> I just noticed that with multiple versions supported, and without extending
+>>> this API, all applications will have to use the same version as it's
+>>> controlled by
+>>> sysctl. And when switching to another version by sysctl, all
+>>> applications will be
+>>> affected and have to do the switch. that seems not nice.
+>> That is true, but an application can not expect any specific behaviour
+>> right now when they are not disabling PMTUD.
+>> 
+>> What about adding a sysctl variable, which defines the default
+>> algorithm and a socket option, which allows to get and set
+>> the algorithm being used.
+> yes, that's also what I'm thinking.
+> sysctl is always used for the default value for future sockets.
+> and the socket option should be added for a socket/asoc's setting.
+> 
+> SCTP_PTMUD_METHOD?
+OK.
+> 0: PTB one
+I don't know what the above would mean. Not sure anything is really specified.
+> 1. PLPMTUD
+I guess you would need an struct sctp_assoc_value here.
+
+Maybe some constants such as:
+SCTP_PMTU_CLASSIC
+SCTP_PMTU_NEW
+or
+SCTP_PMTU_RFC_8899
+
+Best regards
+Michael
+> 
+>> 
+>> Best regards
+>> Michael
+>>> 
 >>>> OK, that makes sense to me.
 >>>> 
 >>>> Another thing I want to know your opinion on is:  do you think the HB
 >>>> should be created
 >>>> separately for PLPMTUD probe, instead of reusing the old HB that
 >>>> checks the link connectivity?
->>> Yes. I think testing for connectivity is conceptually different
->>> from testing a particular PMTU. When testing for PMTU, I think
->>> about sending probe packets. Not that they consist of a HB chunk
->>> bundled with a PAD chunk.
 >>>> As the HB for PLPMTUD probe might get lost, which we don't want to
 >>>> affect the link's
 >>>> connectivity.
->>> Yes, I agree completely.
->> 
->> With this, Xin, seems we should have a separate timer for the
->> PROBE_TIMER, other than the heartbeat one.
->> 
->> Otherwise, converging the two logics into one single timer is not
->> worth the hassle for saving a timer. For example, we would have to
->> have it fire on the active transport but to send only the probe.
->> Also, considering they can and (AFAIU the RFC) should have different
->> expire timeouts from time to time.
->> 
->> With a separate timer, we won't have issues converging the
->> user-selectable heartbeat interval to the recommended 600s
->> PMTU_RAISE_TIMER, for example.
->> 
->> Maybe I am missing something. But it seems the hassle for reusing the
->> timer here is just not worth it. Thoughts?
-> You're right, when I was doing testing, I had to set the hb_interval to 5s.
-> the common value of hb_interval really doesn't fit in the probe_interval.
-> I will try adding a new timer, but at the same time a probe_interval
-> by sysctl/sockopt may be needed, or we can use a value equal to
-> (hb_interval / n) for it?
-Yeah, this is why I did not write a socket API section for RFC 8899. I think
-when implementing it, one will find some parameters which can or should
-be controlled by the application. So I guess there will be more than this
-one.
-
-Timo (CCed) is working on some algorithmic explorations, since RFC 8899, gives
-you some freedom. Right now, his work is done in a simulation environment, but
-once that is finished and he came to some conclusions, we will implement this.
-
-So what about:
-
-* Try to implement PLPMTUD and figure out what you need as user controllable
-  parameters.
-* Bring this up for discussion and we can agree on them and also on how
-  to control them via socket options.
-* Then you get the code into the Linux tree.
-
-That way we would know what parameters are really needed in an implementation
-and we would have a common interface.
-
-Does that make sense to you and sounds like an acceptable plan?
-
-Best regards
-Michael
-> 
->> 
->> Best,
->> Marcelo
->> 
->>> 
->>> Best regards
->>> Michael
 >>>> 
 >>>>> 
 >>>>> Best regards
@@ -158,6 +134,5 @@ Michael
 >>>>>> 
 >>>>>> Thanks.
 >>>>> 
->>> 
 >> 
 
