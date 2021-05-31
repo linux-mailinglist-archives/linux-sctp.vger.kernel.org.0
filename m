@@ -2,65 +2,94 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1220B394E65
-	for <lists+linux-sctp@lfdr.de>; Sun, 30 May 2021 00:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D01E93953BE
+	for <lists+linux-sctp@lfdr.de>; Mon, 31 May 2021 03:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbhE2Wdt (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sat, 29 May 2021 18:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56410 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbhE2Wds (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sat, 29 May 2021 18:33:48 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5977C061574
-        for <linux-sctp@vger.kernel.org>; Sat, 29 May 2021 15:32:10 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id qq22so2436212ejb.9
-        for <linux-sctp@vger.kernel.org>; Sat, 29 May 2021 15:32:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=QyQ9VKjFUq2bSmCMVt9DgAOV84VZIC7oyKxsrSS204w=;
-        b=AgKZBD6MxGWOxm19p0IID6Fq8Rbm5+QD+R1u/qB4W4zpCPWcZr/hwsluR9/PO0fWW7
-         5A4EZ7DX5O9eWpYnCzHjVewvm7qt9ObJorA6FO1mEwcnZo0kiwep7JB8Mt80pZGdKijM
-         d78XOEhxU0yWqMstRwMir+2zhT2Aj1qY0iplQChdby/WjUWz93P2pWxGmrKEaRnoVRsf
-         WHx1C2ip1TdSRt7MO6fqkc5iuyuE3LtBF/+wQP63FNH0iGH3sH7HjZqduwEWZAG4s3aN
-         C5gxSHqKeXBA/OftCVHUu1YMBO6+Awk7V5U99ORY1/rnYimUjdZdXbwKpUm/0KlnM5pF
-         AFzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=QyQ9VKjFUq2bSmCMVt9DgAOV84VZIC7oyKxsrSS204w=;
-        b=r8xhlJBBwPLbuaYLmMZ9htEj3t9h9DCXGHNM6hHI+Imu4uGRVUdFMFYVSD0xgjABMW
-         l/qasZit/KsXjQtC+wLd3Q3FFztCyFv3oLKwdLKRPeAy1Afza9kvoEgoqLIuqiKIU0KY
-         c4kx+uyoqNEFcTb6xzqe64CrfoBlOQJKqnJ9XYG4rfSH85IjUjfc0b6lSAlYn83U90Ij
-         NWtY4bjEXLswBZnd7a4TLbqT64zIrr4LPM3PQw1DpgqAUz8mp5t/QMNzCx7YVdtkVOZa
-         kKd+PqTN/zIK5vOY4NQ6J2P9sK6ZuumeEUXvB3GD3ElrYnjlWWOJW6kxgeLlT6FT1m3Y
-         AvYw==
-X-Gm-Message-State: AOAM530Neeb8HbYipWoKrsPs0HaV9JqbeDpA0IqcLVJzKTyooDKniiXE
-        TYlVrrVDmgBJTHVXtVK8Llj79SXnNQz6eR7xcc8=
-X-Google-Smtp-Source: ABdhPJxuCCkIJpv3N0IARhfwMB9BTT+fNLBsDfm+PID/8fW8dPn/u/ZV4Z2NhTWFsmqZP4Z7Fr/fpodFLjTdIV2OjKk=
-X-Received: by 2002:a17:906:eb10:: with SMTP id mb16mr15655231ejb.209.1622327529079;
- Sat, 29 May 2021 15:32:09 -0700 (PDT)
+        id S230057AbhEaBtN (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 30 May 2021 21:49:13 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:2476 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230059AbhEaBtL (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sun, 30 May 2021 21:49:11 -0400
+Received: from dggeme760-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4FtdPv27Zjz68nL;
+        Mon, 31 May 2021 09:44:35 +0800 (CST)
+Received: from localhost.localdomain (10.175.104.82) by
+ dggeme760-chm.china.huawei.com (10.3.19.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.2; Mon, 31 May 2021 09:47:29 +0800
+From:   Zheng Yongjun <zhengyongjun3@huawei.com>
+To:     <vyasevich@gmail.com>, <nhorman@tuxdriver.com>,
+        <marcelo.leitner@gmail.com>, <davem@davemloft.net>,
+        <kuba@kernel.org>, <linux-sctp@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Zheng Yongjun <zhengyongjun3@huawei.com>
+Subject: [PATCH net-next] sctp: sm_statefuns: Fix spelling mistakes
+Date:   Mon, 31 May 2021 10:01:10 +0800
+Message-ID: <20210531020110.2920255-1-zhengyongjun3@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:ab4:9911:0:0:0:0:0 with HTTP; Sat, 29 May 2021 15:32:08
- -0700 (PDT)
-Reply-To: mrbarraksalah1970@gmail.com
-From:   "Mr.Barrak Salah " <mrcaraluda900@gmail.com>
-Date:   Sat, 29 May 2021 15:32:08 -0700
-Message-ID: <CAJC1fY1ymF+No16ApdY-VCMZd5UOFTMEJ6v5iSB7BVhn5tox8w@mail.gmail.com>
-Subject: READ AND REPLY
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.104.82]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggeme760-chm.china.huawei.com (10.3.19.106)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Dear Friend,
-My Name is Mr.Barrak Salah, I am a banker by profession. My reason for
-contacting you is to transfer an abandoned $15.5 Million United States
-Dollars to your account.
-Further details of the transaction shall be forwarded to you as soonas
-I receive your return mail indicating your interest.
-Thanks and hoping to hear from you soon.
-Mr.Barrak Salah,
+Fix some spelling mistakes in comments:
+genereate ==> generate
+correclty ==> correctly
+boundries ==> boundaries
+failes ==> fails
+
+Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
+---
+ net/sctp/sm_statefuns.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
+index fd1e319eda00..68e7d14c3799 100644
+--- a/net/sctp/sm_statefuns.c
++++ b/net/sctp/sm_statefuns.c
+@@ -608,7 +608,7 @@ enum sctp_disposition sctp_sf_do_5_1C_ack(struct net *net,
+ 	sctp_add_cmd_sf(commands, SCTP_CMD_NEW_STATE,
+ 			SCTP_STATE(SCTP_STATE_COOKIE_ECHOED));
+ 
+-	/* SCTP-AUTH: genereate the assocition shared keys so that
++	/* SCTP-AUTH: generate the assocition shared keys so that
+ 	 * we can potentially signe the COOKIE-ECHO.
+ 	 */
+ 	sctp_add_cmd_sf(commands, SCTP_CMD_ASSOC_SHKEY, SCTP_NULL());
+@@ -838,7 +838,7 @@ enum sctp_disposition sctp_sf_do_5_1D_ce(struct net *net,
+ 
+ 	/* Add all the state machine commands now since we've created
+ 	 * everything.  This way we don't introduce memory corruptions
+-	 * during side-effect processing and correclty count established
++	 * during side-effect processing and correctly count established
+ 	 * associations.
+ 	 */
+ 	sctp_add_cmd_sf(commands, SCTP_CMD_NEW_ASOC, SCTP_ASOC(new_asoc));
+@@ -2950,7 +2950,7 @@ enum sctp_disposition sctp_sf_do_9_2_reshutack(
+ 						  commands);
+ 
+ 	/* Since we are not going to really process this INIT, there
+-	 * is no point in verifying chunk boundries.  Just generate
++	 * is no point in verifying chunk boundaries.  Just generate
+ 	 * the SHUTDOWN ACK.
+ 	 */
+ 	reply = sctp_make_shutdown_ack(asoc, chunk);
+@@ -3560,7 +3560,7 @@ enum sctp_disposition sctp_sf_do_9_2_final(struct net *net,
+ 		goto nomem_chunk;
+ 
+ 	/* Do all the commands now (after allocation), so that we
+-	 * have consistent state if memory allocation failes
++	 * have consistent state if memory allocation fails
+ 	 */
+ 	sctp_add_cmd_sf(commands, SCTP_CMD_EVENT_ULP, SCTP_ULPEVENT(ev));
+ 
+-- 
+2.25.1
+
