@@ -2,136 +2,88 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA7293AFA7C
-	for <lists+linux-sctp@lfdr.de>; Tue, 22 Jun 2021 03:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8613F3AFA9A
+	for <lists+linux-sctp@lfdr.de>; Tue, 22 Jun 2021 03:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbhFVBQ1 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 21 Jun 2021 21:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
+        id S230268AbhFVBch (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 21 Jun 2021 21:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbhFVBQZ (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 21 Jun 2021 21:16:25 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5386FC061574;
-        Mon, 21 Jun 2021 18:14:10 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id i94so21611858wri.4;
-        Mon, 21 Jun 2021 18:14:10 -0700 (PDT)
+        with ESMTP id S230175AbhFVBcg (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 21 Jun 2021 21:32:36 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6CCC061574;
+        Mon, 21 Jun 2021 18:30:20 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id j184so35469742qkd.6;
+        Mon, 21 Jun 2021 18:30:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YKGpqBSae3SQn5FXwUHkM5Y5Zy1QUuaeOYx04RqOUvw=;
-        b=NsQGP6vTQiB8xPTvgdgwiwUf+uIKxW9qgKOxA7tnEbiNVfdqwPQ4Xa4aLgy/bR6ZjC
-         7Xi2FmPn8yw1jkJWtddhsAxxKyu9Plwj61IhYD839/rgokoRl02DAD5dFY2iHcQ/Ch+a
-         b2+gL8HRVWxPKX0h1IiyJrvT4aU2Yq3z2I39BR0eiX9BBBijajizwK37IW3GQRlEdz8d
-         u8lm9cNOy9kj3PV6rKaVjnlv5IM4I1AtmPfefULB1hmiHAPXRIrGMwYg6tXVGrWWEiBQ
-         XhIh5pJyWQ+MjZcaCAl/0pBMUhMMG98gnofRZnb/ZV4816Nov9oNew3wOvKPDFbiWF5r
-         7PNA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=P1T3GyRhBi7GEl+St9OfKiYv0CVkyOTJ8xac8/yyCss=;
+        b=bBRP+3kP2Ehu+3mITOtC1wvmuxEXCHjzPiSWtEORsaMU8D62FrFZIO3wHfpTeQ7EwI
+         02FQhuDDlXrLeL2evsMEgPvr0FyYrglLdFmLdICN9AZknc1IeCQZcuzHxW+RB3T7CDni
+         VlTGsQUH3vmD0Pfqi5EdI6FhrG6/26oy8zeXF1if4EBuTimUKUrEaza9o2M7mPV2Dx/v
+         HTyuh+4Gb1RP1OhLVanbUs7AbA0jZIQGi5jLQ434Nw71W3EsCBcqI6RQ9KxMoRf1CJI+
+         FLw6jkdzdNHt9tVas8ier3xj7SI6VELjN0nkDA4AVh+UbTiPHlLwuaMrjp3N7DwALqUb
+         eiLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YKGpqBSae3SQn5FXwUHkM5Y5Zy1QUuaeOYx04RqOUvw=;
-        b=GirmLS6MQvEqD+eZeMuF/tcuFVqdVeeZsZPPo72l9uMf8AozT3H2+JRaiXHSpNuIBf
-         7PZlpN1MLfnCct+7wvlbSd3rdhe3fWml+9okJkolZlRCFfDDH7STpZ3txGFi1iNlqsv1
-         LxGRd1qKF3LDQHdnqcZ3SwjQui56Ha2ZxhZ6APwlPQXOqVskYTpXdiixsC2CopErmRvp
-         NIec91C5FA4ccci04Wlb6lbFPvJYsVvWXWCrJfVKJpjmL5oooihaGKq8qrL8fzcDgWFt
-         ezduDY8W3njCs9kz/4m0bTmFttDFgmusdD3XJv/qBlwZabiFipErmY9nFIpjfw83P+LC
-         6/+A==
-X-Gm-Message-State: AOAM530Bo6knidp582n9KUswhfR3IUvrUuWxsHQT/F/IwND22ZGPjsk1
-        Y+vUBGLYnUqGRBf5sRqyknZOJ2Lz4bUqXuBrdsw=
-X-Google-Smtp-Source: ABdhPJxUI/4c4cpW9zuyZDxEj0yUVCZv1Ub+4FqshB2g6pGOnGOi+3UW/hfVfVzR5ml+jmwLqLksoa71RmtolIGudV4=
-X-Received: by 2002:a05:6000:2a3:: with SMTP id l3mr1390712wry.395.1624324448810;
- Mon, 21 Jun 2021 18:14:08 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=P1T3GyRhBi7GEl+St9OfKiYv0CVkyOTJ8xac8/yyCss=;
+        b=Cy3UxVnlrOFeq67JFnoz6wg1erhrXjSQE+waXYaOOVXzGNxHi69FMyhnHuC3PRviik
+         ZOkKN+U/MiLV6xs1tBMJWcWCLskGqo3guwEUccrlULXmQ4KCa7Mp57eksxd5pA2gf/Ay
+         4Lxx6qEUDwjrHKqlnmz52SRJ5/Ci93ejprlv9pGSQMk6OYj9UilAHTk3DhcN79/ebYnp
+         zCgKNj9N41Lx+gFQYEDFMrdiSXS0WgPigaBx2yNWsRDPcHvrIbTQjOCsV86isoaiSCG/
+         5EN9832HG0aLlJaw3dS8uosCBuboaojk7JEth7trn1ct4hzv6KEc90IRSPL9Oz6g6Raw
+         dWMA==
+X-Gm-Message-State: AOAM530xDS+qxZbul0CiCkgg8CDJAP/quS0FXjr5K9tguWVjbNRWEY+S
+        wD7oC9/ZZ8hhP/Yc2iiRdkBrbqv2A26OOg==
+X-Google-Smtp-Source: ABdhPJxJfQqBvL41zgDTkD4oinyAdQ1CkAuqtljnq8svjcKeSPzH4ett7D97XAPPmxzuCsDFo81Nmg==
+X-Received: by 2002:a05:620a:c8c:: with SMTP id q12mr1704602qki.203.1624325419845;
+        Mon, 21 Jun 2021 18:30:19 -0700 (PDT)
+Received: from horizon.localdomain ([177.220.172.71])
+        by smtp.gmail.com with ESMTPSA id s133sm11326973qke.97.2021.06.21.18.30.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Jun 2021 18:30:19 -0700 (PDT)
+Received: by horizon.localdomain (Postfix, from userid 1000)
+        id 1BE63C02A9; Mon, 21 Jun 2021 22:30:17 -0300 (-03)
+Date:   Mon, 21 Jun 2021 22:30:17 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     network dev <netdev@vger.kernel.org>, davem@davemloft.net,
+        kuba@kernel.org, linux-sctp@vger.kernel.org
+Subject: Re: [PATCH net-next 00/14] sctp: implement RFC8899: Packetization
+ Layer Path MTU Discovery for SCTP transport
+Message-ID: <YNE9KTlOkzUjgr4c@horizon.localdomain>
+References: <cover.1624239422.git.lucien.xin@gmail.com>
 MIME-Version: 1.0
-References: <66a73fb28cc8175ac80735f6301110b952f6e139.1624239422.git.lucien.xin@gmail.com>
- <202106211151.QDS54KHu-lkp@intel.com>
-In-Reply-To: <202106211151.QDS54KHu-lkp@intel.com>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Mon, 21 Jun 2021 21:13:59 -0400
-Message-ID: <CADvbK_dCgaqrr=pxZGfBmm=3m31+eKgcfkU7AowFbnZAcC92bQ@mail.gmail.com>
-Subject: Re: [PATCH net-next 06/14] sctp: do the basic send and recv for
- PLPMTUD probe
-To:     kernel test robot <lkp@intel.com>
-Cc:     network dev <netdev@vger.kernel.org>, davem <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        kbuild-all@lists.01.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1624239422.git.lucien.xin@gmail.com>
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-This is a "set but not used" warning, I can fix it after.
+On Sun, Jun 20, 2021 at 09:38:35PM -0400, Xin Long wrote:
+> Overview(From RFC8899):
+> 
+>   In contrast to PMTUD, Packetization Layer Path MTU Discovery
+>   (PLPMTUD) [RFC4821] introduces a method that does not rely upon
+>   reception and validation of PTB messages.  It is therefore more
+>   robust than Classical PMTUD.  This has become the recommended
+>   approach for implementing discovery of the PMTU [BCP145].
+> 
+>   It uses a general strategy in which the PL sends probe packets to
+>   search for the largest size of unfragmented datagram that can be sent
+>   over a network path.  Probe packets are sent to explore using a
+>   larger packet size.  If a probe packet is successfully delivered (as
+>   determined by the PL), then the PLPMTU is raised to the size of the
+>   successful probe.  If a black hole is detected (e.g., where packets
+>   of size PLPMTU are consistently not received), the method reduces the
+>   PLPMTU.
 
-Thanks.
+Thanks Xin!
 
-On Sun, Jun 20, 2021 at 11:50 PM kernel test robot <lkp@intel.com> wrote:
->
-> Hi Xin,
->
-> Thank you for the patch! Perhaps something to improve:
->
-> [auto build test WARNING on net-next/master]
->
-> url:    https://github.com/0day-ci/linux/commits/Xin-Long/sctp-implement-RFC8899-Packetization-Layer-Path-MTU-Discovery-for-SCTP-transport/20210621-094007
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git adc2e56ebe6377f5c032d96aee0feac30a640453
-> config: i386-randconfig-r023-20210620 (attached as .config)
-> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-> reproduce (this is a W=1 build):
->         # https://github.com/0day-ci/linux/commit/fcac1d6488c8bc7cb69af9e8051686a674d94fc3
->         git remote add linux-review https://github.com/0day-ci/linux
->         git fetch --no-tags linux-review Xin-Long/sctp-implement-RFC8899-Packetization-Layer-Path-MTU-Discovery-for-SCTP-transport/20210621-094007
->         git checkout fcac1d6488c8bc7cb69af9e8051686a674d94fc3
->         # save the attached .config to linux build tree
->         make W=1 ARCH=i386
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
-> >> net/sctp/output.c:215:16: warning: no previous prototype for 'sctp_packet_bundle_pad' [-Wmissing-prototypes]
->      215 | enum sctp_xmit sctp_packet_bundle_pad(struct sctp_packet *pkt, struct sctp_chunk *chunk)
->          |                ^~~~~~~~~~~~~~~~~~~~~~
->    net/sctp/output.c: In function 'sctp_packet_bundle_pad':
-> >> net/sctp/output.c:219:20: warning: variable 'sp' set but not used [-Wunused-but-set-variable]
->      219 |  struct sctp_sock *sp;
->          |                    ^~
->
->
-> vim +/sctp_packet_bundle_pad +215 net/sctp/output.c
->
->    213
->    214  /* Try to bundle a pad chunk into a packet with a heartbeat chunk for PLPMTUTD probe */
->  > 215  enum sctp_xmit sctp_packet_bundle_pad(struct sctp_packet *pkt, struct sctp_chunk *chunk)
->    216  {
->    217          struct sctp_transport *t = pkt->transport;
->    218          struct sctp_chunk *pad;
->  > 219          struct sctp_sock *sp;
->    220          int overhead = 0;
->    221
->    222          if (!chunk->pmtu_probe)
->    223                  return SCTP_XMIT_OK;
->    224
->    225          sp = sctp_sk(t->asoc->base.sk);
->    226
->    227          /* calculate the Padding Data size for the pad chunk */
->    228          overhead += sizeof(struct sctphdr) + sizeof(struct sctp_chunkhdr);
->    229          overhead += sizeof(struct sctp_sender_hb_info) + sizeof(struct sctp_pad_chunk);
->    230          pad = sctp_make_pad(t->asoc, t->pl.probe_size - overhead);
->    231          if (!pad)
->    232                  return SCTP_XMIT_DELAY;
->    233
->    234          list_add_tail(&pad->list, &pkt->chunk_list);
->    235          pkt->size += SCTP_PAD4(ntohs(pad->chunk_hdr->length));
->    236          chunk->transport = t;
->    237
->    238          return SCTP_XMIT_OK;
->    239  }
->    240
->
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
