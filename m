@@ -2,52 +2,62 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F243B0D17
-	for <lists+linux-sctp@lfdr.de>; Tue, 22 Jun 2021 20:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8A23B0FED
+	for <lists+linux-sctp@lfdr.de>; Wed, 23 Jun 2021 00:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232049AbhFVSmX (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 22 Jun 2021 14:42:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42486 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230146AbhFVSmW (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Tue, 22 Jun 2021 14:42:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 8BA516128C;
-        Tue, 22 Jun 2021 18:40:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624387206;
-        bh=qw91iE0jZ/x2Ymg8H9qTCVqUd9ZGBkvtbseOaXsKCa0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=c2IJPV3wWj2hGH3OlDUcgFTNFfGki2IAU3b89QwHQXThE4yy76Zu3fYJ6zgj7A1cy
-         dsiJIcgDbtxzGrEAIVPBhVyJnwI8giFCsQ7SeXq3+kV2Fbk/AcP9epBekh9wCQHdM8
-         1YD1iYw2Nq5rxxT3TC6b+Gs03Z/Pc6Ak1oedNBRBiLpbajevLugLkejMtTgptfeGmB
-         NzUWhg7NGtfVfBdt9p8Omi4otT062cpt/WJx2k+HRwuJVVgMDcGkG1rFR1DV3YjT7b
-         WbhLp2rvIhfX6OivvKUGbr1xQicsuHOn3xT1GL4wso+1wqB9d0A4LTNDfwtzj0xAHc
-         Z7pZYobtWQmNw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 7DC58609FF;
-        Tue, 22 Jun 2021 18:40:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCHv2 net-next 00/14] sctp: implement RFC8899: Packetization Layer
- Path MTU Discovery for SCTP transport
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162438720650.29926.6241107476929251289.git-patchwork-notify@kernel.org>
-Date:   Tue, 22 Jun 2021 18:40:06 +0000
+        id S229955AbhFVWPe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Tue, 22 Jun 2021 18:15:34 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:58736 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229675AbhFVWPe (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Tue, 22 Jun 2021 18:15:34 -0400
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-231-IXZpIp62M8ys0FTGHGmJgA-1; Tue, 22 Jun 2021 23:13:14 +0100
+X-MC-Unique: IXZpIp62M8ys0FTGHGmJgA-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 22 Jun
+ 2021 23:13:14 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.018; Tue, 22 Jun 2021 23:13:14 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Xin Long' <lucien.xin@gmail.com>,
+        network dev <netdev@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>
+Subject: RE: [PATCHv2 net-next 00/14] sctp: implement RFC8899: Packetization
+ Layer Path MTU Discovery for SCTP transport
+Thread-Topic: [PATCHv2 net-next 00/14] sctp: implement RFC8899: Packetization
+ Layer Path MTU Discovery for SCTP transport
+Thread-Index: AQHXZ5Gk1m/0BhrSYEC4nBP7A0Tb5KsglL6Q
+Date:   Tue, 22 Jun 2021 22:13:14 +0000
+Message-ID: <cfaa01992d064520b3a9138983e8ec41@AcuMS.aculab.com>
 References: <cover.1624384990.git.lucien.xin@gmail.com>
 In-Reply-To: <cover.1624384990.git.lucien.xin@gmail.com>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        marcelo.leitner@gmail.com, linux-sctp@vger.kernel.org
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (refs/heads/master):
-
-On Tue, 22 Jun 2021 14:04:46 -0400 you wrote:
+From: Xin Long
+> Sent: 22 June 2021 19:05
+> 
 > Overview(From RFC8899):
 > 
 >   In contrast to PMTUD, Packetization Layer Path MTU Discovery
@@ -56,41 +66,40 @@ On Tue, 22 Jun 2021 14:04:46 -0400 you wrote:
 >   robust than Classical PMTUD.  This has become the recommended
 >   approach for implementing discovery of the PMTU [BCP145].
 > 
-> [...]
+>   It uses a general strategy in which the PL sends probe packets to
+>   search for the largest size of unfragmented datagram that can be sent
+>   over a network path.  Probe packets are sent to explore using a
+>   larger packet size.  If a probe packet is successfully delivered (as
+>   determined by the PL), then the PLPMTU is raised to the size of the
+>   successful probe.  If a black hole is detected (e.g., where packets
+>   of size PLPMTU are consistently not received), the method reduces the
+>   PLPMTU.
 
-Here is the summary with links:
-  - [PATCHv2,net-next,01/14] sctp: add pad chunk and its make function and event table
-    https://git.kernel.org/netdev/net-next/c/745a32117b5a
-  - [PATCHv2,net-next,02/14] sctp: add probe_interval in sysctl and sock/asoc/transport
-    https://git.kernel.org/netdev/net-next/c/d1e462a7a5f3
-  - [PATCHv2,net-next,03/14] sctp: add SCTP_PLPMTUD_PROBE_INTERVAL sockopt for sock/asoc/transport
-    https://git.kernel.org/netdev/net-next/c/3190b649b4d9
-  - [PATCHv2,net-next,04/14] sctp: add the constants/variables and states and some APIs for transport
-    https://git.kernel.org/netdev/net-next/c/d9e2e410ae30
-  - [PATCHv2,net-next,05/14] sctp: add the probe timer in transport for PLPMTUD
-    https://git.kernel.org/netdev/net-next/c/92548ec2f1f9
-  - [PATCHv2,net-next,06/14] sctp: do the basic send and recv for PLPMTUD probe
-    https://git.kernel.org/netdev/net-next/c/fe59379b9ab7
-  - [PATCHv2,net-next,07/14] sctp: do state transition when PROBE_COUNT == MAX_PROBES on HB send path
-    https://git.kernel.org/netdev/net-next/c/1dc68c194571
-  - [PATCHv2,net-next,08/14] sctp: do state transition when a probe succeeds on HB ACK recv path
-    https://git.kernel.org/netdev/net-next/c/b87641aff9e7
-  - [PATCHv2,net-next,09/14] sctp: do state transition when receiving an icmp TOOBIG packet
-    https://git.kernel.org/netdev/net-next/c/836964083177
-  - [PATCHv2,net-next,10/14] sctp: enable PLPMTUD when the transport is ready
-    https://git.kernel.org/netdev/net-next/c/7307e4fa4d29
-  - [PATCHv2,net-next,11/14] sctp: remove the unessessary hold for idev in sctp_v6_err
-    https://git.kernel.org/netdev/net-next/c/237a6a2e318c
-  - [PATCHv2,net-next,12/14] sctp: extract sctp_v6_err_handle function from sctp_v6_err
-    https://git.kernel.org/netdev/net-next/c/f6549bd37b92
-  - [PATCHv2,net-next,13/14] sctp: extract sctp_v4_err_handle function from sctp_v4_err
-    https://git.kernel.org/netdev/net-next/c/d83060759a65
-  - [PATCHv2,net-next,14/14] sctp: process sctp over udp icmp err on sctp side
-    https://git.kernel.org/netdev/net-next/c/9e47df005cab
+This seems to take a long time (probably well over a minute)
+to determine the mtu.
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+What is used for the actual mtu while this is in progress?
 
+Does packet loss and packet retransmission cause the mtu
+to be reduced as well?
+
+I can imagine that there is an expectation (from the application)
+that the mtu is that of an ethernet link - perhaps less a PPPoE
+header.
+Starting with an mtu of 1200 will break this assumption and may
+have odd side effects.
+For TCP/UDP the ICMP segmentation required error is immediate
+and gets used for the retransmissions.
+This code seems to be looking at separate timeouts - so a lot of
+packets could get discarded and application timers expire before
+if determines the correct mtu.
+
+Maybe I missed something about this only being done on inactive
+paths?
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
