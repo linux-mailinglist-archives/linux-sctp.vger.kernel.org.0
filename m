@@ -2,257 +2,112 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A08F3B1274
-	for <lists+linux-sctp@lfdr.de>; Wed, 23 Jun 2021 05:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA1B93B1743
+	for <lists+linux-sctp@lfdr.de>; Wed, 23 Jun 2021 11:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbhFWDvB (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 22 Jun 2021 23:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56320 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbhFWDvB (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 22 Jun 2021 23:51:01 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63158C061574;
-        Tue, 22 Jun 2021 20:48:44 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id h21-20020a1ccc150000b02901d4d33c5ca0so358287wmb.3;
-        Tue, 22 Jun 2021 20:48:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8+ZeLnwHh9Py0eDeZIZvkJQttIs0sxzhqw37BA3s270=;
-        b=qlWreJ/BoQONV/bBEO+485rLDa7rgGeR7Xu6Ve+1XJU6wbKjZKUJaNVDVnBMH65DQY
-         FXN1TjCpmXE2QOe9g5i8zT5/2pk4to0/vT+7TYDirQ7Jzu6Ucxzgn2GXJqwJK6/+Ap5p
-         jYEWQdWvyXjDFGDXab5xQNyzM1JSgKoSpc5c0OBXfig6KyAUH7OSPqRl0d2n3cn57AGY
-         zpAVeNxUnnaY4Frx4AO/mNJHXZA329LQM71+DtuW91R+uB4mU32SRL0/QyWayCbgU4zJ
-         /awWYA1g5mHS9OCK7mnQIPcRWZoqGz7nMddb8Uee0H3P+KI4VSOXgpIaRITrQ7jCSu2F
-         1Fcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8+ZeLnwHh9Py0eDeZIZvkJQttIs0sxzhqw37BA3s270=;
-        b=KzsH2LusU0vVqA1P/7RPqz/dl1gBU9s1RabGs3HXKq4mjN5L6+ZBJCzNrcxgXfsdle
-         IEM8pGpR0QpmFCpAPgcQctjhvy9nd/DVSt0ShYpk4IiLju5dkHPH/AakGHiqKkX0yCrW
-         pEwZa2V7qaFD0ibhUdNJWpBbtEz/OOhE1sMlIWW9n6wkNldmu30g4/4I9i8qiXMPL7ol
-         0WC1wD4ccUPWoR+gH7ajO858QYI3z3mrkABjvVMxLK2XBlA1AIgBItqGkX/DL5sgmgDc
-         Zup5b+cyZd+gffPqnECBueaBQg4POyIfT7VuUyyQUlhDYowgyt42rEFTs0+cE5SFGOVm
-         LCRQ==
-X-Gm-Message-State: AOAM531RatzdrpHCwg23PKICApvs+n2mnHVr3X6plvC0i1r6XqGxKz8x
-        FWZtNmbxKCv325RTQdYLmeNTzM9btKRKI5NgWq8=
-X-Google-Smtp-Source: ABdhPJzFgactEuWl5qZafUmm5ynYzUFp21GHhNlV06lVCPK9bXBCIS5NB3nCJYmQbe6HRCPbi6K5IPfdm/womrknF0I=
-X-Received: by 2002:a1c:5413:: with SMTP id i19mr8616884wmb.12.1624420122997;
- Tue, 22 Jun 2021 20:48:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1624384990.git.lucien.xin@gmail.com> <cfaa01992d064520b3a9138983e8ec41@AcuMS.aculab.com>
- <CADvbK_e7D4s81vS0rq=P4mQe47dshJgQzaWnrUyCi-Cis4xyhQ@mail.gmail.com>
-In-Reply-To: <CADvbK_e7D4s81vS0rq=P4mQe47dshJgQzaWnrUyCi-Cis4xyhQ@mail.gmail.com>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Tue, 22 Jun 2021 23:48:33 -0400
-Message-ID: <CADvbK_eeJVoWps8UrygEfNdXL76Q2XMoNOoELWHFqOTq2634cA@mail.gmail.com>
-Subject: Re: [PATCHv2 net-next 00/14] sctp: implement RFC8899: Packetization
- Layer Path MTU Discovery for SCTP transport
-To:     David Laight <David.Laight@aculab.com>
-Cc:     network dev <netdev@vger.kernel.org>,
+        id S230234AbhFWJwq (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 23 Jun 2021 05:52:46 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:31613 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230083AbhFWJwq (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Wed, 23 Jun 2021 05:52:46 -0400
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-131-n5qeiCwrNTKvyMAR3gHqsw-1; Wed, 23 Jun 2021 10:50:26 +0100
+X-MC-Unique: n5qeiCwrNTKvyMAR3gHqsw-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 23 Jun
+ 2021 10:50:25 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.018; Wed, 23 Jun 2021 10:50:25 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Xin Long' <lucien.xin@gmail.com>
+CC:     network dev <netdev@vger.kernel.org>,
         "davem@davemloft.net" <davem@davemloft.net>,
         "kuba@kernel.org" <kuba@kernel.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "Marcelo Ricardo Leitner" <marcelo.leitner@gmail.com>,
         "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: RE: [PATCHv2 net-next 00/14] sctp: implement RFC8899: Packetization
+ Layer Path MTU Discovery for SCTP transport
+Thread-Topic: [PATCHv2 net-next 00/14] sctp: implement RFC8899: Packetization
+ Layer Path MTU Discovery for SCTP transport
+Thread-Index: AQHXZ5Gk1m/0BhrSYEC4nBP7A0Tb5KsglL6QgABhdaSAAFqyIA==
+Date:   Wed, 23 Jun 2021 09:50:25 +0000
+Message-ID: <8328f935ec4f488e8d95486a7564aec0@AcuMS.aculab.com>
+References: <cover.1624384990.git.lucien.xin@gmail.com>
+ <cfaa01992d064520b3a9138983e8ec41@AcuMS.aculab.com>
+ <CADvbK_e7D4s81vS0rq=P4mQe47dshJgQzaWnrUyCi-Cis4xyhQ@mail.gmail.com>
+ <CADvbK_eeJVoWps8UrygEfNdXL76Q2XMoNOoELWHFqOTq2634cA@mail.gmail.com>
+In-Reply-To: <CADvbK_eeJVoWps8UrygEfNdXL76Q2XMoNOoELWHFqOTq2634cA@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Jun 22, 2021 at 9:09 PM Xin Long <lucien.xin@gmail.com> wrote:
->
-> On Tue, Jun 22, 2021 at 6:13 PM David Laight <David.Laight@aculab.com> wrote:
-> >
-> > From: Xin Long
-> > > Sent: 22 June 2021 19:05
-> > >
-> > > Overview(From RFC8899):
-> > >
-> > >   In contrast to PMTUD, Packetization Layer Path MTU Discovery
-> > >   (PLPMTUD) [RFC4821] introduces a method that does not rely upon
-> > >   reception and validation of PTB messages.  It is therefore more
-> > >   robust than Classical PMTUD.  This has become the recommended
-> > >   approach for implementing discovery of the PMTU [BCP145].
-> > >
-> > >   It uses a general strategy in which the PL sends probe packets to
-> > >   search for the largest size of unfragmented datagram that can be sent
-> > >   over a network path.  Probe packets are sent to explore using a
-> > >   larger packet size.  If a probe packet is successfully delivered (as
-> > >   determined by the PL), then the PLPMTU is raised to the size of the
-> > >   successful probe.  If a black hole is detected (e.g., where packets
-> > >   of size PLPMTU are consistently not received), the method reduces the
-> > >   PLPMTU.
-> >
-> > This seems to take a long time (probably well over a minute)
-> > to determine the mtu.
-> I just noticed this is a misread of RFC8899, and the next probe packet
-> should be sent immediately once the ACK of the last probe is received,
-> instead of waiting the timeout, which should be for the missing probe.
->
-> I will fix this with:
->
-> diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
-> index d29b579da904..f3aca1acf93a 100644
-> --- a/net/sctp/sm_statefuns.c
-> +++ b/net/sctp/sm_statefuns.c
-> @@ -1275,6 +1275,8 @@ enum sctp_disposition
-> sctp_sf_backbeat_8_3(struct net *net,
->                         return SCTP_DISPOSITION_DISCARD;
->
->                 sctp_transport_pl_recv(link);
-> +               sctp_add_cmd_sf(commands, SCTP_CMD_PROBE_TIMER_UPDATE,
-> +                               SCTP_TRANSPORT(link));
->                 return SCTP_DISPOSITION_CONSUME;
->         }
->
-> diff --git a/net/sctp/transport.c b/net/sctp/transport.c
-> index f27b856ea8ce..88815b98d9d0 100644
-> --- a/net/sctp/transport.c
-> +++ b/net/sctp/transport.c
-> @@ -215,6 +215,11 @@ void sctp_transport_reset_probe_timer(struct
-> sctp_transport *transport)
->  {
->         int scale = 1;
->
-> +       if (transport->pl.probe_count == 0) {
-> +               if (!mod_timer(&transport->probe_timer, jiffies +
-> transport->rto))
-> +                       sctp_transport_hold(transport);
-> +               return;
-> +       }
->         if (timer_pending(&transport->probe_timer))
->                 return;
->         if (transport->pl.state == SCTP_PL_COMPLETE &&
->
-> Thanks for the comment.
-A more efficient improvement:
+RnJvbTogWGluIExvbmcNCj4gU2VudDogMjMgSnVuZSAyMDIxIDA0OjQ5DQouLi4NCj4gWzEwM10g
+cGxfc2VuZDogUExQTVRVRDogc3RhdGU6IDEsIHNpemU6IDEyMDAsIGhpZ2g6IDAgPC0tW2FdDQo+
+IFsxMDNdIHBsX3JlY3Y6IFBMUE1UVUQ6IHN0YXRlOiAxLCBzaXplOiAxMjAwLCBoaWdoOiAwDQou
+Li4NCj4gWzEwM10gcGxfc2VuZDogUExQTVRVRDogc3RhdGU6IDIsIHNpemU6IDE0NTYsIGhpZ2g6
+IDANCj4gWzEwM10gcGxfcmVjdjogUExQTVRVRDogc3RhdGU6IDIsIHNpemU6IDE0NTYsIGhpZ2g6
+IDAgIDwtLVtiXQ0KPiBbMTAzXSBwbF9zZW5kOiBQTFBNVFVEOiBzdGF0ZTogMiwgc2l6ZTogMTQ4
+OCwgaGlnaDogMA0KPiBbMTA4XSBwbF9zZW5kOiBQTFBNVFVEOiBzdGF0ZTogMiwgc2l6ZTogMTQ4
+OCwgaGlnaDogMA0KPiBbMTEzXSBwbF9zZW5kOiBQTFBNVFVEOiBzdGF0ZTogMiwgc2l6ZTogMTQ4
+OCwgaGlnaDogMA0KPiBbMTE4XSBwbF9zZW5kOiBQTFBNVFVEOiBzdGF0ZTogMiwgc2l6ZTogMTQ4
+OCwgaGlnaDogMA0KPiBbMTE4XSBwbF9yZWN2OiBQTFBNVFVEOiBzdGF0ZTogMiwgc2l6ZTogMTQ1
+NiwgaGlnaDogMTQ4OCA8LS0tW2NdDQo+IFsxMThdIHBsX3NlbmQ6IFBMUE1UVUQ6IHN0YXRlOiAy
+LCBzaXplOiAxNDYwLCBoaWdoOiAxNDg4DQo+IFsxMThdIHBsX3JlY3Y6IFBMUE1UVUQ6IHN0YXRl
+OiAyLCBzaXplOiAxNDYwLCBoaWdoOiAxNDg4IDwtLS0gW2RdDQo+IFsxMThdIHBsX3NlbmQ6IFBM
+UE1UVUQ6IHN0YXRlOiAyLCBzaXplOiAxNDY0LCBoaWdoOiAxNDg4DQo+IFsxMjRdIHBsX3NlbmQ6
+IFBMUE1UVUQ6IHN0YXRlOiAyLCBzaXplOiAxNDY0LCBoaWdoOiAxNDg4DQo+IFsxMjldIHBsX3Nl
+bmQ6IFBMUE1UVUQ6IHN0YXRlOiAyLCBzaXplOiAxNDY0LCBoaWdoOiAxNDg4DQo+IFsxMzRdIHBs
+X3NlbmQ6IFBMUE1UVUQ6IHN0YXRlOiAyLCBzaXplOiAxNDY0LCBoaWdoOiAxNDg4DQo+IFsxMzRd
+IHBsX3JlY3Y6IFBMUE1UVUQ6IHN0YXRlOiAyLCBzaXplOiAxNDYwLCBoaWdoOiAxNDY0IDwtLSBh
+cm91bmQNCj4gMzBzICJzZWFyY2ggY29tcGxldGUgZnJvbSAxMjAwIGJ5dGVzIg0KPiBbMjg3XSBw
+bF9zZW5kOiBQTFBNVFVEOiBzdGF0ZTogMywgc2l6ZTogMTQ2MCwgaGlnaDogMA0KPiBbMjg3XSBw
+bF9yZWN2OiBQTFBNVFVEOiBzdGF0ZTogMywgc2l6ZTogMTQ2MCwgaGlnaDogMA0KPiBbMjg3XSBw
+bF9zZW5kOiBQTFBNVFVEOiBzdGF0ZTogMiwgc2l6ZTogMTQ2NCwgaGlnaDogMCA8LS0gW2FhXQ0K
+PiBbMjkyXSBwbF9zZW5kOiBQTFBNVFVEOiBzdGF0ZTogMiwgc2l6ZTogMTQ2NCwgaGlnaDogMA0K
+PiBbMjk4XSBwbF9zZW5kOiBQTFBNVFVEOiBzdGF0ZTogMiwgc2l6ZTogMTQ2NCwgaGlnaDogMA0K
+PiBbMzAzXSBwbF9zZW5kOiBQTFBNVFVEOiBzdGF0ZTogMiwgc2l6ZTogMTQ2NCwgaGlnaDogMA0K
+PiBbMzAzXSBwbF9yZWN2OiBQTFBNVFVEOiBzdGF0ZTogMiwgc2l6ZTogMTQ2MCwgaGlnaDogMTQ2
+NCAgPC0tW2JiXSAgPC0tDQo+IGFyb3VuZCAxNXMgInJlLXNlYXJjaCBjb21wbGV0ZSBmcm9tIGN1
+cnJlbnQgcG10dSINCj4gDQo+IFNvIHNpbmNlIG5vIGludGVydmFsIHRvIHNlbmQgdGhlIG5leHQg
+cHJvYmUgd2hlbiB0aGUgQUNLIGlzIHJlY2VpdmVkDQo+IGZvciB0aGUgbGFzdCBvbmUsDQo+IGl0
+IHdvbid0IHRha2UgbXVjaCB0aW1lIGZyb20gW2FdIHRvIFtiXSwgYW5kIFtjXSB0byBbZF0sDQo+
+IGFuZCB0aGVyZSBhcmUgYXQgbW9zdCAyIGZhaWx1cmVzIHRvIGZpbmQgdGhlIHJpZ2h0IHBtdHUs
+IGVhY2ggZmFpbHVyZQ0KPiB0YWtlcyA1cyAqIDMgPSAxNXMuDQo+IA0KPiB3aGVuIGl0IGdvZXMg
+YmFjayB0byBzZWFyY2ggZnJvbSBzZWFyY2ggY29tcGxldGUgYWZ0ZXIgYSBsb25nIHRpbWVvdXQs
+DQo+IGl0IHdpbGwgdGFrZSBvbmx5IDEgZmFpbHVyZSB0byBnZXQgdGhlIHJpZ2h0IHBtdHUgZnJv
+bSBbYWFdIHRvIFtiYl0uDQoNCldoYXQgbXR1IGlzIGJlaW5nIHVzZWQgZHVyaW5nIHRoZSAnZmFp
+bHVyZXMnID8NCkkgaG9wZSBpdCBpcyB0aGUgbGFzdCB3b3JraW5nIG9uZS4NCg0KQWxzbywgd2hh
+dCBhY3R1YWxseSBoYXBwZW4gaWYgdGhlIG5ldHdvcmsgcm91dGUgY2hhbmdlcyBmcm9tDQpvbmUg
+dGhhdCBzdXBwb3J0cyAxNDYwIGJ5dGVzIHRvIG9uZSB0aGF0IG9ubHkgc3VwcG9ydHMgMTIwMA0K
+YW5kIHdoZXJlIElDTVAgZXJyb3JzIGFyZSBub3QgZ2VuZXJhdGVkPw0KDQpUaGUgZmlyc3QgcHJv
+dG9jb2wgcmV0cnkgaXMgKHByb2JhYmx5KSBhZnRlciAyIHNlY29uZHMuDQpCdXQgaXQgd2lsbCB1
+c2UgdGhlIDE0NjAgYnl0ZSBtdHUgYW5kIGZhaWwgYWdhaW4uDQoNCk5vdHdpdGhzdGFuZGluZyB0
+aGUgc3RhbmRhcmRzLCB3aGF0IHBtdHUgYWN0dWFsbHkgZXhpc3QNCidpbiB0aGUgd2lsZCcgZm9y
+IG5vcm1hbCBuZXR3b3Jrcz8NCkFyZSB0aGVyZSBhY3R1YWxseSBhbnkgb3RoZXJzIGFwYXJ0IGZy
+b20gJ2Z1bGwgc2l6ZWQgZXRoZXJuZXQnDQphbmQgJ1BQUG9FJz8NClNvIHdvdWxkIGl0IGFjdHVh
+bGx5IGJldHRlciB0byBzZW5kIHR3byBwcm9iZXMgb25lIGZvcg0KZWFjaCBvZiB0aG9zZSB0d28g
+c2l6ZXMgYW5kIHNlZSB3aGljaCBvbmVzIHJlc3BvbmQ/DQoNCihJJ20gbm90IHN1cmUgd2UgZXZl
+ciBtYW5hZ2UgdG8gc2VuZCBmdWxsIGxlbmd0aCBwYWNrZXRzLg0KT3VyIGRhdGEgaXMgTTNVQSAo
+bW9zdGx5IFNNUykgYW5kIHNlbnQgd2l0aCBOYWdsZSBkaXNhYmxlZC4NClNvIGV2ZW4gdGhlIGN1
+c3RvbWVycyBzZW5kaW5nIDEwMDBzIG9mIFNNUy9zZWMgYXJlIHVubGlrZWx5DQp0byBmaWxsIHBh
+Y2tldHMuKQ0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFt
+bGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3Ry
+YXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
-diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
-index d29b579da904..d5cb0124bafa 100644
---- a/net/sctp/sm_statefuns.c
-+++ b/net/sctp/sm_statefuns.c
-@@ -1275,7 +1275,13 @@ enum sctp_disposition
-sctp_sf_backbeat_8_3(struct net *net,
-                        return SCTP_DISPOSITION_DISCARD;
-
-                sctp_transport_pl_recv(link);
--               return SCTP_DISPOSITION_CONSUME;
-+
-+               if (link->pl.state == SCTP_PL_COMPLETE) {
-+                       sctp_add_cmd_sf(commands, SCTP_CMD_PROBE_TIMER_UPDATE,
-+                                       SCTP_TRANSPORT(link));
-+                       return SCTP_DISPOSITION_CONSUME;
-+               }
-+               return sctp_sf_send_probe(net, ep, asoc, type, link, commands);
-        }
-
-        max_interval = link->hbinterval + link->rto;
-diff --git a/net/sctp/transport.c b/net/sctp/transport.c
-index f27b856ea8ce..37f65f617f05 100644
---- a/net/sctp/transport.c
-+++ b/net/sctp/transport.c
-@@ -215,10 +215,8 @@ void sctp_transport_reset_probe_timer(struct
-sctp_transport *transport)
- {
-        int scale = 1;
-
--       if (timer_pending(&transport->probe_timer))
--               return;
-        if (transport->pl.state == SCTP_PL_COMPLETE &&
--           transport->pl.probe_count == 1)
-+           transport->pl.probe_count == 0)
-                scale = 30; /* works as PMTU_RAISE_TIMER */
-        if (!mod_timer(&transport->probe_timer,
-                       jiffies + transport->probe_interval * scale))
-
-[103] pl_send: PLPMTUD: state: 1, size: 1200, high: 0 <--[a]
-[103] pl_recv: PLPMTUD: state: 1, size: 1200, high: 0
-[103] pl_send: PLPMTUD: state: 2, size: 1232, high: 0
-[103] pl_recv: PLPMTUD: state: 2, size: 1232, high: 0
-[103] pl_send: PLPMTUD: state: 2, size: 1264, high: 0
-[103] pl_recv: PLPMTUD: state: 2, size: 1264, high: 0
-[103] pl_send: PLPMTUD: state: 2, size: 1296, high: 0
-[103] pl_recv: PLPMTUD: state: 2, size: 1296, high: 0
-[103] pl_send: PLPMTUD: state: 2, size: 1328, high: 0
-[103] pl_recv: PLPMTUD: state: 2, size: 1328, high: 0
-[103] pl_send: PLPMTUD: state: 2, size: 1360, high: 0
-[103] pl_recv: PLPMTUD: state: 2, size: 1360, high: 0
-[103] pl_send: PLPMTUD: state: 2, size: 1392, high: 0
-[103] pl_recv: PLPMTUD: state: 2, size: 1392, high: 0
-[103] pl_send: PLPMTUD: state: 2, size: 1424, high: 0
-[103] pl_recv: PLPMTUD: state: 2, size: 1424, high: 0
-[103] pl_send: PLPMTUD: state: 2, size: 1456, high: 0
-[103] pl_recv: PLPMTUD: state: 2, size: 1456, high: 0  <--[b]
-[103] pl_send: PLPMTUD: state: 2, size: 1488, high: 0
-[108] pl_send: PLPMTUD: state: 2, size: 1488, high: 0
-[113] pl_send: PLPMTUD: state: 2, size: 1488, high: 0
-[118] pl_send: PLPMTUD: state: 2, size: 1488, high: 0
-[118] pl_recv: PLPMTUD: state: 2, size: 1456, high: 1488 <---[c]
-[118] pl_send: PLPMTUD: state: 2, size: 1460, high: 1488
-[118] pl_recv: PLPMTUD: state: 2, size: 1460, high: 1488 <--- [d]
-[118] pl_send: PLPMTUD: state: 2, size: 1464, high: 1488
-[124] pl_send: PLPMTUD: state: 2, size: 1464, high: 1488
-[129] pl_send: PLPMTUD: state: 2, size: 1464, high: 1488
-[134] pl_send: PLPMTUD: state: 2, size: 1464, high: 1488
-[134] pl_recv: PLPMTUD: state: 2, size: 1460, high: 1464 <-- around
-30s "search complete from 1200 bytes"
-[287] pl_send: PLPMTUD: state: 3, size: 1460, high: 0
-[287] pl_recv: PLPMTUD: state: 3, size: 1460, high: 0
-[287] pl_send: PLPMTUD: state: 2, size: 1464, high: 0 <-- [aa]
-[292] pl_send: PLPMTUD: state: 2, size: 1464, high: 0
-[298] pl_send: PLPMTUD: state: 2, size: 1464, high: 0
-[303] pl_send: PLPMTUD: state: 2, size: 1464, high: 0
-[303] pl_recv: PLPMTUD: state: 2, size: 1460, high: 1464  <--[bb]  <--
-around 15s "re-search complete from current pmtu"
-
-So since no interval to send the next probe when the ACK is received
-for the last one,
-it won't take much time from [a] to [b], and [c] to [d],
-and there are at most 2 failures to find the right pmtu, each failure
-takes 5s * 3 = 15s.
-
-when it goes back to search from search complete after a long timeout,
-it will take only 1 failure to get the right pmtu from [aa] to [bb].
-
- Thanks.
-> >
-> > What is used for the actual mtu while this is in progress?
-> >
-> > Does packet loss and packet retransmission cause the mtu
-> > to be reduced as well?
-> No, the data packet is not a probe in this implementation.
->
-> >
-> > I can imagine that there is an expectation (from the application)
-> > that the mtu is that of an ethernet link - perhaps less a PPPoE
-> > header.
-> > Starting with an mtu of 1200 will break this assumption and may
-> > have odd side effects.
-> Starting searching from mtu of 1200, but the real pmtu will only be updated
-> when the search is done and optimal mtu is found.
-> So at the beginning, it will still use the dst mtu as before.
->
-> > For TCP/UDP the ICMP segmentation required error is immediate
-> > and gets used for the retransmissions.
-> > This code seems to be looking at separate timeouts - so a lot of
-> > packets could get discarded and application timers expire before
-> > if determines the correct mtu.
-> This patch will also process ICMP error msg, and gets the 'mtu' size from it
-> but before using it, it will verify(probe) it first:
->
-> see Patch: sctp: do state transition when receiving an icmp TOOBIG packet
->
-> >
-> > Maybe I missed something about this only being done on inactive
-> > paths?
-> >
-> >         David
-> >
-> > -
-> > Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> > Registration No: 1397386 (Wales)
-> >
