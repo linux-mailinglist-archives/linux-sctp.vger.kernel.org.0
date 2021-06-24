@@ -2,59 +2,82 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A08A3B229F
-	for <lists+linux-sctp@lfdr.de>; Wed, 23 Jun 2021 23:41:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14AFE3B32CB
+	for <lists+linux-sctp@lfdr.de>; Thu, 24 Jun 2021 17:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbhFWVnw (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 23 Jun 2021 17:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
+        id S231294AbhFXPuc (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 24 Jun 2021 11:50:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbhFWVnw (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 23 Jun 2021 17:43:52 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5113FC061574
-        for <linux-sctp@vger.kernel.org>; Wed, 23 Jun 2021 14:41:33 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id w21so9006714qkb.9
-        for <linux-sctp@vger.kernel.org>; Wed, 23 Jun 2021 14:41:33 -0700 (PDT)
+        with ESMTP id S230087AbhFXPub (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 24 Jun 2021 11:50:31 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF8BC061574;
+        Thu, 24 Jun 2021 08:48:12 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id g3so844106qth.11;
+        Thu, 24 Jun 2021 08:48:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=anaKSubn4DfLRXNJtFqBmT4L0H4D4V+mURywe8kVq4o=;
-        b=U6n13gUaPU9Tl/1jzmhuBsmWLrXV62Zq4ST1mjyWhLfBzqiCfweB+j2wjEKY0DmQYy
-         lvu7a+64WVOBITWgS4c9KbTnHbOop2ZqxGOk6lc/x0suR/JxanZUi4R9CWOWRP/mvvgZ
-         k0ipDv/EcBXO2rtF3sx9zJqaUrfzgg4iE7Am6nR5PG58xn8wdzk/Uj22CnnSDM71Wm4G
-         Eo1y0NjqOGpVkHI4XstW6X8POu8zgG36WmemfFjQHQwhaoyyG6qK8plu/zFga8re9hU6
-         oSCOuC+WS/FnTWzi0CsJlpkkQewi6aMOmUk53/hym2HqjzenSDSD26++2sNwmw6in147
-         EZ/w==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R9+VKDibn9NfhjcFoZUD6oHbzR2Zf0N89Z4DFIz0UUg=;
+        b=fIJ0mc+eTzRNPGGu229pL+J+opk4FDs2FGKSw4Qalj9EgtxIqUp19j1Cyg/jUOF7DJ
+         Zxg9+whnldRC3c0EN1J61TT8uHSwZr07LqAggg2lj66fDsynb+sVxF46CScs2dxjMDHM
+         t/Hg2xreyJAnkpTZjQbT1A6REclcIlp/HmNznDkbbVkF6aENyJCXMRMJy8NlmGgNQ1rQ
+         eC/6Zoobe4afU++BArLenJkcKrE0ipan4dcrZA1OC4O26rNCDb1Loyv+7zlfWuOojZHJ
+         PV2UW4vVTJERA3uHc2VIVSvPzHzOnXeHQt10X3PIhodHEUl4x8G5AHfu4ly0KD1CJyuC
+         w6zQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=anaKSubn4DfLRXNJtFqBmT4L0H4D4V+mURywe8kVq4o=;
-        b=G2bB7O63Dsx64OzyAnlbb99m1yxvr2FSM3m1TkeUf/mQabo39huhVJhPbc0AR52U6k
-         SvKyNqKGyomkc7cGCHfRu4oBTD2PmsmQSrMG4hCKdfHqvdRgIOojhdmfVcfUKFq4wY4S
-         y7ZNuW/dy+rzi3SS9F13HZHHR3Ojh0J89n1A3ZKY5O4AsoWA9p9TyEJnYP7qH1HaR5vE
-         ogMPTZD6lPeia/2qRw1GNXeDaTYDJ/Z9/uCsQf5dxfr+2cPyKXbaQR7k2Qgig7fKNXZQ
-         C6jgsrn1fXfMfNrjmJ2oX3o4OQKdWmYaQ+EN8zDc75LW9Roo+QwVkfrwpIiprEdOYQss
-         hZVA==
-X-Gm-Message-State: AOAM532W9NxDfzPCbopULoh/KL7DKtwGaCK8GDynIaYJPubDlO/FX3Oj
-        W6R18SMTeAzDuoln2xGgpvujS3zjeKbmOjJlTSE=
-X-Google-Smtp-Source: ABdhPJwCBhlg7bGGutiQ02Hq6wfaVbAPbmxNYmzQXkxH37PRzaEQKr9SZnyKGvBnqHz96qqvg+zCU4Qe7lzvleDD5IM=
-X-Received: by 2002:a37:4048:: with SMTP id n69mr2193812qka.416.1624484492598;
- Wed, 23 Jun 2021 14:41:32 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R9+VKDibn9NfhjcFoZUD6oHbzR2Zf0N89Z4DFIz0UUg=;
+        b=bexn/aqaVn3IM13vWD+sUKWeevuiTFdpzXVyKRUeMV5vJqWxmHE+/Dcb1VRZa1kLJ5
+         0BXSznOU7EK9EPt6sIf/InTZo7oGFrApb5ZCnFOyxNV3dE0qC9MVDys97zarK/j2NTOh
+         raZ2vecC9K8hT3rapn6AGCdjCpUYbRin198LLOFmD+4Kj5e7fcGqaINll9U+mqfYoKg2
+         dSrl0gIL8180FCM02ARZN51EY9Yl3WtG9hSrbSB7l3UAIqxRHnQq7XAsN4UGH+71hsjQ
+         6bEYMucW4n8FCtmHOn1ihjsDYwexMkEa8eO/kc1GYONp7gkoKYqcfBOdP3GKk1KH9H1+
+         J1bQ==
+X-Gm-Message-State: AOAM5315VPjsbeGJJQ23SWKATnckggJJBK18csRavF6QaLrDXF2rZP6V
+        O0MkSdLEMKxrPL9kctpDmLZA59jeM4PK3Q==
+X-Google-Smtp-Source: ABdhPJynEPsSyGIDYR6VePtr7oOuMh8S8I2BbGFtI/FE9cnDMEZ4qaLB0Ynv8aBuwn/ND41LEJFB7w==
+X-Received: by 2002:ac8:5784:: with SMTP id v4mr999712qta.29.1624549691430;
+        Thu, 24 Jun 2021 08:48:11 -0700 (PDT)
+Received: from localhost (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id g19sm2181011qtg.36.2021.06.24.08.48.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Jun 2021 08:48:11 -0700 (PDT)
+From:   Xin Long <lucien.xin@gmail.com>
+To:     network dev <netdev@vger.kernel.org>, davem@davemloft.net,
+        kuba@kernel.org,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        linux-sctp@vger.kernel.org
+Cc:     David Laight <david.laight@aculab.com>
+Subject: [PATCH net-next 0/2] sctp: make the PLPMTUD probe more effective and efficient
+Date:   Thu, 24 Jun 2021 11:48:07 -0400
+Message-Id: <cover.1624549642.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Received: by 2002:a0c:ef88:0:0:0:0:0 with HTTP; Wed, 23 Jun 2021 14:41:32
- -0700 (PDT)
-Reply-To: grgrronica@gmail.com
-From:   Ronica Gregory <ronica.gregory7@gmail.com>
-Date:   Wed, 23 Jun 2021 14:41:32 -0700
-Message-ID: <CAGgm+1iEQSnqUGt7E0GD+-mUUMPyCsFTFpuLFP=0R=hsOynqnw@mail.gmail.com>
-Subject: You did not respond.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Good Day,
-Did you get the message i sent to you?
+As David Laight noticed, it currently takes quite some time to find
+the optimal pmtu in the Search state, and also lacks the black hole
+detection in the Search Complete state. This patchset is to address
+them to mke the PLPMTUD probe more effective and efficient.
+
+Xin Long (2):
+  sctp: do black hole detection in search complete state
+  sctp: send the next probe immediately once the last one is acked
+
+ Documentation/networking/ip-sysctl.rst | 12 ++++++++----
+ include/net/sctp/structs.h             |  3 ++-
+ net/sctp/sm_statefuns.c                |  5 ++++-
+ net/sctp/transport.c                   | 11 ++++-------
+ 4 files changed, 18 insertions(+), 13 deletions(-)
+
+-- 
+2.27.0
+
