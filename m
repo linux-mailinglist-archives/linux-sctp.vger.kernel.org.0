@@ -2,73 +2,52 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7F93B8769
-	for <lists+linux-sctp@lfdr.de>; Wed, 30 Jun 2021 19:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E402F3B963B
+	for <lists+linux-sctp@lfdr.de>; Thu,  1 Jul 2021 20:50:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232420AbhF3RKu (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 30 Jun 2021 13:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34190 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbhF3RKu (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 30 Jun 2021 13:10:50 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09CBC061756;
-        Wed, 30 Jun 2021 10:08:20 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id i6so3090035pfq.1;
-        Wed, 30 Jun 2021 10:08:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=1HBV1uKRWTsNwDEannggYTE19vMCI0GvXIoggQerjfo=;
-        b=WIMvIPloDZTpahPeqFmor4vATcCXK8QXaKFWq69VfNPlSP/Bl31QwU3tcYP25tbHaZ
-         ny20NJQwppb3QKU+5u3gFVOGc7iUmAfarFbimqT8pA4EiseS5p1cfy0LO/q1AvCqvhRv
-         VPn7wDWraImETve0JaP23wbu0e1BydSxaf9n2ZxtVg9pyhwM3oYUVm5D0lVjTGKl42pO
-         4U4YZSaU6H7DysP2hIDD2om+dUx4Coz9JCoI3DiSSaguomfWkWC2htDauwFUAsjsEpdo
-         dC+65YKS1PBYjqwiFpSuL/UncZOrh28xS2u7EzGMxmPlIw3bVMN/wVV4vWGHSeQysnOD
-         vHDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=1HBV1uKRWTsNwDEannggYTE19vMCI0GvXIoggQerjfo=;
-        b=eiUJSupC2+YBcFwwTbi3Hfml7verslWw8G0npOt4S3rKfR66sUsiCEpblv5AZjrVZc
-         cLTyYKOvQiCYsgGzYAd5I2cYL1rj3Tsn/j3mVBTdM/cn6SHOt1amebBOjTzcDSlVfQBD
-         uYXHK6AQtzc4IY0/aCg93iQAx8Hlm4CvFNQ1Quzd79ej3OjHjjuu2E51g/VYVF6M/Zat
-         FDc0ju0m3ZxYb0e4KAmwafQqeO3fPjl2UpkT/q5MFVzgq/Q9NWKP60MskEqbU40qI56+
-         YkChYLzq9l0eBeA5khJGUoP2iPZUOkmYZfFnksDBeCNPa6g041nZQu+bCjsGjNRSaH8M
-         J1fw==
-X-Gm-Message-State: AOAM531mncUn+LgQ5tufGfsorNWbRj7lrxuIcBIQu09Qba6T04jnAoJw
-        FZAkKmM+qdOL/IqaObB5BDU=
-X-Google-Smtp-Source: ABdhPJzc8nOKPw7G3gyo5Vpb2zW+zlXjnqq+Hmx2jTQYGUcSzdNeQz3IkoiOBdwEpJNJ+0Usj5AEhQ==
-X-Received: by 2002:a65:6a45:: with SMTP id o5mr35427214pgu.409.1625072900209;
-        Wed, 30 Jun 2021 10:08:20 -0700 (PDT)
-Received: from horizon.localdomain ([2001:1284:f013:9971:da8:e275:5330:286f])
-        by smtp.gmail.com with ESMTPSA id q12sm17981065pfj.220.2021.06.30.10.08.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Jun 2021 10:08:19 -0700 (PDT)
-Received: by horizon.localdomain (Postfix, from userid 1000)
-        id BAD9FC6362; Wed, 30 Jun 2021 14:08:17 -0300 (-03)
-Date:   Wed, 30 Jun 2021 14:08:17 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     network dev <netdev@vger.kernel.org>, davem@davemloft.net,
-        kuba@kernel.org, linux-sctp@vger.kernel.org
-Subject: Re: [PATCH net-next] sctp: move 198 addresses from unusable to
- private scope
-Message-ID: <YNylAVJ+OHi1e7GV@horizon.localdomain>
-References: <c3f8dfcf952ebfd1ebe0108fc13aacedbad38e99.1625024048.git.lucien.xin@gmail.com>
+        id S233282AbhGASwf (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 1 Jul 2021 14:52:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41374 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229934AbhGASwe (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Thu, 1 Jul 2021 14:52:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 8ABBB613E3;
+        Thu,  1 Jul 2021 18:50:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625165403;
+        bh=At1X6mpgL3PhaY6hnkM51uv1XUInLuobJVxyYFNNI4M=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=qcmnWrg7G26Y6DPuLyUOC84chVLQrdQHhZyOjx2rjmj7DIEK5gflaFTRa5OyD54Mg
+         wlujLaRBIIPUrQBNMPseX7qcwX5p93edQQ4JFyME950zg87x42T4yj7/JvLkUB6A57
+         sMX/op0QmkMWprriQVZoPmnXtbGwttedViIwVxLgdC6Jl/7sxl1v1Qx+fBU9XVmGYD
+         I7nRNz0Fbtua1inDfHQdHWo9ADJP1KlKw+/GmEoVGMHTo9/68x021UB/t68VSlL2Yl
+         D+sR7NyqOz5SE32sYYXpTuElyMRynInu49gdNosPC7ca3B3JNpeIho271MYWp6YQ76
+         /YooHcwpWNztA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 7F63B60A37;
+        Thu,  1 Jul 2021 18:50:03 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] sctp: move 198 addresses from unusable to private
+ scope
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <162516540351.27350.7035524549259593559.git-patchwork-notify@kernel.org>
+Date:   Thu, 01 Jul 2021 18:50:03 +0000
+References: <c3f8dfcf952ebfd1ebe0108fc13aacedbad38e99.1625024048.git.lucien.xin@gmail.com>
 In-Reply-To: <c3f8dfcf952ebfd1ebe0108fc13aacedbad38e99.1625024048.git.lucien.xin@gmail.com>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        marcelo.leitner@gmail.com, linux-sctp@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Jun 29, 2021 at 11:34:08PM -0400, Xin Long wrote:
+Hello:
+
+This patch was applied to netdev/net.git (refs/heads/master):
+
+On Tue, 29 Jun 2021 23:34:08 -0400 you wrote:
 > The doc draft-stewart-tsvwg-sctp-ipv4-00 that restricts 198 addresses
 > was never published. These addresses as private addresses should be
 > allowed to use in SCTP.
@@ -76,7 +55,15 @@ On Tue, Jun 29, 2021 at 11:34:08PM -0400, Xin Long wrote:
 > As Michael Tuexen suggested, this patch is to move 198 addresses from
 > unusable to private scope.
 > 
-> Reported-by: Sérgio <surkamp@gmail.com>
-> Signed-off-by: Xin Long <lucien.xin@gmail.com>
+> [...]
 
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Here is the summary with links:
+  - [net-next] sctp: move 198 addresses from unusable to private scope
+    https://git.kernel.org/netdev/net/c/1d11fa231cab
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
