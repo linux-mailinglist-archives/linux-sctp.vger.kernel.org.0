@@ -2,66 +2,64 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C08EA3B963C
-	for <lists+linux-sctp@lfdr.de>; Thu,  1 Jul 2021 20:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3601A3BB6FD
+	for <lists+linux-sctp@lfdr.de>; Mon,  5 Jul 2021 07:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233477AbhGASwf (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 1 Jul 2021 14:52:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41384 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233223AbhGASwe (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 1 Jul 2021 14:52:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 9C69A6140E;
-        Thu,  1 Jul 2021 18:50:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625165403;
-        bh=2K1RTMskIWz2OTCFctvPmby4zDSYIe7g1D7jUZKqi+w=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=iYmcO5yoIieBEPzksXVp+OnXd5xqWfbMoKoTM/uU5tqoeJPL0t/3neDxhpLcm4rse
-         XCTeONyNbL58X9gshUQliqmF0kV17AK8PGoBtcP5+xxoopMYDdPLV5mmRtTwGq6gTP
-         rQd+wJ/CDJdoWKeJQyBzL5EJQiLiMQEUvpW26KPsRUK+2CjbJ/8lWRQYmCsbUl1Mtp
-         UySeDNDNvYzu26eTgJ/QMKPlj2xM6xZWgPswQ6widtc2yrtE+3CUYRTQpYC/jRA/V7
-         CieDXXsU03IENZsxNPSAbRsxYVRd8/SV1vedMIlUr51j8gz1U4UaMqFfn/+lybVUR+
-         /KjjFXoe5ITRw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 8968260A71;
-        Thu,  1 Jul 2021 18:50:03 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S229744AbhGEFwa (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 5 Jul 2021 01:52:30 -0400
+Received: from static-190-25-223-138.static.etb.net.co ([190.25.223.138]:51216
+        "EHLO correo.hdv.gov.co" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229734AbhGEFw3 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 5 Jul 2021 01:52:29 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by correo.hdv.gov.co (Postfix) with ESMTP id 7F898187CF81;
+        Sat,  3 Jul 2021 08:55:22 -0500 (-05)
+Received: from correo.hdv.gov.co ([127.0.0.1])
+        by localhost (correo.hdv.gov.co [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id CjrXHMh0EErv; Sat,  3 Jul 2021 08:55:22 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by correo.hdv.gov.co (Postfix) with ESMTP id 095731875161;
+        Sat,  3 Jul 2021 06:36:35 -0500 (-05)
+DKIM-Filter: OpenDKIM Filter v2.10.3 correo.hdv.gov.co 095731875161
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hdv.gov.co;
+        s=11DF984A-9D1F-11E6-B193-F2669FC4C452; t=1625312195;
+        bh=YlrueNvYvQTA/rsidM4wE66HE6f1WhuqcZM/LO2K65o=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=CygrJkEOel6v0Ml8eyARWNcKJMS0t0r8VdB+S1Tl1XtCAFQwEK5/KQiepcuDPvY3f
+         SC8/5yColRMCjyqCKk01Mxl3oxWDbDcnU6rCQ0N91FwgmMab2hRNJxordjF77TJ4Wn
+         qMduBFGvtiFZPIhKgkSATZ8v3jMIkwB+YjyGO4rU=
+X-Virus-Scanned: amavisd-new at correo.hdv.gov.co
+Received: from correo.hdv.gov.co ([127.0.0.1])
+        by localhost (correo.hdv.gov.co [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id goGJPLpnbeyj; Sat,  3 Jul 2021 06:36:34 -0500 (-05)
+Received: from [172.20.10.6] (unknown [41.147.1.129])
+        by correo.hdv.gov.co (Postfix) with ESMTPSA id 78FAB1875BEB;
+        Sat,  3 Jul 2021 06:31:57 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] sctp: check pl.raise_count separately from its
- increment
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162516540355.27350.69226156177934555.git-patchwork-notify@kernel.org>
-Date:   Thu, 01 Jul 2021 18:50:03 +0000
-References: <727028cb5f9354809a397cf83d72e71b4c97ab85.1625023836.git.lucien.xin@gmail.com>
-In-Reply-To: <727028cb5f9354809a397cf83d72e71b4c97ab85.1625023836.git.lucien.xin@gmail.com>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        marcelo.leitner@gmail.com, linux-sctp@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: my subject
+To:     Recipients <planeacion.arquitecto@hdv.gov.co>
+From:   planeacion.arquitecto@hdv.gov.co
+Date:   Sat, 03 Jul 2021 04:31:45 -0700
+Reply-To: callumfoundation001@gmail.com
+Message-Id: <20210703113157.78FAB1875BEB@correo.hdv.gov.co>
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello:
+Hallo,
 
-This patch was applied to netdev/net.git (refs/heads/master):
+ Sie haben eine Spende von 2.800.000,00 USD. Ich gewann die amerikanische L=
+otterie im Wert von 343 Millionen US-Dollar in Amerika und spendete einen T=
+eil davon an f=FCnf gl=FCckliche Menschen und Wohlt=E4tigkeitsorganisatione=
+n, die sich an meinen verstorbenen Enkel erinnern, der Anfang April vorzeit=
+ig geboren wurde und nur einen Tag lebte. F=FCr weitere Informationen wende=
+n Sie sich bitte an: callumfoundation001@gmail.com
 
-On Tue, 29 Jun 2021 23:30:36 -0400 you wrote:
-> As Marcelo's suggestion this will make code more clear to read.
-> 
-> Signed-off-by: Xin Long <lucien.xin@gmail.com>
-> ---
->  net/sctp/transport.c | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
-
-Here is the summary with links:
-  - [net-next] sctp: check pl.raise_count separately from its increment
-    https://git.kernel.org/netdev/net/c/650b2a846ddd
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+ =
 
 
+Mit freundlichen Gr=FC=DFen
+Frau Lerynne West
