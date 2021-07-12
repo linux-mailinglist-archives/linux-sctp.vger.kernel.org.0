@@ -2,209 +2,69 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6A0B3C5CA6
-	for <lists+linux-sctp@lfdr.de>; Mon, 12 Jul 2021 14:54:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F33083C6027
+	for <lists+linux-sctp@lfdr.de>; Mon, 12 Jul 2021 18:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231586AbhGLM4V (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 12 Jul 2021 08:56:21 -0400
-Received: from out0.migadu.com ([94.23.1.103]:20253 "EHLO out0.migadu.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231205AbhGLM4V (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Mon, 12 Jul 2021 08:56:21 -0400
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1626094409;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=nLeorn7JAX1a2d/hq7DI3yYWcR2plTGaxbLKNq9l55M=;
-        b=W7corV9zVpilvj/nQG0SESgZO3fyTjFe1Ob5uoNvC+WH/f9RP6k1dKiGaiJDNAQb2BIMr+
-        j1maKRLZOvrqQYEOUd7SYNueYLRtciS9LAfQc6WBcUq2PQfBfnaAF6HuvoPX7m7U8AAd4H
-        RKforoo6ouQvMKOBE6sa7n38iimfQtI=
-From:   Yajun Deng <yajun.deng@linux.dev>
-To:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        kuba@kernel.org, mathew.j.martineau@linux.intel.com,
-        matthieu.baerts@tessares.net, pablo@netfilter.org,
-        kadlec@netfilter.org, fw@strlen.de, vyasevich@gmail.com,
-        nhorman@tuxdriver.com, marcelo.leitner@gmail.com,
-        johannes.berg@intel.com, ast@kernel.org, yhs@fb.com,
-        0x7f454c46@gmail.com, yajun.deng@linux.dev, aahringo@redhat.com,
-        rdunlap@infradead.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mptcp@lists.linux.dev, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, linux-sctp@vger.kernel.org
-Subject: [PATCH] net: Use nlmsg_unicast() instead of netlink_unicast()
-Date:   Mon, 12 Jul 2021 20:53:01 +0800
-Message-Id: <20210712125301.14248-1-yajun.deng@linux.dev>
+        id S231651AbhGLQNq (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 12 Jul 2021 12:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229521AbhGLQNq (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 12 Jul 2021 12:13:46 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE8DC0613E8
+        for <linux-sctp@vger.kernel.org>; Mon, 12 Jul 2021 09:10:56 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id y16so272653iol.12
+        for <linux-sctp@vger.kernel.org>; Mon, 12 Jul 2021 09:10:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=xLoNOxCs1ubsbdkHIy646p19iJgcj2iwbWWJlijREbc=;
+        b=MwCZ6YIwqqLZtq+ZYgmpORdBZWXM/4mzEk7K9gYOyd5jLH6qfpVkeu15YbjDIkglHp
+         L3We0j3aY8/+bv2CvM90qRcOhTMCkRvCGnsFBh/SbHdAvszakf98Z5Sxuwpdl1kBsSS+
+         rI/1OFfGC4O5uIErrEoHJK/tXsMccS+Y6PiWVC8QSACnW1D+fiesuiNCNYq9ph2mrH1h
+         pi0IB/+KkbvrkcTz3uW+wyM550PM8NKzS8DHJsRNk6w7RTDVzoDzo6TSLrlZDylAnD0g
+         vdfprmfoImMzz4F43s/8vtKe82ASxh7F/tzACIFUxNr5KAoo2MXcVpKaJJmc8qI1bO9X
+         vRjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=xLoNOxCs1ubsbdkHIy646p19iJgcj2iwbWWJlijREbc=;
+        b=C/+CzCNB0ET8VuzxjTWixSwrSw6YMbAKr1C9n+fQdK5HNpMpM5n/XGaxkOWqJR4LBj
+         tOVpOnM7pjXuE4Q3yIkPMeeJcaMMXmcJFETmIHWH4OgjRNzL8OFrwgAOeW4bO+uETNCn
+         /HC1DI7uEbOIjbU2G7A9MM8nRHvTrnLbpTEzmvnvzrqGBc6DgW/GXCIvEkTj4gxMfYuq
+         Jwf8Sfe9j4XdO0jupMN4Li1QKpmG62LAvirptXJfJrLicTeezVbWw/3u4d+10hcUCuC/
+         OyxaJPUCye+d79PB6Twavg28ly/xeKJLEmw1D4zW8iOyCgfOHZQ9HkhA6XeiwHhxbcZU
+         zfrQ==
+X-Gm-Message-State: AOAM530xAcPcFVF4z37Dy5T9zyQeKqs4CPskg1raltTyvqTL+cO4hvWp
+        zWSnqtS10JYVD1mVRKPqrFfs87CCYWZacWj+NkE=
+X-Google-Smtp-Source: ABdhPJz5GXiYg7aus0RJAoDIooceeeuyRhnW+h13MDS3BVcY0Hxlkcy5TpXrH3C0f9v6apXkfEPMJH9l4VK4dHcdU1c=
+X-Received: by 2002:a02:8241:: with SMTP id q1mr44740708jag.134.1626106255728;
+ Mon, 12 Jul 2021 09:10:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: yajun.deng@linux.dev
+Received: by 2002:a5d:9c47:0:0:0:0:0 with HTTP; Mon, 12 Jul 2021 09:10:55
+ -0700 (PDT)
+Reply-To: yi.hiuman@hotmail.com
+From:   Yi Hiuman <waynescarletloanfirms@gmail.com>
+Date:   Mon, 12 Jul 2021 17:10:55 +0100
+Message-ID: <CABZyhjp8ywTzA6f2yE7PywkSw_GJuuhuD5mVopKSH1BBKNjvEA@mail.gmail.com>
+Subject: =?UTF-8?Q?Ich_habe_ein_Gesch=C3=A4ft_f=C3=BCr_Sie?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-There has 'if (err >0 )' in nlmsg_unicast(), so use nlmsg_unicast()
-instead of netlink_unicast(), this looks more concise.
+Hallo,
 
-Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
----
- net/ipv4/fib_frontend.c    | 2 +-
- net/ipv4/inet_diag.c       | 5 +----
- net/ipv4/raw_diag.c        | 7 ++-----
- net/ipv4/udp_diag.c        | 6 ++----
- net/mptcp/mptcp_diag.c     | 6 ++----
- net/netfilter/nft_compat.c | 6 ++----
- net/netlink/af_netlink.c   | 2 +-
- net/sctp/diag.c            | 6 ++----
- net/unix/diag.c            | 6 ++----
- 9 files changed, 15 insertions(+), 31 deletions(-)
-
-diff --git a/net/ipv4/fib_frontend.c b/net/ipv4/fib_frontend.c
-index a933bd6345b1..9fe13e4f5d08 100644
---- a/net/ipv4/fib_frontend.c
-+++ b/net/ipv4/fib_frontend.c
-@@ -1376,7 +1376,7 @@ static void nl_fib_input(struct sk_buff *skb)
- 	portid = NETLINK_CB(skb).portid;      /* netlink portid */
- 	NETLINK_CB(skb).portid = 0;        /* from kernel */
- 	NETLINK_CB(skb).dst_group = 0;  /* unicast */
--	netlink_unicast(net->ipv4.fibnl, skb, portid, MSG_DONTWAIT);
-+	nlmsg_unicast(net->ipv4.fibnl, skb, portid);
- }
- 
- static int __net_init nl_fib_lookup_init(struct net *net)
-diff --git a/net/ipv4/inet_diag.c b/net/ipv4/inet_diag.c
-index e65f4ef024a4..ef7897226f08 100644
---- a/net/ipv4/inet_diag.c
-+++ b/net/ipv4/inet_diag.c
-@@ -580,10 +580,7 @@ int inet_diag_dump_one_icsk(struct inet_hashinfo *hashinfo,
- 		nlmsg_free(rep);
- 		goto out;
- 	}
--	err = netlink_unicast(net->diag_nlsk, rep, NETLINK_CB(in_skb).portid,
--			      MSG_DONTWAIT);
--	if (err > 0)
--		err = 0;
-+	err = nlmsg_unicast(net->diag_nlsk, rep, NETLINK_CB(in_skb).portid);
- 
- out:
- 	if (sk)
-diff --git a/net/ipv4/raw_diag.c b/net/ipv4/raw_diag.c
-index 1b5b8af27aaf..ccacbde30a2c 100644
---- a/net/ipv4/raw_diag.c
-+++ b/net/ipv4/raw_diag.c
-@@ -119,11 +119,8 @@ static int raw_diag_dump_one(struct netlink_callback *cb,
- 		return err;
- 	}
- 
--	err = netlink_unicast(net->diag_nlsk, rep,
--			      NETLINK_CB(in_skb).portid,
--			      MSG_DONTWAIT);
--	if (err > 0)
--		err = 0;
-+	err = nlmsg_unicast(net->diag_nlsk, rep, NETLINK_CB(in_skb).portid);
-+
- 	return err;
- }
- 
-diff --git a/net/ipv4/udp_diag.c b/net/ipv4/udp_diag.c
-index b2cee9a307d4..1ed8c4d78e5c 100644
---- a/net/ipv4/udp_diag.c
-+++ b/net/ipv4/udp_diag.c
-@@ -77,10 +77,8 @@ static int udp_dump_one(struct udp_table *tbl,
- 		kfree_skb(rep);
- 		goto out;
- 	}
--	err = netlink_unicast(net->diag_nlsk, rep, NETLINK_CB(in_skb).portid,
--			      MSG_DONTWAIT);
--	if (err > 0)
--		err = 0;
-+	err = nlmsg_unicast(net->diag_nlsk, rep, NETLINK_CB(in_skb).portid);
-+
- out:
- 	if (sk)
- 		sock_put(sk);
-diff --git a/net/mptcp/mptcp_diag.c b/net/mptcp/mptcp_diag.c
-index 8f88ddeab6a2..f48eb6315bbb 100644
---- a/net/mptcp/mptcp_diag.c
-+++ b/net/mptcp/mptcp_diag.c
-@@ -57,10 +57,8 @@ static int mptcp_diag_dump_one(struct netlink_callback *cb,
- 		kfree_skb(rep);
- 		goto out;
- 	}
--	err = netlink_unicast(net->diag_nlsk, rep, NETLINK_CB(in_skb).portid,
--			      MSG_DONTWAIT);
--	if (err > 0)
--		err = 0;
-+	err = nlmsg_unicast(net->diag_nlsk, rep, NETLINK_CB(in_skb).portid);
-+
- out:
- 	sock_put(sk);
- 
-diff --git a/net/netfilter/nft_compat.c b/net/netfilter/nft_compat.c
-index 639c337c885b..aa3397eec330 100644
---- a/net/netfilter/nft_compat.c
-+++ b/net/netfilter/nft_compat.c
-@@ -683,10 +683,8 @@ static int nfnl_compat_get_rcu(struct sk_buff *skb,
- 		goto out_put;
- 	}
- 
--	ret = netlink_unicast(info->sk, skb2, NETLINK_CB(skb).portid,
--			      MSG_DONTWAIT);
--	if (ret > 0)
--		ret = 0;
-+	ret = nlmsg_unicast(info->sk, skb2, NETLINK_CB(skb).portid);
-+
- out_put:
- 	rcu_read_lock();
- 	module_put(THIS_MODULE);
-diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-index d233ac4a91b6..380f95aacdec 100644
---- a/net/netlink/af_netlink.c
-+++ b/net/netlink/af_netlink.c
-@@ -2471,7 +2471,7 @@ void netlink_ack(struct sk_buff *in_skb, struct nlmsghdr *nlh, int err,
- 
- 	nlmsg_end(skb, rep);
- 
--	netlink_unicast(in_skb->sk, skb, NETLINK_CB(in_skb).portid, MSG_DONTWAIT);
-+	nlmsg_unicast(in_skb->sk, skb, NETLINK_CB(in_skb).portid);
- }
- EXPORT_SYMBOL(netlink_ack);
- 
-diff --git a/net/sctp/diag.c b/net/sctp/diag.c
-index 493fc01e5d2b..760b367644c1 100644
---- a/net/sctp/diag.c
-+++ b/net/sctp/diag.c
-@@ -284,10 +284,8 @@ static int sctp_tsp_dump_one(struct sctp_transport *tsp, void *p)
- 		goto out;
- 	}
- 
--	err = netlink_unicast(net->diag_nlsk, rep, NETLINK_CB(in_skb).portid,
--			      MSG_DONTWAIT);
--	if (err > 0)
--		err = 0;
-+	err = nlmsg_unicast(net->diag_nlsk, rep, NETLINK_CB(in_skb).portid);
-+
- out:
- 	return err;
- }
-diff --git a/net/unix/diag.c b/net/unix/diag.c
-index 9ff64f9df1f3..7e7d7f45685a 100644
---- a/net/unix/diag.c
-+++ b/net/unix/diag.c
-@@ -295,10 +295,8 @@ static int unix_diag_get_exact(struct sk_buff *in_skb,
- 
- 		goto again;
- 	}
--	err = netlink_unicast(net->diag_nlsk, rep, NETLINK_CB(in_skb).portid,
--			      MSG_DONTWAIT);
--	if (err > 0)
--		err = 0;
-+	err = nlmsg_unicast(net->diag_nlsk, rep, NETLINK_CB(in_skb).portid);
-+
- out:
- 	if (sk)
- 		sock_put(sk);
--- 
-2.32.0
-
+Ich bin Herr Yi Huiman, ehemaliger Vorsitzender der Industrial and
+Commercial Bank of China (ICBC) und derzeitiger China Securities
+Regulatory Commission (CSRC). Ich habe einen Gesch=C3=A4ftsvorschlag, der
+uns beiden zugute kommt. Ich suche einen seri=C3=B6sen Partner, um eine
+Transaktion im Wert von 45.275.000,00 USD anzuvertrauen. Kann ich mich
+auf dich verlassen? Bitte kontaktieren Sie mich f=C3=BCr weitere
+Informationen =C3=BCber meine pers=C3=B6nliche E-Mail-Adresse:
+yi.hiuman@hotmail.com
