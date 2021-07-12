@@ -2,503 +2,209 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1063C560C
-	for <lists+linux-sctp@lfdr.de>; Mon, 12 Jul 2021 12:57:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A0B3C5CA6
+	for <lists+linux-sctp@lfdr.de>; Mon, 12 Jul 2021 14:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351313AbhGLINr (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 12 Jul 2021 04:13:47 -0400
-Received: from mailms.fh-muenster.de ([212.201.120.190]:42223 "EHLO
-        mailms.fh-muenster.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349123AbhGLIMS (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 12 Jul 2021 04:12:18 -0400
-Received: from mail-director-01.fh-muenster.de (mail-director-01.fh-muenster.de [185.149.215.227])
-        (using TLSv1 with cipher ADH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mailms.fh-muenster.de (Postfix) with ESMTPS id 961FF286ECF;
-        Mon, 12 Jul 2021 10:09:27 +0200 (CEST)
-Received: from fhad-ex04.fhad.fh-muenster.de (fhad-ex04.fhad.fh-muenster.de [10.40.11.27])
-        (using TLSv1.2 with cipher AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail-director-01.fh-muenster.de (Postfix) with ESMTPS id 648CA1A12A2;
-        Mon, 12 Jul 2021 10:09:27 +0200 (CEST)
-Received: from fhad-ex04.fhad.fh-muenster.de (10.40.11.27) by
- fhad-ex04.fhad.fh-muenster.de (10.40.11.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.10; Mon, 12 Jul 2021 10:09:27 +0200
-Received: from fhad-ex04.fhad.fh-muenster.de ([fe80::c97a:37b6:5abe:2799]) by
- fhad-ex04.fhad.fh-muenster.de ([fe80::c97a:37b6:5abe:2799%2]) with mapi id
- 15.01.2242.010; Mon, 12 Jul 2021 10:09:27 +0200
-From:   =?utf-8?B?VGltbyBWw7Zsa2Vy?= <timo.voelker@fh-muenster.de>
-To:     Xin Long <lucien.xin@gmail.com>
-CC:     Marcelo Ricardo Leitner <mleitner@redhat.com>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        "tuexen@freebsd.org" <tuexen@freebsd.org>
-Subject: Re: The new sysctl and socket option added for PLPMTUD (RFC8899)
-Thread-Topic: The new sysctl and socket option added for PLPMTUD (RFC8899)
-Thread-Index: AQHXX9Hn+sqfrC4B4UWbqq7hmdpKMqs1rQOAgAByUICAAVjrAIAAQU+AgAFtjwCAABrIgIAFx2cA
-Date:   Mon, 12 Jul 2021 08:09:27 +0000
-Message-ID: <C4240F4C-D186-40FC-AEB0-C847D55AD1F5@fh-muenster.de>
-References: <CADvbK_de_SNVsTmeCUTOVZoD7A9-sB4cAiqv=0rnvgoGfhErOA@mail.gmail.com>
- <FEF068AA-C660-4A25-ABFE-D559B1136B58@fh-muenster.de>
- <C5076473-6E92-4BC9-A034-A887E0A92814@fh-muenster.de>
- <CADvbK_cmm2rN5gaWt24F+B0+JVKD-fghm_zJRKoj7b-VO=PMUg@mail.gmail.com>
- <D8CA38FB-A0E6-41D6-87AF-08E77038D877@fh-muenster.de>
- <CADvbK_cxx6mnp=ANm+eoUiR0BhGf5K_6FTWCAn+0mjTVW9RyYQ@mail.gmail.com>
- <A3C2113E-302D-4981-B232-0999D8C28607@fh-muenster.de>
- <CADvbK_dwmCJ3zsiJZ0zS62r8wZOmzDMrsSF6kuydT2pETeDExQ@mail.gmail.com>
-In-Reply-To: <CADvbK_dwmCJ3zsiJZ0zS62r8wZOmzDMrsSF6kuydT2pETeDExQ@mail.gmail.com>
-Accept-Language: en-US, de-DE
-Content-Language: en-US
-X-MS-Has-Attach: yes
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.40.10.31]
-Content-Type: multipart/signed;
-        boundary="Apple-Mail=_E6E6BC77-4EBD-428A-998E-A1E1151C18A5";
-        protocol="application/pkcs7-signature"; micalg=sha-256
+        id S231586AbhGLM4V (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 12 Jul 2021 08:56:21 -0400
+Received: from out0.migadu.com ([94.23.1.103]:20253 "EHLO out0.migadu.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231205AbhGLM4V (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Mon, 12 Jul 2021 08:56:21 -0400
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1626094409;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=nLeorn7JAX1a2d/hq7DI3yYWcR2plTGaxbLKNq9l55M=;
+        b=W7corV9zVpilvj/nQG0SESgZO3fyTjFe1Ob5uoNvC+WH/f9RP6k1dKiGaiJDNAQb2BIMr+
+        j1maKRLZOvrqQYEOUd7SYNueYLRtciS9LAfQc6WBcUq2PQfBfnaAF6HuvoPX7m7U8AAd4H
+        RKforoo6ouQvMKOBE6sa7n38iimfQtI=
+From:   Yajun Deng <yajun.deng@linux.dev>
+To:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, mathew.j.martineau@linux.intel.com,
+        matthieu.baerts@tessares.net, pablo@netfilter.org,
+        kadlec@netfilter.org, fw@strlen.de, vyasevich@gmail.com,
+        nhorman@tuxdriver.com, marcelo.leitner@gmail.com,
+        johannes.berg@intel.com, ast@kernel.org, yhs@fb.com,
+        0x7f454c46@gmail.com, yajun.deng@linux.dev, aahringo@redhat.com,
+        rdunlap@infradead.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mptcp@lists.linux.dev, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, linux-sctp@vger.kernel.org
+Subject: [PATCH] net: Use nlmsg_unicast() instead of netlink_unicast()
+Date:   Mon, 12 Jul 2021 20:53:01 +0800
+Message-Id: <20210712125301.14248-1-yajun.deng@linux.dev>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: yajun.deng@linux.dev
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
---Apple-Mail=_E6E6BC77-4EBD-428A-998E-A1E1151C18A5
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain;
-	charset=utf-8
+There has 'if (err >0 )' in nlmsg_unicast(), so use nlmsg_unicast()
+instead of netlink_unicast(), this looks more concise.
 
-> On 8. Jul 2021, at 17:54, Xin Long <lucien.xin@gmail.com> wrote:
->=20
-> On Thu, Jul 8, 2021 at 10:18 AM Timo V=C3=B6lker =
-<timo.voelker@fh-muenster.de> wrote:
->>=20
->>> On 7. Jul 2021, at 18:30, Xin Long <lucien.xin@gmail.com> wrote:
->>>=20
->>> On Wed, Jul 7, 2021 at 8:36 AM Timo V=C3=B6lker =
-<timo.voelker@fh-muenster.de> wrote:
->>>>=20
->>>>> On 6. Jul 2021, at 18:01, Xin Long <lucien.xin@gmail.com> wrote:
->>>>>=20
->>>>> On Tue, Jul 6, 2021 at 5:13 AM Timo V=C3=B6lker =
-<timo.voelker@fh-muenster.de> wrote:
->>>>>>=20
->>>>>>=20
->>>>>> Hi Xin,
->>>>>>=20
->>>>>> I implemented RFC8899 for an SCTP simulation model.
->>>>> great, can I know what that one is?
->>>>=20
->>>> I used the SCTP implementation in INET. INET is a simulation model =
-suite for OMNeT++.
->>> Thanks.
->>>=20
->>>>=20
->>>>>=20
->>>>>>=20
->>>>>> Comments follow inline.
->>>>>>=20
->>>>>>> Begin forwarded message:
->>>>>>>=20
->>>>>>> From: Xin Long <lucien.xin@gmail.com>
->>>>>>> Subject: Re: The new sysctl and socket option added for PLPMTUD =
-(RFC8899)
->>>>>>> Date: 12. June 2021 at 19:32:02 CEST
->>>>>>> To: Michael Tuexen <tuexen@freebsd.org>
->>>>>>> Cc: "linux-sctp @ vger . kernel . org" =
-<linux-sctp@vger.kernel.org>, Marcelo Ricardo Leitner =
-<marcelo.leitner@gmail.com>
->>>>>>>=20
->>>>>>> On Fri, Jun 11, 2021 at 4:42 PM <tuexen@freebsd.org> wrote:
->>>>>>>>=20
->>>>>>>>> On 11. Jun 2021, at 22:20, Xin Long <lucien.xin@gmail.com> =
-wrote:
->>>>>>>>>=20
->>>>>>>>> Hi, Michael,
->>>>>>>>>=20
->>>>>>>>> In the linux implementation of RFC8899, we decided to =
-introduce one
->>>>>>>>> sysctl and one socket option for users to set up the PLPMUTD =
-probe:
->>>>>>>>>=20
->>>>>>>>> 1. sysctl -w net.sctp.plpmtud_probe_interval=3D1
->>>>>>>>>=20
->>>>>>>>> plpmtud_probe_interval - INTEGER
->>>>>>>>>    The interval (in milliseconds) between PLPMTUD probe =
-chunks. These
->>>>>>>>>    chunks are sent at the specified interval with a variable =
-size to
->>>>>>>>>    probe the mtu of a given path between 2 associations. =
-PLPMTUD will
->>>>>>>> I guess you mean "between 2 end points" instead of "between 2 =
-associations".
->>>>>>>>=20
->>>>>>>> I'm not sure what it means:
->>>>>>>>=20
->>>>>>>> I assume, you have candidate 1400, 1420, 1460, 1480, and 1500.
->>>>>>>>=20
->>>>>>>> Assume you sent a probe packet for 1400. Aren't you sending the
->>>>>>>> probe packet for 1420 as soon as you get an ACK for the probe =
-packet
->>>>>>>> of size 1400? Or are you waiting for plpmtud_probe_interval ms?
->>>>>>> It will wait for "plpmtud_probe_interval" ms in searching state, =
-but in
->>>>>>> searching complete it will be "plpmtud_probe_interval * 30" ms.
->>>>>>=20
->>>>>> Does this mean you always wait for plpmtud_probe_interval ms? =
-Even if you receive an ack for a probe packet or a PTB?
->>>>>>=20
->>>>>> In my implementation, I start with the next probe immediately =
-when receiving an ack or PTB.
->>>>> yeah, we should do it immediately to make this more efficient, and =
-I
->>>>> already fixed it in linux for ACK.
->>>>>=20
->>>>> For PTB, I currently only set probe_size as the pmtu from ICMP =
-packet
->>>>> when pmtu > 'current pmtu' && pmtu < probe_size, and wait until =
-next
->>>>> probe_timer. But probably better to send it immediately too, I =
-need to
->>>>> confirm.
->>>>=20
->>>> I think so. At least I don't know what to wait for.
->>> I'm not sure about this, as it says:
->>>=20
->>>  PLPMTU < PL_PTB_SIZE < PROBED_SIZE
->>>  ...
->>>     *  The PL can use the reported PL_PTB_SIZE from the PTB message =
-as
->>>        the next search point when it resumes the search algorithm.
->>>=20
->>> it doesn't seem to mean that.
->>=20
->> The "when it resumes the search algorithm" is a litte abstract, but I =
-don't understand it as the PL has to wait for a timeout before resuming =
-the search algorithm.
->>=20
->>>=20
->>>=20
->>>>=20
->>>>>=20
->>>>>>=20
->>>>>>>=20
->>>>>>> The step we are using is 32, when it fails, we turn the step to =
-4. For example:
->>>>>>> 1400, 1432, 1464, 1496, 1528 (failed), 1500(1496 + 4), =
-1504(failed,
->>>>>>> 1500 is the PMTU).
->>>>>>=20
->>>>>> What does failed mean? Does it mean that you have sent MAX_PROBES =
-(=3D3?) probe packets and waited for each plpmtud_probe_interval ms =
-without receiving a response?
->>>>> yes
->>>>>=20
->>>>>>=20
->>>>>> If so, it might make sense to continue with smaller candidates =
-earlier. For example, after one unanswered probe packet.
->>>>> Sounds a good way to go, and it would save 2 intervals to get the
->>>>> optimal value in the normal case.
->>>>> But if the failure is false (like the link is unstable), it may =
-also
->>>>> take some time to catch up to the bigger candidate.
->>>>=20
->>>> Right, it's a trade off. What is better depends on the probability =
-of a probe packet loss due to another reason than its size.
->>>>=20
->>>> I chose to do something like this, when searching for a PMTU of =
-1472:
->>>>=20
->>>> 1400 ack
->>>> 1432 ack
->>>> 1464 timeout (false negative)
->>>> 1436 ack
->>>> 1440 ack
->>>> 1444 ack
->>>> 1448 ack
->>>> 1452 ack
->>>> 1456 ack
->>>> 1460 ack
->>>> 1464 ack
->>>> 1496 timeout
->>>> 1468 ack
->>>> 1472 ack
->>>> 1476 timeout
->>>> 1476 timeout
->>>> 1476 timeout
->>>> done with PMTU=3D1472
->>> Looks good to me. :-)
->>>=20
->>>>=20
->>>>>=20
->>>>>>=20
->>>>>>>=20
->>>>>>> Sorry, "sysctl -w net.sctp.plpmtud_probe_interval=3D1" won't =
-work.
->>>>>>> As plpmtud_probe_interval is the probe interval TIME for the =
-timer.
->>>>>>> Apart from 0, the minimal value is 5000ms.
->>>>>>>=20
->>>>>>> So it should be:
->>>>>>>=20
->>>>>>> plpmtud_probe_interval - INTEGER
->>>>>>>     The time interval (in milliseconds) for sending PLPMTUD =
-probe chunks.
->>>>>>>     These chunks are sent at the specified interval with a =
-variable size
->>>>>>>     to probe the mtu of a given path between 2 endpoints. =
-PLPMTUD will
->>>>>>>     be disabled when 0 is set.
->>>>>>>=20
->>>>>>>     Default: 0
->>>>>>=20
->>>>>> What do you mean with probe chunks? You are sending probe =
-*packets* containing a HEARTBEAT and a PAD chunk, right?
->>>>> yes.
->>>>>=20
->>>>>>=20
->>>>>> RFC8899 contains:
->>>>>> The PROBE_TIMER is configured to expire after a period longer =
-than the maximum time to receive an acknowledgment to a probe packet.
->>>>>>=20
->>>>>> So, how about plpmtud_probe_max_ack_time?
->>>>> "plpmtud_probe_interval" I got the name from tcp's sysctl plpmtud =
-in
->>>>> linux. I was hoping to keep this consistent in sysctl and sockopt
->>>>> between Linux and BSD.  Note this parameter is also the interval =
-to
->>>>> send a probe for the current pmtu in Search Complete status.
->>>>=20
->>>> Do you send probe packets in Search Complete to confirm the current =
-PMTU estimation?
->>>>=20
->>>> RFC8899 suggests to do this only for non-reliable PLs. For a =
-reliable PL like SCTP, it suggests to use the loss of (data) packets as =
-indication instead.
->>> Can you point out the place in RFC8899 saying so?
->>>=20
->>> What I saw is:
->>>=20
->>>  Search Complete:  The Search Complete Phase is entered when the
->>>     PLPMTU is supported across the network path.  A PL can use a
->>>     CONFIRMATION_TIMER to periodically repeat a probe packet for the
->>>     current PLPMTU size.  If the sender is unable to confirm
->>>     reachability (e.g., if the CONFIRMATION_TIMER expires) or the PL
->>>     signals a lack of reachability, a black hole has been detected =
-and
->>>     DPLPMTUD enters the Base Phase.
->>>=20
->>> it desn't matter if it's a reliable or non-reliable PL, no?
->>=20
->> The description of the phases are used to give a high level overview =
-about the mechanism. The state diagram is more detailed. There you find =
-this sentence: "When used with an acknowledged PL (e.g., SCTP), DPLPMTUD =
-SHOULD NOT continue to generate PLPMTU probes in this state". However, =
-it refers only to probes for confirmation of the current PMTU =
-estimation. SCTP should send probe packets to probe for a larger PMTU in =
-Search Complete.
-> If so, how to make sure the current pmtu is working during the Search =
-Complete?
-> Where did you get "it suggests to use the loss of (data) packets as
-> indication instead"?
+Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+---
+ net/ipv4/fib_frontend.c    | 2 +-
+ net/ipv4/inet_diag.c       | 5 +----
+ net/ipv4/raw_diag.c        | 7 ++-----
+ net/ipv4/udp_diag.c        | 6 ++----
+ net/mptcp/mptcp_diag.c     | 6 ++----
+ net/netfilter/nft_compat.c | 6 ++----
+ net/netlink/af_netlink.c   | 2 +-
+ net/sctp/diag.c            | 6 ++----
+ net/unix/diag.c            | 6 ++----
+ 9 files changed, 15 insertions(+), 31 deletions(-)
 
-Sorry, RFC8899 only suggests to not send probe packets to confirm the =
-current PMTU estimation in Search Complete (when used within an =
-acknowledged PL, like SCTP).
+diff --git a/net/ipv4/fib_frontend.c b/net/ipv4/fib_frontend.c
+index a933bd6345b1..9fe13e4f5d08 100644
+--- a/net/ipv4/fib_frontend.c
++++ b/net/ipv4/fib_frontend.c
+@@ -1376,7 +1376,7 @@ static void nl_fib_input(struct sk_buff *skb)
+ 	portid = NETLINK_CB(skb).portid;      /* netlink portid */
+ 	NETLINK_CB(skb).portid = 0;        /* from kernel */
+ 	NETLINK_CB(skb).dst_group = 0;  /* unicast */
+-	netlink_unicast(net->ipv4.fibnl, skb, portid, MSG_DONTWAIT);
++	nlmsg_unicast(net->ipv4.fibnl, skb, portid);
+ }
+ 
+ static int __net_init nl_fib_lookup_init(struct net *net)
+diff --git a/net/ipv4/inet_diag.c b/net/ipv4/inet_diag.c
+index e65f4ef024a4..ef7897226f08 100644
+--- a/net/ipv4/inet_diag.c
++++ b/net/ipv4/inet_diag.c
+@@ -580,10 +580,7 @@ int inet_diag_dump_one_icsk(struct inet_hashinfo *hashinfo,
+ 		nlmsg_free(rep);
+ 		goto out;
+ 	}
+-	err = netlink_unicast(net->diag_nlsk, rep, NETLINK_CB(in_skb).portid,
+-			      MSG_DONTWAIT);
+-	if (err > 0)
+-		err = 0;
++	err = nlmsg_unicast(net->diag_nlsk, rep, NETLINK_CB(in_skb).portid);
+ 
+ out:
+ 	if (sk)
+diff --git a/net/ipv4/raw_diag.c b/net/ipv4/raw_diag.c
+index 1b5b8af27aaf..ccacbde30a2c 100644
+--- a/net/ipv4/raw_diag.c
++++ b/net/ipv4/raw_diag.c
+@@ -119,11 +119,8 @@ static int raw_diag_dump_one(struct netlink_callback *cb,
+ 		return err;
+ 	}
+ 
+-	err = netlink_unicast(net->diag_nlsk, rep,
+-			      NETLINK_CB(in_skb).portid,
+-			      MSG_DONTWAIT);
+-	if (err > 0)
+-		err = 0;
++	err = nlmsg_unicast(net->diag_nlsk, rep, NETLINK_CB(in_skb).portid);
++
+ 	return err;
+ }
+ 
+diff --git a/net/ipv4/udp_diag.c b/net/ipv4/udp_diag.c
+index b2cee9a307d4..1ed8c4d78e5c 100644
+--- a/net/ipv4/udp_diag.c
++++ b/net/ipv4/udp_diag.c
+@@ -77,10 +77,8 @@ static int udp_dump_one(struct udp_table *tbl,
+ 		kfree_skb(rep);
+ 		goto out;
+ 	}
+-	err = netlink_unicast(net->diag_nlsk, rep, NETLINK_CB(in_skb).portid,
+-			      MSG_DONTWAIT);
+-	if (err > 0)
+-		err = 0;
++	err = nlmsg_unicast(net->diag_nlsk, rep, NETLINK_CB(in_skb).portid);
++
+ out:
+ 	if (sk)
+ 		sock_put(sk);
+diff --git a/net/mptcp/mptcp_diag.c b/net/mptcp/mptcp_diag.c
+index 8f88ddeab6a2..f48eb6315bbb 100644
+--- a/net/mptcp/mptcp_diag.c
++++ b/net/mptcp/mptcp_diag.c
+@@ -57,10 +57,8 @@ static int mptcp_diag_dump_one(struct netlink_callback *cb,
+ 		kfree_skb(rep);
+ 		goto out;
+ 	}
+-	err = netlink_unicast(net->diag_nlsk, rep, NETLINK_CB(in_skb).portid,
+-			      MSG_DONTWAIT);
+-	if (err > 0)
+-		err = 0;
++	err = nlmsg_unicast(net->diag_nlsk, rep, NETLINK_CB(in_skb).portid);
++
+ out:
+ 	sock_put(sk);
+ 
+diff --git a/net/netfilter/nft_compat.c b/net/netfilter/nft_compat.c
+index 639c337c885b..aa3397eec330 100644
+--- a/net/netfilter/nft_compat.c
++++ b/net/netfilter/nft_compat.c
+@@ -683,10 +683,8 @@ static int nfnl_compat_get_rcu(struct sk_buff *skb,
+ 		goto out_put;
+ 	}
+ 
+-	ret = netlink_unicast(info->sk, skb2, NETLINK_CB(skb).portid,
+-			      MSG_DONTWAIT);
+-	if (ret > 0)
+-		ret = 0;
++	ret = nlmsg_unicast(info->sk, skb2, NETLINK_CB(skb).portid);
++
+ out_put:
+ 	rcu_read_lock();
+ 	module_put(THIS_MODULE);
+diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+index d233ac4a91b6..380f95aacdec 100644
+--- a/net/netlink/af_netlink.c
++++ b/net/netlink/af_netlink.c
+@@ -2471,7 +2471,7 @@ void netlink_ack(struct sk_buff *in_skb, struct nlmsghdr *nlh, int err,
+ 
+ 	nlmsg_end(skb, rep);
+ 
+-	netlink_unicast(in_skb->sk, skb, NETLINK_CB(in_skb).portid, MSG_DONTWAIT);
++	nlmsg_unicast(in_skb->sk, skb, NETLINK_CB(in_skb).portid);
+ }
+ EXPORT_SYMBOL(netlink_ack);
+ 
+diff --git a/net/sctp/diag.c b/net/sctp/diag.c
+index 493fc01e5d2b..760b367644c1 100644
+--- a/net/sctp/diag.c
++++ b/net/sctp/diag.c
+@@ -284,10 +284,8 @@ static int sctp_tsp_dump_one(struct sctp_transport *tsp, void *p)
+ 		goto out;
+ 	}
+ 
+-	err = netlink_unicast(net->diag_nlsk, rep, NETLINK_CB(in_skb).portid,
+-			      MSG_DONTWAIT);
+-	if (err > 0)
+-		err = 0;
++	err = nlmsg_unicast(net->diag_nlsk, rep, NETLINK_CB(in_skb).portid);
++
+ out:
+ 	return err;
+ }
+diff --git a/net/unix/diag.c b/net/unix/diag.c
+index 9ff64f9df1f3..7e7d7f45685a 100644
+--- a/net/unix/diag.c
++++ b/net/unix/diag.c
+@@ -295,10 +295,8 @@ static int unix_diag_get_exact(struct sk_buff *in_skb,
+ 
+ 		goto again;
+ 	}
+-	err = netlink_unicast(net->diag_nlsk, rep, NETLINK_CB(in_skb).portid,
+-			      MSG_DONTWAIT);
+-	if (err > 0)
+-		err = 0;
++	err = nlmsg_unicast(net->diag_nlsk, rep, NETLINK_CB(in_skb).portid);
++
+ out:
+ 	if (sk)
+ 		sock_put(sk);
+-- 
+2.32.0
 
-Since I don't see another way how to detect a decreased PMTU, I =
-interpreted it as a suggestion to use packet loss for the detection.
-
-Timo
-
->=20
-> Thanks.
->=20
->>=20
->>>=20
->>>>=20
->>>>>=20
->>>>>>=20
->>>>>> Also, I think more parameters would be helpful. For example,
->>>>>>=20
->>>>>> plpmtud_enable - boolean to control whether to use PLPMTUD (it is =
-more explicit than plpmtud_probe_interval=3D0 or =
-plpmtud_probe_max_ack_time=3D0)
->>>>>> plpmtud_max_probes - controls the number of probe packets sent =
-for one candidate.
->>>>>> plpmtud_raise_time - time to wait before probing for a larger =
-PMTU in search complete (0 to disable it).
->>>>>> plpmtud_use_ptb - boolean to control whether to process an ICMP =
-PTB.
->>>>> With these, the control will be more detailed for sure.
->>>>> But I didn't want to introduce too many parameters for this =
-feature,
->>>>> as you know, these parameters could also be per =
-socket/asoc/transport,
->>>>> and doing set/get with sockopt.
->>>>>=20
->>>>> instead, we keep most fixed:
->>>>>=20
->>>>> plpmtud_use_ptb =3D 1
->>>>> plpmtud_raise_time =3D 30 * =
-plpmtud_probe_max_ack_time(plpmtud_probe_interval)
->>>>> plpmtud_max_probes =3D 3
->>>>> plpmtud_enable =3D !! plpmtud_probe_interval
->>>>>=20
->>>>> Only one variable:
->>>>> plpmtud_probe_interval >=3D 5000ms
->>>>=20
->>>> OK
->>>>=20
->>>>>=20
->>>>> So I think this is up to the implementation, if you want more =
-things
->>>>> to tune, you can go ahead with these all parameters exposed to =
-users.
->>>>=20
->>>> Agree. It is probably a good idea to add not too much parameters.
->>>>=20
->>>>>=20
->>>>>>=20
->>>>>> Timo
->>>>>>=20
->>>>>>>=20
->>>>>>> Thanks.
->>>>>>>>>    be disabled when 0 is set.
->>>>>>>>>=20
->>>>>>>>>    Default: 0
->>>>>>>>>=20
->>>>>>>>> 2. a socket option that can be used per socket, assoc or =
-transport
->>>>>>>>>=20
->>>>>>>>> /* PLPMTUD Probe Interval socket option */
->>>>>>>>> struct sctp_probeinterval {
->>>>>>>>>    sctp_assoc_t spi_assoc_id;
->>>>>>>>>    struct sockaddr_storage spi_address;
->>>>>>>>>    __u32 spi_interval;
->>>>>>>>> };
->>>>>>>>>=20
->>>>>>>>> #define SCTP_PLPMTUD_PROBE_INTERVAL    133
->>>>>>>>>=20
->>>>>>>>>=20
->>>>>>>>> The value above will enable/disable the PLPMUTD probe by =
-setting up the probe
->>>>>>>>> interval for the timer. When it's 0, the timer will also stop =
-and
->>>>>>>>> PLPMUTD is disabled.
->>>>>>>>> By this way, we don't need to introduce more options.
->>>>>>>> OK.
->>>>>>>>>=20
->>>>>>>>> We're expecting to keep consistent with BSD on this, pls check =
-and
->>>>>>>>> share your thoughts.
->>>>>>>> Looks good to me.
->>>>>>>>=20
->>>>>>>> Best regards
->>>>>>>> Michael
->>>>>>>>>=20
->>>>>>>>> Thanks.
->>>>>>>>=20
->>>>>>=20
->>>>>>=20
->>>>=20
->>=20
-
-
---Apple-Mail=_E6E6BC77-4EBD-428A-998E-A1E1151C18A5
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEK4w
-ggUSMIID+qADAgECAgkA4wvV+K8l2YEwDQYJKoZIhvcNAQELBQAwgYIxCzAJBgNVBAYTAkRFMSsw
-KQYDVQQKDCJULVN5c3RlbXMgRW50ZXJwcmlzZSBTZXJ2aWNlcyBHbWJIMR8wHQYDVQQLDBZULVN5
-c3RlbXMgVHJ1c3QgQ2VudGVyMSUwIwYDVQQDDBxULVRlbGVTZWMgR2xvYmFsUm9vdCBDbGFzcyAy
-MB4XDTE2MDIyMjEzMzgyMloXDTMxMDIyMjIzNTk1OVowgZUxCzAJBgNVBAYTAkRFMUUwQwYDVQQK
-EzxWZXJlaW4genVyIEZvZXJkZXJ1bmcgZWluZXMgRGV1dHNjaGVuIEZvcnNjaHVuZ3NuZXR6ZXMg
-ZS4gVi4xEDAOBgNVBAsTB0RGTi1QS0kxLTArBgNVBAMTJERGTi1WZXJlaW4gQ2VydGlmaWNhdGlv
-biBBdXRob3JpdHkgMjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMtg1/9moUHN0vqH
-l4pzq5lN6mc5WqFggEcVToyVsuXPztNXS43O+FZsFVV2B+pG/cgDRWM+cNSrVICxI5y+NyipCf8F
-XRgPxJiZN7Mg9mZ4F4fCnQ7MSjLnFp2uDo0peQcAIFTcFV9Kltd4tjTTwXS1nem/wHdN6r1ZB+Ba
-L2w8pQDcNb1lDY9/Mm3yWmpLYgHurDg0WUU2SQXaeMpqbVvAgWsRzNI8qIv4cRrKO+KA3Ra0Z3qL
-NupOkSk9s1FcragMvp0049ENF4N1xDkesJQLEvHVaY4l9Lg9K7/AjsMeO6W/VRCrKq4Xl14zzsjz
-9AkH4wKGMUZrAcUQDBHHWekCAwEAAaOCAXQwggFwMA4GA1UdDwEB/wQEAwIBBjAdBgNVHQ4EFgQU
-k+PYMiba1fFKpZFK4OpL4qIMz+EwHwYDVR0jBBgwFoAUv1kgNgB5oKAia4zV8mHSuCzLgkowEgYD
-VR0TAQH/BAgwBgEB/wIBAjAzBgNVHSAELDAqMA8GDSsGAQQBga0hgiwBAQQwDQYLKwYBBAGBrSGC
-LB4wCAYGZ4EMAQICMEwGA1UdHwRFMEMwQaA/oD2GO2h0dHA6Ly9wa2kwMzM2LnRlbGVzZWMuZGUv
-cmwvVGVsZVNlY19HbG9iYWxSb290X0NsYXNzXzIuY3JsMIGGBggrBgEFBQcBAQR6MHgwLAYIKwYB
-BQUHMAGGIGh0dHA6Ly9vY3NwMDMzNi50ZWxlc2VjLmRlL29jc3ByMEgGCCsGAQUFBzAChjxodHRw
-Oi8vcGtpMDMzNi50ZWxlc2VjLmRlL2NydC9UZWxlU2VjX0dsb2JhbFJvb3RfQ2xhc3NfMi5jZXIw
-DQYJKoZIhvcNAQELBQADggEBAIcL/z4Cm2XIVi3WO5qYi3FP2ropqiH5Ri71sqQPrhE4eTizDnS6
-dl2e6BiClmLbTDPo3flq3zK9LExHYFV/53RrtCyD2HlrtrdNUAtmB7Xts5et6u5/MOaZ/SLick0+
-hFvu+c+Z6n/XUjkurJgARH5pO7917tALOxrN5fcPImxHhPalR6D90Bo0fa3SPXez7vTXTf/D6OWS
-T1k+kEcQSrCFWMBvf/iu7QhCnh7U3xQuTY+8npTD5+32GPg8SecmqKc22CzeIs2LgtjZeOJVEqM7
-h0S2EQvVDFKvaYwPBt/QolOLV5h7z/0HJPT8vcP9SpIClxvyt7bPZYoaorVyGTkwggWsMIIElKAD
-AgECAgcbY7rQHiw9MA0GCSqGSIb3DQEBCwUAMIGVMQswCQYDVQQGEwJERTFFMEMGA1UEChM8VmVy
-ZWluIHp1ciBGb2VyZGVydW5nIGVpbmVzIERldXRzY2hlbiBGb3JzY2h1bmdzbmV0emVzIGUuIFYu
-MRAwDgYDVQQLEwdERk4tUEtJMS0wKwYDVQQDEyRERk4tVmVyZWluIENlcnRpZmljYXRpb24gQXV0
-aG9yaXR5IDIwHhcNMTYwNTI0MTEzODQwWhcNMzEwMjIyMjM1OTU5WjCBjTELMAkGA1UEBhMCREUx
-RTBDBgNVBAoMPFZlcmVpbiB6dXIgRm9lcmRlcnVuZyBlaW5lcyBEZXV0c2NoZW4gRm9yc2NodW5n
-c25ldHplcyBlLiBWLjEQMA4GA1UECwwHREZOLVBLSTElMCMGA1UEAwwcREZOLVZlcmVpbiBHbG9i
-YWwgSXNzdWluZyBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAJ07eRxH3h+Gy8Zp
-1xCeOdfZojDbchwFfylfS2jxrRnWTOFrG7ELf6Gr4HuLi9gtzm6IOhDuV+UefwRRNuu6cG1joL6W
-LkDh0YNMZj0cZGnlm6Stcq5oOVGHecwX064vXWNxSzl660Knl5BpBb+Q/6RAcL0D57+eGIgfn5mI
-TQ5HjUhfZZkQ0tkqSe3BuS0dnxLLFdM/fx5ULzquk1enfnjK1UriGuXtQX1TX8izKvWKMKztFwUk
-P7agCwf9TRqaA1KgNpzeJIdl5Of6x5ZzJBTN0OgbaJ4YWa52fvfRCng8h0uwN89Tyjo4EPPLR22M
-ZD08WkVKusqAfLjz56dMTM0CAwEAAaOCAgUwggIBMBIGA1UdEwEB/wQIMAYBAf8CAQEwDgYDVR0P
-AQH/BAQDAgEGMCkGA1UdIAQiMCAwDQYLKwYBBAGBrSGCLB4wDwYNKwYBBAGBrSGCLAEBBDAdBgNV
-HQ4EFgQUazqYi/nyU4na4K2yMh4JH+iqO3QwHwYDVR0jBBgwFoAUk+PYMiba1fFKpZFK4OpL4qIM
-z+EwgY8GA1UdHwSBhzCBhDBAoD6gPIY6aHR0cDovL2NkcDEucGNhLmRmbi5kZS9nbG9iYWwtcm9v
-dC1nMi1jYS9wdWIvY3JsL2NhY3JsLmNybDBAoD6gPIY6aHR0cDovL2NkcDIucGNhLmRmbi5kZS9n
-bG9iYWwtcm9vdC1nMi1jYS9wdWIvY3JsL2NhY3JsLmNybDCB3QYIKwYBBQUHAQEEgdAwgc0wMwYI
-KwYBBQUHMAGGJ2h0dHA6Ly9vY3NwLnBjYS5kZm4uZGUvT0NTUC1TZXJ2ZXIvT0NTUDBKBggrBgEF
-BQcwAoY+aHR0cDovL2NkcDEucGNhLmRmbi5kZS9nbG9iYWwtcm9vdC1nMi1jYS9wdWIvY2FjZXJ0
-L2NhY2VydC5jcnQwSgYIKwYBBQUHMAKGPmh0dHA6Ly9jZHAyLnBjYS5kZm4uZGUvZ2xvYmFsLXJv
-b3QtZzItY2EvcHViL2NhY2VydC9jYWNlcnQuY3J0MA0GCSqGSIb3DQEBCwUAA4IBAQCBeEWkTqR/
-DlXwCbFqPnjMaDWpHPOVnj/z+N9rOHeJLI21rT7H8pTNoAauusyosa0zCLYkhmI2THhuUPDVbmCN
-T1IxQ5dGdfBi5G5mUcFCMWdQ5UnnOR7Ln8qGSN4IFP8VSytmm6A4nwDO/afr0X9XLchMX9wQEZc+
-lgQCXISoKTlslPwQkgZ7nu7YRrQbtQMMONncsKk/cQYLsgMHM8KNSGMlJTx6e1du94oFOO+4oK4v
-9NsH1VuEGMGpuEvObJAaguS5Pfp38dIfMwK/U+d2+dwmJUFvL6Yb+qQTkPp8ftkLYF3sv8pBoGH7
-EUkp2KgtdRXYShjqFu9VNCIaE40GMIIF5DCCBMygAwIBAgIMIwapvgoidmnnsEoeMA0GCSqGSIb3
-DQEBCwUAMIGNMQswCQYDVQQGEwJERTFFMEMGA1UECgw8VmVyZWluIHp1ciBGb2VyZGVydW5nIGVp
-bmVzIERldXRzY2hlbiBGb3JzY2h1bmdzbmV0emVzIGUuIFYuMRAwDgYDVQQLDAdERk4tUEtJMSUw
-IwYDVQQDDBxERk4tVmVyZWluIEdsb2JhbCBJc3N1aW5nIENBMB4XDTIwMDYxNTA4MDcxMloXDTIz
-MDYxNTA4MDcxMlowejELMAkGA1UEBhMCREUxIDAeBgNVBAoMF0ZhY2hob2Noc2NodWxlIE11ZW5z
-dGVyMTIwMAYDVQQLDClGYWNoYmVyZWljaCBFbGVrdHJvdGVjaG5payB1bmQgSW5mb3JtYXRpazEV
-MBMGA1UEAwwMVGltbyBWb2Vsa2VyMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsRhk
-t3rRxBOa5IL86FvAp3iB/hVQ8g9SUGjwjOgYQIxTdxMfJlKSREAWDrkm2NQoUYO/BQ3+tH5/yK+8
-pTYdbr6v9akFK/q9Q9I3Rv9NuH/4Y3Qd31mbd73aED4i5aenTgdJYOtk4G1UQOnbY8a1lGba1i5y
-2k7gZTNBYyE8GjwQF9RninX1gRRvlK0+RE/+8XGCDYG+iEHhXoTzXnP315Nm+rlpTdP6/18tZIFd
-B3Rib1vuEt1vnpS67VayAOqcCFC5JbsOQHrvd0pakvfURSWwoNXY7Chaa2yg20aTjyThQqQQ/l/N
-0k3J66RsW8g3Ib7Jj3NNHD7jOkh97spDJQIDAQABo4ICVDCCAlAwPgYDVR0gBDcwNTAPBg0rBgEE
-AYGtIYIsAQEEMBAGDisGAQQBga0hgiwBAQQHMBAGDisGAQQBga0hgiwCAQQHMAkGA1UdEwQCMAAw
-DgYDVR0PAQH/BAQDAgXgMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDAdBgNVHQ4EFgQU
-FpjFiguM9kUKX1eL2HNrE5eehXowHwYDVR0jBBgwFoAUazqYi/nyU4na4K2yMh4JH+iqO3QwJgYD
-VR0RBB8wHYEbdGltby52b2Vsa2VyQGZoLW11ZW5zdGVyLmRlMIGNBgNVHR8EgYUwgYIwP6A9oDuG
-OWh0dHA6Ly9jZHAxLnBjYS5kZm4uZGUvZGZuLWNhLWdsb2JhbC1nMi9wdWIvY3JsL2NhY3JsLmNy
-bDA/oD2gO4Y5aHR0cDovL2NkcDIucGNhLmRmbi5kZS9kZm4tY2EtZ2xvYmFsLWcyL3B1Yi9jcmwv
-Y2FjcmwuY3JsMIHbBggrBgEFBQcBAQSBzjCByzAzBggrBgEFBQcwAYYnaHR0cDovL29jc3AucGNh
-LmRmbi5kZS9PQ1NQLVNlcnZlci9PQ1NQMEkGCCsGAQUFBzAChj1odHRwOi8vY2RwMS5wY2EuZGZu
-LmRlL2Rmbi1jYS1nbG9iYWwtZzIvcHViL2NhY2VydC9jYWNlcnQuY3J0MEkGCCsGAQUFBzAChj1o
-dHRwOi8vY2RwMi5wY2EuZGZuLmRlL2Rmbi1jYS1nbG9iYWwtZzIvcHViL2NhY2VydC9jYWNlcnQu
-Y3J0MA0GCSqGSIb3DQEBCwUAA4IBAQA4nHsyRFfsrgKgWeFhMHS5rrEH35rcng32C6urcvDZ1X/p
-qx9FHlKgakKkUbVc8zsr1DbAFVkS+UbdicYFlBeDSF5bgHBHEJoy50Fo+d/keDCsh9/Z5QVjnMIj
-Y/7h/E7E35Mv1pO2CE3ZDFmt7G0nrLgtLmuhfg2WQ1lLedkpfF/4HJ9BgpdRS4TDOYFFG124yUJG
-KN9UB0iNr7gDVAMDZW4wYiSFdbk+M+p6HMKs1TAkhJygaPyM7QlZZmqx5SRriH0rrXMIoqf7LCfz
-goYVOsqeYB6pxuERkuOZdmY0bgumRN39qE7ELrzLf/dCEwbwY3rl1Xj8hhmdURn3V8EMMYIDnTCC
-A5kCAQEwgZ4wgY0xCzAJBgNVBAYTAkRFMUUwQwYDVQQKDDxWZXJlaW4genVyIEZvZXJkZXJ1bmcg
-ZWluZXMgRGV1dHNjaGVuIEZvcnNjaHVuZ3NuZXR6ZXMgZS4gVi4xEDAOBgNVBAsMB0RGTi1QS0kx
-JTAjBgNVBAMMHERGTi1WZXJlaW4gR2xvYmFsIElzc3VpbmcgQ0ECDCMGqb4KInZp57BKHjANBglg
-hkgBZQMEAgEFAKCCAc8wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcN
-MjEwNzEyMDgwOTI2WjAvBgkqhkiG9w0BCQQxIgQgtB5LMN20jALRNfXBDi1HAzzg7pAkz4uHGsGt
-g21y6bkwga8GCSsGAQQBgjcQBDGBoTCBnjCBjTELMAkGA1UEBhMCREUxRTBDBgNVBAoMPFZlcmVp
-biB6dXIgRm9lcmRlcnVuZyBlaW5lcyBEZXV0c2NoZW4gRm9yc2NodW5nc25ldHplcyBlLiBWLjEQ
-MA4GA1UECwwHREZOLVBLSTElMCMGA1UEAwwcREZOLVZlcmVpbiBHbG9iYWwgSXNzdWluZyBDQQIM
-IwapvgoidmnnsEoeMIGxBgsqhkiG9w0BCRACCzGBoaCBnjCBjTELMAkGA1UEBhMCREUxRTBDBgNV
-BAoMPFZlcmVpbiB6dXIgRm9lcmRlcnVuZyBlaW5lcyBEZXV0c2NoZW4gRm9yc2NodW5nc25ldHpl
-cyBlLiBWLjEQMA4GA1UECwwHREZOLVBLSTElMCMGA1UEAwwcREZOLVZlcmVpbiBHbG9iYWwgSXNz
-dWluZyBDQQIMIwapvgoidmnnsEoeMA0GCSqGSIb3DQEBCwUABIIBAHEXuK0/kRAJGZd2jJePgCU0
-uzAMV9vWBDZZFCKberal/kwq+76AmP5W67yz7VhRoET+ycgZucuf14LwVVXjXmCV4BbuozbWApiH
-x5UciLt21TsExldv0TcvQpVWlgdZae3jgpe+d8TSUxmxZueYmj/JyyS+5vVHsyURWAa29oyZEoRM
-lJ+GMK2TVkoFHUFJCw3Y6uQXcfCTBufCyCZLhMZioEqoRnG/6X/aOeexkd2Adfc5aXTuREgTQoRW
-iArhQREXKdXbn9CHW7C3Se6ZGumo+CAcR+J6ZcG/YkjF8zzEXJmziApPduuO1qIOPZ7PUZG+44l+
-hFsttVg/MJbidSIAAAAAAAA=
-
---Apple-Mail=_E6E6BC77-4EBD-428A-998E-A1E1151C18A5--
