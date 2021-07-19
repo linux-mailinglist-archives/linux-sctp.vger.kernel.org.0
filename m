@@ -2,91 +2,81 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED323CD1B8
-	for <lists+linux-sctp@lfdr.de>; Mon, 19 Jul 2021 12:18:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D609F3CE790
+	for <lists+linux-sctp@lfdr.de>; Mon, 19 Jul 2021 19:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236123AbhGSJfT (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 19 Jul 2021 05:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46522 "EHLO
+        id S1349698AbhGSQ2g (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 19 Jul 2021 12:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236229AbhGSJfR (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 19 Jul 2021 05:35:17 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31EDDC061762
-        for <linux-sctp@vger.kernel.org>; Mon, 19 Jul 2021 02:21:13 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id z9so16173332qkg.5
-        for <linux-sctp@vger.kernel.org>; Mon, 19 Jul 2021 03:15:57 -0700 (PDT)
+        with ESMTP id S241470AbhGSQ1F (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 19 Jul 2021 12:27:05 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD58C07882A;
+        Mon, 19 Jul 2021 09:31:50 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id l6so10795188wmq.0;
+        Mon, 19 Jul 2021 09:53:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=OuC+MOvTUdM6DfSkcXjtPlILGVva6JSXvGxiCX6GKsI=;
-        b=gE4aMY9ocgeX1gp5YvrXzdItIwwXi8uv5EWqnIIFdkg4Z3KlKtiBqhpmlJJhm6xUOy
-         3GjLEXML/qmClZbcxWmfajdhWd+TgeNzdNhdu4LEtLKtwOfZ+CUIhBeUimSW9CuZOmCD
-         NRdvaS4Zh3b81GQQAMyflqjLEpSi/G7LM1+Cq1D5zOWXfU/VDMdwLgtr3z1HK3FWe7WP
-         UjEivS3pJb7POhCx55QQgDUvTadgyOIgdpad4i0rxIr9A8BmgcxQBot41oIyJyJjajRz
-         Iti5OmfIEVE4ASuEuG0st4odzfqMJAANq+B4VhEkmWP3dv3tuRvfxsIRVV/ofbgRIJvJ
-         s6Jg==
+        bh=hvVPJjlBWYw4kVSHvpSZZLNRhOEU+S0xEKG5MEzufL8=;
+        b=BhWmKJjOT7/fxHQDBZz6EomALoJpz2KlmbywxK7xU8l+F0tTxszXo6nSeGawOzZyQ9
+         fSIJll4DVLfYF6Q4KXIfalDsohlxQ7xrQtMQop6HIRtZYvrPdv7LxIgVVIXXzgPDoz8I
+         7PwLpegveYV7QKnf1sHw0S7w0SpWOlv6NYiUU+PXoDJXEtZVSoCExF1PBXVWpwW82PNW
+         CcZO1RGFuBZrMFBzwTqjrj5oydZrcmZ51pDJ9buK5LzI2rwiwDpAyPehbjaSxtaIrJFi
+         uVUSDegRiFVKTrSjq2flKC3r0vrh9acfRaGsWA3gKlVb2V+UTJNOzpbnIwqqCOHHlgiq
+         /A0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=OuC+MOvTUdM6DfSkcXjtPlILGVva6JSXvGxiCX6GKsI=;
-        b=PrqcvdJyubAMGmFIMjua4EJLMDJlEcXiNAhlkT6V52gxiTDVWB+KvccWHbLjGl3J2O
-         e0AkuFb8By4WnIqXo2lqcxCqS3ChPtzAhNjaIGpNPPHBEPbS7N3r2XQUtH2k7/xjmFud
-         5f2/ySG/A6tzov1Ax9VTUn6vRsCkn8hwTrnbDi2A2PZY553cx7v+ikWGPFnmE/OCJewu
-         YscjNBqgYiLPhwqGOsd0D+bhduKThxkZdJWMSQXWs4YoKb2lSnOSVjyYxisAbiHZBSiR
-         SpwyndEOePDrxAg+wRAOYs7aqeVubKg/Ue/qvI6J4MFySkbsE2UO/kf5l9V8o94kXWAR
-         CUTg==
-X-Gm-Message-State: AOAM530jJ4v8zRdFzGirsx3uvYvFgJYR2x+JWXhuFZqPRApEnBHeyxk1
-        w6Y9qSRuRLrZfb5o84/pkcN673mBjU+o/DzDaKM=
-X-Google-Smtp-Source: ABdhPJy4qaDswA4W6snR1OLrI+bxkBK2xBtC77H3vT5X/ElLEC87TNnKjL4B9toX/NKQwazd5XH/of1U0T5UuU8P3mM=
-X-Received: by 2002:ae9:f805:: with SMTP id x5mr22784744qkh.373.1626689756134;
- Mon, 19 Jul 2021 03:15:56 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hvVPJjlBWYw4kVSHvpSZZLNRhOEU+S0xEKG5MEzufL8=;
+        b=G505yT+Ery8VHH9YweM+Oe4Ed4DkpekqcHm5jIqg5Wnj0k2v2YrIyLICK898fcH2uB
+         gqZzYHDzFnweJRMDIi3owNYoG1M2TZqDwgza3/wLCENJOsD7MOTTtebY92umpACGcp0K
+         DV9oZ9SvyfhKlVWOPmwcdHqReAnWn94z2o1og3WRxlJS3X1Zv8H/zSLs9GgszIqqFQeZ
+         lnNlpxYyKkfLzKj/ZISqZ9Y9EGJQtm3blMXpTyQNx62yZCJ3CI5goL6O0vvgjLbTaDrU
+         A0K9hq0Z/8JP8e69oOWQEslFXOSC2wKQCXr99YxIhuJMWWpFzfvdC/dXt6TZ1t7qlkrC
+         c9uw==
+X-Gm-Message-State: AOAM530uFEREYZAzZBn5Ec576WyZJ9qMadpQBC2QBTnqQmDnrf4EiXkM
+        MiYcG8IRm5R4SmRUcSwirDxiS/qwWyOUrg==
+X-Google-Smtp-Source: ABdhPJwFpUHp7eqiFo7tdnAmsitGxxkf93HHf97AM2b3/wHUX0mvgsjGbb+oBigK/ACsTmNiIN3Ztw==
+X-Received: by 2002:a1c:4c18:: with SMTP id z24mr33711432wmf.168.1626713605786;
+        Mon, 19 Jul 2021 09:53:25 -0700 (PDT)
+Received: from localhost (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id p11sm20562149wro.78.2021.07.19.09.53.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jul 2021 09:53:25 -0700 (PDT)
+From:   Xin Long <lucien.xin@gmail.com>
+To:     network dev <netdev@vger.kernel.org>, davem@davemloft.net,
+        kuba@kernel.org, linux-sctp@vger.kernel.org
+Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        timo.voelker@fh-muenster.de
+Subject: [PATCH net 0/2] sctp: improve the pmtu probe in Search Complete state
+Date:   Mon, 19 Jul 2021 12:53:21 -0400
+Message-Id: <cover.1626713549.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Reply-To: mohammedssaaaad@gmail.com
-Sender: mrsanoutraore01@gmail.com
-Received: by 2002:a05:6214:1873:0:0:0:0 with HTTP; Mon, 19 Jul 2021 03:15:55
- -0700 (PDT)
-From:   Mohammed Saad <mohammedsaadht@gmail.com>
-Date:   Mon, 19 Jul 2021 03:15:55 -0700
-X-Google-Sender-Auth: ZahMoWSnemMumA07893gDwZ80wg
-Message-ID: <CAOwpAK969Cb7kPK26AROZqhUOQQa7q-kZbe17vXdox_Cartcjg@mail.gmail.com>
-Subject: OK..........................................
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Greetings,
+Timo recently suggested to use the loss of (data) packets as
+indication to send pmtu probe for Search Complete state, which
+should also be implied by RFC8899. This patchset is to change
+the current one that is doing probe with current pmtu all the
+time.
 
-This is a personal email directed to you for your consideration alone.
-I request that it remain and be treated as such only. My name is Mr.
-Mohammed Saad . I have an interesting business proposal for you that
-will be of immense benefit to both of us, although this may be hard
-for you to believe, we stand to gain =E2=82=AC 15 million Euros between us =
-in
-a matter of one week.
+Xin Long (2):
+  sctp: improve the code for pmtu probe send and recv update
+  sctp: send pmtu probe only if packet loss in Search Complete state
 
-This is fully legal and 100% genuine. I need you to signify your
-interest by replying to my email. Most importantly, I need you to keep
-whatever information between us confidential even if you decide not to
-go along with me. I will make more details available to you on receipt
-of your positive response.
-Kindly send me the followings
+ include/net/sctp/structs.h |  5 +++--
+ net/sctp/sm_statefuns.c    | 15 ++++++-------
+ net/sctp/transport.c       | 45 +++++++++++++++++++++++---------------
+ 3 files changed, 37 insertions(+), 28 deletions(-)
 
-Full Names
-Address
-Occupation
-Direct Mobile Telephone Lines
-Nationality
+-- 
+2.27.0
 
-Regards,
-
-Mohammed Saad
-
-UBA BANK
-
-OUAGADOUGOU BURKINA FASO
