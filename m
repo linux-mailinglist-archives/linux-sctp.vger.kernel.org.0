@@ -2,106 +2,70 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BDE73D0293
-	for <lists+linux-sctp@lfdr.de>; Tue, 20 Jul 2021 22:14:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1416D3D03E9
+	for <lists+linux-sctp@lfdr.de>; Tue, 20 Jul 2021 23:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbhGTT2N (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 20 Jul 2021 15:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34512 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232764AbhGTT0c (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 20 Jul 2021 15:26:32 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA565C061574;
-        Tue, 20 Jul 2021 13:07:03 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id c68so16545495qkf.9;
-        Tue, 20 Jul 2021 13:07:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rI8cSuSairE1K6x1UuaJ83a15FibjOPB9oWfkOqo2XY=;
-        b=lIi5dj/+zcyg6CyrTbemupbiHGg6WbzbM7GtL6Bg/cKac0QiHP28GBOk5uFaUTH+5y
-         5+FkHZoy2zoXPnMvEN9+G5SHWw+6fT873DjcqWAlWGAwCUZ2b7fXQwNI5LPtxELhVx5I
-         W/XAMFQb6qa6/B5CVSBng1txHioRCMP6BiCw+LMCoFMx76ceTAnBtp5fHjcuw4aQkjpv
-         Dd9BvuEUvs/zTH5PgUaZO21IpJeIrOm79IDfMjoib8DjGoy9obYs8jv98pbGkNJfs+8n
-         C+tTpfWSHZFwccZQP2NPaEGBcvwcNzYW/2td8bprk3oMij2pXcjdld3LLjjogysEFrZe
-         8j7g==
+        id S229728AbhGTUwd (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 20 Jul 2021 16:52:33 -0400
+Received: from mail-il1-f200.google.com ([209.85.166.200]:34549 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231401AbhGTUwc (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 20 Jul 2021 16:52:32 -0400
+Received: by mail-il1-f200.google.com with SMTP id w2-20020a056e0213e2b029020f555eb3c6so349632ilj.1
+        for <linux-sctp@vger.kernel.org>; Tue, 20 Jul 2021 14:33:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rI8cSuSairE1K6x1UuaJ83a15FibjOPB9oWfkOqo2XY=;
-        b=dSRWqWJ4fKc7roT/viaijcT0j2AfHGQbWDd/CCcQ0eAYJ6IMLSE2H+N2ayXnrRq9kC
-         WrXXb2n8J9DuIXP7PrVOJeBXuyQcYn6ROVqXT5//QFoRVf6YLlPx+bKivjv38JJrc4Bg
-         /EYJv/eAMInrKOrHzKTAI3kWpZBeMGkeSZnNRSn6YnF02Y38LQAvyRojpoS9coUMrsoj
-         /Ix15/5gYwLb5R1v8C7pdSEa7AH1syMvM0U27SbswYFBL2Rp77mKHYnr4XDy5QRn7zNC
-         qbQIpc1jCSBcJvbakVw5Xy+PP3Kfaqv56d9ko7t8Uotupjw9yXwtb2khBgkDhfOLt/SV
-         xZ3g==
-X-Gm-Message-State: AOAM533DfHyyOf4xXIn6UAnbVqul1c8nhDR2Y+Kg4vat+mh3ALbgQxHY
-        EE4HjaE7hNEcmuF17Oi4iX/SNKHBOjY=
-X-Google-Smtp-Source: ABdhPJzcW2XC0MbgtplTFUv5C4C979jJI8EpVsxRBFLTUwV2NAf2bdjXXmI0Gzez4Dl3ViQS0ZPIpA==
-X-Received: by 2002:a05:620a:13c8:: with SMTP id g8mr31319122qkl.342.1626811622860;
-        Tue, 20 Jul 2021 13:07:02 -0700 (PDT)
-Received: from localhost (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id d192sm75650qkc.51.2021.07.20.13.07.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jul 2021 13:07:02 -0700 (PDT)
-From:   Xin Long <lucien.xin@gmail.com>
-To:     network dev <netdev@vger.kernel.org>, davem@davemloft.net,
-        kuba@kernel.org, linux-sctp@vger.kernel.org
-Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Subject: [PATCH net] sctp: update active_key for asoc when old key is being replaced
-Date:   Tue, 20 Jul 2021 16:07:01 -0400
-Message-Id: <a1e260329384a040f11f0f393327e25cf909da2e.1626811621.git.lucien.xin@gmail.com>
-X-Mailer: git-send-email 2.27.0
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=3twmQjVLKZYLJpKK4SKvwqowp6QBKj+Dr4lo3yFdzNA=;
+        b=csUbRCavln+JJhg7OZa2ciSugA4fXHUa1RtaC+JzkhDMNdCj8GyxxFdIPJYgUYTTfw
+         tmNNSTHAGwyUyA7fAIVPupGXHYPwqSREgvt2VIMaUskxTjYBnuBBQ1S9Cqzg2tuQmfpN
+         J1a/2e32HdNDyp/6p/9MtvWAPUxzS5MAcKjkIOhhZPmUIVWDu3EZGNNwR9+OZl6SQeNJ
+         ePruXksWzJtwg8II3TizgHlap712/0Uz2i3ihkZQmFZgJdEU4zUaKjDz40xNuhP63x+p
+         DHiNFO/Ubgc6Ek63YjCatCquKGABmxXF3TX0E/IA3P3fqpbXlilIzFDOTO3jYrzr8+nD
+         jI0w==
+X-Gm-Message-State: AOAM5304OamfSotK5fuYi55opEBL+J+Thf73b1BYHnma+aV86+iY58JH
+        pU5utTa+EMmyvDWpdYnFCf28qLpVUmoiHVklR0MIN20xVf78
+X-Google-Smtp-Source: ABdhPJwTGv8EA0EAXmAbxt7FCbB05Tx4rEaJhZhVK23G4D38hwxDrO7tuJHibuW4OAJb7XFSwHPExGTlUY8xeNWFF45fpyVojlM+
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a92:507:: with SMTP id q7mr17867804ile.81.1626816790235;
+ Tue, 20 Jul 2021 14:33:10 -0700 (PDT)
+Date:   Tue, 20 Jul 2021 14:33:10 -0700
+In-Reply-To: <000000000000a0982305c6e5c9f5@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e58f5705c794cc1b@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Write in sctp_auth_shkey_hold
+From:   syzbot <syzbot+b774577370208727d12b@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, hdanton@sina.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
+        lucien.xin@gmail.com, marcelo.leitner@gmail.com,
+        netdev@vger.kernel.org, nhorman@tuxdriver.com,
+        syzkaller-bugs@googlegroups.com, vyasevich@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-syzbot reported a call trace:
+syzbot has bisected this issue to:
 
-  BUG: KASAN: use-after-free in sctp_auth_shkey_hold+0x22/0xa0 net/sctp/auth.c:112
-  Call Trace:
-   sctp_auth_shkey_hold+0x22/0xa0 net/sctp/auth.c:112
-   sctp_set_owner_w net/sctp/socket.c:131 [inline]
-   sctp_sendmsg_to_asoc+0x152e/0x2180 net/sctp/socket.c:1865
-   sctp_sendmsg+0x103b/0x1d30 net/sctp/socket.c:2027
-   inet_sendmsg+0x99/0xe0 net/ipv4/af_inet.c:821
-   sock_sendmsg_nosec net/socket.c:703 [inline]
-   sock_sendmsg+0xcf/0x120 net/socket.c:723
+commit 56dd525abd56f7acd7b44a52935726e3ada4916c
+Author: Xin Long <lucien.xin@gmail.com>
+Date:   Mon Aug 19 14:02:49 2019 +0000
 
-This is an use-after-free issue caused by not updating asoc->shkey after
-it was replaced in the key list asoc->endpoint_shared_keys, and the old
-key was freed.
+    sctp: add SCTP_AUTH_SUPPORTED sockopt
 
-This patch is to fix by also updating active_key for asoc when old key is
-being replaced with a new one. Note that this issue doesn't exist in
-sctp_auth_del_key_id(), as it's not allowed to delete the active_key
-from the asoc.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=162bdf22300000
+start commit:   6f20c8adb181 net/tcp_fastopen: fix data races around tfo_a..
+git tree:       net
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=152bdf22300000
+console output: https://syzkaller.appspot.com/x/log.txt?x=112bdf22300000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6da37c7627210105
+dashboard link: https://syzkaller.appspot.com/bug?extid=b774577370208727d12b
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12d37b4a300000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=114bd0ea300000
 
-Fixes: 1b1e0bc99474 ("sctp: add refcnt support for sh_key")
 Reported-by: syzbot+b774577370208727d12b@syzkaller.appspotmail.com
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
----
- net/sctp/auth.c | 2 ++
- 1 file changed, 2 insertions(+)
+Fixes: 56dd525abd56 ("sctp: add SCTP_AUTH_SUPPORTED sockopt")
 
-diff --git a/net/sctp/auth.c b/net/sctp/auth.c
-index 6f8319b828b0..fe74c5f95630 100644
---- a/net/sctp/auth.c
-+++ b/net/sctp/auth.c
-@@ -860,6 +860,8 @@ int sctp_auth_set_key(struct sctp_endpoint *ep,
- 	if (replace) {
- 		list_del_init(&shkey->key_list);
- 		sctp_auth_shkey_release(shkey);
-+		if (asoc && asoc->active_key_id == auth_key->sca_keynumber)
-+			sctp_auth_asoc_init_active_key(asoc, GFP_KERNEL);
- 	}
- 	list_add(&cur_key->key_list, sh_keys);
- 
--- 
-2.27.0
-
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
