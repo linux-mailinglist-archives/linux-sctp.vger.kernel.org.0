@@ -2,65 +2,44 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 398713D2791
-	for <lists+linux-sctp@lfdr.de>; Thu, 22 Jul 2021 18:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1482C3D2D5B
+	for <lists+linux-sctp@lfdr.de>; Thu, 22 Jul 2021 22:09:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbhGVPsE (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 22 Jul 2021 11:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44850 "EHLO
+        id S231135AbhGVT3Q (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 22 Jul 2021 15:29:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbhGVPsD (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 22 Jul 2021 11:48:03 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21BAC061575
-        for <linux-sctp@vger.kernel.org>; Thu, 22 Jul 2021 09:28:38 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id t2so7490911edd.13
-        for <linux-sctp@vger.kernel.org>; Thu, 22 Jul 2021 09:28:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=s3ORVPfeqsbIwaEF6gwDU0K19fRVauQoSNaQl2dZZuU=;
-        b=AyK7Rl/xVmCDI+MJatnmmhQ9AWlK1cz/AooSOPSpEdskvvbz68+MIf8NNM8QG4lzRi
-         wpbzJq6XJMXXpSiWu0XxaRC0Spm5N3rin7/bDeAsTPSzDLqW/668r7M0eu9B4PTMSzVo
-         SFILNWlkTLgfYs5FNzSmCiFmm5LGxG6koJx+tQGlQPmzWPwd5M0aJI5hyhQ/0BpebU7V
-         7nCLYCNt+R7aYgmGu81NWNgr4fpihq5rB1KFqlTCwtsLHurCOEDSNCPGJRvzAbaYP6Uz
-         IWAfy2aF9A1AtCUVcZ9rkPWBwivMjtfQSTmJ8G5NGSOPw+ETg15x1LC/RlgADeYVGwke
-         tisA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=s3ORVPfeqsbIwaEF6gwDU0K19fRVauQoSNaQl2dZZuU=;
-        b=cM4DFUg8t2Z1doJdL9osxmsP7Yieflgfz6JXmnjC4pBcMffMxkAaut58KGNExVPHiD
-         txAFDU0VxUxhWqiaLq0padx+lmK1Lo1r1dxVcauC0ro8lRO8QdzTCzID4tbBhPfTWmAo
-         jrp5ebTkFTmNUVLjptDgti1AbD2XPPrdimhAAJl7ZoPGWjO4kek1JBIJJpcKRUIrr36C
-         f7AKpCPXiFOA5m3FhJYMp6NjhahZ5pPr6iyAUTBdYmRsCMqudoYJbySdvcomLiX8OugM
-         WXqaBOjZFQiqcnZje/uhfhmWElgFvdgC9voofweF/M8W2uCJTDf5e2Bf8cjOiahV97xD
-         VkRg==
-X-Gm-Message-State: AOAM532L5ghRg1vZgK9gV2I9iGIFo+Crq1rg5OKsNkSVFTDXP3FQWZ+Z
-        +0nlYVFnKWMlwcVCqlpL5Sld3TUUsQuMGoTE3Bc=
-X-Google-Smtp-Source: ABdhPJw0006BK89gxnOdd418PiFOB19BU/bhjSqbHY8MUw5Uo9PD97vBjeWoBj8egwbPYkFI7E/OeSMDUmWydTQtLuE=
-X-Received: by 2002:a05:6402:2228:: with SMTP id cr8mr525803edb.309.1626971317273;
- Thu, 22 Jul 2021 09:28:37 -0700 (PDT)
+        with ESMTP id S230429AbhGVT3P (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 22 Jul 2021 15:29:15 -0400
+Received: from 68-252-206-104.staticrdns.eonix.net (unknown [IPv6:2607:ff28:b005:2a:ec52:75ff:fe50:d321])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 677C0C061575;
+        Thu, 22 Jul 2021 13:09:50 -0700 (PDT)
+Received: from User (localhost [IPv6:::1])
+        by 68-252-206-104.staticrdns.eonix.net (Postfix) with SMTP id DC7298F1F52;
+        Mon, 19 Jul 2021 22:13:42 -0400 (EDT)
+Reply-To: <mrs_hannah@rediffmail.com>
+From:   "Mrs. Hajia Hannah Ahmed" <info@247vidz.com>
+Subject: Re: I WANT TO INVESTMENT IN YOUR COUNTRY?
+Date:   Tue, 20 Jul 2021 05:13:14 -0700
 MIME-Version: 1.0
-Received: by 2002:a54:3ece:0:0:0:0:0 with HTTP; Thu, 22 Jul 2021 09:28:36
- -0700 (PDT)
-Reply-To: s7jamesl@gmail.com
-From:   "JAMES L. SMITH" <jameslukan18@gmail.com>
-Date:   Thu, 22 Jul 2021 16:28:36 +0000
-Message-ID: <CAGaH9fKVSJD3gzBUu8Ep-74vqrkq8oe7cHs0CmZ9_irawpVwYA@mail.gmail.com>
-Subject: reHello.Greetings
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-Id: <20210720021342.DC7298F1F52@68-252-206-104.staticrdns.eonix.net>
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Greetings,
-
-Why haven't you replied to me? Please, kindly let me know your
-thoughts towards project funding.
-
-Best regards,
-James L. Smith
-Accredited Broker
+Attn:
+ 
+I am Mrs. Hajia Hannah Ahmed I am a Widow and member of the contract award committee and 14 project allocation manager, of the Department of Minerals and Natural Resources in Syria;
+ 
+Due to the war in Syria, I am in search of an agent or company to assist me to invest my fund  (USD$35Million) and subsequent investment in properties in your country. You will be required to. If you decide to render your service to me in this regard, 30% of the total sum of USD$35M will be given to you for your service. 
+ 
+Yours Faithfully,
+Mrs. Hajia Hannah Ahmed
