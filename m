@@ -2,107 +2,72 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A9E3D333B
-	for <lists+linux-sctp@lfdr.de>; Fri, 23 Jul 2021 06:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F4FC3D369F
+	for <lists+linux-sctp@lfdr.de>; Fri, 23 Jul 2021 10:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233881AbhGWDU3 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 22 Jul 2021 23:20:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37500 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233823AbhGWDRp (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 22 Jul 2021 23:17:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9B8DE60F25;
-        Fri, 23 Jul 2021 03:58:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627012699;
-        bh=r6KvBsv2mk7eJulnSPf9e29PrLX2bcuIHESMYO0eIhQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QNe+zuxRYIFePgXATRxFMhw61ecUYbIquWnLZDEEbe93BbVvURLlJ3kn52ee47ihH
-         jSB2SsV3CyA8/QRS9+P16LkInlhPMgPcy3ewD0Bz3FK+NvoZ4dOzA8Psi3LjjtIQiO
-         9ZVt1cvBp8NvkdQa50oq5InTv6Jn5noKuJ43kDb53vLMBRp85evzMgzmnFYg4sDrsZ
-         6JRRaX1JK9LTOYdOXLk8n3y1AVWixqLWtt4hSqR9Ql9k3757jf9ySAmIU9fk2mpDIX
-         KG3lBzvVpkS6xTSriOxqqa4GMIL0WMTk4NUxQh03Ctc/LFp6aaNYw+j149O78AFdfY
-         7eRBvkaQZ+tAQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Xin Long <lucien.xin@gmail.com>,
-        =?UTF-8?q?S=C3=A9rgio?= <surkamp@gmail.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 04/14] sctp: move 198 addresses from unusable to private scope
-Date:   Thu, 22 Jul 2021 23:58:03 -0400
-Message-Id: <20210723035813.531837-4-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210723035813.531837-1-sashal@kernel.org>
-References: <20210723035813.531837-1-sashal@kernel.org>
+        id S234311AbhGWHpD (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 23 Jul 2021 03:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229907AbhGWHpC (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 23 Jul 2021 03:45:02 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF064C061575
+        for <linux-sctp@vger.kernel.org>; Fri, 23 Jul 2021 01:25:35 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id q18so810044ile.9
+        for <linux-sctp@vger.kernel.org>; Fri, 23 Jul 2021 01:25:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=8Fh1AmsX8lTEP6wAub3MAWGaox9nC2Imv6c0kMa0AgI=;
+        b=MNTcpAYtMHz3mWuwqP8A85+5WSKFHBAu/cC3a07veDqS5/P7/tLOIWBZ2Qp61/jwkm
+         ttl4VpeJUdOH0gPCH0mbqvssBd7dJ33ndZ85sGi8mHHrVDmORSAao84x9BgG65LkGaSv
+         vN4dUL53DEZhmcZL4y/A0n6xeeOTysmEzWpDUlocdZyd6f8TNdNk+2/54FU1T5wFPOsx
+         AzencyIxbM2+MUcqtGLz8ngbZ9kzcB+d15VGChdEUUNSYJsgduD+vVVgqI0NErSNhK80
+         BOe0+tbSH5UC3QXYhjsg+2pmarDz+xk66f9+jFRKjSLz1c/DFE2SLRbFOddQ1bSio2mX
+         CiHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=8Fh1AmsX8lTEP6wAub3MAWGaox9nC2Imv6c0kMa0AgI=;
+        b=kwDOybU+GnIVZtl0naoaEGn6MOIR/jPITjPWtyEy+kXuNDnU+qC8dZaU2yIxOzTOPn
+         AuC52vYkWpwi6Tj7+7r5vcNMfT/WZrWfv0z5vguQs3NXzpS/JbzV3+2NXQ7RiNFFY7xK
+         MCSSouqORWROQuOCMtSPlq31IOUQ6w9DPQ61gouDbfsKYxsBmZVrIfs3KJv7AT8+YyAW
+         QtSYqjAJFlu1/fo81GuAC60pi9ZChYpBcST61xVAJ/iWf00R84tylqfyfZN0pSljcOhV
+         UdAQYE2SnjLmZXnOm9nCPejMAJ9ZfSiHiQGvZqX0tbhDhdTxbhizPqJd/QJJX0uh3t/A
+         7aew==
+X-Gm-Message-State: AOAM532baRbd9aIEirsz6bc3LDm3f8SeNAioVZ2bnIRRrJ6Ypt6h9g5m
+        vNzbW+sN6GdmvM3+ZvnR4W4PsyCGHXuMSXd61H4=
+X-Google-Smtp-Source: ABdhPJwvODM8LImX7csZ3G2roUS6vmfW6mVkC2ADPGYkwWT1LvY5Sc1uqTIB7jL65/nfOykKbRwxuJjM1IGEQKe5kyI=
+X-Received: by 2002:a92:1e03:: with SMTP id e3mr2901966ile.264.1627028735331;
+ Fri, 23 Jul 2021 01:25:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Reply-To: jabbarqasim39@gmail.com
+Sender: parrickmark99@gmail.com
+Received: by 2002:a05:6602:2117:0:0:0:0 with HTTP; Fri, 23 Jul 2021 01:25:34
+ -0700 (PDT)
+From:   Jabbar Qasim <jabbarqasim673@gmail.com>
+Date:   Fri, 23 Jul 2021 08:25:34 +0000
+X-Google-Sender-Auth: jTX-N6hwMUESL48P9C0a1UYJFkg
+Message-ID: <CAEDe2oW0TsEgsCf4v3HtDEc1k+KE37AmzN2zKV1xC9wx6FBKNA@mail.gmail.com>
+Subject: Reply me very urgent
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Xin Long <lucien.xin@gmail.com>
+Greetings,
 
-[ Upstream commit 1d11fa231cabeae09a95cb3e4cf1d9dd34e00f08 ]
+I know that this mail will come to you as a surprise as we have never
+met before, but need not to worry as I am contacting you independently
+of my investigation and no one is informed of this communication. I
+need your urgent assistance in transferring the sum of $13,300,000.00
+USD immediately to your private account.The money has been here in our
+Bank lying dormant for years now without anybody coming for the claim
+it.
 
-The doc draft-stewart-tsvwg-sctp-ipv4-00 that restricts 198 addresses
-was never published. These addresses as private addresses should be
-allowed to use in SCTP.
+Best Regards,
 
-As Michael Tuexen suggested, this patch is to move 198 addresses from
-unusable to private scope.
-
-Reported-by: Sérgio <surkamp@gmail.com>
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- include/net/sctp/constants.h | 4 +---
- net/sctp/protocol.c          | 3 ++-
- 2 files changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/include/net/sctp/constants.h b/include/net/sctp/constants.h
-index 06e1deeef464..8c6b04f9f6cb 100644
---- a/include/net/sctp/constants.h
-+++ b/include/net/sctp/constants.h
-@@ -328,8 +328,7 @@ enum {
- #define SCTP_SCOPE_POLICY_MAX	SCTP_SCOPE_POLICY_LINK
- 
- /* Based on IPv4 scoping <draft-stewart-tsvwg-sctp-ipv4-00.txt>,
-- * SCTP IPv4 unusable addresses: 0.0.0.0/8, 224.0.0.0/4, 198.18.0.0/24,
-- * 192.88.99.0/24.
-+ * SCTP IPv4 unusable addresses: 0.0.0.0/8, 224.0.0.0/4, 192.88.99.0/24.
-  * Also, RFC 8.4, non-unicast addresses are not considered valid SCTP
-  * addresses.
-  */
-@@ -337,7 +336,6 @@ enum {
- 	((htonl(INADDR_BROADCAST) == a) ||  \
- 	 ipv4_is_multicast(a) ||	    \
- 	 ipv4_is_zeronet(a) ||		    \
--	 ipv4_is_test_198(a) ||		    \
- 	 ipv4_is_anycast_6to4(a))
- 
- /* Flags used for the bind address copy functions.  */
-diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
-index 981c7cbca46a..2661a453a1c2 100644
---- a/net/sctp/protocol.c
-+++ b/net/sctp/protocol.c
-@@ -392,7 +392,8 @@ static enum sctp_scope sctp_v4_scope(union sctp_addr *addr)
- 		retval = SCTP_SCOPE_LINK;
- 	} else if (ipv4_is_private_10(addr->v4.sin_addr.s_addr) ||
- 		   ipv4_is_private_172(addr->v4.sin_addr.s_addr) ||
--		   ipv4_is_private_192(addr->v4.sin_addr.s_addr)) {
-+		   ipv4_is_private_192(addr->v4.sin_addr.s_addr) ||
-+		   ipv4_is_test_198(addr->v4.sin_addr.s_addr)) {
- 		retval = SCTP_SCOPE_PRIVATE;
- 	} else {
- 		retval = SCTP_SCOPE_GLOBAL;
--- 
-2.30.2
-
+Mr.Jabbar Qasim
