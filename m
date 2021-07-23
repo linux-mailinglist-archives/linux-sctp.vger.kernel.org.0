@@ -2,72 +2,69 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F4FC3D369F
-	for <lists+linux-sctp@lfdr.de>; Fri, 23 Jul 2021 10:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFEC43D3C9B
+	for <lists+linux-sctp@lfdr.de>; Fri, 23 Jul 2021 17:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234311AbhGWHpD (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 23 Jul 2021 03:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbhGWHpC (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 23 Jul 2021 03:45:02 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF064C061575
-        for <linux-sctp@vger.kernel.org>; Fri, 23 Jul 2021 01:25:35 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id q18so810044ile.9
-        for <linux-sctp@vger.kernel.org>; Fri, 23 Jul 2021 01:25:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=8Fh1AmsX8lTEP6wAub3MAWGaox9nC2Imv6c0kMa0AgI=;
-        b=MNTcpAYtMHz3mWuwqP8A85+5WSKFHBAu/cC3a07veDqS5/P7/tLOIWBZ2Qp61/jwkm
-         ttl4VpeJUdOH0gPCH0mbqvssBd7dJ33ndZ85sGi8mHHrVDmORSAao84x9BgG65LkGaSv
-         vN4dUL53DEZhmcZL4y/A0n6xeeOTysmEzWpDUlocdZyd6f8TNdNk+2/54FU1T5wFPOsx
-         AzencyIxbM2+MUcqtGLz8ngbZ9kzcB+d15VGChdEUUNSYJsgduD+vVVgqI0NErSNhK80
-         BOe0+tbSH5UC3QXYhjsg+2pmarDz+xk66f9+jFRKjSLz1c/DFE2SLRbFOddQ1bSio2mX
-         CiHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=8Fh1AmsX8lTEP6wAub3MAWGaox9nC2Imv6c0kMa0AgI=;
-        b=kwDOybU+GnIVZtl0naoaEGn6MOIR/jPITjPWtyEy+kXuNDnU+qC8dZaU2yIxOzTOPn
-         AuC52vYkWpwi6Tj7+7r5vcNMfT/WZrWfv0z5vguQs3NXzpS/JbzV3+2NXQ7RiNFFY7xK
-         MCSSouqORWROQuOCMtSPlq31IOUQ6w9DPQ61gouDbfsKYxsBmZVrIfs3KJv7AT8+YyAW
-         QtSYqjAJFlu1/fo81GuAC60pi9ZChYpBcST61xVAJ/iWf00R84tylqfyfZN0pSljcOhV
-         UdAQYE2SnjLmZXnOm9nCPejMAJ9ZfSiHiQGvZqX0tbhDhdTxbhizPqJd/QJJX0uh3t/A
-         7aew==
-X-Gm-Message-State: AOAM532baRbd9aIEirsz6bc3LDm3f8SeNAioVZ2bnIRRrJ6Ypt6h9g5m
-        vNzbW+sN6GdmvM3+ZvnR4W4PsyCGHXuMSXd61H4=
-X-Google-Smtp-Source: ABdhPJwvODM8LImX7csZ3G2roUS6vmfW6mVkC2ADPGYkwWT1LvY5Sc1uqTIB7jL65/nfOykKbRwxuJjM1IGEQKe5kyI=
-X-Received: by 2002:a92:1e03:: with SMTP id e3mr2901966ile.264.1627028735331;
- Fri, 23 Jul 2021 01:25:35 -0700 (PDT)
+        id S235807AbhGWO7i (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 23 Jul 2021 10:59:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47460 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235765AbhGWO7a (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Fri, 23 Jul 2021 10:59:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 2A75260EBD;
+        Fri, 23 Jul 2021 15:40:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627054804;
+        bh=R0L44uAf9kXc1MarPTVvuXq4z9Tihu/b/+LCxWdIKLM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=qLUpCbHfmyqDkKQM4kBYqCNbmMGXz7JYRyGX+9KncUpDKx6MTfgXC0bNydkyWrpvQ
+         vMwfMFjKTOYRF7UpNLdw9pJhwg9n0UFhHrTQG/HF0VLsYIEkP/yeWkyFfZ7djTs9m9
+         iu38/tpLKdi35UHcpWsE5InBW69ZXFUAmUX53NwBrK3Y2C7rNP22T1n4iVXK3kqhXu
+         +NsLtpbZHj1qV9AGv3KfHHBQ51DE09pnm2L9MC/q3uW+/F5Z1limy9FPnjzFW3N6oQ
+         1MEXJnSdeaAqKzleiKBbxXROpblM84Hgp2JmxwA+CyOdSkWxW9jB6a31kSIhtCqevy
+         occkHVuowjobw==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 1E0A060972;
+        Fri, 23 Jul 2021 15:40:04 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Reply-To: jabbarqasim39@gmail.com
-Sender: parrickmark99@gmail.com
-Received: by 2002:a05:6602:2117:0:0:0:0 with HTTP; Fri, 23 Jul 2021 01:25:34
- -0700 (PDT)
-From:   Jabbar Qasim <jabbarqasim673@gmail.com>
-Date:   Fri, 23 Jul 2021 08:25:34 +0000
-X-Google-Sender-Auth: jTX-N6hwMUESL48P9C0a1UYJFkg
-Message-ID: <CAEDe2oW0TsEgsCf4v3HtDEc1k+KE37AmzN2zKV1xC9wx6FBKNA@mail.gmail.com>
-Subject: Reply me very urgent
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] tipc: fix implicit-connect for SYN+
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <162705480411.17668.14638810207586161441.git-patchwork-notify@kernel.org>
+Date:   Fri, 23 Jul 2021 15:40:04 +0000
+References: <9f7076d5dd455e26df404b917bfe99f301c0eb72.1626969941.git.lucien.xin@gmail.com>
+In-Reply-To: <9f7076d5dd455e26df404b917bfe99f301c0eb72.1626969941.git.lucien.xin@gmail.com>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        tipc-discussion@lists.sourceforge.net, linux-sctp@vger.kernel.org,
+        jmaloy@redhat.com
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Greetings,
+Hello:
 
-I know that this mail will come to you as a surprise as we have never
-met before, but need not to worry as I am contacting you independently
-of my investigation and no one is informed of this communication. I
-need your urgent assistance in transferring the sum of $13,300,000.00
-USD immediately to your private account.The money has been here in our
-Bank lying dormant for years now without anybody coming for the claim
-it.
+This patch was applied to netdev/net.git (refs/heads/master):
 
-Best Regards,
+On Thu, 22 Jul 2021 12:05:41 -0400 you wrote:
+> For implicit-connect, when it's either SYN- or SYN+, an ACK should
+> be sent back to the client immediately. It's not appropriate for
+> the client to enter established state only after receiving data
+> from the server.
+> 
+> On client side, after the SYN is sent out, tipc_wait_for_connect()
+> should be called to wait for the ACK if timeout is set.
+> 
+> [...]
 
-Mr.Jabbar Qasim
+Here is the summary with links:
+  - [net] tipc: fix implicit-connect for SYN+
+    https://git.kernel.org/netdev/net/c/f8dd60de1948
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
