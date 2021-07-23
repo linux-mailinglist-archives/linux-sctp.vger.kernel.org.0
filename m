@@ -2,27 +2,27 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99E4D3D3272
-	for <lists+linux-sctp@lfdr.de>; Fri, 23 Jul 2021 05:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87C473D32A7
+	for <lists+linux-sctp@lfdr.de>; Fri, 23 Jul 2021 05:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233694AbhGWDQ4 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 22 Jul 2021 23:16:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36944 "EHLO mail.kernel.org"
+        id S233950AbhGWDRp (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 22 Jul 2021 23:17:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37788 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233638AbhGWDQx (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Thu, 22 Jul 2021 23:16:53 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 469F960ED7;
-        Fri, 23 Jul 2021 03:57:26 +0000 (UTC)
+        id S233833AbhGWDRU (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Thu, 22 Jul 2021 23:17:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BBA3460F35;
+        Fri, 23 Jul 2021 03:57:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627012647;
-        bh=zOoCF+HS6tH6/uMM57hvO1ALQwVAf4hdAFDbogkm7xY=;
+        s=k20201202; t=1627012674;
+        bh=cjA8zfkLm82sp6iWXUazz8svY+c1a46JHZzF8PLh4cU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cjMzWGMUuZZH26FHQ4mcJy/dmuo1rPtCxTTjaIo1s40B7AOygpbZ9lC+MEgUPwoS1
-         oe6UveaRJcPWdbLm1DDB/1cRHstkGqS8D9fmtSV0vhL7XS3rg6QvRoiAbD8bb6N6Xe
-         yhuYTMNEw75yEkMXPFDvQ+jzkEHvbMDY2xOhO1E3tWbY6TuiATq42tc7aAgIwDVkbl
-         ia9zVftxkIJI/3CPxfOFY3g+1x+qLGI7h007lwQnN1Gr88vGcLVQwR/Xak3nb6gG1f
-         ZXarR9X3nuxp2WcavVaaiUfIASGBIVvf96sGzE7xDmXPBBQ5qX8JLkIUt4Rr+jZ+vW
-         uGn9GFUVfmUDA==
+        b=XXQu0Uk1ltjT7LbIGlkJKOF3Nj30FsuUpp3FAxPmURhBRI/X9G65UE/UlNpQt1eKa
+         BPxBBFlrV8Uoxa9do8WGtSNn1qrZa+JH3k96QyZqtPZJXTi774cX24BDTf7q95i0Ng
+         UO7TgDG4vJq3a36Ia28uksPj+tQ38g5hJgG33FY6+VtUKWMbRuZ6qerLyuMA7jMRFB
+         2Z7mYksK9axnG8RBfWNF/Svw/4FYTLvGkLfIKZN/xHkPQBO8ClXI7dXI0QfEYdXwhf
+         0WJb2vAsrN2Ad9eaGuPwFXilohGp5xUjllK7TXa1wYe16bbO7g86lyQLCV28ramb47
+         kOL3bNSFyjWJw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Xin Long <lucien.xin@gmail.com>,
@@ -31,12 +31,12 @@ Cc:     Xin Long <lucien.xin@gmail.com>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, linux-sctp@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 04/19] sctp: move 198 addresses from unusable to private scope
-Date:   Thu, 22 Jul 2021 23:57:05 -0400
-Message-Id: <20210723035721.531372-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 04/17] sctp: move 198 addresses from unusable to private scope
+Date:   Thu, 22 Jul 2021 23:57:35 -0400
+Message-Id: <20210723035748.531594-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210723035721.531372-1-sashal@kernel.org>
-References: <20210723035721.531372-1-sashal@kernel.org>
+In-Reply-To: <20210723035748.531594-1-sashal@kernel.org>
+References: <20210723035748.531594-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -68,10 +68,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 3 insertions(+), 4 deletions(-)
 
 diff --git a/include/net/sctp/constants.h b/include/net/sctp/constants.h
-index 14a0d22c9113..bf23a2ed92da 100644
+index 122d9e2d8dfd..1ad049ac2add 100644
 --- a/include/net/sctp/constants.h
 +++ b/include/net/sctp/constants.h
-@@ -342,8 +342,7 @@ enum {
+@@ -340,8 +340,7 @@ enum {
  #define SCTP_SCOPE_POLICY_MAX	SCTP_SCOPE_POLICY_LINK
  
  /* Based on IPv4 scoping <draft-stewart-tsvwg-sctp-ipv4-00.txt>,
@@ -81,7 +81,7 @@ index 14a0d22c9113..bf23a2ed92da 100644
   * Also, RFC 8.4, non-unicast addresses are not considered valid SCTP
   * addresses.
   */
-@@ -351,7 +350,6 @@ enum {
+@@ -349,7 +348,6 @@ enum {
  	((htonl(INADDR_BROADCAST) == a) ||  \
  	 ipv4_is_multicast(a) ||	    \
  	 ipv4_is_zeronet(a) ||		    \
@@ -90,10 +90,10 @@ index 14a0d22c9113..bf23a2ed92da 100644
  
  /* Flags used for the bind address copy functions.  */
 diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
-index 6f2bbfeec3a4..603049aa4950 100644
+index 25833238fe93..e4e401e2acfb 100644
 --- a/net/sctp/protocol.c
 +++ b/net/sctp/protocol.c
-@@ -393,7 +393,8 @@ static enum sctp_scope sctp_v4_scope(union sctp_addr *addr)
+@@ -392,7 +392,8 @@ static enum sctp_scope sctp_v4_scope(union sctp_addr *addr)
  		retval = SCTP_SCOPE_LINK;
  	} else if (ipv4_is_private_10(addr->v4.sin_addr.s_addr) ||
  		   ipv4_is_private_172(addr->v4.sin_addr.s_addr) ||
