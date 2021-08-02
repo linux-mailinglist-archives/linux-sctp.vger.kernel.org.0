@@ -2,119 +2,74 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D1C03DCA4D
-	for <lists+linux-sctp@lfdr.de>; Sun,  1 Aug 2021 08:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2673DCF7B
+	for <lists+linux-sctp@lfdr.de>; Mon,  2 Aug 2021 06:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbhHAGZp (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 1 Aug 2021 02:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39138 "EHLO
+        id S231432AbhHBEYo (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 2 Aug 2021 00:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbhHAGZp (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sun, 1 Aug 2021 02:25:45 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301D0C06175F;
-        Sat, 31 Jul 2021 23:25:38 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id s22-20020a17090a1c16b0290177caeba067so1194197pjs.0;
-        Sat, 31 Jul 2021 23:25:38 -0700 (PDT)
+        with ESMTP id S231410AbhHBEYn (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 2 Aug 2021 00:24:43 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64918C06179B
+        for <linux-sctp@vger.kernel.org>; Sun,  1 Aug 2021 21:24:33 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id h9so13284389ejs.4
+        for <linux-sctp@vger.kernel.org>; Sun, 01 Aug 2021 21:24:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BtXZYRmT/NygaPovlN6oa9mK2ot2ugUhbkM/k/oqAFc=;
-        b=u1zd4g941vdPgwNRViARd7Z1hL7pEvoXJLiPhiYFFIDu5CWoOlbz1jmMzEuMj7T+7Y
-         mTbEIesEptIXQmk2bOM8XM7emd/kvad8Slz5A/QaY+b4DwAuCCXjHMwXE1YTAv6DZ+zg
-         MeXRSxMEG2Iv+D7j/BY19u2NhlMiawS3IeCQWXOS8fzTjo9KSn10cBuzuWLkycpCJGwU
-         brdiRbuLn4fFYf5Uo1MYTNuOkZybae+m0by9qLf5chYPhHxOWMCciPNSnYedT92lZDHC
-         tQR/ovGSIPq/ASZ3gJhKuxxu0jATz9RpGZkffEpKgumMFqy36azVa+qlBESeR8EguHwR
-         r6gw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
+        b=WDq9P0bY1AsY9kO7VoQiuEkd/+xeN2uAzVka1J/B7YABFMMcv9zsRMDuUzGU3t7LVq
+         x60AdfwMQPfhhBT91CFmxmNgG6fRcK6BFaIDqx+Ms1vLOgOAYNOd4Xbt+10CNKTcRAMK
+         KeTYcmNC0bNtdVd3yLIRxS8Pr5sLxpts2NC88pKkxuGBDjkmUnJislac8lDy7dNnd85N
+         dz7rwNTEXx7I9NqC47E4asccGsO9/P6huztRZkI4lkvRJ5hB7XcOxioVdhTGqNDSXebW
+         Md0Dh2ya6SQXgvhbdFNsJy7D030uG2HCPIxJG2TxztPigkWx+ZXfNLX+hVWs0ri0sCK7
+         k48A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BtXZYRmT/NygaPovlN6oa9mK2ot2ugUhbkM/k/oqAFc=;
-        b=pP30pBfSJE82s78/kTTN2r8eDZjquP3UTE0TnkRF4ZGfz0+3tkABjNOzX/k7HhTwvE
-         PIJKmHOe5BmhRQXTCab9MR1UjOPKU1/XSw1lAH4c8HGDYQWLvpUC9tAS/nrzCErdQm/D
-         rQhO0OagYCJ9gn8vlQjGlFcmfH8xuAbh1jQvuHP715YPH6TT5WHWgrJ4Uqid7R/+kedO
-         bjwrf7DxrrgTZxb9zfrGRiakbTMt8YPNbqg/MJWI5y3X0QBcvja8TYhshy+2tN5MKOl+
-         +jqtWc+xXu6uAXm6dkLeR92PRf2LNrJZ9As5Eu5VirMK/flXhHSXEep4w6mYT7Zv87Wh
-         S64Q==
-X-Gm-Message-State: AOAM533edYRqbsPAn1sedL6o1R5wSCRYBDMYM/7vWn3+6y8ldD+QkWgy
-        V47yf+5xLPcY+tJ5z997qWl7GWBVs5AsiQ==
-X-Google-Smtp-Source: ABdhPJx8yO4av8qIygpaoIvNvNi6Zc0yhbOZ7kjqzuAGkDmjU8YvDeIfvFjjS43ZuzyRmnmhgqMoRg==
-X-Received: by 2002:a63:4b0a:: with SMTP id y10mr3487658pga.437.1627799137345;
-        Sat, 31 Jul 2021 23:25:37 -0700 (PDT)
-Received: from localhost (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id x81sm7452631pfc.22.2021.07.31.23.25.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Jul 2021 23:25:36 -0700 (PDT)
-From:   Xin Long <lucien.xin@gmail.com>
-To:     network dev <netdev@vger.kernel.org>, davem@davemloft.net,
-        kuba@kernel.org, linux-sctp@vger.kernel.org
-Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Subject: [PATCH net] sctp: move the active_key update after sh_keys is added
-Date:   Sun,  1 Aug 2021 02:25:31 -0400
-Message-Id: <514d9b43054a4dc752b7d575700ad87ae0db5f0c.1627799131.git.lucien.xin@gmail.com>
-X-Mailer: git-send-email 2.27.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
+        b=JFvHElEcCeau82NtITrhfTIivEdG86HBnALOxRl6sMhmtmpph20/lytmaMd2cspi7y
+         s0bD9aWCJFQO2BfmniwoKSiRiFs1TQeUpnMYTDIpAXaoyKW9bh8aftwo7dv+RznnUFqu
+         2BjHayPEsv3Emd1370vZd0gkoE+yz5WRJ8RZ5QHlqENryb9nBF24dWYri4zNHv1wablS
+         MQ5k7Ia3v2BWLSMCQWCA7rTAj0rIPu2LKsAkRR4/Tc0hibkhzQyJNqmtT08VT+fKSLwN
+         z1K1Ab1InP4sYLWZ+a7cRDc3GizDD0ekZv1+tf+MsGOBwZau0Bdin1PWrI0bY5UQk0Uf
+         RMWQ==
+X-Gm-Message-State: AOAM530KFU+pn5TNhMr8hD40fe826O9apaLtGAvK24YWmsPJiQCubynU
+        OlJQXMcaafZ6Z1JcZIt2ExOvMLSmHPZjtR6jXWE=
+X-Google-Smtp-Source: ABdhPJyge6CE4/3PK9Ai4ltivb6MMxmm7LTQ2s8bjzS0dUrr9KzpIrZxfzN76q9x5Xx6YjpKdH1irFSuudYhIT6knzs=
+X-Received: by 2002:a17:906:3b87:: with SMTP id u7mr13818454ejf.66.1627878272087;
+ Sun, 01 Aug 2021 21:24:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a17:907:d0b:0:0:0:0 with HTTP; Sun, 1 Aug 2021 21:24:31
+ -0700 (PDT)
+Reply-To: ablahikazabl67@gmail.com
+From:   Abdoulahi Kazim <drwilliamcuthbert@gmail.com>
+Date:   Mon, 2 Aug 2021 05:24:31 +0100
+Message-ID: <CAKwBCXtg5uyf7Jb2AAcE1ghxD-+sCDTGfZ6n10fsvHdbE918iA@mail.gmail.com>
+Subject: More Authentic Information
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-In commit 58acd1009226 ("sctp: update active_key for asoc when old key is
-being replaced"), sctp_auth_asoc_init_active_key() is called to update
-the active_key right after the old key is deleted and before the new key
-is added, and it caused that the active_key could be found with the key_id.
-
-In Ying Xu's testing, the BUG_ON in sctp_auth_asoc_init_active_key() was
-triggered:
-
-  [ ] kernel BUG at net/sctp/auth.c:416!
-  [ ] RIP: 0010:sctp_auth_asoc_init_active_key.part.8+0xe7/0xf0 [sctp]
-  [ ] Call Trace:
-  [ ]  sctp_auth_set_key+0x16d/0x1b0 [sctp]
-  [ ]  sctp_setsockopt.part.33+0x1ba9/0x2bd0 [sctp]
-  [ ]  __sys_setsockopt+0xd6/0x1d0
-  [ ]  __x64_sys_setsockopt+0x20/0x30
-  [ ]  do_syscall_64+0x5b/0x1a0
-
-So fix it by moving the active_key update after sh_keys is added.
-
-Fixes: 58acd1009226 ("sctp: update active_key for asoc when old key is being replaced")
-Reported-by: Ying Xu <yinxu@redhat.com>
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
----
- net/sctp/auth.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
-
-diff --git a/net/sctp/auth.c b/net/sctp/auth.c
-index fe74c5f95630..db6b7373d16c 100644
---- a/net/sctp/auth.c
-+++ b/net/sctp/auth.c
-@@ -857,14 +857,18 @@ int sctp_auth_set_key(struct sctp_endpoint *ep,
- 	memcpy(key->data, &auth_key->sca_key[0], auth_key->sca_keylength);
- 	cur_key->key = key;
- 
--	if (replace) {
--		list_del_init(&shkey->key_list);
--		sctp_auth_shkey_release(shkey);
--		if (asoc && asoc->active_key_id == auth_key->sca_keynumber)
--			sctp_auth_asoc_init_active_key(asoc, GFP_KERNEL);
-+	if (!replace) {
-+		list_add(&cur_key->key_list, sh_keys);
-+		return 0;
- 	}
-+
-+	list_del_init(&shkey->key_list);
-+	sctp_auth_shkey_release(shkey);
- 	list_add(&cur_key->key_list, sh_keys);
- 
-+	if (asoc && asoc->active_key_id == auth_key->sca_keynumber)
-+		sctp_auth_asoc_init_active_key(asoc, GFP_KERNEL);
-+
- 	return 0;
- }
- 
 -- 
-2.27.0
+Dear Partner,
 
+I am soliciting your partnership to relocate $12.5 Million to your
+country for investment on my behalf and you will be entitled to 30% of
+the sum once the transaction is successful made.
+
+Please indicate your genuine interest if you are capable so that i
+will send you the authentic details and documents of the transaction
+in awareness with some of my fellow Directors in the bank.
+
+If you are interested, here is my private Email address:
+(ablahikazabl67@gmail.com)
+For more authentic and legit information.
+
+
+Regards :  Abdoulahi Kazim
