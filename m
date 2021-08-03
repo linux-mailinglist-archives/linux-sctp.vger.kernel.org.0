@@ -2,68 +2,75 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B1DA3DEB3B
-	for <lists+linux-sctp@lfdr.de>; Tue,  3 Aug 2021 12:50:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B21AF3DEF7B
+	for <lists+linux-sctp@lfdr.de>; Tue,  3 Aug 2021 15:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235255AbhHCKuk (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 3 Aug 2021 06:50:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42332 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235481AbhHCKuf (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Tue, 3 Aug 2021 06:50:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 906C360F94;
-        Tue,  3 Aug 2021 10:50:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627987805;
-        bh=1QOQv5V34KtBH2qOa5zdjAHcBIUjPsffHWf1wD7XsIs=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=m6K3nlrH9bFVlJMb1AnxLunweDSFEwdYsxaH1HFoPNjUHkNvZBim7qMHkMCJWC+pl
-         RlgoHI2p5Ighis2ow/XkGmakWAevC09Y60vcuyKhQcSDhvbfVlbQUkeE0mHra7vacR
-         95OsFQdLkaQvLywikqAKRIPLLh/4uvBr9wcLyKbABgWjCJnVLX6ymZjLAFYLRR2WB/
-         FZQTvGqKy0Qd4OLxEyQYArBlUkONosIytk0fMPHORfhK60vD8IRNabd6KN+CUUGk1g
-         mN+bWAIOXvKoEWER4VIV1RdZhXjxGIwIq5HFwI5+KUgBdcLspOH+9Cm4ILDOl3XkE4
-         6TTnZ5WY4kKZw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 8551060A49;
-        Tue,  3 Aug 2021 10:50:05 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] sctp: move the active_key update after sh_keys is added
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162798780554.3453.3732441559932672042.git-patchwork-notify@kernel.org>
-Date:   Tue, 03 Aug 2021 10:50:05 +0000
-References: <514d9b43054a4dc752b7d575700ad87ae0db5f0c.1627799131.git.lucien.xin@gmail.com>
-In-Reply-To: <514d9b43054a4dc752b7d575700ad87ae0db5f0c.1627799131.git.lucien.xin@gmail.com>
+        id S236355AbhHCOAA (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 3 Aug 2021 10:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50602 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236045AbhHCN77 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 3 Aug 2021 09:59:59 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83082C061764;
+        Tue,  3 Aug 2021 06:59:47 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id i10so23851863pla.3;
+        Tue, 03 Aug 2021 06:59:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4mFsdkxp6Aw6HFL87VLjwezm1Sz+I3cKph9vTTCvyyM=;
+        b=ntfzF+nANifsLT5sfp87BIaEvIpgEe15cxmGFpkThesuhzjxH7cPBu7btukVF6lmAX
+         ENBCPugujh976tUFETdlEMklBjwjs5WjEfYFqynyw5Z020A8b3g8SYcoHyv9MZU8BrU0
+         OqGJXMOM/U8Ci585j+fnVb4tIiCZL+0JOoRj9tkofPDlR55OQzeDqYQgB+bUSjqpi+Fp
+         AEjntO6dyvA0jIKG2VwEF/w0tlXgEfIN5Gl/5FvHLb7j0sqRvEbnqq9r2//HpZUSYqt/
+         K5R1crrYK7w0dxkk9zTV65MJgLciMkARXQ3HWxGKW5wqcyTHOMMr+1Gpou9RlJEr8lfj
+         FqKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4mFsdkxp6Aw6HFL87VLjwezm1Sz+I3cKph9vTTCvyyM=;
+        b=JvWJ0nixRlrpx6RDHucyPGMEZc7dnAKxF+XVBMAmetxlWHT6XkZTBydS6dehF6PDps
+         i8/YVkOYPA56aJwiSyv0hUCb0V0jmlFPm79fFmjo2PpODCCGKRf5pDAupKdtXF3pQCyx
+         Cifoacw5rUv7+fsraPat/pd4Eqw72nCBQLssyeWfNuQtzw6wj70p/N9ibSKoKD+fjKuU
+         tY/Ptd/QNz8Orh8MipQ/aCAv7KWbTWuTD6cPFMxf4H5Sya1dkQOgUn4uqcJNSxx/fFlY
+         FKJ8sfK2Z2DnPQvflhpmbOaGQimbl1/JsMuNFWnk2Ikstuv/ZldPRZSUdkeQ1KqHcLBm
+         gmIA==
+X-Gm-Message-State: AOAM5317L5yNrj81QwK5YKXQ2tFX31Sv/4MnFA9+ipUEHLhsgKDOSEyi
+        EXv6PbPvTm5apKpPqVJH0Kc=
+X-Google-Smtp-Source: ABdhPJyFBgHK0siEy5bldYY6aW4HwwIz9iPB0l64wLuTptbY2llyIrexYbxDT9VMbW6R6uNzRyYc7A==
+X-Received: by 2002:a17:902:9046:b029:12c:b5b7:e443 with SMTP id w6-20020a1709029046b029012cb5b7e443mr9392386plz.31.1627999187028;
+        Tue, 03 Aug 2021 06:59:47 -0700 (PDT)
+Received: from horizon.localdomain ([177.220.172.78])
+        by smtp.gmail.com with ESMTPSA id p8sm6569987pfw.35.2021.08.03.06.59.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Aug 2021 06:59:46 -0700 (PDT)
+Received: by horizon.localdomain (Postfix, from userid 1000)
+        id DCBA8C08C9; Tue,  3 Aug 2021 10:59:43 -0300 (-03)
+Date:   Tue, 3 Aug 2021 10:59:43 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 To:     Xin Long <lucien.xin@gmail.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-sctp@vger.kernel.org, marcelo.leitner@gmail.com
+Cc:     network dev <netdev@vger.kernel.org>, davem@davemloft.net,
+        kuba@kernel.org, linux-sctp@vger.kernel.org
+Subject: Re: [PATCH net] sctp: move the active_key update after sh_keys is
+ added
+Message-ID: <YQlLz90u6p0yQa4y@horizon.localdomain>
+References: <514d9b43054a4dc752b7d575700ad87ae0db5f0c.1627799131.git.lucien.xin@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <514d9b43054a4dc752b7d575700ad87ae0db5f0c.1627799131.git.lucien.xin@gmail.com>
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (refs/heads/master):
-
-On Sun,  1 Aug 2021 02:25:31 -0400 you wrote:
+On Sun, Aug 01, 2021 at 02:25:31AM -0400, Xin Long wrote:
 > In commit 58acd1009226 ("sctp: update active_key for asoc when old key is
 > being replaced"), sctp_auth_asoc_init_active_key() is called to update
 > the active_key right after the old key is deleted and before the new key
 > is added, and it caused that the active_key could be found with the key_id.
-> 
-> In Ying Xu's testing, the BUG_ON in sctp_auth_asoc_init_active_key() was
-> triggered:
-> 
-> [...]
 
-Here is the summary with links:
-  - [net] sctp: move the active_key update after sh_keys is added
-    https://git.kernel.org/netdev/net/c/ae954bbc451d
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+I know it's late, but anyway:
+Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
