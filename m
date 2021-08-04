@@ -2,75 +2,81 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B21AF3DEF7B
-	for <lists+linux-sctp@lfdr.de>; Tue,  3 Aug 2021 15:59:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0068A3E0024
+	for <lists+linux-sctp@lfdr.de>; Wed,  4 Aug 2021 13:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236355AbhHCOAA (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 3 Aug 2021 10:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50602 "EHLO
+        id S236649AbhHDL3c (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 4 Aug 2021 07:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236045AbhHCN77 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 3 Aug 2021 09:59:59 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83082C061764;
-        Tue,  3 Aug 2021 06:59:47 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id i10so23851863pla.3;
-        Tue, 03 Aug 2021 06:59:47 -0700 (PDT)
+        with ESMTP id S235066AbhHDL3c (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 4 Aug 2021 07:29:32 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32CEC0613D5
+        for <linux-sctp@vger.kernel.org>; Wed,  4 Aug 2021 04:29:18 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id w197so1029626qkb.1
+        for <linux-sctp@vger.kernel.org>; Wed, 04 Aug 2021 04:29:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4mFsdkxp6Aw6HFL87VLjwezm1Sz+I3cKph9vTTCvyyM=;
-        b=ntfzF+nANifsLT5sfp87BIaEvIpgEe15cxmGFpkThesuhzjxH7cPBu7btukVF6lmAX
-         ENBCPugujh976tUFETdlEMklBjwjs5WjEfYFqynyw5Z020A8b3g8SYcoHyv9MZU8BrU0
-         OqGJXMOM/U8Ci585j+fnVb4tIiCZL+0JOoRj9tkofPDlR55OQzeDqYQgB+bUSjqpi+Fp
-         AEjntO6dyvA0jIKG2VwEF/w0tlXgEfIN5Gl/5FvHLb7j0sqRvEbnqq9r2//HpZUSYqt/
-         K5R1crrYK7w0dxkk9zTV65MJgLciMkARXQ3HWxGKW5wqcyTHOMMr+1Gpou9RlJEr8lfj
-         FqKA==
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=98UCNDXMKoi7q0sV9XhqQ+3F+5iNMNsRGdkS2sxD1QY=;
+        b=LknwwWXMUYPv0nb3qpQsdyDDuDYYWbRo6TUav774uEEud3LGkR2UODadobG+pw3XEG
+         FGw1Zm74QO68pklbdcLCy58JCtER/ZSf36hAp3gXikNS2YGysWnrGS2atgJ+Zk3H7dLy
+         O20Zr5z9C747LaA3COcYcZ5TIeHXC+OSfgUEhtkgJFeR6AfnBkL8WoUX9CfVrUngL172
+         mRmspyIty/OuY+vbTAlJ6dQR1rWeH2W1crjrqwVlZJPb9IX18CGiPBULgfJTruNJz4wz
+         KuNXlDPzn2zfbDint/DFV19v8fG0cGjUK4G15Vrx3GBH/WwvrtMdiBTfMCVOY0oHM7/e
+         qTqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4mFsdkxp6Aw6HFL87VLjwezm1Sz+I3cKph9vTTCvyyM=;
-        b=JvWJ0nixRlrpx6RDHucyPGMEZc7dnAKxF+XVBMAmetxlWHT6XkZTBydS6dehF6PDps
-         i8/YVkOYPA56aJwiSyv0hUCb0V0jmlFPm79fFmjo2PpODCCGKRf5pDAupKdtXF3pQCyx
-         Cifoacw5rUv7+fsraPat/pd4Eqw72nCBQLssyeWfNuQtzw6wj70p/N9ibSKoKD+fjKuU
-         tY/Ptd/QNz8Orh8MipQ/aCAv7KWbTWuTD6cPFMxf4H5Sya1dkQOgUn4uqcJNSxx/fFlY
-         FKJ8sfK2Z2DnPQvflhpmbOaGQimbl1/JsMuNFWnk2Ikstuv/ZldPRZSUdkeQ1KqHcLBm
-         gmIA==
-X-Gm-Message-State: AOAM5317L5yNrj81QwK5YKXQ2tFX31Sv/4MnFA9+ipUEHLhsgKDOSEyi
-        EXv6PbPvTm5apKpPqVJH0Kc=
-X-Google-Smtp-Source: ABdhPJyFBgHK0siEy5bldYY6aW4HwwIz9iPB0l64wLuTptbY2llyIrexYbxDT9VMbW6R6uNzRyYc7A==
-X-Received: by 2002:a17:902:9046:b029:12c:b5b7:e443 with SMTP id w6-20020a1709029046b029012cb5b7e443mr9392386plz.31.1627999187028;
-        Tue, 03 Aug 2021 06:59:47 -0700 (PDT)
-Received: from horizon.localdomain ([177.220.172.78])
-        by smtp.gmail.com with ESMTPSA id p8sm6569987pfw.35.2021.08.03.06.59.46
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=98UCNDXMKoi7q0sV9XhqQ+3F+5iNMNsRGdkS2sxD1QY=;
+        b=HbnWi7G6Gee+Rg9UfwuxlxQ5BwIwGkIQgRyviiNhH6Z8hpCMI5ypmmaAMwBcmOG/W/
+         zXv8yvsLEt4y+BdOFDoVzfJPubWAu6qVV0dzAb42dWu5QROnnSEYcrW+HxSuhfkMghiW
+         DJ909fYfZ0cnO8kSDr/kl6lvLHq5Lc3/+BmSTN8+IpMo9HnnaqYcyztSjN8qXdkZE8+D
+         hul4zaTTxaI7TdYZzSONO+200/IDC/ybl6aMMBLyIPjlhiHo4E9nYbHc9wfp2gVna1bm
+         OHuBfA92351++WOEhuwQ9M7C423/jTLk+fwR1w/RkhXZOaXprVqjC45udlQtU5qRyjwS
+         WKxg==
+X-Gm-Message-State: AOAM532hHYwTyyhyd06He8ZwnnF10ALutLJWbQDm75m4R5pKGOmcR5op
+        6Rp3XGuf24NUE27Tq6WDyqw1OMn43lZEcQ==
+X-Google-Smtp-Source: ABdhPJy1O7elNvqRZpSyiMCqEhFKg5/n9UZ2d7DUQZMxy8+TgywU28gxLCOoBll79gBD6Uq3Ms6akQ==
+X-Received: by 2002:ae9:f312:: with SMTP id p18mr25909742qkg.5.1628076557744;
+        Wed, 04 Aug 2021 04:29:17 -0700 (PDT)
+Received: from localhost (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id p187sm1117720qkd.101.2021.08.04.04.29.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Aug 2021 06:59:46 -0700 (PDT)
-Received: by horizon.localdomain (Postfix, from userid 1000)
-        id DCBA8C08C9; Tue,  3 Aug 2021 10:59:43 -0300 (-03)
-Date:   Tue, 3 Aug 2021 10:59:43 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     network dev <netdev@vger.kernel.org>, davem@davemloft.net,
-        kuba@kernel.org, linux-sctp@vger.kernel.org
-Subject: Re: [PATCH net] sctp: move the active_key update after sh_keys is
- added
-Message-ID: <YQlLz90u6p0yQa4y@horizon.localdomain>
-References: <514d9b43054a4dc752b7d575700ad87ae0db5f0c.1627799131.git.lucien.xin@gmail.com>
+        Wed, 04 Aug 2021 04:29:17 -0700 (PDT)
+From:   Xin Long <lucien.xin@gmail.com>
+To:     linux-sctp@vger.kernel.org,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Subject: [PATCH lksctp-tools 0/4] lksctp-tools: replace use of deprecated gethostbyname with getaddrinfo
+Date:   Wed,  4 Aug 2021 07:29:12 -0400
+Message-Id: <cover.1628076531.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <514d9b43054a4dc752b7d575700ad87ae0db5f0c.1627799131.git.lucien.xin@gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Sun, Aug 01, 2021 at 02:25:31AM -0400, Xin Long wrote:
-> In commit 58acd1009226 ("sctp: update active_key for asoc when old key is
-> being replaced"), sctp_auth_asoc_init_active_key() is called to update
-> the active_key right after the old key is deleted and before the new key
-> is added, and it caused that the active_key could be found with the key_id.
+This patchset is simply to replace use of deprecated gethostbyname
+with getaddrinfo in myftp, sctp_xconnect, sctp_test and sctp_darn.
 
-I know it's late, but anyway:
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Xin Long (4):
+  myftp: replace use of deprecated gethostbyname with getaddrinfo
+  sctp_xconnect: replace use of deprecated gethostbyname with
+    getaddrinfo
+  sctp_test: replace use of deprecated gethostbyname with getaddrinfo
+  sctp_darn: replace use of deprecated gethostbyname with getaddrinfo
+
+ configure.ac             |   2 +-
+ src/apps/myftp.c         |  40 +++----
+ src/apps/sctp_darn.c     | 246 +++++++++++----------------------------
+ src/apps/sctp_test.c     |  63 +++-------
+ src/apps/sctp_xconnect.c |  72 +++++-------
+ 5 files changed, 137 insertions(+), 286 deletions(-)
+
+-- 
+2.27.0
+
