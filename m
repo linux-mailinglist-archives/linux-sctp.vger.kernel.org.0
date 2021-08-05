@@ -2,103 +2,63 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D08EF3E0AF4
-	for <lists+linux-sctp@lfdr.de>; Thu,  5 Aug 2021 01:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0003E121D
+	for <lists+linux-sctp@lfdr.de>; Thu,  5 Aug 2021 12:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233941AbhHDXrb (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 4 Aug 2021 19:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40928 "EHLO
+        id S240270AbhHEKId (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 5 Aug 2021 06:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233832AbhHDXra (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 4 Aug 2021 19:47:30 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70138C0613D5
-        for <linux-sctp@vger.kernel.org>; Wed,  4 Aug 2021 16:47:16 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id b128so2154232wmb.4
-        for <linux-sctp@vger.kernel.org>; Wed, 04 Aug 2021 16:47:16 -0700 (PDT)
+        with ESMTP id S240345AbhHEKI2 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 5 Aug 2021 06:08:28 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA48BC061799
+        for <linux-sctp@vger.kernel.org>; Thu,  5 Aug 2021 03:08:14 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id a93so8200469ybi.1
+        for <linux-sctp@vger.kernel.org>; Thu, 05 Aug 2021 03:08:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=QDv0rqgUyrJPqw0W+rCLZ6ZMyhM9KE/jmdnRmtL81g0=;
-        b=V2W0uZUZnKTpCwzSVmnUoDaQjT31+tVsAo/HkEFfyWvuDCPNLDrf/ITw2d7jmnd/s0
-         h1q/hoIXcx4YBpiRhNPEeyAyVVSqxmqDa2xyxd3msg9p7aR74x/3nLJeyftV5i+QoGDE
-         jZWBOQsBjfXnGR/qO1djdl3DOf5z95GgZvqBlFYOWc7zEqkvs5DSixvDMgu/iDpxuNeL
-         noIfjxkksJmz0HEcIfKBbtHrEgYEN16EEhb+6iwASQg3wFti0mVs1ekWaJSLN6I+Kjsc
-         5CTnOF9GcptLd3tefs+EiVG1z1ClSnfYG7/L6Ww/Lm/cmt55EzjyoAXrAX1IfM05XglI
-         qrBg==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=IXiF0cE8iLdsKXBHXuqgd6kWlwigyuOCyyGf/zSHAKo=;
+        b=pdNJV22hEKUkr2wA+Dw7b0HK5p+fKD7oi9ms73/NQBq4byh0+9pB1A6oe1xCXysupS
+         vT4ZgNrd/iDydeaITAzgCWnvJ1T8DzO9Ikue0eh2028J3bvM5/nV9CmcQHIWzzF2i+mX
+         /sg0lMiy+hw6Gvldm32hnzhxHNIZ3+sg/LpGT95hdfcE2C1+CpQnpZJcHKLwQp4sX3cM
+         fVqfexzZBPzvGUcimtdAPr3QQtqUMw9B7bRNUxrN6Y7mpkt3HH0BSk5A+iJOJO2gEQRY
+         drwgDCakbhJ9+GbQpfUQ9EJCisqQqw73Q2cN3zdtfbHNShRLJrFU59HOzPVqqfS6ENTI
+         xSyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=QDv0rqgUyrJPqw0W+rCLZ6ZMyhM9KE/jmdnRmtL81g0=;
-        b=T7aoA3pt6i29nf3XAasibTtuWu5Y6tU0vPlw6EIC3baCeQLgEgUop6d2ouL2pZm0OU
-         kCHFSiPim4HMobCdC1SYabz4EbzNjncYemdknnMUTVX7k01wiewPFKYvGGcg3YCSUdLK
-         YHO3w79giThfDVm2mdCtg+pdNqIj36I64soC4GMUwaNT+Q6VNPmLuVXEoVgzRDLqhPAC
-         xgTvOwdOUo0ZP9JMDUAYP0Op6XEpGPaMmcgcX6M7zsPFf/lA+tX+0HkRtVT2+lJFbrm9
-         ittXwnHOi6IG3fBY6tsSevxgHo+UpE1kG5KSQf4geLz0FoG+hO5XZWbkFwS7ynoFtWbN
-         TbIQ==
-X-Gm-Message-State: AOAM5338KgT3C29QWP+z6xaO5NCPo2/sl970Q86k1bzO+L1JzyWJLWzE
-        FA5qSSlwYo9bC7E52EZYFi6p3cUl3V/Lrd3H9pVLEERzZuKzTLsx
-X-Google-Smtp-Source: ABdhPJxFmtMR5mxaiJRQ7mZQP40KlxcnjycNtIit3VUBFc3cJcRi6pqG2HZ/z+8Tq4ucJ/7SUZehtuJaQ+eOYMKPOSE=
-X-Received: by 2002:a7b:ce89:: with SMTP id q9mr1779737wmj.156.1628120833532;
- Wed, 04 Aug 2021 16:47:13 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=IXiF0cE8iLdsKXBHXuqgd6kWlwigyuOCyyGf/zSHAKo=;
+        b=uD3VeGkroR21RpOPlRLe8bq6K2KZrYxkndBDYwcl96K8oK+UiiQjQxy+8eF9udK1be
+         Ni6v1kp8knnlJXYznC1hkMLJMvAKe/N+l9gLqUpYTwb5oDoS6veN+D4BBCXjPcjeaHvv
+         /SVsE+vDeXqFTtqtxrNNcybAVnBBbeRCXOfZgPXpmSb0ko2qJEBfTxKb6qeyECD4eGB0
+         yYeQQS8cQr4EeKj4bd7qgbrC+2FkfCLKyW3Vd4I2jDbOO5uUsiOVJ+moM+o5+0WFwV57
+         zYYfHVr7khiiIRI8hTWZrr8maqXfxwCAd/s0Xi7VAAJwYRBR1uDG1w4iUMDH/lzjrVDX
+         CPzg==
+X-Gm-Message-State: AOAM532mICmIjtSF4D+r84slwCx94FrpSpPR0U47hhlCgc7eppzyHVji
+        ed9hqC/Z3g+B11TaRfEgdCC/Wfm4XH7PmgA8APg=
+X-Google-Smtp-Source: ABdhPJy6VyomjzZA7FzL2YAykxMaSEH2FbkM8+spFBukZHbLNwTOeY7OBuFr7jJq9kzHGjfNz0QbSoO2ZvIS8b1T9E0=
+X-Received: by 2002:a25:ad57:: with SMTP id l23mr5146843ybe.303.1628158094076;
+ Thu, 05 Aug 2021 03:08:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1628076531.git.lucien.xin@gmail.com>
-In-Reply-To: <cover.1628076531.git.lucien.xin@gmail.com>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Thu, 5 Aug 2021 07:47:02 +0800
-Message-ID: <CADvbK_chOXWAj4Lr14JT2=WxqmPGK9Qndq9yyQyEX6gFsF42og@mail.gmail.com>
-Subject: Re: [PATCH lksctp-tools 0/4] lksctp-tools: replace use of deprecated
- gethostbyname with getaddrinfo
-To:     "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Received: by 2002:a05:7010:330b:b029:db:4f3a:6691 with HTTP; Thu, 5 Aug 2021
+ 03:08:13 -0700 (PDT)
+Reply-To: rihabmanyang07@yahoo.com
+From:   Rihab Manyang <diamakaire48@gmail.com>
+Date:   Thu, 5 Aug 2021 11:08:13 +0100
+Message-ID: <CAJq20O=9kXZZhN9x-CTs6piokkzkxiwXwVNxHWpQhvfUgDzb5A@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, Aug 4, 2021 at 7:29 PM Xin Long <lucien.xin@gmail.com> wrote:
->
-> This patchset is simply to replace use of deprecated gethostbyname
-> with getaddrinfo in myftp, sctp_xconnect, sctp_test and sctp_darn.
-There are three ways to use this function in this patchset:
+-- 
 
-a. get IPv4 addresses by a hostname:
+Hello,
 
-               hints.ai_family = AF_INET;
-               hints.ai_protocol = IPPROTO_SCTP;
-               getaddrinfo(remote_host, NULL, &hints, &rp)
-
-b. get IPv6 addresses by a hostname:
-
-               hints.ai_family = AF_INET6;
-               hints.ai_protocol = IPPROTO_SCTP;
-               getaddrinfo(remote_host, NULL, &hints, &rp)
-
-c. get IPv4 and IPv6 addresses by a hostname:
-
-               hints.ai_family = AF_UNSPEC;
-               hints.ai_protocol = IPPROTO_SCTP;
-               getaddrinfo(remote_host, NULL, &hints, &rp)
-
-Note ai_protocol = IPPROTO_SCTP is necessary, especially for case c.
-Otherwise, it will return many addresses with different protocol(TCP, UDP...).
-
->
-> Xin Long (4):
->   myftp: replace use of deprecated gethostbyname with getaddrinfo
->   sctp_xconnect: replace use of deprecated gethostbyname with
->     getaddrinfo
->   sctp_test: replace use of deprecated gethostbyname with getaddrinfo
->   sctp_darn: replace use of deprecated gethostbyname with getaddrinfo
->
->  configure.ac             |   2 +-
->  src/apps/myftp.c         |  40 +++----
->  src/apps/sctp_darn.c     | 246 +++++++++++----------------------------
->  src/apps/sctp_test.c     |  63 +++-------
->  src/apps/sctp_xconnect.c |  72 +++++-------
->  5 files changed, 137 insertions(+), 286 deletions(-)
->
-> --
-> 2.27.0
->
+i am trying to reach you hope this message get to
+you.from Rihab Manyang
