@@ -2,63 +2,103 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0003E121D
-	for <lists+linux-sctp@lfdr.de>; Thu,  5 Aug 2021 12:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DD6E3E1E66
+	for <lists+linux-sctp@lfdr.de>; Fri,  6 Aug 2021 00:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240270AbhHEKId (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 5 Aug 2021 06:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240345AbhHEKI2 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 5 Aug 2021 06:08:28 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA48BC061799
-        for <linux-sctp@vger.kernel.org>; Thu,  5 Aug 2021 03:08:14 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id a93so8200469ybi.1
-        for <linux-sctp@vger.kernel.org>; Thu, 05 Aug 2021 03:08:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=IXiF0cE8iLdsKXBHXuqgd6kWlwigyuOCyyGf/zSHAKo=;
-        b=pdNJV22hEKUkr2wA+Dw7b0HK5p+fKD7oi9ms73/NQBq4byh0+9pB1A6oe1xCXysupS
-         vT4ZgNrd/iDydeaITAzgCWnvJ1T8DzO9Ikue0eh2028J3bvM5/nV9CmcQHIWzzF2i+mX
-         /sg0lMiy+hw6Gvldm32hnzhxHNIZ3+sg/LpGT95hdfcE2C1+CpQnpZJcHKLwQp4sX3cM
-         fVqfexzZBPzvGUcimtdAPr3QQtqUMw9B7bRNUxrN6Y7mpkt3HH0BSk5A+iJOJO2gEQRY
-         drwgDCakbhJ9+GbQpfUQ9EJCisqQqw73Q2cN3zdtfbHNShRLJrFU59HOzPVqqfS6ENTI
-         xSyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=IXiF0cE8iLdsKXBHXuqgd6kWlwigyuOCyyGf/zSHAKo=;
-        b=uD3VeGkroR21RpOPlRLe8bq6K2KZrYxkndBDYwcl96K8oK+UiiQjQxy+8eF9udK1be
-         Ni6v1kp8knnlJXYznC1hkMLJMvAKe/N+l9gLqUpYTwb5oDoS6veN+D4BBCXjPcjeaHvv
-         /SVsE+vDeXqFTtqtxrNNcybAVnBBbeRCXOfZgPXpmSb0ko2qJEBfTxKb6qeyECD4eGB0
-         yYeQQS8cQr4EeKj4bd7qgbrC+2FkfCLKyW3Vd4I2jDbOO5uUsiOVJ+moM+o5+0WFwV57
-         zYYfHVr7khiiIRI8hTWZrr8maqXfxwCAd/s0Xi7VAAJwYRBR1uDG1w4iUMDH/lzjrVDX
-         CPzg==
-X-Gm-Message-State: AOAM532mICmIjtSF4D+r84slwCx94FrpSpPR0U47hhlCgc7eppzyHVji
-        ed9hqC/Z3g+B11TaRfEgdCC/Wfm4XH7PmgA8APg=
-X-Google-Smtp-Source: ABdhPJy6VyomjzZA7FzL2YAykxMaSEH2FbkM8+spFBukZHbLNwTOeY7OBuFr7jJq9kzHGjfNz0QbSoO2ZvIS8b1T9E0=
-X-Received: by 2002:a25:ad57:: with SMTP id l23mr5146843ybe.303.1628158094076;
- Thu, 05 Aug 2021 03:08:14 -0700 (PDT)
+        id S235706AbhHEWFD (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 5 Aug 2021 18:05:03 -0400
+Received: from ns3020889.ip-5-39-64.eu ([5.39.64.141]:38230 "EHLO
+        server.example.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S238718AbhHEWFB (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 5 Aug 2021 18:05:01 -0400
+X-Greylist: delayed 107203 seconds by postgrey-1.27 at vger.kernel.org; Thu, 05 Aug 2021 18:05:01 EDT
+Received: by server.example.com (Postfix, from userid 1023)
+        id 599F2D4720E; Thu,  5 Aug 2021 21:16:22 +0000 (UTC)
+To:     linux-sctp@vger.kernel.org
+Subject: {Spam?} =?UTF-8?Q?Z._HD,Sehr_geehrte_/_r_Fondsempf=C3=A4nger?=
+Date:   Thu, 5 Aug 2021 21:16:22 +0000
+From:   "ANWALT BILBAO &EMMA ASSOZIIERT & CO..." 
+        <support@quali.speed.hebergement-com4design.fr>
+Reply-To: buroLotto.es@spainmail.com
+Message-ID: <8a44939ed03c48cb258c1f3c1892a882@www.quali.speed.hebergement-com4design.fr>
 MIME-Version: 1.0
-Received: by 2002:a05:7010:330b:b029:db:4f3a:6691 with HTTP; Thu, 5 Aug 2021
- 03:08:13 -0700 (PDT)
-Reply-To: rihabmanyang07@yahoo.com
-From:   Rihab Manyang <diamakaire48@gmail.com>
-Date:   Thu, 5 Aug 2021 11:08:13 +0100
-Message-ID: <CAJq20O=9kXZZhN9x-CTs6piokkzkxiwXwVNxHWpQhvfUgDzb5A@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-yoursite-MailScanner-Information: Please contact the ISP for more information
+X-yoursite-MailScanner-ID: 599F2D4720E.ABBA9
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-SpamCheck: spam, SpamAssassin (cached, score=7.061,
+        required 6, ADVANCE_FEE_2_NEW_MONEY 0.15,
+        FREEMAIL_FORGED_REPLYTO 2.50, FREEMAIL_REPLYTO 1.00,
+        LOTS_OF_MONEY 0.00, MONEY_FREEMAIL_REPTO 2.43, MONEY_NOHTML 0.97,
+        NO_RELAYS -0.00, T_FILL_THIS_FORM_SHORT 0.01, XFER_LOTSA_MONEY 0.00)
+X-yoursite-MailScanner-SpamScore: sssssss
+X-yoursite-MailScanner-From: support@quali.speed.hebergement-com4design.fr
+X-Spam-Status: Yes
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
--- 
+Rechtsanwältin BILBAO &EMMA ASSOZIIERT & CO...
+#########################################
+AV/DE GRAN VIA NO.38k, 28008 MADRID.   SPAIN 
+TEL. ( 34) 602 810 185 FAX: ( 34) 931-702-120
+Eingetragener Fall NR: GY/Q3J63753 / SQQ/93000XS10.
 
-Hello,
+Ihnen wird empfohlen, die folgenden Informationen an Ihre Bevollmächtigte zu senden. Rechtsanwältin  BILBAO & EMMA  ASSOZIIERT CO ERMÖGLICHT IHNEN DIE FREIGABE IHRES FONDS:Wir bitten dringend, Ihre E-Mails an unsere Büro-E-Mail zu beantworten, buroLotto.es@spainmail.com, 
 
-i am trying to reach you hope this message get to
-you.from Rihab Manyang
+Wir gratulieren und informieren Sie über die Auswahl des Geldpreises €935.470,00 EUROS, SOMMERBONANZA, EL GORDO DE LA PRIMITIVA LOTTERIE IN VERBINDUNG MIT EUROMILLIONS ESPAÑA INTERNATIONAL LOTTERIE BEFÖRDERUNG  PROGRAMM Madrid Spanien
+
+ Sehr Geehrter  Begünstigten, 
+Wir möchten Sie informieren, dass das Büro des nicht Beanspruchten Preisgeldes in Spanien,unsere Anwaltskanzlei ernannt hat, als gesetzliche Berater zu handeln, in der Verarbeitung und der Zahlung eines Preisgeldes, das auf Ihrem Namen gutgeschrieben wurde, und nun seit über zwei Jahren nicht beansprucht wurde.
+
+ Der Gesamtbetrag der ihnen zusteht beträgt momentan €935, 470, 15, cent.
+
+Der Gesamtbetrag der ihnen zusteht beträgt momentan  €935, 470, 15, neunhundert fünfunddreißigtausend, vierhundertsiebzig und fünfzehn Cent, Das ursprüngliche Preisgeld bertug €785.810, 15.00 EUROS. Siebenhundert Fünfundachtzigtausend Acht Hundertzehn Euro und fünfzehn Cent Diese Summe wurde fuer nun mehr als zwei Jahre,Gewinnbringend  angelegt,daher die aufstockung auf die oben genannte Gesamtsumme.Entsprechend dem Büros des nicht Beanspruchten  Preisgeldes,wurde dieses Geld als nicht beanspruchten Gewinn einer Lotterie Firma bei ihnen zum verwalten niedergelegt und  in ihrem namen versichert. Nach Ansicht der Lotterie Firma wurde ihnen das Geld nach einer Weihnachts Förderung Lotterie  zugesprochen. 
+
+ Die Kupons wurden von einer Investmentgesellschaft gekauft.Nach Ansicht der Lotterie Firma wurden sie damals Angeschrieben um Sie über dieses Geld zu informieren es hat sich aber leider bis zum Ablauf  der  gesetzten  Frist  keiner gemeldet um den Gewinn zu Beanspruchen. Dieses war der Grund weshalb das Geld zum verwalten niedergelegt wurde. Gemab des Spanischen Gesetzes muss der inhaber alle zwei Jahre ueber seinen vorhanden Gewinn informiert werden.Sollte dass Geld wieder nicht beansprucht werden,.wird der Gewinn abermals ueber eine Investierung gesellschaft fur eine weitere Periode von zwei Jahren angelegt werden.Wir sind daher, durch das Buro des nicht Beanspruchten Preisgelds beauftragt worden sie anzuschreiben.Dies ist eine Notifikation für das Beanspruchen dieses Gelds.
+
+Wir möchten sie darauf hinweisen, dass die Lotteriegesellschaft überprüfen und bestätigen wird ob ihre Identität  übereinstimmt bevor ihnen ihr Geld ausbezahlt wird.Wir werden sie beraten wie sie ihren Anspruch geltend machen.Bitte  setzen sie sich dafuer mit unserer Deutsch Spanisch oder Englisch Sprachigen Rechtsanwalt in Verbindung Rechtsanwältin: Bilbao & Emma ASSOZIIERT & CO.., TEL( 34) 602 810 185 & email,( Ihre Antwort sollte an diese E-MAIL-Adresse gerichtet, (promolottooffice@spainmail.com  )ist zustaendig fuer  Auszahlungen ins Ausland und wird ihnen in dieser sache zur seite stehen. Der Anspruch sollte vor den 30 August 2021 geltend  gemacht werden,da sonst dass Geld wieder angelegt werden wuerde.Wir freuen uns, von Ihnen zu hören, während wir Ihnen  unsere Rechtshilfe Versichern.
+
+Nachdem Sie die von Ihnen geforderten Daten bereitgestellt haben, können Sie davon ausgehen, dass Sie innerhalb weniger  Stunden direkt von diesem Büro erfahren werden. Bis dahin müssen wir Ihre Informationen verarbeitet und Ihre Fonds Akte für  die Zustellung vorbereitet haben, um Verzögerungen zu vermeiden. 
+Wir gehen davon aus, dass Sie die erläuternden Anweisungen und Anweisungen für den Erhalt Ihrer Prämien (935 €, 470, 15 Cent) verstehen, die Ihnen von der spanischen Euro Millones /El Gordo de la Primitiva International lotterie Madrid Spain legal zugesprochen werden.
+
+HINWEIS: Um unnötige Verzögerungen zu vermeiden, wenn es eine Änderung Ihrer Adresse oder Komplikationen geben, informieren Sie Ihren Agenten so schnell wie möglich, Ihr Agent wird 10% des Premium Preises bezahlt, da die Provision NACH Dem, was Sie Ihr Geld auf Ihr kostenpflichtiges Konto erhalten haben. Das Zahlungsbearbeitung Formular ist mit einer Fotokopie Ihres Ausweises auszufüllen und zur Überprüfung per Faxnummer zu senden: ( 34) 935457490 & E-Mail: Wir bitten dringend, Ihre E-Mails an unsere Büro-E-Mail zu beantworten  promolottooffice@spainmail.com
+
+Mit Freundlichen Grüßen
+Rechtsanwältin Bilbao & Emma ASSOZIIERT & CO..
+
+ANMELDEFORMULAR FÜR DEN GEWINNANSPRUCH Vom 28. Juni bis 30. August 2021
+Hinweis bitte geben Sie die folgenden Informationen, wie unten gefordert, faxen   34935457490 oder e mail: promolottooffice@spainmail.com ,es zurück in mein Büro sofort für uns in der Lage zu sein die Legalisierung Prozess Ihrer  Persönliche investiertes Preisgeld zu vervollständigen, und das Geld wird Ihnen von Zentralbank spain Int  ausgezahlt.  Alle Prozess Überprüfung durch unsere Kanzlei ist für Sie kostenlos, weil unsere Kosten werden von der internationalen  Lotto Kommission am Ende des Prozesses zu zahlen, wenn Sie Ihr Geld erhalten.Wenn Sie nicht die erforderlichen  Informationen vor der Zeit gegeben hat, können ist Anwaltskanzlei nicht haftbar gemacht werden, wenn Ihr Geld reinvestiert  wurde.
+
+Ein Bestätigungsschreiben wird Ihnen gefaxt werden sofort wenn wir komplette Überprüfung der Informationen die Sie uns zur  Verfügung stellen habe, Ich werde die Investmentbank unverzüglich über die von Ihnen angegebene Informationen zu kommen,  bevor sie werden mit Ihnen Kontakt aufnehmen für die ausZahlung von Ihrem Geld . Ihre Daten werden vertraulich gehalten  nach der Europäischen Union Datenschutzrecht.
+
+"Antworten Sie nicht auf die Absenderadresse oder die Quell-E-Mail-Adresse, es wird über den Computer gesendet virtuelle  Hilfe für die Antwort wird  nicht meine menschliche sondern Computer" Daher müssen Sie die Treuhänder über Telefon und E- Mail-Adresse oben" (ACHTUNG Wir (bitten Sie, auf diese E-Mail-Adresse zu antworten, (promolottooffice@spainmail.com )
+########################################################
+
+REF.NR:………………………………STAPELN Sie NR:…………………………
+Vorname:……………………Vor-NACHNAME…………………………………
+GEBURTSDATUM:……………………………BERUF:……………………………
+STRASSE:………………………………………PLZ/ORT…………………………
+ADRESSE:……………………………………………………………………………
+TELEFON:(___)……………………HANDY:(__)………………FAX (__)………
+EMAIL:…………………………………………………………Nationalitit:……
+
+HINWEIS: BANKVERBINDUNG IST NUR ERFORDERLICH, WENN SIE BESCHLIEßEN, IHREN GEWINN ZU ERHALTEN PER ÜBERWEISUNG
+
+Nachdem Sie die von Ihnen geforderten Daten bereitgestellt haben, können Sie davon ausgehen, dass Sie innerhalb weniger  Stunden direkt von diesem Büro erfahren werden. Bis dahin müssen wir Ihre Informationen verarbeitet und Ihre Fonds Akte für  die Zustellung vorbereitet haben, um Verzögerungen zu vermeiden. Wir gehen davon aus, dass Sie die erklärenden Anweisungen  und Anweisungen zum Einholen und Einholen Ihrer Auszeichnungen (€935,470,15 EUROS) verstehen, die Ihnen vom spanischen Euro Millones de La Primitiva International Madrid legal zugesprochen wurden
+
+BANK ZAHLUNGSOPTIONEN: A / BANKÜBERWEISUNG Oder BANK CERTIFIED CHECK (BANKDATEN SIND NUR NOTWENDIG, WENN SIE SICH FÜR EINE  BANKÜBERWEISUNG ENTSCHIEDEN HABEN)
+ZAHLUNGSOPTION: (A) BESTÄTIGTER SCHECK (BEZAHLEN Sie ÜBERTRAGUNG EIN
+
+BETRÄGE GEWONNEN: ……………………………………………………
+NAME DER BANK:……………………………………………………………
+KONTONUMMER:…………………………SWIFT-CODE:…………………
+ADRESSE DER BANK …………………………………………………………
+GEB-DATUM:…………Unterschrift …………(Erst bei hmeAbna)
+
+Rechtsanwältin  Bilbao & Emma Asociados, Abogados, Fiscal Y Accesorios horario de consultas Lunes.bis Samstag De. 09 - 16.30 Uhr  654280 / MLA & (Seien Sie informiert, dass Ihr Vertreter 10% des Preises als Provision erhält, wenn Sie Ihr Geld auf Ihrem  angegebenen Konto erhalten haben) Mitglied des Consejo de Constitucional de España, (ACHTUNG Wir bitten Sie, auf diese E-Mail-Adresse zu antworten (promolottooffice@spainmail.com) BÜRO-KONTOINFORMATIONEN- BANK NAME: P.F.S.SPAIN SL SWIFT CODE: PFSSESM1 IBAN: ES17 6713   0002 5700 0584 3906)COPYRIGHT 2019.LOTERIA SPANIEN. Alle Rechte vorbehalten. NUTZUNGSBEDINGUNGEN HANDELSPOLITIK DATENSCHUTZ VON BESCHWERDEN....
+ 
+Diese E-Mail ist für den vorgesehenen Empfänger bestimmt und enthält Informationen, die vertraulich sein können. Wenn Sie nicht der beabsichtigte Empfänger sind, benachrichtigen Sie bitte den Absender per E-Mail und löschen Sie diese E-Mail aus Ihrem Posteingang. Jede unbefugte Nutzung oder Verbreitung dieser E-Mail, ganz oder teilweise, ist strengstens untersagt und kann rechtswidrig sein. Alle in dieser E-Mail enthaltenen Preisangebote sind nur indikativ und führen zu keiner rechtlich bindenden oder durchsetzbaren Verpflichtung. Sofern nicht ausdrücklich als beabsichtigter E-Vertrag bezeichnet, stellt diese E-Mail kein Vertragsangebot, keine Vertragsänderung oder eine Annahme eines Vertragsangebots dar.
+WWW.GORDO/ EUROMILLIONS ESPAÑA  Sitz der Gesellschaft: Torre Europa Paseo de la Barcelona 15. Planta 16 28006 • Madrid. (Spanien)
+
