@@ -2,71 +2,75 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B53A23E243B
-	for <lists+linux-sctp@lfdr.de>; Fri,  6 Aug 2021 09:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A163E2C04
+	for <lists+linux-sctp@lfdr.de>; Fri,  6 Aug 2021 15:55:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237817AbhHFHkQ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 6 Aug 2021 03:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48460 "EHLO
+        id S233639AbhHFN4J (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 6 Aug 2021 09:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237731AbhHFHkQ (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 6 Aug 2021 03:40:16 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C748C061799
-        for <linux-sctp@vger.kernel.org>; Fri,  6 Aug 2021 00:40:01 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id j18-20020a17090aeb12b029017737e6c349so11663612pjz.0
-        for <linux-sctp@vger.kernel.org>; Fri, 06 Aug 2021 00:40:01 -0700 (PDT)
+        with ESMTP id S233195AbhHFN4J (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 6 Aug 2021 09:56:09 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06C4C0613CF
+        for <linux-sctp@vger.kernel.org>; Fri,  6 Aug 2021 06:55:52 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id m193so15308784ybf.9
+        for <linux-sctp@vger.kernel.org>; Fri, 06 Aug 2021 06:55:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=Aauu7gYvMaBruI9Zt1CgTlkxSZ8evQwPBhKOMH6jf8s=;
-        b=kNA2VpQTTGGCUu/HPBUvQfOVLHAMiXfiOXPl6EZ5AumSRd0zGEFBtCMSNkZGkXe6DQ
-         +IV+zm7ebbW/GUqhgYSJbM++KsnKHQKt8KfyF8h0PNc7wXEPCF8rSHgeM2eZR8FPADco
-         UJ+w7oM9VDeOC+x47ORv3R6R/co3HPU6H1MLKBSZInuVH7wV1cRLixN1NZKnLDhgQqTx
-         u7g/Q/sEIqytgUEOQfts8jQewy4adj2be16wTm6c3y3kuePHQpk0aDYRnexMlVf08jvc
-         Nxl15n6/3o4KJUoVZ2EvJYf81LXZ7fnJzPFqHLHYQY2sX6u5rhm/n8F5Y5iA0Y/JtJXc
-         KJZw==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=emsIfpCu0wKjcv4GLEBqdG7WGqJXaEylukxTLTJJqqU=;
+        b=GmklsFT2TOWZilfGvcFbpOM2Ke3prPGsqdW7Mj1M/jYzIheJYWsQcExET1Fg2LLxSy
+         M/nIkSBSQhwt+uc4R4S7p8LNjZ4buwmBq+KvSPD56/XMA1UNWild+ltAjl+BCpVmPjXH
+         ScDGcrzetGq4spB4nyMoemzf7uKEqo7WLf1j5STNyrWeJZEa2pKT2tQ3aYgx166qtk2B
+         UOoEl5swvjGDO90Yp7xUvj4bqBZTETy9cVj2asYcyxl8iQ1g1k59KPfZaNKaTZ7WODOP
+         G2H/3KcmMpRsUdzpYplyoirZenGf+1Vn7QAXdzf2fYEcGQXXxRc+7D9SMzTRmQDy2YyX
+         Fzlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=Aauu7gYvMaBruI9Zt1CgTlkxSZ8evQwPBhKOMH6jf8s=;
-        b=WHEZh35la8chqVSBd3zJU4m1nJ7kCN3kMZh1dI853C1BZ/9D6BLgTXdSyFSQ0tFrt6
-         J6CKQ5H1dV+F4uNk4e2BkIlaovzHTer9kjPheoYSat66o+1edR/Ft1cR3TEs6iYiryX9
-         qLiyLphLneyD1mzMMWhu/ym0oU3pRksrYFi5uP3BzOtZxkxOXFp8DoWdKoXuGiEDvJf3
-         BnuWqrKeUO8t9Y5SV2TeeMLWsA42CvCCgTOskxg3bVDer7m+ICTwPAwU83/22hmG84p/
-         /FpEVJ7Z4MwfXQvRDeaP14wrTX4hrH+Vw0ubQQ0RwDZSmROQIbqzpshNfWB1mdpE2ia8
-         MVCA==
-X-Gm-Message-State: AOAM533z1lRVZW5TY9ANemh+7BpN5M/XnpVvx4coXcB1Ef9eYJ21YkH6
-        DmcOxTR8bjV4kUlHhwx4etxs0ww2r+sr3FM5Lm0=
-X-Google-Smtp-Source: ABdhPJzo3Xwi1Nwlji2gW0hAAVsNlObmeCnS/qqr61gOvhTmlZsp/pLe+qUpc8/IYuIYN7xDeY7n0U2ZjacmrLYt7pw=
-X-Received: by 2002:a17:90b:4ad1:: with SMTP id mh17mr8975871pjb.164.1628235600637;
- Fri, 06 Aug 2021 00:40:00 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=emsIfpCu0wKjcv4GLEBqdG7WGqJXaEylukxTLTJJqqU=;
+        b=oTp+RsYdPW4iRkEsYlKp2nrm4Enhv0nnIXW+Akiy3oXAvotJ5jRBBsEAemSSOoSUSw
+         UBKTmfZQRJKDBk4+r83J9zTariuF2x88V9PcqsxypcCUiIvflFZULBn5yUSYBJYMn+VM
+         Q2/m2azpjKQm+xnKdZXAJCNQspjN8OvIa3BWeQeLVhK4Fyu4NcROL3FFy4DkT2ypYn85
+         3/eSPnxKwevJYr006yaLXNsgQOwoLxrBQ4Kqo7kMATfX5vXnuj5kiLaIVCpPBRF41y3q
+         G6ghZjoRSA6fFWp0Fo69dxyELUjjQg/w12I5NREPfxjNG1VQTc9hpgLRqKQPPuf88jwt
+         /9FQ==
+X-Gm-Message-State: AOAM531Q4RhaUKgQhHtEpl66hCPFVCLgwwP74gn9ZiLQ+PipcWsMICJV
+        j64S5tKlievDhUhUZw1z0PCr8xQCyRwgs2l9Z3s=
+X-Google-Smtp-Source: ABdhPJymH89zyzT6Q5th0EKBaT9PxrrOzQAexnxkRd9v11X6yKBxaUMpm2nnRv/i/RnPAykBsdMs3MvgZ4mpj/ndF8M=
+X-Received: by 2002:a25:83cd:: with SMTP id v13mr12459920ybm.325.1628258151934;
+ Fri, 06 Aug 2021 06:55:51 -0700 (PDT)
 MIME-Version: 1.0
-Reply-To: godwinppter@gmail.com
-Sender: dr.nikitarehan@gmail.com
-Received: by 2002:a05:6a10:fe08:0:0:0:0 with HTTP; Fri, 6 Aug 2021 00:40:00
- -0700 (PDT)
-From:   Godwin Pete <godwinnpeter@gmail.com>
-Date:   Fri, 6 Aug 2021 09:40:00 +0200
-X-Google-Sender-Auth: qgugmeCSZRd2pjDyFiwGNadTyUM
-Message-ID: <CALd83H1qWW6jYbcFrALSMbPTLdBwfGXGuU1XCp04+20hH8bi1Q@mail.gmail.com>
-Subject: Reply Urgently
+Received: by 2002:a05:7110:b011:b029:ea:eb06:48a0 with HTTP; Fri, 6 Aug 2021
+ 06:55:51 -0700 (PDT)
+Reply-To: juleskokou007@gmail.com
+From:   jules kokou <makebee4real77@gmail.com>
+Date:   Fri, 6 Aug 2021 13:55:51 +0000
+Message-ID: <CAM+M+dO53SjgNCkE9iwy_5MGGPQpyaTHe0eNnbGeCwnxU_RQFw@mail.gmail.com>
+Subject: Hallo
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-My good friend,
-
-I just want to know if you, can help me to transfer the amount of
-($6Million). After the transfer we have to share it, 50% for me, and
-50% for you. Please let me know if you can help me for more
-information in regards with the transfer. I hope you can work with me
-honestly?
+Sch=C3=B6ne Gr=C3=BC=C3=9Fe,
 
 
-Thanks.
+ Ich lade Sie ein f=C3=BCr eine Erbschaftsklage meines inzwischen
+verstorbenen Mandanten,
 
-Godwin Peter,
+Ich werde Ihnen alle Informationen zu dieser Erbschaft geben
+
+behaupten und warum ich Sie als meinen einzigen =C3=BCberlebenden
+Verwandten als meinen verstorbenen Klienten ausgew=C3=A4hlt habe.
+
+
+Ich freue mich auf Ihre diesbez=C3=BCgliche positive Antwort.
+
+Dein
+Rechtsanwalt Jules Kokou Esq.
