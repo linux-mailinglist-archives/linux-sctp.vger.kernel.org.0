@@ -2,69 +2,102 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7183E8212
-	for <lists+linux-sctp@lfdr.de>; Tue, 10 Aug 2021 20:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 074963E8E4E
+	for <lists+linux-sctp@lfdr.de>; Wed, 11 Aug 2021 12:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235768AbhHJSFi (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 10 Aug 2021 14:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57012 "EHLO
+        id S236924AbhHKKQE (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 11 Aug 2021 06:16:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237286AbhHJSDt (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 10 Aug 2021 14:03:49 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46A1C09B138
-        for <linux-sctp@vger.kernel.org>; Tue, 10 Aug 2021 10:36:54 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id b6so26781381lff.10
-        for <linux-sctp@vger.kernel.org>; Tue, 10 Aug 2021 10:36:54 -0700 (PDT)
+        with ESMTP id S236810AbhHKKQD (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 11 Aug 2021 06:16:03 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A74C061765
+        for <linux-sctp@vger.kernel.org>; Wed, 11 Aug 2021 03:15:39 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id cf5so2948258edb.2
+        for <linux-sctp@vger.kernel.org>; Wed, 11 Aug 2021 03:15:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=y3BZ+wT7TMDVjM2/WQcyPOhYkG/NWjvDbJIsMqFI2RA=;
-        b=rZyDO+pQmFAMTqMMwbflMM4ql7GCGPeivQF49luaUKDh68BdWveTpXnyTbx8OavZh5
-         bGP7zLKVlUZwhT2f48vcZmIt1snZCfta1+RSsuWy7jL1bN3yiCeI7kSgY9GO+Mr9hMq3
-         QkduLfUrIvN/HhmkJo3bkzdVVz9B3L1xqaqjjeWbgQaiVHo19p8Fs6QUjc1RLTijFsZ1
-         J9z0vnpLd+WWbyIkFWEiiEi8HRNeEnyGx9q1dMSNuv5GsXDJ6u1Pt8dggrrGxNlZZA6H
-         nx910xE9Y9oc9IQRBXvrtvv831ie/oFdSTFPcOo+Z7/z7WR4icLIqTKALRAXVA68hURN
-         avgA==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=TF0q49JJ8TdBpV2jACxkHeg5j7VTKCMsyhV0iFJXHOA=;
+        b=Gl29eJ9qVb2p+R+URvpDa1UeRlztXU5LgLaxaPJ/+qo8W3GKQrPUQqed57Jp+8sfg9
+         K7njwGYuhK62C4jkNnFYRizZP5PtpUK66jBejxe9M+DPdf5sZBhymwlizcvCDjSI9LsB
+         +fq2x0FOZHRUZG3QbNMTcGo19IfC7hmupqtwWzhLniYKjR6fvIRzBr0uedLphxrqbs63
+         UhFql2YuMePdk622UjMeF9PRDYrg6xIpqKWQcNwKTP4GAmUE2ZcHx+hwIhN4zsUDRcpv
+         uooZ6sQVL/hwqCLDe8C7WJmP9kPfAt9uZmHO15ntNR6k7dMRupPZoQW6rFW0+N8KZGeJ
+         g7RA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=y3BZ+wT7TMDVjM2/WQcyPOhYkG/NWjvDbJIsMqFI2RA=;
-        b=lhLgQj/vkTDvasy60QVTid3dXa9WUJ8uS5BqcKujRh7AGLHgZVB/sSA2Uu7CRK5ZTl
-         W4nGBrtqNeAMKoldEQt/I6dscUdtjEwAXahZjxopYE62xh0eQK9uCAb8MewfyT3ZkbhI
-         s+9l4ZQIZPBQ9pWg9FMj0+UkeLegrlBk4JBzV9BPDkYrSIFzyRGS23KcATD/mVRes8+S
-         rmWis6PIAzEXIUAA1sDG3+XmAC8EFeugWbNAiLKApz9IgLYVH2/j6jr4QahGv//czxsh
-         P04/19M6gq3E8HRypoeaQpqrpi6Qhf1lNGp8hh/LdTjak4b7E4EOpuSt17BdbP9YJDZW
-         3IYQ==
-X-Gm-Message-State: AOAM531hnB30lLbQkO2bVFteKlIdK2qpIdQONAWJ4LHCGjHFE/xsqAYq
-        o7qagSewLs5JBwWlMrw2VWWw+hKMUrRJyJ7/W40=
-X-Google-Smtp-Source: ABdhPJzIebxwo90Zyr4sj9ScmYCof4VCk1w95dCMQpZ4/cQfOuUDCqwTC1pz0BbxoizG48Nn6kSbzrBfyOpB9YVAvEQ=
-X-Received: by 2002:a05:6512:11c3:: with SMTP id h3mr22104381lfr.413.1628617013026;
- Tue, 10 Aug 2021 10:36:53 -0700 (PDT)
+         :subject:to:content-transfer-encoding;
+        bh=TF0q49JJ8TdBpV2jACxkHeg5j7VTKCMsyhV0iFJXHOA=;
+        b=c+tpAUd55Wj3sgaPBOq6w15b5ZV1Ki3BI71sMcKh3NKomj1Ro962tOzZ5Bl0y/4cbj
+         CfOnRcw8qnw+dTOBpLhCrrLIkzlfuqS6d7Vacqbcbw/2fAb6QaKDX6NdVQTFOuknlvTY
+         vqhErvUP/kmCGJ9w1c8SNJamP/Na282pYl3qlKdNndBouVuSsz70+6aweLXJd0gFBBXv
+         iJE5cYHZymupTCU8z3OpIk5UcS5oXVYzzh/+9NIrjsiUtO5vrWhdVxu2Gnk5gD+NP1H7
+         ayQE5Qi602Q0VoEgPlv7M9liMS/GRyhxZLgfLt+vlOG+BTZO6GQGx7LGrBFOzv/Sd0XU
+         lcog==
+X-Gm-Message-State: AOAM533AbHG+Y0YEls0TQ2HarNgDFslKkbtfk2UP8YweJ4+te5pkTBBI
+        e9Q1IvxgqrX2vqpmZJ+kz6QYDkv6eu6+0fMaUps=
+X-Google-Smtp-Source: ABdhPJzGeEbUglUkUjOlsaFokkWAlqEwHjA22udY+oPBrM62C91l/4IDaqIPVwFD3sYWr1oX1RNy2BkyXXuDAi0ZeFI=
+X-Received: by 2002:aa7:de05:: with SMTP id h5mr10630966edv.174.1628676938179;
+ Wed, 11 Aug 2021 03:15:38 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:ac2:4eca:0:0:0:0:0 with HTTP; Tue, 10 Aug 2021 10:36:52
+Received: by 2002:a50:7ed1:0:0:0:0:0 with HTTP; Wed, 11 Aug 2021 03:15:37
  -0700 (PDT)
-Reply-To: majidmuzaffar8@gmail.com
-From:   Majid Muzaffar <ngl.binabdul.rashiid333.me@gmail.com>
-Date:   Tue, 10 Aug 2021 20:36:52 +0300
-Message-ID: <CAG1gDZWXEFoLwsRk8a_qSWzn3-vwvvxE2XX3d--LKh2r2t4e1w@mail.gmail.com>
-Subject: Proposal
+Reply-To: stellacollins033@gmail.com
+From:   stella collins <pastoremmanueljose@gmail.com>
+Date:   Wed, 11 Aug 2021 03:15:37 -0700
+Message-ID: <CADKhSHzfYUJu9SQXFU7z-KUZm2yLD8+cUOyFH=2s_oqrjgvFqQ@mail.gmail.com>
+Subject: Attention:Beneficiary,
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Salam alaikum,
+Attention:Beneficiary,
 
-I am the investment officer of UAE based investment company who are
-ready to fund projects outside UAE, in the form of debt finance. We
-grant loan to both Corporate and private entities at a low interest
-rate of 3% ROI per annum. The terms are very flexible and interesting.
-Kindly revert back if you have projects that needs funding for further
-discussion and negotiation.
+With reference of the information received, in respect of your
+outstanding fund which has been delayed as a result of the fees you
+were asked to pay.
 
-Thanks
+It is very important to inform you that we have arranged your total
+Fund of (3.5 Million US Dollars) through our Swift Card Payment(Center
+Asia Pacific) please this Center will send you an ATM CARD=C2=A0 which you
+will use to withdraw your money in any ATM MACHINE in all parts of the
+World.You are required to know that the maximum withdrawal amount per
+a day is Three thousand five hundred dollars.
 
-investment officer
+This letter is to acknowledge that you are hereby authorized to
+contact Mr.David Mark ATM processing Admin, for further directives on
+how this ATM Card should reach you, the PIN Code will be send to you
+orally for security reasons.Contact Email:
+(cardcenter008@gmail.com) Tele Phone Number:+229 68043749 You have to
+reconfirm your address to him.
+
+Contact Mr.David Mark=C2=A0 who is in better position to delver your=C2=A0 =
+ATM
+CARD to you in your home address
+
+Email address. cardcenter008@gmail.com
+Tel phone number. +229 68043749
+Name.Mr.David Mark
+
+You have to reconfirm the following details to him.
+
+1. Full name :::::::
+2. Your home Address :::::::
+3. Your current telephone number ::::::
+4. A copy of your id card or passport ::::::::
+6. Your country and city :::::::::::
+7. Your occupation ::::::::::::::::::::
+
+Note that because of impostors, we hereby issued you our code of
+conduct,which is (ATM 12) so you have to indicate this code when
+contacting the card center by using it as your subject.
+
+Sincerely,
+Mrs. Stella Collins
