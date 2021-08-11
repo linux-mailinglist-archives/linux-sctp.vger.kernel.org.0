@@ -2,60 +2,74 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F623E9151
-	for <lists+linux-sctp@lfdr.de>; Wed, 11 Aug 2021 14:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 102523E96D6
+	for <lists+linux-sctp@lfdr.de>; Wed, 11 Aug 2021 19:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbhHKMch (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 11 Aug 2021 08:32:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbhHKMcY (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 11 Aug 2021 08:32:24 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC1AC03547F
-        for <linux-sctp@vger.kernel.org>; Wed, 11 Aug 2021 05:30:34 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id t128so4332351oig.1
-        for <linux-sctp@vger.kernel.org>; Wed, 11 Aug 2021 05:30:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=77BwqRII9XCweQU8IJul6unijI/BEL+vUJmVmCRLxH4=;
-        b=nFX2iyV8Qzv5VsUpkp+XCZa2rMildRgp4rmfs3/i85r3diZKl8jKG090hSg6ULd5u0
-         wIUSHLA1AmXndyReLtv1chzdu754A+Ph1wh/vfIxRjmTWJBsEDXYNbyV2L9uurl7rygw
-         3BEum9dkaxKey+Q+UMRctjDwuKQ1YXcRTKc1UUkneSCjfxqWrboBTOfNkJIzK5BsdQWa
-         4ApOxxKRhIhdaQEWowgLF5+CTQczgHFusP4oeusQUd6ved7FHPiMHEi1ZA8iFV2rLfKi
-         fjv9vsAR1EzF12CgxEwzjmHIzUqCG96Sjm8KNwWILsHtKg9/nTHJHDOvwQ9NbYqFW4uy
-         uTIQ==
+        id S229946AbhHKR2P (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 11 Aug 2021 13:28:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27927 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229535AbhHKR2P (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Wed, 11 Aug 2021 13:28:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1628702871;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OqXLIC7EcLLh+W8vtswta2rji3gNQCAGuPrp8NpwNIw=;
+        b=R5rQPbpriA1rHw2hhuStYdBBh6xdEonRLjpCrO3WXAHYdM05K0jA1pNJL7ZAhuKhRSwLMF
+        Toq3lixpoHKC7mztN50AvkJQvdUi/ZGoOnJOU7ItfoHG+g+6hm5mNv2z0W2F+lw6p+ZcQA
+        W6GAlyiAiP7vJfiIzCQd4tFbAZGDEAg=
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
+ [209.85.166.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-258-DW4VjO4_OJOtYhXw946IXQ-1; Wed, 11 Aug 2021 13:27:49 -0400
+X-MC-Unique: DW4VjO4_OJOtYhXw946IXQ-1
+Received: by mail-io1-f71.google.com with SMTP id n22-20020a6bf6160000b0290520c8d13420so1930873ioh.19
+        for <linux-sctp@vger.kernel.org>; Wed, 11 Aug 2021 10:27:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=77BwqRII9XCweQU8IJul6unijI/BEL+vUJmVmCRLxH4=;
-        b=Ql7j03niby3CaMAD7yLDT7GJxCH6zbXN8xPMA4+qFe14PKfvq22I2gzs8RmT4r9og8
-         4BtMqXdrGVVwHU1SwL6TkWUe0ks/4KxDHjtmkegME7tfsfGIcyWzprq8GHO/gmXl9WlY
-         gHPqQXRJfJnDaxDS656qNC60DM0rfJtLFxNl76OkJD5fKJiMcPECMiZ++H6P+EkHlf2T
-         ZG/R35f4c/A7xIHkUOZJJISvQrjVFqgxClyWn+Dua/GeMmKwSIIbU0i0VR2Kg3o7ngWi
-         UKZ5MGI3X0mhsah6fqc3F7gQzu8OZi4BCHCwnlFUXjEb3rJQszWFJP0ejnmpn16zoRRX
-         /3Ug==
-X-Gm-Message-State: AOAM531nyU3Cyg22GSslfGON/HTmXyTHB68m99o+W5Fk1viZ/6VVgAVK
-        41oGyQxwFWL6SNLS1OIrxt6uS5fMuDIo72KysYQ=
-X-Google-Smtp-Source: ABdhPJxSi33xoEoIXQryMK7AlPvsXum9+Uhn2FA5SmsaT4s7SDGDeViE6wxc5zRdGly1PhBzYc0n/cZJtjhPnV2BKH4=
-X-Received: by 2002:aca:f306:: with SMTP id r6mr23008947oih.165.1628685033420;
- Wed, 11 Aug 2021 05:30:33 -0700 (PDT)
+        h=x-gm-message-state:from:references:mime-version:in-reply-to:date
+         :message-id:subject:to:cc;
+        bh=OqXLIC7EcLLh+W8vtswta2rji3gNQCAGuPrp8NpwNIw=;
+        b=oJoJe+jbygNBR7pnxI1RTq+MiOHHtUiMqNtmOKz1jsHPRCG576k+UjVb3AbhZ1rWJQ
+         enqnQ0aupjExJqseOlUqhvi/622pYMeWACajpj4vbyZm+hAkoTEdxwpPz36/icOJrv99
+         Wp4Xy8hcRh36gRz35DFT4t/4CicViUdYYyVBR+Opqyp9y1nGjUC5myi1bNgW4Z6ILAAn
+         S6Un093CP/75x2tWZ6fV2QdICVHL0+7gy6yqVMG6s+90gvDiSC01Lj08KwVcgAkNttIC
+         sXZNtpC+KMHkPgzdSpxdsI47saWkRyVtn0jfivc7pjMMN0H9YtMgtXK77SSg6dz2rPSG
+         aUcQ==
+X-Gm-Message-State: AOAM531okEz+l33SWNkdqUYpcavFZBZ5YlAHzHN4FBTCEZ2AHBod0yIX
+        RGzd1HozdKZmvau76R6LmG1GRKf8LJOLxPRkN64eDWvWuhMtCMD11zdtIEE8URLCGsA/U0GxCOp
+        Oo3iCxb+HxgGdmC8lRErfbXfvyKITLweNPbKOBg==
+X-Received: by 2002:a6b:f205:: with SMTP id q5mr25685ioh.158.1628702869359;
+        Wed, 11 Aug 2021 10:27:49 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz2KlWY6Y80yZlbxpA0xk0ufElQEr/Un9ppHkSB6iW1+HIVOBbi5IADGN3OGQDnwOUb9wgTHE2ohKKSyunp81E=
+X-Received: by 2002:a6b:f205:: with SMTP id q5mr25674ioh.158.1628702869208;
+ Wed, 11 Aug 2021 10:27:49 -0700 (PDT)
+Received: from 868169051519 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 11 Aug 2021 19:27:48 +0200
+From:   mleitner@redhat.com
+References: <cover.1628076531.git.lucien.xin@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6830:23a5:0:0:0:0 with HTTP; Wed, 11 Aug 2021 05:30:32
- -0700 (PDT)
-Reply-To: rihabmanyang07@yahoo.com
-From:   Rihab Manyang <ndourandiogou1@gmail.com>
-Date:   Wed, 11 Aug 2021 13:30:32 +0100
-Message-ID: <CAP5_mB4O7JPQr86GPAep=Ynd-Yb8pks_-mRAKZxGu6O8ZzfAKA@mail.gmail.com>
-Subject: hi
-To:     undisclosed-recipients:;
+In-Reply-To: <cover.1628076531.git.lucien.xin@gmail.com>
+Date:   Wed, 11 Aug 2021 19:27:48 +0200
+Message-ID: <CALnP8ZYO8ACkjWMj++6yw6yj068BHgx87CtqTuYiD=KXns8uHw@mail.gmail.com>
+Subject: Re: [PATCH lksctp-tools 0/4] lksctp-tools: replace use of deprecated
+ gethostbyname with getaddrinfo
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     linux-sctp@vger.kernel.org
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=mleitner@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
--- 
-How are you?I am miss.Rihab Manyang i will like to be your friend
-please write me back on my email for more details, Thanks.
+On Wed, Aug 04, 2021 at 07:29:12AM -0400, Xin Long wrote:
+> This patchset is simply to replace use of deprecated gethostbyname
+> with getaddrinfo in myftp, sctp_xconnect, sctp_test and sctp_darn.
+
+Applied. Thanks Xin.
+
