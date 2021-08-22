@@ -2,98 +2,66 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 212E23F235E
-	for <lists+linux-sctp@lfdr.de>; Fri, 20 Aug 2021 00:45:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB3E3F3CD9
+	for <lists+linux-sctp@lfdr.de>; Sun, 22 Aug 2021 02:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236442AbhHSWqC (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 19 Aug 2021 18:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46078 "EHLO
+        id S230346AbhHVAgI (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sat, 21 Aug 2021 20:36:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236420AbhHSWp7 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 19 Aug 2021 18:45:59 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6DDC061575
-        for <linux-sctp@vger.kernel.org>; Thu, 19 Aug 2021 15:45:22 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id i28so16267728lfl.2
-        for <linux-sctp@vger.kernel.org>; Thu, 19 Aug 2021 15:45:22 -0700 (PDT)
+        with ESMTP id S229657AbhHVAgI (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sat, 21 Aug 2021 20:36:08 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FA8C061575
+        for <linux-sctp@vger.kernel.org>; Sat, 21 Aug 2021 17:35:28 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id n12so19892787edx.8
+        for <linux-sctp@vger.kernel.org>; Sat, 21 Aug 2021 17:35:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Fexz5ESIGD6pODoWRffE5zPwnucGRfC0rVcrlRm424k=;
-        b=NlEwJiw2HKjvu/t52EW+hsJgQ6a1D8dA9aiLhWHwHLYu3IGeDcov6whNiURBSD4XVK
-         tzhN7PrJFSB5OWvGW6TFiFdGXbT+xpuYlrUHe/RmEWPOYyTTwkazO/dX9qZ40j1g5jBz
-         603S9NVecUEbIBseprXUdTPD3UMtsRDtje4WdWHQpqaSs7h6RjxI7fNzUzaPR8rf1zDF
-         Py5GRbcNNjBM4m4z0W1sBpzhuOFqY93BA6hHOPb4ye+IEGvCa3fNa81PSqYOqWvkGj5B
-         CMW8YSda4eGsoRZyayyym9PeJG8tMlDv/PEmHjlzO+FjKNEETEDAjmJq2VAuJknYz/kS
-         q5/w==
+        bh=ucocBtH5MLsC40IF/0ahhcUHtHdiGcXjPJ2fDQ7dFq4=;
+        b=Yh7BWWsgV7HUKTgA7mu6c+Uh6/GR2b9OJUZJilsf/Zn6FdhU7HWIYdpPZUAWwXxFhj
+         fsIfdTVRP79ba3416QtCJ4xUUX4vqsPOeLJpPw5wOmkRPaK+eVQ56e2fIs8erUoK/5/P
+         rallK3huGDpFU/2/WBvE45XGzy83bZ003njsRHfh7rDW9aHpFwcxmYqI72NrBi2oGZOu
+         +gvC9+qfWt+mHvikD7m3asb0xzYhKC3+hAW24Gy72/GLePxiBWIwcxcsPjWnZXwORb+m
+         56oSPD+LYIpaUV+GSjuE+Fo0hOBTa2SxC1Wsf7KT/5dQ8Xv5ZnEmotIbeO2utS9tT/LH
+         j1hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
          :subject:to;
-        bh=Fexz5ESIGD6pODoWRffE5zPwnucGRfC0rVcrlRm424k=;
-        b=sV86/HsWEcqctPTCC647o8W1X0YU26YLU9HpRaSJVQ2tXHbp5vfYdVWLjRsR9LU293
-         gCaUT1Saaw6fuyHuVHrukA2nS9NaxOuP/3oD0FMuDiuU9r+nJl8HQ1jAQcbdq86h/tG3
-         t8Q5UjrsDXqocfIjBeGrwQBf7jgea56hpz0fcMj7mInb3tmqaRzevekWx0SsIVV10suS
-         S7RkXw9zXykkyVgFPx2V4WVQqdKL55nW96yN0Qq9LeGGkjA4V2i1/ELOrqZG6VYKsmbP
-         8m0kC3KYjjVVX3mWUXHsf5e2/TI0p/C4S2DRZrZk8x4a/kct+L70AMkkrzGJVCPS6vli
-         m9Xg==
-X-Gm-Message-State: AOAM5304p4TKXcqFkPuXfiSlV3dmR+i0X/0GsRmMeIERTxvRwISZ3sFM
-        1+8sx6NWBxbD3Us0p32I88jKKEpDvkLc3h0sHmo=
-X-Google-Smtp-Source: ABdhPJxK4uuDR96P7ULqFTMiSu0ogbpvIaSnASFYYg4vLWnPzKTmZ87nVMCyVryEjPZ7SS7McHfNIj2grPYJgh+EEz8=
-X-Received: by 2002:ac2:5ec7:: with SMTP id d7mr12054165lfq.234.1629413121287;
- Thu, 19 Aug 2021 15:45:21 -0700 (PDT)
+        bh=ucocBtH5MLsC40IF/0ahhcUHtHdiGcXjPJ2fDQ7dFq4=;
+        b=GI51zoBOJ3WxVPALrtx8AIqwyVEjbJAeVeeDu2yl8S4RtLoz6yqtUW3eZyjZ0AdQwY
+         nRfTAYleIlMssSx6u4ZXvgOwtDi28fqYxonMeEnh1UlWYQ6yG/6pYzZv8ME5Uno7JUPj
+         dodQ56bxtNv9Odf0Km+PzXtvd+gN6b7ZRK0DgFPoEjAliLLZZ9/+vjJ2LJPih4Mj013C
+         gwVMcAInwxXuNoBP97BnSnSp6r3pvV5/VOp/li2bqo38rX13dkkQxGDmG8uPiTIGS2yW
+         jUD/QJpibWfNcKi3qmsREARjP7ysgUabujqfh8V3SiyeesJOUIktF7QS6e/GNIiQNj26
+         XxuQ==
+X-Gm-Message-State: AOAM530pm6LgYQBBHp9svGtPsZPGDdWN5ejLCdOCv4syUKgtwyFlVbGc
+        gXU80gweFrwQJWkEBe85VwOpktEGwlLgkJc6cXk=
+X-Google-Smtp-Source: ABdhPJwKQMJLCvVh8iHccJDikSIE9FX+PIlm3/5lwHENC/60jtfPZGKmUtTcOu8bsJNoeszF8ReRqktycad6zYVocCs=
+X-Received: by 2002:a05:6402:1249:: with SMTP id l9mr335603edw.177.1629592526513;
+ Sat, 21 Aug 2021 17:35:26 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:aa6:c042:0:b029:115:502b:e43d with HTTP; Thu, 19 Aug 2021
- 15:45:20 -0700 (PDT)
-Reply-To: neilwaudby@mail.ru
-From:   NEIL WAUDBY <waudbyneil2@gmail.com>
-Date:   Thu, 19 Aug 2021 23:45:20 +0100
-Message-ID: <CAOR1+wyzZ6ANOFR=+gYYdC+4AkWhE6ufSQa++TaA=8J+UiTVLg@mail.gmail.com>
-Subject: FROM NEIL WAUDBY
+Received: by 2002:a05:6402:1519:0:0:0:0 with HTTP; Sat, 21 Aug 2021 17:35:25
+ -0700 (PDT)
+Reply-To: tracymedicinemed70@gmail.com
+From:   "Dr. Tracy William" <arijegloba70@gmail.com>
+Date:   Sat, 21 Aug 2021 17:35:25 -0700
+Message-ID: <CAA7+S4B3CsBfP8iw4+jMYtLFKN7VxD3J5-dGqvDZ9JFL=yOW5A@mail.gmail.com>
+Subject: Tracy William from the United States,
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Dear friend
+Hello Dear,
 
-It is a fact that we have not met before neither have we had any
-previous business dealings, but I strongly believe that with
-understanding and trust we can have a successful business
-relationship.
+How are you today, I hope you are good. My name is Tracy William
+from the United States, Am an English and French nationalities.
+I will give you pictures and more details about my self as soon as
+i hear from you.
 
-How are you and your family today? my name is Mr. Neil Waudby, Audit
-and account manager Access Bank PLC headquarters,Cotonou Republic of
-Benin. Before us is a great opportunity. Described here-under for our
-mutual benefit and hope you will understand the nature of the
-transaction and keep it a top secret.
-
-On February 10 2011, My client; Mr.Richard Noble, was killed in
-Airplane crash at Cork Airport-Manx2 Flight 7100, Fairchild Metro
-liner III in the Republic of Ireland.
-
-After going through his file in our bank, I discovered that he left
-the sum of US $22.000, 000.00 USD (Twenty two Million UNITED STATES
-DOLLARS) without specifying any beneficiary in his file as next of
-kin. The fund in question can only be released to specified next of
-Kin to Late Mr. Richard Noble.
-
-Now this money is unclaimed fund; this is where i require assistance
-and seek your consent to present you as the next of  kin Bonafide
-Beneficiary to the deceased so that the proceeds of this account
-valued at $22.Million United  States Dollars will be transfer to your
-account, which we will share in these percentages ratio;70% for me and
-30% to you and I assured you that this transaction will be executed
-under  a legitimate arrangement that will protect you from any breach
-of the law both in your country and here,
-
-upon consideration and acceptance of this offer, Kindly get back to me
-at your most early convenience so that I Can Brief you on the next
-line of action how we can proceed to transfer this fund to your
-account  immediately
-
-Please send your reply to   neilwaudby@mail.ru
-
-Yours Sincerely
-Neil Waudby
+Thanks
+Tracy
