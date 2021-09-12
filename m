@@ -2,120 +2,104 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF59A40746B
-	for <lists+linux-sctp@lfdr.de>; Sat, 11 Sep 2021 03:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB854081F9
+	for <lists+linux-sctp@lfdr.de>; Sun, 12 Sep 2021 23:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235032AbhIKB2K (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 10 Sep 2021 21:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
+        id S236559AbhILWAG (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 12 Sep 2021 18:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234989AbhIKB2I (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 10 Sep 2021 21:28:08 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EBDC061574
-        for <linux-sctp@vger.kernel.org>; Fri, 10 Sep 2021 18:26:56 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id s11so7446584yba.11
-        for <linux-sctp@vger.kernel.org>; Fri, 10 Sep 2021 18:26:56 -0700 (PDT)
+        with ESMTP id S236547AbhILWAG (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sun, 12 Sep 2021 18:00:06 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4374C06175F
+        for <linux-sctp@vger.kernel.org>; Sun, 12 Sep 2021 14:58:51 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id z1so9571159ioh.7
+        for <linux-sctp@vger.kernel.org>; Sun, 12 Sep 2021 14:58:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=sPXVZuczp6nIm+g+ehEulGNHA1uxWEN7CnVl/RWVxEc=;
-        b=VNm/L3t5k6qXeETHoFsJfahga7P8DkL2bGS5zPtapBM91fnkZSYpMAYsL47mMgTmDK
-         9vexWGFFf15YKj5TeHPoaKdEn3tIYsP85yP5KehdFCE0mk0ELPCqwSqe9fo+GmnPPu61
-         xBkaLejL43wBWQQjF77kLCgAoiAWjZGI/3SsED0jQqA2Nmk+LjYsvUMltG1EMeYXl0pC
-         zv7TY8kBsol4BXFoaExrU7sP+tGDnwUSbZ7Lc9jcyLgo9f5YJE6knrTuUzoaOWpDd+sv
-         ZovljpOSeqNxknWkv1ORQxXNtbZ3PXaoqFQIGh63RZjpXmiE9a39BkkR2fNq6EfKTYeA
-         3yrA==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=KoseWHC1X1eUmhKmXE//peQwxmYp0XripPbl2Zk3A1o=;
+        b=SGN5D1E0sUeuZ31ahb3quJTGt3i+Z3NJKPntRFfm/NtywgEXfwRzhJCslf/Q4+Y5BZ
+         FGEvZ2RW4L+anl/sX4u+Ou5cYIM00BOVUkVthooZr35SfTmY8sPAS5zrH428IRFjq5Z2
+         T5vHXBx1JIMUh9iHUJ2tSXwD4tUt0LFOTJIu+KpG065wHNoBDbpdpLwbsGI2LCJhzaJD
+         QBv7eMT/7vldmyAwyK1EleM+3MPsGpIew+QUZk7s/1al5sM5u/OXnWQaFnfVJ2CwE09d
+         BAYFPRgPLcBePkgFBOnkKw/0XEhChoAbYr7Kkrosf7y9gn3/HjAV4q0pX0g8wDL8Tr2T
+         OmDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=sPXVZuczp6nIm+g+ehEulGNHA1uxWEN7CnVl/RWVxEc=;
-        b=P+QUdMWtM+Hxi2fOvH8XwCXF5RvRKWj9YS0D+t3UKr6wofAWBem3fBU2pJnrEh/hHg
-         KBEijPAKzTpxf29agKZkcgXrYc+cVL33D5thnmYyQAN31jFJhpzcQl6Y5JuRmajcXIfi
-         v7SL4PJHb3lPebTSxe09p0/LATA5myJZbitCWcGwcnc+KW+4N5gnOhtjuBor/8Ct+yLv
-         8YuRBgVPUHvR2L3X/HeqKc9vQOF8onZ6OiNZ0+iAEuz8WHK0oIhR+XWpqFj6UxJYN300
-         ER+oDtPqeJtieHRySuUSosE8Nqqt/5RXMTVYHEh9fUqR6JdXQb2cvuQf+najs9svE1Be
-         PYCA==
-X-Gm-Message-State: AOAM532AIq/hMLWo5605yVjhmoOIeWPvTDpK0NQebdr9+IXArVsA6jRa
-        xD1nVhSOqBLmhs73TriBempHW/AjC7DFvD1eEdQ=
-X-Google-Smtp-Source: ABdhPJyt+ogDdH5s0Xqp9me6qs4wnXb1yhkD7nQy8TPLab9ff+TNA3NYUjZuzTzY4PjVaVReooL7Bpaf8KrU3RsDyXY=
-X-Received: by 2002:a05:6902:709:: with SMTP id k9mr809713ybt.331.1631323615673;
- Fri, 10 Sep 2021 18:26:55 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=KoseWHC1X1eUmhKmXE//peQwxmYp0XripPbl2Zk3A1o=;
+        b=epgfdioFJS0OF2NyCj09t7jMpVAjMctlg88Spp49Fv19QDGWw4i5sDxQDdXBZuEQT9
+         gP2Pjk3qskCf42MNJJ8Ol/bw/uSTSMwOMyR2x9EeqxWI09HWx+rGaGqHBsyuLEmc+6kY
+         N3UZGCKvvjQ/bJTkzg7rxfo7hctq5nh9K1zYfKdVLNxNvsYCotgfPB19t8M4jyIcorTC
+         tMSKw5X7cdJ8PUqh2AtGJjo/QW+W2FhBwDwE48haNLYUITrhe8zctMZMxIK92QIScLWq
+         z5rOykq0/mMUD/efGXibIe8qRWn6BnMyFHkLTAFOAbb/bEINoO7ZONemyJF7WSdVWZk/
+         whcA==
+X-Gm-Message-State: AOAM531A26q0J1j7bsmLtHqgF3sbtaeqeZFvE0aT6uN04vHet1Q0OeCt
+        RPIloRKZ+ehm/aJWa1Hkej4vJ74fuxqTygwhW1E=
+X-Google-Smtp-Source: ABdhPJzzP7OVVAg9GePpfLWrQAU5PBYf860Mr3KrpRNzXDbI/b9fgmJA16uFBFDEUkivexnNy4BaMI/ZsCnD28plnM4=
+X-Received: by 2002:a6b:e410:: with SMTP id u16mr6177192iog.38.1631483931337;
+ Sun, 12 Sep 2021 14:58:51 -0700 (PDT)
 MIME-Version: 1.0
-Sender: mrsnadiaemaan5@gmail.com
-Received: by 2002:a05:7010:34c2:b0:109:f5a5:2917 with HTTP; Fri, 10 Sep 2021
- 18:26:55 -0700 (PDT)
-From:   Mrs Nadia Emaan <mrsnadiaemaan50@gmail.com>
-Date:   Sat, 11 Sep 2021 01:26:55 +0000
-X-Google-Sender-Auth: 0M46kCv3WWUpLc4rpro5ft5GuJM
-Message-ID: <CAOg3cV1Sxjt+DtY=WjvSK5AU4P+Fe5CGgZRza6fFE+9KU2E2Zw@mail.gmail.com>
-Subject: HELLO
+Received: by 2002:a6b:e907:0:0:0:0:0 with HTTP; Sun, 12 Sep 2021 14:58:50
+ -0700 (PDT)
+Reply-To: mstheresaheidi8@gmail.com
+From:   Ms Theresa Heidi <mstheresaheidi@gmail.com>
+Date:   Sun, 12 Sep 2021 14:58:50 -0700
+Message-ID: <CAK_gh8JNpGJDaf2YG99kBtkHbVRb6RX7O6KBw7Dsv30HtuKY9A@mail.gmail.com>
+Subject: URGENT MATTER HELP!
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Gretings My Friend,
+Dear Beloved One,
 
-I am contacting you through this means because I need your urgent
-assistance and also help me to carry a charity project in your
-country. I found your email address as a true child of God for past
-few days now that I have been praying to know if you are really the
-chosen one for this great charity project, according to God's
-direction, after all prayers I am convinced, and I have decided to
-contact you. Please, i want you use the funds for the Lord's work,
-with confidence, read and respond now.
+CHARITY DONATION Please read carefully, I know it is true that this
+letter may come to you as a surprise. I came across your e-mail
+contact through a private search while in need of your assistance. I
+am writing this mail to you with heavy sorrow in my heart, I have
+chose to reach you through Internet because it still remains the
+fastest medium of communication.
 
+My Name is Mrs. Theresa Heidi I am native France currently
+hospitalized in a private hospital here in Israel as a result of lungs
+cancer I am 62 years old and I was diagnosed of lungs cancer for about
+4 years ago, immediately after the death of my husband, who has left
+me everything he worked for. I'm with my laptop in a hospital here in
+where I have been undergoing treatment for cancer of the lungs. I have
+some funds inherited from my late husband, the sum of Two Million Five
+Hundred Thousand Dollars Only (USD$2,500,000,00).Now it's clear that
+I=E2=80=99m approaching the last-days of my life and I don't think I need t=
+his
+money anymore. My doctor made me to understand that I would not last
+for the period of one year due to Lungs cancer problem.
 
-My name is Ms. Nadia Faroul, a widow, but currently based in West
-Africa since my life with my late husband, who was a businessman in
-this country before dying some years ago. We were married to many
-years without a child. He died after a brief illness that lasted only
-six days and I myself have been suffering from an ovarian cancer
-disease. At this moment I am about to finish the race in this way
-because the disease has reached a very bad stage, without any family
-member and without children. I hope you do not expose or betray this
-trust and I am sure that I am about to trust you for the mutual
-benefit of orphans and the less privileged. I have some funds that I
-inherited from my late husband, the total sum of ($ 12,500,000.00)
-deposited at a bank here in Burkina Faso. After knowing my current
-state of health, I decided to trust you with this fund, believing that
-you will use it in the way I will instruct here.
+This money is still with the foreign bank and the management wrote me
+as the true owner to come forward to receive the money or rather issue
+a letter of authorization to somebody to receive it on my behalf since
+I can't come over because of my illness. Failure to act the bank may
+get fund confiscated for keeping it so long.
 
+I decided to contact you if you maybe willing and interested to help
+me withdraw this money from the foreign bank then use the funds for
+Charity works in helping the less privileged and also to fight against
+Covid-19 Pandemic in the society. I want you to handle these trust
+funds in good faith before anything happens to me. This is not a
+stolen money and there are no dangers involved is 100% risk free with
+full legal proof.
 
-you will use this $12.5 Million for public benefit as follows;
+I want you to take 45% of the total money for your personal used while
+55% of the money will go to charity work. I will appreciate your
+utmost trust and confidentiality in this matter to accomplish my heart
+desire, as I don't want anything that will jeopardize my last wish. I
+am very sorry if you received this letter in your spam, is due to
+recent connection error here in the country.
 
-1. Establish An Orphanage Home To Help The Orphanages Children.
-2. Build A Hospital To Help The Poor.
-3. Build A Nursing Home For Elderly People Need Care & Meal.
-
-You will named them after my late husband.Therefore, I need you to
-help me and claim this money and use it for charities, for orphanages
-and provide justice and help to the poor, needy and to promote the
-words of God and the effort to maintain the house of God, according to
-the bible in the book of. Jeremiah 22: 15-16, without minding our
-different religions.
-
-It will be a pleasure to compensate with 40% percent of the total
-money for your effort in handling the transaction, while 60% of the
-money will go to charity project.
-
-All I need from you is sincerity and ability to complete the task of
-God without any failure. It will be my pleasure to see that the bank
-has finally released and transferred the fund to your bank account in
-the country, even before I die here in the hospital, due to my current
-state of health, everything must be processed as soon as possible.
-
-I am waiting for your immediate response, if you are only interested
-in obtaining more details about the transaction and execution of this
-humanitarian project for the glory and honor of God.
-
-Sorry if you received this letter in your spam, is due to recent
-connection/network error here in the country.
-
-Please I am waiting for your urgent reply now.
-
-May God Bless you,
-Ms. Nadia Faroul.
+Yours Beloved Sister.
+Mrs. Theresa Heidi
