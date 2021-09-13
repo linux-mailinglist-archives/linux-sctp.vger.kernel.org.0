@@ -2,104 +2,82 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EB854081F9
-	for <lists+linux-sctp@lfdr.de>; Sun, 12 Sep 2021 23:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FFB94097C2
+	for <lists+linux-sctp@lfdr.de>; Mon, 13 Sep 2021 17:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236559AbhILWAG (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 12 Sep 2021 18:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
+        id S1344286AbhIMPti (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 13 Sep 2021 11:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236547AbhILWAG (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sun, 12 Sep 2021 18:00:06 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4374C06175F
-        for <linux-sctp@vger.kernel.org>; Sun, 12 Sep 2021 14:58:51 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id z1so9571159ioh.7
-        for <linux-sctp@vger.kernel.org>; Sun, 12 Sep 2021 14:58:51 -0700 (PDT)
+        with ESMTP id S1344064AbhIMPtf (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 13 Sep 2021 11:49:35 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10605C08EE22
+        for <linux-sctp@vger.kernel.org>; Mon, 13 Sep 2021 08:31:36 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 9so14953234edx.11
+        for <linux-sctp@vger.kernel.org>; Mon, 13 Sep 2021 08:31:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:reply-to:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=KoseWHC1X1eUmhKmXE//peQwxmYp0XripPbl2Zk3A1o=;
-        b=SGN5D1E0sUeuZ31ahb3quJTGt3i+Z3NJKPntRFfm/NtywgEXfwRzhJCslf/Q4+Y5BZ
-         FGEvZ2RW4L+anl/sX4u+Ou5cYIM00BOVUkVthooZr35SfTmY8sPAS5zrH428IRFjq5Z2
-         T5vHXBx1JIMUh9iHUJ2tSXwD4tUt0LFOTJIu+KpG065wHNoBDbpdpLwbsGI2LCJhzaJD
-         QBv7eMT/7vldmyAwyK1EleM+3MPsGpIew+QUZk7s/1al5sM5u/OXnWQaFnfVJ2CwE09d
-         BAYFPRgPLcBePkgFBOnkKw/0XEhChoAbYr7Kkrosf7y9gn3/HjAV4q0pX0g8wDL8Tr2T
-         OmDg==
+        bh=WcPG37PGgntXFFZN9AUZuW9icy+zkvgoRPv06Um6C2Y=;
+        b=Gl1f1EhHnEZ0SoTYzru2Uynh/6Z3KWBCee+CHYdoUky5idee/xTJq+7TRM9PNxBUMJ
+         tYyS+Mi5cccFkopLJ4Bw769XSsHeyj86SINDIlAoFXbjNHezRrgaSscPtmeb32HlIrRY
+         TEdn1nSlo6pGdOgG3/HJG9nixA1bhxdKjb3tr87WPS9KvFxvMMMcsaPEKR2B72zG5uX5
+         Qt0IFPwxYKSs9YHr5KTpgyM9wuh4IGtHTVWgrjCe53tLnzo98w9vRgf7kcZM5IDBSwvd
+         2D8gjojdR7eG4YetdOA9an9gnmE9t3xdmKJtPxIIjgKyB8TXniNSM05y9ga6V3oTs2mw
+         h9VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
          :subject:to:content-transfer-encoding;
-        bh=KoseWHC1X1eUmhKmXE//peQwxmYp0XripPbl2Zk3A1o=;
-        b=epgfdioFJS0OF2NyCj09t7jMpVAjMctlg88Spp49Fv19QDGWw4i5sDxQDdXBZuEQT9
-         gP2Pjk3qskCf42MNJJ8Ol/bw/uSTSMwOMyR2x9EeqxWI09HWx+rGaGqHBsyuLEmc+6kY
-         N3UZGCKvvjQ/bJTkzg7rxfo7hctq5nh9K1zYfKdVLNxNvsYCotgfPB19t8M4jyIcorTC
-         tMSKw5X7cdJ8PUqh2AtGJjo/QW+W2FhBwDwE48haNLYUITrhe8zctMZMxIK92QIScLWq
-         z5rOykq0/mMUD/efGXibIe8qRWn6BnMyFHkLTAFOAbb/bEINoO7ZONemyJF7WSdVWZk/
-         whcA==
-X-Gm-Message-State: AOAM531A26q0J1j7bsmLtHqgF3sbtaeqeZFvE0aT6uN04vHet1Q0OeCt
-        RPIloRKZ+ehm/aJWa1Hkej4vJ74fuxqTygwhW1E=
-X-Google-Smtp-Source: ABdhPJzzP7OVVAg9GePpfLWrQAU5PBYf860Mr3KrpRNzXDbI/b9fgmJA16uFBFDEUkivexnNy4BaMI/ZsCnD28plnM4=
-X-Received: by 2002:a6b:e410:: with SMTP id u16mr6177192iog.38.1631483931337;
- Sun, 12 Sep 2021 14:58:51 -0700 (PDT)
+        bh=WcPG37PGgntXFFZN9AUZuW9icy+zkvgoRPv06Um6C2Y=;
+        b=Zsb32QifJG4LY1LhSRdRAvpeH3Q/Y8r7fVI3tpfdyJJqmLk9nWwDk9mcq69O2enIyC
+         ggrNBCvsrqmWaRIJiKfmdBM6h/KH1PepimlcwuQmBdT2oUM2V9vWTiVWO2kq2P+KXv6F
+         82zR3cv1XxNhmpZ40AJ6SHnHmlPzn7+rGRntS2/RgibDE7J13Hh7Cvbps1Hp1GvvrtPI
+         7rfc4fwegEFCzddy0rPJfqfQmzd6uNYiLj0H40w2nMMgzFdV8wBYjG7yFU+ZA2U2MJsd
+         ugHuX0oeZNtu2sbDIQIo1FJhWAO1XMjhwygrttpnDNzj/YQKmh8pkSautrthM4NTjhs5
+         PdMA==
+X-Gm-Message-State: AOAM530fvbQjgwTzIY1D9IabFoTdj2TwRpre2ni5+4+1fgs5hfiqKZ7C
+        gnDwK+4JEtS9QUfH5e6WyHUvrphGNoienZmKN5U=
+X-Google-Smtp-Source: ABdhPJzDkA7KDueZWgvwxwZUqVKk04+9yh9KAyP5C17XLXLCYiQUqRJuPPyeEYIUnAM/nPv73pG0AfwAUeU3HaR4Zoc=
+X-Received: by 2002:a05:6402:4d:: with SMTP id f13mr13599219edu.275.1631547094412;
+ Mon, 13 Sep 2021 08:31:34 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a6b:e907:0:0:0:0:0 with HTTP; Sun, 12 Sep 2021 14:58:50
+Received: by 2002:aa7:c847:0:0:0:0:0 with HTTP; Mon, 13 Sep 2021 08:31:33
  -0700 (PDT)
-Reply-To: mstheresaheidi8@gmail.com
-From:   Ms Theresa Heidi <mstheresaheidi@gmail.com>
-Date:   Sun, 12 Sep 2021 14:58:50 -0700
-Message-ID: <CAK_gh8JNpGJDaf2YG99kBtkHbVRb6RX7O6KBw7Dsv30HtuKY9A@mail.gmail.com>
-Subject: URGENT MATTER HELP!
-To:     undisclosed-recipients:;
+Reply-To: davidlivingstone070@gmail.com
+From:   David Livingstone <dlivingstone608@gmail.com>
+Date:   Mon, 13 Sep 2021 16:31:33 +0100
+Message-ID: <CAD2OVo_1=CuN_NLvdrf-riPyvQ10V3SR3oJiXR3ZBnoE3Wg7Fw@mail.gmail.com>
+Subject: =?UTF-8?Q?Das_ist_f=C3=BCr_dich?=
+To:     dlivingstone608 <dlivingstone608@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Dear Beloved One,
-
-CHARITY DONATION Please read carefully, I know it is true that this
-letter may come to you as a surprise. I came across your e-mail
-contact through a private search while in need of your assistance. I
-am writing this mail to you with heavy sorrow in my heart, I have
-chose to reach you through Internet because it still remains the
-fastest medium of communication.
-
-My Name is Mrs. Theresa Heidi I am native France currently
-hospitalized in a private hospital here in Israel as a result of lungs
-cancer I am 62 years old and I was diagnosed of lungs cancer for about
-4 years ago, immediately after the death of my husband, who has left
-me everything he worked for. I'm with my laptop in a hospital here in
-where I have been undergoing treatment for cancer of the lungs. I have
-some funds inherited from my late husband, the sum of Two Million Five
-Hundred Thousand Dollars Only (USD$2,500,000,00).Now it's clear that
-I=E2=80=99m approaching the last-days of my life and I don't think I need t=
-his
-money anymore. My doctor made me to understand that I would not last
-for the period of one year due to Lungs cancer problem.
-
-This money is still with the foreign bank and the management wrote me
-as the true owner to come forward to receive the money or rather issue
-a letter of authorization to somebody to receive it on my behalf since
-I can't come over because of my illness. Failure to act the bank may
-get fund confiscated for keeping it so long.
-
-I decided to contact you if you maybe willing and interested to help
-me withdraw this money from the foreign bank then use the funds for
-Charity works in helping the less privileged and also to fight against
-Covid-19 Pandemic in the society. I want you to handle these trust
-funds in good faith before anything happens to me. This is not a
-stolen money and there are no dangers involved is 100% risk free with
-full legal proof.
-
-I want you to take 45% of the total money for your personal used while
-55% of the money will go to charity work. I will appreciate your
-utmost trust and confidentiality in this matter to accomplish my heart
-desire, as I don't want anything that will jeopardize my last wish. I
-am very sorry if you received this letter in your spam, is due to
-recent connection error here in the country.
-
-Yours Beloved Sister.
-Mrs. Theresa Heidi
+Hallo,
+Die Wirtschaftsgemeinschaft des Staates Westafrika (ECOWAS) hat ihr
+Management beauftragt, alle nicht in Anspruch genommenen
+Vertr=C3=A4ge/Erbschaftszahlungen durch das Schuldenausgleichsgremium gem=
+=C3=A4=C3=9F
+den Anweisungen der Finanz=C3=BCberwachungsstelle der Europ=C3=A4ischen Uni=
+on
+nach einer detaillierten Pr=C3=BCfung Ihrer Zahlungsakte zu =C3=BCberpr=C3=
+=BCfen, mit
+weiteren Anweisungen zur Information Sie, dass Ihre Zahlung bearbeitet
+wird und wird Ihnen freigegeben, sobald Sie auf dieses Schreiben
+antworten.Sie m=C3=BCssen mit einer genehmigten Summe in H=C3=B6he von drei
+Millionen f=C3=BCnfhunderttausend US-Dollar entsch=C3=A4digt werden. Wir we=
+rden
+mit Ihnen die erforderlichen detaillierten Informationen
+korrespondieren, die erforderlich sind, um die von einem Fonds
+genehmigten Dokumente rechtlich zu bearbeiten, damit das benannte
+Finanzinstitut in Paris, Frankreich, die finanzielle Verantwortung
+=C3=BCbernehmen kann mit Wirkung zur Freigabe Ihres Geldes durch
+telegrafische Zahlungsmethode oder Prepaid-Visa-Karte Eine weitere
+Information ist, dass f=C3=BCr diesen Vorgang keine Dokumentation
+erforderlich ist.
+David Livingstone.
