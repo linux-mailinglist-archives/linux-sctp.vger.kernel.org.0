@@ -2,58 +2,158 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A87409A7E
-	for <lists+linux-sctp@lfdr.de>; Mon, 13 Sep 2021 19:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3EAE412D72
+	for <lists+linux-sctp@lfdr.de>; Tue, 21 Sep 2021 05:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241216AbhIMRR0 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 13 Sep 2021 13:17:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56528 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239236AbhIMRR0 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 13 Sep 2021 13:17:26 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A46DC061574
-        for <linux-sctp@vger.kernel.org>; Mon, 13 Sep 2021 10:16:10 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id a4so22589028lfg.8
-        for <linux-sctp@vger.kernel.org>; Mon, 13 Sep 2021 10:16:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=PjySurpSeLUKOnf+RPhGhkIIGTQpz7P4FAm389YAtdo=;
-        b=M3zZqT0/G2e7Et5iwHoxPohv90pZoX7VV9E7BKkGm9584X4i4p/VFyQz5lkXm6Kce2
-         wgaN67OzbKO1bbk2DloHM2N9D0q9TMxJsqfbxP7Bvqqb4H5dw2fMAqbKSUoX2VqnuhHT
-         +p0c8lzK+qPEYHROQeNpf1cmw3cv6kU1Jhu+1bvYAPJ4tQFR/ihK9I796Mj+6y/nbM3+
-         uItMkzCtm6nrsUVo0fBebll4wGcO0ATgs75g13lDPue0rrZqfxXv+//A4Kn4W26gZchJ
-         I7tshKxdcRDJ5zZIvxAZJDXzzfZCyvHdGSaYcU64AXlX9tzItWdFKhtsu+uw388rmWqv
-         pGeQ==
+        id S231465AbhIUDcK (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 20 Sep 2021 23:32:10 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:33744 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353001AbhIUC5o (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 20 Sep 2021 22:57:44 -0400
+Received: by mail-io1-f69.google.com with SMTP id g2-20020a6b7602000000b005be59530196so46576311iom.0
+        for <linux-sctp@vger.kernel.org>; Mon, 20 Sep 2021 19:56:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=PjySurpSeLUKOnf+RPhGhkIIGTQpz7P4FAm389YAtdo=;
-        b=3aBUna0eVF43ONiml5RSPPRHFomripiEd2AwhuAEjN4XZOGUvFw9h2rd2587pOc6SK
-         Aqdq8+3gzHQPmlQsQXnH/JOLwgydQXAab8uOs6wtynZwqdUfiduDNtcqsYPeGzm7roSg
-         bwBnSa5oCtokOANwEXBqKg7tmRBDDo9fAeWucB9XAKuUyfDUHBMtMs9xAoW0jwcY57Gz
-         hJOktjDD+GWSjSaSheZ5b32W2Z5kUEXZPfaFi5Y2Vkq8mJa+ainJME2PUk4MBASjo+zs
-         SKE013jXORM4rA7qkpNEl7XU9ZPLDD4wY78nVt9CI3BXbI7a47Xxl+NEwG3yPuGD2lUL
-         l3yA==
-X-Gm-Message-State: AOAM5303Raiv5AKBKfIJg4ZT7XBrCEcPHQha6CFbFx646Zqc2NYvm+JC
-        9QnizY7+GDcLA1wosRqZ2Yf1WAQXWqTmLZ6uZ9M=
-X-Google-Smtp-Source: ABdhPJz3pnvcNYfNadIA23FlPqsSwUVNo8+lrck93JtBiM5f4B4cfdonYTtUj97tXityeEx/c+45VhEBJq3RILQTcD8=
-X-Received: by 2002:ac2:4312:: with SMTP id l18mr9646823lfh.602.1631553368595;
- Mon, 13 Sep 2021 10:16:08 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=MNpadMHNgZjbL+VRdgzRTRIiaLJg27YWyIUZKCU8PDs=;
+        b=SOuJM7qcPtjz+iuF6Tqz77k013hSZsLwgO356M2qy75y1zeDDZuPCBsVRwrIw5/iGQ
+         bl5FF+IOmj+CGT2hxuJ6mizqavYAZaF7+uNFbi8nIFuwvLAhXHlfvPtnGqQNk5PX0B++
+         ce+yLdISN4vtusT9VOaYEh5npihgtktKnPi3pXbmjO4+Qrrt7xgUNC6PgyRE9DL7fHeC
+         2Pqr3gBGSu+UtcvOnT8mJdwy++bn17n5CskBvONJp923HALwN0WxpsJk/GpH4SiroRRm
+         fhgMjo993SKPTJZYTbDQvn0RF9hf2UiYKBWMr43AfEhnpnWto5RZCaQ5SIo9Yk+6iUkl
+         /CEA==
+X-Gm-Message-State: AOAM532Vul18kKT/myVTEJKPnB8E3bAyd3uVvU7PoluCEPtH97Qxx6Is
+        mExLni+rr4Fm48oZAv0enqrPTQqUIA32Np13b0LRtBT4kQAf
+X-Google-Smtp-Source: ABdhPJzFElshIctAq247vtysjG+pyJtpXZZ/wOxOpzGbONGpgTNUb5NF2MHpKQSxm3n1vcSiwDCoYNJorvbRQwcecfroXErtUPAo
 MIME-Version: 1.0
-Received: by 2002:a9a:564c:0:b0:139:3eb5:6dcc with HTTP; Mon, 13 Sep 2021
- 10:16:08 -0700 (PDT)
-Reply-To: oj2023oj@gmail.com
-From:   Julia Olmos <imeldaneil3@gmail.com>
-Date:   Mon, 13 Sep 2021 18:16:08 +0100
-Message-ID: <CAE8PmYs8AhJ8Rm0vTPm0LRvDLzdqNVsh+_AUTXjKpuVheO_tvw@mail.gmail.com>
-Subject: _j
-To:     undisclosed-recipients:;
+X-Received: by 2002:a05:6e02:134e:: with SMTP id k14mr19895623ilr.39.1632192977063;
+ Mon, 20 Sep 2021 19:56:17 -0700 (PDT)
+Date:   Mon, 20 Sep 2021 19:56:17 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009a53cd05cc788a95@google.com>
+Subject: [syzbot] general protection fault in sctp_rcv
+From:   syzbot <syzbot+581aff2ae6b860625116@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-sctp@vger.kernel.org, marcelo.leitner@gmail.com,
+        netdev@vger.kernel.org, nhorman@tuxdriver.com,
+        syzkaller-bugs@googlegroups.com, vyasevich@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Good day, I'm Miss. Julia Olmos, i need to talk to you reply me please ?
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    98dc68f8b0c2 selftests: nci: replace unsigned int with int
+git tree:       net
+console output: https://syzkaller.appspot.com/x/log.txt?x=11fd443d300000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c31c0936547df9ea
+dashboard link: https://syzkaller.appspot.com/bug?extid=581aff2ae6b860625116
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+581aff2ae6b860625116@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+CPU: 0 PID: 11205 Comm: kworker/0:12 Not tainted 5.14.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: ipv6_addrconf addrconf_dad_work
+RIP: 0010:sctp_rcv_ootb net/sctp/input.c:705 [inline]
+RIP: 0010:sctp_rcv+0x1d84/0x3220 net/sctp/input.c:196
+Code: fb 03 0f 8e 51 01 00 00 e8 99 ac 17 f9 4c 01 ed e8 91 ac 17 f9 48 8d 7d 02 48 b9 00 00 00 00 00 fc ff df 48 89 f8 48 c1 e8 03 <0f> b6 14 08 48 89 f8 83 e0 07 83 c0 01 38 d0 7c 08 84 d2 0f 85 ea
+RSP: 0018:ffffc900000079c8 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 00000000fffffff2 RCX: dffffc0000000000
+RDX: ffff88803d790000 RSI: ffffffff885e62cf RDI: 0000000000000002
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff885e6448 R11: 0000000000000000 R12: 000000000000050c
+R13: ffff88803f42a0e4 R14: 0000000000000510 R15: ffff888070e2c500
+FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f0dce1763ad CR3: 0000000027250000 CR4: 00000000001506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ sctp6_rcv+0x38/0x60 net/sctp/ipv6.c:1109
+ ip6_protocol_deliver_rcu+0x2e9/0x1ca0 net/ipv6/ip6_input.c:422
+ ip6_input_finish+0x62/0x170 net/ipv6/ip6_input.c:463
+ NF_HOOK include/linux/netfilter.h:307 [inline]
+ NF_HOOK include/linux/netfilter.h:301 [inline]
+ ip6_input+0x9c/0xd0 net/ipv6/ip6_input.c:472
+ dst_input include/net/dst.h:460 [inline]
+ ip6_rcv_finish net/ipv6/ip6_input.c:76 [inline]
+ NF_HOOK include/linux/netfilter.h:307 [inline]
+ NF_HOOK include/linux/netfilter.h:301 [inline]
+ ipv6_rcv+0x28c/0x3c0 net/ipv6/ip6_input.c:297
+ __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5436
+ __netif_receive_skb+0x24/0x1b0 net/core/dev.c:5550
+ process_backlog+0x2a5/0x6c0 net/core/dev.c:6427
+ __napi_poll+0xaf/0x440 net/core/dev.c:6982
+ napi_poll net/core/dev.c:7049 [inline]
+ net_rx_action+0x801/0xb40 net/core/dev.c:7136
+ __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
+ do_softirq.part.0+0xde/0x130 kernel/softirq.c:459
+ </IRQ>
+ do_softirq kernel/softirq.c:451 [inline]
+ __local_bh_enable_ip+0x102/0x120 kernel/softirq.c:383
+ spin_unlock_bh include/linux/spinlock.h:408 [inline]
+ addrconf_dad_work+0x474/0x1340 net/ipv6/addrconf.c:4077
+ process_one_work+0x9bf/0x16b0 kernel/workqueue.c:2297
+ worker_thread+0x658/0x11f0 kernel/workqueue.c:2444
+ kthread+0x3e5/0x4d0 kernel/kthread.c:319
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+Modules linked in:
+---[ end trace 80d76c5102c944b0 ]---
+RIP: 0010:sctp_rcv_ootb net/sctp/input.c:705 [inline]
+RIP: 0010:sctp_rcv+0x1d84/0x3220 net/sctp/input.c:196
+Code: fb 03 0f 8e 51 01 00 00 e8 99 ac 17 f9 4c 01 ed e8 91 ac 17 f9 48 8d 7d 02 48 b9 00 00 00 00 00 fc ff df 48 89 f8 48 c1 e8 03 <0f> b6 14 08 48 89 f8 83 e0 07 83 c0 01 38 d0 7c 08 84 d2 0f 85 ea
+RSP: 0018:ffffc900000079c8 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 00000000fffffff2 RCX: dffffc0000000000
+RDX: ffff88803d790000 RSI: ffffffff885e62cf RDI: 0000000000000002
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff885e6448 R11: 0000000000000000 R12: 000000000000050c
+R13: ffff88803f42a0e4 R14: 0000000000000510 R15: ffff888070e2c500
+FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f0dce1763ad CR3: 0000000027250000 CR4: 00000000001506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	fb                   	sti
+   1:	03 0f                	add    (%rdi),%ecx
+   3:	8e 51 01             	mov    0x1(%rcx),%ss
+   6:	00 00                	add    %al,(%rax)
+   8:	e8 99 ac 17 f9       	callq  0xf917aca6
+   d:	4c 01 ed             	add    %r13,%rbp
+  10:	e8 91 ac 17 f9       	callq  0xf917aca6
+  15:	48 8d 7d 02          	lea    0x2(%rbp),%rdi
+  19:	48 b9 00 00 00 00 00 	movabs $0xdffffc0000000000,%rcx
+  20:	fc ff df
+  23:	48 89 f8             	mov    %rdi,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	0f b6 14 08          	movzbl (%rax,%rcx,1),%edx <-- trapping instruction
+  2e:	48 89 f8             	mov    %rdi,%rax
+  31:	83 e0 07             	and    $0x7,%eax
+  34:	83 c0 01             	add    $0x1,%eax
+  37:	38 d0                	cmp    %dl,%al
+  39:	7c 08                	jl     0x43
+  3b:	84 d2                	test   %dl,%dl
+  3d:	0f                   	.byte 0xf
+  3e:	85 ea                	test   %ebp,%edx
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
