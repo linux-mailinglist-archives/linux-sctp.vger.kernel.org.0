@@ -2,68 +2,93 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42FA7415CFB
-	for <lists+linux-sctp@lfdr.de>; Thu, 23 Sep 2021 13:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0E554169A3
+	for <lists+linux-sctp@lfdr.de>; Fri, 24 Sep 2021 03:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240619AbhIWLpD (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 23 Sep 2021 07:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36302 "EHLO
+        id S240863AbhIXBxs (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 23 Sep 2021 21:53:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238930AbhIWLpC (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 23 Sep 2021 07:45:02 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD39DC061574
-        for <linux-sctp@vger.kernel.org>; Thu, 23 Sep 2021 04:43:30 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id x7so8267852edd.6
-        for <linux-sctp@vger.kernel.org>; Thu, 23 Sep 2021 04:43:30 -0700 (PDT)
+        with ESMTP id S243813AbhIXBxq (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 23 Sep 2021 21:53:46 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0EE1C061756;
+        Thu, 23 Sep 2021 18:52:14 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id q81so22718439qke.5;
+        Thu, 23 Sep 2021 18:52:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=1ITLupb9O7mn5vuSAlJlY3zrr2sMeD1JUb+cPhHXZpA=;
-        b=L/M55i+C12Q2Xf8mtjxsJNGI/18lxU8+H8gIhXFmflUicnqNPJXQScJkv99BhyBoLJ
-         asE1GPx6+THSpTp6/VSBwSZZJJtXFvA1wIPmu0nvhPFjcAKTD0QSe3+9hI1DAFsJdgD3
-         EtuQWgEjtU8aaQyvr4xVMsbnk4hD7ePG2XOt1FpzY4iNkT0g5jcPsiXXgFN+vI3pTrON
-         LxRbw2xBv+LkULw5BMiMi/ZcRiz4h3Qr9oHVUlQFMGQSKzbjFwdSfvE3Dso0Lz09Mh3V
-         jETN+0vDHBS9ogFxG+PYDnD6IZecmk/wuPwdm524DRhR2ZI88cLLb0R6ZdcWMNh3THW+
-         WV+w==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=k6nLk3aL6nBiH7JDC988keu7nNQDGEdARxJpeWOPbtg=;
+        b=bs3jrrPiAUQqyENrDpO6ddMqHbSjldAUrr3MNq/QkCGDD22auAE8lwaFo7PNUpwtZ8
+         SLm7GXnx7gUGwOm2gvUh0Qei49XZLvx+iOycESLPa9x6rdPdAXpCt4Pd7xz3/tukoxaz
+         UlRYNdFK0UyKntRBLL9ScK1rwu1XY163w5GAKzhRPRX2QVR3cP9nsxtqnhjG7vrwfChw
+         TuwVXn/RC3kcCFz5oHuxft/KTGHk9GrfskxhiI6WWy6WzSnD9tIOvbCWREV39TRzw6FO
+         8SjYlZrTwL15KCERaSEEH346UGbiZQJj3UFE14NLha712KAPKoOAMSrBWGn9Ms2WYRuF
+         tWhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=1ITLupb9O7mn5vuSAlJlY3zrr2sMeD1JUb+cPhHXZpA=;
-        b=rCyWaBgzOfcMK7LPI/dCIdfczD5vG/PFgqLDzhi7TiDPamlAF1ix6PU/XLU1KEgJ8X
-         Mmmyk8ykLdWiSMBqyXlHEeIzIpqV0PCdpwCDA5ofjZ6D/lfNhO+zVFqiaVLz+a3kZdB7
-         Om4opAxsecWX0SaUI0Y1i0sS5R5LEhwUbr7DSRRzNBYqBv+FCMjGeUBu6Ay9PtJhu+K/
-         zuR9LPeFpHQASEu3a0hb5Ig6vwXmxAqHmqRsIVpEc+U+kzYg37EEOuaDgPkMaV0XsYSO
-         NSJASkY1VywD07mG6Q03aZOg9rsWV9Xa1gCvB1XV9nRKgI8Y/IFIBZw8XIrCSyLQF7Pu
-         RfFg==
-X-Gm-Message-State: AOAM530wHTvde+LuFInBWbUKUayINWV/a8Q/eLJw7+DiB1MZPiWoDu+/
-        lgfAjGd+16PcwAlNw8WEeX+tKkGGixn+KI311bY=
-X-Google-Smtp-Source: ABdhPJzsrB3sLwLedW+/2vym3UuP/PIa9RIc3eNSDdDD0aUdQ2nIUaDtIjvYIsXwJYldrkYDH3iKZplRqkFA9tvUj/k=
-X-Received: by 2002:aa7:db85:: with SMTP id u5mr4836612edt.234.1632397409400;
- Thu, 23 Sep 2021 04:43:29 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=k6nLk3aL6nBiH7JDC988keu7nNQDGEdARxJpeWOPbtg=;
+        b=5gVmi/euFt3Agbfryd0s2UVmgq+0Z7fHNM25N62ydS2pDP4bZCNPkaPDvOYRTWSJ+b
+         GZ+Kp/xl8mRhguef+6YHYXvJafFsTsGH4HukHmRuIvzAa+P2kq59imMadi8CkTJblqvt
+         +c+RdwcsJxEYtA+ixjIg+cNTgCi8r8NAYKsgVv/mD/ThaRTjd+O/3ZfUhRBLIrNGLnBl
+         zXngBaEzB0K8sxQf/SMI9syG6ojHCV7ISzt9hQ0w8JR6sGBPHjR/mQgqfX2g/M188eum
+         q7NmZEDbOWbG1Bb4oFuRsQuA/p9ueb6Ow7eTT1zsJzuguj1kq/Eb5kes2gIxCeZtvg9z
+         yXMQ==
+X-Gm-Message-State: AOAM5313T3nmi8I0jVrf+QfRQCRoAteb/sl6RUAWv5pRquvVTK6myJCV
+        lLg6ylHHfrvoLilM/byD29c=
+X-Google-Smtp-Source: ABdhPJyiHxHR1dzN5tK9aZzz23jTjfZwrzwxIthx8aJyfqQazkX3v8zFWi1XJWHnJxc0DNjzfIaxdQ==
+X-Received: by 2002:a37:aac6:: with SMTP id t189mr8019507qke.88.1632448333813;
+        Thu, 23 Sep 2021 18:52:13 -0700 (PDT)
+Received: from t14s.localdomain ([177.220.174.161])
+        by smtp.gmail.com with ESMTPSA id z1sm4918463qki.42.2021.09.23.18.52.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Sep 2021 18:52:13 -0700 (PDT)
+Received: by t14s.localdomain (Postfix, from userid 1000)
+        id 10B1967FA8; Thu, 23 Sep 2021 22:52:11 -0300 (-03)
+Date:   Thu, 23 Sep 2021 22:52:11 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     network dev <netdev@vger.kernel.org>, davem@davemloft.net,
+        kuba@kernel.org, linux-sctp@vger.kernel.org
+Subject: Re: [PATCH net] sctp: break out if skb_header_pointer returns NULL
+ in sctp_rcv_ootb
+Message-ID: <YU0vSytl5kjXYe9k@t14s.localdomain>
+References: <8f91703995c8de638695e330c06d17ecec8c9135.1632369904.git.lucien.xin@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a17:906:1d12:0:0:0:0 with HTTP; Thu, 23 Sep 2021 04:43:28
- -0700 (PDT)
-Reply-To: bellvaleri02@gmail.com
-From:   =?UTF-8?Q?Val=C3=A9rie_Bell?= <clarabordeaux11@gmail.com>
-Date:   Thu, 23 Sep 2021 12:43:28 +0100
-Message-ID: <CALT36d5d5NDddOjV+yg7rXJPwTbgBvOA5BYHKnxca2XP9060DA@mail.gmail.com>
-Subject: Salut
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8f91703995c8de638695e330c06d17ecec8c9135.1632369904.git.lucien.xin@gmail.com>
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
---=20
-D=C3=A9sol=C3=A9e pour cette approche inattendue, je suis Val=C3=A9rie qui =
-d=C3=A9sire
-votre amiti=C3=A9 sinc=C3=A8re si cela ne vous a d=C3=A9range pas, je reste=
- =C3=A0 l
-=C3=A9coute
+On Thu, Sep 23, 2021 at 12:05:04AM -0400, Xin Long wrote:
+> We should always check if skb_header_pointer's return is NULL before
+> using it, otherwise it may cause null-ptr-deref, as syzbot reported:
+> 
+>   KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+>   RIP: 0010:sctp_rcv_ootb net/sctp/input.c:705 [inline]
+>   RIP: 0010:sctp_rcv+0x1d84/0x3220 net/sctp/input.c:196
+>   Call Trace:
+>   <IRQ>
+>    sctp6_rcv+0x38/0x60 net/sctp/ipv6.c:1109
+>    ip6_protocol_deliver_rcu+0x2e9/0x1ca0 net/ipv6/ip6_input.c:422
+>    ip6_input_finish+0x62/0x170 net/ipv6/ip6_input.c:463
+>    NF_HOOK include/linux/netfilter.h:307 [inline]
+>    NF_HOOK include/linux/netfilter.h:301 [inline]
+>    ip6_input+0x9c/0xd0 net/ipv6/ip6_input.c:472
+>    dst_input include/net/dst.h:460 [inline]
+>    ip6_rcv_finish net/ipv6/ip6_input.c:76 [inline]
+>    NF_HOOK include/linux/netfilter.h:307 [inline]
+>    NF_HOOK include/linux/netfilter.h:301 [inline]
+>    ipv6_rcv+0x28c/0x3c0 net/ipv6/ip6_input.c:297
+> 
+> Fixes: 3acb50c18d8d ("sctp: delay as much as possible skb_linearize")
+> Reported-by: syzbot+581aff2ae6b860625116@syzkaller.appspotmail.com
+> Signed-off-by: Xin Long <lucien.xin@gmail.com>
 
-Sinc=C3=A8res Salutations
-Val=C3=A9rie Bell
+Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
