@@ -2,88 +2,80 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E6B4286F2
-	for <lists+linux-sctp@lfdr.de>; Mon, 11 Oct 2021 08:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC621428B34
+	for <lists+linux-sctp@lfdr.de>; Mon, 11 Oct 2021 12:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233522AbhJKGpA (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 11 Oct 2021 02:45:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43630 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229797AbhJKGpA (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Mon, 11 Oct 2021 02:45:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E227060C41;
-        Mon, 11 Oct 2021 06:42:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1633934580;
-        bh=8XqgNnSi1DT5I1+mNKRtuFuL+X9shKCQ0IBVFhwHhVE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=TIG0lQkrDuwkqh2Q4f0b+KlJsljdZWuw6S6rkyFCMkfJuLP/X9h08t2PgM8RnwTG/
-         gpwgLRFTRwrqtxT970+UyTDEgH/7incZHRxMS/uaa9QAh89Gdm6NqxuyGcL8YAhS9a
-         6hD4nsO8TmphjrMsmKpmDlhrJx5J3RCDw9ZER0hk=
-Date:   Mon, 11 Oct 2021 08:42:57 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Eiichi Tsukata <eiichi.tsukata@nutanix.com>,
-        gregkh@linuxfoundation.org
-Subject: [PATCH] sctp: account stream padding length for reconf chunk
-Message-ID: <YWPc8Stn3iBBNh80@kroah.com>
+        id S236073AbhJKKzC (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 11 Oct 2021 06:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50498 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236024AbhJKKym (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 11 Oct 2021 06:54:42 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A76CC061773
+        for <linux-sctp@vger.kernel.org>; Mon, 11 Oct 2021 03:52:20 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id p13so66733117edw.0
+        for <linux-sctp@vger.kernel.org>; Mon, 11 Oct 2021 03:52:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=DOxN63QWnl4dBNWQl+LufsBrewR+8VuPJnGph7ijSeE=;
+        b=AOwGJPRzreY174rbkYBENqDohFuS97wCy60jVSdUYNPvEhybdL2c3BcOeGHfafS8qn
+         uli8WfEZJzoNSATFu7DBFWZM5wABtXSV1fVUNkqBG+wI3EdLjqFjRGvGLPDsXQD4j8ti
+         JdKJOvfhiPWLhIdXxcZs7yEtyw7uhQsNkQbVb/JxSGMRe/N7DhEqEKRxFVAhJqYVr6ip
+         luxhwneuxQj/LqEVquYWqA1ElmxbF28So8sZzLv8Aq0heCWPmvwVFbMZiqnZY0gUleVY
+         srMWfgZ4YU41fQPU+nXlKo2suPYWVFr3mwjljaEytb5oh4cOqW2uYqGIU/2pgk6wVBCS
+         OkkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=DOxN63QWnl4dBNWQl+LufsBrewR+8VuPJnGph7ijSeE=;
+        b=sjfgCQqX2I9E3jVeYhah+f0eLpTBRDRFkuqc+tHPqqvMTkh+073bYeqW6Ge1mcVaPM
+         /+8QX8Jk1Kyv+5JhRJ1hsjT38heF9ekWP5EfB3My93pPH7vTxLtvV5nByOfwkwxa+Qzm
+         XSoBkAfHpE9JsorQqo0+2VGJDHJQ790e3MNf0P7S5A+nUFwp/YltapnrNNRNPYaz2Chv
+         6ockujOX4pHy9mU7UGK9jjMCgHZ/LebVcLuEIGQK1CJIyV+H0vUAXNyG8AetZf3E2sbD
+         6ya9LuLNKN4bJjPDZFLr8upMZtsjslZCRnJm9UBF3PWHUK05FJkKUyjpiZlkJMZs05Sg
+         G6RQ==
+X-Gm-Message-State: AOAM531FbbQjd4OGnCKyvcOhbPobC/RlQZeFX+YZnF1Lvru004bTd+Hq
+        fAv3AUs7YxfgCiUzRdVaTQnZYF1ffJgb9pyhKDpVhiu0vLqHNA==
+X-Google-Smtp-Source: ABdhPJyfJGEDNJnYy+rVU5F2kp5CR0JNqric22BUxuwjRQiA96y3Nmwroy+PAkdet7/Z+lAMJSMDUb21JjG1eJ5mxBo=
+X-Received: by 2002:adf:a550:: with SMTP id j16mr24209932wrb.180.1633949528442;
+ Mon, 11 Oct 2021 03:52:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1434;
- i=gregkh@linuxfoundation.org; h=from:subject;
- bh=fWL+345goEDajSmeEAJ0ZaRVm0tKbjyM/lwIQgQ+9w0=;
- b=owGbwMvMwCRo6H6F97bub03G02pJDInJt40z8qIN137eW7ul4bupvEihyymTyrWt7jM3njkVdz7n
- hiBDRywLgyATg6yYIsuXbTxH91ccUvQytD0NM4eVCWQIAxenAEzk9imGBRP3sxuyHLa4kFO24uTcte
- Xe2eo77BnmKSf2vzpX8VLQTU3Y4CyXsViBeNAiAA==
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp;
- fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Received: by 2002:adf:dd8c:0:0:0:0:0 with HTTP; Mon, 11 Oct 2021 03:52:07
+ -0700 (PDT)
+Reply-To: ramcharan9910@outlook.com
+From:   "Cr.David Ramcharan" <convy0101@gmail.com>
+Date:   Mon, 11 Oct 2021 03:52:07 -0700
+Message-ID: <CADDRs97R=WZOwhBkw75zF4TtQ=idFbd5TWX3jbTc8zsFJ+4qNw@mail.gmail.com>
+Subject: Thank You
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Eiichi Tsukata <eiichi.tsukata@nutanix.com>
+Please I am writing to notify you again on my intention to list your
+name as a beneficiary to the total sum of GBP6.350 million (Six
+million, Three hundred and fifty thousand British Pounds Sterlings) in
+the intent of the deceased (name now withheld since this is my second
+letter to you).
 
-"stream_len" is not always multiple of 4. Account padding length
-which can be added in sctp_addto_chunk() for reconf chunk.
+I contacted you because you bear the surname identity and therefore
+can present you as the beneficiary to inherit the account proceeds of
+the deceased since there is no written "WILL" or trace to the deceased
+family relatives. My aim is to present you to my Bank Authorities as
+the Next of Kin to our deceased client. I will guide you all through
+the Claim procedure by providing all relevant Information and guiding
+you in your decisions and response to the Bank Management. All the
+papers will be processed after your acceptance.
 
-Cc: Vlad Yasevich <vyasevich@gmail.com>
-Cc: Neil Horman <nhorman@tuxdriver.com>
-Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: linux-sctp@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Fixes: cc16f00f6529 ("sctp: add support for generating stream reconf ssn reset request chunk")
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Eiichi Tsukata <eiichi.tsukata@nutanix.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- net/sctp/sm_make_chunk.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+In your acceptance of this deal, I request that you kindly forward to
+me your letter of acceptance; your current telephone and fax numbers
+,age, occupational status and a forwarding address to enable me submit
+to the Bank Management the details as the Next of Kin to their
+deceased customer. Reply strictly through: ramcharancrdavid@gmail.com
 
-diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
-index b8fa8f1a7277..f7a1072a2a2a 100644
---- a/net/sctp/sm_make_chunk.c
-+++ b/net/sctp/sm_make_chunk.c
-@@ -3694,8 +3694,8 @@ struct sctp_chunk *sctp_make_strreset_req(
- 	struct sctp_chunk *retval;
- 	__u16 outlen, inlen;
- 
--	outlen = (sizeof(outreq) + stream_len) * out;
--	inlen = (sizeof(inreq) + stream_len) * in;
-+	outlen = (sizeof(outreq) + SCTP_PAD4(stream_len)) * out;
-+	inlen = (sizeof(inreq) + SCTP_PAD4(stream_len)) * in;
- 
- 	retval = sctp_make_reconf(asoc, outlen + inlen);
- 	if (!retval)
--- 
-2.33.0
-
+Yours faithfully,
+Cr.David Ramcharan
