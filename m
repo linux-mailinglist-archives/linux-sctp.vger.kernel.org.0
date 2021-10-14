@@ -2,105 +2,114 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADC642C4CF
-	for <lists+linux-sctp@lfdr.de>; Wed, 13 Oct 2021 17:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 871F542D1AE
+	for <lists+linux-sctp@lfdr.de>; Thu, 14 Oct 2021 06:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbhJMPdH (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 13 Oct 2021 11:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
+        id S229472AbhJNEk7 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 14 Oct 2021 00:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbhJMPdH (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 13 Oct 2021 11:33:07 -0400
-Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF0FC061570;
-        Wed, 13 Oct 2021 08:31:03 -0700 (PDT)
-Received: by mail-ua1-x929.google.com with SMTP id q13so5316326uaq.2;
-        Wed, 13 Oct 2021 08:31:03 -0700 (PDT)
+        with ESMTP id S229457AbhJNEk6 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 14 Oct 2021 00:40:58 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4336AC061570;
+        Wed, 13 Oct 2021 21:38:54 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id v17so15209655wrv.9;
+        Wed, 13 Oct 2021 21:38:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=/ZBJjm+4NhR4GlguoMXFg/KsmiNX+LHGMnNEPUDTBVw=;
-        b=Fz8jsLxny0P6SGfvSlb6H1Z3nW3OOzTlkD0eHH8Vi6PIkZE0ntPUm/egfy5WAyyYXi
-         efz4AzuTNAqXDBOJCpsPR3B18LMWPBMf7cJVdFEAjm8DjSfTysfGqEqCqifWecVWuUoy
-         oLlVaLIQ2WGBC8AgMKm5g/hX+0WHIjdZ4lz8oIuER9Sb2TZXZPKnMpbDMnNmZHshMQ1L
-         d8XkhJs1LheJ+p706OEdhiq62QekVBJAHs88Md1t7a0+kX04udQKSAjrj5DlmZA1L2zY
-         0rcnKae5E15Pg+0ubqFnRZoHhg3NsYCG1/4xYG6XzcmEbXGJgd1EzDIQ+6YWoXU3K7Df
-         UGKQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Wgv6cDEm6n/7wB+5ada4bNuNyCqeYPkJ/qfH7uQLwdw=;
+        b=HBqlbpKTnGP1oBL4c0ock7YYEUfuEpFtHRG8LE+ycRa1fw1zk50ai68cRxyfJYnh/l
+         7IJwcKjFpBMfNXGn6Llamu3+Ilj3b62xtTrj7ZVKHB8KgHhYoB4F+cWOFxOJSD/1vA+6
+         I8gJhjd6CC6O/wwLOE50j1516nsaJyGOZeJgN2oiGd7kx5IbfCZ1NC4MStD3KeykJFZa
+         c01/oFJBv1PeHZ3dR+iMLqP+CCRerN1T4T8HXur+tSFqK+ZaKx7cxsdwykpllKcdxACx
+         3Y38aEnBDooF6RXWIfYjd0tB3owcclhpy7IksdPt9eP+Jpxx5mmslqlJtQm/HVghh8k4
+         9vIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=/ZBJjm+4NhR4GlguoMXFg/KsmiNX+LHGMnNEPUDTBVw=;
-        b=mBUwBHaEaM+QeGa3I1UZFKS/enPQV3kWt4uBu6he0UiaWuRxuVgdO3zreFtusFOu5J
-         Avdike5kmVszmrrjwZWgh8uY4pcQE1Kly2M3Gqdotvx53QEjwcdlyQ7N8+p8yOGx3MiF
-         3wLCNJuz5XahHeRT7GF9JBXSkxEPsYuuMdqqcArhQwsUZLfqvVBUkmbjaV5Xi8geNhlm
-         F+iHdEeA+xgDUajciGyfKK/JOkLkbyOG1YWUuWkxw35BkQ5ycy16wwA6pYfdgf7xiQrF
-         Giv1Le7WRTVvpT/f+gLABS8PsG/LxDdTaZy+Vo6iCtVMn/nc5m0JHX8zhiR3pkTMvS2h
-         piaQ==
-X-Gm-Message-State: AOAM530//Fe9OsUhpzw6p4NldXe0IvbkWWTyRuRrfFWEbQ1vkrkuR+VP
-        k4uywVJJxtkhByUHE/AQodU=
-X-Google-Smtp-Source: ABdhPJzaZrAdqtZKw+ljkGjy+/5Eo5FO0rZIfnSJucNiaomXqeBxkKCxVxUzz6zuD6ZH6RjrWsDzjQ==
-X-Received: by 2002:a67:ac04:: with SMTP id v4mr39843399vse.50.1634139062835;
-        Wed, 13 Oct 2021 08:31:02 -0700 (PDT)
-Received: from t14s.localdomain ([177.220.174.164])
-        by smtp.gmail.com with ESMTPSA id c10sm6044500vsm.13.2021.10.13.08.31.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Oct 2021 08:31:02 -0700 (PDT)
-Received: by t14s.localdomain (Postfix, from userid 1000)
-        id B93B887E7E; Wed, 13 Oct 2021 12:31:00 -0300 (-03)
-Date:   Wed, 13 Oct 2021 12:31:00 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Eiichi Tsukata <eiichi.tsukata@nutanix.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Wgv6cDEm6n/7wB+5ada4bNuNyCqeYPkJ/qfH7uQLwdw=;
+        b=rohoXRT51fJp4iGJkhStEceyTWlVTIHDHxeTN6ZJjZcZzs5W5bJzpIsU9he2K+VMaf
+         uA0SG06t89BpYCg2I3cIJKoE/6+sBKACQ7a9KjLlSJKNno/fLuJ5NA2CLCfRGtVrfFpT
+         PhrBrz19AIqNOR709nBcTW7Gd2FGAOnYO2RkIdpsIdATDP7LQcz0n6xWkVKbbr8nbY9K
+         EAE3nffUThF5Kn56u0mot9L83K6h+glLq4CQPVtKVoE603Y0QKJiG8yuZWKvtNM9xQxS
+         jComxQWKbd2wnGuSS1XZK1avx6E4KP3ZGxaJCCKstr2o4sf2k1a5IBWhkjD7g/IAzbAj
+         j1tA==
+X-Gm-Message-State: AOAM5308lw3xL731lLqOciviD9yyBDgMEHm9SC2vxe4OxIedxk7mwI8D
+        6LghsQE5mJCAKc33UJVQm9enVKshM9y2XNUbcZnmIhpahn+TEw==
+X-Google-Smtp-Source: ABdhPJxSelOiLlZl4FOTD/U2o55/uu/hebvyjCb43lohPc/vEuzmnHtnUYE1H2Ni2qUg7V+BGd/a0/W5Jw22+rJX2Is=
+X-Received: by 2002:a05:6000:162f:: with SMTP id v15mr4098049wrb.118.1634186332786;
+ Wed, 13 Oct 2021 21:38:52 -0700 (PDT)
+MIME-Version: 1.0
+References: <b97c1f8b0c7ff79ac4ed206fc2c49d3612e0850c.1634156849.git.mleitner@redhat.com>
+In-Reply-To: <b97c1f8b0c7ff79ac4ed206fc2c49d3612e0850c.1634156849.git.mleitner@redhat.com>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Thu, 14 Oct 2021 12:38:41 +0800
+Message-ID: <CADvbK_dc0fuSuSdGihgL2Ms3_ZhQx0Jd5k+-wFR5fM7ss52r-w@mail.gmail.com>
+Subject: Re: [PATCH net] sctp: account stream padding length for reconf chunk
+To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc:     network dev <netdev@vger.kernel.org>,
         Vlad Yasevich <vyasevich@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        Eiichi Tsukata <eiichi.tsukata@nutanix.com>,
+        "David S . Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH] sctp: account stream padding length for reconf chunk
-Message-ID: <YWb7tFDwitBYSaXO@t14s.localdomain>
-References: <YWPc8Stn3iBBNh80@kroah.com>
- <YWQ43VyG8bF2gvF7@t14s.localdomain>
- <A3FC3A11-C149-4527-84A2-541E951B7A86@nutanix.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <A3FC3A11-C149-4527-84A2-541E951B7A86@nutanix.com>
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Oct 12, 2021 at 12:17:08AM +0000, Eiichi Tsukata wrote:
-> Hi Marcelo
-> 
-> > On Oct 11, 2021, at 22:15, Marcelo Ricardo Leitner <marcelo.leitner@gmail.com> wrote:
-> > 
-> > 
-> ...
-> > 
-> > So if stream_num was originally 1, stream_len would be 2, and with
-> > padding, 4. Here, nums would be 2 then, and not 1. The padding gets
-> > accounted as if it was payload.
-> > 
-> > IOW, the patch is making the padding part of the parameter data by
-> > adding it to the header as well. SCTP padding works by having it in
-> > between them, and not inside them.
-> > 
-> > This other approach avoids this issue by adding the padding only when
-> > allocating the packet. It (ab)uses the fact that inreq and outreq are
-> > already aligned to 4 bytes. Eiichi, can you please give it a go?
-> > 
-> > 
-> 
-> Thanks, I understood. I’ve tested your diff with my reproducer and it certainly works.
-> Your diff looks good to me.
-
-Cool, thanks. I'm running a couple more tests on it and will submit it
-on your behalf by EOD if all goes well.
-
-Regards,
-Marcelo
+On Thu, Oct 14, 2021 at 4:27 AM Marcelo Ricardo Leitner
+<marcelo.leitner@gmail.com> wrote:
+>
+> From: Eiichi Tsukata <eiichi.tsukata@nutanix.com>
+>
+> sctp_make_strreset_req() makes repeated calls to sctp_addto_chunk()
+> which will automatically account for padding on each call. inreq and
+> outreq are already 4 bytes aligned, but the payload is not and doing
+> SCTP_PAD4(a + b) (which _sctp_make_chunk() did implicitly here) is
+> different from SCTP_PAD4(a) + SCTP_PAD4(b) and not enough. It led to
+> possible attempt to use more buffer than it was allocated and triggered
+> a BUG_ON.
+>
+> Cc: Vlad Yasevich <vyasevich@gmail.com>
+> Cc: Neil Horman <nhorman@tuxdriver.com>
+> Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: linux-sctp@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Greg KH <gregkh@linuxfoundation.org>
+> Fixes: cc16f00f6529 ("sctp: add support for generating stream reconf ssn reset request chunk")
+> Reported-by: Eiichi Tsukata <eiichi.tsukata@nutanix.com>
+> Signed-off-by: Eiichi Tsukata <eiichi.tsukata@nutanix.com>
+> Signed-off-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+> Signed-off-by: Marcelo Ricardo Leitner <mleitner@redhat.com>
+> ---
+>  net/sctp/sm_make_chunk.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
+> index b8fa8f1a7277..c7503fd64915 100644
+> --- a/net/sctp/sm_make_chunk.c
+> +++ b/net/sctp/sm_make_chunk.c
+> @@ -3697,7 +3697,7 @@ struct sctp_chunk *sctp_make_strreset_req(
+>         outlen = (sizeof(outreq) + stream_len) * out;
+>         inlen = (sizeof(inreq) + stream_len) * in;
+>
+> -       retval = sctp_make_reconf(asoc, outlen + inlen);
+> +       retval = sctp_make_reconf(asoc, SCTP_PAD4(outlen) + SCTP_PAD4(inlen));
+>         if (!retval)
+>                 return NULL;
+>
+> --
+> 2.31.1
+>
+Reviewed-by: Xin Long <lucien.xin@gmail.com>
