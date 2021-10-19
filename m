@@ -2,81 +2,85 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6D0432CE9
-	for <lists+linux-sctp@lfdr.de>; Tue, 19 Oct 2021 06:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80B7A432FE3
+	for <lists+linux-sctp@lfdr.de>; Tue, 19 Oct 2021 09:42:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232568AbhJSEuQ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 19 Oct 2021 00:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44172 "EHLO
+        id S231187AbhJSHpB (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 19 Oct 2021 03:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbhJSEuQ (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 19 Oct 2021 00:50:16 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8622C06161C
-        for <linux-sctp@vger.kernel.org>; Mon, 18 Oct 2021 21:48:03 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id e3so44990909wrc.11
-        for <linux-sctp@vger.kernel.org>; Mon, 18 Oct 2021 21:48:03 -0700 (PDT)
+        with ESMTP id S230365AbhJSHpB (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 19 Oct 2021 03:45:01 -0400
+Received: from mail-ua1-x943.google.com (mail-ua1-x943.google.com [IPv6:2607:f8b0:4864:20::943])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8ADC06161C
+        for <linux-sctp@vger.kernel.org>; Tue, 19 Oct 2021 00:42:48 -0700 (PDT)
+Received: by mail-ua1-x943.google.com with SMTP id i15so10090247uap.0
+        for <linux-sctp@vger.kernel.org>; Tue, 19 Oct 2021 00:42:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Adf2P5uyEvoS4WxUpf9nghdKz8/wTohm80xr46ONw3A=;
-        b=Kr85685t2cqjDmp74dtWhFAirtuUbyYAAaNm2marOjQn+plVYPui1YmOsyetkCnILG
-         xBOtOtSrjv3EzGZeF65dXZcJj8UeV6djOci43JSiqFmXbm4aZJsoCOR9D04aZG1U8uxl
-         tqU7wabLMODWFsvh3Ar1x4Y9u/Zk2oIkbGC9Bs1GdMZFUSB2kNEeMCyDUdQj3ej0O/9K
-         TfKu2o0agocyGBZVnZaqAG1sd92FG7pE3rqrCRxmDSeo7irWBDTbhzekzV03gVlq0hJP
-         ONlF5ctjiemebyxkQGYWBMXa8bSjyYRHSaYZJZnegZDLBgPSba5VnqJ/649SMZoAD4P6
-         sx4g==
+        bh=mpeHwGOfKSkvcE6upqaXCF7LbYMUiHp8YqdxUMN0M+k=;
+        b=bxnxlCDzqA7IWzeBhRHZ9tPPoi0zJXiMOm5N6+O7Ec/eRZ1Iiu8SjbmASrYWJPRgjd
+         uCdDUJXZwcw0ulc+dCY1eWLA//3dRKtgeL3PSfFMTuNCVDidexfxjgph0glCHqsXBfN2
+         bef3u1kT5/G93RMsXSXbOTFU9shsSOJBSr2XLIau9knBIlNpr2tiz8b19E1m04r2fLq3
+         CN5nlN4zbesRBAbf5s9sX9+PzxQejSwNgayMNT0bgBFqZldJ2qWlFsrJq49yYoLWeCfx
+         iJwNwYgeP6VNtjjZr1Rgpb0uyZ4LZO4WQdQx44jlihE2aIV8MlYxFvOLXR3U+E0hAJap
+         RMwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
          :subject:to;
-        bh=Adf2P5uyEvoS4WxUpf9nghdKz8/wTohm80xr46ONw3A=;
-        b=b1ExVAla0sNQX/qB9QT8QEay8SC72OWKxdcbejUoOTkiRZfNJtTtL6y9NAdo+Omt3a
-         vumbibIKZN8kEaHQ2Tyx3i6zlHPCz+Q48yQD1yHFv7+GQXw4NAt/vSV8DK5ZeojG+/fY
-         S7d7RohnjlKuBYIFmRVLFLj8CxBgrRXVoinbcDjbHDQN4tePdrNpPubpaeC85CxTttFo
-         rdkVr4sLAPS15K6CahlBUoeRGybKwPvKNBjL1z9WsUpcThWXOIonQC1fSBNe7VUzv8gQ
-         jxp7WPOA/wwEsP481EjVA5WD4HBtfn8a4MLAIeTEdLufhAzkpOHwSkIcA9UFZTlubyID
-         h9/w==
-X-Gm-Message-State: AOAM533dPufzs3/ujFdTJchjuz1Vr7MF+9UoatZ1FIeP3tJWVYYRBdMI
-        WJWvfyA8uGnwSsunXeaaR2rDuMS1xFgVNXA4jWA=
-X-Google-Smtp-Source: ABdhPJySbKjTRI2NE3IOpkJjGPWzNy/eHNPFkYev0te3SOvsDXjB91DQ6N1xJpO8HZkIpfKIdgob/v8jTHwphwCMAfI=
-X-Received: by 2002:adf:9b97:: with SMTP id d23mr39887604wrc.53.1634618882461;
- Mon, 18 Oct 2021 21:48:02 -0700 (PDT)
+        bh=mpeHwGOfKSkvcE6upqaXCF7LbYMUiHp8YqdxUMN0M+k=;
+        b=ouFHmdlR7F6jHsBccLLZ/wnnWhDwXLZPF91AZHgpKSJcaXX0d5r+CZDbsq/P18pXll
+         W1uNU5PbvSUnFWuWKaxa6HwSmtCl6q01FtJ+QgQUMfRugVxheqJ/z2nhKA6JdFgTQKj9
+         dqxrpRRuALSsiBStQ8psdN3INU2JgFjdDBIzMK013ZMxRWME75Zkvb5//IHfBbQ8H8Kf
+         rcotl1cSpg8heKerfPwubuVixdzvGb6C2I0YzarmyLgwH1Zn3WpF4BM7m6Wx0RhzOZyw
+         urRCn60Q421XnGQYNbJQJdX2yy6sVXvVVQ90IPDrsQn5GEdzO/I4D+jStsiQJNwEU/s6
+         mu1g==
+X-Gm-Message-State: AOAM530klal05QZAn/gpWmKc9KyzESoFmVJTR5MV+nP/JvDTm5nuLL5+
+        Bh/ucWCplEEJl00IDS7p91fF+N8jDtUuUmQbQGI=
+X-Google-Smtp-Source: ABdhPJwRZCss9C0dqyr9Nc372ejeELolf/zoqS9xIViqsZu+yxlC+tz1BdxvNuIC+ZzRa41iJnrXJnE6EOvOs6lTSXU=
+X-Received: by 2002:a67:3244:: with SMTP id y65mr33335921vsy.10.1634629367629;
+ Tue, 19 Oct 2021 00:42:47 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a1c:f616:0:0:0:0:0 with HTTP; Mon, 18 Oct 2021 21:48:01
+Received: by 2002:a9f:260b:0:0:0:0:0 with HTTP; Tue, 19 Oct 2021 00:42:47
  -0700 (PDT)
-Reply-To: abdul.qahhar7d@gmail.com
-From:   Abdul Qahhar <davidmary05547@gmail.com>
-Date:   Mon, 18 Oct 2021 21:48:01 -0700
-Message-ID: <CAAPaKH1H-S7TfDb1bsr2Pru=jbUtfLOE60zEyN=8fTvLf4Vv=g@mail.gmail.com>
-Subject: Dear friend greetings,
-To:     undisclosed-recipients:;
+Reply-To: accontofficer50@gmail.com
+From:   Kevin Osah <catm74395@gmail.com>
+Date:   Tue, 19 Oct 2021 00:42:47 -0700
+Message-ID: <CAKspoLwOdCVuq8XOjJ+zGqf=x3TSEadYFUgupm-r2dUVaXTFDw@mail.gmail.com>
+Subject: OTHER FROM UNITED NATION INSTRUCTION
+To:     accontofficer50@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
 -- 
+Attention Beneficiary, How are you and your family? I will be very
+glad to hear from you, if you are still alive or dead. Furthermore
+your fund of $4.700,000,00 USD which grant by United Nation, still
+available for you in other to remain the good image of the World, This
+your fund has been deposited to Remittance department Benin Republic
+to pay you maximum of $7000 twice daily, All you will do is to contact
+Remittance Manager: Mr. Henry Oso Email:(accontofficer50@gmail.com) He
+will give you more direction on how you will be receiving your
+funds $7000 twice daily until you receive the total ( Four Million
+Seven Hundred Thousand ) Completed. Remember to send him your Full
+information to avoid wrong transfer such as your:
 
-Dear friend greetings,
-I am pleased to contact you,my name is Abdul Qahhar,an
-oil tycoon from Afghanistan,I need your help in the following.
+Receiver's Name_______________
+Address: ________________
+Country: ____________
+Phone Number: _____________
+ID Card:_____________
 
-I want to purchase a living home with a budget of $900 Thousand
-USD,and it is needed as soon as possible in your country,I am also
-interested to invest over $30 Million USD with you as soon as you
-complied,this fund was acquired from my oil business and it
-belongs to me and my immediate family.
 
-I need your advice in which area I can invest the fund in your
-country,me and my family need to relocate and have a new good
-life in your country because of my country Afghanistan power shift,
-the Taliban's are terrorists which will not allow Christian families to
-thrive in my country Afghanistan anymore.
+Your fund of $4.700,000,00 is available for you, in your name so
+contact the Remittance department: Mr. Henry Oso as soon as you
+receive this email or call him
+Whats-App Or call ( +22964101280)
+office E-mail:(accontofficer50@gmail.com)
 
-Please come to our rescue as you will be compensated
-with 10% of the house price purchased in your country.
-
-I am waiting for your response
-Regards
-Mr.Abdul Qahhar.
+Yours Faithful
+Kevin Osah
