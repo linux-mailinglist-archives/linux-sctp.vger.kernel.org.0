@@ -2,87 +2,109 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A45CB4371CA
-	for <lists+linux-sctp@lfdr.de>; Fri, 22 Oct 2021 08:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3714371D8
+	for <lists+linux-sctp@lfdr.de>; Fri, 22 Oct 2021 08:36:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231941AbhJVGfY (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 22 Oct 2021 02:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59610 "EHLO
+        id S232002AbhJVGig (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 22 Oct 2021 02:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232057AbhJVGfW (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 22 Oct 2021 02:35:22 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED58C061220;
-        Thu, 21 Oct 2021 23:33:05 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id g79-20020a1c2052000000b00323023159e1so2197250wmg.2;
-        Thu, 21 Oct 2021 23:33:05 -0700 (PDT)
+        with ESMTP id S229545AbhJVGie (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 22 Oct 2021 02:38:34 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F10C061764;
+        Thu, 21 Oct 2021 23:36:17 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id i12so608736wrb.7;
+        Thu, 21 Oct 2021 23:36:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=K3ag/8I6dY0xnXzblFz/1w5mgGcBQvelgLc2shxtkfc=;
-        b=PTQEtRJkvbdBeeUpy0SiyY+F0rHKPnxxj2b5Rqzx40gPhHZTjIDHlWOqU1SWf9Ziso
-         7L4W22xUMO3/DeZnclGgp8yLPSDsuL5O/f4dgTTrKyomPfAsXmXCb45l4TxZmtGd6bo0
-         bJaOm7zJ/NDWtQzmEXnDIx1czxdgusih1AnMgVw7fsqim33dlN2lu+Acy811aBT2CxsY
-         sNGnhxhLNUYffLBe8b+JONuyOBmuFJIAD/d1Rd4HFlhgwq6+bhviz5XfSC23vXhDLlCf
-         ulrZsBlxyoTcZENsqmH8xAOvFKZMBOv5lSL1s5W62eat5DFy2x7SdBBos1fqHlx608kA
-         CXBg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Wqajo9l0GXf1mGw9gRUF75nIkkhhT1HFpYyLLwFZC+I=;
+        b=FFefIGyD1Phu9cZOJx0kNT09EOz5cTuU28dlgk8X4zpMHk1+wmOJvhA8WBNyxvPlPQ
+         ZOw8EZYVcx4Lrx28Kyo7z2WFZcYS/wcndNhlaEl5biTL/MnDKSLP9+KzDeDwidJPOXCx
+         sTHYhZe856NBAaohgcn6OSlJp+BkkMxx0e8N2i1A+vvXhqgi3/pbDHTa/kf6sZgzlMIF
+         ODXCfGC13d/AW5iVxyqgIaFhS0zS2JFwv88pW89FzTSYPCfhHNvl6B/oE70QYD73FyHW
+         LPAgAMc/+LRg01qZvmJVLHfx83n4zxb9DreZ6Lbh8uAySmP4GnOilRZGCzGrCNUZu06x
+         vcEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=K3ag/8I6dY0xnXzblFz/1w5mgGcBQvelgLc2shxtkfc=;
-        b=yH0DHv5u5omkrciyd2mRq35KO6cTACwtrrYYfdyiW607Gy2BRKBLIlxFiRzLU7Fm9c
-         mdFtVI3eVGyj+IL55kezSVzcqMnfabtHh5fheBguNAOZinlQ5hZD9hIJrKEfpbQSQnwb
-         krBMq1zREh84MR0y7869YEtL2ONvtTlfSbImWTsVqEbLhzM8mT/s99nEh61SaEnA6mFH
-         LT6A+S/SclYnbJf9OQR0SkwykUVSn/iFqCo3AvQh6b9YJUzEc9R1LJ6YtCMlNTSxVWUU
-         /DG2FnWFSPmRVbyhqNoyVFS8dChZW5znWSCMwxOB9VBXMzdhB30jbkGA9xewEHNQ3j3i
-         1pTg==
-X-Gm-Message-State: AOAM531/xLG0OOP9WCfazi811gA2GY3PUBfKvcNiafRhkuiIX22KdGmH
-        2kCCNLVsYDXgku7Zdbaylfsi+TSUgv1/FdIVvgZ5Zu1oUSg=
-X-Google-Smtp-Source: ABdhPJzCAtRD5QUGKUs2UsgDv4VG1mUB5AiemLTR85yYtzJwMWcMfdK+dnfSplqLyFMDGsyrX5zALXT3wdbfHzhXGus=
-X-Received: by 2002:a1c:7dcb:: with SMTP id y194mr8906027wmc.8.1634884383912;
- Thu, 21 Oct 2021 23:33:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211021153846.745289-1-omosnace@redhat.com> <YXGNZTJPxL9Q/GHt@t14s.localdomain>
-In-Reply-To: <YXGNZTJPxL9Q/GHt@t14s.localdomain>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Wqajo9l0GXf1mGw9gRUF75nIkkhhT1HFpYyLLwFZC+I=;
+        b=S72pCfyVIAxN1+cdfx0dmqLR4pRHQZrEQ7weKgoakJzfdhqg46Qc6d0xH62r555Qw2
+         cbKDZCfl29y3p+/s3hnBbxR/AiLy4V6Hu5hFzQEJmt9y0B1QbMYsES3wqGs2Kr8vf7Ul
+         Smzc3EzQ3GSswhagZevFLJi4D0FK6qODZVGfwkKr7xzf1FpfscAeNlVeITWeENT8tWgO
+         06O996ljUz2Pby2iH/Ml1pUnqcAhlsEXEL0SJM67OiYeDhg8h3T0G184zAHBNZ7BWqWU
+         iX+QhBVxfvOXYBHv2hmPY0Ll8f+nZI8e4hdPUtUpF0Q90Nepwv8r0SX535QFPnq0avBp
+         2Bcw==
+X-Gm-Message-State: AOAM5321mi70PUHigAUh30rzLmwvupUlTxki4c4AvQgn//SBbfOgUdh6
+        7V7IfPBWp/zHVYMleYKkgTwbgn4i7aRRkQ==
+X-Google-Smtp-Source: ABdhPJwZjz0iy6J0sYLUc1VI2UtyIbn4e4HgWJ/rzsEIIVhf/TynYySmhxIuBqEI5NvEyItCon7mrw==
+X-Received: by 2002:adf:a2d4:: with SMTP id t20mr12874782wra.229.1634884576155;
+        Thu, 21 Oct 2021 23:36:16 -0700 (PDT)
+Received: from wsfd-netdev15.ntdv.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id c7sm4099733wrp.51.2021.10.21.23.36.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Oct 2021 23:36:15 -0700 (PDT)
 From:   Xin Long <lucien.xin@gmail.com>
-Date:   Fri, 22 Oct 2021 14:32:52 +0800
-Message-ID: <CADvbK_eHsAjih9bAiH3d2cwkaizuYnn6gL85V6LdpWUrenMAxg@mail.gmail.com>
-Subject: Re: [PATCH] sctp: initialize endpoint LSM labels also on the client side
-To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     Ondrej Mosnacek <omosnace@redhat.com>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        network dev <netdev@vger.kernel.org>, selinux@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Richard Haines <richard_c_haines@btinternet.com>
-Content-Type: text/plain; charset="UTF-8"
+To:     network dev <netdev@vger.kernel.org>, selinux@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-sctp@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Richard Haines <richard_c_haines@btinternet.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>
+Subject: [PATCH net 0/4] security: fixups for the security hooks in sctp
+Date:   Fri, 22 Oct 2021 02:36:08 -0400
+Message-Id: <cover.1634884487.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, Oct 21, 2021 at 11:55 PM Marcelo Ricardo Leitner
-<marcelo.leitner@gmail.com> wrote:
->
-> On Thu, Oct 21, 2021 at 05:38:46PM +0200, Ondrej Mosnacek wrote:
-> > The secid* fields in struct sctp_endpoint are used to initialize the
-> > labels of a peeloff socket created from the given association. Currently
-> > they are initialized properly when a new association is created on the
-> > server side (upon receiving an INIT packet), but not on the client side.
->
-> +Cc Xin
-Thanks Marcelo,
+There are a couple of problems in the currect security hooks in sctp:
 
-security_sctp_assoc_request() is not supposed to call on the client side,
-as we can see on TCP. The client side's labels should be set to the
-connection by selinux_inet_conn_request(). But we can't do it based
-on the current hooks.
+1. The hooks incorrectly treat sctp_endpoint in SCTP as request_sock in
+   TCP, while it's in fact no more than an extension of the sock, and
+   represents the local host. It is created when sock is created, not
+   when a conn request comes. sctp_association is actually the correct
+   one to represent the connection, and created when a conn request
+   arrives.
 
-The root problem is that the current hooks incorrectly treat sctp_endpoint
-in SCTP as request_sock in TCP, while it should've been sctp_association.
-We need a bigger change on the current security sctp code.
+2. security_sctp_assoc_request() hook should also be called in processing
+   COOKIE ECHO, as that's the place where the real assoc is created and
+   used in the future.
 
-I will post the patch series in hand, please take a look.
+The problems above may cause accept sk, peeloff sk or client sk having
+the incorrect security labels.
+
+So this patchset is to change some hooks and pass asoc into them and save
+these secids into asoc, as well as add the missing sctp_assoc_request
+hook into the COOKIE ECHO processing.
+
+Xin Long (4):
+  security: pass asoc to sctp_assoc_request and sctp_sk_clone
+  security: call security_sctp_assoc_request in sctp_sf_do_5_1D_ce
+  security: add sctp_assoc_established hook
+  security: implement sctp_assoc_established hook in selinux
+
+ Documentation/security/SCTP.rst     | 65 +++++++++++++++--------------
+ include/linux/lsm_hook_defs.h       |  6 ++-
+ include/linux/lsm_hooks.h           | 13 ++++--
+ include/linux/security.h            | 18 +++++---
+ include/net/sctp/structs.h          | 20 ++++-----
+ net/sctp/sm_statefuns.c             | 31 ++++++++------
+ net/sctp/socket.c                   |  5 +--
+ security/security.c                 | 15 +++++--
+ security/selinux/hooks.c            | 36 +++++++++++-----
+ security/selinux/include/netlabel.h |  4 +-
+ security/selinux/netlabel.c         | 14 +++----
+ 11 files changed, 135 insertions(+), 92 deletions(-)
+
+-- 
+2.27.0
+
