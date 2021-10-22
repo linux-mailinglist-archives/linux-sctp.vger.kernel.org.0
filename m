@@ -2,90 +2,87 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93219436F8E
-	for <lists+linux-sctp@lfdr.de>; Fri, 22 Oct 2021 03:45:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A45CB4371CA
+	for <lists+linux-sctp@lfdr.de>; Fri, 22 Oct 2021 08:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbhJVBr5 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 21 Oct 2021 21:47:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52678 "EHLO
+        id S231941AbhJVGfY (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 22 Oct 2021 02:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbhJVBr4 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 21 Oct 2021 21:47:56 -0400
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07487C061764;
-        Thu, 21 Oct 2021 18:45:39 -0700 (PDT)
-Received: by mail-ua1-x92d.google.com with SMTP id f4so4868666uad.4;
-        Thu, 21 Oct 2021 18:45:39 -0700 (PDT)
+        with ESMTP id S232057AbhJVGfW (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 22 Oct 2021 02:35:22 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED58C061220;
+        Thu, 21 Oct 2021 23:33:05 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id g79-20020a1c2052000000b00323023159e1so2197250wmg.2;
+        Thu, 21 Oct 2021 23:33:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VWt6uqKTCCbsCNQyOaLjTBfNtiRbQoxiDY+LcfMpBc8=;
-        b=JmnAy8kwgFEEicRCGgjVO0otnNga/dFuZfftJUkEsqvlQWrZ4MRq+ZJ4hvxOV+Fy07
-         q5DkJSksGZNxQnW7jjBWV/mol/fHdzZW4zBvAtSiE/Ik/ttLDFY8sb+tT/jPz3fzbs6r
-         fvWNOkrA014tyYzkK+6KHe0a4zAsN1pXa0LszHDKS/51h4G2WPK3P36CYuhyKsBX5Apu
-         dKZrGmcG4e2/87QUODg65LdZSZ0AxQMOuh+Y8aCeZOnqTdl8NjF0F2BqdKKfKiGSSkiU
-         UmLrTdjwhWvf5FwJifq5TshIDMXBShDn1mm6HE1gcqFfRiynlIa3Vi/5tYrw0GqrDYxZ
-         tuBA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K3ag/8I6dY0xnXzblFz/1w5mgGcBQvelgLc2shxtkfc=;
+        b=PTQEtRJkvbdBeeUpy0SiyY+F0rHKPnxxj2b5Rqzx40gPhHZTjIDHlWOqU1SWf9Ziso
+         7L4W22xUMO3/DeZnclGgp8yLPSDsuL5O/f4dgTTrKyomPfAsXmXCb45l4TxZmtGd6bo0
+         bJaOm7zJ/NDWtQzmEXnDIx1czxdgusih1AnMgVw7fsqim33dlN2lu+Acy811aBT2CxsY
+         sNGnhxhLNUYffLBe8b+JONuyOBmuFJIAD/d1Rd4HFlhgwq6+bhviz5XfSC23vXhDLlCf
+         ulrZsBlxyoTcZENsqmH8xAOvFKZMBOv5lSL1s5W62eat5DFy2x7SdBBos1fqHlx608kA
+         CXBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VWt6uqKTCCbsCNQyOaLjTBfNtiRbQoxiDY+LcfMpBc8=;
-        b=hu6tkQwaKwNk0vWGaEgaF9q8Dxl7Sw/lA4wDyvwTVShRDSjgUt4WvONnBROFLWdoz6
-         RWJ55WgXn9Jv07G+hEP0Bi7rqw3s//vJUqKy8qbWu+EzB6+UVpMda/eNpT8R5qJ31BsI
-         ipbdKEtmKx3WmqA7ouQXnMlSKgHqDStn/VMKwnbbq25f8w9idE7WRxcrZU8iYCKk5zim
-         sxrQv9p4XglNJKDRQAa2HrFSXioyeA12igcVafvuZe4yprqjGA6OtI3QwgvqCFtBmabN
-         UYAgc1lqjw44teizV2KuJPYSvRRyUZzudbzI1IpD6QKw7l+uvAsTsLzDybSQAa1Nae3w
-         6ySQ==
-X-Gm-Message-State: AOAM5331e37jAiERw/ziJw85/O0OLKMUlOuqMjawX2bIlVVxSbygK30V
-        EWx+Ea/y/ZlzYnYOgfl2uycKSWJQTJ8=
-X-Google-Smtp-Source: ABdhPJwu+YbcfSozFiBh7WVDUy+QLzNt1z2VCcQQNUTujIw9CRKuWpaMW82yW7akt/WkVm/kpEAGCw==
-X-Received: by 2002:ab0:5741:: with SMTP id t1mr11182173uac.72.1634867139131;
-        Thu, 21 Oct 2021 18:45:39 -0700 (PDT)
-Received: from t14s.localdomain ([2001:1284:f013:9215:811c:de3a:f39a:8a57])
-        by smtp.gmail.com with ESMTPSA id n18sm3905633vsk.22.2021.10.21.18.45.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Oct 2021 18:45:38 -0700 (PDT)
-Received: by t14s.localdomain (Postfix, from userid 1000)
-        id 39CA191F49; Thu, 21 Oct 2021 22:45:37 -0300 (-03)
-Date:   Thu, 21 Oct 2021 22:45:37 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     network dev <netdev@vger.kernel.org>, davem@davemloft.net,
-        kuba@kernel.org, linux-sctp@vger.kernel.org,
-        michael.tuexen@lurchi.franken.de
-Subject: Re: [PATCH net 0/7] sctp: enhancements for the verification tag
-Message-ID: <YXIXwWOkUYhazR4R@t14s.localdomain>
-References: <cover.1634730082.git.lucien.xin@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K3ag/8I6dY0xnXzblFz/1w5mgGcBQvelgLc2shxtkfc=;
+        b=yH0DHv5u5omkrciyd2mRq35KO6cTACwtrrYYfdyiW607Gy2BRKBLIlxFiRzLU7Fm9c
+         mdFtVI3eVGyj+IL55kezSVzcqMnfabtHh5fheBguNAOZinlQ5hZD9hIJrKEfpbQSQnwb
+         krBMq1zREh84MR0y7869YEtL2ONvtTlfSbImWTsVqEbLhzM8mT/s99nEh61SaEnA6mFH
+         LT6A+S/SclYnbJf9OQR0SkwykUVSn/iFqCo3AvQh6b9YJUzEc9R1LJ6YtCMlNTSxVWUU
+         /DG2FnWFSPmRVbyhqNoyVFS8dChZW5znWSCMwxOB9VBXMzdhB30jbkGA9xewEHNQ3j3i
+         1pTg==
+X-Gm-Message-State: AOAM531/xLG0OOP9WCfazi811gA2GY3PUBfKvcNiafRhkuiIX22KdGmH
+        2kCCNLVsYDXgku7Zdbaylfsi+TSUgv1/FdIVvgZ5Zu1oUSg=
+X-Google-Smtp-Source: ABdhPJzCAtRD5QUGKUs2UsgDv4VG1mUB5AiemLTR85yYtzJwMWcMfdK+dnfSplqLyFMDGsyrX5zALXT3wdbfHzhXGus=
+X-Received: by 2002:a1c:7dcb:: with SMTP id y194mr8906027wmc.8.1634884383912;
+ Thu, 21 Oct 2021 23:33:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1634730082.git.lucien.xin@gmail.com>
+References: <20211021153846.745289-1-omosnace@redhat.com> <YXGNZTJPxL9Q/GHt@t14s.localdomain>
+In-Reply-To: <YXGNZTJPxL9Q/GHt@t14s.localdomain>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Fri, 22 Oct 2021 14:32:52 +0800
+Message-ID: <CADvbK_eHsAjih9bAiH3d2cwkaizuYnn6gL85V6LdpWUrenMAxg@mail.gmail.com>
+Subject: Re: [PATCH] sctp: initialize endpoint LSM labels also on the client side
+To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc:     Ondrej Mosnacek <omosnace@redhat.com>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
+        network dev <netdev@vger.kernel.org>, selinux@vger.kernel.org,
+        LSM List <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Richard Haines <richard_c_haines@btinternet.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, Oct 20, 2021 at 07:42:40AM -0400, Xin Long wrote:
-> This patchset is to address CVE-2021-3772:
-> 
->   A flaw was found in the Linux SCTP stack. A blind attacker may be able to
->   kill an existing SCTP association through invalid chunks if the attacker
->   knows the IP-addresses and port numbers being used and the attacker can
->   send packets with spoofed IP addresses.
-> 
-> This is caused by the missing VTAG verification for the received chunks
-> and the incorrect vtag for the ABORT used to reply to these invalid
-> chunks.
-> 
-> This patchset is to go over all processing functions for the received
-> chunks and do:
-> 
-...
-> 
-> This patch series has been tested with SCTP TAHI testing to make sure no
-> regression caused on protocol conformance.
+On Thu, Oct 21, 2021 at 11:55 PM Marcelo Ricardo Leitner
+<marcelo.leitner@gmail.com> wrote:
+>
+> On Thu, Oct 21, 2021 at 05:38:46PM +0200, Ondrej Mosnacek wrote:
+> > The secid* fields in struct sctp_endpoint are used to initialize the
+> > labels of a peeloff socket created from the given association. Currently
+> > they are initialized properly when a new association is created on the
+> > server side (upon receiving an INIT packet), but not on the client side.
+>
+> +Cc Xin
+Thanks Marcelo,
 
-Nice!
+security_sctp_assoc_request() is not supposed to call on the client side,
+as we can see on TCP. The client side's labels should be set to the
+connection by selinux_inet_conn_request(). But we can't do it based
+on the current hooks.
 
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+The root problem is that the current hooks incorrectly treat sctp_endpoint
+in SCTP as request_sock in TCP, while it should've been sctp_association.
+We need a bigger change on the current security sctp code.
+
+I will post the patch series in hand, please take a look.
