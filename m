@@ -2,68 +2,67 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4964379FA
-	for <lists+linux-sctp@lfdr.de>; Fri, 22 Oct 2021 17:36:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3FE437ED3
+	for <lists+linux-sctp@lfdr.de>; Fri, 22 Oct 2021 21:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232576AbhJVPiS (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 22 Oct 2021 11:38:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39466 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232339AbhJVPiR (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Fri, 22 Oct 2021 11:38:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9C0566121F;
-        Fri, 22 Oct 2021 15:35:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634916960;
-        bh=0ZR8O9FlD5B7yu81apaRKl77Msj4he+jWK9IlKVr47Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SK0BjwWIcPOBwUfIaq06htaqtdstrZzYY9/8QWTllYKA0DR4Gkvk5Uh+bF/gMgKWT
-         ceUGmz0tSkrjjHVz3UcF1ZKUcKQpJOYfNdATLU+UKEOc+K3cp80jlnXFu+AOuZcDOX
-         eHeh1y/+o4pUV8WfgmhI/w0VPiqgBN+ANNiOhheR1nNcEi/OR0RZ1s6KQalNsiVeMu
-         QmeUl7fP4Drx8Wqc4ddFoH45M1hr9ble+jp1dn1741IRKahrHt8gFSlA5QRMgp8Wbs
-         542PU71C5rHQN+nTfp7BhQxR3WXIV3E92r8TKfkhzAgXdQZoxRey88vbf6rzmUeTnn
-         7cBZMUkC2Q10Q==
-Date:   Fri, 22 Oct 2021 08:35:58 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     network dev <netdev@vger.kernel.org>, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-sctp@vger.kernel.org,
-        davem@davemloft.net,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Richard Haines <richard_c_haines@btinternet.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>
-Subject: Re: [PATCH net 1/4] security: pass asoc to sctp_assoc_request and
- sctp_sk_clone
-Message-ID: <20211022083558.5fce8039@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <615570feca5b99958947a7fdb807bab1e82196ca.1634884487.git.lucien.xin@gmail.com>
-References: <cover.1634884487.git.lucien.xin@gmail.com>
-        <615570feca5b99958947a7fdb807bab1e82196ca.1634884487.git.lucien.xin@gmail.com>
+        id S233848AbhJVTu2 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 22 Oct 2021 15:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234000AbhJVTu1 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 22 Oct 2021 15:50:27 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCA9C061764
+        for <linux-sctp@vger.kernel.org>; Fri, 22 Oct 2021 12:48:09 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id p16so89352lfa.2
+        for <linux-sctp@vger.kernel.org>; Fri, 22 Oct 2021 12:48:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Ca6pgAg73hQVg1DqjefSy8tyQKhSrDDZXYRAdtk0EMI=;
+        b=EAqWc9dAuqxwY2yrJ6QYvUBRbsx4GWscS3DUv+NYNbm+74O4Pgfr+RDdX1mXksE7Za
+         AKdE8DYaVhYjQJGglK2i6Xl62H4NKmfFcvkpy3NywFXCQb39jnefBoxbJQHsUAIku+TQ
+         ScdyFeLiHmkuef+ohP2FT/JNS/X2571GsqV3oYaUu1avcUfZxq3srTu+EhzNqslyvXni
+         xPwnrY/dcRfsRX6XnV4zyQQWKA4lj1CCYeWm/uO/HOCnilDNt62sFgSrPtln0brY+pHz
+         LCn8vsGMoC8cE6kvQp3Asp8C++m+fkrAA2w2bNTWNLRVMwyz6Jwitb3NRJUG2FV3pmd1
+         w+HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=Ca6pgAg73hQVg1DqjefSy8tyQKhSrDDZXYRAdtk0EMI=;
+        b=PQFKrfpoOycWSfjarGorjtzp8Z0pBU+JklhDsgCBStjGuQolwQ3fRZlc5cJ2Po8ecE
+         0WAFWnGFoCEuJlpNS7g+vGETRzl0vW01oWP3wwL0tc00gVYBoW7PCTLZ2ky0uANYnbtB
+         ZYrbxkqwa8pHgjme29948rSFYaGET49tQKOSZp0tR27VbM8zaaCIwpCJtkcPN7qpgFUb
+         q0tPvlm0mz9IpvAyWXDjj2o7hc5pg7XCuvzCguZT74wl+JWSJSqpYD9ITHTmS4/ItEGF
+         nMUFeqOkv/LtKjsP3ZjnCnA7xo4FbiAtl76d5+pQZpiD649jhFNyXuKS182twRMEIJww
+         6rbQ==
+X-Gm-Message-State: AOAM532zpWZXtm4fC4DhTW3QESEOoFiv6GarcJDZYXi3vi51uk0U4hcD
+        tsdJ3lYsUC50xEGaX9e6h4nL1OMONmYEX4lKHiI=
+X-Google-Smtp-Source: ABdhPJyqQTqtFvsvW2L7m1+bfU1NjiTN8Xw9biEpjRdaD8EedheJ9c0ZfEaYomNfL18nMDNIVpY7eRKGvpKN0/NA4vc=
+X-Received: by 2002:a05:6512:1286:: with SMTP id u6mr1634731lfs.24.1634932087438;
+ Fri, 22 Oct 2021 12:48:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Received: by 2002:ac2:5c09:0:0:0:0:0 with HTTP; Fri, 22 Oct 2021 12:48:06
+ -0700 (PDT)
+Reply-To: zm504728@gmail.com
+From:   Anita Marie Louise <yabaabo68@gmail.com>
+Date:   Fri, 22 Oct 2021 21:48:06 +0200
+Message-ID: <CAA-fXoYHcOcCU84As+uUrE7ake-LV8kBwdQphnkatv3c8ws69g@mail.gmail.com>
+Subject: =?UTF-8?Q?Hoffe=2C_von_dir_zu_h=C3=B6ren=2E?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Fri, 22 Oct 2021 02:36:09 -0400 Xin Long wrote:
-> This patch is to move secid and peer_secid from endpoint to association,
-> and pass asoc to sctp_assoc_request and sctp_sk_clone instead of ep. As
-> ep is the local endpoint and asoc represents a connection, and in SCTP
-> one sk/ep could have multiple asoc/connection, saving secid/peer_secid
-> for new asoc will overwrite the old asoc's.
-> 
-> Note that since asoc can be passed as NULL, security_sctp_assoc_request()
-> is moved to the place right after the new_asoc is created in
-> sctp_sf_do_5_1B_init() and sctp_sf_do_unexpected_init().
-> 
-> Fixes: 72e89f50084c ("security: Add support for SCTP security hooks")
-> Reported-by: Prashanth Prahlad <pprahlad@redhat.com>
-> Signed-off-by: Xin Long <lucien.xin@gmail.com>
-
-missed one?
-
-security/selinux/netlabel.c:274: warning: Function parameter or member
-'asoc' not described in 'selinux_netlbl_sctp_assoc_request'
-security/selinux/netlabel.c:274: warning: Excess function parameter 'ep' description in 'selinux_netlbl_sctp_assoc_request'
+Hallo,
+Sch=C3=B6nen Tag f=C3=BCr Sie und Ihre Familie.
+Bitte, es gibt etwas sehr Privates und Pers=C3=B6nliches, das ich mit Ihnen
+besprechen m=C3=B6chte, wenn Sie mir gestatten.
+Kann ich mich dir anvertrauen?
+Hoffe, von dir zu h=C3=B6ren.
+Vielen Dank
+Anita Marie-Louise
