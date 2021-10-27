@@ -2,87 +2,68 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A4743CC8A
-	for <lists+linux-sctp@lfdr.de>; Wed, 27 Oct 2021 16:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F2A43D7B0
+	for <lists+linux-sctp@lfdr.de>; Thu, 28 Oct 2021 01:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239036AbhJ0OoG (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 27 Oct 2021 10:44:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47012 "EHLO
+        id S229437AbhJ0Xre (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 27 Oct 2021 19:47:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237854AbhJ0OoF (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 27 Oct 2021 10:44:05 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249B3C061745
-        for <linux-sctp@vger.kernel.org>; Wed, 27 Oct 2021 07:41:40 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id b63so136115edf.10
-        for <linux-sctp@vger.kernel.org>; Wed, 27 Oct 2021 07:41:40 -0700 (PDT)
+        with ESMTP id S229540AbhJ0Xre (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 27 Oct 2021 19:47:34 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C1FC061570
+        for <linux-sctp@vger.kernel.org>; Wed, 27 Oct 2021 16:45:08 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id ls14-20020a17090b350e00b001a00e2251c8so3264983pjb.4
+        for <linux-sctp@vger.kernel.org>; Wed, 27 Oct 2021 16:45:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gaiy8iI3KoAyhwe4AaJugOjEos/PZdxnCB8V0KH1Dno=;
-        b=CBeBZwBdiZIUZVnM5Khw1ZEjGcdJVEay33Tiq5yOsocJpeWvvFEIKqxKdPJ9KE7dzF
-         pShXKIjs5jM0jO1kukrMSxHwPSkmN18a1+FZPMkqZrDgXruCgpnOQ1uXSQ/vzTQ8kLP9
-         OqkjFlT64D5zj44wOS1FzCSevHTBuT5V5kTmoDI0HQQQBao8DTa6CcgJBvxIieYDHVUZ
-         XX3JPmm+v89PawnpKqt84iEctdnp5mTneda198Y4CIerLDOntkfiq7N4TRk0sK60bTnE
-         hJStBgr73WTxL9sNHNg66vKLPDML0GOXTg4QWefV5bJevjkANoWgHqHflMZYNyGNkTFf
-         XEqg==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=oDVdWICwavrWQ8UAVYhe8ynFXsBBW1vVQ7W08zgiq24=;
+        b=hPdRBqjsZmk4ktCmg/LOpHN5jLqF0PcOaiRTD4ftLBp0LGVOjdqY0ptepKvjk1xPFj
+         bpWRCrBTp702ouuOelUpNePwRyR7hEXBcfuNiuVZeDtxs+6Dfr3OQgg7qo6J4OhY6mk3
+         jG/elwGNLaG1/ZG21wrrnpbS2bARDj3kMqhFNbA3Xf9mMHhm1gVrUCJn35sHJ+7BBgKw
+         7Fs6vkp8BlNEaau7hhQOSO3iDV9XfTN4qsytlCAnKuDDQ55ibqfG3d5yCM+cGr1hwoIi
+         6NSP4xL0mYNq26xUm7O3/xb8/ciAydHpY7ze2FKy6EWaARaeGSb3981gd3f7gzYg45bi
+         aU2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gaiy8iI3KoAyhwe4AaJugOjEos/PZdxnCB8V0KH1Dno=;
-        b=cH9Avco8c+PQ0HgXdWOi0l+9zTzzU0o8XPYpOg5jeFDGf3N/9oZEFKC885RMxPJCVY
-         0+kqjqhPh+MmVy99IgsbTNljpy+S2YQ1kpE5Jc0Uq9fHfUflycum8KvrOMTtMIF0+fJk
-         I+rw9k4vsH6LPhXFJefMPN6vtQaPkKYkIuMWLzGQL7g2BcBJh5hkSzEI4W9Ez0lBDCpv
-         v8i8j9aSY3sl6/yjSqerwHDn8xdd7xUDibe3iEvxf+7q7UY2gPwkvXXCFH/mzSdmxix+
-         xikSNVPaYvVKEihiqfhlTPqaYMttDhN2GMzroUo1eZlZCPxwTDlGTaqw4KBPYK2sNd2k
-         iLRw==
-X-Gm-Message-State: AOAM5328B0bP6UYqasR4AjJ9vbH8GejpBIu4+cRf8bwRaffFVJSavVDk
-        4YBsIRrMg8k263LO6yicGHSG5WFy75Wgl3xHed/V
-X-Google-Smtp-Source: ABdhPJwvDV51df1jsbukGYi/QiG9zzLsCbuK6XTvcBu2DkK2prsxWu/++ORqQzcu3+tmw/SVuP3YMDt5c0Vmg4CFG5Q=
-X-Received: by 2002:a05:6402:22d6:: with SMTP id dm22mr45319307edb.209.1635345692764;
- Wed, 27 Oct 2021 07:41:32 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=oDVdWICwavrWQ8UAVYhe8ynFXsBBW1vVQ7W08zgiq24=;
+        b=LBk1tHpr5n9iPnYlGHOhMP2HvZO21zMYZtWYPZQ0lrPjbiRNQ4VAriJgTD+fyMIdW9
+         h2fD7hb+vaStfi1zhXlZZTx0g8/uIS+VpsOGxkHrcAzTLfh4mTMekxjX5y7ASMzKCBBl
+         O5bTrceDRXGNIoCZeaoI/Rd9BeM5yn/2kfK3gyADiyh/woWjpAtlSpUUU9xms8TyATsb
+         LxgZNSPWpo3XvMM7xTZ8oYmOF18pYHHPLo4LyIZk320U2oztPgxh1cxT6gEsHbASa/Fv
+         tovrCrOre1gaz3EVy5DCGGsZdUy1T+SKUymdkPLuQ6F0SJqVv08RVi5ujR0eAJTeaaUp
+         om9Q==
+X-Gm-Message-State: AOAM533+lj1smf7Kt5ZJ0UA7/C29FscvuBlB4I4GmBTYPNcQ2upD6ACy
+        gOcQWKw+GaLn/eS085NOiKg1vf+28b0LoQWL7CY=
+X-Google-Smtp-Source: ABdhPJwWHOayA09pz9pkH9z0wbcOOqBDZNhQfI4U9579sRGyTW3/UUnRbEBWxfWf0o6BLl7v7SIMWVf6fmp7EFkncQ0=
+X-Received: by 2002:a17:903:41c2:b0:13f:f26:d6b9 with SMTP id
+ u2-20020a17090341c200b0013f0f26d6b9mr628942ple.14.1635378307882; Wed, 27 Oct
+ 2021 16:45:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1634884487.git.lucien.xin@gmail.com> <53026dedd66beeaf18a4570437c4e6c9e760bb90.1634884487.git.lucien.xin@gmail.com>
- <CAFqZXNs89yGcoXumNwavLRQpYutfnLY-SM2qrHbvpjJxVtiniw@mail.gmail.com>
- <CADvbK_djVKxjfRaLS0EZRY2mkzWXTMnwvbe-b7cK-T3BR8jzKQ@mail.gmail.com>
- <CAFqZXNsnEwPcEXB-4O983bxGj5BfZVMB6sor7nZVkT-=uiZ2mw@mail.gmail.com>
- <CADvbK_eE9VhB2cWzHSk_LNm_VemEt9vm=FMMVYzo5eVH=zEhKw@mail.gmail.com>
- <CAHC9VhTfVmcLOG3NfgQ3Tjpe769XzPntG24fejzSCvnZt_XZ9A@mail.gmail.com>
- <CADvbK_dwLCOvS8YzFXcXoDF6F69_sc7voPbxn5Ov4ygBR_5FXw@mail.gmail.com>
- <CAHC9VhREfztHQ8mqA_WM6NF=jKf0fTFTSRp_D5XhOVxckckwzw@mail.gmail.com> <CADvbK_c0CosUo4mMrSYQs_AA2KbB4MdnX5aS0zS0pJBOJV2vUA@mail.gmail.com>
-In-Reply-To: <CADvbK_c0CosUo4mMrSYQs_AA2KbB4MdnX5aS0zS0pJBOJV2vUA@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 27 Oct 2021 10:41:21 -0400
-Message-ID: <CAHC9VhTYNkvqLWA+FXVz=1dL8QvF9AmV7UMgAzNOcj238yjVvw@mail.gmail.com>
-Subject: Re: [PATCH net 4/4] security: implement sctp_assoc_established hook
- in selinux
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     Ondrej Mosnacek <omosnace@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Richard Haines <richard_c_haines@btinternet.com>,
-        SElinux list <selinux@vger.kernel.org>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        network dev <netdev@vger.kernel.org>
+Received: by 2002:a05:6a10:b706:0:0:0:0 with HTTP; Wed, 27 Oct 2021 16:45:07
+ -0700 (PDT)
+Reply-To: ninacoulibaly04@hotmail.com
+From:   nina coulibaly <ninacoulibaly214@gmail.com>
+Date:   Thu, 28 Oct 2021 00:45:07 +0100
+Message-ID: <CAL5O4-HFybk2hzvdHwpyXO7nLnTASBVUqdjN7=8KYGYSeC054A@mail.gmail.com>
+Subject: from nina coulibaly
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, Oct 27, 2021 at 12:00 AM Xin Long <lucien.xin@gmail.com> wrote:
-> OK, I think we are on the same page now, I will post v2.
+Dear,
 
-I'm not quite as confident we are on the same page just yet, but I
-agree that having a new revision is a good idea; if nothing else it
-will help reset the discussion to focus on updated patches - thanks!
+I am interested to invest with you in your country with total trust
+and i hope you will give me total support, sincerity and commitment.
+Please get back to me as soon as possible so that i can give you my
+proposed details of funding and others.
 
--- 
-paul moore
-www.paul-moore.com
+Best Regards.
+
+Mrs Nina Coulibaly
