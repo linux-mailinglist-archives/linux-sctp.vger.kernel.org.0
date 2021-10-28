@@ -2,68 +2,83 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02F2A43D7B0
-	for <lists+linux-sctp@lfdr.de>; Thu, 28 Oct 2021 01:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F2D43DDDA
+	for <lists+linux-sctp@lfdr.de>; Thu, 28 Oct 2021 11:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229437AbhJ0Xre (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 27 Oct 2021 19:47:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58546 "EHLO
+        id S230071AbhJ1JjL (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 28 Oct 2021 05:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbhJ0Xre (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 27 Oct 2021 19:47:34 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C1FC061570
-        for <linux-sctp@vger.kernel.org>; Wed, 27 Oct 2021 16:45:08 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id ls14-20020a17090b350e00b001a00e2251c8so3264983pjb.4
-        for <linux-sctp@vger.kernel.org>; Wed, 27 Oct 2021 16:45:08 -0700 (PDT)
+        with ESMTP id S229850AbhJ1JjL (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 28 Oct 2021 05:39:11 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A01C061570;
+        Thu, 28 Oct 2021 02:36:44 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id s1so22270129edd.3;
+        Thu, 28 Oct 2021 02:36:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=oDVdWICwavrWQ8UAVYhe8ynFXsBBW1vVQ7W08zgiq24=;
-        b=hPdRBqjsZmk4ktCmg/LOpHN5jLqF0PcOaiRTD4ftLBp0LGVOjdqY0ptepKvjk1xPFj
-         bpWRCrBTp702ouuOelUpNePwRyR7hEXBcfuNiuVZeDtxs+6Dfr3OQgg7qo6J4OhY6mk3
-         jG/elwGNLaG1/ZG21wrrnpbS2bARDj3kMqhFNbA3Xf9mMHhm1gVrUCJn35sHJ+7BBgKw
-         7Fs6vkp8BlNEaau7hhQOSO3iDV9XfTN4qsytlCAnKuDDQ55ibqfG3d5yCM+cGr1hwoIi
-         6NSP4xL0mYNq26xUm7O3/xb8/ciAydHpY7ze2FKy6EWaARaeGSb3981gd3f7gzYg45bi
-         aU2A==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=erzUkbCpRs7mF8JPNwqvfUrlKic2ZgXPblnwsdv+efU=;
+        b=MLNAvumxitgWuRAjxQ9/9P1koVG/jxp+b6oW6HYvMbH2nOvmkcRY1p9y9xm2JJknq0
+         jf3aYDDd6mO17go3YScwTYBmhIz5V6TCiUTVwHcTMQQuH3uJYELsA4b2t6Ux2XXnQLff
+         jODYPzvqFRICTxDWliVjgZUecMICPopGIFIncfVYMdnjKFyQ0wde6sixpU9SZQrdqOQ2
+         sCyTXOndItzrh0wgB+eo81eklooqHMA1oNp8f3rXJ5ZBI2dADFFremFk+XQ72vo5ctOz
+         OJ7hI4cHDVPdIC5uSl9j/Zdu8aC3ryz/yjEuG4gseyGBok4KJtldT2Q9FRBJEGrl8L8r
+         YWsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=oDVdWICwavrWQ8UAVYhe8ynFXsBBW1vVQ7W08zgiq24=;
-        b=LBk1tHpr5n9iPnYlGHOhMP2HvZO21zMYZtWYPZQ0lrPjbiRNQ4VAriJgTD+fyMIdW9
-         h2fD7hb+vaStfi1zhXlZZTx0g8/uIS+VpsOGxkHrcAzTLfh4mTMekxjX5y7ASMzKCBBl
-         O5bTrceDRXGNIoCZeaoI/Rd9BeM5yn/2kfK3gyADiyh/woWjpAtlSpUUU9xms8TyATsb
-         LxgZNSPWpo3XvMM7xTZ8oYmOF18pYHHPLo4LyIZk320U2oztPgxh1cxT6gEsHbASa/Fv
-         tovrCrOre1gaz3EVy5DCGGsZdUy1T+SKUymdkPLuQ6F0SJqVv08RVi5ujR0eAJTeaaUp
-         om9Q==
-X-Gm-Message-State: AOAM533+lj1smf7Kt5ZJ0UA7/C29FscvuBlB4I4GmBTYPNcQ2upD6ACy
-        gOcQWKw+GaLn/eS085NOiKg1vf+28b0LoQWL7CY=
-X-Google-Smtp-Source: ABdhPJwWHOayA09pz9pkH9z0wbcOOqBDZNhQfI4U9579sRGyTW3/UUnRbEBWxfWf0o6BLl7v7SIMWVf6fmp7EFkncQ0=
-X-Received: by 2002:a17:903:41c2:b0:13f:f26:d6b9 with SMTP id
- u2-20020a17090341c200b0013f0f26d6b9mr628942ple.14.1635378307882; Wed, 27 Oct
- 2021 16:45:07 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=erzUkbCpRs7mF8JPNwqvfUrlKic2ZgXPblnwsdv+efU=;
+        b=st5FUilPOb0o5R9H9BaLpy3uS1Sr+wohpDKFLtPrpHq/tP3Nofn3hYuyllsrSXrsnI
+         qdDbzQ4Xl6OpgdC/VycpO0JymFeAXFZsM3In69X2j17dDmL8P8ZJEs3Zlg4tTKUfH+gQ
+         Z8qR7vJFW7hqmVFsFuLNj9Iov+Pq4RsPrel/dhw631/6YAz2swxgIjFoz7bl6Y7MAyK6
+         5BDofMtpiw9rB2JOR/zMIk0jiPXJ2nYlKmMYvaALJsgngVW0oWHcBq589EcfyfTdd/JP
+         yUSLk0wEJWOUpKYXb+QZQ0kT8RhrqjKmnBLeszKo2pmj+WmFU8lX8bX2L3Xmbef1IQvX
+         McBw==
+X-Gm-Message-State: AOAM532TxdziywyfUNEehOlxjpUOe8cSYmAdTA29fr+d4mi0TAW1B1il
+        a+RTy4xsIV+xqLQlpGjm+hvAx6A4ExcWrg==
+X-Google-Smtp-Source: ABdhPJwbegGbH3srxiy6hE5wkZLO76uMPbTh/63SidwxvB5um/gYvD+6UgLd4zxu75j137TOLDOMKg==
+X-Received: by 2002:a05:6402:270e:: with SMTP id y14mr4567070edd.3.1635413802572;
+        Thu, 28 Oct 2021 02:36:42 -0700 (PDT)
+Received: from wsfd-netdev15.ntdv.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id s12sm1379865edc.48.2021.10.28.02.36.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Oct 2021 02:36:42 -0700 (PDT)
+From:   Xin Long <lucien.xin@gmail.com>
+To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Subject: [PATCH net 0/4] sctp: a couple of fixes for PLPMTUD
+Date:   Thu, 28 Oct 2021 05:36:00 -0400
+Message-Id: <cover.1635413715.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:b706:0:0:0:0 with HTTP; Wed, 27 Oct 2021 16:45:07
- -0700 (PDT)
-Reply-To: ninacoulibaly04@hotmail.com
-From:   nina coulibaly <ninacoulibaly214@gmail.com>
-Date:   Thu, 28 Oct 2021 00:45:07 +0100
-Message-ID: <CAL5O4-HFybk2hzvdHwpyXO7nLnTASBVUqdjN7=8KYGYSeC054A@mail.gmail.com>
-Subject: from nina coulibaly
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Dear,
+Four fixes included in this patchset:
 
-I am interested to invest with you in your country with total trust
-and i hope you will give me total support, sincerity and commitment.
-Please get back to me as soon as possible so that i can give you my
-proposed details of funding and others.
+  - fix the packet sending in Error state.
+  - fix the timer stop when transport update dst.
+  - fix the outer header len calculation.
+  - fix the return value for toobig processing.
 
-Best Regards.
+Xin Long (4):
+  sctp: allow IP fragmentation when PLPMTUD enters Error state
+  sctp: reset probe_timer in sctp_transport_pl_update
+  sctp: subtract sctphdr len in sctp_transport_pl_hlen
+  sctp: return true only for pathmtu update in sctp_transport_pl_toobig
 
-Mrs Nina Coulibaly
+ include/net/sctp/sctp.h |  7 +++----
+ net/sctp/output.c       | 13 ++++++++-----
+ net/sctp/transport.c    | 11 ++++++-----
+ 3 files changed, 17 insertions(+), 14 deletions(-)
+
+-- 
+2.27.0
+
