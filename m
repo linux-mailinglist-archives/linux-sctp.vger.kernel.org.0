@@ -2,89 +2,74 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F7143DF82
-	for <lists+linux-sctp@lfdr.de>; Thu, 28 Oct 2021 12:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9B443FB85
+	for <lists+linux-sctp@lfdr.de>; Fri, 29 Oct 2021 13:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbhJ1KzF (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 28 Oct 2021 06:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37578 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbhJ1Kyx (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 28 Oct 2021 06:54:53 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67396C0432C6
-        for <linux-sctp@vger.kernel.org>; Thu, 28 Oct 2021 03:52:23 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id g10so22795598edj.1
-        for <linux-sctp@vger.kernel.org>; Thu, 28 Oct 2021 03:52:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=vprh3gRT3Cegcj0K7Fy7tqOfLGKK384XjLMkCZvF/BY=;
-        b=MqgQiMnth4O6zLvpsYbAhVLW1BorpgoCleWwfkY0/i+i6OSDuXRZO1jIKzpTTrmehO
-         XtsLWdXiTcL+XCe4naFtf2tTUJnbwwmDpuUkpvRhLd+LEnuxY7nNr11hmTRUVX1WOHsO
-         bN0u1arCg4gm9LHdXRMZFcXOD22U5gDGuBOuhPo6qvWbt6nA2j/p/5IZ88XFHrEsiSW3
-         12hentYJMlWeUfa2lUQkLm+5/fvMSizrI7wGoF2taOa3dgGUV5HKZWb0yAAH7nAXVevJ
-         tDC/xbHNLzSn310XeD3Gkoobjl6MPBQzT5DSLzerNBdTKOdmyp3xvfvOyo80qVUTZIED
-         gaRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=vprh3gRT3Cegcj0K7Fy7tqOfLGKK384XjLMkCZvF/BY=;
-        b=GUbubUmwPaPSxhUTJ9zVkybZgB0j0x4PqmCTsA5Wxe9okGtyFqhFRdhi/0yXsxrJ6h
-         it5vlasALPX9sgy2pIUqbe3/MEZRbOLS9d3zGd0UsO90kO0pSlIcROZuqBd69NV/q+Kv
-         eX5qMZEw/YkNZKjyJdh3s25gtNW9uVjGh+J6pEsFPDIbnG6sNi52AFROcnusncjjxeN7
-         JNosrwCzB3DPlH+6vltwLVUozg+k5NEMxZjYLDdzh7YDMwt+4iwktsnsSjpeJ3hSKeY/
-         VFShzB3s9E6K1SeoELShk9hhHjQDOIN3QoSloFDFWXXz6PeBYdFh2nv7DF6mHc2Do20C
-         CeSQ==
-X-Gm-Message-State: AOAM530XkUvwTabtDAdZ+xkef09HuYREJBAYmSDS8ZQX10K6xFIp5ITp
-        lgrE8MjSKQ2SnW9/W5ZHVBc0wDlaLNQkKGqGbREh2MiyjQZ/UGaC
-X-Google-Smtp-Source: ABdhPJw39EF9dJlXS9lAFrZ3adXxB8DVzXcygVzA3uRLiZxWlggxaB9ElCxkEB0P82xisoA6G442GD5iqMe2hCgLIt8=
-X-Received: by 2002:a2e:9a83:: with SMTP id p3mr3750290lji.145.1635418330269;
- Thu, 28 Oct 2021 03:52:10 -0700 (PDT)
+        id S231942AbhJ2Lmj (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 29 Oct 2021 07:42:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50822 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231807AbhJ2Lmi (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Fri, 29 Oct 2021 07:42:38 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id B3E5761167;
+        Fri, 29 Oct 2021 11:40:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635507609;
+        bh=Ova+fHEyLv3Ydj/WhLWHTiMkcz4ifleXZG+pkn6V3Uw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=KbTMTuE4gwKNfsPpI9kpSIFhMsGg4/4lkp2HFgYrf6DnBpKpm93cBQ9wzPfCtxdEU
+         lQ4uWrZEd4pxz6GOHV5xiwzBZPjKbE31cI0KnV4XYtUgz9nghodbpDpYqjATeU3bBy
+         rZu1XzKdX2jUFyfObbYOquUoFaV/vWCjChyWcK1SsdXFID0giZ63agYIpWI0cROIBv
+         lVifpL3qfdu0mB1KN2IcZSzhPQ1YacbtlRztjP3Fn9xZxArli5yVDewCapcE7itjHR
+         ylnCv0soQCmhw34VGP9maNJlnHP/dgo2pWSjKfzmrKvgxNbyLv1BnX6qTDdIe7y3vW
+         1DzAwVhRpLBIg==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id A75B960A1B;
+        Fri, 29 Oct 2021 11:40:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Received: by 2002:ab3:6f89:0:0:0:0:0 with HTTP; Thu, 28 Oct 2021 03:52:09
- -0700 (PDT)
-Reply-To: aabdulwalialhashmi@gmail.com
-From:   Abdulwali Alhashmi <husamalsayed.hs@gmail.com>
-Date:   Thu, 28 Oct 2021 03:52:09 -0700
-Message-ID: <CAF6yYCeS=rm8=_71-kMjVo4oaVK57w9X52R_yv1HDrBe7vh-sA@mail.gmail.com>
-Subject: PLEASE GET BACK TO ME IF I CAN I TRUST YOU
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 0/4] sctp: a couple of fixes for PLPMTUD
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163550760967.31573.4777989715064942637.git-patchwork-notify@kernel.org>
+Date:   Fri, 29 Oct 2021 11:40:09 +0000
+References: <cover.1635413715.git.lucien.xin@gmail.com>
+In-Reply-To: <cover.1635413715.git.lucien.xin@gmail.com>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org, marcelo.leitner@gmail.com
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
+Hello:
+
+This series was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu, 28 Oct 2021 05:36:00 -0400 you wrote:
+> Four fixes included in this patchset:
+> 
+>   - fix the packet sending in Error state.
+>   - fix the timer stop when transport update dst.
+>   - fix the outer header len calculation.
+>   - fix the return value for toobig processing.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,1/4] sctp: allow IP fragmentation when PLPMTUD enters Error state
+    https://git.kernel.org/netdev/net/c/40171248bb89
+  - [net,2/4] sctp: reset probe_timer in sctp_transport_pl_update
+    https://git.kernel.org/netdev/net/c/c6ea04ea692f
+  - [net,3/4] sctp: subtract sctphdr len in sctp_transport_pl_hlen
+    https://git.kernel.org/netdev/net/c/cc4665ca646c
+  - [net,4/4] sctp: return true only for pathmtu update in sctp_transport_pl_toobig
+    https://git.kernel.org/netdev/net/c/75cf662c64dd
+
+You are awesome, thank you!
 -- 
-Greetings,
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Firstly, I apologize for encroaching into your privacy in this manner
-as it may seem unethical though it is a matter of great importance.
 
-I am Abdulwali Alhashmi, I work with Cayman National Bank (Cayman Islands).
-
-I am contacting you because my status would not permit me to do this
-alone as it is concerning our customer and an investment placed under
-our bank's management over 5 years ago.
-
-I have a proposal I would love to discuss with you which will be very
-beneficial to both of us. It's regarding my late client who has a huge
-deposit with my bank.
-
-He is from your country and shares the same last name with you.
-
-I want to seek your consent to present you as the next of kin to my
-late client who died and left a huge deposit with my bank.
-
-I would respectfully request that you keep the contents of this mail
-confidential and respect the integrity of the information you come by
-as a result of this mail.
-
-Please kindly get back to me for more details if I can TRUST YOU.{
-aabdulwalialhashmi@gmail.com }
-
-Regards
-Abdulwali Alhashmi
-Treasury and Deposit Management,
-Cayman National Bank Cayman Islands
