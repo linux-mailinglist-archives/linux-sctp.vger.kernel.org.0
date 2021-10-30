@@ -2,74 +2,61 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C9B443FB85
-	for <lists+linux-sctp@lfdr.de>; Fri, 29 Oct 2021 13:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 968914406A6
+	for <lists+linux-sctp@lfdr.de>; Sat, 30 Oct 2021 03:22:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231942AbhJ2Lmj (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 29 Oct 2021 07:42:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50822 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231807AbhJ2Lmi (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Fri, 29 Oct 2021 07:42:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id B3E5761167;
-        Fri, 29 Oct 2021 11:40:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635507609;
-        bh=Ova+fHEyLv3Ydj/WhLWHTiMkcz4ifleXZG+pkn6V3Uw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=KbTMTuE4gwKNfsPpI9kpSIFhMsGg4/4lkp2HFgYrf6DnBpKpm93cBQ9wzPfCtxdEU
-         lQ4uWrZEd4pxz6GOHV5xiwzBZPjKbE31cI0KnV4XYtUgz9nghodbpDpYqjATeU3bBy
-         rZu1XzKdX2jUFyfObbYOquUoFaV/vWCjChyWcK1SsdXFID0giZ63agYIpWI0cROIBv
-         lVifpL3qfdu0mB1KN2IcZSzhPQ1YacbtlRztjP3Fn9xZxArli5yVDewCapcE7itjHR
-         ylnCv0soQCmhw34VGP9maNJlnHP/dgo2pWSjKfzmrKvgxNbyLv1BnX6qTDdIe7y3vW
-         1DzAwVhRpLBIg==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id A75B960A1B;
-        Fri, 29 Oct 2021 11:40:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S229694AbhJ3BZ0 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 29 Oct 2021 21:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51588 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229656AbhJ3BZ0 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 29 Oct 2021 21:25:26 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C66C061570
+        for <linux-sctp@vger.kernel.org>; Fri, 29 Oct 2021 18:22:56 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id a129so15435535yba.10
+        for <linux-sctp@vger.kernel.org>; Fri, 29 Oct 2021 18:22:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=VAGeb7ztmVMmN71h5wSUZrD859a1KxcaKD9zTo+YxnM=;
+        b=cQCa4oDQ+/fCqJ7r62HsvKAAl184/8REmElYctmpPTrfDPLsQazRpt7Ns9bPH0wHbz
+         M6uBlzHC54MPa/hX4oX9lJHJVCrYPGaGM49spM0Soq33HuvtaH/bqYfQGQlWXrIMVtHp
+         OKvbET65feySXr3W7YWe/tJMhoKc9p9VXxYXYyfTpXMgwOshqhWzwtT6v/ygUPFGYjjT
+         PeS/c8YP7M+j+zLQUi44enLbgllVXF9zAI80l74O2SpenSNrZc7ZMPslNnVNlWV6FCmn
+         7NTE3hfyo8SYzis7jlawY0PRlNa/CEnQZVkOo+ENtd0OLcMYIkkyhP7Ai5zh7A5eD7c6
+         PaNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=VAGeb7ztmVMmN71h5wSUZrD859a1KxcaKD9zTo+YxnM=;
+        b=B5JoVln7tKBHKhqan6RrmlwO1MUswvUzCtQmmEdcGkcCw54QQDkMAHCEV+CholQELk
+         OJtmeesA2F5/G1rf/XxKMgAGMQ+FtfYvo9YTwPnOuyXr/9AwxKVy6jj2gJZCa0/D3YPC
+         MrmZd88CWlKOm7M+4tEQdHJNU9eAxmf5LrUiH/YimJFE6SRYXk1nF01LwCpp9ALcgVsC
+         Evz1ib2GMb3AVYdLTUTKYZPEVsoT49hdjdsusTWPR25hsZvw4kmsMRhwGCojSsyO0xQI
+         FTM+vU9XuNQjoX79miNF1Dmlx0ynwqrRiu8/zB31ZtWIg9QLZ2Y7XQAfcMEoFi0qK1X3
+         jn7w==
+X-Gm-Message-State: AOAM532Y/j4AC1pQI9wlnm1zKpSIalGTX3RqRlT/jSIF7I6HrlGueCh3
+        cBxpsklfhUaNFlVoXT9vwmvosPVGuHi42SVNqxk=
+X-Google-Smtp-Source: ABdhPJz8Z3J7hlQ+T3VEDreaBgLOjrRnGPs2PAMyTOkqUxqw/6RP+gkCM3bvz57nNohpmcvqOTM7cxNaMW2naKwL/Dg=
+X-Received: by 2002:a25:2805:: with SMTP id o5mr15138465ybo.110.1635556975921;
+ Fri, 29 Oct 2021 18:22:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 0/4] sctp: a couple of fixes for PLPMTUD
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163550760967.31573.4777989715064942637.git-patchwork-notify@kernel.org>
-Date:   Fri, 29 Oct 2021 11:40:09 +0000
-References: <cover.1635413715.git.lucien.xin@gmail.com>
-In-Reply-To: <cover.1635413715.git.lucien.xin@gmail.com>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
-        davem@davemloft.net, kuba@kernel.org, marcelo.leitner@gmail.com
+Received: by 2002:a05:7000:8d0b:0:0:0:0 with HTTP; Fri, 29 Oct 2021 18:22:55
+ -0700 (PDT)
+Reply-To: ltom0937@gmail.com
+From:   Brian Tony <romeodoca@gmail.com>
+Date:   Sat, 30 Oct 2021 04:22:55 +0300
+Message-ID: <CAAK6X2oUyi-V-Q4-OGDu-4JqK5i3Uy6Fuu+hKWBbpB0zJ4uFBQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu, 28 Oct 2021 05:36:00 -0400 you wrote:
-> Four fixes included in this patchset:
-> 
->   - fix the packet sending in Error state.
->   - fix the timer stop when transport update dst.
->   - fix the outer header len calculation.
->   - fix the return value for toobig processing.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net,1/4] sctp: allow IP fragmentation when PLPMTUD enters Error state
-    https://git.kernel.org/netdev/net/c/40171248bb89
-  - [net,2/4] sctp: reset probe_timer in sctp_transport_pl_update
-    https://git.kernel.org/netdev/net/c/c6ea04ea692f
-  - [net,3/4] sctp: subtract sctphdr len in sctp_transport_pl_hlen
-    https://git.kernel.org/netdev/net/c/cc4665ca646c
-  - [net,4/4] sctp: return true only for pathmtu update in sctp_transport_pl_toobig
-    https://git.kernel.org/netdev/net/c/75cf662c64dd
-
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Congratulations, Your Email was randomly selected for charity donation
+of $2,500,000.00
+Email:ltom0937@gmail.com
