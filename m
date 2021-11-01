@@ -2,57 +2,81 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 240474411B5
-	for <lists+linux-sctp@lfdr.de>; Mon,  1 Nov 2021 01:38:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C87D64414B9
+	for <lists+linux-sctp@lfdr.de>; Mon,  1 Nov 2021 09:05:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbhKAAkk (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 31 Oct 2021 20:40:40 -0400
-Received: from condef-06.nifty.com ([202.248.20.71]:29050 "EHLO
-        condef-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbhKAAkj (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sun, 31 Oct 2021 20:40:39 -0400
-X-Greylist: delayed 310 seconds by postgrey-1.27 at vger.kernel.org; Sun, 31 Oct 2021 20:40:39 EDT
-Received: from conwmuserg-01.nifty.com ([10.126.8.120])by condef-06.nifty.com with ESMTP id 1A10UvFl006721
-        for <linux-sctp@vger.kernel.org>; Mon, 1 Nov 2021 09:30:59 +0900
-Received: from aps7-02 ([10.126.11.34])by conwmuserg-01.nifty.com with ESMTP id 1A10Kqo3005303;
-        Mon, 1 Nov 2021 09:20:52 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conwmuserg-01.nifty.com 1A10Kqo3005303
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1635726064;
-        bh=ZWIUJwh/Fhrl7VvU+Lgv6SQ9cJ9pGr1OUCLgbmPt7RI=;
-        h=Date:From:Reply-To:To:Subject:From;
-        b=0Sl7XOj5XWlF7jW14VaUABGI0Qmsnmei69abWcU5jgJKSey/+F1W/gcqoJIIYC23R
-         S0wl9BfEgDWo9pWwa7H8XwoxugWW2NHK7QatREsTQdWmPAYN3N8QSYajGH3/p7ZYFI
-         VSCJRYlMoUu/eyWXz4cBmahPaGMm91qlbGMpMuf0Vok71uU8IYV+CB2biHmrsO+37X
-         K0TfL1mjIinbXvuKnn34NwrzhdO7jrgu0qenAxiDl90kZXH8NcGH3YW9LqwGNvUA9l
-         B9ZWtdt1Bm04VR/6Og6GKqOSXk7TQl2rm34QrjSxOOD09f6nVoaOElfiJ3IKgT3gIW
-         QVgBF118HN87A==
-X-Nifty-SrcIP: [10.126.11.34]
-Message-ID: <1263382878.55731635726052066.cthvzw05611@nifty.com>
-Date:   Mon, 1 Nov 2021 09:20:52 +0900 (JST)
-From:   Catherine Wenzel <cthvzw05611@nifty.com>
-Reply-To: catherienewenzel@nifty.com
-To:     catherinewenzel@nifty.com
-Subject:  Re: This is for My DONATION
+        id S231560AbhKAIIQ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 1 Nov 2021 04:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53946 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231486AbhKAIIP (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 1 Nov 2021 04:08:15 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07729C061203
+        for <linux-sctp@vger.kernel.org>; Mon,  1 Nov 2021 01:05:42 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 205so28041627ljf.9
+        for <linux-sctp@vger.kernel.org>; Mon, 01 Nov 2021 01:05:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=J/sLAHxRh6EjJh2rcjPDJLzA40VXjb4DP54UXQAr8IU=;
+        b=V/IbKY0g2EmPf9Psw8/L5H/ix/AU0zvu2OUN3f6n4Fv6NgmpLlFSkK+umz4tcLa+rQ
+         KPHS/U/tha1vFbqZfuKiI6zDNVPEppLWjyRMC297y8Re0TE1J6EAlHSS5afwmMs11biY
+         h6h9pozx9oemeYr42hloFFZRds8Ya+2AP507sW/DcWz6BjqKrxv4hcir1uA1OXS1hEyB
+         w9XZ2qfq7a1kiIG9xUCGZ5ig/Y+IKbMB2fFHseYh6GvlAWlR1PaalxFQ2QVnq2fOdjHW
+         Eb6a7nGCdEyfObn3JBdFXKk3sCBeQVUP9+skggjMAA78OwbRWXloeHcIXoEQjELtBjiU
+         mUaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=J/sLAHxRh6EjJh2rcjPDJLzA40VXjb4DP54UXQAr8IU=;
+        b=o39soMvE6vmGFzmg929LCly6oBpY0oO7qP7AbIj0EMht2/k2z2X0dh9fEvJI3CM34u
+         6Sz1dkMhX/kZYtU3QjxVcx/QEIPiOvny4URqU2C+pF9XUKUoJJMYXQYWB55VKsMc7Y/M
+         Zlrm7b1z4gbYuixLbIE3/hqiasnPEaVnvLAY0ATGH4F7IfZ3WHsQ32+siKr7jvzUZ1rl
+         qXBi9qT4zcVH0N+I2+jfTaTnsNB2CkXF8vciUIUXeDK8lH9IXon4xwHgch7aCShKtOI+
+         tnY3hPS+WOyVud+W3OKcGIP212aufgBjG+4I/femg5OAXG3Lh/3mzmp/I5StCKtUpPHu
+         zn2Q==
+X-Gm-Message-State: AOAM533kvEzo0nce5W+1Vvjk/bDC4I3M2nw/8grDa+XdjB/3nJB8/eWJ
+        /52GE+IN3+7AqIFFEScpNVx2Q8Np+wrxpwprhyo=
+X-Google-Smtp-Source: ABdhPJxb2IUIUXhKKURBVeICoPrhviYGICVFrEZcryYbGqEFChPtB2pihWtXvX9AOYCQUaOuAHH1W7L8fo+ujk/IU2k=
+X-Received: by 2002:a05:651c:893:: with SMTP id d19mr30641059ljq.236.1635753940302;
+ Mon, 01 Nov 2021 01:05:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-2022-jp"
-Content-Transfer-Encoding: base64
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: @nifty Webmail
+Received: by 2002:a05:6512:304b:0:0:0:0 with HTTP; Mon, 1 Nov 2021 01:05:39
+ -0700 (PDT)
+Reply-To: aisha.7d@yahoo.com
+From:   Aisha AG <rbx17058@gmail.com>
+Date:   Mon, 1 Nov 2021 00:05:39 -0800
+Message-ID: <CA+KbyydC86ZoU6svaPH_F8XsYFEfUDwRRCtAR6OV3qd_NN0kFw@mail.gmail.com>
+Subject: Hello Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-DQpEZWFyIGZyaWVuZCwNCk1heSBHT0QgYmxlc3MgeW91IGZvciBwYXlpbmcgYXR0ZW50aW9uIHRv
-IG15IG1lc3NhZ2UuDQpJIGFtIHdyaXRpbmcgdGhpcyBsZXR0ZXIgdG8geW91IGZyb20gdGhlIGhv
-c3BpdGFsIGJlY2F1c2UgSSBhbSB2ZXJ5IHNpY2sgbm93Lg0KSSBoYXZlIHNvbWUgaHVnZSBhbW91
-bnQgb2YgbW9uZXksICQ1LDAwMCwwMDAuMDAgZG9sbGFycyB0byBkb25hdGUgdG8gdGhlIGxlc3MN
-CnByaXZpbGVnZWQgYmVmb3JlIEkgZGllLiAgSSBhbSBhZnJhaWQgSSBtYXkgbm90IHN1cnZpdmUg
-dGhpcyBpbGxuZXNzLg0KTXkgaW50ZW50aW9uIGlzIHRvIHVzZSB0aGUgbW9uZXkgdG8gb3BlbiBh
-IENoYXJpdHkgRm91bmRhdGlvbiBidXQgbXkgaGVhbHRoIGlzIHZlcnkgYmFkIG5vdy4NCkZvciB0
-aGF0IHJlYXNvbiBJIHdpbGwgbmVlZCB5b3VyIGhlbHAgdG8gbWFuYWdlIHRoZSBjaGFyaXR5IGZv
-dW5kYXRpb24gb24gbXkgYmVoYWxmLg0KSSB3aWxsIGluc3RydWN0IG15IGJhbmsgdG8gdHJhbnNm
-ZXIgdGhlIG1vbmV5IHRvIHlvdXIgYWNjb3VudCB0byBzdGFydCB1cCB0aGlzIHByb2plY3Qgb24g
-bXkgYmVoYWxmLg0KSSB3aWxsIHRlbGwgeW91IG1vcmUgYWJvdXQgbXlzZWxmIGFuZCBteSBwbGFu
-cyBpZiB5b3UncmUgd2lsbGluZyB0byBoZWxwIG1lDQpNcnMuIENhdGhlcmluZSBXZW56ZWwuDQo=
+-- 
+
+Hello Dear,
+
+I came across your e-mail contact prior to a private search while in
+need of your assistance. I am Aisha Al-Qaddafi, the only biological
+Daughter of Former President of Libya Col.Muammar Al-Qaddafi.
+Am a Widow and a single Mother with three Children.
+
+I have investment funds worth Twenty Seven Million Five Hundred
+Thousand United State Dollar $27.500.000.00, and i need a trusted
+investment Manager/Partner because of my current refugee status,
+however, I am interested in you for investment project assistance in
+your country,may be from there,we can build business relationship
+in the nearest future.
+
+I am willing to negotiate an investment/business profit sharing ratio
+with you based on the future investment earning profits.
+
+If you are willing to handle this project on my behalf kindly reply
+urgently to enable me to provide you more information about the
+investment funds.
+Best Regards
+Mrs Aisha Al-Qaddafi.
