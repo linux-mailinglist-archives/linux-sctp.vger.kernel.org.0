@@ -2,57 +2,57 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 613A4441025
-	for <lists+linux-sctp@lfdr.de>; Sun, 31 Oct 2021 19:16:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 240474411B5
+	for <lists+linux-sctp@lfdr.de>; Mon,  1 Nov 2021 01:38:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbhJaSSj (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 31 Oct 2021 14:18:39 -0400
-Received: from mailgate.kemenperin.go.id ([202.47.80.142]:51760 "EHLO
-        mailgate.kemenperin.go.id" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbhJaSSh (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sun, 31 Oct 2021 14:18:37 -0400
-X-Greylist: delayed 1946 seconds by postgrey-1.27 at vger.kernel.org; Sun, 31 Oct 2021 14:18:25 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mailgate.kemenperin.go.id (Postfix) with ESMTP id 5C56C828694;
-        Mon,  1 Nov 2021 00:39:29 +0700 (WIB)
-Received: from mailgate.kemenperin.go.id ([127.0.0.1])
-        by localhost (mailgate.kemenperin.go.id [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Tuljp_J1Cdlq; Mon,  1 Nov 2021 00:39:28 +0700 (WIB)
-Received: from localhost (localhost [127.0.0.1])
-        by mailgate.kemenperin.go.id (Postfix) with ESMTP id ADDE58286A9;
-        Mon,  1 Nov 2021 00:39:19 +0700 (WIB)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mailgate.kemenperin.go.id ADDE58286A9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kemenperin.go.id;
-        s=3298A942-BBC6-11E3-B333-483736368EC2; t=1635701959;
-        bh=+tje3x5yIAM91gcZZJ8xoRjx6IuR+B3ePoXPCKu2mgI=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=I9X5S/EXkVkRluX+ZSit7NFR+OW43BqhWaImhHOVukb3qOg4mxQL0FOzHiQQ0QWtu
-         KQa7Ki4CUyShQL6tKlHQ2sju9QbGIAAqzmfnY9543e4CcsCf3fTpzVOzH7DFyJ+n2N
-         pbIsYLFs1Y2zkQa1+kK/NYR2sChScl7lzgpXIyKs=
-X-Virus-Scanned: amavisd-new at kemenperin.go.id
-Received: from mailgate.kemenperin.go.id ([127.0.0.1])
-        by localhost (mailgate.kemenperin.go.id [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id yX4BRpdxBRqw; Mon,  1 Nov 2021 00:39:19 +0700 (WIB)
-Received: from mailgate.kemenperin.go.id (mailgate.kemenperin.go.id [10.1.0.89])
-        by mailgate.kemenperin.go.id (Postfix) with ESMTP id 047EB8286A0;
-        Mon,  1 Nov 2021 00:39:10 +0700 (WIB)
-Date:   Mon, 1 Nov 2021 00:39:09 +0700 (WIB)
-From:   Manuel Franco <silitonga@kemenperin.go.id>
-Reply-To: Manuel Franco <manuelfrancospende1@gmail.com>
-Message-ID: <1813105855.326067.1635701949890.JavaMail.zimbra@kemenperin.go.id>
-Subject: 2,000,000.00 Euro
+        id S230121AbhKAAkk (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 31 Oct 2021 20:40:40 -0400
+Received: from condef-06.nifty.com ([202.248.20.71]:29050 "EHLO
+        condef-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229982AbhKAAkj (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sun, 31 Oct 2021 20:40:39 -0400
+X-Greylist: delayed 310 seconds by postgrey-1.27 at vger.kernel.org; Sun, 31 Oct 2021 20:40:39 EDT
+Received: from conwmuserg-01.nifty.com ([10.126.8.120])by condef-06.nifty.com with ESMTP id 1A10UvFl006721
+        for <linux-sctp@vger.kernel.org>; Mon, 1 Nov 2021 09:30:59 +0900
+Received: from aps7-02 ([10.126.11.34])by conwmuserg-01.nifty.com with ESMTP id 1A10Kqo3005303;
+        Mon, 1 Nov 2021 09:20:52 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conwmuserg-01.nifty.com 1A10Kqo3005303
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1635726064;
+        bh=ZWIUJwh/Fhrl7VvU+Lgv6SQ9cJ9pGr1OUCLgbmPt7RI=;
+        h=Date:From:Reply-To:To:Subject:From;
+        b=0Sl7XOj5XWlF7jW14VaUABGI0Qmsnmei69abWcU5jgJKSey/+F1W/gcqoJIIYC23R
+         S0wl9BfEgDWo9pWwa7H8XwoxugWW2NHK7QatREsTQdWmPAYN3N8QSYajGH3/p7ZYFI
+         VSCJRYlMoUu/eyWXz4cBmahPaGMm91qlbGMpMuf0Vok71uU8IYV+CB2biHmrsO+37X
+         K0TfL1mjIinbXvuKnn34NwrzhdO7jrgu0qenAxiDl90kZXH8NcGH3YW9LqwGNvUA9l
+         B9ZWtdt1Bm04VR/6Og6GKqOSXk7TQl2rm34QrjSxOOD09f6nVoaOElfiJ3IKgT3gIW
+         QVgBF118HN87A==
+X-Nifty-SrcIP: [10.126.11.34]
+Message-ID: <1263382878.55731635726052066.cthvzw05611@nifty.com>
+Date:   Mon, 1 Nov 2021 09:20:52 +0900 (JST)
+From:   Catherine Wenzel <cthvzw05611@nifty.com>
+Reply-To: catherienewenzel@nifty.com
+To:     catherinewenzel@nifty.com
+Subject:  Re: This is for My DONATION
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.1.0.89]
-Thread-Index: Rc07z4zuj7w66chiYJCRC031ZEpyeA==
-Thread-Topic: 2,000,000.00 Euro
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: base64
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: @nifty Webmail
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-
-
--- 
-You have a donation of 2,000,000.00 Euro.Get back to me now so we can proceed.
+DQpEZWFyIGZyaWVuZCwNCk1heSBHT0QgYmxlc3MgeW91IGZvciBwYXlpbmcgYXR0ZW50aW9uIHRv
+IG15IG1lc3NhZ2UuDQpJIGFtIHdyaXRpbmcgdGhpcyBsZXR0ZXIgdG8geW91IGZyb20gdGhlIGhv
+c3BpdGFsIGJlY2F1c2UgSSBhbSB2ZXJ5IHNpY2sgbm93Lg0KSSBoYXZlIHNvbWUgaHVnZSBhbW91
+bnQgb2YgbW9uZXksICQ1LDAwMCwwMDAuMDAgZG9sbGFycyB0byBkb25hdGUgdG8gdGhlIGxlc3MN
+CnByaXZpbGVnZWQgYmVmb3JlIEkgZGllLiAgSSBhbSBhZnJhaWQgSSBtYXkgbm90IHN1cnZpdmUg
+dGhpcyBpbGxuZXNzLg0KTXkgaW50ZW50aW9uIGlzIHRvIHVzZSB0aGUgbW9uZXkgdG8gb3BlbiBh
+IENoYXJpdHkgRm91bmRhdGlvbiBidXQgbXkgaGVhbHRoIGlzIHZlcnkgYmFkIG5vdy4NCkZvciB0
+aGF0IHJlYXNvbiBJIHdpbGwgbmVlZCB5b3VyIGhlbHAgdG8gbWFuYWdlIHRoZSBjaGFyaXR5IGZv
+dW5kYXRpb24gb24gbXkgYmVoYWxmLg0KSSB3aWxsIGluc3RydWN0IG15IGJhbmsgdG8gdHJhbnNm
+ZXIgdGhlIG1vbmV5IHRvIHlvdXIgYWNjb3VudCB0byBzdGFydCB1cCB0aGlzIHByb2plY3Qgb24g
+bXkgYmVoYWxmLg0KSSB3aWxsIHRlbGwgeW91IG1vcmUgYWJvdXQgbXlzZWxmIGFuZCBteSBwbGFu
+cyBpZiB5b3UncmUgd2lsbGluZyB0byBoZWxwIG1lDQpNcnMuIENhdGhlcmluZSBXZW56ZWwuDQo=
