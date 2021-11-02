@@ -2,82 +2,64 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCCAB4430E0
-	for <lists+linux-sctp@lfdr.de>; Tue,  2 Nov 2021 15:53:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B82944376C
+	for <lists+linux-sctp@lfdr.de>; Tue,  2 Nov 2021 21:36:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234237AbhKBOz7 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 2 Nov 2021 10:55:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47418 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234213AbhKBOz4 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 2 Nov 2021 10:55:56 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38287C061767
-        for <linux-sctp@vger.kernel.org>; Tue,  2 Nov 2021 07:53:21 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id y3so42681801ybf.2
-        for <linux-sctp@vger.kernel.org>; Tue, 02 Nov 2021 07:53:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=HZTVyCpaCESsoTkc4UmpJ+yw6VlZkf4tQGGwsU/EPNk=;
-        b=GMS5rSFeNsjiS5CUvoorul24bZ3fUleS1fWEFaLfPgs6unZa+o9GhwOgKC9U0Miyva
-         /beHcgVyP0ckqwdKOD1Uo0+kwK4XTA96xrwlIrj6ExK0V+TS/tzpS6+vzKf679LRuzlo
-         r7Co99BGU5LlkaKKMpb4DON7K62kKIRLbsR+bXpKFZrqxYQg6pMikZB00dtEm5b+71JM
-         e2fNTm1OuLaLZKCGpt7moznQU4e2IGZJQmtucaSQb/y85t6ufjI/LMtJHl7HAAPTE5Vg
-         jhCyCoI4uzznAcAXycfSeoEkTmSeTe92Q74pW80G6iLSte0ABieyP9IN3of2VsZdpt04
-         5AWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=HZTVyCpaCESsoTkc4UmpJ+yw6VlZkf4tQGGwsU/EPNk=;
-        b=Jd3WtDBiM+iR1wKrzP345idu1VDdoNAVvevxgKRduH8pdJqcYESbDG53mBLBNx8hEY
-         re2YbM8vLJBX7hAQBZhVGrtW2fzH790ZBCLn3z+yOMFtmYhw5v+T4VgpP7gk+qTB9tVl
-         /B5vtyr0MJGPpNrkgFWsCXTLdDcR6hQaGzF5awaqp2lp1NjBOmuI0ON/fFutqvKpwqFb
-         s1ylkklnKRNNNI+OmzD+BSN4PokO7ibCIFGoeVMAqn5gEVofCjMAo+mtnSGlUgrS5FFh
-         lYBr1lB225ihl+R1s1e+eiPWObn40gSHaDTne+6D1+FevW8IB3O4mqW9k+kwVWZuXse1
-         51zg==
-X-Gm-Message-State: AOAM5318sf4Ho4Md5QrAKUfJ7jjq5ZF7q9C/KQ6jJBafusvt4ladCKul
-        1G1OQy8xIHFQ1nlaQcaN8ROnVJo/n70+zMombU4=
-X-Google-Smtp-Source: ABdhPJy2ZZTf34NgC+fLRNvFUuJRWIfYBWMPhi6yb50Q0CzG/fIYPELvMaYh2tGtLKYa7k8fiLN5QxusvTiQOR+chDs=
-X-Received: by 2002:a25:2d1:: with SMTP id 200mr23644881ybc.528.1635864800337;
- Tue, 02 Nov 2021 07:53:20 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:7000:7648:0:0:0:0 with HTTP; Tue, 2 Nov 2021 07:53:19
- -0700 (PDT)
-Reply-To: adrar2570361@gmail.com
-From:   "Adeline Rodrigues." <mrpaulmadiiim01@gmail.com>
-Date:   Tue, 2 Nov 2021 14:53:19 +0000
-Message-ID: <CAEDi4tqJ6zwT+W-rvnDYvXuaj+o70P-FZmTpVUDjq4Z40Lqzug@mail.gmail.com>
-Subject: please help me with good faith and trust
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S231433AbhKBUjT (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 2 Nov 2021 16:39:19 -0400
+Received: from mail.ispras.ru ([83.149.199.84]:51464 "EHLO mail.ispras.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229764AbhKBUjT (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Tue, 2 Nov 2021 16:39:19 -0400
+X-Greylist: delayed 563 seconds by postgrey-1.27 at vger.kernel.org; Tue, 02 Nov 2021 16:39:18 EDT
+Received: from hednb3.Dlink (unknown [109.252.87.51])
+        by mail.ispras.ru (Postfix) with ESMTPSA id C175E40D403D;
+        Tue,  2 Nov 2021 20:27:16 +0000 (UTC)
+From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
+To:     Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Xin Long <lucien.xin@gmail.com>,
+        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>
+Subject: [PATCH] sctp: avoid NULL pointer dereference in sctp_sf_violation
+Date:   Tue,  2 Nov 2021 23:27:04 +0300
+Message-Id: <1635884824-28790-1-git-send-email-khoroshilov@ispras.ru>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
+Some callers (e.g. sctp_sf_violation_chunk) passes NULL to
+asoc argument of sctp_sf_violation. So, it should check it
+before calling sctp_vtag_verify().
+
+Probably it could be exploited by a malicious SCTP packet
+to cause NULL pointer dereference.
+
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
+
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+Fixes: aa0f697e4528 ("sctp: add vtag check in sctp_sf_violation")
+---
+ net/sctp/sm_statefuns.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
+index fb3da4d8f4a3..77f3cd6c516e 100644
+--- a/net/sctp/sm_statefuns.c
++++ b/net/sctp/sm_statefuns.c
+@@ -4669,7 +4669,7 @@ enum sctp_disposition sctp_sf_violation(struct net *net,
+ {
+ 	struct sctp_chunk *chunk = arg;
+ 
+-	if (!sctp_vtag_verify(chunk, asoc))
++	if (asoc && !sctp_vtag_verify(chunk, asoc))
+ 		return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
+ 
+ 	/* Make sure that the chunk has a valid length. */
 -- 
-Good Day Dearest.
+2.7.4
 
-My name is Adeline Rodrigues I am 35 year's old, the only daughter of
-late MR. RODRIGUES PASCAL JOSE from Burkina Faso, I am contacting you
-to help me relocate to your country to continue my future in your
-country, because before my father died he gave me a deposit slip
-document of ($7.7 Million United State Dollars) and let me understand
-that it was because of his position in government that his government
-associates planed and poisoned him on a business trip with them to
-France and he advised me to look for a faithful and reliable foreigner
-who will help me to transfer this money to his country and help me to
-relocate over there to continue my future.
-
-I hope you will help me with good faith and trust I have in you, after
-you have secured the money and settle staying in your country
-peacefully, I will give you 40% of the money for your good and kind
-assistance to me.
-
-I waiting on your reply
-
-Please reply me here email address: adrar2570361@gmail.com
-
-Regards,
-Adeline Rodrigues.
