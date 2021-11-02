@@ -2,140 +2,78 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB02E442D72
-	for <lists+linux-sctp@lfdr.de>; Tue,  2 Nov 2021 13:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 906B4442DCD
+	for <lists+linux-sctp@lfdr.de>; Tue,  2 Nov 2021 13:25:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbhKBMFh (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 2 Nov 2021 08:05:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
+        id S230333AbhKBM1f (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 2 Nov 2021 08:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230336AbhKBMFf (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 2 Nov 2021 08:05:35 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6559BC061714;
-        Tue,  2 Nov 2021 05:03:00 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id n2so18598971qta.2;
-        Tue, 02 Nov 2021 05:03:00 -0700 (PDT)
+        with ESMTP id S230326AbhKBM1e (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 2 Nov 2021 08:27:34 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6005C061714
+        for <linux-sctp@vger.kernel.org>; Tue,  2 Nov 2021 05:24:59 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id r12so75608467edt.6
+        for <linux-sctp@vger.kernel.org>; Tue, 02 Nov 2021 05:24:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=T44CZRmnaWPBQSGS+Pwv2sHWRWGvq0ZanEywQcWcUM0=;
-        b=at9TbhefYUpM4GGOGAyTWcijQCrS4lSzG2nN33x0Qn5FRggbmj/zrMy+Jl68K3YMTI
-         ir6ZLzIlHqXFUqfEIomsHdxrwzZLw8q647V+aMUaIQV4Vl8JtE7SPCoBu3JruppfB3Zq
-         S4AYUd55nIaBegaZJ2NsivfAjYXmzVm9X0LCER23gijGr+HkufRD5hQbvSvGFeX3RLOt
-         D433oEqnAvio9OdaglFLibrCPZttVaikl1Dhlo329+jL4RupeOLUHLwHD8Qn3kQ3Fxpl
-         jtN8gUQst9JaDDp052WUScMXt7v9liNrFaAmpPknbPhCxBIgIsLuhWVgs5zWZjDYWv+G
-         MlFg==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=0gER9BiuAwISREJ9nPPefaIJ39znbJTWTQTCKXPZoWw=;
+        b=NT2tnaO/weadKKN5NGLpnSfpzmmqij5TTRGdsUMoigBv7GQqHpWLqoP1eAjfu+tEEN
+         IFgeGEmZuZ3s1k9ymnXna+LOZBzLRklY/B54ThTBTXqmbhjEWY5J1ePILi/m4TsybpF4
+         2IByEGMflCrhwnwytNwx7vIiBsz5laAzM+U6WtqJHBAjRDHyrtfPFQHwBAhnrjAva4Rj
+         X/BfU7NC8EAGolgEVs2WJ5zUY33C86P9S657svBBsq2Cd3OdAXP0RaxRgw18RSTiG1MS
+         Epjt27Z/cYST68eJcu66F6GshVqsoFM0KoogQqInwlIAfnqeZmcduIaFzoMu5+x6Pa1u
+         6Tww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=T44CZRmnaWPBQSGS+Pwv2sHWRWGvq0ZanEywQcWcUM0=;
-        b=TZhV/ncdsZ3+Cr3y6rf/rWniGmcdTvMbO9RIMVDrpXqfNNwf3YQ+qAjLhmX4tw/yOt
-         B7NKNoPupSTtuplS/guuIp1h2dsMbmxPXD7l5pjJZf2hCfctuGS+xnqKtu2hjJ1KmjEm
-         H1/gTWQLQwDca+jpgHR/vOM04yLzYv0IWDSjQdcn6UsUmz/jGbQz/bCWFmJ+nljYYDrs
-         1EMtVwpPbISkqtWt0wumALTr7uNliHuXWC+UcriQES6Z/O4qlTEjfJE3Rrd1BHci69Ew
-         0K/ZznPOROV5uC8elIDfmXhx4MuM2xUG33nlRACiIgbpXN1sVDQaIvcpO4Tra+D4BU1R
-         YL3Q==
-X-Gm-Message-State: AOAM532Sp5dO5y5bgbFMMuW/h7o5MYeDIUkcruInhlBqFzzYBHaRmq3A
-        g5YzyOG1sfohax1lSrkbq/Q05zqn/SRbvcAC
-X-Google-Smtp-Source: ABdhPJwqrls12Pwd0Cqxm8B2xKOByRaV2WV+gBcoUMsKVWZ4GAmy88q717EFGNMgE+Krq9HtxOZmyQ==
-X-Received: by 2002:ac8:5916:: with SMTP id 22mr11478576qty.288.1635854579011;
-        Tue, 02 Nov 2021 05:02:59 -0700 (PDT)
-Received: from wsfd-netdev15.ntdv.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id w9sm12498988qko.19.2021.11.02.05.02.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Nov 2021 05:02:58 -0700 (PDT)
-From:   Xin Long <lucien.xin@gmail.com>
-To:     network dev <netdev@vger.kernel.org>, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-sctp@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Richard Haines <richard_c_haines@btinternet.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>
-Subject: [PATCHv2 net 4/4] security: implement sctp_assoc_established hook in selinux
-Date:   Tue,  2 Nov 2021 08:02:50 -0400
-Message-Id: <cdca8eaca8a0ec5fe4aa58412a6096bb08c3c9bc.1635854268.git.lucien.xin@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <cover.1635854268.git.lucien.xin@gmail.com>
-References: <cover.1635854268.git.lucien.xin@gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=0gER9BiuAwISREJ9nPPefaIJ39znbJTWTQTCKXPZoWw=;
+        b=UN+4tQp9t42jDmJgTk8muitWvKNOTNtho15mz2nHJvTqJwaofJm7wm6i6K+Q9zqSrU
+         /BuNAucvQSGEXC+PKNdeIMHHXfzM+Ux4SOZGCzB4qihLBeU58/Zvgf/w82iP6Yisomzj
+         ZZ367Rcl/jlQ4q6d1laaUVbVJ3sOGU22UhYUBe4MWXI5Hz8oa/VWy6VxBk/hv0U9qJn+
+         C/DF4EHBXHfdQnE4CFy25d6iU/bVHWD3H8sGc4prbLlDt/LdYM+U3GcYkZ0jJhWNY5Xl
+         NPByTlI9CuZG6TOgrpS/Uwug/SH+UCSXtGL/wcToBs4b3R99l5wDNz27ThsjkA8BbECD
+         CJUg==
+X-Gm-Message-State: AOAM5306v52tqEhLiV0i+PgxegJrogGd43PvH8m0oXHVlM1G90uVD5f4
+        oUnqcLDs1/GgdjtSALgfJr5kpfKFDC/l2ou75nA=
+X-Google-Smtp-Source: ABdhPJwUy4CMBN3HKwUWI1lK+gmvahOK1J2GWdmssqAXQkNPO3O/R9jCJvmae/INp2t7/pJOE2XmCI1RpocVSoZIZ10=
+X-Received: by 2002:a17:907:72d2:: with SMTP id du18mr20150310ejc.570.1635855898062;
+ Tue, 02 Nov 2021 05:24:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a55:8017:0:b029:e9:9106:8845 with HTTP; Tue, 2 Nov 2021
+ 05:24:57 -0700 (PDT)
+Reply-To: mrsmariaku24@outlook.com
+From:   service center <chiomd545@gmail.com>
+Date:   Tue, 2 Nov 2021 05:24:57 -0700
+Message-ID: <CACSwTzxzorXuLagGnoqNaSZteZxYhHE92=ybj++3gX9J_pNC4g@mail.gmail.com>
+Subject: =?UTF-8?Q?antworte_jetzt_f=C3=BCr_das_geld?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Different from selinux_inet_conn_established(), it also gives the
-secid to asoc->peer_secid in selinux_sctp_assoc_established(),
-as one UDP-type socket may have more than one asocs.
+Guten Tag,
 
-Note that peer_secid in asoc will save the peer secid for this
-asoc connection, and peer_sid in sksec will just keep the peer
-secid for the latest connection. So the right use should be do
-peeloff for UDP-type socket if there will be multiple asocs in
-one socket, so that the peeloff socket has the right label for
-its asoc.
 
-v1->v2:
-  - call selinux_inet_conn_established() to reduce some code
-    duplication in selinux_sctp_assoc_established(), as Ondrej
-    suggested.
-  - when doing peeloff, it calls sock_create() where it actually
-    gets secid for socket from socket_sockcreate_sid(). So reuse
-    SECSID_WILD to ensure the peeloff socket keeps using that
-    secid after calling selinux_sctp_sk_clone() for client side.
+Bitte, sind Sie bereit, Ihren Fonds $ 4.500.000,00 USD zu fordern?
 
-Fixes: 72e89f50084c ("security: Add support for SCTP security hooks")
-Reported-by: Prashanth Prahlad <pprahlad@redhat.com>
-Reviewed-by: Richard Haines <richard_c_haines@btinternet.com>
-Tested-by: Richard Haines <richard_c_haines@btinternet.com>
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
----
- security/selinux/hooks.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index a9977a2ae8ac..341cd5dccbf5 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -5519,7 +5519,8 @@ static void selinux_sctp_sk_clone(struct sctp_association *asoc, struct sock *sk
- 	if (!selinux_policycap_extsockclass())
- 		return selinux_sk_clone_security(sk, newsk);
- 
--	newsksec->sid = asoc->secid;
-+	if (asoc->secid != SECSID_WILD)
-+		newsksec->sid = asoc->secid;
- 	newsksec->peer_sid = asoc->peer_secid;
- 	newsksec->sclass = sksec->sclass;
- 	selinux_netlbl_sctp_sk_clone(sk, newsk);
-@@ -5575,6 +5576,16 @@ static void selinux_inet_conn_established(struct sock *sk, struct sk_buff *skb)
- 	selinux_skb_peerlbl_sid(skb, family, &sksec->peer_sid);
- }
- 
-+static void selinux_sctp_assoc_established(struct sctp_association *asoc,
-+					   struct sk_buff *skb)
-+{
-+	struct sk_security_struct *sksec = asoc->base.sk->sk_security;
-+
-+	selinux_inet_conn_established(asoc->base.sk, skb);
-+	asoc->peer_secid = sksec->peer_sid;
-+	asoc->secid = SECSID_WILD;
-+}
-+
- static int selinux_secmark_relabel_packet(u32 sid)
- {
- 	const struct task_security_struct *__tsec;
-@@ -7290,6 +7301,7 @@ static struct security_hook_list selinux_hooks[] __lsm_ro_after_init = {
- 	LSM_HOOK_INIT(sctp_assoc_request, selinux_sctp_assoc_request),
- 	LSM_HOOK_INIT(sctp_sk_clone, selinux_sctp_sk_clone),
- 	LSM_HOOK_INIT(sctp_bind_connect, selinux_sctp_bind_connect),
-+	LSM_HOOK_INIT(sctp_assoc_established, selinux_sctp_assoc_established),
- 	LSM_HOOK_INIT(inet_conn_request, selinux_inet_conn_request),
- 	LSM_HOOK_INIT(inet_csk_clone, selinux_inet_csk_clone),
- 	LSM_HOOK_INIT(inet_conn_established, selinux_inet_conn_established),
--- 
-2.27.0
+Kontaktieren Sie jetzt mrsmariaku24@outlook.com
 
+
+Geben Sie Ihre Daten unten ein.
+
+Ihr vollst=C3=A4ndiger Name:
+Alter:
+Adresse:
+Telefonnummer:
+
+
+Gezeichnet
+Frau Kathrine
