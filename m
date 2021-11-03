@@ -2,114 +2,77 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F204441CC
-	for <lists+linux-sctp@lfdr.de>; Wed,  3 Nov 2021 13:44:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC5474441E9
+	for <lists+linux-sctp@lfdr.de>; Wed,  3 Nov 2021 13:50:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232012AbhKCMqf (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 3 Nov 2021 08:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34158 "EHLO
+        id S230299AbhKCMxa (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 3 Nov 2021 08:53:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231961AbhKCMqf (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 3 Nov 2021 08:46:35 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA446C061714;
-        Wed,  3 Nov 2021 05:43:58 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id o14so3329001wra.12;
-        Wed, 03 Nov 2021 05:43:58 -0700 (PDT)
+        with ESMTP id S231267AbhKCMx3 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 3 Nov 2021 08:53:29 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E454AC061714
+        for <linux-sctp@vger.kernel.org>; Wed,  3 Nov 2021 05:50:52 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id g10so8885549edj.1
+        for <linux-sctp@vger.kernel.org>; Wed, 03 Nov 2021 05:50:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=90K7h1vadNvDApkPIeu9bZ3f4TXBlF4ZUifSLTiW4KY=;
-        b=Y3aeSAxzKr+wlBlyxEumnYVVH4/dPwRP+VIztBGO1BA9KgA4qe+lXR1hiibl24iV4R
-         9BULyfeEGsH+b/+IBjKJjcwyXItTPKd4D4B14HprUNxI4115KjzueXWLrvRUJf8XlXOK
-         ai/lYIxvgh/tdtyS/1Eq95kiZ6WAhvACitupAMWtw2y0JJTvxtslflq63HAiJogCq9Kc
-         3bQqRt2E84XYTLssYtI/+0idicVw5CxZXKCFxRfAezWWTSoKh0Us2oFzMBXhIhY2nElF
-         EvCDwdh40+0+pZhi9xb+0ik6I/ZdAmSH8rtYTedrvPY/IteRGThC1vFw7rUsHS4QV4AE
-         XQ4Q==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Pmx5dMS/sfvj+Kx+WtUsbkLY0X876q84Mr0oV/bmMHs=;
+        b=p0jszQb7wXhYA4aQ6qKjhNrVHrlOfcnwuyB9Lu6RiLa3GaW/J50zCApmG8vtSYxZKA
+         vxUXVupwmPp3twsmfGcmp2eJppnw4mYiwYX6QFU0Nl4XHOm0Cx+HXIl/O8UISJmLcDdl
+         IhBWXgp1gL17yno/QNtGyhZnu6Ff/yTpXx+hLaeknokjxpWnix5w6qc6e/ogYo7GdTC9
+         IhifMqgeajitAhyDKkSXrnk/v7WCvnpE12EUk45tPlVYixHxtdr172u4bT4T1h+rPcn0
+         h7OuahG2Le0SancRqwIDEEoXfjaM+bunMuMVNvtHHwFw0SJ+9eWjPSE9rsqojjhJNYXP
+         4JLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=90K7h1vadNvDApkPIeu9bZ3f4TXBlF4ZUifSLTiW4KY=;
-        b=nINGs4bpFXfyPT3lfFIw65UJrdWbXomVnqXAUXh9djJzbglitfP+iVs19s77d77Jpx
-         UjbOWuqK6E475sCbL4HOOOPRBgzcC0RPP2uDwCpBoBY5dxn5INckH/GFNv/PC7iQKJER
-         x8bs9WQ1G+vQrGEgG2m4cgMFvindEJJDeYB4EC4jZlwAE2PneEpzR909+BJ2RcQqtH7y
-         66q+c34G+LjnhquCtlXzmTFE8lFrYdlYSF9VOApoLpYMZio4kh7pOvOyXA3LW7wCQl1/
-         jTcM6dRqOdWeM7w/AWctQecJ4G6KFi0hHBRkvx2F8GJOsnwr//m+srYwzC4ogHUoOk+h
-         j/pw==
-X-Gm-Message-State: AOAM531hAK1J58QaNiyubD+j2z8dod3bnfzTXL7AVOtdxrL3Ij86J2rM
-        754Wi+BOQaGC1WYKkgQgKr79FcP6gfZ+BNABLpE=
-X-Google-Smtp-Source: ABdhPJyltS33f36MXJQ02mrMxSEGkedcKr0g9cvUzlZh2XpWAUO+CWqfV4YaBIm4SDCW4w7AWk0Wpwf1MCmM6dN0vhI=
-X-Received: by 2002:a5d:47aa:: with SMTP id 10mr24412405wrb.50.1635943437431;
- Wed, 03 Nov 2021 05:43:57 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=Pmx5dMS/sfvj+Kx+WtUsbkLY0X876q84Mr0oV/bmMHs=;
+        b=qPcZ9xrm7yfvJKIrE5fFZ1YpBODCgqquUH3ct+WSzSYb5Rl29HfJVHDYqovHGn2epP
+         7QRfWm/VeIFUPOv4Ou3q48s07Gh68s40DAduJl9OAlsIv2kYUh2FkeYO+DAQL9DjtM5B
+         +WtIPt7Pi9gJr9pUd9ccsQIDf5JEmGX2uzD0Q1lu8J6lsYBTYFU41UmvjuFO2SP4TuQP
+         skJht4pGACR0XDnxVZbVwGbqvuegOlIYVUaw6vUIfXvEnOmDZLc8r1aHKCrvVD9Ya9g4
+         77PBE89keK4w5Qylb7KDPdbRdz0jm3rYkz9wEg2/Iw1u6VsdqgOdD0k3TSQomMBU+WfN
+         20NA==
+X-Gm-Message-State: AOAM533OTDiBXyFMA+mntWQK9paeUIlyfpT6sMmkh5BGBNUeDF3b6tAs
+        Y5gpZsnr+0tMLAjy85ZwR+n8R7HRZp3zUbw2n68=
+X-Google-Smtp-Source: ABdhPJyNQ/OEDYtl3jnHckXCBL4W5QvzN6Y2/STywnzfKXsPgBj0tfpGQA9lMRtJvBqe4H3YglwBGMBJWk0GwYxgeAk=
+X-Received: by 2002:a17:906:2a5a:: with SMTP id k26mr10159144eje.135.1635943851131;
+ Wed, 03 Nov 2021 05:50:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <1635884824-28790-1-git-send-email-khoroshilov@ispras.ru>
-In-Reply-To: <1635884824-28790-1-git-send-email-khoroshilov@ispras.ru>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Wed, 3 Nov 2021 08:43:45 -0400
-Message-ID: <CADvbK_fTmu4MWdwk5uTd_FEnny=_=OD=iqrq-3McQ5mgw1JnKg@mail.gmail.com>
-Subject: Re: [PATCH] sctp: avoid NULL pointer dereference in sctp_sf_violation
-To:     Alexey Khoroshilov <khoroshilov@ispras.ru>
-Cc:     Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        network dev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, ldv-project@linuxtesting.org
+Received: by 2002:a17:906:370b:0:0:0:0 with HTTP; Wed, 3 Nov 2021 05:50:50
+ -0700 (PDT)
+Reply-To: catherienewenzel@nifty.com
+From:   Catherine Wenzel <ministere.soutien@gmail.com>
+Date:   Wed, 3 Nov 2021 13:50:50 +0100
+Message-ID: <CAMTz8rQftVKCFE-pEK4uZQX_uuEsUy7rEynjGpTLi6OQHnb18g@mail.gmail.com>
+Subject: =?UTF-8?B?LS0gUmU6IE1laW5lIGJlc3RlbiBHcsO8w59l?=
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Nov 2, 2021 at 4:27 PM Alexey Khoroshilov <khoroshilov@ispras.ru> wrote:
->
-> Some callers (e.g. sctp_sf_violation_chunk) passes NULL to
-> asoc argument of sctp_sf_violation. So, it should check it
-> before calling sctp_vtag_verify().
->
-> Probably it could be exploited by a malicious SCTP packet
-> to cause NULL pointer dereference.
-I don't think asoc can be NULL in here, did you see any call trace
-caused by it?
-
-If this was found by a tool, please remove the unnecessary call from
-sctp_sf_violation_chunk() instead:
-
-@@ -4893,9 +4893,6 @@ static enum sctp_disposition sctp_sf_violation_chunk(
- {
-        static const char err_str[] = "The following chunk violates protocol:";
-
--       if (!asoc)
--               return sctp_sf_violation(net, ep, asoc, type, arg, commands);
--
-
-Thanks.
-
->
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->
-> Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
-> Fixes: aa0f697e4528 ("sctp: add vtag check in sctp_sf_violation")
-> ---
->  net/sctp/sm_statefuns.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
-> index fb3da4d8f4a3..77f3cd6c516e 100644
-> --- a/net/sctp/sm_statefuns.c
-> +++ b/net/sctp/sm_statefuns.c
-> @@ -4669,7 +4669,7 @@ enum sctp_disposition sctp_sf_violation(struct net *net,
->  {
->         struct sctp_chunk *chunk = arg;
->
-> -       if (!sctp_vtag_verify(chunk, asoc))
-> +       if (asoc && !sctp_vtag_verify(chunk, asoc))
->                 return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
->
->         /* Make sure that the chunk has a valid length. */
-> --
-> 2.7.4
->
+Lieber Freund,
+M=C3=B6ge GOTT Sie segnen, dass Sie auf meine Botschaft achten.
+Ich schreibe Ihnen diesen Brief aus dem Krankenhaus, weil ich jetzt
+sehr krank bin.
+Ich habe eine riesige Menge Geld, 5.000.000,00 Dollar, um es an die
+Weniger zu spenden
+privilegiert, bevor ich sterbe. Ich habe Angst, dass ich diese
+Krankheit nicht =C3=BCberleben k=C3=B6nnte.
+Meine Absicht ist es, mit dem Geld eine Wohlt=C3=A4tigkeitsstiftung zu
+gr=C3=BCnden, aber mein Gesundheitszustand ist jetzt sehr schlecht.
+Aus diesem Grund ben=C3=B6tige ich Ihre Hilfe, um die
+Wohlt=C3=A4tigkeitsstiftung in meinem Namen zu verwalten.
+Ich werde meine Bank anweisen, das Geld auf Ihr Konto zu =C3=BCberweisen,
+um dieses Projekt in meinem Namen zu starten.
+Ich erz=C3=A4hle dir mehr =C3=BCber mich und meine Pl=C3=A4ne, wenn du bere=
+it bist
+mir zu helfen
+Frau Catherine Wenzel.
