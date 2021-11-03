@@ -2,64 +2,79 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B82944376C
-	for <lists+linux-sctp@lfdr.de>; Tue,  2 Nov 2021 21:36:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1339E444070
+	for <lists+linux-sctp@lfdr.de>; Wed,  3 Nov 2021 12:20:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbhKBUjT (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 2 Nov 2021 16:39:19 -0400
-Received: from mail.ispras.ru ([83.149.199.84]:51464 "EHLO mail.ispras.ru"
+        id S231539AbhKCLWp (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 3 Nov 2021 07:22:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45554 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229764AbhKBUjT (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
-        Tue, 2 Nov 2021 16:39:19 -0400
-X-Greylist: delayed 563 seconds by postgrey-1.27 at vger.kernel.org; Tue, 02 Nov 2021 16:39:18 EDT
-Received: from hednb3.Dlink (unknown [109.252.87.51])
-        by mail.ispras.ru (Postfix) with ESMTPSA id C175E40D403D;
-        Tue,  2 Nov 2021 20:27:16 +0000 (UTC)
-From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
-To:     Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Xin Long <lucien.xin@gmail.com>,
-        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>
-Subject: [PATCH] sctp: avoid NULL pointer dereference in sctp_sf_violation
-Date:   Tue,  2 Nov 2021 23:27:04 +0300
-Message-Id: <1635884824-28790-1-git-send-email-khoroshilov@ispras.ru>
-X-Mailer: git-send-email 2.7.4
+        id S231405AbhKCLWp (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Wed, 3 Nov 2021 07:22:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 150E2610FD;
+        Wed,  3 Nov 2021 11:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635938409;
+        bh=RD8qpeEQNqs1IHHBUt5tXBWknLg0tITMb7Ekd/jXwF4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=PIK4Y7+M8VJq+RYSCNOoCdFXf/v9STgJP/8ieN/kcaGszhoTpw0Fo1KnRt38E+6zc
+         QXii2cBiK0gM1znaS6qctsiUV3duuiNgVAmn47/Mo0P4akaJFz4UgnbQUU9QqoSVgV
+         /Rref0LRPRR4Yq9KcgfB+S3anWdA/sIUwkmgGuEfo7tszLZie1A0z52L9ALQymBNRQ
+         KRRhncJuQQ5qg5lnv9hRESN8parhwG+ARbn8iOqvoIyR9W/g3ov90sdpMghmwQX9ys
+         anRbltOFUwcKksJmWm/ndDnehUrEtjktY3Z2nQKjVB96qtQ65iz/hgP1mB+SQwcCtt
+         VzgIICS5MZ5/w==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 0816F609D9;
+        Wed,  3 Nov 2021 11:20:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCHv2 net 0/4] security: fixups for the security hooks in sctp
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163593840902.17756.9280314114933444317.git-patchwork-notify@kernel.org>
+Date:   Wed, 03 Nov 2021 11:20:09 +0000
+References: <cover.1635854268.git.lucien.xin@gmail.com>
+In-Reply-To: <cover.1635854268.git.lucien.xin@gmail.com>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     netdev@vger.kernel.org, selinux@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-sctp@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org, marcelo.leitner@gmail.com,
+        jmorris@namei.org, paul@paul-moore.com,
+        richard_c_haines@btinternet.com, omosnace@redhat.com
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Some callers (e.g. sctp_sf_violation_chunk) passes NULL to
-asoc argument of sctp_sf_violation. So, it should check it
-before calling sctp_vtag_verify().
+Hello:
 
-Probably it could be exploited by a malicious SCTP packet
-to cause NULL pointer dereference.
+This series was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+On Tue,  2 Nov 2021 08:02:46 -0400 you wrote:
+> There are a couple of problems in the currect security hooks in sctp:
+> 
+> 1. The hooks incorrectly treat sctp_endpoint in SCTP as request_sock in
+>    TCP, while it's in fact no more than an extension of the sock, and
+>    represents the local host. It is created when sock is created, not
+>    when a conn request comes. sctp_association is actually the correct
+>    one to represent the connection, and created when a conn request
+>    arrives.
+> 
+> [...]
 
-Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
-Fixes: aa0f697e4528 ("sctp: add vtag check in sctp_sf_violation")
----
- net/sctp/sm_statefuns.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Here is the summary with links:
+  - [PATCHv2,net,1/4] security: pass asoc to sctp_assoc_request and sctp_sk_clone
+    https://git.kernel.org/netdev/net/c/c081d53f97a1
+  - [PATCHv2,net,2/4] security: call security_sctp_assoc_request in sctp_sf_do_5_1D_ce
+    https://git.kernel.org/netdev/net/c/e215dab1c490
+  - [PATCHv2,net,3/4] security: add sctp_assoc_established hook
+    https://git.kernel.org/netdev/net/c/7c2ef0240e6a
+  - [PATCHv2,net,4/4] security: implement sctp_assoc_established hook in selinux
+    https://git.kernel.org/netdev/net/c/e7310c94024c
 
-diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
-index fb3da4d8f4a3..77f3cd6c516e 100644
---- a/net/sctp/sm_statefuns.c
-+++ b/net/sctp/sm_statefuns.c
-@@ -4669,7 +4669,7 @@ enum sctp_disposition sctp_sf_violation(struct net *net,
- {
- 	struct sctp_chunk *chunk = arg;
- 
--	if (!sctp_vtag_verify(chunk, asoc))
-+	if (asoc && !sctp_vtag_verify(chunk, asoc))
- 		return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
- 
- 	/* Make sure that the chunk has a valid length. */
+You are awesome, thank you!
 -- 
-2.7.4
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
