@@ -2,49 +2,47 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CDBF44519F
-	for <lists+linux-sctp@lfdr.de>; Thu,  4 Nov 2021 11:40:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C52C4451CA
+	for <lists+linux-sctp@lfdr.de>; Thu,  4 Nov 2021 11:56:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbhKDKnT (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 4 Nov 2021 06:43:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:54336 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231136AbhKDKnS (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 4 Nov 2021 06:43:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1636022440;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=d85cq3e+gY+RFYzObrRjB95nMqlpdlXGq+udehhKLTU=;
-        b=dGbzh3W1BOBgDbbNR5nRZLpVIBN7jvwHEAEmgpVXEleom+1dV7JywShDm9w65hrKw6OAOW
-        dJPXrwUEJ0EaqO4ixU2eBeGyfV3PxxQYexsLc0gWeLs4dOu9DpCUyTCnMGdMsu/vDP/z7d
-        Lt7ZfZcxauVE4a4lj1rooACvfI01hMM=
-Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
- [209.85.219.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-309-rw3IoN5qMeafwI3_nR1k3A-1; Thu, 04 Nov 2021 06:40:39 -0400
-X-MC-Unique: rw3IoN5qMeafwI3_nR1k3A-1
-Received: by mail-yb1-f199.google.com with SMTP id q7-20020a25b007000000b005c1d1377abdso7981932ybf.23
-        for <linux-sctp@vger.kernel.org>; Thu, 04 Nov 2021 03:40:39 -0700 (PDT)
+        id S230401AbhKDK7J (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 4 Nov 2021 06:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229809AbhKDK7I (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 4 Nov 2021 06:59:08 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B2EC061714;
+        Thu,  4 Nov 2021 03:56:30 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 67-20020a1c1946000000b0030d4c90fa87so3941817wmz.2;
+        Thu, 04 Nov 2021 03:56:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wWWXhfRjzRysjE0NOvlFjKePJBuoPIi4Ry+b748tzNs=;
+        b=JBxTmWbY70ZlQw09JgizVDUINgs67bQfkDVVClj4C6KjRfii0FJMzNEd7yRcm6EKlf
+         /q0HG1mTt0mNvjq60isCXGrrclPlOM5OK1DE3gFl3fj7h5C0dQLvA21a10/lQ7GcRiA/
+         W10TOLn7RLRKaUvhoE08zNomINd4nunVUPyHBLGxHAs23mguo4hsXBeS96iBVdxn+moA
+         B8QRoTsASW1voZxfGc6ozHOd4xBShjDhdd4PWMlnnWwyCTKqZAOnW7KQ6gsr06J6f46d
+         VbdNJBbjhAgAvViBVEgTqUxtvotX7CKOpgUZmdWzJW2vaEFFNyrDF3NEbehMHtWtOPJJ
+         5jkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=d85cq3e+gY+RFYzObrRjB95nMqlpdlXGq+udehhKLTU=;
-        b=RDQlqA27C0DlO79Srp6mpTzEsK4cj1GPrIcWb15DZRcmG8s51c0R3kgIHZWvwHiXEC
-         q4UrxrXdqNjlS31N//lRo3xRvgjHF1fndKVzKE1U96bohgl6yAwB4rET3Vgfe3LJdJe8
-         w/jB/81Lf7w2JvNaB07veny3SOORuk/wTvEOD/38xxsJhKnTMpGD584Zj3tBBen5TyXW
-         /jtBT9dATLIn2Pjg6ftWB4G0Z6iJ8yUBATwnuj5hB2m/Z/W4YmVgPcO6b9K97Ecr70hY
-         EHU1O1Ipb/5tyfFELXQ9Ek0+McoVrLKJ9JuMhK41bPvWt2GGkoBdQLPQ8R30YolS8LIw
-         AVSw==
-X-Gm-Message-State: AOAM532sMn6MmsJr+zHc7/dnvGWQBW9lY/cU9MPWyIgzh2poxOfP6uUn
-        zlmf0TQROXDzOHE+TnlZXeldYGzSkmAHk074yO2OWJhxNbBmM1zAipHoL64vRT+uiJkFXSrfTp4
-        s1BuQdt32E/Dp7iXEOvKvQaXQAeBN63zAIyJ7mg==
-X-Received: by 2002:a25:8205:: with SMTP id q5mr41501157ybk.256.1636022439062;
-        Thu, 04 Nov 2021 03:40:39 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxe8DH5G7BKS+RoTciQRrRmoZzMj+563HC+blRzICyrBk8D02cJvZaSvtQyhkfRBx0tupfTWVGs60moeAUe/Hw=
-X-Received: by 2002:a25:8205:: with SMTP id q5mr41500743ybk.256.1636022433959;
- Thu, 04 Nov 2021 03:40:33 -0700 (PDT)
+        bh=wWWXhfRjzRysjE0NOvlFjKePJBuoPIi4Ry+b748tzNs=;
+        b=7wr6Hhsg0LxaUBE5UUtxg0VTiQ+sq5GANq8Kv+C79u85k/1LAymJ+GHF/CqVYbaGQG
+         KKqKUv+dDpiRotGHWMc1z2qNpkNo4L8VZELegxK2c7koKPMWW5N6KRRDERFonqJIcrzD
+         NqGofF940bYzyNgqSFaqyZwW8s31IDtwpr+KpqwSpnVtE23kSezYkX3pfEExHXOi0++X
+         ah9l1LWb90HUW+qUaXZ6fghrnSm0gYMkQoABfhKTHeJMU6PgcH4uvQkmciEWKrDYYPDE
+         RO5NYQehKyAQ3fDw443fK5useJCpBrE32Srqt/1dVS6YRdlnsLoOxuND6tLxHEZBosLH
+         OnKw==
+X-Gm-Message-State: AOAM533GSLbQcxZdaBqUZitwoy7P2tLyM/1uTw8M0eCfmRzbW46QRbf8
+        BC12jqUDYGhh7YxNoeDYkNOrH17kJJ3POaPQEKc=
+X-Google-Smtp-Source: ABdhPJw+tXxe/YWGGiXFBzKZux/R5pAIVkL+bontHuXR1Q8ayZE79eFWb/Dpyp6owkTUAKUYRaGQ5reEP/FQM1DAL+g=
+X-Received: by 2002:a05:600c:296:: with SMTP id 22mr22955656wmk.135.1636023389240;
+ Thu, 04 Nov 2021 03:56:29 -0700 (PDT)
 MIME-Version: 1.0
 References: <cover.1635854268.git.lucien.xin@gmail.com> <cdca8eaca8a0ec5fe4aa58412a6096bb08c3c9bc.1635854268.git.lucien.xin@gmail.com>
  <CAFqZXNtJNnk+iwLnGq6mpdTKuWFmZ4W0PCTj4ira7G2HHPU1tA@mail.gmail.com>
@@ -53,13 +51,13 @@ References: <cover.1635854268.git.lucien.xin@gmail.com> <cdca8eaca8a0ec5fe4aa584
  <CAHC9VhRQ3wGRTL1UXEnnhATGA_zKASVJJ6y4cbWYoA19CZyLbA@mail.gmail.com>
  <CADvbK_fVENGZhyUXKqpQ7mpva5PYJk2_o=jWKbY1jR_1c-4S-Q@mail.gmail.com> <CAHC9VhSjPVotYVb8-ABescHmnNnDL=9B3M0J=txiDOuyJNoYuw@mail.gmail.com>
 In-Reply-To: <CAHC9VhSjPVotYVb8-ABescHmnNnDL=9B3M0J=txiDOuyJNoYuw@mail.gmail.com>
-From:   Ondrej Mosnacek <omosnace@redhat.com>
-Date:   Thu, 4 Nov 2021 11:40:25 +0100
-Message-ID: <CAFqZXNv3eRYTEJprKr0FD7i2DcZ8ZygkVqsAQY4=e484-3cPeA@mail.gmail.com>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Thu, 4 Nov 2021 06:56:17 -0400
+Message-ID: <CADvbK_cmo5Nbrgdt_qLZVnee4M_e4vrw+ocHG5BZpPH_=SS=bQ@mail.gmail.com>
 Subject: Re: [PATCHv2 net 4/4] security: implement sctp_assoc_established hook
  in selinux
 To:     Paul Moore <paul@paul-moore.com>
-Cc:     Xin Long <lucien.xin@gmail.com>,
+Cc:     Ondrej Mosnacek <omosnace@redhat.com>,
         network dev <netdev@vger.kernel.org>,
         SElinux list <selinux@vger.kernel.org>,
         Linux Security Module list 
@@ -70,16 +68,13 @@ Cc:     Xin Long <lucien.xin@gmail.com>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         James Morris <jmorris@namei.org>,
         Richard Haines <richard_c_haines@btinternet.com>
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=omosnace@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, Nov 4, 2021 at 4:17 AM Paul Moore <paul@paul-moore.com> wrote:
+On Wed, Nov 3, 2021 at 11:17 PM Paul Moore <paul@paul-moore.com> wrote:
+>
 > On Wed, Nov 3, 2021 at 9:46 PM Xin Long <lucien.xin@gmail.com> wrote:
 > > On Wed, Nov 3, 2021 at 6:01 PM Paul Moore <paul@paul-moore.com> wrote:
 > > > On Wed, Nov 3, 2021 at 1:36 PM Xin Long <lucien.xin@gmail.com> wrote:
@@ -134,9 +129,36 @@ On Thu, Nov 4, 2021 at 4:17 AM Paul Moore <paul@paul-moore.com> wrote:
 >
 > In the case of security_sctp_sk_clone() the new client socket (the
 > cloned socket) should inherit the label/sid from the original socket
+
+"""
+ The initial SCTP client association would
+need to take it's label from the parent process so perhaps that is the
+right answer for all SCTP client associations[2].
+
+[2] I'm guessing the client associations might also want to follow the
+setsockcreatecon(3) behavior, see selinux_sockcreate_sid() for more
+info.
+"""
+What I got is to take it's label from the parent process, which means
+we get it from socket_sockcreate_sid(), not directly copy from parent
+socket. It seems I misunderstood that, Sorry, maybe we should just
+use the v1 patchset.
+
+
 > (the "parent" in the inherit-from-parent label inheritance behavior
 > discussed earlier).  The selinux_sctp_assoc_established() function
 > should not change the socket's label/sid at all, only the peer label.
+Right, that's what it currently does in this patchset, no *socket* sid
+is changed, and only *socket*'s peer label.
+
+{
+        struct sk_security_struct *sksec = asoc->base.sk->sk_security;
+
+        selinux_inet_conn_established(asoc->base.sk, skb);
+        asoc->peer_secid = sksec->peer_sid;
+        asoc->secid = SECSID_WILD;
+}
+
 >
 > > If I understand correctly, new socket's should keep using its original
 > > sid, namely,
@@ -173,6 +195,11 @@ On Thu, Nov 4, 2021 at 4:17 AM Paul Moore <paul@paul-moore.com> wrote:
 >     newsksec->sclass = sksec->sclass;
 >     selinux_netlbl_sctp_sk_clone(sk, newsk);
 >   }
+here, SCTP is one-to-many socket, and it means one socket can have
+multiple associations or connections, so for sksec->sid in one socket
+it can only save the latest cid, if we peel off an old one, it will get the
+wrong cid on server side.
+
 >
 >   static void selinux_sctp_assoc_established(struct sctp_association *asoc,
 >                                              struct sk_buff *skb)
@@ -182,28 +209,48 @@ On Thu, Nov 4, 2021 at 4:17 AM Paul Moore <paul@paul-moore.com> wrote:
 >     selinux_inet_conn_established(asoc->base.sk, skb);
 >     asoc->peer_secid = sksec->peer_sid;
 >   }
-
-This code would be functionally equivalent to the v1 patchset for the
-client side, but on server side you want to set newsksec->secid to
-asoc->secid, as this contains the "connection secid" computed by
-selinux_conn_sid() in selinux_sctp_assoc_request(). This is supposed
-to mirror what selinux_inet_conn_request() -> selinux_inet_csk_clone()
-does for non-SCTP sockets. So I think we should rather go back to the
-v1 patchset variant, where the parent socket's sid is stashed in
-asoc->secid to be picked up by selinux_sctp_sk_clone().
-
-As for the sctp_do_peeloff-calls-sock_create problem - I was oblivious
-about the difference between the sock vs. socket structs, so this
-would be a bit more difficult to fix than replacing one function call.
-But if we end up just overwriting the label assigned in
-selinux_socket_post_create() as it is now, then the only difference is
-an unexpected SCTP_SOCKET__CREATE permission check and a pointless
-computation of socket_sockcreate_sid(), so it can be addressed
-separately. I'll try to suggest a patch and then we can discuss
-whether it makes sense or not.
-
---
-Ondrej Mosnacek
-Software Engineer, Linux Security - SELinux kernel
-Red Hat, Inc.
-
+>
+> > > > > > > Fixes: 72e89f50084c ("security: Add support for SCTP security hooks")
+> > > > > > > Reported-by: Prashanth Prahlad <pprahlad@redhat.com>
+> > > > > > > Reviewed-by: Richard Haines <richard_c_haines@btinternet.com>
+> > > > > > > Tested-by: Richard Haines <richard_c_haines@btinternet.com>
+> > > > > >
+> > > > > > You made non-trivial changes since the last revision in this patch, so
+> > > > > > you should have also dropped the Reviewed-by and Tested-by here. Now
+> > > > > > David has merged the patches probably under the impression that they
+> > > > > > have been reviewed/approved from the SELinux side, which isn't
+> > > > > > completely true.
+> > > > >
+> > > > > Oh, that's a mistake, I thought I didn't add it.
+> > > > > Will he be able to test this new patchset?
+> > >
+> > > While I tend to try to avoid reverts as much as possible, I think the
+> > > right thing to do is to get these patches reverted out of DaveM's tree
+> > > while we continue to sort this out and do all of the necessary testing
+> > > and verification.
+> > >
+> > > Xin Long, please work with the netdev folks to get your patchset
+> > > reverted and then respin this patchset using the feedback provided.
+> >
+> > Hi, Paul,
+> >
+> > The original issue this patchset fixes is a crucial one (it could cause
+> > peeloff sockets on client side to not work) which I think
+> > can already be fixed now. If you think SECSID_WILD is tricky but
+> > no better way yet, my suggestion is to leave it for now until we have
+> > a better solution to follow up. As I couldn't find a better way to work
+> > it out. Also, we may want to hear Richard's opinion on how it should
+> > work and how this should be fixed.
+>
+> While I understand you did not intend to mislead DaveM and the netdev
+> folks with the v2 patchset, your failure to properly manage the
+> patchset's metadata *did* mislead them and as a result a patchset with
+> serious concerns from the SELinux side was merged.  You need to revert
+> this patchset while we continue to discuss, develop, and verify a
+> proper fix that we can all agree on.  If you decide not to revert this
+> patchset I will work with DaveM to do it for you, and that is not
+> something any of us wants.
+>
+> --
+> paul moore
+> www.paul-moore.com
