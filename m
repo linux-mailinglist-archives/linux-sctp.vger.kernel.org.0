@@ -2,156 +2,64 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06B02445AEA
-	for <lists+linux-sctp@lfdr.de>; Thu,  4 Nov 2021 21:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4735F4467ED
+	for <lists+linux-sctp@lfdr.de>; Fri,  5 Nov 2021 18:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232073AbhKDUKe (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 4 Nov 2021 16:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36654 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231826AbhKDUKd (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 4 Nov 2021 16:10:33 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F50C061208
-        for <linux-sctp@vger.kernel.org>; Thu,  4 Nov 2021 13:07:55 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id f4so25227130edx.12
-        for <linux-sctp@vger.kernel.org>; Thu, 04 Nov 2021 13:07:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=32eKwvwSC2TbEbjQwE3qOFh+LqTWwRQrTGzfIUBib6Y=;
-        b=1UoI/Ei5Rx/7y/lZRgwjoMm4Lx4ivAQFlpHplwwOVbUQC7kkQ1Fnboaz8MdFWUakD3
-         ZOg8TfYQ2FCjqpc7prpHW/7+kktg/b/dQP8wIXfbR2ctxOOYvD52Fu5IxfENXUQpwkiO
-         hItQ6XWbFo1AM+iV94CXzIHS+iyk/mnLTcBihDKc+qTKgKVAiARSuIQYsZqEov+yJ9UA
-         50U8XrYqkG/hhYjYvFn1LUMH2A3YwjLcLqEH8oBaRa6HDOGMlx2R7acFlSeLwNq30mV/
-         9XBGkJfeNfmhIvJ4IYxY43E/yhknHt+zzwdmZJ0j9gIlLEBXk86gzZu+NE0F3E6vwoXf
-         gkSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=32eKwvwSC2TbEbjQwE3qOFh+LqTWwRQrTGzfIUBib6Y=;
-        b=OfxaU+7GHg+Hi12fPMcIOIq7cOVOZM+xON7wT2234v+GoQVhrs5FRqr1XQRXEkJ92f
-         0pug0DOHWZQ1eJlSZ/+VHtN0fb3O4NHIi0WhBgGZiChuUvMZuWdArJ8XpQA7oxj7oLVb
-         GP2wP3UKspv29yI3DsmSuMMUN32r7mgK03wUfLxFdIGAatDkQy3TTkYvVB85xozRJQuT
-         64chzNIn0J5ikOnEkVvx8gRVXdk3vwSMlz5TCK/Z/jhomyBUbubxFJGXn+3depOrWGOj
-         jzceLFQqC9LJgBF64j70MNOYS+s7QGM6o+dxHiDBj72+WjrkiEFdB0b0H4FaT4In5iJZ
-         dvmQ==
-X-Gm-Message-State: AOAM531tKQfBfsIzK6BIDJJWEUgy6qUfiSAUP/fjZBwusxkNJPZ8p4Ry
-        SXlPwmVzLd1TFRhucFoEXs5orHE9PqHsusmaI8ON
-X-Google-Smtp-Source: ABdhPJwJy/Jf/YG7EhdohcU/l4B741Q+VsTW+pPOnxuyZ+OCM2Bzqqj0V54aEq0vBBRY8vsUP5GmmCZ7bogWs6h5SbY=
-X-Received: by 2002:a17:906:7632:: with SMTP id c18mr2624351ejn.104.1636056473625;
- Thu, 04 Nov 2021 13:07:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAHC9VhRQ3wGRTL1UXEnnhATGA_zKASVJJ6y4cbWYoA19CZyLbA@mail.gmail.com>
- <CADvbK_fVENGZhyUXKqpQ7mpva5PYJk2_o=jWKbY1jR_1c-4S-Q@mail.gmail.com>
- <CAHC9VhSjPVotYVb8-ABescHmnNnDL=9B3M0J=txiDOuyJNoYuw@mail.gmail.com>
- <20211104.110213.948977313836077922.davem@davemloft.net> <CAHC9VhQUdU6iXrnMTGsHd4qg7DnHDVoiWE9rfOQPjNoasLBbUA@mail.gmail.com>
- <CADvbK_f7XyL8uvHdSgdvbphfw6QzTPFMvwZdW0P4R7qFJPc=yQ@mail.gmail.com>
-In-Reply-To: <CADvbK_f7XyL8uvHdSgdvbphfw6QzTPFMvwZdW0P4R7qFJPc=yQ@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 4 Nov 2021 16:07:42 -0400
-Message-ID: <CAHC9VhQFBL4JA4KwtKJyaB=NEa4mL89uVzj32WCyhZqFhWqvJg@mail.gmail.com>
-Subject: Re: [PATCHv2 net 4/4] security: implement sctp_assoc_established hook
- in selinux
+        id S232896AbhKERd3 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 5 Nov 2021 13:33:29 -0400
+Received: from mail.ispras.ru ([83.149.199.84]:37044 "EHLO mail.ispras.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231844AbhKERd2 (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Fri, 5 Nov 2021 13:33:28 -0400
+Received: from localhost.localdomain (unknown [109.252.87.51])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 3B3C040D3BFF;
+        Fri,  5 Nov 2021 17:30:46 +0000 (UTC)
+From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
 To:     Xin Long <lucien.xin@gmail.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        network dev <netdev@vger.kernel.org>,
-        SElinux list <selinux@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
+Cc:     Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        jmorris <jmorris@namei.org>,
-        Richard Haines <richard_c_haines@btinternet.com>
-Content-Type: text/plain; charset="UTF-8"
+        "David S. Miller" <davem@davemloft.net>,
+        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org
+Subject: [PATCH] sctp: remove unreachable code from sctp_sf_violation_chunk()
+Date:   Fri,  5 Nov 2021 20:30:27 +0300
+Message-Id: <1636133427-3990-1-git-send-email-khoroshilov@ispras.ru>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <CADvbK_fTmu4MWdwk5uTd_FEnny=_=OD=iqrq-3McQ5mgw1JnKg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, Nov 4, 2021 at 3:49 PM Xin Long <lucien.xin@gmail.com> wrote:
-> On Thu, Nov 4, 2021 at 3:10 PM Paul Moore <paul@paul-moore.com> wrote:
-> > On Thu, Nov 4, 2021 at 7:02 AM David Miller <davem@davemloft.net> wrote:
-> > > From: Paul Moore <paul@paul-moore.com>
-> > > Date: Wed, 3 Nov 2021 23:17:00 -0400
-> > > >
-> > > > While I understand you did not intend to mislead DaveM and the netdev
-> > > > folks with the v2 patchset, your failure to properly manage the
-> > > > patchset's metadata *did* mislead them and as a result a patchset with
-> > > > serious concerns from the SELinux side was merged.  You need to revert
-> > > > this patchset while we continue to discuss, develop, and verify a
-> > > > proper fix that we can all agree on.  If you decide not to revert this
-> > > > patchset I will work with DaveM to do it for you, and that is not
-> > > > something any of us wants.
-> > >
-> > > I would prefer a follow-up rathewr than a revert at this point.
-> > >
-> > > Please work with Xin to come up with a fix that works for both of you.
-> >
-> > We are working with Xin (see this thread), but you'll notice there is
-> > still not a clear consensus on the best path forward.  The only thing
-> > I am clear on at this point is that the current code in linux-next is
-> > *not* something we want from a SELinux perspective.  I don't like
-> > leaving known bad code like this in linux-next for more than a day or
-> > two so please revert it, now.  If your policy is to merge substantive
-> > non-network subsystem changes into the network tree without the proper
-> > ACKs from the other subsystem maintainers, it would seem reasonable to
-> > also be willing to revert those patches when the affected subsystems
-> > request it.
-> >
-> > I understand that if a patchset is being ignored you might feel the
-> > need to act without an explicit ACK, but this particular patchset
-> > wasn't even a day old before you merged into the netdev tree.  Not to
-> > mention that the patchset was posted during the second day of the
-> > merge window, a time when many maintainers are busy testing code,
-> > sending pull requests to Linus, and generally managing merge window
-> > fallout.
->
-> Hi Paul,
->
-> It's applied on net tree, I think mostly because I posted this on net.git tree.
-> Also, it's well related to the network part and affects SCTP protocol
-> quite a lot.
+sctp_sf_violation_chunk() is not called with asoc argument equal to NULL,
+but if that happens it would lead to NULL pointer dereference
+in sctp_vtag_verify().
 
-Yes, I know it is in the net tree, that is how it made its way into
-linux-next.  I wouldn't have merged it yet, and if not me who else
-would have merged it beside the netdev folks?
+The patch removes code that handles NULL asoc in sctp_sf_violation_chunk().
 
-Am I misunderstanding your comment?
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-> I wanted to post it on selinux tree: pcmoore/selinux.git, but I noticed the
-> commit on top is written in 2019:
->
-> commit 6e6934bae891681bc23b2536fff20e0898683f2c (HEAD -> main,
-> origin/main, origin/HEAD)
-> Author: Paul Moore <paul@paul-moore.com>
-> Date:   Tue Sep 17 15:02:56 2019 -0400
->
->     selinux: add a SELinux specific README.md
->
->     DO NOT SUBMIT UPSTREAM
->
-> Then I thought this tree was no longer active, sorry about that.
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+Proposed-by: Xin Long <lucien.xin@gmail.com>
+---
+ net/sctp/sm_statefuns.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Like many kernel trees the default/main branch for the SELinux tree
-doesn't contain anything useful, for the SELinux tree (and audit for
-that matter) it is basically just the most recent major/minor tag from
-Linus tree with a single tree specific README.md file patch so that
-the GitHub mirror has a pretty landing page and a canonical reference
-for how the tree is maintained.
-
-* https://github.com/SELinuxProject/selinux-kernel
-
-The general approach to the SELinux tree, as documented in the
-README.md, is to do all of the linux-next work in the selinux/next
-branch with the stable work happening in the selinux/stable-X.Y
-branches.
-
-FWIW, once we've resolved things I would be happy to have the patchset
-live in the SELinux tree as opposed to the netdev tree.
-
+diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
+index fb3da4d8f4a3..ec8561dd7e76 100644
+--- a/net/sctp/sm_statefuns.c
++++ b/net/sctp/sm_statefuns.c
+@@ -4893,9 +4893,6 @@ static enum sctp_disposition sctp_sf_violation_chunk(
+ {
+ 	static const char err_str[] = "The following chunk violates protocol:";
+ 
+-	if (!asoc)
+-		return sctp_sf_violation(net, ep, asoc, type, arg, commands);
+-
+ 	return sctp_sf_abort_violation(net, ep, asoc, arg, commands, err_str,
+ 				       sizeof(err_str));
+ }
 -- 
-paul moore
-www.paul-moore.com
+2.7.4
+
