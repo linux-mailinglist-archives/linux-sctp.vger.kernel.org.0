@@ -2,60 +2,71 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4739944752D
-	for <lists+linux-sctp@lfdr.de>; Sun,  7 Nov 2021 20:10:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F6444754A
+	for <lists+linux-sctp@lfdr.de>; Sun,  7 Nov 2021 20:40:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236256AbhKGTMy (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 7 Nov 2021 14:12:54 -0500
-Received: from shards.monkeyblade.net ([23.128.96.9]:54100 "EHLO
-        mail.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236250AbhKGTMx (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sun, 7 Nov 2021 14:12:53 -0500
-Received: from localhost (225.159.143.150.dyn.plus.net [150.143.159.225])
-        by mail.monkeyblade.net (Postfix) with ESMTPSA id 345F74FE7B833;
-        Sun,  7 Nov 2021 11:10:05 -0800 (PST)
-Date:   Sun, 07 Nov 2021 19:09:59 +0000 (GMT)
-Message-Id: <20211107.190959.1432110661171124830.davem@davemloft.net>
-To:     paul@paul-moore.com
-Cc:     omosnace@redhat.com, netdev@vger.kernel.org, kuba@kernel.org,
-        lucien.xin@gmail.com, richard_c_haines@btinternet.com,
-        vyasevich@gmail.com, nhorman@tuxdriver.com,
-        marcelo.leitner@gmail.com, linux-sctp@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] selinux: fix SCTP client peeloff socket labeling
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <CAHC9VhQwpKWBF2S=vTutBVXeY9xSfTRuhK9nM9TariLVUSweMA@mail.gmail.com>
-References: <20211104195949.135374-1-omosnace@redhat.com>
-        <CAHC9VhQwpKWBF2S=vTutBVXeY9xSfTRuhK9nM9TariLVUSweMA@mail.gmail.com>
-X-Mailer: Mew version 6.8 on Emacs 27.2
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.2 (mail.monkeyblade.net [0.0.0.0]); Sun, 07 Nov 2021 11:10:07 -0800 (PST)
+        id S233784AbhKGTmw (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 7 Nov 2021 14:42:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42552 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229789AbhKGTmv (ORCPT <rfc822;linux-sctp@vger.kernel.org>);
+        Sun, 7 Nov 2021 14:42:51 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id ED71B61215;
+        Sun,  7 Nov 2021 19:40:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636314008;
+        bh=VAso2nZ4kaYiTYlW3IlpWNWHmUI5hVgybCBBN4rfgnE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=hXMmM2x9c9jFx1U07PLnPot/1ksyEIB1dJhAr962AwIsxoOQGFkaJXfXWdgZgj6nU
+         BkVYMUmQGDmOwTbfmnF0UgS+ksZLCJvgOIr2XqSf1nYB73Lvkk7YgdDPtqhf+44ugL
+         D3vJKceMz31kZcTc2QmB4Lnp9hNj0V8j9miBxsAeo5rMZvsW1ojgWHdb1DIhe5he9F
+         KpB96Rna+kPA9wlb+1h6JL/QIBf0CS2G/jGSpAuF+2aB2gbLgc9WbPXOPUSk8u8KT4
+         3fKUWuSTk8PlvqWv2+RE50MIKB2ChRde1NMBCeWB5osms3MiQ90f9CMqZk8a+q0Lst
+         /ndlXqmGwFsSQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E083B60A2E;
+        Sun,  7 Nov 2021 19:40:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] sctp: remove unreachable code from sctp_sf_violation_chunk()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163631400791.18215.13246547902490470871.git-patchwork-notify@kernel.org>
+Date:   Sun, 07 Nov 2021 19:40:07 +0000
+References: <1636133427-3990-1-git-send-email-khoroshilov@ispras.ru>
+In-Reply-To: <1636133427-3990-1-git-send-email-khoroshilov@ispras.ru>
+To:     Alexey Khoroshilov <khoroshilov@ispras.ru>
+Cc:     lucien.xin@gmail.com, vyasevich@gmail.com, nhorman@tuxdriver.com,
+        marcelo.leitner@gmail.com, davem@davemloft.net,
+        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-From: Paul Moore <paul@paul-moore.com>
-Date: Sun, 7 Nov 2021 09:12:57 -0500
+Hello:
 
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Fri,  5 Nov 2021 20:30:27 +0300 you wrote:
+> sctp_sf_violation_chunk() is not called with asoc argument equal to NULL,
+> but if that happens it would lead to NULL pointer dereference
+> in sctp_vtag_verify().
 > 
-> When we change things as significantly as we are doing here, i.e.
-> shifting some of the labeling away from the endpoint to the
-> association, I much rather we do it as a chunk/patchset so that we can
-> review it in a consistent manner.  Some of that has gone out the door
-> here because of what I view as recklessness on the part of the netdev
-> folks, but that doesn't mean we need to abandon all order.  Let's get
-> all the fixes and repairs queued up in a single patchset so that we
-> can fully see what the end result of these changes are going to look
-> like.  Further, I think it would be good if at least one of the
-> patches has a very clear explanation in the commit description (not
-> the cover letter, I want to see this in the git log) of what happens
+> The patch removes code that handles NULL asoc in sctp_sf_violation_chunk().
+> 
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> 
+> [...]
 
-Cover letters show up in the merge commit log message for the patch
-series so they show up in the git commit log.
+Here is the summary with links:
+  - sctp: remove unreachable code from sctp_sf_violation_chunk()
+    https://git.kernel.org/netdev/net/c/e7ea51cd879c
 
-Paul, please stop being so difficult and let's fix this.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Thank you.
 
