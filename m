@@ -2,92 +2,91 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F25AB4584A6
-	for <lists+linux-sctp@lfdr.de>; Sun, 21 Nov 2021 17:23:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF3B458AAB
+	for <lists+linux-sctp@lfdr.de>; Mon, 22 Nov 2021 09:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238369AbhKUQ0j (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 21 Nov 2021 11:26:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37159 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237816AbhKUQ0j (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>);
-        Sun, 21 Nov 2021 11:26:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637511813;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5o6/wBGbGY6DcbOKW8sJZyFNOEtnCAysm1b68CJVM+g=;
-        b=f/eRZKAZxiYr1bJyNUD6VP71vaIeslR83uXJaYAL8ZO5u/adAvn3HMZDe9v/dH1v5eW/Kj
-        i9cC0C7ZMz5HteVfceDbmUIgBIPaIBLughU7YYJ/0cZbWiFrBTCOxY0izitnj5P5YfOZgD
-        FeDoVj+GOkiikG6r6KFSHmaYHQuDnaw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-138-4J9HxJ_TPf2uHCKYncaYYw-1; Sun, 21 Nov 2021 11:23:29 -0500
-X-MC-Unique: 4J9HxJ_TPf2uHCKYncaYYw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EAF0D18125C0;
-        Sun, 21 Nov 2021 16:23:24 +0000 (UTC)
-Received: from [10.22.8.49] (unknown [10.22.8.49])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C5B4E60C5F;
-        Sun, 21 Nov 2021 16:23:18 +0000 (UTC)
-Message-ID: <97cf8c1f-2a1d-d505-9216-37a3da0fc7f6@redhat.com>
-Date:   Sun, 21 Nov 2021 11:22:56 -0500
+        id S238909AbhKVIu4 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 22 Nov 2021 03:50:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52578 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233105AbhKVIuz (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 22 Nov 2021 03:50:55 -0500
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980C5C061574
+        for <linux-sctp@vger.kernel.org>; Mon, 22 Nov 2021 00:47:49 -0800 (PST)
+Received: by mail-pj1-x1043.google.com with SMTP id cq22-20020a17090af99600b001a9550a17a5so16285084pjb.2
+        for <linux-sctp@vger.kernel.org>; Mon, 22 Nov 2021 00:47:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=KAbhMQt4nCgWni6Pt6IcGkUBR1XzjBlAXekRoPKEnOo=;
+        b=jXkX/8xiG2y3badTiE8MKyApgJi7frOSGal5CQRZb4qZVi2SQQTN7Hmxr7jR7LcS0g
+         Z9A5CseqQwuX6q+L0LCw8Wl9lpoHSyE6vCNkHMvjNgRhn/jrCDuEglGJ8WRlnDhFkU4F
+         U2JkxHyYq4xRcMnhzvWgMcrwPCN2cPYeD2OPx59BKixnOOA8v8ESHYblSgvvtSGBXZeu
+         /lDp1Oc6lWHOOYvvzaY2RrzNKlOjwEiDcsTrfbmwkUgqt52GW0naSNx0tSo/fX7YREIZ
+         YKo0PAoZGr7+JoQMbvFS//YCIVkDrQB4R8ynEbP//5cRA/UqoeFa2VRdtI4Gi/Z5fILt
+         jPbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=KAbhMQt4nCgWni6Pt6IcGkUBR1XzjBlAXekRoPKEnOo=;
+        b=G+6d3mAMEURI2ZpM+wbnqmj3jecyau7bKj14SrSGdyv7vsm6ico1tnIdKjN2zleyVt
+         Q2ZTm770m38s5vO67r+/7qNU1kkSfS3/CogDJCDooN5htaECdntDwSSS5eSAN6SELJ34
+         UAlXhoDK/cccX5l37iOP5uSEcWb2KgKZkge6ozcGS2/pFZLgz43H1aPI+AFr0l/dS/j8
+         kizCmeZpGMszH8A/2rkQRquiag+iRLVIutZKpKsFphm5fgmVlXlcoAg84jmsNFmQDNSD
+         i8P+6hYQKGAz7AhDlwLJMs95zeBc+D78ZwoK509WSSHgmv1fFcmZxKvuLjAKsktDL0lr
+         hHkg==
+X-Gm-Message-State: AOAM532/gvzjwxrf+kUcF8dlIoF3iNZdRLAmoiFU8YjqiuUm8LAVXHRC
+        wYpulv+eSh4dwzAAmybR4zMqZwe6fG0AuPT2VN8=
+X-Google-Smtp-Source: ABdhPJyJ3fz+zu1gjA1jqgwSOl2bPwOEe5uIm7znr0ixL9y2mJBY/T8lJHGh5zcB1LVlhbJo4Ey3sfj9ikcVWQvLqDg=
+X-Received: by 2002:a17:902:b20b:b0:141:a92c:a958 with SMTP id
+ t11-20020a170902b20b00b00141a92ca958mr107166350plr.24.1637570869066; Mon, 22
+ Nov 2021 00:47:49 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [syzbot] WARNING in cgroup_finalize_control
-Content-Language: en-US
-To:     syzbot <syzbot+9c08aaa363ca5784c9e9@syzkaller.appspotmail.com>,
-        andriin@fb.com, ast@kernel.org, bpf@vger.kernel.org,
-        cgroups@vger.kernel.org, christian@brauner.io,
-        coreteam@netfilter.org, daniel@iogearbox.net, davem@davemloft.net,
-        hannes@cmpxchg.org, john.fastabend@gmail.com, kaber@trash.net,
-        kadlec@blackhole.kfki.hu, kafai@fb.com, kpsingh@chromium.org,
-        linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
-        lizefan.x@bytedance.com, lizefan@huawei.com,
-        marcelo.leitner@gmail.com, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, nhorman@tuxdriver.com,
-        pablo@netfilter.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, tj@kernel.org,
-        vyasevich@gmail.com, yhs@fb.com
-References: <000000000000d6442705d143337a@google.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <000000000000d6442705d143337a@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Received: by 2002:a17:90b:4c10:0:0:0:0 with HTTP; Mon, 22 Nov 2021 00:47:48
+ -0800 (PST)
+Reply-To: justinseydou@gmail.com
+From:   Justin Seydou <fredericmoustapha44@gmail.com>
+Date:   Mon, 22 Nov 2021 09:47:48 +0100
+Message-ID: <CAAH=C4=Mui8+yhPyj=nQt4WMRyDDZMfGLHxoTjhai541UKOcjQ@mail.gmail.com>
+Subject: Proposal
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-#syz fix: cgroup: Make rebind_subsystems() disable v2 controllers all at once
+Estimado amigo,
+
+Con mucha sinceridad de coraz=C3=B3n les escribo para informarles sobre un =
+negocio
+propuesta que tengo que me gustar=C3=ADa manejar con ustedes.
+
+Indique amablemente su inter=C3=A9s para habilitar
+Yo les doy m=C3=A1s detalles de la propuesta.
+
+Esperando por tu respuesta.
+
+Atentamente,
+
+Se=C3=B1or Justin Seydou.
 
 
-On 11/20/21 21:24, syzbot wrote:
-> syzbot suspects this issue was fixed by commit:
->
-> commit 7ee285395b211cad474b2b989db52666e0430daf
-> Author: Waiman Long <longman@redhat.com>
-> Date:   Sat Sep 18 22:53:08 2021 +0000
->
->      cgroup: Make rebind_subsystems() disable v2 controllers all at once
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12232c06b00000
-> start commit:   442489c21923 Merge tag 'timers-core-2020-08-04' of git://g..
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=b3f0df8558780a7d
-> dashboard link: https://syzkaller.appspot.com/bug?extid=9c08aaa363ca5784c9e9
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14148c62900000
->
-> If the result looks correct, please mark the issue as fixed by replying with:
->
-> #syz fix: cgroup: Make rebind_subsystems() disable v2 controllers all at once
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
->
 
+
+Dear friend,
+
+With much sincerity of heart I write to inform you about a business
+proposal I have which I would like to handle with you.
+
+Kindly indicate your interest so as to enable
+me give you more details of the proposal.
+
+Waiting for your response.
+
+Yours faithfully,
+
+Mr.Justin Seydou.
