@@ -2,80 +2,90 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AED0459971
-	for <lists+linux-sctp@lfdr.de>; Tue, 23 Nov 2021 01:55:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B383745C836
+	for <lists+linux-sctp@lfdr.de>; Wed, 24 Nov 2021 16:05:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbhKWA6R (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 22 Nov 2021 19:58:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
+        id S1345423AbhKXPIu (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 24 Nov 2021 10:08:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbhKWA6Q (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 22 Nov 2021 19:58:16 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF92C061714
-        for <linux-sctp@vger.kernel.org>; Mon, 22 Nov 2021 16:55:09 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id v15so7698637ljc.0
-        for <linux-sctp@vger.kernel.org>; Mon, 22 Nov 2021 16:55:09 -0800 (PST)
+        with ESMTP id S1344411AbhKXPIt (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 24 Nov 2021 10:08:49 -0500
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A6FC061574
+        for <linux-sctp@vger.kernel.org>; Wed, 24 Nov 2021 07:05:39 -0800 (PST)
+Received: by mail-qk1-x72f.google.com with SMTP id m186so3131975qkb.4
+        for <linux-sctp@vger.kernel.org>; Wed, 24 Nov 2021 07:05:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=zejIlZjGjvzTKDlE9IDzfKlgpBmC2NhrN3/klGVK4ZA=;
-        b=jw4g7UOAWkd2snKCLJKqEXQFGLEWCdfXx1sVgnB8nFno0y7wkqruQOTUVGTMcg+DZ4
-         vNi0OzWBjaujPTs1cDMRqkin69dJ/ngoJhTOi+rWjJ/EdWulGaGFYBJtQiGcYSV5ENOj
-         M19vZnQhW/DvHZikgVhb0z3OkPsIPxTnuLcs1btLkSiDqDeAW1qO4OgI2oymYt9ZrVnB
-         hkk/RAKPSVrsDv70eX49GBwasKGcwpUrkW1FRmCyH1wJyG3N7geHFGbw49GcSLms3mwD
-         /LhbNTleZqqNS+LKi5OMvuE6GnQ+QqLk5GELv96hpPA+/tmKtgOltqx38XU4k+a52AQe
-         6HmA==
+        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=DcgsBeCnEwqqWaXsal6nWXS5Txi8oBR2DUxEMRsCkZs=;
+        b=YM4olPgkGq6Ij1ymwDKjrC6kgq8xK2mNQQVYqrMr4EAqV1tNc3QuzAC40R/sFThUan
+         iFXgTnWJpXNJhxl1oZYBm6WpXgcdoD0lfCKsG/xDV9AzXiS9qVB5iB8HR3IavfiGbzvf
+         T1TBo2XSD3N/wtRFaws2j9KygoQ0EODQTV981novoXxm97cKJoAVTTBSfeJOm5R+Mjse
+         cKrT9PfbCl8OX5057GK7OCiWF1DuqshVFq1wCEaiA3gLFtBqVLPrXzgLcG5hcFvf+Jts
+         b9I/ick2dFw/uGcdPg3Nh07e5HVHip1uR/9PsMPKT21P0mktLgTvmFImRrZ1YZySzVfj
+         ygPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=zejIlZjGjvzTKDlE9IDzfKlgpBmC2NhrN3/klGVK4ZA=;
-        b=ihvuRqLKgHVCi2kZOBEF/KPEe2YKr0sPeZuw5lLUXOO26p9M9i10HunQHfjJgjIGsi
-         XamM0A6d8PMDMgosRM5pdzkq/z/3rtdkBBjk9WxJh3yRJtAAFISh0tB7osE8EzOenn7D
-         HM6Y1d3swQb3j2nbDpfHrgOD/zvDZLFKYmuiCMhv6PzBCNZoiF35sMbHIdYSx4VnP5H+
-         +VDNsztw/eCULtMARq6PF23HoxG7/IWtueYIjLUzVSuwAdyTW5/Ox0kHzbI9tzjaO/LC
-         KDOb7fdYR6WTpmC4iOJ64a20CpukvolXo1rQGO6y7ZFhpr64ubblnoO6TEGzK7q8FtqB
-         n1Lw==
-X-Gm-Message-State: AOAM53084d48CI4KSdhBE1NZ1EuUnBd0uWLeHw6K8E6SxuJHbNeZBXww
-        PVuRcRzDWNul6E0n4NBwiFEoNVQ9UvMTwMVcRUU=
-X-Google-Smtp-Source: ABdhPJxK9uYh3381UwmFWUAWhAi7Y2M/NH/DFKYWHvOAPImwE4ITRS/d/zAaenXqA4YwEeZDt+9WkwXfPp4qqZRazVY=
-X-Received: by 2002:a2e:9b17:: with SMTP id u23mr708729lji.258.1637628907482;
- Mon, 22 Nov 2021 16:55:07 -0800 (PST)
+        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=DcgsBeCnEwqqWaXsal6nWXS5Txi8oBR2DUxEMRsCkZs=;
+        b=cDjBKUbaWlzy9Kyfz43+dRjSvjYQDenlW/zA0kYIBV9SRczsCaV3aguNFO/pUuM5/G
+         PqcZBYhdJ6Nqs3rIfhX6Cm4OzH9F1ThpmYiVBIss6/Rfa8nS71GhR0Buv+BmRUKBfaTW
+         Y7OOE09YpuQaqML28yCMs4CPiA36+n5Ni1tbbh5zq2UreV4ZkiKlXAbvVho6TDmqVp9L
+         Gu+xs9RYzm6Be1DrH2xt3qacTp2rUEnMfhr5m70z/voh9AW5ga8F3jlnvizOOvyrj6iC
+         /CBCAtNe3YpRhthW4NEf2L2CgoXcYqoRyJLgTOyhjwP6K2795GLANAt/3AdrwwlqfLKo
+         1Tag==
+X-Gm-Message-State: AOAM531Rcrzd0Y/KNq1m3Ffg1vih9961sZrvyMTOqYUMA0SFPZwt+YgB
+        fCw+Pb6k3IbBq42G6o3qvtLXfFLE/Zuoi0Mdmg==
+X-Google-Smtp-Source: ABdhPJwBO7ipr+aNIB28eoioPUHNasQM0i01UUWiTFrEJTkxL791+7B2n/UzNr9DAk0Kt+JBdh43YGku//FZOWQCzos=
+X-Received: by 2002:a05:620a:4249:: with SMTP id w9mr4993805qko.251.1637766339011;
+ Wed, 24 Nov 2021 07:05:39 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6520:4084:b0:14d:ab54:2be2 with HTTP; Mon, 22 Nov 2021
- 16:55:06 -0800 (PST)
-Reply-To: rubenherbert789@gmail.com
-From:   Ruben Herbert <rubenherbert16@gmail.com>
-Date:   Tue, 23 Nov 2021 01:55:06 +0100
-Message-ID: <CADgtACBo+MTF0CGWoX9YzY05h_J-UVmzeTGnw7DUH4KR7Kf-JA@mail.gmail.com>
-Subject: ABANDONED FUND
+Received: by 2002:a05:6214:f67:0:0:0:0 with HTTP; Wed, 24 Nov 2021 07:05:38
+ -0800 (PST)
+In-Reply-To: <CAL08XB=Ht_OtYX340YsYuXEOzJTeix+BLAMMwnSyNCkqoR-APA@mail.gmail.com>
+References: <CAL08XB=+wOuPDOj9rAx3fZXg1mB9QsJNkKxvm+nNYbJ=Pejdhw@mail.gmail.com>
+ <CAL08XBnWXmJ-KCyDhzf54uFwrUjRGcELRvn3XDTnsLLVFmFHwQ@mail.gmail.com>
+ <CAL08XBnTLOn+67c-wfrdZ8YH=oGm6QQ-oTyj7M7TcyN-YCLBWw@mail.gmail.com>
+ <CAL08XB=snvsQ-R1ftn3JUPUp7DEBf6o7jqb5PDPPL7Q30+Ricg@mail.gmail.com>
+ <CAL08XBnqd_i8YYpcPTy_t7TvVaGxZo9QKU3CawOqNvf4KfSwbA@mail.gmail.com>
+ <CAL08XBn_5xPWkRSEpkb+1xwEOJj3zk=uiPn0e07ttzfRzn579g@mail.gmail.com> <CAL08XB=Ht_OtYX340YsYuXEOzJTeix+BLAMMwnSyNCkqoR-APA@mail.gmail.com>
+From:   kredit kredit <krediiit6@gmail.com>
+Date:   Wed, 24 Nov 2021 16:05:38 +0100
+Message-ID: <CAL08XBnuXvoWodTpLwqJ1OPXoy2qwm6RMuby=SYC6kD+wPdoCA@mail.gmail.com>
+Subject: DARLEHEN UND INVESTITION
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Dear Beneficiary,
+DARLEHEN UND INVESTITION
 
-How are you today? I need the following answers from you immediately:
 
-Did you abandon your funds of US$35,000,000.00?
+Guten tag Frau und Herr
+Ben=C3=B6tigen Sie einen privaten Investor ?
+Ben=C3=B6tigen Sie einen privaten Kredit??
+Wir sind private Investoren in der Lage, in Ihr Unternehmen zu
+investieren, k=C3=B6nnen wir Ihnen auch Darlehen zur Gr=C3=BCndung eines
+Unternehmens oder pers=C3=B6nliche Darlehen .
+Darlehen von 10.000 bis 5 Millionen Euro mit einem Zinssatz von 2,5% .
+Bitte Kontaktieren Sie uns f=C3=BCr Ihre Finanzierung .
+envoyez vos informations suivante
+senden Sie Ihre folgenden Informationen
 
-Did you authorize a lawyer to claim the fund on your behalf and that
-the funds should be sent to the below account details?;
+-Name und Vorname ______
 
-Canadian Imperial Bank of Commerce
-1120 Grant Ave Wpg Mb Canada R3M 2A6
-Usd Acct No: 01007-93-17899
-Swift Code: cibccatt
-Beneficiary Name: Fitzroy Joseph
+-H=C3=B6he Ihres Darlehens _____
 
-Kindly get back to me immediately to avoid paying the wrong person.
+-Erstattungsdauer _______
 
-I await your urgent response.
+-Handy-Nummer_________
 
-Yours sincerely,,
-Dr. Ruben Herbert
-Head, Financial System Stability,
-Central Bank of Nigeria (CBN)
+E-mail :  theresia.rekus@e-nautia.com
+
+Whatsapp:  +491707457729
