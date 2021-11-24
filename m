@@ -2,86 +2,85 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A43345C942
-	for <lists+linux-sctp@lfdr.de>; Wed, 24 Nov 2021 16:55:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 311AB45CACA
+	for <lists+linux-sctp@lfdr.de>; Wed, 24 Nov 2021 18:23:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347106AbhKXP6h (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 24 Nov 2021 10:58:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40268 "EHLO
+        id S236319AbhKXR0H (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 24 Nov 2021 12:26:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241748AbhKXP6g (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 24 Nov 2021 10:58:36 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A044AC061574
-        for <linux-sctp@vger.kernel.org>; Wed, 24 Nov 2021 07:55:26 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id t11so3064556qtw.3
-        for <linux-sctp@vger.kernel.org>; Wed, 24 Nov 2021 07:55:26 -0800 (PST)
+        with ESMTP id S236477AbhKXR0B (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 24 Nov 2021 12:26:01 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263E6C061574
+        for <linux-sctp@vger.kernel.org>; Wed, 24 Nov 2021 09:22:51 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id u22so6959656lju.7
+        for <linux-sctp@vger.kernel.org>; Wed, 24 Nov 2021 09:22:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
+        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=LNPRAvzHRQiSHLn/cT4g8BBF0UaFRV39KtTNWBDdgrU=;
-        b=h96H6htJjF+jMjGqjBzUFUr/U7nHA86WJjY4CvbUIl9cR0RNtMbHNbdtQVZ2bL7Ev4
-         61LyJGrCKDs8IeBuMqUCTepLcrpHI7tNvb7VZnmAya/yNfjvDpjeVMQwpz9O5pOuCRV9
-         dWuXjliKQauIoG94E4uzPPvdpNF61Sx2sO8prxdSnNJEdH1sDjfog1uSVfKI4LC6pz4L
-         s+6Zzr1VPZI8bv9z0YitIXucDEZihrtFOVF6O6yfx/9DIoLnNBh3bwHMxRWw8YxvIIvV
-         zrocGgNwyqtfsnxo0Zu8TBoyxfZG5T2NZRLQPmWVX5eQZGFXYnBfnZ6HJb2Yk3AmyPr2
-         YXhA==
+        bh=DcgsBeCnEwqqWaXsal6nWXS5Txi8oBR2DUxEMRsCkZs=;
+        b=OqpXQ+xU3K7b+LxZq22jUO0L/KnXMdhOS4jFGH+QocYPWoA8gtzsYKq5s1zVot+Uy7
+         wZbs5jWoEqXN2EvRSOje5Dedrf1bhthuNGptNBUA5ECfApQykjqMtwFEMXrJp1VMEwzc
+         103aBGZzYINWzxD48xLlML/7gq4YkPEcRllIF55Q/llYBiDWZJR7tA8L88RZi0vj2J1Q
+         1+2EsXWL5XAuh9jVgJURKPuqwisuiV42W3rmAijcTrTDUxF8WrCGR85xTXtASERo/Vqb
+         i7DUU/uM+yqb/oPA7Gs/7RTF9QeeQuL/EcoHkVH0mM0SneGfSCfwaEWsFJmfm2pFDsJP
+         J42w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LNPRAvzHRQiSHLn/cT4g8BBF0UaFRV39KtTNWBDdgrU=;
-        b=WK2Qy5FiOQzwahrVw0ibjynlcrGEFUIYtyXjsrIeDoS/yYsw9p/Hd3mU9SyhfrIlKI
-         ghRSx55934Tnhd0V6yrelxFCb3Mpmkj0bQIOguhF1khtZDu5kjrsJQZA1KVt8ovb2BLB
-         APbEBkhB+PQvhKATESea0YwyxNN7A4eoYXmNiiXPrvboRexfkEEImzoDlkgMernt3GXW
-         FbQXTxILHASn+qpGJ2057y7c1Rrjq4ojFxNTKBnyy4EWrwSmE+2DYz67+yCPqvDQNUpN
-         zsAB1DVCwmgP6YwtIzccDE4x/C8rLUhtkunakGLxqlP8dUv46BGUQq5rZtIkCVkFs9Yg
-         MSXg==
-X-Gm-Message-State: AOAM532ckpmwC2Lw80Bk0u5dB64+opydm/c/+CztU2rol+R9h5ph/icF
-        7DHgysogNS4SxVFjKUq9SQdQgoHYPeo=
-X-Google-Smtp-Source: ABdhPJxW/CTEKiXfMDu/oEnUQscmhH1Li9LTosH73UGJ4TdPX6lVp6AzZHvThrTRp0XcCxL2ap+9uQ==
-X-Received: by 2002:a05:622a:1014:: with SMTP id d20mr8852343qte.399.1637769325688;
-        Wed, 24 Nov 2021 07:55:25 -0800 (PST)
-Received: from wsfd-netdev15.ntdv.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id i14sm62270qko.9.2021.11.24.07.55.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Nov 2021 07:55:25 -0800 (PST)
-From:   Xin Long <lucien.xin@gmail.com>
-To:     linux-sctp@vger.kernel.org
-Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Subject: [PATCH lksctp-tools] sctp_test: check strdup return in append_addr
-Date:   Wed, 24 Nov 2021 10:55:24 -0500
-Message-Id: <82e5a846ca8cedf06e36a83422b6cb51cb0be61b.1637769324.git.lucien.xin@gmail.com>
-X-Mailer: git-send-email 2.27.0
+        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=DcgsBeCnEwqqWaXsal6nWXS5Txi8oBR2DUxEMRsCkZs=;
+        b=eaNgbBXssFXcyBeNtPTSCe2IZ6geh5ssVPyiMLRPe4iZo07GMaMGaih7RHfAV94oqJ
+         fJO8YLyc75zizVqgVwxnrUkXstcJAp+cV8x27CT5Xs7I05TC4MSVN0wKZ8KTDka3H/z1
+         Nx+j9xfonV1+t/7Tv0UZB6iuDYnihnDz+OJlis4eBB87smk2OSQD3QVTbRjF9+uMIQKB
+         1+tVe6Arsc6W8Bz4Rc23xztb0Uvnu2lBkkydh0e/Lu6vnPdNQbNBV7VPUHOem1JwTiC9
+         4LGnkmF0fsbxpYx1ZqaGsMXiUD03Qu8nq9eYnisn4C2ag4Uep4ZYj2i1106LpHaPUXvN
+         kudA==
+X-Gm-Message-State: AOAM530EUclNUaZIqYsub5HPzfuOniOYPjFR8hOLTUSdY3PBKJTh/DyJ
+        ltrs6HRVXWn1xXMIzN1F+AFSghiJkY7XwS2K8zo=
+X-Google-Smtp-Source: ABdhPJxmEbOkmVjOou/iUBBRYq864nzme12biy/QbjwNrfoZVbMPpF3UenkPhRrgVyAIF7M6KK2UZcKt3xzVrdrcv9Q=
+X-Received: by 2002:a2e:b6c5:: with SMTP id m5mr17538217ljo.469.1637774569429;
+ Wed, 24 Nov 2021 09:22:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6520:6149:b0:14d:8dc:7f97 with HTTP; Wed, 24 Nov 2021
+ 09:22:48 -0800 (PST)
+In-Reply-To: <CAO-e1eEEmTJScKazGz-LE9khn54ssU-qsiemw12G8xPP-UFRkw@mail.gmail.com>
+References: <CAO-e1eEEmTJScKazGz-LE9khn54ssU-qsiemw12G8xPP-UFRkw@mail.gmail.com>
+From:   kredit kreditt <krediit1@gmail.com>
+Date:   Wed, 24 Nov 2021 18:22:48 +0100
+Message-ID: <CAO-e1eEqGsHSRudiFFpDxt-m6GEU_DwmnCn8ZKLaZi=fVsh+wg@mail.gmail.com>
+Subject: DARLEHEN UND INVESTITION
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-strdup() may return NULL in append_addr(), and we should do the
-check for its return value before operating it.
+DARLEHEN UND INVESTITION
 
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
----
- src/apps/sctp_test.c | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/src/apps/sctp_test.c b/src/apps/sctp_test.c
-index e382804..59fd4ad 100644
---- a/src/apps/sctp_test.c
-+++ b/src/apps/sctp_test.c
-@@ -499,6 +499,9 @@ append_addr(const char *parm, struct sockaddr *addrs, int *ret_count)
- 	char *ifname;
- 	int ifindex = 0;
- 
-+	if (!ipaddr)
-+		return NULL;
-+
- 	/* check the interface. */
- 	ifname = strchr(ipaddr,'%');
- 	if (ifname) {
--- 
-2.27.0
+Guten tag Frau und Herr
+Ben=C3=B6tigen Sie einen privaten Investor ?
+Ben=C3=B6tigen Sie einen privaten Kredit??
+Wir sind private Investoren in der Lage, in Ihr Unternehmen zu
+investieren, k=C3=B6nnen wir Ihnen auch Darlehen zur Gr=C3=BCndung eines
+Unternehmens oder pers=C3=B6nliche Darlehen .
+Darlehen von 10.000 bis 5 Millionen Euro mit einem Zinssatz von 2,5% .
+Bitte Kontaktieren Sie uns f=C3=BCr Ihre Finanzierung .
+envoyez vos informations suivante
+senden Sie Ihre folgenden Informationen
 
+-Name und Vorname ______
+
+-H=C3=B6he Ihres Darlehens _____
+
+-Erstattungsdauer _______
+
+-Handy-Nummer_________
+
+E-mail :  theresia.rekus@e-nautia.com
+
+Whatsapp:  +491707457729
