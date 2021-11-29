@@ -2,55 +2,54 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66914460B6F
-	for <lists+linux-sctp@lfdr.de>; Mon, 29 Nov 2021 01:08:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17C7846105C
+	for <lists+linux-sctp@lfdr.de>; Mon, 29 Nov 2021 09:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376274AbhK2ALP (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 28 Nov 2021 19:11:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
+        id S1349302AbhK2Ipv (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 29 Nov 2021 03:45:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376283AbhK2AJP (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sun, 28 Nov 2021 19:09:15 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8AFC06175F
-        for <linux-sctp@vger.kernel.org>; Sun, 28 Nov 2021 16:05:39 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id t11so31042775ljh.6
-        for <linux-sctp@vger.kernel.org>; Sun, 28 Nov 2021 16:05:39 -0800 (PST)
+        with ESMTP id S1345215AbhK2Inu (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 29 Nov 2021 03:43:50 -0500
+Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5836C061396
+        for <linux-sctp@vger.kernel.org>; Mon, 29 Nov 2021 00:28:09 -0800 (PST)
+Received: by mail-ua1-x929.google.com with SMTP id a14so32431964uak.0
+        for <linux-sctp@vger.kernel.org>; Mon, 29 Nov 2021 00:28:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
+        h=mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=hs3qnIcKtRCT83bE7Elusv1v0jityjS4B84eiJJr7pM=;
-        b=H8o0BSfnPeJiEbYqwwaIzxxt3dBBXRLCTVQR6coynWOtm4se76sdgXe3gI5jts5xYO
-         ZQUn9g6USpqXs4Wc6vCH0VEiOCnCtY8paSEItbXeSfUSUv+vUBEzxxtWvVuBLQa+S/rr
-         LTd64RalxhYzCI/moJoknhwPi+Qzy4ykGQmbz8TCTw7DyfuhSZHXjGqUs2M28nA/qTas
-         Va7YWU33NGrNS31agfSOWybLEb9cazyozQfj9sg45YicKdoU0QcokompqBDzIj5OX1vH
-         nTR/pqc3oUfUNZ3oIAyEhAZxwGTEV302Ep6q653xI07bZ0SZU76ndqwNepVgh3LE9h7T
-         cgdA==
+        bh=NX2bqQHsNayiqR44PKgqpb7Ibk1CQbDP3NctUg7ZpKg=;
+        b=qJ6wI0hiQtgjseenWTKNMYgqo4b78FouqRn/6UOqCxsPWJ1vygXQOzUmfwrMWDIc2y
+         XHko/K44Je7XQldy/HGl+GCaheBV9RiFJB4Xg9HB+uv8JoIRb/94w1yzSHcNiCvkukPD
+         39lNOm5ySQWxRawl7BJvWg84m9PXF7bSQXnxBTufzyoHSbid4odXhvh9HKa2Dx3Z0w8p
+         3P00yR4bxR4OgKs84pwFU52OUTa6t2SyLpA5DDzGqaMcba86cOPpqhWpOOTF5wLTRifv
+         PveDivtiOaS+lTyJbuPC1DdLyc9CZbcoufuWVHEDUlBMKYCex6J+E3g54omN3vu7pYxk
+         Cshw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=hs3qnIcKtRCT83bE7Elusv1v0jityjS4B84eiJJr7pM=;
-        b=HqNUu9B27miidMwBP9UXuFY2hucrt2l14iLekntKjkvBUVVaVPCZpH5w/s2sjFEqAN
-         9XLFskq4NnXHwLR9PznKT1j410e59m6fW96W466SvQWFiz4GnBpopuEjDGjvkJNXQPUW
-         vhZXJYwd3Q04G32KtVAJTWBf84BnppC1PqgwXprZzC1DprQIz5xg+NjYCVfwDOmrypAH
-         34wn8U6tCMUxTjpPClRYfmikK+quw8XdynBV9xJQ3JK9xB6ZH9X7DLbHmUMDxkPWZKKw
-         PGXNMJfVr/i/cQ902P3vpA90tppWWKtH7X1H3/MSXTZZhrbhkzT40ey6LFMUDFB1FeZt
-         E8UA==
-X-Gm-Message-State: AOAM531U52MMq8M/3gFeOaEjgxLBjLqUUOnwiWXutZ3u1uawLaB3TCst
-        tsZiHE8kpHrG4/Z8K+T52xLjyXx/ksWXBc95//k=
-X-Google-Smtp-Source: ABdhPJxLzZX1Z7aPISfmZgbEzfgnfPPOJ19Co3Q0WsWgIkTMnbRtAFLYCoTlRTYgCCttpEwrhZ9uJ4ouwCtZ161rx3Q=
-X-Received: by 2002:a05:651c:621:: with SMTP id k33mr46125665lje.359.1638144337213;
- Sun, 28 Nov 2021 16:05:37 -0800 (PST)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=NX2bqQHsNayiqR44PKgqpb7Ibk1CQbDP3NctUg7ZpKg=;
+        b=TDaHyhALldvRK8mg1MtW7ucksO7DNyKZD4haN8WdERILJCphpgOVKm23bbL27zvDr3
+         T+w8IRpNJhcOcHPaTpnJ0Lcwf8RGtJfyi4akskGZJRa8jIlwTY2TxggKkIlP112SiLS3
+         NdQJ2hYm0hksDUg0O38FgViBOZk2qJGFodXxJXaO1XspHYcdjq2zl302bhFk3aoRZqi2
+         onUuN4n62d+OmZKxJoV/T002UGq+hZRLDgxC1vNTcPZNv5u1H3c1ZWmTItPz39KPtKrj
+         mKEtG+fnfmnnbUe9wT0B1AS3g0l2URk2FBsIVEtubspARbeheEtJP21hIQa4YIlqun4x
+         CYDA==
+X-Gm-Message-State: AOAM531rowbNP3MDVl35vpfnyrQnDJNjp9AphtepnxMBNXxCA27IiT3P
+        4W9YxJ+wxeqRK3Nl1EdDwziK5OAuAN7N0ySaFH0=
+X-Google-Smtp-Source: ABdhPJw/qS6uB86oDrCzO8DzZiFz+klUls91t4pStYDINnIjRXbKbBkKgugrjuYuy65YueKRDjJzRlBAkKgew923oxY=
+X-Received: by 2002:a05:6102:e88:: with SMTP id l8mr30136110vst.55.1638174488968;
+ Mon, 29 Nov 2021 00:28:08 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6504:1149:0:0:0:0 with HTTP; Sun, 28 Nov 2021 16:05:36
+Received: by 2002:ab0:3386:0:0:0:0:0 with HTTP; Mon, 29 Nov 2021 00:28:08
  -0800 (PST)
-Reply-To: aishsgaddafi00@gmail.com
-From:   "Miss.Aisha Gaddafi" <aishsgaddafi880@gmail.com>
-Date:   Sun, 28 Nov 2021 16:05:36 -0800
-Message-ID: <CAK8Xn7E_=b8NndfmWrpZK9ApY-zSP5rffkCLD47Fbf9M4RP3Nw@mail.gmail.com>
-Subject: THE AMOUNT IS 27.5 MILLIOMS USD
+From:   Robert Baileys <eashangsama@gmail.com>
+Date:   Mon, 29 Nov 2021 09:28:08 +0100
+Message-ID: <CA+h2PfPBqvCHmfagG+joe=pfk+N=cO7rQ0Kx3DsfgWWk=tLdnA@mail.gmail.com>
+Subject: 
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
@@ -58,45 +57,39 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Dearest One,
+Hallo, lieber Beg=C3=BCnstigter,
 
-I am Miss AIshs Gaddafi, one of the daughters of the embattled
-president of Libya, I am currently residing in one of the African
-Countries, unfortunately as a refugee. At the meantime, my family is
-the target of Western nations led by Nato who wants to destroy my
-father at all costs. Our investments and bank accounts in several
-countries are their targets to freeze.
+Sie haben diese E-Mail von der Robert Bailey Foundation erhalten. Ich
+bin ein pensionierter Regierungsangestellter aus Harlem und ein
+Powerball-Lotterie-Jackpot-Gewinner von 343,8 Millionen Dollar. Ich
+bin der gr=C3=B6=C3=9Fte Jackpot-Gewinner in der Geschichte der New York Lo=
+ttery
+in Amerika. Ich habe diesen Wettbewerb am 27. Oktober 2018 gewonnen
+und m=C3=B6chte Ihnen mitteilen, dass Google in Kooperation mit Microsoft
+Ihre "E-Mail-Adresse" f=C3=BCr meine Anfrage hat und diese 3.000.000,00
+Millionen Euro kosten wird. Ich spende diese 3 Millionen Euro an Sie,
+um auch Wohlt=C3=A4tigkeitsorganisationen und armen Menschen in Ihrer
+Gemeinde zu helfen, damit wir die Welt zu einem besseren Ort f=C3=BCr alle
+machen k=C3=B6nnen. Bitte besuchen Sie die folgende Website f=C3=BCr weiter=
+e
+Informationen, damit Sie diesen 3 Mio. EUR Ausgaben nicht skeptisch
+gegen=C3=BCberstehen.
+https://nypost.com/2018/11/14/meet-the-winner-of-the-biggest-lottery-jackpo=
+t-in-new-york-history/Sie
+Weitere Best=C3=A4tigungen kann ich auch auf meinem Youtube suchen:
+https://www.youtube.com/watch?v=3DH5vT18Ysavc
+Bitte antworten Sie mir per E-Mail (robertbaileys_spende@aol.com).
+Sie m=C3=BCssen diese E-Mail sofort beantworten, damit die =C3=BCberweisend=
+e
+Bank mit dem Erhalt dieser Spende in H=C3=B6he von 3.000.000,00 Millionen
+Euro beginnen kann.
+Bitte kontaktieren Sie die untenstehende E-Mail-Adresse f=C3=BCr weitere
+Informationen, damit Sie diese Spende von der =C3=BCberweisenden Bank
+erhalten k=C3=B6nnen. E-Mail: robertbaileys_spende@aol.com
 
-I have been commissioned to contact an interested foreign
-investor/partner who will be able to take
-absolute control of part of the vast cash available to private
-account with my late brother who was killed by NATO air strike, for a
-possible investment in your country.
+Gr=C3=BC=C3=9Fe,
+Robert Bailey
+* * * * * * * * * * * * * * * *
 
-If this transaction interest you, you don=E2=80=99t have to disclose it to =
-any
-body because of what is going with my entire family, if the united
-nation happens to know this account, they will freezing it as they
-freeze others so keep this transaction for yourself only until we
-finalize it.
-I want to transfer this money into your account immediately for onward
-investment in your country because I don=E2=80=99t want the united nation t=
-o
-know about this account.
-
-Therefore if you are capable of running an establishment and can
-maintain the high level of secrecy required in this project, kindly
-respond with the following information for details of the
-project.Please contact me to my email ( aishsgaddafi00@gmail.com )
-
-
-
-1. Your Full Name =E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6
-2. Your Current Address=E2=80=A6=E2=80=A6=E2=80=A6
-3. Your Nationality=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6
-4. Your Age=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6
-5. Your Occupation=E2=80=A6=E2=80=A6=E2=80=A6
-6. Send me a scan copy of your Photograph
-
-Best Regard
-Miss.Aisha Gaddafi
+Powerball-Jackpot-Gewinner
+E-Mail: robertbaileys_spende@aol.com
