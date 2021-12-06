@@ -2,77 +2,218 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D00C8464CE7
-	for <lists+linux-sctp@lfdr.de>; Wed,  1 Dec 2021 12:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E18C46A58D
+	for <lists+linux-sctp@lfdr.de>; Mon,  6 Dec 2021 20:21:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349050AbhLALhp (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 1 Dec 2021 06:37:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
+        id S1348387AbhLFTYh (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 6 Dec 2021 14:24:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348930AbhLALhh (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 1 Dec 2021 06:37:37 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA93C06179B
-        for <linux-sctp@vger.kernel.org>; Wed,  1 Dec 2021 03:34:10 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id gf14-20020a17090ac7ce00b001a7a2a0b5c3so20785749pjb.5
-        for <linux-sctp@vger.kernel.org>; Wed, 01 Dec 2021 03:34:10 -0800 (PST)
+        with ESMTP id S1348073AbhLFTYg (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 6 Dec 2021 14:24:36 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84172C0613F8
+        for <linux-sctp@vger.kernel.org>; Mon,  6 Dec 2021 11:21:07 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id p27-20020a05600c1d9b00b0033bf8532855so582749wms.3
+        for <linux-sctp@vger.kernel.org>; Mon, 06 Dec 2021 11:21:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
-        b=nKE9e+4jEQRb21OhoYPSbxPLfJ2IuSmNXU0U6wmcP4ykCacrWpdbtE0jjuz/hSLLGi
-         3CHjeG+lFmWzoULwCsmlhVFgDEk5dLFaYb51pw7bXGjZ9H8t0j91dP9aL17MRQYkMPZK
-         Snvty/Yp8/ZrWZr2EuFXHqBxUdbU8X39ik45viERJ1Dn7qW8BPCFp2vlafV2okU0kn5j
-         QPTIDY8QJSy8zAVbK10d6+AY0lky+mrQRAAg0uS1DacQStzD/dQtt/uBz/RlGIdZCai/
-         BHep24kmiLdl1nvBvHYMFonu8NoJvJlErv7lbZlg2+2c277BpkzmDA4WwPZoxzlIf0Mh
-         Af5g==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=17dMvWQJWFrU7HYHq+6U8LXq9UKpalF6hcq4itOn2fA=;
+        b=kZIGxNQrSY5J5FA9xwYF5Cbuyv2wTtoNxeh5pZlNumanTnXqd7xeePLVfhVjT1kHO/
+         ub9AR2hmCmqHRg2oiFAeoRM+TldtNQOkC8CwW8UYBGY+DNg/55/P5E7sJJy+mGi+CSgB
+         px5zdDhFcnfLXxhqU7UZYzPq9o5vdLlHpGY3qCym4qx9b7qVOlb3czFhYw89rhEk1gkG
+         GPEs/rj5kdGHaTvypI2DIWGeNagESmUGZdcGbfZJHory9lQ0Y8K1pz3GkJ0TjG5aKPKW
+         yEO6+qeOHtmooQOiGvb+O5eE9BfsFiLGiBqQkr4VGAmTDzs3tPSbOEqPVxbMAq+nT4Qx
+         5+Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
-        b=tlmd+wj7pWw0E0Y7S9r29I5sBTYKfvSloSkXIANnj3EwfcbCVQPuZlgIbPouwWeaDl
-         h83PU2IGMAzAsMpgvb/CpFKZG60bf0MCDMjoEPzborPV/A/JZvTMhfOL6gB1HsoOq9V2
-         YtDi8I/wBLhVnYXZSuErCA/PNY1/hk736MMRVk7OeAw4aZibjkSUQdS7Q+FDCZb8yD8J
-         m43sWFIDTlb41N5S3SThN2PGiPYYkh44eJHxE3DMXSxeY5fwORjLUcN3/l5p7XGdtqB2
-         /y6rjoCe64szbHzsZK2JozS1tWOd6h9NgEHExpvIKELnqwIPg6LWuJpFvtgr3qoy+2PF
-         PQuQ==
-X-Gm-Message-State: AOAM532/NbNYl6rTawbcb8OSeqJPgWm4hNOfNzJ5VmFApRSDaXCVAN0N
-        cVmm43Ac58URwgZ5k9X7DZeMfQ3JZf/uJUEJ6ILTBGANj8Q=
-X-Google-Smtp-Source: ABdhPJwK+H50pzFgfv5CJPfAwBzUdMqIKHh+Ckkuju2lG2knVlJrzqINPiiwPjc/Uz6xuSJez7Fkn5YZPcfa5CPpvro=
-X-Received: by 2002:a67:ef4d:: with SMTP id k13mr6266305vsr.4.1638358439020;
- Wed, 01 Dec 2021 03:33:59 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=17dMvWQJWFrU7HYHq+6U8LXq9UKpalF6hcq4itOn2fA=;
+        b=pqYM787krWZgfskFW0VRD4Ou+IM/mBpqzpDzUbV0quxWXPnU7UjSpsAqWyHFR3HxSh
+         P/GM89cLf/ewHZka6zQLXPTIWqQPGpGNZnZ/V6snE8eYXJAXo4CQvlaRyHeoiqbLzDmW
+         40p99CSQbOAXnrS2h04NVXaYadG4Jp/wboy6EAl+Ndy7s40WzlnIC3zY+fVjJrq//0Iq
+         4RT2NqDJKCeyxnAJHTK0GNsk4f8Mx96K3j4awwhVnoO+/74oK6vjJ9tcjg/Vk7mr5WBX
+         1wXK7nPLQxXyngKLH2n8RFklWJlmgPp8o6+peKagZFiRyMvQnpp94p5n75YyI4KgyZhg
+         IP+w==
+X-Gm-Message-State: AOAM531B+C4obhDFvUmWKFVgLGpq/ZH/Unn6Nc5cJtl3al2wO/407s4h
+        NJcQPN6ZbJMOw/1Nlp6ECK+ZkQ==
+X-Google-Smtp-Source: ABdhPJzUqF3sHYHJXA6kO6W6NE7EZuMoA50/Oi+NTHo45Z52I0AKGQT/OjjeCzWHU4THVRVJVo3PqQ==
+X-Received: by 2002:a7b:c256:: with SMTP id b22mr634701wmj.176.1638818466059;
+        Mon, 06 Dec 2021 11:21:06 -0800 (PST)
+Received: from google.com ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id g16sm311850wmq.20.2021.12.06.11.21.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 11:21:05 -0800 (PST)
+Date:   Mon, 6 Dec 2021 19:21:03 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc:     Xin Long <lucien.xin@gmail.com>,
+        syzbot+9276d76e83e3bcde6c99@syzkaller.appspotmail.com,
+        davem <davem@davemloft.net>, LKML <linux-kernel@vger.kernel.org>,
+        linux-sctp@vger.kernel.org, network dev <netdev@vger.kernel.org>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        syzkaller-bugs@googlegroups.com,
+        Vlad Yasevich <vyasevich@gmail.com>
+Subject: Re: KASAN: use-after-free Read in __lock_sock
+Message-ID: <Ya5in2ZB8T0ZbrEa@google.com>
+References: <000000000000b98a67057ad7158a@google.com>
+ <CADvbK_f3CpK=qJFngBGmO3VXFLsJm9=qqZVtxYOeBS8rwE=9Ew@mail.gmail.com>
+ <20181122131344.GD31918@localhost.localdomain>
+ <CADvbK_f0n64K==prdcM0KzU0S3pbo1oMW3HhE8zMngCUZp3-iQ@mail.gmail.com>
+ <20181122143743.GE31918@localhost.localdomain>
 MIME-Version: 1.0
-Sender: unitednationawardwinner@gmail.com
-Received: by 2002:ab0:6c55:0:0:0:0:0 with HTTP; Wed, 1 Dec 2021 03:33:58 -0800 (PST)
-From:   "Mrs. Orgil Baatar" <mrs.orgilbaatar21@gmail.com>
-Date:   Wed, 1 Dec 2021 03:33:58 -0800
-X-Google-Sender-Auth: uTQ_nfkzXaWGWaTWp1BSFqK3Ucs
-Message-ID: <CAJ4dHaSrD-X=xpfKNZV-hXSiMV6mNYrgy5vWCNkKm6iu5RQStg@mail.gmail.com>
-Subject: Your long awaited part payment of $2.5.000.00Usd
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20181122143743.GE31918@localhost.localdomain>
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Attention: Beneficiary, Your long awaited part payment of
-$2.5.000.00Usd (TWO MILLION FIVE Hundred Thousand United State
-Dollars) is ready for immediate release to you, and it was
-electronically credited into an ATM Visa Card for easy delivery.
+Networking Gurus,
 
-Your new Payment Reference No.- 6363836,
-Pin Code No: 1787
-Your Certificate of Merit Payment No: 05872,
+On Thu, 22 Nov 2018, Marcelo Ricardo Leitner wrote:
+> On Thu, Nov 22, 2018 at 10:44:16PM +0900, Xin Long wrote:
+> > On Thu, Nov 22, 2018 at 10:13 PM Marcelo Ricardo Leitner
+> > <marcelo.leitner@gmail.com> wrote:
+> > >
+> > > On Mon, Nov 19, 2018 at 05:57:33PM +0900, Xin Long wrote:
+> > > > On Sat, Nov 17, 2018 at 4:18 PM syzbot
+> > > > <syzbot+9276d76e83e3bcde6c99@syzkaller.appspotmail.com> wrote:
+> > > > >
+> > > > > Hello,
+> > > > >
+> > > > > syzbot found the following crash on:
+> > > > >
+> > > > > HEAD commit:    ccda4af0f4b9 Linux 4.20-rc2
+> > > > > git tree:       upstream
+> > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=156cd53=
+3400000
+> > > > > kernel config:  https://syzkaller.appspot.com/x/.config?xJ0a89f12=
+ca9b0f5
+> > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=E2=80=997=
+6d76e83e3bcde6c99
+> > > > > compiler:       gcc (GCC) 8.0.1 20180413 (experimental)
+> > > > >
+> > > > > Unfortunately, I don't have any reproducer for this crash yet.
+> > > > >
+> > > > > IMPORTANT: if you fix the bug, please add the following tag to th=
+e commit:
+> > > > > Reported-by: syzbot+9276d76e83e3bcde6c99@syzkaller.appspotmail.com
+> > > > >
+> > > > > netlink: 5 bytes leftover after parsing attributes in process
+> > > > > `syz-executor5'.
+> > > > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > > > BUG: KASAN: use-after-free in __lock_acquire+0x36d9/0x4c20
+> > > > > kernel/locking/lockdep.c:3218
+> > > > > Read of size 8 at addr ffff8881d26d60e0 by task syz-executor1/137=
+25
+> > > > >
+> > > > > CPU: 0 PID: 13725 Comm: syz-executor1 Not tainted 4.20.0-rc2+ #333
+> > > > > Hardware name: Google Google Compute Engine/Google Compute Engine=
+, BIOS
+> > > > > Google 01/01/2011
+> > > > > Call Trace:
+> > > > >   __dump_stack lib/dump_stack.c:77 [inline]
+> > > > >   dump_stack+0x244/0x39d lib/dump_stack.c:113
+> > > > >   print_address_description.cold.7+0x9/0x1ff mm/kasan/report.c:256
+> > > > >   kasan_report_error mm/kasan/report.c:354 [inline]
+> > > > >   kasan_report.cold.8+0x242/0x309 mm/kasan/report.c:412
+> > > > >   __asan_report_load8_noabort+0x14/0x20 mm/kasan/report.c:433
+> > > > >   __lock_acquire+0x36d9/0x4c20 kernel/locking/lockdep.c:3218
+> > > > >   lock_acquire+0x1ed/0x520 kernel/locking/lockdep.c:3844
+> > > > >   __raw_spin_lock_bh include/linux/spinlock_api_smp.h:135 [inline]
+> > > > >   _raw_spin_lock_bh+0x31/0x40 kernel/locking/spinlock.c:168
+> > > > >   spin_lock_bh include/linux/spinlock.h:334 [inline]
+> > > > >   __lock_sock+0x203/0x350 net/core/sock.c:2253
+> > > > >   lock_sock_nested+0xfe/0x120 net/core/sock.c:2774
+> > > > >   lock_sock include/net/sock.h:1492 [inline]
+> > > > >   sctp_sock_dump+0x122/0xb20 net/sctp/diag.c:324
+> > > >
+> > > > static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
+> > > > {
+> > > >         struct sctp_endpoint *ep =3D tsp->asoc->ep;
+> > > >         struct sctp_comm_param *commp =3D p;
+> > > >         struct sock *sk =3D ep->base.sk; <--- [1]
+> > > > ...
+> > > >         int err =3D 0;
+> > > >
+> > > >         lock_sock(sk);  <--- [2]
+> > > >
+> > > > Between [1] and [2], an asoc peeloff may happen, still thinking
+> > > > how to avoid this.
+> > >
+> > > This race cannot happen more than once for an asoc, so something
+> > > like this may be doable:
+> > >
+> > >         struct sctp_comm_param *commp =3D p;
+> > >         struct sctp_endpoint *ep;
+> > >         struct sock *sk;
+> > > ...
+> > >         int err =3D 0;
+> > >
+> > > again:
+> > >         ep =3D tsp->asoc->ep;
+> > >         sk =3D ep->base.sk; <---[3]
+> > >         lock_sock(sk);  <--- [2]
+> > if peel-off happens between [3] and [2], and sk is freed
+> > somewhere, it will panic on [2] when trying to get the
+> > sk->lock, no?
+>=20
+> Not sure what protects it, but this construct is also used in BH processi=
+ng at
+> sctp_rcv():
+> ...
+>         bh_lock_sock(sk); [4]
+>=20
+>         if (sk !=3D rcvr->sk) {
+>                 /* Our cached sk is different from the rcvr->sk.  This is
+>                  * because migrate()/accept() may have moved the associat=
+ion
+>                  * to a new socket and released all the sockets.  So now =
+we
+>                  * are holding a lock on the old socket while the user may
+>                  * be doing something with the new socket.  Switch our ve=
+iw
+>                  * of the current sk.
+>                  */
+>                 bh_unlock_sock(sk);
+>                 sk =3D rcvr->sk;
+>                 bh_lock_sock(sk);
+>         }
+> ...
+>=20
+> If it is not safe, then we have an issue there too.
+> And by [4] that copy on sk is pretty old already.
+>=20
+> >=20
+> > >         if (sk !=3D tsp->asoc->ep->base.sk) {
+> > >                 /* Asoc was peeloff'd */
+> > >                 unlock_sock(sk);
+> > >                 goto again;
+> > >         }
+> > >
+> > > Similarly to what we did on cea0cc80a677 ("sctp: use the right sk
+> > > after waking up from wait_buf sleep").
 
-Your Names: |
-Address: |
+I'm currently debugging something similar (the same perhaps) on an
+older Stable kernel.  However the same Repro which was found and
+authored for a production level mobile phone, doesn't seem to trigger
+on an x86_64 qemu instance running Mainline.
 
-Person to Contact:MR KELLY HALL the Director of the International
-Audit unit ATM Payment Center,
+That's not to say that Mainline isn't still suffering with this issue
+though.  It probably has more to do with the specificity of the Repro
+which was designed specifically to trigger on the target device.
 
-Email: uba-bf@e-ubabf.com
-TELEPHONE: +226 64865611 You can whatsApp the bank
+Does anyone know if this particular issue was ever patched?
 
-Regards.
-Mrs ORGIL BAATAR
+--=20
+Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
+Senior Technical Lead - Developer Services
+Linaro.org =E2=94=82 Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
