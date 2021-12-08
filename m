@@ -2,92 +2,178 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10BA846CC10
-	for <lists+linux-sctp@lfdr.de>; Wed,  8 Dec 2021 05:13:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA95C46D8FD
+	for <lists+linux-sctp@lfdr.de>; Wed,  8 Dec 2021 17:54:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244178AbhLHEQw (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 7 Dec 2021 23:16:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41416 "EHLO
+        id S237398AbhLHQ6Q (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 8 Dec 2021 11:58:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244167AbhLHEQv (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 7 Dec 2021 23:16:51 -0500
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432AEC0617A2
-        for <linux-sctp@vger.kernel.org>; Tue,  7 Dec 2021 20:13:20 -0800 (PST)
-Received: by mail-il1-x141.google.com with SMTP id j21so1073404ila.5
-        for <linux-sctp@vger.kernel.org>; Tue, 07 Dec 2021 20:13:20 -0800 (PST)
+        with ESMTP id S237394AbhLHQ6P (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 8 Dec 2021 11:58:15 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC540C061746
+        for <linux-sctp@vger.kernel.org>; Wed,  8 Dec 2021 08:54:43 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id d9so5175255wrw.4
+        for <linux-sctp@vger.kernel.org>; Wed, 08 Dec 2021 08:54:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
-        b=IhzYOc5TV5tRY8NA+oRQO6aAhcoLWjmDIiGp+agW0PuwWFWsW07ntJsVzV38I0OHqC
-         EzpNMp4ySTsTiHWjcoES1pDWfQa3hzEmTAjGEQsGKU00LGNUDJTNHWI4LldEus+S1mKT
-         dko5ukALMgi8bh7atGVs0Rt/fX7KXpplv23WbLhFzP1TfY2PPXBqFY9j53j/esPLibRX
-         1XRHyOwTiT/4tG9WZ3q4H7N/dOnVkB10wmKDHGYmk9qWEUW5JWqpdoVu6C7jO8de13Mw
-         Z0SLBzksJKYbu7/KIOlWOhfXUDnmMk6QWiigAfQd89OMRAg6NTmeD6n5AJpihkslyYUP
-         nSKA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YN7SopJ792rYSyvS/k6+6PuXkEaW1GUeMvGKCe7x+ik=;
+        b=J+TbOkyt82nIoJaFvHEWgDDTEY6jM1fG04zXfRHK4uHp2LoCSuRsMIvzHPOloJPfsz
+         VaZ1RcPw20Qi/PxMrsxj6bgcTp87z/4dTXl2iA4FcKzjjbgaxslIvg9sdW3R6lTmb4Qy
+         JVx6pAoQfeFiVVqQQc2Paml9c7cm6lLVlywQCauLw8o6e/3gchFs23/TPwxT82ak6mWH
+         /3Hvg6pk8zCXVq+PaJHgcCWiDkz19z9r35eC4ltmWmrBjGCBRQlKs8S96fu7JIEWVitP
+         ypmTeAf6FN8NZyySe4lTY1919vCTLZ39MyJwHM8iKCFaNzMUX06r7RXtEnuHhog3ukVi
+         c2uA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
-        b=BHuMNXkdh4V2v1ZmJGlUF4Tsxo73BnlpTFGYr2PFwruZQyHAbVk7okjIzpctpIGGWQ
-         shTbSESOGsUJF7t5zWpZGDF2RDUenuw5wcp51Pl4RS400v0c+LvSHbaJ7eXwvRd1zNoy
-         ni018VduHowVM4jwZUJCA4OtpMJvf8LLZ+tdWcq9IMRSRiE0lSoS6RAADl3AAb4gnEKv
-         J2B3B9gpC5M+W1rFJXeyofsh9sCdTBPC0zKB+AzXR3OHQzdqtnSFUbKWjP5KCkGdJPkP
-         54n54G3ozf/PaJwFVM5N/kISCF7s8Hmg4+Hg5ZMltin5XKx6KOa/3f99Dr7yZ8TnUHWX
-         NNSA==
-X-Gm-Message-State: AOAM5312dLN4eFk85L36/wLl7pNMWWzCCrqEZl2cxFw3Q99W4eHJRypW
-        FVJfXVK8hHQgLE2WasmV7MPcAk21+zmg+ZsNSxk=
-X-Google-Smtp-Source: ABdhPJyRa63HXlstQIFzLUqJGv8AYgt9EsJ312gy8TgYauJosfme9E4HgsWb4N3jUnNwnaOH3Nf1ZFtOzW3RJg9WBQw=
-X-Received: by 2002:a92:cdac:: with SMTP id g12mr3699225ild.204.1638936799717;
- Tue, 07 Dec 2021 20:13:19 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YN7SopJ792rYSyvS/k6+6PuXkEaW1GUeMvGKCe7x+ik=;
+        b=2GJrWUXND7v3ttcphIxFJpnkU3c8P716LNLGku6nmXRuS1dO73oIDgvUQ3GwQtkV21
+         FVp/oYpF5INScIhDGIj59HJK/1nINKqMBXzmIRsQyDi/xxe5ncvuW72Q8bat0qjOrWp+
+         d29quzORkQYI13Qxb99nQyKmSpRMrnVf+khrCiucyUYp4gSoxm6h9pQ3wXaMSMJF/gUd
+         9kLm9gznGz5NCPIjsyOE8xTuwyu3RXKPpLJX7OHNVoaeCj8jLdSL+37a6Hu0BpwnOopB
+         v5swHogl+0fdsafY9Dvvg+CyhwtaHmTBj1llFc13IHTQ9vy7F7KO/UgHGYrMl/m0b2J2
+         tDEw==
+X-Gm-Message-State: AOAM533WrHY4NIgyXPv9VcdQdGiHAbFZY8CXPMM4ZQre6GvjQqS7SmGU
+        XoM5G9crKCGqWdnM5IkUewSVaQ==
+X-Google-Smtp-Source: ABdhPJyCsxaHwjoJGpb1kpKdErG9QngK0st0jPwjBrFDcGdCXFGG2d4SLrzhQROA3gmmJTUxyr0unw==
+X-Received: by 2002:a5d:64a2:: with SMTP id m2mr61750734wrp.248.1638982482311;
+        Wed, 08 Dec 2021 08:54:42 -0800 (PST)
+Received: from joneslee.c.googlers.com.com (205.215.190.35.bc.googleusercontent.com. [35.190.215.205])
+        by smtp.gmail.com with ESMTPSA id y15sm4375735wry.72.2021.12.08.08.54.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 08:54:41 -0800 (PST)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     lee.jones@linaro.org
+Cc:     linux-kernel@vger.kernel.org, Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        lksctp developers <linux-sctp@vger.kernel.org>,
+        "H.P. Yarroll" <piggy@acm.org>,
+        Karl Knutson <karl@athena.chicago.il.us>,
+        Jon Grimm <jgrimm@us.ibm.com>,
+        Xingang Guo <xingang.guo@intel.com>,
+        Hui Huang <hui.huang@nokia.com>,
+        Sridhar Samudrala <sri@us.ibm.com>,
+        Daisy Chang <daisyc@us.ibm.com>,
+        Ryan Layer <rmlayer@us.ibm.com>,
+        Kevin Gao <kevin.gao@intel.com>, netdev@vger.kernel.org
+Subject: [PATCH 1/1] sctp: Protect cached endpoints to prevent possible UAF
+Date:   Wed,  8 Dec 2021 16:54:34 +0000
+Message-Id: <20211208165434.2962062-1-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:1a07:0:0:0:0 with HTTP; Tue, 7 Dec 2021 20:13:19
- -0800 (PST)
-Reply-To: dj0015639@gmail.com
-From:   David Jackson <enkenpaul@gmail.com>
-Date:   Wed, 8 Dec 2021 05:13:19 +0100
-Message-ID: <CAG7-cQ-YcFp0byqpLCXPRy0-4+-Zq7hzZMz6DzM5KzsbksYgog@mail.gmail.com>
-Subject: FEDERAL BUREAU OF INVESTIGATION
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Our Ref: RTB /SNT/STB
-To: Beneficiary
+The cause of the resultant dump_stack() reported below is a
+dereference of a freed pointer to 'struct sctp_endpoint' in
+sctp_sock_dump().
 
-This is FBI special agents, David Jackson. I was delegated along side
-others by the United Nations to investigate scammers who has been in
-the business of swindling foreigners especially those that has one
-form of transaction/contracts and another. Please be informed that in
-the course of our investigation, we detected that your name and
-details in our Scammed Monitoring Network. We also found out that you
-were scammed of a huge sum of money by scammers via Western union and
-MoneyGram. Be informed here that in a bid to alleviate the suffering
-of scammed victims, the United Nations initiated this compensation
-program and therefore, you are entitled to the sum of Five Million Two
-Hundred Thousand United States Dollars ($5,200,000.00 USD) for being a
-victim.
+This race condition occurs when a transport is cached into its
+associated hash table then freed prior to its subsequent use in
+sctp_diag_dump() which uses sctp_for_each_transport() to walk the
+(now out of date) hash table calling into sctp_sock_dump() where the
+dereference occurs.
 
-Note that the said fund will be transfer to you via the Citibank being
-the paying bank mandated by the United Nations officials.
+To prevent this from happening we need to take a reference on the
+to-be-used/dereferenced 'struct sctp_endpoint' until such a time when
+we know it can be safely released.
 
-However, we have to inform you that we have been able to arrest some
-of the swindlers who has been in this illicit business and will all be
-prosecuted accordingly. Be informed as well that we have limited time
-to stay back here, so we will advice that you urgently respond to this
-message ASAP. And do not inform any of the people that collected money
-from you before now about this new development to avoid jeopardizing
-our investigation. All you need to do is to follow our instruction and
-receive your compensation accordingly as directed by the United
-Nations.
+When KASAN is not enabled, a similar, but slightly different NULL
+pointer derefernce crash occurs later along the thread of execution in
+inet_sctp_diag_fill() this time.
 
-We urgently wait to receive your response.
+  BUG: KASAN: use-after-free in sctp_sock_dump+0xa8/0x438 [sctp_diag]
+  Call trace:
+   dump_backtrace+0x0/0x2dc
+   show_stack+0x20/0x2c
+   dump_stack+0x120/0x144
+   print_address_description+0x80/0x2f4
+   __kasan_report+0x174/0x194
+   kasan_report+0x10/0x18
+   __asan_load8+0x84/0x8c
+   sctp_sock_dump+0xa8/0x438 [sctp_diag]
+   sctp_for_each_transport+0x1e0/0x26c [sctp]
+   sctp_diag_dump+0x180/0x1f0 [sctp_diag]
+   inet_diag_dump+0x12c/0x168
+   netlink_dump+0x24c/0x5b8
+   __netlink_dump_start+0x274/0x2a8
+   inet_diag_handler_cmd+0x224/0x274
+   sock_diag_rcv_msg+0x21c/0x230
+   netlink_rcv_skb+0xe0/0x1bc
+   sock_diag_rcv+0x34/0x48
+   netlink_unicast+0x3b4/0x430
+   netlink_sendmsg+0x4f0/0x574
+   sock_write_iter+0x18c/0x1f0
+   do_iter_readv_writev+0x230/0x2a8
+   do_iter_write+0xc8/0x2b4
+   vfs_writev+0xf8/0x184
+   do_writev+0xb0/0x1a8
+   __arm64_sys_writev+0x4c/0x5c
+   el0_svc_common+0x118/0x250
+   el0_svc_handler+0x3c/0x9c
+   el0_svc+0x8/0xc
 
-Regards,
-DAVID JACKSON
-FEDERAL BUREAU OF INVESTIGATION
-INVESTIGATION ON ALL ONLINE WIRE TRANSFER
+Cc: Vlad Yasevich <vyasevich@gmail.com>
+Cc: Neil Horman <nhorman@tuxdriver.com>
+Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: lksctp developers <linux-sctp@vger.kernel.org>
+Cc: "H.P. Yarroll" <piggy@acm.org>
+Cc: Karl Knutson <karl@athena.chicago.il.us>
+Cc: Jon Grimm <jgrimm@us.ibm.com>
+Cc: Xingang Guo <xingang.guo@intel.com>
+Cc: Hui Huang <hui.huang@nokia.com>
+Cc: Sridhar Samudrala <sri@us.ibm.com>
+Cc: Daisy Chang <daisyc@us.ibm.com>
+Cc: Ryan Layer <rmlayer@us.ibm.com>
+Cc: Kevin Gao <kevin.gao@intel.com>
+Cc: linux-sctp@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+---
+ net/sctp/associola.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/net/sctp/associola.c b/net/sctp/associola.c
+index be29da09cc7ab..df171a297d095 100644
+--- a/net/sctp/associola.c
++++ b/net/sctp/associola.c
+@@ -499,8 +499,9 @@ void sctp_assoc_rm_peer(struct sctp_association *asoc,
+ 
+ 	/* Remove this peer from the list. */
+ 	list_del_rcu(&peer->transports);
+-	/* Remove this peer from the transport hashtable */
++	/* Remove this peer from the transport hashtable and remove its reference */
+ 	sctp_unhash_transport(peer);
++	sctp_endpoint_put(asoc->ep);
+ 
+ 	/* Get the first transport of asoc. */
+ 	pos = asoc->peer.transport_addr_list.next;
+@@ -710,11 +711,12 @@ struct sctp_transport *sctp_assoc_add_peer(struct sctp_association *asoc,
+ 	/* Set the peer's active state. */
+ 	peer->state = peer_state;
+ 
+-	/* Add this peer into the transport hashtable */
++	/* Add this peer into the transport hashtable and take a reference */
+ 	if (sctp_hash_transport(peer)) {
+ 		sctp_transport_free(peer);
+ 		return NULL;
+ 	}
++	sctp_endpoint_hold(asoc->ep);
+ 
+ 	sctp_transport_pl_reset(peer);
+ 
+-- 
+2.34.1.400.ga245620fadb-goog
+
