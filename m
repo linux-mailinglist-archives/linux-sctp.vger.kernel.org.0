@@ -2,73 +2,92 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D659446C264
-	for <lists+linux-sctp@lfdr.de>; Tue,  7 Dec 2021 19:09:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10BA846CC10
+	for <lists+linux-sctp@lfdr.de>; Wed,  8 Dec 2021 05:13:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240413AbhLGSMg (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 7 Dec 2021 13:12:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41670 "EHLO
+        id S244178AbhLHEQw (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 7 Dec 2021 23:16:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240410AbhLGSMf (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 7 Dec 2021 13:12:35 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B07C061574
-        for <linux-sctp@vger.kernel.org>; Tue,  7 Dec 2021 10:09:05 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id l24so46489uak.2
-        for <linux-sctp@vger.kernel.org>; Tue, 07 Dec 2021 10:09:05 -0800 (PST)
+        with ESMTP id S244167AbhLHEQv (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 7 Dec 2021 23:16:51 -0500
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432AEC0617A2
+        for <linux-sctp@vger.kernel.org>; Tue,  7 Dec 2021 20:13:20 -0800 (PST)
+Received: by mail-il1-x141.google.com with SMTP id j21so1073404ila.5
+        for <linux-sctp@vger.kernel.org>; Tue, 07 Dec 2021 20:13:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cCUM1lEbcBNYrD2ZSJos7dWypTScplKBKMOULp/u4X8=;
-        b=SsbQqSts/JEje7pqUuNy7B3F2h/VylK9qxlas/k5xlHFx/9srKr/ruNLbZ8H4biHpH
-         7rqB5grtbsLwFZlVfarQtq4cNYXX+y/JXmH6xbufWoKt/SRC+UTWDsGE3ce5W2y5pijw
-         q/lNWqQ8QD07ra31aZjpT6dVRb18wNghu/AqL7HGE9mUy6czyNq4GtU0+X+TU1CaXBVi
-         fXHktk+GI29NaX6WKBwZVPJ5XVsYKP4RQuvPX8qEFZxXj+Nx1H/9+DOsJchRK+Bu7r6F
-         Ce5+nLm/HV2RwS0mrDfX8Pcn5yUv0HdSXw6CXQmfc86HQea5QOCyWpCvRjXy6fdkYQsD
-         gZpA==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
+        b=IhzYOc5TV5tRY8NA+oRQO6aAhcoLWjmDIiGp+agW0PuwWFWsW07ntJsVzV38I0OHqC
+         EzpNMp4ySTsTiHWjcoES1pDWfQa3hzEmTAjGEQsGKU00LGNUDJTNHWI4LldEus+S1mKT
+         dko5ukALMgi8bh7atGVs0Rt/fX7KXpplv23WbLhFzP1TfY2PPXBqFY9j53j/esPLibRX
+         1XRHyOwTiT/4tG9WZ3q4H7N/dOnVkB10wmKDHGYmk9qWEUW5JWqpdoVu6C7jO8de13Mw
+         Z0SLBzksJKYbu7/KIOlWOhfXUDnmMk6QWiigAfQd89OMRAg6NTmeD6n5AJpihkslyYUP
+         nSKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cCUM1lEbcBNYrD2ZSJos7dWypTScplKBKMOULp/u4X8=;
-        b=e+ErZwTDg24A9UnKAmoKKWbfU5cmdnO98qyoZWq7HeW0LkHppMlWNRwQiHEkbfTwUy
-         elTaNXQalnbE90GE4+vfqhj7ZKqKU9A2kzdeSnNebpL6R0cAEUaZZCxRO2CjVrVUJxlT
-         iAB3BCVyiHawCW+lPfXJXuc1lIaANqsFl7dOkSMzmTkzuf1XH8o03paRLr2C2iCrode7
-         oWqMEN5kTwiG5U/CdZGh0TXMYfwMuTTM2VmRAvCk7VTE5y860tpLfwfxihJdi1/sKCgM
-         UrrKGhlLobtLSqiLPMk3eve8jgKrfnSxvE7NmshY7J+9JkIUixCmgWQWIfOBmpjKM+eJ
-         Ukgw==
-X-Gm-Message-State: AOAM532A3OsHgVIHOrnbn2yZw+Vw/vJR/WzI6O2wrC9osP0J+b6GP5Ak
-        vCUYL7DtCtuqBUn9zgilSmgySytF7WY=
-X-Google-Smtp-Source: ABdhPJzFuReLPgOucfZjrOTqtiRMGsPvDxmppAgu7vEMDoWltWKfZZS7e8ng5gWRHGORDel9s2msjg==
-X-Received: by 2002:a67:5fc6:: with SMTP id t189mr45552627vsb.79.1638900544183;
-        Tue, 07 Dec 2021 10:09:04 -0800 (PST)
-Received: from t14s.localdomain ([177.220.172.101])
-        by smtp.gmail.com with ESMTPSA id y7sm243898uad.2.2021.12.07.10.09.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 10:09:03 -0800 (PST)
-Received: by t14s.localdomain (Postfix, from userid 1000)
-        id C5D4DEC378; Tue,  7 Dec 2021 15:09:01 -0300 (-03)
-Date:   Tue, 7 Dec 2021 15:09:01 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     linux-sctp@vger.kernel.org
-Subject: Re: [PATCH lksctp-tools] sctp_test: check strdup return in
- append_addr
-Message-ID: <20211207180901.5xncbn23ijrnx5tk@t14s.localdomain>
-References: <82e5a846ca8cedf06e36a83422b6cb51cb0be61b.1637769324.git.lucien.xin@gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
+        b=BHuMNXkdh4V2v1ZmJGlUF4Tsxo73BnlpTFGYr2PFwruZQyHAbVk7okjIzpctpIGGWQ
+         shTbSESOGsUJF7t5zWpZGDF2RDUenuw5wcp51Pl4RS400v0c+LvSHbaJ7eXwvRd1zNoy
+         ni018VduHowVM4jwZUJCA4OtpMJvf8LLZ+tdWcq9IMRSRiE0lSoS6RAADl3AAb4gnEKv
+         J2B3B9gpC5M+W1rFJXeyofsh9sCdTBPC0zKB+AzXR3OHQzdqtnSFUbKWjP5KCkGdJPkP
+         54n54G3ozf/PaJwFVM5N/kISCF7s8Hmg4+Hg5ZMltin5XKx6KOa/3f99Dr7yZ8TnUHWX
+         NNSA==
+X-Gm-Message-State: AOAM5312dLN4eFk85L36/wLl7pNMWWzCCrqEZl2cxFw3Q99W4eHJRypW
+        FVJfXVK8hHQgLE2WasmV7MPcAk21+zmg+ZsNSxk=
+X-Google-Smtp-Source: ABdhPJyRa63HXlstQIFzLUqJGv8AYgt9EsJ312gy8TgYauJosfme9E4HgsWb4N3jUnNwnaOH3Nf1ZFtOzW3RJg9WBQw=
+X-Received: by 2002:a92:cdac:: with SMTP id g12mr3699225ild.204.1638936799717;
+ Tue, 07 Dec 2021 20:13:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <82e5a846ca8cedf06e36a83422b6cb51cb0be61b.1637769324.git.lucien.xin@gmail.com>
+Received: by 2002:a05:6e02:1a07:0:0:0:0 with HTTP; Tue, 7 Dec 2021 20:13:19
+ -0800 (PST)
+Reply-To: dj0015639@gmail.com
+From:   David Jackson <enkenpaul@gmail.com>
+Date:   Wed, 8 Dec 2021 05:13:19 +0100
+Message-ID: <CAG7-cQ-YcFp0byqpLCXPRy0-4+-Zq7hzZMz6DzM5KzsbksYgog@mail.gmail.com>
+Subject: FEDERAL BUREAU OF INVESTIGATION
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, Nov 24, 2021 at 10:55:24AM -0500, Xin Long wrote:
-> strdup() may return NULL in append_addr(), and we should do the
-> check for its return value before operating it.
-> 
-> Signed-off-by: Xin Long <lucien.xin@gmail.com>
+Our Ref: RTB /SNT/STB
+To: Beneficiary
 
-Applied. Thanks.
+This is FBI special agents, David Jackson. I was delegated along side
+others by the United Nations to investigate scammers who has been in
+the business of swindling foreigners especially those that has one
+form of transaction/contracts and another. Please be informed that in
+the course of our investigation, we detected that your name and
+details in our Scammed Monitoring Network. We also found out that you
+were scammed of a huge sum of money by scammers via Western union and
+MoneyGram. Be informed here that in a bid to alleviate the suffering
+of scammed victims, the United Nations initiated this compensation
+program and therefore, you are entitled to the sum of Five Million Two
+Hundred Thousand United States Dollars ($5,200,000.00 USD) for being a
+victim.
+
+Note that the said fund will be transfer to you via the Citibank being
+the paying bank mandated by the United Nations officials.
+
+However, we have to inform you that we have been able to arrest some
+of the swindlers who has been in this illicit business and will all be
+prosecuted accordingly. Be informed as well that we have limited time
+to stay back here, so we will advice that you urgently respond to this
+message ASAP. And do not inform any of the people that collected money
+from you before now about this new development to avoid jeopardizing
+our investigation. All you need to do is to follow our instruction and
+receive your compensation accordingly as directed by the United
+Nations.
+
+We urgently wait to receive your response.
+
+Regards,
+DAVID JACKSON
+FEDERAL BUREAU OF INVESTIGATION
+INVESTIGATION ON ALL ONLINE WIRE TRANSFER
