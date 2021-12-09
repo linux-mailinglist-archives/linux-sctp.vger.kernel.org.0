@@ -2,54 +2,54 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E4046E85D
-	for <lists+linux-sctp@lfdr.de>; Thu,  9 Dec 2021 13:22:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70D2E46E899
+	for <lists+linux-sctp@lfdr.de>; Thu,  9 Dec 2021 13:42:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237317AbhLIMZb (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 9 Dec 2021 07:25:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60740 "EHLO
+        id S237489AbhLIMqL (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 9 Dec 2021 07:46:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbhLIMZa (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 9 Dec 2021 07:25:30 -0500
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D75C061746;
-        Thu,  9 Dec 2021 04:21:57 -0800 (PST)
-Received: by mail-vk1-xa31.google.com with SMTP id q21so3647016vkn.2;
-        Thu, 09 Dec 2021 04:21:57 -0800 (PST)
+        with ESMTP id S230094AbhLIMqK (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 9 Dec 2021 07:46:10 -0500
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42915C061746;
+        Thu,  9 Dec 2021 04:42:37 -0800 (PST)
+Received: by mail-vk1-xa2f.google.com with SMTP id m19so3652544vko.12;
+        Thu, 09 Dec 2021 04:42:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=w3ReoaqnPEHjdJMe05z68xUf6XudxSIjb7gmP09rJQc=;
-        b=qAXe/PUEjSWPGwo4b8gou+dvBHVqhIAIgQxrvG4FTud65PvHoO/e55K661EV3H/B7p
-         F1xAxQHtey8CwpR7QFO7JohxqAzuvbmJiq/mZAqAcHTN9cFWocuXT5TwL9/0W3Hz2sDG
-         YfMP4QsUAohnNc8LNTza+91rJepm4DX0ikuTuZSGAg0Ecz/yuNkkS8KLdfGQOlmW5RSp
-         AUkFG3E+drqcU6ODhkf19gb7AjduYsSv51huT9XT4yCyPxi4WHJw5ywl9glFwtJV42Jm
-         GJYSap6GBjQGN0ITA23LEeDWnykD2FllYj4Ai0leFxYP4/rB+OA2FXen3wu57KLbA4f6
-         nQaQ==
+        bh=B99doplKMhCF3/NI+gmHfnS9FII0vd0OCqQprdWAKGw=;
+        b=cyf0yHemDemISmOvVy+aopA4fi2LoydNrrkxsO/dk0BXNerSGHZF509VK4BHayIJjC
+         fUfr2j+YMMMPHDeBH8Slw8ikVrUcpZnHS6gqeo1XIVLKf4DacsGXUhNxkCY7MseMjWOS
+         GyuiRvkTFtEKcloYUUWM2yYtnR6N0uiinPu1Es0L0nN2ChPWZR91l4O7HcsD0wPQNJT/
+         B4Sj7abwy8G9NORm28sAlu1S61ejA3KyRlUigd5JR1HselBFQNlUXVTMLMlvKPGuNVVu
+         MiW380fJZ/J/1VRrffTnQupdJqCfrn+jUkJNcDEWOQsnesUlZyFYcwp25G3SyPrxwKED
+         IB1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=w3ReoaqnPEHjdJMe05z68xUf6XudxSIjb7gmP09rJQc=;
-        b=ROlKWS/Fdd9K93Oabvzg1rsQMtdXAaU8t3GSD6USvE3+7KEMu/uvRv3Ae0dwYx0Idd
-         LFzjJON5F6tKPe8GCermJgPSoRQH4KjE9pMF5ZXY4avG5zo+Pd2pyueJ3+KlKwAmKOpC
-         hSb2x/Jcx49P1N7BeCGarBnntWza7CyamJPeIlxFEOsjUeAvUvnygIq94y22fhLS06Nh
-         gcTRVaMVoYOKvxN8MktLFCjeVjBg4iVHjXeT40FtFfFTtJyu1hya0NNo7fi5uoKPDE0t
-         eQhjzC2Ly6PSCK1LZiK8ymtt9C2rNL2GbLcElhkGoTHWSTb59j2xPww94rXCK2bv8028
-         EtOg==
-X-Gm-Message-State: AOAM532g9UUZQXWUSKjjrZD0JW6XIBcqJEhiFU8SKS7RHijr/qoBzS7O
-        orWfDYk++5KtXUpiP81EsuM=
-X-Google-Smtp-Source: ABdhPJziCTAr2E8Bs/ThL9oUGU3K0fyG3S9LlyLkquPvm2rZNuin3u/ToaT22Fm2JY8wZ/2q2NO5EA==
-X-Received: by 2002:a05:6122:988:: with SMTP id g8mr8851565vkd.2.1639052516572;
-        Thu, 09 Dec 2021 04:21:56 -0800 (PST)
+        bh=B99doplKMhCF3/NI+gmHfnS9FII0vd0OCqQprdWAKGw=;
+        b=6s5ddKTtVJVv8xzJlnB9ejWOr7lMZw8A7buBWLQuivCeeNtGglcYFEGBbXhiXg6e5e
+         r5VghTD2iFgTdj9tjgFPfwSTJOAPaXjeljGkAqM4RGKqU8t9xcqrw5NoU5GhvcKcBZZy
+         livRW0L+3eOmovaOyzmuEEX/MsgTa+uPA4ycAlz04G1BZooJuScEp4jDZKEIli4EYdnP
+         qnfDgMXn6cWUu9Dcg+rcAjCVqwq61rz4SuZoOApD9K8atuXxNhVwa9yeujrJwtzkfhXV
+         4EmLxG+Mm+UeE2+7CYo7Ao0om5u54HefIX4438OZbqAHxMiptSCTCrkPfEz0TZ7xiIL0
+         sA7Q==
+X-Gm-Message-State: AOAM530KyKZXH94WMysmI7tjg6BKtgLqofokFNdRYuuNkf1zsTqoLdKW
+        n9YYk9SIka1yA2IW7dpju5w=
+X-Google-Smtp-Source: ABdhPJx3lgyOD6ZeYYjqxmbuMSNvFbZ+0T6h79BGDGCI48zAjIY0NPzSMHB7GiHOIv4UE5mMT2mTKw==
+X-Received: by 2002:a1f:cd47:: with SMTP id d68mr8595660vkg.33.1639053756428;
+        Thu, 09 Dec 2021 04:42:36 -0800 (PST)
 Received: from t14s.localdomain ([177.220.172.101])
-        by smtp.gmail.com with ESMTPSA id e13sm3673249vkd.21.2021.12.09.04.21.55
+        by smtp.gmail.com with ESMTPSA id t5sm3810985vsk.24.2021.12.09.04.42.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 04:21:56 -0800 (PST)
+        Thu, 09 Dec 2021 04:42:36 -0800 (PST)
 Received: by t14s.localdomain (Postfix, from userid 1000)
-        id 5C510ECD30; Thu,  9 Dec 2021 09:21:54 -0300 (-03)
-Date:   Thu, 9 Dec 2021 09:21:54 -0300
+        id 43C72ECD4C; Thu,  9 Dec 2021 09:42:34 -0300 (-03)
+Date:   Thu, 9 Dec 2021 09:42:34 -0300
 From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 To:     Lee Jones <lee.jones@linaro.org>
 Cc:     linux-kernel@vger.kernel.org, Vlad Yasevich <vyasevich@gmail.com>,
@@ -68,71 +68,51 @@ Cc:     linux-kernel@vger.kernel.org, Vlad Yasevich <vyasevich@gmail.com>,
         Kevin Gao <kevin.gao@intel.com>, netdev@vger.kernel.org
 Subject: Re: [PATCH 1/1] sctp: Protect cached endpoints to prevent possible
  UAF
-Message-ID: <YbH04oUdLf2XML23@t14s.localdomain>
+Message-ID: <YbH5um3HVQbSecx4@t14s.localdomain>
 References: <20211208165434.2962062-1-lee.jones@linaro.org>
- <YbDlFFVPm/MYEoOQ@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YbDlFFVPm/MYEoOQ@google.com>
+In-Reply-To: <20211208165434.2962062-1-lee.jones@linaro.org>
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 05:02:12PM +0000, Lee Jones wrote:
-> On Wed, 08 Dec 2021, Lee Jones wrote:
+On Wed, Dec 08, 2021 at 04:54:34PM +0000, Lee Jones wrote:
+> To prevent this from happening we need to take a reference on the
+> to-be-used/dereferenced 'struct sctp_endpoint' until such a time when
+> we know it can be safely released.
 > 
-> > The cause of the resultant dump_stack() reported below is a
-> > dereference of a freed pointer to 'struct sctp_endpoint' in
-> > sctp_sock_dump().
-> > 
-> > This race condition occurs when a transport is cached into its
-> > associated hash table then freed prior to its subsequent use in
-> > sctp_diag_dump() which uses sctp_for_each_transport() to walk the
-> > (now out of date) hash table calling into sctp_sock_dump() where the
-> > dereference occurs.
-> > 
-> > To prevent this from happening we need to take a reference on the
-> > to-be-used/dereferenced 'struct sctp_endpoint' until such a time when
-> > we know it can be safely released.
-> > 
-> > When KASAN is not enabled, a similar, but slightly different NULL
-> > pointer derefernce crash occurs later along the thread of execution in
-> > inet_sctp_diag_fill() this time.
-> > 
-> >   BUG: KASAN: use-after-free in sctp_sock_dump+0xa8/0x438 [sctp_diag]
-> >   Call trace:
-> >    dump_backtrace+0x0/0x2dc
-> >    show_stack+0x20/0x2c
-> >    dump_stack+0x120/0x144
-> >    print_address_description+0x80/0x2f4
-> >    __kasan_report+0x174/0x194
-> >    kasan_report+0x10/0x18
-> >    __asan_load8+0x84/0x8c
-> >    sctp_sock_dump+0xa8/0x438 [sctp_diag]
-> >    sctp_for_each_transport+0x1e0/0x26c [sctp]
-> >    sctp_diag_dump+0x180/0x1f0 [sctp_diag]
-> >    inet_diag_dump+0x12c/0x168
-> >    netlink_dump+0x24c/0x5b8
-> >    __netlink_dump_start+0x274/0x2a8
-> >    inet_diag_handler_cmd+0x224/0x274
-> >    sock_diag_rcv_msg+0x21c/0x230
-> >    netlink_rcv_skb+0xe0/0x1bc
-> >    sock_diag_rcv+0x34/0x48
-> >    netlink_unicast+0x3b4/0x430
-> >    netlink_sendmsg+0x4f0/0x574
-> >    sock_write_iter+0x18c/0x1f0
-> >    do_iter_readv_writev+0x230/0x2a8
-> >    do_iter_write+0xc8/0x2b4
-> >    vfs_writev+0xf8/0x184
-> >    do_writev+0xb0/0x1a8
-> >    __arm64_sys_writev+0x4c/0x5c
-> >    el0_svc_common+0x118/0x250
-> >    el0_svc_handler+0x3c/0x9c
-> >    el0_svc+0x8/0xc
-> 
-> This looks related (reported 3 years ago!)
-> 
->   https://lore.kernel.org/all/20181122131344.GD31918@localhost.localdomain/
+> When KASAN is not enabled, a similar, but slightly different NULL
+> pointer derefernce crash occurs later along the thread of execution in
+> inet_sctp_diag_fill() this time.
 
-Agree, seems related. Thanks for root causing it.
+Hey Lee, did you try running lksctp-tools [1] func tests with this patch?
+I'm getting failures here.
+
+[root@vm1 func_tests]# make v4test
+./test_assoc_abort
+test_assoc_abort.c  1 PASS : ABORT an association using SCTP_ABORT
+test_assoc_abort passes
+
+./test_assoc_shutdown
+test_assoc_shutdown.c  1 BROK : bind: Address already in use
+DUMP_CORE ../../src/testlib/sctputil.h: 145
+/bin/sh: line 1:  3727 Segmentation fault      (core dumped) ./$a
+test_assoc_shutdown fails
+make: *** [Makefile:1648: v4test] Error 1
+
+I didn't check it closely but it would seem that the ep is beind held
+forever. If I simply retry after a few seconds, it's still there (now the 1st
+test fails):
+
+[root@vm1 func_tests]# make v4test
+./test_assoc_abort
+test_assoc_abort.c  1 BROK : bind: Address already in use
+DUMP_CORE ../../src/testlib/sctputil.h: 145
+/bin/sh: line 1:  3751 Segmentation fault      (core dumped) ./$a
+test_assoc_abort fails
+
+1.https://github.com/sctp/lksctp-tools
+
+  Marcelo
