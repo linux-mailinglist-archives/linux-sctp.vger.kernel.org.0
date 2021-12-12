@@ -2,77 +2,60 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2D947101E
-	for <lists+linux-sctp@lfdr.de>; Sat, 11 Dec 2021 03:01:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DFB0471B5F
+	for <lists+linux-sctp@lfdr.de>; Sun, 12 Dec 2021 16:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345649AbhLKCFO (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 10 Dec 2021 21:05:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47988 "EHLO
+        id S231287AbhLLPjK (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 12 Dec 2021 10:39:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235243AbhLKCFN (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 10 Dec 2021 21:05:13 -0500
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3372C0617A1
-        for <linux-sctp@vger.kernel.org>; Fri, 10 Dec 2021 18:01:37 -0800 (PST)
-Received: by mail-lf1-x144.google.com with SMTP id b40so21110861lfv.10
-        for <linux-sctp@vger.kernel.org>; Fri, 10 Dec 2021 18:01:37 -0800 (PST)
+        with ESMTP id S231304AbhLLPjH (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sun, 12 Dec 2021 10:39:07 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C514C061371
+        for <linux-sctp@vger.kernel.org>; Sun, 12 Dec 2021 07:39:07 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id cq22-20020a17090af99600b001a9550a17a5so12919149pjb.2
+        for <linux-sctp@vger.kernel.org>; Sun, 12 Dec 2021 07:39:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=UB8HPXfiFrSS8lJHVD9imqT8IM8lXgQeVTQMVTTdoew=;
-        b=mz95yEd7wqF+xhUHtNPAXzDqdjYFScvN3EmOxAWd7Hh/o1vy+XqEivxP3kDofXPyLO
-         W5XYmQxuXpNI3d7FE6qlKbDJOmp94nfu+yejkZPeS8A+ZVAmw4cZ+M6yxC0QmeEf1OXV
-         PvDrRZYwPm6F8rgxNp9KyZWDTRe2X5+2LGXtbLKhD7Oa/8VkVmV/ger+T/AcpZOMY+Hr
-         pk6PIvsKN2RQ9T1Jd5CmaYlFRwzl33lR1Geg2MwN8uXRCax0hB6XBG9KhwPleIbxoFyA
-         9z1MohiiVn4QgqqC9HVrz8gzOxH9wawpDOURL7bzutAg2ChxVB0407dYfMeaU4eByX7U
-         kFyA==
+        bh=CScZ3wgwAoNcP2hDnqXlix5UDGrDiarDd6PNIGLyspo=;
+        b=nW34jVsv56Ss5jLoooIeVciA93Clw83n+wCeADNfCEpcC+rdzdpKO/LYgFQaULd1OH
+         U8TXUuQSIh4yHtn8e56U2OR9tvVaBrIbZqVXXTO9qyu2ymRftWSklBAq1tsUV/ZwQyli
+         OQNIJmsnRTWXVSmhooYoNI3mrca0uQe4Qvw2po2hRHk49IphRRBl7/cc79IWCwq/knSD
+         jAnxigACSUDasTs+EUStoKgNQ9kt9Efz64Sltjg2RvPSjES1dEb3Rnabml57kHg8BYan
+         0xGZn+cZ+L22txoY5kcj47AS69tJiBQ/eAoB9E7bJT52uVrJV5T2gB+PKNcvh9Cn0hK0
+         5YnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
          :subject:to;
-        bh=UB8HPXfiFrSS8lJHVD9imqT8IM8lXgQeVTQMVTTdoew=;
-        b=3C4I08XkhAj4/QPGgbAoKk2kO7ILFkkKOMbXxCsHKBvHQZapbtvimDrbLAcdoO8XJm
-         dwdJSmpiFx55dDrlEFVykpvsd4dQSyLnvPcuyFWVZPzeDv1ZFwVj1b79+lUAvBDQs+zx
-         EehgqugiqlJN4wvamYGjCMyUkIUYgs9/KzyT5XCQ8HAIvQqV3zOuyHsYQ6aNI5/H/qes
-         2svO6UuuHaP6pWFzlEW8OuGFXU2hJ3jVhXNIh7cv+LDYV3nfcIiM5kSeyosT3mz0+YN4
-         r2FteemcPuJd4C3DIdkAcvgCxQrZx/WpdTEw3AgL1Hu1iuumVxHh5U6FAkZQqlsuLrZP
-         /T4g==
-X-Gm-Message-State: AOAM531P6nV6Qd9JQ6aCfeM7fIKgrs2tZrNL9HjIgO3IbZ0hRQWT+o9A
-        tnc15XCubrKDI22PtckXOFjDBF/D5Lt61+PoA6o=
-X-Google-Smtp-Source: ABdhPJzO1rWK98J/C4GWmBNNeA4TMusWwthEf445R0dRxZhfqtQs8WAeeSSG9+arglNkiB0I8dDFlCz1Qas71LQQq4Y=
-X-Received: by 2002:a05:6512:3f28:: with SMTP id y40mr15606868lfa.609.1639188095920;
- Fri, 10 Dec 2021 18:01:35 -0800 (PST)
+        bh=CScZ3wgwAoNcP2hDnqXlix5UDGrDiarDd6PNIGLyspo=;
+        b=Gi6lZX56Z/s94U/MS4NlpuS34qtIJC6LQzYrGNFVuYqti1Y1gw/qbWPv8mZoMoSN7E
+         2LUZtuVF+/RRw0YIRPJ+eRiVBbhffvYspSbMFkP3oFRCWwsdXGToQvtZQr2kagl92vgn
+         P1JoB+HhMK0VnDGyU9eUrAYnRlv+HCCYMFgWSHLFnUW25TnoqmnHo85uSa0tnBC8XaRY
+         M2te4fDBziWHAcDNxbQcOkcOAekVWwKeWtGWrifS3VtKFpFFGy8WwD79CH1cwdFjSP7F
+         eorRFYT8FM4mPsnbiGVTxnhS99p7vTkwEFSiK+RDIyqCZK3QjgEB9fZ14jkcBVBkzDNw
+         xEvA==
+X-Gm-Message-State: AOAM532KUm4ixyXvVbdp0wfJa+MdIzxmMrYWr+sNqXErUz71uus693ns
+        ghSmk8afNVuzE+KnKt7ARNGosP+J9OmASyQl7WY=
+X-Google-Smtp-Source: ABdhPJxsBJYooaMgLjqzimk0hrl//BEpZRFhZTgaDxYyJHLKhaJGvTFjIF0TvE7MIczQ9k5dw4plILBX5bRdp3Gs0bY=
+X-Received: by 2002:a17:90b:33d0:: with SMTP id lk16mr38626959pjb.7.1639323545943;
+ Sun, 12 Dec 2021 07:39:05 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6512:12c7:0:0:0:0 with HTTP; Fri, 10 Dec 2021 18:01:35
+Received: by 2002:a17:90b:4c51:0:0:0:0 with HTTP; Sun, 12 Dec 2021 07:39:05
  -0800 (PST)
-Reply-To: internationallmonetary695@gmail.com
-From:   International Monetary fund <abubakarsadiq1297@gmail.com>
-Date:   Fri, 10 Dec 2021 18:01:35 -0800
-Message-ID: <CAHXNoSjzJGPbSRqufvG2p9+fDSLRA_m=x+GXMLdQjX8eJrF8EQ@mail.gmail.com>
-Subject: Dear Beneficiary,
+Reply-To: mrsisabelladz@gmail.com
+From:   Mrs Isabella <zaidn8225@gmail.com>
+Date:   Sun, 12 Dec 2021 16:39:05 +0100
+Message-ID: <CAMU20GMeochfDfA+tFFMDmQu2qHHMSRkoPHpA3GKtw8UP0dvgw@mail.gmail.com>
+Subject: From Mrs. Isabella Dzsesszika
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
--- 
- I.M.F Head Office
-#1900 Pennsylvania Ave NW,
-Washington, DC 20431
-INTERNATIONAL MONETARY FUND.
-REF:-XVGNN82010
-internationallmonetary695@gmail.com
-Telephone : +12062785473
-
-This message is from International Monetary fund (IMF) I am Mr Bo Li
-deputy to  Kristalina Georgieva the current president of International
-  Monetary fund (IMF) We are aware of the stress you have been passing
-through and how you have lost your money trying to claim your fund ,
-you have to worry no more for the international monetary fund is fully
- in-charge of your fund now, contact  me for more info on how you will
-receive your fund( internationallmonetary695@gmail.com) or call me
-on-Telephone : +12062785473 for more info.
-
-Regards,
-Mr Bo Li
+GOOD MORNING DEAR. MY NAME IS Isabella Dzsesszika. I AM CONTACTING YOU
+FOR IMPORTANT ISSUE I WILL LIKE TO DISCUS WITH YOU. PLEASE GET BACK TO
+ME IF YOU READ THIS MAIL.  YOURS, Isabella Dzsesszika
