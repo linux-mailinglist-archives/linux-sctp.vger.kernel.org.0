@@ -2,72 +2,172 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17528474265
-	for <lists+linux-sctp@lfdr.de>; Tue, 14 Dec 2021 13:22:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 791FC474BCC
+	for <lists+linux-sctp@lfdr.de>; Tue, 14 Dec 2021 20:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232035AbhLNMW0 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 14 Dec 2021 07:22:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
+        id S237374AbhLNTXJ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 14 Dec 2021 14:23:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbhLNMWZ (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 14 Dec 2021 07:22:25 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73F0C061574
-        for <linux-sctp@vger.kernel.org>; Tue, 14 Dec 2021 04:22:25 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id o4so17655522pfp.13
-        for <linux-sctp@vger.kernel.org>; Tue, 14 Dec 2021 04:22:25 -0800 (PST)
+        with ESMTP id S237322AbhLNTXI (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 14 Dec 2021 14:23:08 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29252C061574
+        for <linux-sctp@vger.kernel.org>; Tue, 14 Dec 2021 11:23:08 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id k9so16388898wrd.2
+        for <linux-sctp@vger.kernel.org>; Tue, 14 Dec 2021 11:23:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=mTe6rsF1WlocKfWRCIawejpNJl6lRYSIlYxDz8jltlQ=;
-        b=Vd27lepw9Bd8dAOqtIuHZAHMdLQ0Nk2EXaWWTdaeD/ws0tdZN4Ebhc8hv90iQtr1Th
-         g9T80OHFrqW2WI9jWbFLCauiOSWEZsOHYFanye0fMYhf68Z5pFR4/rHzNj/JPUikZJWR
-         G4ZvZ6dN7FHjZES4evTYHglz/LRE/KoVr2EHaq1n4pFvv0gExKhCHMgOWtLUlW/d9+vQ
-         gN34Fqo9LXXP8LKK02KtWw5TaTyzujzGltdDAIq0XGIaA14UuhR7ZIatmeIHQagXnNi9
-         OsubiF3Onz+jYFRoGmlpKfZOlvYilVAZ4/ic/KzD0xCOJMUyd9dNWxQRkEhmk+h/+kvY
-         iIUQ==
+        bh=9MfX+ladgz8v1uPlUvt81YDUVI2BVYjumD0vKwEPZL8=;
+        b=WqDW2eYz3b7YYPBATttXaZ6buiyp4VM0CVsPBNwqwvYXLJqSfLdSDpj5RehBf1rzm8
+         0NGFCRKTByBHutzxvd6c3nFRfg7S5gUxzyjAsZRCB6ZNpHiZ2kV4SDb8uD7YJDElQvlZ
+         OKIIpRv009ozrHeUDnGuQDG22K2U2mBGC0ta7+gNfXDSXxmilG4PK8PLbtJqfFIzJDBA
+         z8MvgBO9eoTIaFj2zVPC3py7D9VrBVFftahzSaKfwtYSDwwnGClk+GUSkt5Geu8DLPDe
+         AYpoiIGXYQQWCabokDuhcVDYZs+WEqYPRuJCe9jGgGOnOOBFi7boE3CqCm1HAkh3//a8
+         O05g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=mTe6rsF1WlocKfWRCIawejpNJl6lRYSIlYxDz8jltlQ=;
-        b=YRK5OH2mdY+B/maD1VSm7VDgVyR96f5TqB1AwZ1gQECfM52EgQcGcH6SvPIQCLSuh7
-         5aW/s/dSus6n++qkG0XmHUhVwsfIZv9It0Ne2MuJS1asgZeIO48HSqh6rbqTYVQPCmyQ
-         snDtkfvkHi5QIKc2ZPZExRQkye+O/Sdfr/aRFcBiT2v/U4GuATyCZvPhVkXdUAZZRYWd
-         wBrz9PwJ1FyRsWnjWBhlKW/hZjCETAU7iO0i8eF89jXBYmGjh14SGdcRSQEjNhD0k6c7
-         AFi6QjRRls+0TDdXqPQg6cGw2IlX5sG/5NiclH0wlMA5VfISOBe1I59px3Bi1/A1a2W3
-         vKOQ==
-X-Gm-Message-State: AOAM5338RMMQZxzjOb9Pd2HNGx60SL31KI8Y8EH7cWhnRmEkIuLpl0Z3
-        Qbgxj99h/Wocywpf14fucO0yyZ1rhU8wCKMz/rs=
-X-Google-Smtp-Source: ABdhPJxXsbQXHqPj5V0f2eageVaqYhGaCHjNM6KvdL50//E8384BtUHmU3FDk27ZOypZ1M60MkEsAiUuBGgFHIo3e34=
-X-Received: by 2002:a63:3841:: with SMTP id h1mr3449514pgn.597.1639484545364;
- Tue, 14 Dec 2021 04:22:25 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9MfX+ladgz8v1uPlUvt81YDUVI2BVYjumD0vKwEPZL8=;
+        b=XL9mQdTtvzZj2p9RoiffIsNQozGCTova3j5H+m2nT8V7Mom9Ao9yHFWnrYxTqw9KrL
+         gLxKdWwVuadLqL97VjDXfGk13mHW/fJU/HbffuiqntVF2vXPGOUhlpzCFDxYPHtl9uIM
+         pl3B0JNYHkFdhSzRfVE6oYFOh0KKM9ceqzOpm2NtjMzDVOb+7yKZge8YFfEO9ZGgbGQB
+         kjyrZJ/XBWxP9944tZHsoCZZDLruhU1fMGO2UzbUrJ+FrJofnVA/IyYe4GJwmvZUL0+7
+         W9g/DqnEILCzg2my2yMIinMngoUS5DiUSQE1/A15Fi7Gw8wQX5pqj5KAZkAr/xn114Bp
+         jvTg==
+X-Gm-Message-State: AOAM533QlnUcXZIP/uOszs8OFbzH9k0xzvBvLorJyytOqqQ73H2LpgqT
+        QuZ92CT7ikjTHowoiW5Dkdw7CA==
+X-Google-Smtp-Source: ABdhPJwoBMoW5TWXaHsl8SQQzk0cq/QVYi0kpQ4LMnACrafWI+8XOMMdce8J0U4u6zLy20HzGg6EZA==
+X-Received: by 2002:a5d:6211:: with SMTP id y17mr1055106wru.97.1639509786687;
+        Tue, 14 Dec 2021 11:23:06 -0800 (PST)
+Received: from localhost.localdomain ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id d7sm672169wrw.87.2021.12.14.11.23.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 11:23:06 -0800 (PST)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     lee.jones@linaro.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        lksctp developers <linux-sctp@vger.kernel.org>,
+        "H.P. Yarroll" <piggy@acm.org>,
+        Karl Knutson <karl@athena.chicago.il.us>,
+        Jon Grimm <jgrimm@us.ibm.com>,
+        Xingang Guo <xingang.guo@intel.com>,
+        Hui Huang <hui.huang@nokia.com>,
+        Sridhar Samudrala <sri@us.ibm.com>,
+        Daisy Chang <daisyc@us.ibm.com>,
+        Ryan Layer <rmlayer@us.ibm.com>,
+        Kevin Gao <kevin.gao@intel.com>, netdev@vger.kernel.org
+Subject: [PATCH 2/2] sctp: hold cached endpoints to prevent possible UAF
+Date:   Tue, 14 Dec 2021 19:23:01 +0000
+Message-Id: <20211214192301.1496754-1-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
 MIME-Version: 1.0
-Reply-To: zahirikeen@gmail.com
-Sender: mouhamadoudiagana123@gmail.com
-Received: by 2002:a05:6a11:326:0:0:0:0 with HTTP; Tue, 14 Dec 2021 04:22:25
- -0800 (PST)
-From:   Zahiri Keen <zahirikeen2@gmail.com>
-Date:   Tue, 14 Dec 2021 13:22:25 +0100
-X-Google-Sender-Auth: LnbbvLAgsTFyo_ZErjFnb14OWPs
-Message-ID: <CAEzroUR9C1ot0xuhPYsr+Ob3K8p12G1D87Og091jOi6nkGA9vA@mail.gmail.com>
-Subject: Urgent Please.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Good Day,
+The cause of the resultant dump_stack() reported below is a
+dereference of a freed pointer to 'struct sctp_endpoint' in
+sctp_sock_dump().
 
-I know this email might come to you as a surprise because is coming
-from someone you haven=E2=80=99t met with before.
+This race condition occurs when a transport is cached into its
+associated hash table followed by an endpoint/sock migration to a new
+association in sctp_assoc_migrate() prior to their subsequent use in
+sctp_diag_dump() which uses sctp_for_each_transport() to walk the hash
+table calling into sctp_sock_dump() where the dereference occurs.
 
-I am Mr. Zahiri Keen, the bank manager with BOA bank i contact you for
-a deal relating to the funds which are in my position I shall furnish
-you with more detail once your response.
+  BUG: KASAN: use-after-free in sctp_sock_dump+0xa8/0x438 [sctp_diag]
+  Call trace:
+   dump_backtrace+0x0/0x2dc
+   show_stack+0x20/0x2c
+   dump_stack+0x120/0x144
+   print_address_description+0x80/0x2f4
+   __kasan_report+0x174/0x194
+   kasan_report+0x10/0x18
+   __asan_load8+0x84/0x8c
+   sctp_sock_dump+0xa8/0x438 [sctp_diag]
+   sctp_for_each_transport+0x1e0/0x26c [sctp]
+   sctp_diag_dump+0x180/0x1f0 [sctp_diag]
+   inet_diag_dump+0x12c/0x168
+   netlink_dump+0x24c/0x5b8
+   __netlink_dump_start+0x274/0x2a8
+   inet_diag_handler_cmd+0x224/0x274
+   sock_diag_rcv_msg+0x21c/0x230
+   netlink_rcv_skb+0xe0/0x1bc
+   sock_diag_rcv+0x34/0x48
+   netlink_unicast+0x3b4/0x430
+   netlink_sendmsg+0x4f0/0x574
+   sock_write_iter+0x18c/0x1f0
+   do_iter_readv_writev+0x230/0x2a8
+   do_iter_write+0xc8/0x2b4
+   vfs_writev+0xf8/0x184
+   do_writev+0xb0/0x1a8
+   __arm64_sys_writev+0x4c/0x5c
+   el0_svc_common+0x118/0x250
+   el0_svc_handler+0x3c/0x9c
+   el0_svc+0x8/0xc
 
-Regards,
-Mr.Zahiri
+To prevent this from happening we need to take a references to the
+to-be-used/dereferenced 'struct sock' and 'struct sctp_endpoint's
+until such a time when we know it can be safely released.
+
+When KASAN is not enabled, a similar, but slightly different NULL
+pointer derefernce crash occurs later along the thread of execution in
+inet_sctp_diag_fill() this time.
+
+Cc: Vlad Yasevich <vyasevich@gmail.com>
+Cc: Neil Horman <nhorman@tuxdriver.com>
+Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: lksctp developers <linux-sctp@vger.kernel.org>
+Cc: "H.P. Yarroll" <piggy@acm.org>
+Cc: Karl Knutson <karl@athena.chicago.il.us>
+Cc: Jon Grimm <jgrimm@us.ibm.com>
+Cc: Xingang Guo <xingang.guo@intel.com>
+Cc: Hui Huang <hui.huang@nokia.com>
+Cc: Sridhar Samudrala <sri@us.ibm.com>
+Cc: Daisy Chang <daisyc@us.ibm.com>
+Cc: Ryan Layer <rmlayer@us.ibm.com>
+Cc: Kevin Gao <kevin.gao@intel.com>
+Cc: linux-sctp@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+---
+ net/sctp/diag.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/net/sctp/diag.c b/net/sctp/diag.c
+index 760b367644c12..2029b240b6f24 100644
+--- a/net/sctp/diag.c
++++ b/net/sctp/diag.c
+@@ -301,6 +301,8 @@ static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
+ 	struct sctp_association *assoc;
+ 	int err = 0;
+ 
++	sctp_endpoint_hold(ep);
++	sock_hold(sk);
+ 	lock_sock(sk);
+ 	list_for_each_entry(assoc, &ep->asocs, asocs) {
+ 		if (cb->args[4] < cb->args[1])
+@@ -341,6 +343,8 @@ static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
+ 	cb->args[4] = 0;
+ release:
+ 	release_sock(sk);
++	sock_put(sk);
++	sctp_endpoint_put(ep);
+ 	return err;
+ }
+ 
+-- 
+2.34.1.173.g76aa8bc2d0-goog
+
