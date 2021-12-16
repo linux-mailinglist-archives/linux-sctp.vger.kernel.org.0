@@ -2,57 +2,56 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03FAF477763
-	for <lists+linux-sctp@lfdr.de>; Thu, 16 Dec 2021 17:12:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D35D7477962
+	for <lists+linux-sctp@lfdr.de>; Thu, 16 Dec 2021 17:39:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235662AbhLPQMe (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 16 Dec 2021 11:12:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
+        id S233308AbhLPQjX (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 16 Dec 2021 11:39:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233454AbhLPQMd (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 16 Dec 2021 11:12:33 -0500
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE126C06173E;
-        Thu, 16 Dec 2021 08:12:33 -0800 (PST)
-Received: by mail-oo1-xc2a.google.com with SMTP id t9-20020a4a8589000000b002c5c4d19723so7028060ooh.11;
-        Thu, 16 Dec 2021 08:12:33 -0800 (PST)
+        with ESMTP id S233079AbhLPQjW (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 16 Dec 2021 11:39:22 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D480C06173E
+        for <linux-sctp@vger.kernel.org>; Thu, 16 Dec 2021 08:39:22 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id a9so45242300wrr.8
+        for <linux-sctp@vger.kernel.org>; Thu, 16 Dec 2021 08:39:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9kZY0y4bJ51DNchCQ2ejZd3Xh1xZcKkFY6bC/GIArL0=;
-        b=nAgA/qpjKfVvgxYfTjtw+a6Pd/1/AfG6Y6xfyiJFHHxQkMQhkH+p6kncmKhP8Gdp5f
-         hmoZIDMKlK9X+eW/HD59KMkqh0E9l9gU7lVJMaIULD3rnCGgV/JjGRzPaRxIsseox56y
-         yRid31eEM1NoDZp02PUS78e4m0kklW92OPbNyXFMNOft3P8x1HVHhdDhEX4BQju5tf6g
-         MhGND/eJArQCOXohCE4ph9lMHS7pX5tNQ1EpIAzJiFf44E9mwmSmm1fnCWS/NZxh3h/t
-         Lq922YHFrAUTm3EifMyVM3vB3i9OWzI8yzMDwRSgpmLLMr/rhhdDO6lQvREDAtEIvS5K
-         CuTQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=kK2E/MMuR3TkQFzlN1U/zL0lQXThXaSDf+DSACr+ZJQ=;
+        b=AfZce4hj/OyMTPFe9m4P1A9oJgKDVJr02gvJWBgrr9mxCzJy6ziMLD54MRyS6YJtoa
+         tVRUzAvcIBZVrrcbCJt0TNeXIqNi7YZYl2iq/E4Wr5DKYTNT1gZ5GowODw2mZiI36ZKA
+         F4B05jb/YWyYD3a1Xpju8YcBzJfiIVJcaRtkKWKGokh5/My2h/YuyhucwAiQ3sjSfMkm
+         cAU+NeYYMMfS4JMKyZEvfsMRkVGjlB8bgb5PcsKm66iNo+/rOUb1+FSM3zhIivmr5hv2
+         epTvTu+9MFHnJ9UKkaKI800srEM49bWICIEnW7KS1ePCABv3QdHlBFypOntEYI4lrqii
+         LOLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9kZY0y4bJ51DNchCQ2ejZd3Xh1xZcKkFY6bC/GIArL0=;
-        b=k3hv5easVGCzmJ4VOyjqcYxP3+ZdcbjQLQ9eUCyJDoZtb+yw6IlTmraoZEFVp8Mmx9
-         xI7UJejFX8i0lqFKhePSiphEN8hwP5ubqi6l9C2CkThzRpxLYPYS4DPvXkHNjkeEFvP3
-         tMktIw0CReid/2HvjdUtVi6z1Sh86aL12n6wLKzRjcWXGdII+15Dp3lFgLXlCqGHShEk
-         DDvRDHFm+A7y51lNZZ/TD7HPJNKDJlSWfFPE61anzdU868PCegg9X4hWWMFmge6KiXSv
-         OIzLeAtPtx9XJzKthmRWyWvsxL97AihQf7KvFWivwnKX7E4qWarH51MVdrJfPvFvlEjb
-         hKJA==
-X-Gm-Message-State: AOAM5320XURGFNj/vqfEJ8PFYU+VAx8WiOpD4jbuC4EaoSgw4VNWo9wT
-        XmRAoLNTmYihJRRSqkLB6bHVxmJDhZdTSergmcM=
-X-Google-Smtp-Source: ABdhPJy/4c+4QoJGB5vgsj7Dlzr2XsROyjpIWNv04Gthol0bd8SEQMUhab2NX4mgdnUh55ISlr87FKobbSkG9Ln41Yw=
-X-Received: by 2002:a4a:d68f:: with SMTP id i15mr11657941oot.77.1639671152984;
- Thu, 16 Dec 2021 08:12:32 -0800 (PST)
-MIME-Version: 1.0
-References: <20211214215732.1507504-1-lee.jones@linaro.org>
- <20211214215732.1507504-2-lee.jones@linaro.org> <20211215174818.65f3af5e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20211215174818.65f3af5e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Thu, 16 Dec 2021 11:12:22 -0500
-Message-ID: <CADvbK_emZsHVsBvNFk9B5kCZjmAQkMBAx1MtwusDJ-+vt0ukPA@mail.gmail.com>
-Subject: Re: [RESEND 2/2] sctp: hold cached endpoints to prevent possible UAF
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Lee Jones <lee.jones@linaro.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=kK2E/MMuR3TkQFzlN1U/zL0lQXThXaSDf+DSACr+ZJQ=;
+        b=PfWB1Uzopg8eTUViOh3rBdnYBuuo+IiXIdJ/9Vmvha8ilUnrrCktAIUSI3/eqxCuqK
+         ncuxUQptOZMgK+MQdWfO/FUaJDMKqmt/IE95zrD4sWl3IFH6sWKy1/AkoL5uPSp/CjUM
+         5z6qm9G9jKXK6H/3IdUT3XmtroWNN71gnp25DejrDFI8aP2uiPSGHM69MHPqadoKYKud
+         1IBPL69g7ojZtUlLEAnx0lW0orLKBKBsIycUGdF9+nKNXL2xHfVm6d2GrAO348HDH1b8
+         Uw3LqTw8HcaCXnuQ1LZEfEyQR1I7De1dxGLv1ugTCJB/pRt+83MqIEXmMWR/V6h6amu7
+         8b8w==
+X-Gm-Message-State: AOAM5315UBsLhn+2DLEQpAPuVgSc0x/BZJ0+vsoveuLGiq4ZLni+Afh3
+        rQk6ddaSNpCAyGp1cf/s/z1A/g==
+X-Google-Smtp-Source: ABdhPJwMMy984oVm1mzrWQj70JbEAsHknbyrmdCszQIgnW+xBEUUUWPhHof6vdXHQHq9GGuCuifOFw==
+X-Received: by 2002:a5d:5181:: with SMTP id k1mr9883578wrv.681.1639672760937;
+        Thu, 16 Dec 2021 08:39:20 -0800 (PST)
+Received: from google.com ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id y3sm3050806wrq.12.2021.12.16.08.39.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 08:39:20 -0800 (PST)
+Date:   Thu, 16 Dec 2021 16:39:15 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Vlad Yasevich <vyasevich@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
@@ -69,107 +68,149 @@ Cc:     Lee Jones <lee.jones@linaro.org>,
         Ryan Layer <rmlayer@us.ibm.com>,
         Kevin Gao <kevin.gao@intel.com>,
         network dev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [RESEND 2/2] sctp: hold cached endpoints to prevent possible UAF
+Message-ID: <Ybtrs56tSBbmyt5c@google.com>
+References: <20211214215732.1507504-1-lee.jones@linaro.org>
+ <20211214215732.1507504-2-lee.jones@linaro.org>
+ <20211215174818.65f3af5e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CADvbK_emZsHVsBvNFk9B5kCZjmAQkMBAx1MtwusDJ-+vt0ukPA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CADvbK_emZsHVsBvNFk9B5kCZjmAQkMBAx1MtwusDJ-+vt0ukPA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 8:48 PM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Tue, 14 Dec 2021 21:57:32 +0000 Lee Jones wrote:
-> > The cause of the resultant dump_stack() reported below is a
-> > dereference of a freed pointer to 'struct sctp_endpoint' in
-> > sctp_sock_dump().
-> >
-> > This race condition occurs when a transport is cached into its
-> > associated hash table followed by an endpoint/sock migration to a new
-> > association in sctp_assoc_migrate() prior to their subsequent use in
-> > sctp_diag_dump() which uses sctp_for_each_transport() to walk the hash
-> > table calling into sctp_sock_dump() where the dereference occurs.
-in sctp_sock_dump():
-        struct sock *sk = ep->base.sk;
-        ... <--[1]
-        lock_sock(sk);
+On Thu, 16 Dec 2021, Xin Long wrote:
 
-Do you mean in [1], the sk is peeled off and gets freed elsewhere?
-if that's true, it's still late to do sock_hold(sk) in your this patch.
-
-I talked with Marcelo about this before, if the possible UAF in [1] exists,
-the problem also exists in the main RX path sctp_rcv().
-
+> On Wed, Dec 15, 2021 at 8:48 PM Jakub Kicinski <kuba@kernel.org> wrote:
 > >
-> >   BUG: KASAN: use-after-free in sctp_sock_dump+0xa8/0x438 [sctp_diag]
-> >   Call trace:
-> >    dump_backtrace+0x0/0x2dc
-> >    show_stack+0x20/0x2c
-> >    dump_stack+0x120/0x144
-> >    print_address_description+0x80/0x2f4
-> >    __kasan_report+0x174/0x194
-> >    kasan_report+0x10/0x18
-> >    __asan_load8+0x84/0x8c
-> >    sctp_sock_dump+0xa8/0x438 [sctp_diag]
-> >    sctp_for_each_transport+0x1e0/0x26c [sctp]
-> >    sctp_diag_dump+0x180/0x1f0 [sctp_diag]
-> >    inet_diag_dump+0x12c/0x168
-> >    netlink_dump+0x24c/0x5b8
-> >    __netlink_dump_start+0x274/0x2a8
-> >    inet_diag_handler_cmd+0x224/0x274
-> >    sock_diag_rcv_msg+0x21c/0x230
-> >    netlink_rcv_skb+0xe0/0x1bc
-> >    sock_diag_rcv+0x34/0x48
-> >    netlink_unicast+0x3b4/0x430
-> >    netlink_sendmsg+0x4f0/0x574
-> >    sock_write_iter+0x18c/0x1f0
-> >    do_iter_readv_writev+0x230/0x2a8
-> >    do_iter_write+0xc8/0x2b4
-> >    vfs_writev+0xf8/0x184
-> >    do_writev+0xb0/0x1a8
-> >    __arm64_sys_writev+0x4c/0x5c
-> >    el0_svc_common+0x118/0x250
-> >    el0_svc_handler+0x3c/0x9c
-> >    el0_svc+0x8/0xc
-> >
-> > To prevent this from happening we need to take a references to the
-> > to-be-used/dereferenced 'struct sock' and 'struct sctp_endpoint's
-> > until such a time when we know it can be safely released.
-> >
-> > When KASAN is not enabled, a similar, but slightly different NULL
-> > pointer derefernce crash occurs later along the thread of execution in
-> > inet_sctp_diag_fill() this time.
-Are you able to reproduce this issue?
+> > On Tue, 14 Dec 2021 21:57:32 +0000 Lee Jones wrote:
+> > > The cause of the resultant dump_stack() reported below is a
+> > > dereference of a freed pointer to 'struct sctp_endpoint' in
+> > > sctp_sock_dump().
+> > >
+> > > This race condition occurs when a transport is cached into its
+> > > associated hash table followed by an endpoint/sock migration to a new
+> > > association in sctp_assoc_migrate() prior to their subsequent use in
+> > > sctp_diag_dump() which uses sctp_for_each_transport() to walk the hash
+> > > table calling into sctp_sock_dump() where the dereference occurs.
 
-What I'm thinking is to fix it by freeing sk in call_rcu() by
-sock_set_flag(sock->sk, SOCK_RCU_FREE),
-and add rcu_read_lock() in sctp_sock_dump().
+> in sctp_sock_dump():
+>         struct sock *sk = ep->base.sk;
+>         ... <--[1]
+>         lock_sock(sk);
+> 
+> Do you mean in [1], the sk is peeled off and gets freed elsewhere?
 
-Thanks.
+'ep' and 'sk' are both switched out for new ones in sctp_sock_migrate().
 
->
-> Are you able to identify where the bug was introduced? Fixes tag would
-> be good to have here.
->
-> You should squash the two patches together.
->
-> > diff --git a/net/sctp/diag.c b/net/sctp/diag.c
-> > index 760b367644c12..2029b240b6f24 100644
-> > --- a/net/sctp/diag.c
-> > +++ b/net/sctp/diag.c
-> > @@ -301,6 +301,8 @@ static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
-> >       struct sctp_association *assoc;
-> >       int err = 0;
+> if that's true, it's still late to do sock_hold(sk) in your this patch.
+
+No, that's not right.
+
+The schedule happens *inside* the lock_sock() call.
+
+So if you take the reference before it, you're good.
+
+> I talked with Marcelo about this before, if the possible UAF in [1] exists,
+> the problem also exists in the main RX path sctp_rcv().
+> 
+> > >
+> > >   BUG: KASAN: use-after-free in sctp_sock_dump+0xa8/0x438 [sctp_diag]
+> > >   Call trace:
+> > >    dump_backtrace+0x0/0x2dc
+> > >    show_stack+0x20/0x2c
+> > >    dump_stack+0x120/0x144
+> > >    print_address_description+0x80/0x2f4
+> > >    __kasan_report+0x174/0x194
+> > >    kasan_report+0x10/0x18
+> > >    __asan_load8+0x84/0x8c
+> > >    sctp_sock_dump+0xa8/0x438 [sctp_diag]
+> > >    sctp_for_each_transport+0x1e0/0x26c [sctp]
+> > >    sctp_diag_dump+0x180/0x1f0 [sctp_diag]
+> > >    inet_diag_dump+0x12c/0x168
+> > >    netlink_dump+0x24c/0x5b8
+> > >    __netlink_dump_start+0x274/0x2a8
+> > >    inet_diag_handler_cmd+0x224/0x274
+> > >    sock_diag_rcv_msg+0x21c/0x230
+> > >    netlink_rcv_skb+0xe0/0x1bc
+> > >    sock_diag_rcv+0x34/0x48
+> > >    netlink_unicast+0x3b4/0x430
+> > >    netlink_sendmsg+0x4f0/0x574
+> > >    sock_write_iter+0x18c/0x1f0
+> > >    do_iter_readv_writev+0x230/0x2a8
+> > >    do_iter_write+0xc8/0x2b4
+> > >    vfs_writev+0xf8/0x184
+> > >    do_writev+0xb0/0x1a8
+> > >    __arm64_sys_writev+0x4c/0x5c
+> > >    el0_svc_common+0x118/0x250
+> > >    el0_svc_handler+0x3c/0x9c
+> > >    el0_svc+0x8/0xc
+> > >
+> > > To prevent this from happening we need to take a references to the
+> > > to-be-used/dereferenced 'struct sock' and 'struct sctp_endpoint's
+> > > until such a time when we know it can be safely released.
+> > >
+> > > When KASAN is not enabled, a similar, but slightly different NULL
+> > > pointer derefernce crash occurs later along the thread of execution in
+> > > inet_sctp_diag_fill() this time.
+> Are you able to reproduce this issue?
+
+Yes 100% of the time without this patch.
+
+0% of the time with it applied.
+
+> What I'm thinking is to fix it by freeing sk in call_rcu() by
+> sock_set_flag(sock->sk, SOCK_RCU_FREE),
+> and add rcu_read_lock() in sctp_sock_dump().
+> 
+> Thanks.
+> 
 > >
-> > +     sctp_endpoint_hold(ep);
-> > +     sock_hold(sk);
-> >       lock_sock(sk);
-> >       list_for_each_entry(assoc, &ep->asocs, asocs) {
-> >               if (cb->args[4] < cb->args[1])
-> > @@ -341,6 +343,8 @@ static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
-> >       cb->args[4] = 0;
-> >  release:
-> >       release_sock(sk);
-> > +     sock_put(sk);
-> > +     sctp_endpoint_put(ep);
-> >       return err;
-> >  }
+> > Are you able to identify where the bug was introduced? Fixes tag would
+> > be good to have here.
+
+It's probably been there since the code was introduced.
+
+I'll see how far back we have to go.
+
+> > You should squash the two patches together.
+
+I generally like patches to encapsulate functional changes.
+
+This one depends on the other, but they are not functionally related.
+
+You're the boss though - I'll squash them if you insist.
+
+> > > diff --git a/net/sctp/diag.c b/net/sctp/diag.c
+> > > index 760b367644c12..2029b240b6f24 100644
+> > > --- a/net/sctp/diag.c
+> > > +++ b/net/sctp/diag.c
+> > > @@ -301,6 +301,8 @@ static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
+> > >       struct sctp_association *assoc;
+> > >       int err = 0;
+> > >
+> > > +     sctp_endpoint_hold(ep);
+> > > +     sock_hold(sk);
+> > >       lock_sock(sk);
+> > >       list_for_each_entry(assoc, &ep->asocs, asocs) {
+> > >               if (cb->args[4] < cb->args[1])
+> > > @@ -341,6 +343,8 @@ static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
+> > >       cb->args[4] = 0;
+> > >  release:
+> > >       release_sock(sk);
+> > > +     sock_put(sk);
+> > > +     sctp_endpoint_put(ep);
+> > >       return err;
+> > >  }
+> > >
 > >
->
+
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
