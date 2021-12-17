@@ -2,116 +2,70 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4020E4789B4
-	for <lists+linux-sctp@lfdr.de>; Fri, 17 Dec 2021 12:21:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F344789EB
+	for <lists+linux-sctp@lfdr.de>; Fri, 17 Dec 2021 12:32:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235241AbhLQLV5 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 17 Dec 2021 06:21:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
+        id S229817AbhLQLcA (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 17 Dec 2021 06:32:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233365AbhLQLV5 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 17 Dec 2021 06:21:57 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0456C061574
-        for <linux-sctp@vger.kernel.org>; Fri, 17 Dec 2021 03:21:56 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so3790553wmj.5
-        for <linux-sctp@vger.kernel.org>; Fri, 17 Dec 2021 03:21:56 -0800 (PST)
+        with ESMTP id S229771AbhLQLb7 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 17 Dec 2021 06:31:59 -0500
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FFEC061574
+        for <linux-sctp@vger.kernel.org>; Fri, 17 Dec 2021 03:31:59 -0800 (PST)
+Received: by mail-lf1-x143.google.com with SMTP id z7so3875878lfi.11
+        for <linux-sctp@vger.kernel.org>; Fri, 17 Dec 2021 03:31:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=b7wCHOvs45jhnC7XuyqmlLe/ZuZPVp+HAfTPI5Xa2rc=;
-        b=IbGU0gXI3aj7M7rsWXaz58qc6sm5aCK8trwuh7TiyxQ05QF2Ev6sza9b8Cj1+fbjFw
-         T1el7Hw5I/roOh8tCcK/IFLPsfPHyDstzzcGCo1uunaMyBktXw1wtZVPi/+vuwR5l5vO
-         UaEl6idd2XIcfGLv1IlrUKn/Ai/TiMXHYFqwZ7mm6MsZFwKDsWlecYwwW5+ZZZMo92Lm
-         bitqJcDRSEjY0Fj6kKk6yZEb9zEwGM52vHQ5bzlYRAOX75ur5zfEuqCro4tzyH1jEpY4
-         jpAjeHUCzuNQXqwSrh0oPU0aBAd20bCxHT6MDs8jJWgmbMUimPl0Hle1Vzdst63QbdlQ
-         TRUg==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=3KhLtwCKP93j3EcWq+BGTsAWsp8Oi4eBuXX0Ov40ah8=;
+        b=YKJi6Cnmdmtq1lS5Aapb/XSshuvR7plsyqDfIQ3xYZArexz47dTPxO9VbC4udHfZI1
+         49X9+FjBu76493zKKofGuuy/cmL3Hvpidlc1fGAXsbOXZ4fXD7AeMieX5WSrl9uLYt+2
+         1/e9mQGjIH9168D9l+DQVI6TEw8czNQJipvJXgtHSpBDNmAXz87HtzQJEhF1Iv5MUMSS
+         zWJGHtWfgCgj2pr5mgmVvPXLV48U8pWIgrIYECK0xocYuxUk4F9hsuduUcPu6lQOVUzO
+         8v0WzyocS5eV1KAhmOXG6E//h06HHtXnZESoOYY9hIwn9waK2M15SwTvb3XjFvEIqUfK
+         nSyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=b7wCHOvs45jhnC7XuyqmlLe/ZuZPVp+HAfTPI5Xa2rc=;
-        b=acfTpZ3z67BlysGZ7Hf0qd47/f1wfrSCSyedmdZtPKdlOaenGavoENDtokUKzMKKEZ
-         pgCT0V9eDEIq44RGg3bNSwNLZhTWdF850pZvhOT4wNiBCmJWs5D8ZH5yeFvyk0lagJoc
-         R1FjOB7HTxr9LlfcbiNKUkLdrg9qZTWalbkdGwTmQKBZEur36cTMFr2uW3WgyzMmHVgY
-         4hjhYZt6pUt/4vxV+hFgwZmwWgQAaxcXl73MhWMxkNqmGYVJuAlZIWnBPR8K6wACbcYc
-         urUPJ/dTXpkVvi+yLRHbkKniP+semko56ciLCIU6rBIYxwxQwu/vjWrSYWuITkEKDXRx
-         64sw==
-X-Gm-Message-State: AOAM533lZlR4c0xwojD3naW3TdEJH7FxMgAgGbNPb8ak/vqgKof/lUOC
-        8GRCA7iR59OCoIjAAyMsyK7NKA==
-X-Google-Smtp-Source: ABdhPJyJc7u+feUS+x+soNm2i/bRHMLVWEnj454hUUTmnY+fjIXlM4qlznKBeLrAeEMn4fHfKRhvHQ==
-X-Received: by 2002:a7b:c452:: with SMTP id l18mr2318480wmi.46.1639740115302;
-        Fri, 17 Dec 2021 03:21:55 -0800 (PST)
-Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id g3sm3725926wrp.79.2021.12.17.03.21.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 03:21:54 -0800 (PST)
-Date:   Fri, 17 Dec 2021 11:21:52 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Xin Long <lucien.xin@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        lksctp developers <linux-sctp@vger.kernel.org>,
-        "H.P. Yarroll" <piggy@acm.org>,
-        Karl Knutson <karl@athena.chicago.il.us>,
-        Jon Grimm <jgrimm@us.ibm.com>,
-        Xingang Guo <xingang.guo@intel.com>,
-        Hui Huang <hui.huang@nokia.com>,
-        Sridhar Samudrala <sri@us.ibm.com>,
-        Daisy Chang <daisyc@us.ibm.com>,
-        Ryan Layer <rmlayer@us.ibm.com>,
-        Kevin Gao <kevin.gao@intel.com>,
-        network dev <netdev@vger.kernel.org>
-Subject: Re: [RESEND 2/2] sctp: hold cached endpoints to prevent possible UAF
-Message-ID: <Ybxy0HU5yfKm5sVF@google.com>
-References: <20211214215732.1507504-1-lee.jones@linaro.org>
- <20211214215732.1507504-2-lee.jones@linaro.org>
- <20211215174818.65f3af5e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <CADvbK_emZsHVsBvNFk9B5kCZjmAQkMBAx1MtwusDJ-+vt0ukPA@mail.gmail.com>
- <Ybtrs56tSBbmyt5c@google.com>
- <20211216124430.142a013c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=3KhLtwCKP93j3EcWq+BGTsAWsp8Oi4eBuXX0Ov40ah8=;
+        b=5ZrTlOzb2HHW0yT0bXDCSTEclxCMNvpYpfwHNQslAaiDYdFuFVLrO7mewfzoKKwThV
+         ZxrsnAmicA58UWKZxWLLsDdOAmnFZ3ifB9MHTM55HSTcbUfqV8Los+TQBRusKfceBAgF
+         DvgeQFhmBTxWiNcXyMreWZXWPlH2FvFMlXjOgCRultfVI/j4vo5wJbnHMm2vRL0bk2LT
+         Een19eNZD0RdfhpXvnsNPKLvVcwzubwTS7MVI2D8iaTgHNtI/bgmayI+/5MJML0O0Go5
+         zeXQcdVYUX29jWVbEihthPnBlhhc4e6E/uDfD5DaJaYUqhzHqqMzX/Hkhw5JqPf7tl3h
+         eE3Q==
+X-Gm-Message-State: AOAM530DIfoTiDeHSoqtNZdM9wA9fvYeTip9Tfo68BDxnwDpY4eSoLmI
+        p8ZDMgtQ+5ITKysBeyRltL4GEexUeApFZYb2cqA=
+X-Google-Smtp-Source: ABdhPJysuCHxmZ65yxeIPnx/7rpvTGOzZFTK0AHRGJYuEu2cdz//jeFvIpUkoBS8C9IVEfbv4loDtbI3c2v07Vk5km4=
+X-Received: by 2002:ac2:5a45:: with SMTP id r5mr2416589lfn.547.1639740717556;
+ Fri, 17 Dec 2021 03:31:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211216124430.142a013c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Received: by 2002:a05:6520:2e0a:b0:14f:34a5:f2fe with HTTP; Fri, 17 Dec 2021
+ 03:31:56 -0800 (PST)
+Reply-To: amabenchambers00@gmail.com
+From:   Amadou Benjamin <amegbohhelene@gmail.com>
+Date:   Fri, 17 Dec 2021 03:31:56 -0800
+Message-ID: <CAGi4tSuTtpkfhZirCZQV1iGkc+m=7u92P6CBkgnZaPFi+Q2W9Q@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, 16 Dec 2021, Jakub Kicinski wrote:
-
-> On Thu, 16 Dec 2021 16:39:15 +0000 Lee Jones wrote:
-> > > > You should squash the two patches together.  
-> > 
-> > I generally like patches to encapsulate functional changes.
-> > 
-> > This one depends on the other, but they are not functionally related.
-> > 
-> > You're the boss though - I'll squash them if you insist.
-> 
-> Yes, please squash them.
-
-I'm just about to make some changes to the patches.
-
-Specifically, I'm going to make sctp_endpoint_hold() return the
-endpoint it incremented, in order to prevent schedule related data
-corruption before/after the increment of refcnt.
-
-I'm going to keep the patches separate for the time being (since I'm
-going to submit this before you get out of bed most likely).  Just let
-me know if you still want them squashed, even with these additional
-changes (along with their explanation in the commit message), or feel
-free to squash them yourself if you choose to merge them.
-
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Hello good day.
+
+I am Barrister Amadou Benjamin by name, with due respect, I am
+contacting you to help get the deposit 10.5 million Dollars, my late
+client Engineer Vasiliy left in his Bank before his sudden death on
+April 21, 2007, to avoid confiscation by Lloyds bank. Please write me
+back through this email (amabenchambers00@gmail.com)for more
+information about this transaction or send me your private email to
+Contact you myself.
+
+Sincerely,
+Barrister Amadou Benjamin Esq
