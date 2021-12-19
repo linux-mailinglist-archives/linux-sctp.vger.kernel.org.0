@@ -2,69 +2,116 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B8F4792B3
-	for <lists+linux-sctp@lfdr.de>; Fri, 17 Dec 2021 18:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC5047A0CA
+	for <lists+linux-sctp@lfdr.de>; Sun, 19 Dec 2021 15:04:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239818AbhLQRTl (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 17 Dec 2021 12:19:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55962 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239823AbhLQRTd (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 17 Dec 2021 12:19:33 -0500
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24DDC061401
-        for <linux-sctp@vger.kernel.org>; Fri, 17 Dec 2021 09:19:32 -0800 (PST)
-Received: by mail-ua1-x92f.google.com with SMTP id w23so5647492uao.5
-        for <linux-sctp@vger.kernel.org>; Fri, 17 Dec 2021 09:19:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=G8Bj0QsxwTCM3kAbZFeDOMLo67FFphOT6CZhjs5xPqA=;
-        b=g/9uHh0ztM5cHq/IwVOj+klZpxnhqr67/PPnHj7rtjtqQaDOXQa1NkpCIt/nMizzLB
-         p3WacC5L3xXCLtDUbhzWvRAlPtx6vM5hzg+OcAP3VMM/GhG5Kr+LfMSU0pHopHnuXIaj
-         AYsGjGUb66rEaCFPWQ1jUCSq6+kmwOgGxKV0S5QC8vd62Ey6Hz23VVsNjv4hCFXR4cqS
-         xD3evRhDmLRX/q8lYhf+H9HAXj8uSR8K/WDcVr1Ul0lsTf/1I4W0y/KVhkjYR/nAcKMK
-         DsdfmroGY0D0tyJNMGBsex2P8aE5X9nfNVW1/3yZX/UOtiU5hpXbzjLO4kP3qb7Abcn6
-         FRgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=G8Bj0QsxwTCM3kAbZFeDOMLo67FFphOT6CZhjs5xPqA=;
-        b=pHbxGbXoY80HWejcGTCz9OAS8+iucG2gDIHeSqGp6Z2tx+QezvIFDEzaZZrXgToGEd
-         +V5CGgnJs1ENWBubPAGYvSHOWwFuxJsuhwGgZtlSkIIGYkE1kKD+PpfNAv8iK89puJxS
-         kCOSssCb/4kMCTllwp3nZnayJ9diDIcv3t7VsVsGrjx3bSp4MzpZf+T17tg934RxPreq
-         A2FZoNTZzrdtZBwck1lf+jQuMnM6sP5VU1uU41ZgRKZCJXmp/TzsuZwemX8PJu44yaHN
-         qrGdifMSgwkBs5SCY2kJIZSefob5nuz6uWmvU9fSmqVpCcS3CSxa4bKxKluuQXOZfnRV
-         7fFg==
-X-Gm-Message-State: AOAM532bKrf4NS+HaF+57L3xGRPXXfBlAj5RIeT1XVZKqQYsWj02L0B3
-        7kB5U1k+1Or9sG9tqYxc58Qs8+WTmnrRMS2l6Sc=
-X-Google-Smtp-Source: ABdhPJzEFABqK7gURTTR1tqTSuRXyhUpHiTAzcpuvSP3/QbhaQvwuGkfu7PzqOVXqyqTyRQNv13UmUn2XAVUbwxd7qo=
-X-Received: by 2002:a67:e40d:: with SMTP id d13mr1511459vsf.11.1639761571951;
- Fri, 17 Dec 2021 09:19:31 -0800 (PST)
+        id S233038AbhLSOEU (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 19 Dec 2021 09:04:20 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:42822 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235888AbhLSOEN (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Sun, 19 Dec 2021 09:04:13 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-281-UDWdNUDTNgaebzpPJPcDfQ-1; Sun, 19 Dec 2021 14:04:09 +0000
+X-MC-Unique: UDWdNUDTNgaebzpPJPcDfQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Sun, 19 Dec 2021 14:04:08 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Sun, 19 Dec 2021 14:04:08 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Lee Jones' <lee.jones@linaro.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Vlad Yasevich" <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        "Marcelo Ricardo Leitner" <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        lksctp developers <linux-sctp@vger.kernel.org>,
+        "H.P. Yarroll" <piggy@acm.org>,
+        Karl Knutson <karl@athena.chicago.il.us>,
+        Jon Grimm <jgrimm@us.ibm.com>,
+        Xingang Guo <xingang.guo@intel.com>,
+        Hui Huang <hui.huang@nokia.com>,
+        Sridhar Samudrala <sri@us.ibm.com>,
+        Daisy Chang <daisyc@us.ibm.com>,
+        Ryan Layer <rmlayer@us.ibm.com>,
+        Kevin Gao <kevin.gao@intel.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH v2 1/2] sctp: export sctp_endpoint_{hold,put}() and return
+ incremented endpoint
+Thread-Topic: [PATCH v2 1/2] sctp: export sctp_endpoint_{hold,put}() and
+ return incremented endpoint
+Thread-Index: AQHX80yDhnx49qqwrkWmSXPA3hUXMKw2ugEAgAAGAoCAAxo9gA==
+Date:   Sun, 19 Dec 2021 14:04:08 +0000
+Message-ID: <20ea50c910654fa0abc601bbddc37eaf@AcuMS.aculab.com>
+References: <20211217134607.74983-1-lee.jones@linaro.org>
+ <1458e6e239e2493e9147fd95ec32d9fd@AcuMS.aculab.com>
+ <YbygIz4oqlTkrQgD@google.com>
+In-Reply-To: <YbygIz4oqlTkrQgD@google.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Received: by 2002:abe:a504:0:b0:28f:c0fd:ef95 with HTTP; Fri, 17 Dec 2021
- 09:19:31 -0800 (PST)
-Reply-To: mrsmercyadams07@gmail.com
-From:   "Miss. Auel Adeline" <jessied4luv@gmail.com>
-Date:   Fri, 17 Dec 2021 18:19:31 +0100
-Message-ID: <CAFryVwEzB8g9LZ_Kg+U78RtoVhGW86gzm0H7DePJf3zUD+4+=Q@mail.gmail.com>
-Subject: Royal greatings
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Royal greatings my good friend
-My name is: Miss Auel Adeline.
-I'm contacting you because I want to be your friend and confide in
-you. I have in my possession now 227 KG of Gold Bars, Quality: 23
-carat, 95%pure that I inherited from my late mother. I want you to buy
-or help me to find a buyer who can buy the gold at a better price than
-the African price so you can help me to invest the money in your
-country since I have no business idea. I want to leave Cote d'Ivoire
-and relocate to your country to continue my education in your country.
-I want you to stand by me as my tutor to sell this gold and for
-investment in your country.I will be waiting for your response.
-Miss Auel Adeline.
+RnJvbTogTGVlIEpvbmVzDQo+IFNlbnQ6IDE3IERlY2VtYmVyIDIwMjEgMTQ6MzUNCj4gDQo+IE9u
+IEZyaSwgMTcgRGVjIDIwMjEsIERhdmlkIExhaWdodCB3cm90ZToNCj4gDQo+ID4gRnJvbTogTGVl
+IEpvbmVzDQo+ID4gPiBTZW50OiAxNyBEZWNlbWJlciAyMDIxIDEzOjQ2DQo+ID4gPg0KPiA+ID4g
+bmV0L3NjdHAvZGlhZy5jIGZvciBpbnN0YW5jZSBpcyBidWlsdCBpbnRvIGl0cyBvd24gc2VwYXJh
+dGUgbW9kdWxlDQo+ID4gPiAoc2N0cF9kaWFnLmtvKSBhbmQgcmVxdWlyZXMgdGhlIHVzZSBvZiBz
+Y3RwX2VuZHBvaW50X3tob2xkLHB1dH0oKSBpbg0KPiA+ID4gb3JkZXIgdG8gcHJldmVudCBhIHJl
+Y2VudGx5IGZvdW5kIHVzZS1hZnRlci1mcmVlIGlzc3VlLg0KPiA+ID4NCj4gPiA+IEluIG9yZGVy
+IHRvIHByZXZlbnQgZGF0YSBjb3JydXB0aW9uIG9mIHRoZSBwb2ludGVyIHVzZWQgdG8gdGFrZSBh
+DQo+ID4gPiByZWZlcmVuY2Ugb24gYSBzcGVjaWZpYyBlbmRwb2ludCwgYmV0d2VlbiB0aGUgdGlt
+ZSBvZiBjYWxsaW5nDQo+ID4gPiBzY3RwX2VuZHBvaW50X2hvbGQoKSBhbmQgaXQgcmV0dXJuaW5n
+LCB0aGUgQVBJIG5vdyByZXR1cm5zIGEgcG9pbnRlcg0KPiA+ID4gdG8gdGhlIGV4YWN0IGVuZHBv
+aW50IHRoYXQgd2FzIGluY3JlbWVudGVkLg0KPiA+ID4NCj4gPiA+IEZvciBleGFtcGxlLCBpbiBz
+Y3RwX3NvY2tfZHVtcCgpLCB3ZSBjb3VsZCBoYXZlIHRoZSBmb2xsb3dpbmcgaHVuazoNCj4gPiA+
+DQo+ID4gPiAJc2N0cF9lbmRwb2ludF9ob2xkKHRzcC0+YXNvYy0+ZXApOw0KPiA+ID4gCWVwID0g
+dHNwLT5hc29jLT5lcDsNCj4gPiA+IAlzayA9IGVwLT5iYXNlLnNrDQo+ID4gPiAJbG9ja19zb2Nr
+KGVwLT5iYXNlLnNrKTsNCj4gPiA+DQo+ID4gPiBJdCBpcyBwb3NzaWJsZSBmb3IgdGhpcyB0YXNr
+IHRvIGJlIHN3YXBwZWQgb3V0IGltbWVkaWF0ZWx5IGZvbGxvd2luZw0KPiA+ID4gdGhlIGNhbGwg
+aW50byBzY3RwX2VuZHBvaW50X2hvbGQoKSB0aGF0IHdvdWxkIGNoYW5nZSB0aGUgYWRkcmVzcyBv
+Zg0KPiA+ID4gdHNwLT5hc29jLT5lcCB0byBwb2ludCB0byBhIGNvbXBsZXRlbHkgZGlmZmVyZW50
+IGVuZHBvaW50LiAgVGhpcyBtZWFucw0KPiA+ID4gYSByZWZlcmVuY2UgY291bGQgYmUgdGFrZW4g
+dG8gdGhlIG9sZCBlbmRwb2ludCBhbmQgdGhlIG5ldyBvbmUgd291bGQNCj4gPiA+IGJlIHByb2Nl
+c3NlZCB3aXRob3V0IGEgcmVmZXJlbmNlIHRha2VuLCBtb3Jlb3ZlciB0aGUgbmV3IGVuZHBvaW50
+DQo+ID4gPiBjb3VsZCB0aGVuIGJlIGZyZWVkIHdoaWxzdCBzdGlsbCBwcm9jZXNzaW5nIGFzIGEg
+cmVzdWx0LCBjYXVzaW5nIGENCj4gPiA+IHVzZS1hZnRlci1mcmVlLg0KPiA+ID4NCj4gPiA+IElm
+IHdlIHJldHVybiB0aGUgZXhhY3QgcG9pbnRlciB0aGF0IHdhcyBoZWxkLCB3ZSBlbnN1cmUgdGhp
+cyB0YXNrDQo+ID4gPiBwcm9jZXNzZXMgb25seSB0aGUgZW5kcG9pbnQgd2UgaGF2ZSB0YWtlbiBh
+IHJlZmVyZW5jZSB0by4gIFRoZQ0KPiA+ID4gcmVzdWx0YW50IGh1bmsgbm93IGxvb2tzIGxpa2Ug
+dGhpczoNCj4gPiA+DQo+ID4gPiAJZXAgPSBzY3RwX2VuZHBvaW50X2hvbGQodHNwLT5hc29jLT5l
+cCk7DQo+ID4gPiAJc2sgPSBlcC0+YmFzZS5zaw0KPiA+ID4gCWxvY2tfc29jayhzayk7DQo+ID4N
+Cj4gPiBJc24ndCB0aGF0IGp1c3QgdGhlIHNhbWUgYXMgZG9pbmcgdGhpbmdzIGluIHRoZSBvdGhl
+ciBvcmRlcj8NCj4gPiAJZXAgPSB0c3AtPmFzb2MtPmVwOw0KPiA+IAlzY3RwX2VuZHBvaW50X2hv
+bGQoZXApOw0KPiANCj4gU2xlZXAgZm9yIGEgZmV3IG1pbGxpc2Vjb25kcyBiZXR3ZWVuIHRob3Nl
+IGxpbmVzIGFuZCBzZWUgd2hhdCBoYXBwZW5zLg0KPiANCj4gJ2VwJyBjb3VsZCBzdGlsbCBiZSBm
+cmVlZCBiZXR3ZWVuIHRoZSBhc3NpZ25tZW50IGFuZCB0aGUgY2FsbC4NCg0KSXQgY2FuIGFsc28g
+YmUgZnJlZWQgaGFsZiB3YXkgdGhyb3VnaCBzZXR0aW5nIHVwIHRoZSBhcmd1bWVudHMgdG8gdGhl
+IGNhbGwuDQpTbyBhbnkgY2FsbDoNCgkJeHh4KHRzcC0+YXNvYy0+ZXApOw0KaXMgb25seSByZWFs
+bHkgdmFsaWQgaWYgYm90aCB0c3AtPmFzb2MgYW5kIGFzb2MtPmVwIGFyZSBzdGFibGUuDQpTbyBp
+dCBpcyBleGFjdGx5IHRoZSBzYW1lIGFzIGRvaW5nOg0KCQllcCA9IHRzcC0+YXNvYy0+ZXA7DQoJ
+CXh4eChlcCk7DQpSZXR1cm5pbmcgdGhlIHZhbHVlIG9mIHRoZSBhcmd1bWVudCBkb2Vzbid0IGhl
+bHAgaWYgYW55IG9mIHRoZSBwb2ludGVkLXRvDQppdGVtcyBjYW4gZ2V0IGZyZWVkLg0KDQoJRGF2
+aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50
+IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTcz
+ODYgKFdhbGVzKQ0K
+
