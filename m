@@ -2,61 +2,141 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A00E47E7F2
-	for <lists+linux-sctp@lfdr.de>; Thu, 23 Dec 2021 20:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0C9247E990
+	for <lists+linux-sctp@lfdr.de>; Thu, 23 Dec 2021 23:49:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbhLWTHy (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 23 Dec 2021 14:07:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52170 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231715AbhLWTHv (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 23 Dec 2021 14:07:51 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF410C061757
-        for <linux-sctp@vger.kernel.org>; Thu, 23 Dec 2021 11:07:51 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id jw3so5752210pjb.4
-        for <linux-sctp@vger.kernel.org>; Thu, 23 Dec 2021 11:07:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=PA5Eb3SKatYFaqsO/40bx9AAytaL07oA6ydkj8EAbzQ=;
-        b=UkmYk8bkT1Rlj5rgk1SO6h0a2ZnhiE0CBVLQVCDUO1lxjvxxLnJNbWx2J/zaCycaUm
-         gpjDQqIAT6ZdkIVSdg12eiqOeKZjQ7B6avvrJ11TgZ58l6SPRF67r2i8cOWD6iLnPwPF
-         +GcYnPV4M9mtgkW7MsgK10b37Ijt2h/pZL/47tsQAtxbO0Nb1h1DPgU3hjSIh8885jv5
-         oNLiuaX90XkSrXfJ0vKffls2f+YLeWewZGK/zF0rLrvD9l7ES6ybm6hpfj/AVz5kx4WE
-         A714SEbTsaEBoc+IzAmR9gzV6J73CerBUPJm1+2cTEpQIpocdCh9nGXBIgSVzkoz3fIl
-         Ib/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=PA5Eb3SKatYFaqsO/40bx9AAytaL07oA6ydkj8EAbzQ=;
-        b=OFKw4JI7KFwkiE57KqHKt3EGzgFymk3A2QIuj/0yNigfp7B3GECV934QL2bhXziziA
-         F4k/pPmrwaNVjsZhHACk7wbjWm3WTC+5upjR3J6UzsvViGs6H1Z3aBKXry32Ygu6Pdi9
-         qnunqX8ocK5U2cPLVvtJqtlFK8ZJnyv4yRZRqJhk+NxqR+7oxwmabpK3Fjz8ZWiA2fRC
-         4Uw9QtvT1+stVuMctQOkZh2DFCnq3ipwJQlmvuH95W2EymbQ6j1JdNC+tljQHBIh07rO
-         x7muLWO7fCEnMZ+WwxPZo/9mfIJLREdm/rglmrDcjghVP3qjw96K6c1iCXDVky2WaAr5
-         e8GA==
-X-Gm-Message-State: AOAM5309WGAhfqWigDLUox4nHKbfBCUATOT99ZybWECiQ4tiRMGyjQOm
-        /GJYLwVUTA9hjtzZYdSAZ9u8t972lULFvocFzkU=
-X-Google-Smtp-Source: ABdhPJxjjNNaAAZf6zdtV7cHFZ3Xttipb6gKEGO0gs2RpfKNenVe7eKOsItJva599gJnrgD6H+SGyKXDWlL/iH75a/Q=
-X-Received: by 2002:a17:902:bc85:b0:143:954e:8548 with SMTP id
- bb5-20020a170902bc8500b00143954e8548mr3526489plb.82.1640286471040; Thu, 23
- Dec 2021 11:07:51 -0800 (PST)
+        id S234065AbhLWWtQ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 23 Dec 2021 17:49:16 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:34730 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232659AbhLWWtQ (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 23 Dec 2021 17:49:16 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 78D2D210E0;
+        Thu, 23 Dec 2021 22:49:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1640299755; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=wbmGWyeEVNIS/ME+UQ/afuNXoUDG8JZI1rGewRKA1SA=;
+        b=dU4vcy/VpP6s+hkvgzpyz7emfay2mHajPcszmovkldX1yI8DWhlt80WYYN775fC0+KpFfb
+        HaTO2rqCoXd6etNhD7xWsaL7THHtjSGa8d0Mo+LmhdPpOHOl3THTVg2d8I2yU3FlnITGrk
+        gzZ+Z8AqwQxI2qT++QlM2FFnVmfLGIY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1640299755;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=wbmGWyeEVNIS/ME+UQ/afuNXoUDG8JZI1rGewRKA1SA=;
+        b=mcMC+W3BaSecXpY6+F2MstvJNSxiJWf6X9q7xGelCP5kP3AsF6I8tFoNOfnsV0ek31SgTG
+        ZMnajzAHGg9HiECw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3E16113E6D;
+        Thu, 23 Dec 2021 22:49:15 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id +o2CDev8xGF2HgAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Thu, 23 Dec 2021 22:49:15 +0000
+From:   Petr Vorel <pvorel@suse.cz>
+To:     linux-sctp@vger.kernel.org
+Cc:     Petr Vorel <pvorel@suse.cz>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>
+Subject: [PATCH 1/1] sctp: Add optional SHA256 hmac cookie generation
+Date:   Thu, 23 Dec 2021 23:49:11 +0100
+Message-Id: <20211223224911.9542-1-pvorel@suse.cz>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Received: by 2002:a05:6a20:789d:b0:68:7657:a7bf with HTTP; Thu, 23 Dec 2021
- 11:07:50 -0800 (PST)
-Reply-To: revfrpaulwilliams2@gmail.com
-From:   "Rev. Fr. Paul Williams" <melindagatesfoundation53@gmail.com>
-Date:   Fri, 24 Dec 2021 00:37:50 +0530
-Message-ID: <CAMk=7STiO_AnPfiThkc0igBhN28j_=mWdZ6Aq04xstne4q8cRw@mail.gmail.com>
-Subject: Donation From Williams Foundation.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Contact Rev. Fr. Paul Williams Immediately For A Charity Donation Of
-$6,200,000.00 United States Dollars At E-Mail:
-revfrpaulwilliams2@gmail.com
+Signed-off-by: Petr Vorel <pvorel@suse.cz>
+---
+Hi,
+
+WARNING: While I tested this with LTP SCTP and IPsec over SCTP tests,
+it'd be good to review carefully.
+
+Also this may not be that useful given that CRYPTO_SHA256 will be most
+likely enabled due being selected by ENCRYPTED_KEYS [=y] && KEYS [=y]
+or BT [=m] && NET [=y] && !S390 && (RFKILL [=m] || !RFKILL [=m]).
+
+Kind regards,
+Petr
+
+ net/sctp/Kconfig    | 13 +++++++++++++
+ net/sctp/protocol.c |  2 ++
+ net/sctp/sysctl.c   |  6 ++++++
+ 3 files changed, 21 insertions(+)
+
+diff --git a/net/sctp/Kconfig b/net/sctp/Kconfig
+index 5da599ff84a9..0f508d0b1864 100644
+--- a/net/sctp/Kconfig
++++ b/net/sctp/Kconfig
+@@ -68,6 +68,12 @@ config SCTP_DEFAULT_COOKIE_HMAC_SHA1
+ 	  Enable optional SHA1 hmac based SCTP cookie generation
+ 	select SCTP_COOKIE_HMAC_SHA1
+ 
++config SCTP_DEFAULT_COOKIE_HMAC_SHA256
++	bool "Enable optional SHA256 hmac cookie generation"
++	help
++	  Enable optional SHA256 hmac based SCTP cookie generation
++	select SCTP_COOKIE_HMAC_SHA256
++
+ config SCTP_DEFAULT_COOKIE_HMAC_NONE
+ 	bool "Use no hmac alg in SCTP cookie generation"
+ 	help
+@@ -89,6 +95,13 @@ config SCTP_COOKIE_HMAC_SHA1
+ 	select CRYPTO_HMAC if SCTP_COOKIE_HMAC_SHA1
+ 	select CRYPTO_SHA1 if SCTP_COOKIE_HMAC_SHA1
+ 
++config SCTP_COOKIE_HMAC_SHA256
++	bool "Enable optional SHA256 hmac cookie generation"
++	help
++	  Enable optional SHA256 hmac based SCTP cookie generation
++	select CRYPTO_HMAC if SCTP_COOKIE_HMAC_SHA256
++	select CRYPTO_SHA256 if SCTP_COOKIE_HMAC_SHA256
++
+ config INET_SCTP_DIAG
+ 	depends on INET_DIAG
+ 	def_tristate INET_DIAG
+diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
+index 35928fefae33..3a0b76e26878 100644
+--- a/net/sctp/protocol.c
++++ b/net/sctp/protocol.c
+@@ -1317,6 +1317,8 @@ static int __net_init sctp_defaults_init(struct net *net)
+ 	net->sctp.sctp_hmac_alg			= "md5";
+ #elif defined (CONFIG_SCTP_DEFAULT_COOKIE_HMAC_SHA1)
+ 	net->sctp.sctp_hmac_alg			= "sha1";
++#elif defined (CONFIG_SCTP_DEFAULT_COOKIE_HMAC_SHA256)
++	net->sctp.sctp_hmac_alg			= "sha256";
+ #else
+ 	net->sctp.sctp_hmac_alg			= NULL;
+ #endif
+diff --git a/net/sctp/sysctl.c b/net/sctp/sysctl.c
+index b46a416787ec..05bfc66effeb 100644
+--- a/net/sctp/sysctl.c
++++ b/net/sctp/sysctl.c
+@@ -400,6 +400,12 @@ static int proc_sctp_do_hmac_alg(struct ctl_table *ctl, int write,
+ 			net->sctp.sctp_hmac_alg = "sha1";
+ 			changed = true;
+ 		}
++#endif
++#ifdef CONFIG_CRYPTO_SHA256
++		if (!strncmp(tmp, "sha256", 6)) {
++			net->sctp.sctp_hmac_alg = "sha256";
++			changed = true;
++		}
+ #endif
+ 		if (!strncmp(tmp, "none", 4)) {
+ 			net->sctp.sctp_hmac_alg = NULL;
+-- 
+2.34.1
+
