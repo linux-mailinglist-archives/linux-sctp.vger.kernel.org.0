@@ -2,106 +2,149 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69CDF4809D5
-	for <lists+linux-sctp@lfdr.de>; Tue, 28 Dec 2021 15:10:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9965E48129B
+	for <lists+linux-sctp@lfdr.de>; Wed, 29 Dec 2021 13:20:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233294AbhL1OKC (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 28 Dec 2021 09:10:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51854 "EHLO
+        id S235982AbhL2MUp (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 29 Dec 2021 07:20:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231987AbhL1OKC (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 28 Dec 2021 09:10:02 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912D3C061574
-        for <linux-sctp@vger.kernel.org>; Tue, 28 Dec 2021 06:10:01 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id l5so39601114edj.13
-        for <linux-sctp@vger.kernel.org>; Tue, 28 Dec 2021 06:10:01 -0800 (PST)
+        with ESMTP id S234936AbhL2MUo (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 29 Dec 2021 07:20:44 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2505BC061574
+        for <linux-sctp@vger.kernel.org>; Wed, 29 Dec 2021 04:20:44 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id a9so44023722wrr.8
+        for <linux-sctp@vger.kernel.org>; Wed, 29 Dec 2021 04:20:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=zwa5SmF7AqJ7b8ziq0P2tazEHmZcmrR0jeKQIZMxvV0=;
-        b=nAYfxbW+UjtrRYnJ6qW+UZji2MJ1Ao2CSM5NC6/jJsJu6sET8TUvVCb4M0x0s3KXb/
-         28MPjNQRH63gN4MsoqVggE2E3Zs7IHSrCc/raUONXShOTiDw5/VgWwMZXNYegyx62Exn
-         PGWiMvrpwgR/uCZan8SF9YD4yKcDN5keXnJ8ldNYQswt9PcqaXRq07FaPW+QI6/J+zDT
-         j18UU6VfqawnVWze+jNuYDW7WL1m+TX0rj3fxTWiRuPIAmBH0Q9i1u8YMR4kScJlne/b
-         J/9ziTaSCf5/FxObvzIjYSn8qfahRN6cMq1E5aV/oo2FCXnMOjZMaf/oApfOF8QIvI5k
-         DVug==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=qdxysVGtt4FcWQNLA8BShzevbYmgDdMZZHbKkdXEhqc=;
+        b=Ji4DMvElI3uotsoXs1c78pyZyHcVYEJjOZMFBfs9dbd8d0XLxjdb7Jgw76bNZCZsCH
+         0ieSGZkZj68IXoGVq2amW5FXDnNW4F59P+Q+t5lI5UWh723BP+3N7WsdeoxH5oN4TT/o
+         BGJDtlOS3Nl6l6xaVipLLLtweZUVsbN+HCchOSdKsVjI2K/d+0jpR72pezVf2IWdA5Sz
+         1pIdN8aFuEq7+oYLG4rj3ZuFt6IkdXXhc93q88D8nxNpRDck9Tv+dTOILegxDpgaMQaP
+         Dymk72ZSLBC43dunQ4paVVrGUMzPdzjci5vDA0HX4Pfst0/YOGwSp+07ZbdhEZtykSnn
+         Lv/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=zwa5SmF7AqJ7b8ziq0P2tazEHmZcmrR0jeKQIZMxvV0=;
-        b=mnoRW6AUIkNMT/4PxqDlXzw5VMn4H30uBcEagNMGQaTNnXv/PHFEmS0jRJ7iM/WC3b
-         wpizer9GrOx1c1+Bj2eJY/AGjcqus01oW/ZsrX9k+GI4lbV2p9MW2Kfxytp9z7aMyAsi
-         TQY8TaT5sgUdrP+emt/Q9B545IXKZ2R8gHMlbzn+MSCLue+NCRQqk4hYvWI9/FEoJyPL
-         LD9YAIAjThjbl7FlkHBD1yHwQHXF/jkgGYjgHwyRkHS9/5C2fGYBBfuvHfi87uJ94lKC
-         8qe/h2WCpeJ910Q3v3k+La8/A9kBBqLMbf+nGuYB9r4ZYZmqx2ev4wb6jSyY7xPPFIsM
-         jVXw==
-X-Gm-Message-State: AOAM532euo8DBo7h6LabDSalHGyFT3445htKCh8ei8pYaNw4UCaMUFr6
-        fb5IEqvfU49oVeDVq37Xc89QpvGOXl+mH7cyApA=
-X-Google-Smtp-Source: ABdhPJyAWB85JzxsfzcGZcym0/qN2kIPBYTkbMTqTOs41NHh44UIem4lSl9HEJMz6j8ho5lB/nudjGF6Ng2+d8KscqA=
-X-Received: by 2002:a05:6402:35c2:: with SMTP id z2mr20989808edc.136.1640700599850;
- Tue, 28 Dec 2021 06:09:59 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=qdxysVGtt4FcWQNLA8BShzevbYmgDdMZZHbKkdXEhqc=;
+        b=P3LOdk/Kn/yDimd8rHR7HWB0FUnlA449BD5zDWhJF5h7MjxUVt1YX5KiUzZ+y7rX49
+         Sj0wU8/qDJA/JXypjiLLDZuLsWKVzLuD4swLtU9XvAcFukgiutF0mbzcZXYwAzwNONga
+         xz1MpmOrHIeLmUObjY1NKwk+s4qJLbLlKgjwae8ITPlEvWMUHNnMpEx2CF1H5/Al2K6p
+         UFnK4useiUcka7he2+pv9AyHQe5ge41zoofJtp9EzZA8BDWhnFXsq3gMta2YGBE1+w5X
+         Ek7vk2kN5t/nZKQq6DLgKBvwKzLt/OiT0O6kfyu6pTbxq4zKmx9Mm7YpVQln+9M3Ow0T
+         tVkw==
+X-Gm-Message-State: AOAM530pBucQfoTScc09ySInCYh1cJ07ggRT3LNdMtLKbi543EksJB1L
+        aFK5gDDDYOD7uoTt62JanyE6TA==
+X-Google-Smtp-Source: ABdhPJwnKEqMnn1CMxmAL3M3tBnIe+RumF4OwRsvIzHGJxu6pjb3MMw56OApPMB/lZBYuCq8jjQ4Bg==
+X-Received: by 2002:a5d:4d42:: with SMTP id a2mr20779611wru.311.1640780441975;
+        Wed, 29 Dec 2021 04:20:41 -0800 (PST)
+Received: from google.com ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id h19sm20347949wmm.13.2021.12.29.04.20.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Dec 2021 04:20:41 -0800 (PST)
+Date:   Wed, 29 Dec 2021 12:20:39 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Subject: Re: [PATCHv2 net] sctp: use call_rcu to free endpoint
+Message-ID: <YcxSl+YZ2WCRh9Ls@google.com>
+References: <152f3b81e78d311514330a5b97131beb459b01f5.1640282670.git.lucien.xin@gmail.com>
 MIME-Version: 1.0
-Sender: mrsdanielsmarina2020@gmail.com
-Received: by 2002:a17:907:6da5:0:0:0:0 with HTTP; Tue, 28 Dec 2021 06:09:59
- -0800 (PST)
-From:   Jackie Fowler <jackiefowler597@gmail.com>
-Date:   Tue, 28 Dec 2021 14:09:59 +0000
-X-Google-Sender-Auth: Fq-GA9VKL47CG3jQ9qSLXlrhLYU
-Message-ID: <CAKV9mijpmwGhs43EBOozg5NrktjSUK87Xw_dXn4a+01s_noEJA@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <152f3b81e78d311514330a5b97131beb459b01f5.1640282670.git.lucien.xin@gmail.com>
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Gooday my beloved,
+On Thu, 23 Dec 2021, Xin Long wrote:
 
- I sent this mail praying it will get to you in a good condition of
-health, since I myself are in a very critical health condition in
-which I sleep every night without knowing if I may be alive to see the
-next day. I bring peace and love to you. It is by the grace of God, I
-had no choice than to do what is lawful and right in the sight of God
-for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
-y
-and glory upon my life. I am Mrs.Fowler,Jackie,a widow and citizen of
-Canada. I am suffering from a long time brain tumor, It has defiled
-all forms of medical treatment, and right now I have about a few
-months to leave, according to medical experts.
+> This patch is to delay the endpoint free by calling call_rcu() to fix
+> another use-after-free issue in sctp_sock_dump():
+> 
+>   BUG: KASAN: use-after-free in __lock_acquire+0x36d9/0x4c20
+>   Call Trace:
+>     __lock_acquire+0x36d9/0x4c20 kernel/locking/lockdep.c:3218
+>     lock_acquire+0x1ed/0x520 kernel/locking/lockdep.c:3844
+>     __raw_spin_lock_bh include/linux/spinlock_api_smp.h:135 [inline]
+>     _raw_spin_lock_bh+0x31/0x40 kernel/locking/spinlock.c:168
+>     spin_lock_bh include/linux/spinlock.h:334 [inline]
+>     __lock_sock+0x203/0x350 net/core/sock.c:2253
+>     lock_sock_nested+0xfe/0x120 net/core/sock.c:2774
+>     lock_sock include/net/sock.h:1492 [inline]
+>     sctp_sock_dump+0x122/0xb20 net/sctp/diag.c:324
+>     sctp_for_each_transport+0x2b5/0x370 net/sctp/socket.c:5091
+>     sctp_diag_dump+0x3ac/0x660 net/sctp/diag.c:527
+>     __inet_diag_dump+0xa8/0x140 net/ipv4/inet_diag.c:1049
+>     inet_diag_dump+0x9b/0x110 net/ipv4/inet_diag.c:1065
+>     netlink_dump+0x606/0x1080 net/netlink/af_netlink.c:2244
+>     __netlink_dump_start+0x59a/0x7c0 net/netlink/af_netlink.c:2352
+>     netlink_dump_start include/linux/netlink.h:216 [inline]
+>     inet_diag_handler_cmd+0x2ce/0x3f0 net/ipv4/inet_diag.c:1170
+>     __sock_diag_cmd net/core/sock_diag.c:232 [inline]
+>     sock_diag_rcv_msg+0x31d/0x410 net/core/sock_diag.c:263
+>     netlink_rcv_skb+0x172/0x440 net/netlink/af_netlink.c:2477
+>     sock_diag_rcv+0x2a/0x40 net/core/sock_diag.c:274
+> 
+> This issue occurs when asoc is peeled off and the old sk is freed after
+> getting it by asoc->base.sk and before calling lock_sock(sk).
+> 
+> To prevent the sk free, as a holder of the sk, ep should be alive when
+> calling lock_sock(). This patch uses call_rcu() and moves sock_put and
+> ep free into sctp_endpoint_destroy_rcu(), so that it's safe to try to
+> hold the ep under rcu_read_lock in sctp_transport_traverse_process().
+> 
+> If sctp_endpoint_hold() returns true, it means this ep is still alive
+> and we have held it and can continue to dump it; If it returns false,
+> it means this ep is dead and can be freed after rcu_read_unlock, and
+> we should skip it.
+> 
+> In sctp_sock_dump(), after locking the sk, if this ep is different from
+> tsp->asoc->ep, it means during this dumping, this asoc was peeled off
+> before calling lock_sock(), and the sk should be skipped; If this ep is
+> the same with tsp->asoc->ep, it means no peeloff happens on this asoc,
+> and due to lock_sock, no peeloff will happen either until release_sock.
+> 
+> Note that delaying endpoint free won't delay the port release, as the
+> port release happens in sctp_endpoint_destroy() before calling call_rcu().
+> Also, freeing endpoint by call_rcu() makes it safe to access the sk by
+> asoc->base.sk in sctp_assocs_seq_show() and sctp_rcv().
+> 
+> Thanks Jones to bring this issue up.
+> 
+> v1->v2:
+>   - improve the changelog.
+>   - add kfree(ep) into sctp_endpoint_destroy_rcu(), as Jakub noticed.
+> 
+> Reported-by: syzbot+9276d76e83e3bcde6c99@syzkaller.appspotmail.com
+> Reported-by: Lee Jones <lee.jones@linaro.org>
+> Fixes: d25adbeb0cdb ("sctp: fix an use-after-free issue in sctp_sock_dump")
+> Signed-off-by: Xin Long <lucien.xin@gmail.com>
+> ---
+>  include/net/sctp/sctp.h    |  6 +++---
+>  include/net/sctp/structs.h |  3 ++-
+>  net/sctp/diag.c            | 12 ++++++------
+>  net/sctp/endpointola.c     | 23 +++++++++++++++--------
+>  net/sctp/socket.c          | 23 +++++++++++++++--------
+>  5 files changed, 41 insertions(+), 26 deletions(-)
 
- The situation has gotten complicated recently with my inability to
-hear proper, am communicating with you with the help of the chief
-nurse herein the hospital, from all indication my conditions is really
-deteriorating and it is quite obvious that, according to my doctors
-they have advised me that I may not live too long, Because this
-illness has gotten to a very bad stage. I plead that you will not
-expose or betray this trust and confidence that I am about to repose
-on you for the mutual benefit of the orphans and the less privilege. I
-have some funds I inherited from my late husband, the sum of ($
-12,500,000.00 Dollars).Having known my condition, I decided to donate
-this fund to you believing that you will utilize it the way i am going
-to instruct herein.
- I need you to assist me and reclaim this money and use it for Charity
-works, for orphanages and gives justice and help to the poor, needy
-and widows says The Lord." Jeremiah 22:15-16.=E2=80=9C and also build schoo=
-ls
-for less privilege that will be named after my late husband if
-possible and to promote the word of God and the effort that the house
-of God is maintained. I do not want a situation where this money will
-be used in an ungodly manner. That's why I'm taking this decision. I'm
-not afraid of death, so I know where I'm going.
- I accept this decision because I do not have any child who will
-inherit this money after I die. Please I want your sincerely and
-urgent answer to know if you will be able to execute this project for
-the glory of God, and I will give you more information on how the fund
-will be transferred to your bank account. May the grace, peace, love
-and the truth in the Word of God be with you and all those that you
-love and care for.
-I'm waiting for your immediate reply.
-May God Bless you,
-Best Regards.
-Mrs.Jackie,Fowler.
+My test has been soaking for about an hour now with no crashes.
+
+So far so good:
+
+Tested-by: Lee Jones <lee.jones@linaro.org>
+
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
