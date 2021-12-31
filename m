@@ -2,149 +2,232 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9965E48129B
-	for <lists+linux-sctp@lfdr.de>; Wed, 29 Dec 2021 13:20:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7FE1482621
+	for <lists+linux-sctp@lfdr.de>; Sat,  1 Jan 2022 00:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235982AbhL2MUp (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 29 Dec 2021 07:20:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34200 "EHLO
+        id S229474AbhLaXhs (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 31 Dec 2021 18:37:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234936AbhL2MUo (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 29 Dec 2021 07:20:44 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2505BC061574
-        for <linux-sctp@vger.kernel.org>; Wed, 29 Dec 2021 04:20:44 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id a9so44023722wrr.8
-        for <linux-sctp@vger.kernel.org>; Wed, 29 Dec 2021 04:20:44 -0800 (PST)
+        with ESMTP id S229473AbhLaXhs (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 31 Dec 2021 18:37:48 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C138C061574;
+        Fri, 31 Dec 2021 15:37:48 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id r16-20020a17090a0ad000b001b276aa3aabso18764388pje.0;
+        Fri, 31 Dec 2021 15:37:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=qdxysVGtt4FcWQNLA8BShzevbYmgDdMZZHbKkdXEhqc=;
-        b=Ji4DMvElI3uotsoXs1c78pyZyHcVYEJjOZMFBfs9dbd8d0XLxjdb7Jgw76bNZCZsCH
-         0ieSGZkZj68IXoGVq2amW5FXDnNW4F59P+Q+t5lI5UWh723BP+3N7WsdeoxH5oN4TT/o
-         BGJDtlOS3Nl6l6xaVipLLLtweZUVsbN+HCchOSdKsVjI2K/d+0jpR72pezVf2IWdA5Sz
-         1pIdN8aFuEq7+oYLG4rj3ZuFt6IkdXXhc93q88D8nxNpRDck9Tv+dTOILegxDpgaMQaP
-         Dymk72ZSLBC43dunQ4paVVrGUMzPdzjci5vDA0HX4Pfst0/YOGwSp+07ZbdhEZtykSnn
-         Lv/Q==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=O+Kc/UYgK6oTjcvVvGgDkY/jZEZZ3r0f0THb7EUT3Fg=;
+        b=Qv4cgel8JElkHJRkFGcwE4+dUE22sQ618eA+6zR3gszp3FeqEuLmLvkzlVp6rdx8Ug
+         psJO2uAqhElGWpDAjHG82XnOHEH0pVtuFaqzSm0GhiAmiVpoJcihIlaIeUuiAzWW+8W9
+         V7tObgVZZlNdvikJ2mbFoIaW2b3S+gXw51o7oz45Zimx5kBhwBixduQPzatiegUwN6x1
+         ZHr9Fhp4bZEeD/+3uH+g7n0j0w1mpx57uMzjqsWSsqzk4aGDoUjKKOCydzyWyFRti8+n
+         cepLE+r3QGQBBqwG1kDs5wO8hJD1hnxiQ3s0xCywBGUioL/Fwd1VXfIYBDpPcU4FeUfA
+         1+Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=qdxysVGtt4FcWQNLA8BShzevbYmgDdMZZHbKkdXEhqc=;
-        b=P3LOdk/Kn/yDimd8rHR7HWB0FUnlA449BD5zDWhJF5h7MjxUVt1YX5KiUzZ+y7rX49
-         Sj0wU8/qDJA/JXypjiLLDZuLsWKVzLuD4swLtU9XvAcFukgiutF0mbzcZXYwAzwNONga
-         xz1MpmOrHIeLmUObjY1NKwk+s4qJLbLlKgjwae8ITPlEvWMUHNnMpEx2CF1H5/Al2K6p
-         UFnK4useiUcka7he2+pv9AyHQe5ge41zoofJtp9EzZA8BDWhnFXsq3gMta2YGBE1+w5X
-         Ek7vk2kN5t/nZKQq6DLgKBvwKzLt/OiT0O6kfyu6pTbxq4zKmx9Mm7YpVQln+9M3Ow0T
-         tVkw==
-X-Gm-Message-State: AOAM530pBucQfoTScc09ySInCYh1cJ07ggRT3LNdMtLKbi543EksJB1L
-        aFK5gDDDYOD7uoTt62JanyE6TA==
-X-Google-Smtp-Source: ABdhPJwnKEqMnn1CMxmAL3M3tBnIe+RumF4OwRsvIzHGJxu6pjb3MMw56OApPMB/lZBYuCq8jjQ4Bg==
-X-Received: by 2002:a5d:4d42:: with SMTP id a2mr20779611wru.311.1640780441975;
-        Wed, 29 Dec 2021 04:20:41 -0800 (PST)
-Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id h19sm20347949wmm.13.2021.12.29.04.20.41
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=O+Kc/UYgK6oTjcvVvGgDkY/jZEZZ3r0f0THb7EUT3Fg=;
+        b=dMBg55iWbsaZ7ZZT/qVNFK30gG//D7SebLizuHxsduU5xGkb1pCrhQgd4E5C24EWiJ
+         01YWj6mNwQNnA9wNXZGbBJOy6J//NWxxlUewQ27eLGDlLmk+3W5+fvV8OrLxYmsymOr/
+         QSuZG5rx+gooc23/CcGJfpPQvCrWxuksi+eH+pWtZ9O0x5Ce4XRhZ8cne6ihIaXJB9gu
+         f9YPbdEV6la0EsJYWt49hb4xzIOxTyoG7TdaYPIG9aUbCAkkV0+mVMjZuLpWgcUMW7sE
+         eAKZ8jZYRsUN3YUxEMN0H5WKE6OGa0qCj3ge+CA7/Q0DGJKFY4mpPRdWb38z1AVLIbSY
+         IpIQ==
+X-Gm-Message-State: AOAM531ZXeIp1+6LRsTk4RdC5+tM9w6DSJCF4YQGSx0rGQYuPQMkqc6U
+        F0G1PwLKa5RcrIstGXJRi4M7Vos75KhM2Q==
+X-Google-Smtp-Source: ABdhPJzhtEAb/SZefHB9TSS8LnCV50TKOwQUUyMSvCZKw5wmC9goR9GGhbdJfEpZ8EzEpba62CU+QQ==
+X-Received: by 2002:a17:90b:4b8d:: with SMTP id lr13mr45739670pjb.0.1640993867180;
+        Fri, 31 Dec 2021 15:37:47 -0800 (PST)
+Received: from wsfd-netdev15.ntdv.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id u71sm25888167pgd.68.2021.12.31.15.37.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Dec 2021 04:20:41 -0800 (PST)
-Date:   Wed, 29 Dec 2021 12:20:39 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
-        davem@davemloft.net, kuba@kernel.org,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Subject: Re: [PATCHv2 net] sctp: use call_rcu to free endpoint
-Message-ID: <YcxSl+YZ2WCRh9Ls@google.com>
-References: <152f3b81e78d311514330a5b97131beb459b01f5.1640282670.git.lucien.xin@gmail.com>
+        Fri, 31 Dec 2021 15:37:46 -0800 (PST)
+From:   Xin Long <lucien.xin@gmail.com>
+To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: [PATCH net] sctp: hold endpoint before calling cb in sctp_transport_lookup_process
+Date:   Fri, 31 Dec 2021 18:37:37 -0500
+Message-Id: <937648ddf3d2bf49c8fb15e82b45b24d5a537cda.1640993857.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <152f3b81e78d311514330a5b97131beb459b01f5.1640282670.git.lucien.xin@gmail.com>
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, 23 Dec 2021, Xin Long wrote:
+The same fix in commit 5ec7d18d1813 ("sctp: use call_rcu to free endpoint")
+is also needed for dumping one asoc and sock after the lookup.
 
-> This patch is to delay the endpoint free by calling call_rcu() to fix
-> another use-after-free issue in sctp_sock_dump():
-> 
->   BUG: KASAN: use-after-free in __lock_acquire+0x36d9/0x4c20
->   Call Trace:
->     __lock_acquire+0x36d9/0x4c20 kernel/locking/lockdep.c:3218
->     lock_acquire+0x1ed/0x520 kernel/locking/lockdep.c:3844
->     __raw_spin_lock_bh include/linux/spinlock_api_smp.h:135 [inline]
->     _raw_spin_lock_bh+0x31/0x40 kernel/locking/spinlock.c:168
->     spin_lock_bh include/linux/spinlock.h:334 [inline]
->     __lock_sock+0x203/0x350 net/core/sock.c:2253
->     lock_sock_nested+0xfe/0x120 net/core/sock.c:2774
->     lock_sock include/net/sock.h:1492 [inline]
->     sctp_sock_dump+0x122/0xb20 net/sctp/diag.c:324
->     sctp_for_each_transport+0x2b5/0x370 net/sctp/socket.c:5091
->     sctp_diag_dump+0x3ac/0x660 net/sctp/diag.c:527
->     __inet_diag_dump+0xa8/0x140 net/ipv4/inet_diag.c:1049
->     inet_diag_dump+0x9b/0x110 net/ipv4/inet_diag.c:1065
->     netlink_dump+0x606/0x1080 net/netlink/af_netlink.c:2244
->     __netlink_dump_start+0x59a/0x7c0 net/netlink/af_netlink.c:2352
->     netlink_dump_start include/linux/netlink.h:216 [inline]
->     inet_diag_handler_cmd+0x2ce/0x3f0 net/ipv4/inet_diag.c:1170
->     __sock_diag_cmd net/core/sock_diag.c:232 [inline]
->     sock_diag_rcv_msg+0x31d/0x410 net/core/sock_diag.c:263
->     netlink_rcv_skb+0x172/0x440 net/netlink/af_netlink.c:2477
->     sock_diag_rcv+0x2a/0x40 net/core/sock_diag.c:274
-> 
-> This issue occurs when asoc is peeled off and the old sk is freed after
-> getting it by asoc->base.sk and before calling lock_sock(sk).
-> 
-> To prevent the sk free, as a holder of the sk, ep should be alive when
-> calling lock_sock(). This patch uses call_rcu() and moves sock_put and
-> ep free into sctp_endpoint_destroy_rcu(), so that it's safe to try to
-> hold the ep under rcu_read_lock in sctp_transport_traverse_process().
-> 
-> If sctp_endpoint_hold() returns true, it means this ep is still alive
-> and we have held it and can continue to dump it; If it returns false,
-> it means this ep is dead and can be freed after rcu_read_unlock, and
-> we should skip it.
-> 
-> In sctp_sock_dump(), after locking the sk, if this ep is different from
-> tsp->asoc->ep, it means during this dumping, this asoc was peeled off
-> before calling lock_sock(), and the sk should be skipped; If this ep is
-> the same with tsp->asoc->ep, it means no peeloff happens on this asoc,
-> and due to lock_sock, no peeloff will happen either until release_sock.
-> 
-> Note that delaying endpoint free won't delay the port release, as the
-> port release happens in sctp_endpoint_destroy() before calling call_rcu().
-> Also, freeing endpoint by call_rcu() makes it safe to access the sk by
-> asoc->base.sk in sctp_assocs_seq_show() and sctp_rcv().
-> 
-> Thanks Jones to bring this issue up.
-> 
-> v1->v2:
->   - improve the changelog.
->   - add kfree(ep) into sctp_endpoint_destroy_rcu(), as Jakub noticed.
-> 
-> Reported-by: syzbot+9276d76e83e3bcde6c99@syzkaller.appspotmail.com
-> Reported-by: Lee Jones <lee.jones@linaro.org>
-> Fixes: d25adbeb0cdb ("sctp: fix an use-after-free issue in sctp_sock_dump")
-> Signed-off-by: Xin Long <lucien.xin@gmail.com>
-> ---
->  include/net/sctp/sctp.h    |  6 +++---
->  include/net/sctp/structs.h |  3 ++-
->  net/sctp/diag.c            | 12 ++++++------
->  net/sctp/endpointola.c     | 23 +++++++++++++++--------
->  net/sctp/socket.c          | 23 +++++++++++++++--------
->  5 files changed, 41 insertions(+), 26 deletions(-)
+Fixes: 86fdb3448cc1 ("sctp: ensure ep is not destroyed before doing the dump")
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+---
+ include/net/sctp/sctp.h |  3 +--
+ net/sctp/diag.c         | 46 +++++++++++++++++++----------------------
+ net/sctp/socket.c       | 22 +++++++++++++-------
+ 3 files changed, 37 insertions(+), 34 deletions(-)
 
-My test has been soaking for about an hour now with no crashes.
-
-So far so good:
-
-Tested-by: Lee Jones <lee.jones@linaro.org>
-
+diff --git a/include/net/sctp/sctp.h b/include/net/sctp/sctp.h
+index d314a180ab93..3ae61ce2eabd 100644
+--- a/include/net/sctp/sctp.h
++++ b/include/net/sctp/sctp.h
+@@ -112,8 +112,7 @@ struct sctp_transport *sctp_transport_get_next(struct net *net,
+ 			struct rhashtable_iter *iter);
+ struct sctp_transport *sctp_transport_get_idx(struct net *net,
+ 			struct rhashtable_iter *iter, int pos);
+-int sctp_transport_lookup_process(int (*cb)(struct sctp_transport *, void *),
+-				  struct net *net,
++int sctp_transport_lookup_process(sctp_callback_t cb, struct net *net,
+ 				  const union sctp_addr *laddr,
+ 				  const union sctp_addr *paddr, void *p);
+ int sctp_transport_traverse_process(sctp_callback_t cb, sctp_callback_t cb_done,
+diff --git a/net/sctp/diag.c b/net/sctp/diag.c
+index a7d623171501..034e2c74497d 100644
+--- a/net/sctp/diag.c
++++ b/net/sctp/diag.c
+@@ -245,48 +245,44 @@ static size_t inet_assoc_attr_size(struct sctp_association *asoc)
+ 		+ 64;
+ }
+ 
+-static int sctp_tsp_dump_one(struct sctp_transport *tsp, void *p)
++static int sctp_sock_dump_one(struct sctp_endpoint *ep, struct sctp_transport *tsp, void *p)
+ {
+ 	struct sctp_association *assoc = tsp->asoc;
+-	struct sock *sk = tsp->asoc->base.sk;
+ 	struct sctp_comm_param *commp = p;
+-	struct sk_buff *in_skb = commp->skb;
++	struct sock *sk = ep->base.sk;
+ 	const struct inet_diag_req_v2 *req = commp->r;
+-	const struct nlmsghdr *nlh = commp->nlh;
+-	struct net *net = sock_net(in_skb->sk);
++	struct sk_buff *skb = commp->skb;
+ 	struct sk_buff *rep;
+ 	int err;
+ 
+ 	err = sock_diag_check_cookie(sk, req->id.idiag_cookie);
+ 	if (err)
+-		goto out;
++		return err;
+ 
+-	err = -ENOMEM;
+ 	rep = nlmsg_new(inet_assoc_attr_size(assoc), GFP_KERNEL);
+ 	if (!rep)
+-		goto out;
++		return -ENOMEM;
+ 
+ 	lock_sock(sk);
+-	if (sk != assoc->base.sk) {
+-		release_sock(sk);
+-		sk = assoc->base.sk;
+-		lock_sock(sk);
++	if (ep != assoc->ep) {
++		err = -EAGAIN;
++		goto out;
+ 	}
+-	err = inet_sctp_diag_fill(sk, assoc, rep, req,
+-				  sk_user_ns(NETLINK_CB(in_skb).sk),
+-				  NETLINK_CB(in_skb).portid,
+-				  nlh->nlmsg_seq, 0, nlh,
+-				  commp->net_admin);
+-	release_sock(sk);
++
++	err = inet_sctp_diag_fill(sk, assoc, rep, req, sk_user_ns(NETLINK_CB(skb).sk),
++				  NETLINK_CB(skb).portid, commp->nlh->nlmsg_seq, 0,
++				  commp->nlh, commp->net_admin);
+ 	if (err < 0) {
+ 		WARN_ON(err == -EMSGSIZE);
+-		kfree_skb(rep);
+ 		goto out;
+ 	}
++	release_sock(sk);
+ 
+-	err = nlmsg_unicast(net->diag_nlsk, rep, NETLINK_CB(in_skb).portid);
++	return nlmsg_unicast(sock_net(skb->sk)->diag_nlsk, rep, NETLINK_CB(skb).portid);
+ 
+ out:
++	release_sock(sk);
++	kfree_skb(rep);
+ 	return err;
+ }
+ 
+@@ -429,15 +425,15 @@ static void sctp_diag_get_info(struct sock *sk, struct inet_diag_msg *r,
+ static int sctp_diag_dump_one(struct netlink_callback *cb,
+ 			      const struct inet_diag_req_v2 *req)
+ {
+-	struct sk_buff *in_skb = cb->skb;
+-	struct net *net = sock_net(in_skb->sk);
++	struct sk_buff *skb = cb->skb;
++	struct net *net = sock_net(skb->sk);
+ 	const struct nlmsghdr *nlh = cb->nlh;
+ 	union sctp_addr laddr, paddr;
+ 	struct sctp_comm_param commp = {
+-		.skb = in_skb,
++		.skb = skb,
+ 		.r = req,
+ 		.nlh = nlh,
+-		.net_admin = netlink_net_capable(in_skb, CAP_NET_ADMIN),
++		.net_admin = netlink_net_capable(skb, CAP_NET_ADMIN),
+ 	};
+ 
+ 	if (req->sdiag_family == AF_INET) {
+@@ -460,7 +456,7 @@ static int sctp_diag_dump_one(struct netlink_callback *cb,
+ 		paddr.v6.sin6_family = AF_INET6;
+ 	}
+ 
+-	return sctp_transport_lookup_process(sctp_tsp_dump_one,
++	return sctp_transport_lookup_process(sctp_sock_dump_one,
+ 					     net, &laddr, &paddr, &commp);
+ }
+ 
+diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+index ad5028a07b18..da08671a3f80 100644
+--- a/net/sctp/socket.c
++++ b/net/sctp/socket.c
+@@ -5317,23 +5317,31 @@ int sctp_for_each_endpoint(int (*cb)(struct sctp_endpoint *, void *),
+ }
+ EXPORT_SYMBOL_GPL(sctp_for_each_endpoint);
+ 
+-int sctp_transport_lookup_process(int (*cb)(struct sctp_transport *, void *),
+-				  struct net *net,
++int sctp_transport_lookup_process(sctp_callback_t cb, struct net *net,
+ 				  const union sctp_addr *laddr,
+ 				  const union sctp_addr *paddr, void *p)
+ {
+ 	struct sctp_transport *transport;
+-	int err;
++	struct sctp_endpoint *ep;
++	int err = -ENOENT;
+ 
+ 	rcu_read_lock();
+ 	transport = sctp_addrs_lookup_transport(net, laddr, paddr);
++	if (!transport) {
++		rcu_read_unlock();
++		return err;
++	}
++	ep = transport->asoc->ep;
++	if (!sctp_endpoint_hold(ep)) { /* asoc can be peeled off */
++		sctp_transport_put(transport);
++		rcu_read_unlock();
++		return err;
++	}
+ 	rcu_read_unlock();
+-	if (!transport)
+-		return -ENOENT;
+ 
+-	err = cb(transport, p);
++	err = cb(ep, transport, p);
++	sctp_endpoint_put(ep);
+ 	sctp_transport_put(transport);
+-
+ 	return err;
+ }
+ EXPORT_SYMBOL_GPL(sctp_transport_lookup_process);
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.27.0
+
