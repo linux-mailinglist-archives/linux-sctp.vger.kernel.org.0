@@ -2,156 +2,91 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66342488235
-	for <lists+linux-sctp@lfdr.de>; Sat,  8 Jan 2022 09:01:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DABD48898B
+	for <lists+linux-sctp@lfdr.de>; Sun,  9 Jan 2022 14:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233771AbiAHIA1 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sat, 8 Jan 2022 03:00:27 -0500
-Received: from mail-io1-f71.google.com ([209.85.166.71]:50848 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233665AbiAHIAZ (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sat, 8 Jan 2022 03:00:25 -0500
-Received: by mail-io1-f71.google.com with SMTP id p129-20020a6b8d87000000b00601b30457cdso5932526iod.17
-        for <linux-sctp@vger.kernel.org>; Sat, 08 Jan 2022 00:00:25 -0800 (PST)
+        id S235638AbiAINRe (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 9 Jan 2022 08:17:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36082 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234075AbiAINRd (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sun, 9 Jan 2022 08:17:33 -0500
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DB8C061757
+        for <linux-sctp@vger.kernel.org>; Sun,  9 Jan 2022 05:17:33 -0800 (PST)
+Received: by mail-ed1-x541.google.com with SMTP id w16so42587805edc.11
+        for <linux-sctp@vger.kernel.org>; Sun, 09 Jan 2022 05:17:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=NdonzBmQ8GAPbs/WLTboFJCrlKbR6tI6Y2UMvojR29M=;
+        b=KctYciuEp/oAmoqAD2NrJIuesl+o6W8pUrei975SVDRl3fu3TIb/BotQnulg3skRTA
+         ov4C5CdQIk5fe8Wpi0UO/mV5EZNo2cPvaIo3qAIuIcaG1SIeDvoIvdfctPRvSmt2tWRe
+         1dGbnle6dzBJf4ptHUUWeft4k5VWdsSJPmmL9JprTrKzhuWGdr7KDD6qQ7tSPUF03PQn
+         uYHfoaFB1vPb8+DlSOyn+EiUqLaWOB8gs5VKsi1FUeowjv3nHSMDxy+y/L6oGz0fZ25H
+         r1NXQh1G+3fkVD0eiJ6R2E/+g7SN4U1a+mr/k0/r3X+FjjM+cIGQEGwaL7qS4XIiJDkA
+         YvkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=zoA6QDxz3PS7MAyLWApYsQnm2pFkixHDdjsPGCEpEk0=;
-        b=WFZKnckZmQkoNG+nv3vIoL29ktJW6x1W4Apgd76W7MI/9lZ/1WPhOzS1rYFXO7P6QI
-         7YTtfiHn4KLfroyP2a0Bq5SogMRRFlOVdaiJE+v8m0IFAvUau8+/tAG0yo3NBFbZwqRa
-         I48p+lzH7SRBYE9JIzgOmqgEltTqKU2wuyWrpLdE74Xex898oO9dRlhEYDNb6uFJJhU8
-         arbeEpkzZ1zmFDFSydc4hVujrEekcKbh59o43ZLOF67fvoPIVE/gqwgWHo+R0zm/SBWT
-         yIXbcf73qP4XqaXMEROxFL/n0JNmzKbIsvtXhl92pNxif8fn3Y3UK4wODcFCRCHZSp0V
-         PDtA==
-X-Gm-Message-State: AOAM530vojqiEXoeNkmzIRv+LbUhqJqb4z1zKNP/Piuh1R4gKsJ+9oPJ
-        FPpjH240+e1IwN813sPncd7aJmizgs9QIg5TSHF6Rlvip5L/
-X-Google-Smtp-Source: ABdhPJxxpIIw13W+L4C0NlnaAdtY0cniTk8F77x4I1lVeU+b4ButZnGQ6oEy6MS0PSxZFLkoX7rS/l+itUJumD6f0ADmOF3fZEVX
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=NdonzBmQ8GAPbs/WLTboFJCrlKbR6tI6Y2UMvojR29M=;
+        b=ATAG7NY2PYoPM0C/caxwVjIZ2ItKYA2gm92vTrvXShN1zTcXMMA4ISTFtRMJjcKb+P
+         RiQib76rBCg1oOdC3v/TltwzMK/XcwIlMy2O7Lxf5VjVODp8ymsVsb6E1JU4Swg8Lht5
+         q/Y83hJ8OxDNgHUMqZcUFIyzTTsqD8VtEUrEwrI33S5Lc8h+Db+QmsyxUDRLdBIO6GOl
+         11cXTjcWV7vS+sIW7BkOIkVa1QdMJ6Cqnxw5zO4FBNTBcpv2zmSS0gMyjTFdwB6RRMWh
+         N9T7HusqP55Z01RpqIEl4jDhkcIeE/lOPp7AVUHGO/iw8QikmmrIbKXOQK9/GA5cKKwI
+         X0/w==
+X-Gm-Message-State: AOAM5322q9nyfGf7J9kIBy/j3VIj0f60IpVUaiMolx2/ZUrj3QY4y5lD
+        LYkjhEmMovMK682/R3ev/qKg6tjbWlyQzMnUZV4=
+X-Google-Smtp-Source: ABdhPJy1Kk2P1qr60unDYkLmxpe29AxO1ybT01oom74v5kgYB4CXpazeNrGbVGU0Eb6c72WVg+9vphFa51PVrjJn79Q=
+X-Received: by 2002:aa7:d8d4:: with SMTP id k20mr10191779eds.17.1641734251531;
+ Sun, 09 Jan 2022 05:17:31 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a92:dc8c:: with SMTP id c12mr29429570iln.43.1641628825031;
- Sat, 08 Jan 2022 00:00:25 -0800 (PST)
-Date:   Sat, 08 Jan 2022 00:00:25 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f81aa305d50d7e4c@google.com>
-Subject: [syzbot] KMSAN: uninit-value in sctp_inq_pop (2)
-From:   syzbot <syzbot+70a42f45e76bede082be@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, glider@google.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
-        marcelo.leitner@gmail.com, netdev@vger.kernel.org,
-        nhorman@tuxdriver.com, syzkaller-bugs@googlegroups.com,
-        vyasevich@gmail.com
+Reply-To: jennybezoss14@gmail.com
+Sender: mrsnicolemarois94@gmail.com
+Received: by 2002:a17:906:9c83:0:0:0:0 with HTTP; Sun, 9 Jan 2022 05:17:30
+ -0800 (PST)
+From:   Mrs Jenny Bezos <jennybezos1@gmail.com>
+Date:   Sun, 9 Jan 2022 13:17:30 +0000
+X-Google-Sender-Auth: 9WOQPfJPVVx74kvKQTeLsijzTF8
+Message-ID: <CALas=iYKSw+Yx6FTDyWCgedQSzW10sx7L_AC_6ESH=0E-Z9BKg@mail.gmail.com>
+Subject: Dearest Friend,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello,
+-- 
 
-syzbot found the following issue on:
+Dearest Friend,
 
-HEAD commit:    81c325bbf94e kmsan: hooks: do not check memory in kmsan_in..
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=15dad2c3b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2d8b9a11641dc9aa
-dashboard link: https://syzkaller.appspot.com/bug?extid=70a42f45e76bede082be
-compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=173a7b0db00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14de2ffdb00000
+I am Mrs. Jenny Bezos from America  USA, I decided to donate what I
+have to you  for investment towards the good work of charity
+organizations, and also  to help the motherless and the less
+privileged ones and to carry out charitable works in your Country and
+around the World on my Behalf.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+70a42f45e76bede082be@syzkaller.appspotmail.com
+I am diagnosing of throat Cancer, hospitalize for good 2 years and
+some months now and quite obvious that I have few days to live, and I
+am a Widow no child; I decided to will/donate the sum of $7.8 million
+to you for the good work of God, and also to help the motherless and
+less privilege and also forth assistance of the widows. At the moment
+I cannot take any telephone calls right now due to the fact that my
+relatives (who have squandered the funds for this purpose before) are
+around me and my health also. I have adjusted my will and my Bank  is
+aware.
 
-netlink: 244 bytes leftover after parsing attributes in process `syz-executor678'.
-=====================================================
-BUG: KMSAN: uninit-value in sctp_inq_pop+0x15c8/0x18f0 net/sctp/inqueue.c:205
- sctp_inq_pop+0x15c8/0x18f0 net/sctp/inqueue.c:205
- sctp_assoc_bh_rcv+0x1fa/0xdd0 net/sctp/associola.c:1000
- sctp_inq_push+0x31c/0x440 net/sctp/inqueue.c:80
- sctp_backlog_rcv+0x30f/0x10b0 net/sctp/input.c:344
- sk_backlog_rcv include/net/sock.h:1030 [inline]
- __release_sock+0x256/0x640 net/core/sock.c:2768
- release_sock+0x98/0x2e0 net/core/sock.c:3300
- sctp_wait_for_connect+0x52a/0x9e0 net/sctp/socket.c:9306
- sctp_sendmsg_to_asoc+0x1c47/0x1f90 net/sctp/socket.c:1881
- sctp_sendmsg+0x3eaa/0x5460 net/sctp/socket.c:2027
- inet_sendmsg+0x15b/0x1d0 net/ipv4/af_inet.c:819
- sock_sendmsg_nosec net/socket.c:704 [inline]
- sock_sendmsg net/socket.c:724 [inline]
- __sys_sendto+0x9ef/0xc70 net/socket.c:2036
- __do_sys_sendto net/socket.c:2048 [inline]
- __se_sys_sendto net/socket.c:2044 [inline]
- __x64_sys_sendto+0x19c/0x210 net/socket.c:2044
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+ I have willed those properties to you by quoting my Personal File
+Routing and Account Information. And I have also notified the bank
+that I am willing to give that property to you for good, effective and
+prudent work. It is right to say that I have been directed to do this
+by God. I will be going in for a surgery soon and I want to make sure
+that I make this donation before undergoing this surgery.  I will need
+your support to make this dream come through, could you let me know
+your interest to enable me to give you further information. And I
+hereby advise you to contact me by this email address.
 
-Uninit was stored to memory at:
- sctp_inq_pop+0x155c/0x18f0 net/sctp/inqueue.c:201
- sctp_assoc_bh_rcv+0x1fa/0xdd0 net/sctp/associola.c:1000
- sctp_inq_push+0x31c/0x440 net/sctp/inqueue.c:80
- sctp_backlog_rcv+0x30f/0x10b0 net/sctp/input.c:344
- sk_backlog_rcv include/net/sock.h:1030 [inline]
- __release_sock+0x256/0x640 net/core/sock.c:2768
- release_sock+0x98/0x2e0 net/core/sock.c:3300
- sctp_wait_for_connect+0x52a/0x9e0 net/sctp/socket.c:9306
- sctp_sendmsg_to_asoc+0x1c47/0x1f90 net/sctp/socket.c:1881
- sctp_sendmsg+0x3eaa/0x5460 net/sctp/socket.c:2027
- inet_sendmsg+0x15b/0x1d0 net/ipv4/af_inet.c:819
- sock_sendmsg_nosec net/socket.c:704 [inline]
- sock_sendmsg net/socket.c:724 [inline]
- __sys_sendto+0x9ef/0xc70 net/socket.c:2036
- __do_sys_sendto net/socket.c:2048 [inline]
- __se_sys_sendto net/socket.c:2044 [inline]
- __x64_sys_sendto+0x19c/0x210 net/socket.c:2044
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Uninit was created at:
- slab_post_alloc_hook mm/slab.h:524 [inline]
- slab_alloc_node mm/slub.c:3251 [inline]
- __kmalloc_node_track_caller+0xe0c/0x1510 mm/slub.c:4974
- kmalloc_reserve net/core/skbuff.c:354 [inline]
- __alloc_skb+0x545/0xf90 net/core/skbuff.c:426
- alloc_skb include/linux/skbuff.h:1126 [inline]
- sctp_packet_pack net/sctp/output.c:471 [inline]
- sctp_packet_transmit+0x194c/0x45a0 net/sctp/output.c:620
- sctp_outq_flush_transports net/sctp/outqueue.c:1163 [inline]
- sctp_outq_flush+0x17d9/0x5eb0 net/sctp/outqueue.c:1211
- sctp_outq_uncork+0x105/0x120 net/sctp/outqueue.c:758
- sctp_side_effects net/sctp/sm_sideeffect.c:1195 [inline]
- sctp_do_sm+0x946f/0x9b50 net/sctp/sm_sideeffect.c:1166
- sctp_assoc_bh_rcv+0xa15/0xdd0 net/sctp/associola.c:1054
- sctp_inq_push+0x31c/0x440 net/sctp/inqueue.c:80
- sctp_backlog_rcv+0x30f/0x10b0 net/sctp/input.c:344
- sk_backlog_rcv include/net/sock.h:1030 [inline]
- __release_sock+0x256/0x640 net/core/sock.c:2768
- release_sock+0x98/0x2e0 net/core/sock.c:3300
- sctp_wait_for_connect+0x52a/0x9e0 net/sctp/socket.c:9306
- sctp_sendmsg_to_asoc+0x1c47/0x1f90 net/sctp/socket.c:1881
- sctp_sendmsg+0x3eaa/0x5460 net/sctp/socket.c:2027
- inet_sendmsg+0x15b/0x1d0 net/ipv4/af_inet.c:819
- sock_sendmsg_nosec net/socket.c:704 [inline]
- sock_sendmsg net/socket.c:724 [inline]
- __sys_sendto+0x9ef/0xc70 net/socket.c:2036
- __do_sys_sendto net/socket.c:2048 [inline]
- __se_sys_sendto net/socket.c:2044 [inline]
- __x64_sys_sendto+0x19c/0x210 net/socket.c:2044
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-CPU: 0 PID: 3479 Comm: syz-executor678 Not tainted 5.16.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-=====================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Thanks
+Mrs. Jenny Bezos.
