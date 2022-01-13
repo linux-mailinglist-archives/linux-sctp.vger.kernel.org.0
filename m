@@ -2,86 +2,85 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F0A848B24D
-	for <lists+linux-sctp@lfdr.de>; Tue, 11 Jan 2022 17:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80E6548DB26
+	for <lists+linux-sctp@lfdr.de>; Thu, 13 Jan 2022 16:56:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349870AbiAKQgA (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 11 Jan 2022 11:36:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240478AbiAKQgA (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 11 Jan 2022 11:36:00 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E56C06173F
-        for <linux-sctp@vger.kernel.org>; Tue, 11 Jan 2022 08:36:00 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id kc16so18993275qvb.3
-        for <linux-sctp@vger.kernel.org>; Tue, 11 Jan 2022 08:35:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=vQnGiBKlA4WECGdlZmYMrv8JZP8tH7/C0N0oslqDqTY=;
-        b=G6eZSg1X883AfRtPSa+habapvUPNdq7keLm48IJaztqdoxLDOoMhUyaaFLCCDXj354
-         H7/eux1dMM8SAQfliDx4MQLQH/U+kv6guMg/jQPkvSK/zGplaAjtehU53rboPHmobjFk
-         o7d1Fpiih/A44nGLtII+jxOVFEb5qvw9dVH5n9Cz0lHfAq7cPyxwmDB1smnEnEVnXCEs
-         jYOiax2u+4zxHJn2FWZMSpH71eLbJMmjQk5qfRIMb4ngaKGQ3cpyehWEMzRPx/KBbrjB
-         vk5o9V1sQ12lKjQ+Kfzweccb3K8VCZBweOcTbW07vsXtp9LRjOrE2v3cQJmQX0uJfnDE
-         WUdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=vQnGiBKlA4WECGdlZmYMrv8JZP8tH7/C0N0oslqDqTY=;
-        b=5oHBoSyPv4pJgwGpdTr4mCoNGATDIzvegDewcC+KjxJljme4N5mCdvt1hAAXdqppgq
-         MYQdlGI4glPnIN+MxCySRYRpe3PPSEKPm3PNgsxle1rOoIdgxmWe8rJzMVXM2oE0SjtL
-         pj1/euokrsVGhOltTopj5OAHjKvutl89+duYaY5jP9Sz2SFBxw6CG7YHrBQhjwMmG53G
-         TjDK99xhwtYyL5SW6jkDvEeirHTI3ciSnha6WNIzN444VX2ze6WfPGd+PNqWXImDinIZ
-         59yq5FyF7QLBLRssmOdchZhyaS4JJDuV03BQlOtGYL/Ga8bjziPFZjNMzTLPWKlmwREr
-         UNKw==
-X-Gm-Message-State: AOAM530rCXeArsBJF+AnhnOwAo4698m/st79kl4+3Trliv2VGe3fcNGe
-        PUVGZ3ayJlg5R/p9cFzswg3Sdbns9hXwdtQEOUc=
-X-Google-Smtp-Source: ABdhPJwG98VzGEXrdbJJgTxge+kTiiMyOQLI82qN7HWOmJEHQMmhocJfwLCVm+ZSCn8FQhZuyupQ5bjdPO1PFqSYtUY=
-X-Received: by 2002:a05:6214:20aa:: with SMTP id 10mr4601060qvd.90.1641918959015;
- Tue, 11 Jan 2022 08:35:59 -0800 (PST)
+        id S236380AbiAMP4D (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 13 Jan 2022 10:56:03 -0500
+Received: from [194.99.46.92] ([194.99.46.92]:55480 "EHLO
+        slot0.bluewaterleisure.com" rhost-flags-FAIL-FAIL-OK-OK)
+        by vger.kernel.org with ESMTP id S236381AbiAMP4D (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>);
+        Thu, 13 Jan 2022 10:56:03 -0500
+X-Greylist: delayed 610 seconds by postgrey-1.27 at vger.kernel.org; Thu, 13 Jan 2022 10:56:02 EST
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=bluewaterleisure.com;
+ h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding; i=ker.mon@bluewaterleisure.com;
+ bh=Z36JRb4aE+LyXh52lyt9Mg7IHZE=;
+ b=cn8g7GC+A/2LZREDsMugP5kasQTKZ4VB0HO+NrtCZYy9ntFDrvg4BxAk1fitxAHIMDTZw6w6Fed2
+   dFOWa2ad6w6PutVrphzzN13RH7b1Z2blpaOhyriY0h/KHDiBs2dhqa0B3/Vzdly/rCcTo47pqOmT
+   N1FTXRPp4naP2NblNBUoQar6UD8JIr1CZ8bAP6gdtokcNtwApP2Kwlk7wCvBB0gr7iPMfZkyoo7g
+   OYpjBvo9YGvpMh/sLzEil9MuOx40i9ZozSVgVFtNNsT9WieDGqe0tnACrFz2EkBEJ0Vv51Pr0UH8
+   T0mmI3dVFX/+cV+i4nYid5qL9H/7YQ9vt4qjnQ==
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=bluewaterleisure.com;
+ b=kiqU0R7TOU/DV05/nBEiKOwQKC3S7zUoykBqz1XxzFSfpnPnR6XI1zWK0FqUOeGFng8L311kCOoQ
+   KGiPIzKuj2wYILmPRmd2EdDBUa0PIsNrY8DYROuyzXBk+1FQKJQFt2MsyfkFJtpVGbYwMTY3m4+3
+   joPVnLiX5T7xH9S/KyoYUBn0mRGc4rdtYtnQf/ojjVN5+5QGzxrcVwBlFBZBYO6/XfNLwRKSJSO9
+   xIf8wHijvruHYB86En/OmdKpu9YxtcoZ7HPH4ww7yiSFjmdtk+VQZEduY/T5olstatihHgUaMavL
+   S4gl8rJA/XVkayddInyF1nZvEM3WR3AdBvNNTQ==;
+Reply-To: mustafa.ayvaz@ayvazburosu.com
+From:   "Barrister Mustafa" <ker.mon@bluewaterleisure.com>
+To:     linux-sctp@vger.kernel.org
+Subject: Achtung:
+Date:   13 Jan 2022 16:36:24 +0100
+Message-ID: <20220113163624.D273B8012F8DC7E1@bluewaterleisure.com>
 MIME-Version: 1.0
-Received: by 2002:ad4:574e:0:0:0:0:0 with HTTP; Tue, 11 Jan 2022 08:35:58
- -0800 (PST)
-Reply-To: selviasantiago1@gmail.com
-From:   Selvia Santiago <micarlos341@gmail.com>
-Date:   Tue, 11 Jan 2022 16:35:58 +0000
-Message-ID: <CAJG6KgEt23-Q2RBd2CvCUJ0DFVEx=516e6PTxE28k145jAc-nA@mail.gmail.com>
-Subject: Urgent
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
--- 
-Urgent
+Dear linux-sctp,
 
-I am Mrs. Selvia Santiago 51 years from Abidjan, Cote D'Ivoire, I am a
-widow suffering from long time illness (Cancer), there is funds I
-inherited from my late loving husband Mr. Santiago Carlos, the sum of
-(US$ 2.7 Million Dollars) which he deposited in bank before his death,
-I need a honest and Faithful person that can use these funds for
-humanity work.
+Ich bin Barrister Mustafa Ayvaz, ein pers=C3=B6nlicher Anwalt des=20
+verstorbenen Mr.
+Anderson, der an der Coronavirus-Krankheit starb, die er
+w=C3=A4hrend seiner Gesch=C3=A4ftsreise in China unter Vertrag genommen.=20=
 
-I took this decision because I don't have any child that will inherit
-this money and I don't want a situation where this money will be used
-in an ungodly way. That is why I am taking this decision, and my
-doctor has confirmed to me that I have less than two weeks to live,
-having known my condition I decided to donate this fund to a charity
-or individual that will utilize this money to assist the poor and the
-needy in accordance to my instructions.
+Ich m=C3=B6chte, dass Sie freundlich sind und mit mir=20
+zusammenarbeiten, um das Geld zu sichern, das er hier in der=20
+T=C3=BCrkei auf der Bank hinterlassen hat, das sind drei Millionen=20
+dreihundertneunzigtausend Dollar.
 
-I want you to use 70% of this funds for orphanages, school and church,
-widows, propagating the word and other humanity works,The remaining
-30% should be yours for your efforts as the new beneficiary.
+Ich habe nach den n=C3=A4chsten Angeh=C3=B6rigen meines Verstorbenen=20
+gesucht
+Kunde, sind aber gescheitert, da ich seinen aktuellen Wohnsitz=20
+nicht habe
+und Kontaktdaten. Auf der Suche bin ich auf dich gesto=C3=9Fen
+Profil mit dem gleichen Nachnamen und am gleichen Ort mit
+die n=C3=A4chsten Angeh=C3=B6rigen. Ich habe mich entschieden, dich zu=20
+kontaktieren und dich als den
+Bonafide n=C3=A4chster Verwandter.
 
-Please if you would be able to use these funds for humanity work
-kindly reply me. As soon as I have received your response, I will give
-you further directives on how you are to go about the claims of the
-said funds.
+Ich erbitte Ihre Zustimmung, Sie als N=C3=A4chsten meiner Verwandten=20
+hervorzubringen
+verstorbener Kunde, da Sie beide denselben Nachnamen tragen. Der
+das Geld wird dann an Sie als Beg=C3=BCnstigten =C3=BCberwiesen und
+geteilt gem=C3=A4=C3=9F einem vorgeschlagenen Sharing-Muster/Verh=C3=A4ltni=
+s von=20
+60:40
+das sind 60 % f=C3=BCr mich und 40 % f=C3=BCr dich. Freundlich
+kontaktieren Sie mich sofort f=C3=BCr weitere Informationen.
 
-Remain blessed.
-Mrs Selvia Santiago.
+Danach schicke ich Ihnen die Details der Transaktion
+wird beginnen, Kontaktieren Sie mich f=C3=BCr weitere Informationen=20
+=C3=BCber mein
+E-Mail-Adressen unten.
+
+Gr=C3=BC=C3=9Fe
+Mustafa Ayvaz
+
+E-Mail: mustafa.ayvaz@ayvazburosu.com
+oder
+ayvazmustafa231@gmail.com
