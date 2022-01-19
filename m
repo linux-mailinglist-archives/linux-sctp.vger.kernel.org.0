@@ -2,76 +2,83 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF03D492204
-	for <lists+linux-sctp@lfdr.de>; Tue, 18 Jan 2022 10:07:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3CB4933C9
+	for <lists+linux-sctp@lfdr.de>; Wed, 19 Jan 2022 04:52:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232237AbiARJGm (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 18 Jan 2022 04:06:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38448 "EHLO
+        id S1344963AbiASDv7 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 18 Jan 2022 22:51:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345179AbiARJGl (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 18 Jan 2022 04:06:41 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58DDC061751
-        for <linux-sctp@vger.kernel.org>; Tue, 18 Jan 2022 01:06:40 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id m6so53628851ybc.9
-        for <linux-sctp@vger.kernel.org>; Tue, 18 Jan 2022 01:06:40 -0800 (PST)
+        with ESMTP id S241235AbiASDv6 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 18 Jan 2022 22:51:58 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E7DC061574
+        for <linux-sctp@vger.kernel.org>; Tue, 18 Jan 2022 19:51:58 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id d10-20020a17090a498a00b001b33bc40d01so2210818pjh.1
+        for <linux-sctp@vger.kernel.org>; Tue, 18 Jan 2022 19:51:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=AIHedDQeQ2nfeFyhlIY6iBZ7Eo/kAlP72EhStgPHV1I=;
-        b=Soz+QHT0dGLM8FndDi8+DmGrzF8Nand3R01M5J9drC3NXqHN7kmc4VY6l/NuWtUVfL
-         Pw1ipMH9eBCg/ZHqGLeAt2KZPu6XRfsWiJE2xzcq96Ba85LXlrKxOVNuY0HYvfKDfmKc
-         jAQ6EF695L6TTvaCdYqZtBN8gkAnqp1+r0RbNtIeu3qM6gm6h0M3GCKOMUuS25NPcq7T
-         m06EBwLGmWMwlcWjC1WtBCJ/c9tTXkQfsHougCLjPDZp39fgMD8pqVkLYWwbFdfOrAZL
-         FCMwtSnm8Hemf8tY2r2VyBfKOXtSL3AjGIsLn+yMreEST0ocUC4Xu0XEMGJmBV9pdbj2
-         rlHw==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=CmuNpHT3Ghu1p9u8qrzNES2PUlPivqE0AKA17621SPk=;
+        b=PJGGTZWzRImW5LI9rw1pg5Ta/6NDdGVBwlTAc01jVzryCnMgPTjoRLIrs63SAinmgt
+         siOrlfszWehMWBEjzN6TA7W/WzG4B6H/IUNJUsaebp0LuWz4xRCmINIBsJVFWoLsf81u
+         PJPlD8K8uZAORiJm2CYd2rnqwcdoxvqzbTb4YeRsBJQ3R+sF0vvyRjFcN5Z/ghAeEN7v
+         EggGjrncV7t36tkIm1yqP71r/QTsu7zaDGJNkwL3kD7GsRkAtBoMaq5Bt9vDCDlMJmZb
+         p+mZmDzQ/R4vIv3JyMhQdeRb9x8PTOuA4ZaK7jwezFyYFNY2oxxqnwYQf5FGRtZ3ydxo
+         sQnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=AIHedDQeQ2nfeFyhlIY6iBZ7Eo/kAlP72EhStgPHV1I=;
-        b=B3rA7dndn59gBgsFF7U3MCW76ygGDQ8nm21w5plJcbbX3EWlvP31xFpU84mOyP766d
-         yhOiZOQOmay6pJu8PmRkgWT/RtWbT5LYQPKo7Fy8FDPPwTax5I+j6rJA7xnF6BOXymMp
-         2rFOec9+zmoVF5KRmjCrGdF6dRtgll+8nFjTAOcLGXyZG52lZXgyI1ykdQgJEyoD77OC
-         nVVlY4foQzWFdI7jbvxwtYrNa0hUJjtKCFebZToXcmwGqH0x60N7Ple509OipjZ1FWh0
-         TL8R6gL1s+3w2Vzf/29ACJh+8Q9HlcJyhgfU2X+Z2qmX+Fg9OfBKF2yXkTWJDcAGXtyQ
-         Bpww==
-X-Gm-Message-State: AOAM532su/+WShidmEG44Z8S7PUkTw6bk7mCEwG/oFBaak1n7dPcdt+/
-        l8OcIaYshRRajn+spSRtKMnT9HpQf87nMpNGhTU=
-X-Google-Smtp-Source: ABdhPJyw0yTCzDjS933NePR8DAFAXJuHa33nOCZujulUZ2idVfAerV+90UYpawy22l7XlVZmlrM9B7gLM03XAJNOkeI=
-X-Received: by 2002:a25:37c2:: with SMTP id e185mr32076301yba.333.1642496799696;
- Tue, 18 Jan 2022 01:06:39 -0800 (PST)
+         :subject:to:content-transfer-encoding;
+        bh=CmuNpHT3Ghu1p9u8qrzNES2PUlPivqE0AKA17621SPk=;
+        b=Qk3sjR6CtRVEzZQj7sD5Aq1C00DOWe9QKKPgX0KkISWo5sUwd4ouO2nPrVKxncqHTg
+         3MoeneVYZLKlJqKwN2TUJqmfqz80enMreVFOQCYOXXoQ1B+jLYW4wjsJ0Mh2dY/DO8ar
+         yYEIjWuDchcDparPOWKRd/MrTnOeSEOHRCvBUuZdFCvKRSwUguJUNaZaf9R2Kc8lT2K6
+         fmjpmqXZl2fY65aT2PfDmcEGgOZIfyY+TXIc9kPjzaT4tbujekgIu9stTwN9vRHtVPQy
+         W1lj73fxoPGXJGuaswLnquaJSKcIJ7N+vc48KJ92yR/GGMkGQu4A8fLVbI12dWNMyAMO
+         fSjw==
+X-Gm-Message-State: AOAM53353XalJ6Z/z5e8MuRAfj6OdxL9B+zywtn28NaD3nXFmU59fqpO
+        SjcEJhhWB9CJo3PSI6Vo5jslhkL9yd8iBh8zXqo=
+X-Google-Smtp-Source: ABdhPJy4OVkLPfxr7BqfBLXfy8aNPU0DuSiHKMnRx9my8J3pKAzVTW5D1F1njuEBZ5sB1pDlg5LJKiIYKZSDampIprg=
+X-Received: by 2002:a17:902:e546:b0:14a:6fcc:607e with SMTP id
+ n6-20020a170902e54600b0014a6fcc607emr30778068plf.38.1642564317664; Tue, 18
+ Jan 2022 19:51:57 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:7108:3655:0:0:0:0 with HTTP; Tue, 18 Jan 2022 01:06:38
+Received: by 2002:a05:6a10:e816:0:0:0:0 with HTTP; Tue, 18 Jan 2022 19:51:57
  -0800 (PST)
-Reply-To: asil.ajwad@gmail.com
-From:   Asil Ajwad <graceyaogokamboule@gmail.com>
-Date:   Mon, 17 Jan 2022 21:06:38 -1200
-Message-ID: <CA+Yy_gDoLjOfusfXaCVeyK5wpATnnfHVgZ2fw-LqNg4nowYW8A@mail.gmail.com>
-Subject: Greetings,
+Reply-To: wilfried.vogele@gmail.com
+From:   "wilfried.vogele" <vidal.charpentier@gmail.com>
+Date:   Wed, 19 Jan 2022 04:51:57 +0100
+Message-ID: <CAN7qQvRGK9H1WZSwsR8aM5U5+wFmkYJsKpv4s+hbNcCXr=y_-w@mail.gmail.com>
+Subject: Geldverleih an Privatpersonen und Gewerbetreibende in weniger als 72 Stunden
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
--- 
-Greetings,
+Hallo,
 
-I am Mr.Asil Ajwad, I work with United Bank of Africa, can you use
-an ATM Visa Card to withdraw money at, ATM Cash Machine in your
-country, if yes I want to transfer abounded fund the sum of $10.5million
-US-Dollars, to you from my country, this is part of the money that was
-abounded by our late old client a politician who unfortunately lost
-his life and was forced out of power Du to his greedy act, the bank will
+Sind Sie in einer schwierigen Situation, f=C3=BCr die Sie einen Kredit
+suchen? Ben=C3=B6tigen Sie eine Finanzierung zur Begleichung einer Schuld
+oder zur Finanzierung einer Aktivit=C3=A4t? Ben=C3=B6tigen Sie einen
+Konsumentenkredit, einen Immobilienkredit, einen Privatkredit, einen
+Hypothekarkredit, einen Investitionskredit, einen Kreditr=C3=BCckkauf oder
+anderes?
 
-change the account details to your name, and apply for a Visa Card
-with your details, the Visa Card will be send to you, and you can be
-withdrawing money with it always, whatever any amount you withdraw
-daily, you will send 60% to me and you will take 40%, the Visa Card
-and the bank account will be on your name, I will be waiting for your
-response for more details, thanks to you a lot for giving me your time.
+Ich bin ein privater Investor. Ich versorge Sie mit kurz-, mittel- und
+langfristigen Krediten. Meine Finanzierungskonditionen sind sehr
+einfach und der Zinssatz betr=C3=A4gt 3% pro Jahr.
 
-regards,
-Mr.Asil Ajwad.
+F=C3=BCr alle Informationsanfragen stehe ich Ihnen gerne zur Verf=C3=BCgung=
+.
+
+Vielen Dank f=C3=BCr Ihre Kontaktaufnahme per Mail an:
+
+wilfried.vogele@gmail.com
+
+Mit freundlichen Gr=C3=BC=C3=9Fen.
+
+Wilfried V=C3=B6gele
