@@ -2,66 +2,79 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 091174A33EB
-	for <lists+linux-sctp@lfdr.de>; Sun, 30 Jan 2022 05:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C92BF4A4155
+	for <lists+linux-sctp@lfdr.de>; Mon, 31 Jan 2022 12:03:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354274AbiA3E2r (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sat, 29 Jan 2022 23:28:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38130 "EHLO
+        id S1348728AbiAaLDW (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 31 Jan 2022 06:03:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354182AbiA3E2a (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sat, 29 Jan 2022 23:28:30 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B12FC0613DC
-        for <linux-sctp@vger.kernel.org>; Sat, 29 Jan 2022 20:28:25 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id d18-20020a9d51d2000000b005a09728a8c2so9716509oth.3
-        for <linux-sctp@vger.kernel.org>; Sat, 29 Jan 2022 20:28:25 -0800 (PST)
+        with ESMTP id S1358956AbiAaLCT (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 31 Jan 2022 06:02:19 -0500
+Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B54C06134B
+        for <linux-sctp@vger.kernel.org>; Mon, 31 Jan 2022 03:00:25 -0800 (PST)
+Received: by mail-il1-x143.google.com with SMTP id z7so11020511ilb.6
+        for <linux-sctp@vger.kernel.org>; Mon, 31 Jan 2022 03:00:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=B5teSI3NqSzeGu7ngV/22RiyR60khzQ8THYZDZ9DX3Q=;
-        b=QI2firgHOSt+2ZiRAEUqBnRqfCndbuygIyUz1kdYlPzS6AXkdk+mfMubksdM+6U8hJ
-         A4UbXdfo0bhasYFmsw5ceBBj4ub2bgaEqkI+Cp5foQd/M11l9HiEax3hX9+hB29fNDF1
-         4XtAbOKK0Jrn48roHo8mUNvKaz7FG0Csy4DWdnw8Q+/oXs7GbWFZBjN+ifwhy6Rfe8k0
-         Pzhs5uXUX+5v6iQyGpPCJWV84GisQUz+5cfOraMc3PalgV6vYI9t2Z4JMkhIMshepKV2
-         BM+Zj3o1QTUTRt1Kxwo+5vz+cvvR7n44irHUjPq0LbDCW52O0lwQK7qPtMHxw7vn0Id9
-         5U2A==
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=FANIUiWvB3mdY3zLX2DODg2pUIL5eGT5wlydl6jYk40=;
+        b=UiZkV1xu/1z5A/ztD5Jldn3XOzfxCb5dH+/DMk1AFwK/nat4JXJLhGvMZnA2+IcjXR
+         YpW9r7ae6KAHd2sg0/6YFTRnkZ3XqJMzbhN9flAzZs0JoNMicLhQj4whv/k5nByjCpr2
+         OPf/s6NNTy4WRB8M3asGC42AidvYisjk++OWaBieA6XGemBs4Y+JGAvZ5l41ammJrDB4
+         p5lGBdvbZ5NrWMYLncN5GoY37UsWl4xjwHwFxwvY+3e/m9UxQRtNwA1vx+Ngxm2/RcIf
+         HB+3yGJS8mnEVkIPxbImLKA3AmKSXwrPGXKRYLzTh8tWOJi5P+SVpgZzGLkgPt54T4WY
+         uPBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=B5teSI3NqSzeGu7ngV/22RiyR60khzQ8THYZDZ9DX3Q=;
-        b=uLrItok4wmuAIrVO93R0QghGYLKE8Xfk397P0AY/ahK7R1HsIDjDSKGIGSddbweKUe
-         3AGVBzQpmnYViFqn+BRUKVU7XKmRTVZG9s3X/xJYkn6QJVrFiBu91QLJRJnHtw9iowE/
-         6GVahE60qENFJKVTAKd+zxs4K4ZVxmneEqWa5SwiU1/1ffrmvoJklNZi0ibd5yQnThkb
-         Q7iS4LyS3qKsVita643IuWN1jhHVwQAEZXG4+wVj/IwD1uS+5HV2IgyUzVBX8Dasd4nk
-         xjwxyLcDtFOOLUPnvhiOPAGhH/LHe2VWc6CXJVcBrCPAiM3ik8qSR05+6h4C5wHlY3jb
-         cu3g==
-X-Gm-Message-State: AOAM531y5l1piYzJnYH8o1aBYKDZ8g2Zp6fzl6w9DrH1HfNY6ejoQhKR
-        HF34uCXTPphNfGciFC6ket8mO8hjV7XS+1KkHOcTWSzV04U=
-X-Google-Smtp-Source: ABdhPJz3bgso8viJFkNwiW8XigzdjL6JZBPDE3NfxKOCgEqvWjdU/qagorQKM5joSRLXylFmq9/zlHP85rUYuZ5fTGQ=
-X-Received: by 2002:a25:6d45:: with SMTP id i66mr23246397ybc.352.1643516893721;
- Sat, 29 Jan 2022 20:28:13 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=FANIUiWvB3mdY3zLX2DODg2pUIL5eGT5wlydl6jYk40=;
+        b=3zQKH93wSLw+g8V/2fvmrfa8Xkir5DAujr7TSyAClI1Edl/Vq7Af7cw5jyRGgdG30U
+         sIriY8slg0wlyzuYoiX5H9JSOFMi3+J7ZlSfDGvQ9kSPfm+5nrbigqNbRQ0PYe2CXEQX
+         OnR60ugDpzM/2mR8F+8Ovctf8Q97w348Hd1nrzi+0G0qOLmcpacdefN2O78KZ7+zlax3
+         PYYypZA498XvSr0tX3z28+oMTPdNS1lPxHjJHk8z3bG+JnSCANXIwys2QJQsz0ec9Z9e
+         qoC9+y7ZqXsXjbcR2U8j2KFlwqLzrMR0RvHkGOkitTHmZHLdHstwnjJoJ5D9MMSFE8M9
+         hgMg==
+X-Gm-Message-State: AOAM53013bCwzyZGEetDxYOw/I/t781pXRR/wOw1eoqrdcFdVczAYXRW
+        5R1gKAouBbJb/6n6bhaMWeh3iuhB9AnGlIZ4O9A=
+X-Google-Smtp-Source: ABdhPJzd4XpulgxPqo3GJyz/7qJgMmqyQWLIjLiq4E497a4l1ZK6xwd0ZMb9kbBqw+HfcfevS7FYQFhhZjxFTzbYWZE=
+X-Received: by 2002:a92:bf01:: with SMTP id z1mr11261719ilh.18.1643626824914;
+ Mon, 31 Jan 2022 03:00:24 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:7010:2312:b0:201:cd76:102e with HTTP; Sat, 29 Jan 2022
- 20:28:13 -0800 (PST)
-Reply-To: mrs.bill.chantalone01@gmail.com
-From:   "Mrs.Bill.Chantal" <grassroot309@gmail.com>
-Date:   Sun, 30 Jan 2022 05:28:13 +0100
-Message-ID: <CAO3iUMDzg_ZovNWXtuQhU6sDXk7LsNwvNc2pOb7zvX7pPCdMAw@mail.gmail.com>
-Subject: Hello....
+Reply-To: daniellakyle60@gmail.com
+Sender: drdanielmorris11111@gmail.com
+Received: by 2002:a05:6638:1248:0:0:0:0 with HTTP; Mon, 31 Jan 2022 03:00:24
+ -0800 (PST)
+From:   Mrs daniell akyle <daniellakyle60@gmail.com>
+Date:   Mon, 31 Jan 2022 12:00:24 +0100
+X-Google-Sender-Auth: In2hlqlpPwPr7MI-yh9_QFub_fE
+Message-ID: <CAKFcj-MLAnZBo0A2RqXf-exs+KAG-o6Ln5XerrcTvaKWSBL9yQ@mail.gmail.com>
+Subject: Ahoj
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-You have been compensated with the sum of 9.5 million dollars in this
-united nation the payment will be issue into atm visa  card and send
-to you from the santander bank we need your address and your
-Whatsapp number  + 1 6465853907  this my email.ID
-( mrs.bill.chantal.roland@gmail.com )  contact  me
-
-Thanks my
-
-mrs bill chantal
+Pozdravy
+Jmenuji se pan=C3=AD Daniella Kyleov=C3=A1, je mi 58 let
+Filip=C3=ADny. V sou=C4=8Dasn=C3=A9 dob=C4=9B jsem hospitalizov=C3=A1n na F=
+ilip=C3=ADn=C3=A1ch, kde jsem
+podstupuje l=C3=A9=C4=8Dbu akutn=C3=ADho karcinomu j=C3=ADcnu. jsem um=C3=
+=ADraj=C3=ADc=C3=AD,
+vdova, kter=C3=A1 se rozhodla darovat =C4=8D=C3=A1st sv=C3=A9ho majetku spo=
+lehliv=C3=A9 osob=C4=9B
+kter=C3=A1 tyto pen=C3=ADze pou=C5=BEije na pomoc chud=C3=BDm a m=C3=A9n=C4=
+=9B privilegovan=C3=BDm. Chci
+poskytnout dar ve v=C3=BD=C5=A1i 3 700 000 =C2=A3 na sirotky nebo charitati=
+vn=C3=AD organizace
+ve va=C5=A1=C3=AD oblasti. Zvl=C3=A1dne=C5=A1 to? Pokud jste ochotni tuto n=
+ab=C3=ADdku p=C5=99ijmout
+a ud=C4=9Blejte p=C5=99esn=C4=9B tak, jak v=C3=A1m =C5=99=C3=ADk=C3=A1m, pa=
+k se mi vra=C5=A5te pro dal=C5=A1=C3=AD vysv=C4=9Btlen=C3=AD.
+pozdravy
+Pan=C3=AD Daniella Kyleov=C3=A1
