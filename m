@@ -2,90 +2,83 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4274A51B5
-	for <lists+linux-sctp@lfdr.de>; Mon, 31 Jan 2022 22:41:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E2D4A634F
+	for <lists+linux-sctp@lfdr.de>; Tue,  1 Feb 2022 19:14:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245695AbiAaVku (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 31 Jan 2022 16:40:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51700 "EHLO
+        id S241811AbiBASOp (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 1 Feb 2022 13:14:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381225AbiAaVir (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 31 Jan 2022 16:38:47 -0500
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F05C06176C
-        for <linux-sctp@vger.kernel.org>; Mon, 31 Jan 2022 13:38:20 -0800 (PST)
-Received: by mail-oi1-x241.google.com with SMTP id t199so12778378oie.10
-        for <linux-sctp@vger.kernel.org>; Mon, 31 Jan 2022 13:38:20 -0800 (PST)
+        with ESMTP id S241828AbiBASMo (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 1 Feb 2022 13:12:44 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19123C061748
+        for <linux-sctp@vger.kernel.org>; Tue,  1 Feb 2022 10:12:44 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id f80-20020a1c1f53000000b0035399b8bedcso2350160wmf.0
+        for <linux-sctp@vger.kernel.org>; Tue, 01 Feb 2022 10:12:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=RcCyF58LaRxi/j1nHAT0ApLeXmQ9s66f3iMVqhPacvY=;
-        b=dEuqzCa7Zlz6s4mRGbRbRWXXanD59qsT+xmKk7tBbCVL8shmNgt9pnuL3r3GZQALql
-         Y63DqHUGCnZO0yzAtzp7ZNS2CuC8pMKUMaMtNqE3s9gB45FDt9/C7CdeYDqwmv7HZJbj
-         h6fZit5aG7dGp8FvXKTscfcGshyIKAGZl/Y4NFvWe+GDkg5MDDBzPsbgzyvzZ7B1mfX4
-         ltlQ0tRJrdsWlCdvxMPpvS+PhwNDM1Zp7MYHnfnHzWMTP4bbhrhxbQSB0Xw9LPR0gSp/
-         L2Vas/DZH4ZiZyplfhihUfOHaOD2GjtH1tg3ZI6lVgxDcwRnl8d4U3qCI5tj+07J/ZXk
-         SzvA==
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=dY71NLd2odIGCqoV5Xs6eXVkEoQhnfK5Y92j96KZ6U4=;
+        b=WNZlggPqi+mcyn6CtHhFvi90Qy9rbenquOQ8+cMfPWnJCY6ppZPEBZjCGNOimAnNjp
+         RAMXNXAWOoGwq5pz8Gzhi9fwRiObOKoEEm9OhJTaukJim9rjChe9D1Rq8QusJ7dcbeFc
+         pS3jLIIQV08Uc7zDf5YhWR4AcXsQshQqTo53n4jFIH6maUEtr0Hf9cirLCmbGL7mMBNt
+         QSUAHexfNt7ydRZgZImN14l/h7lnJNzJUPpOeZjF9GYPyVHGnKJwSLiAj/kYHhnlrius
+         HSKoEuiJKxLgcrm/3nuUTzcIvu7E9rlUC/oFggE0r6ucDQV7/q294oPmPdu/0i+r/Qq2
+         lk0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=RcCyF58LaRxi/j1nHAT0ApLeXmQ9s66f3iMVqhPacvY=;
-        b=AEhqQlG1bZ2JswB2St73JRGs4X1QUXb4c24vsQB5T4T5A8Ovm879IF/nKcyFGW4LiZ
-         t6zh8lSvo/MYU/7Al4aCt+auzlmAcJ1zWYQlOXWanbk+vfEE4oNAuMJgyB0fcIuWcC45
-         EHu1wHa6gJ0jOOGIAQ3rzZoI5N945X6M2Lvxg4HX2HuX7QIoI3nci6DxlIQto9eOBttA
-         YSha5a505jT3Un5fzgcRJ5sSyIF+jfZDNTJuQTCsBn57EMnWaON+KCLLku8V+3F9Q3aR
-         5wwQ9OnhqJ6RuA8WwA8igcHOpca7CDESXwPD2iYmETZGfT1dgsjztYbAbMRznS0suqb7
-         vewA==
-X-Gm-Message-State: AOAM532cRQ1AjonMj3XZORKjWGmLxdpE8hf+tOKBu3wlh4zUJq4YeFI5
-        K1p0MPZ7/t97PKBF2KsSPHTdvY4htHDmMOR7mZ7w8t0qjl7gUQ==
-X-Google-Smtp-Source: ABdhPJzjG4nHBnpm1YeRsvfpKVsM6nmNJIeFJaztEJrNHMe+iyJctx1iGavTAT23A2IhS4j6LtYbunRiUquAn1xj08o=
-X-Received: by 2002:a54:4490:: with SMTP id v16mr14818764oiv.157.1643665089421;
- Mon, 31 Jan 2022 13:38:09 -0800 (PST)
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=dY71NLd2odIGCqoV5Xs6eXVkEoQhnfK5Y92j96KZ6U4=;
+        b=x/IKoZQxfDgUIzL0FIHiUp5V4iIjQRLhbM+ECds/obYYBM4HgsF6YGE30Kqc4eyz4/
+         371+PKIy/c+eYsNYkV4TG9AopOFQM4dXqSycaG6EeGzXH5iqb1wekGevuTCnA4XTekj8
+         8+9+a1nPqxNv0GAeTWtBaw/FeqR+QinkCpYNOB0ykdmRPuCD2zP2LgEB3ZStcIrGuDy1
+         PyPTNZkMMWp9ZRlMr2p4n8949kogBvvbnGEm+Mr0SMZKB1HoAnOT0TVC2yJ5FuBuV8PM
+         t3Nqz0+QjyPX2o9ZfHbb8D14z2jOdOVvZ73bX2FFu2TqneaEDA6zA+xdcSqQNhervA6L
+         Nt5g==
+X-Gm-Message-State: AOAM532gvKpSvGGEGfK7voWGJQP9UQcfIYiBQTnJ2cfgkhEZednGbJuW
+        1myoeBbRi92xdtQD6zRCaDU/zytT/BO/CAVuwfM=
+X-Google-Smtp-Source: ABdhPJyOjuBfQpYrK7GejPA936VIMD75H+qFkYQKzA270Gq/3NXrS4C7dVrOucVlpZDJIL5NgvNLJvtkHdYeIxdrXfU=
+X-Received: by 2002:a05:600c:a4c:: with SMTP id c12mr2842205wmq.48.1643739162610;
+ Tue, 01 Feb 2022 10:12:42 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a4a:c30d:0:0:0:0:0 with HTTP; Mon, 31 Jan 2022 13:38:09
- -0800 (PST)
-Reply-To: westerunion909@gmail.com
-From:   "Antonia Lloyd." <anthonylloydatmxxx04@gmail.com>
-Date:   Mon, 31 Jan 2022 13:38:09 -0800
-Message-ID: <CAExPwBBpihjV-rv_-+hYqb1WD3wpSWx81B_Q3ES15U3TXSPsyw@mail.gmail.com>
-Subject: Dear Email ID Owner.(USD$4000 IMF COMPENSATION FUND TO PICK UP TODAY).
+Sender: 1joypeters@gmail.com
+Received: by 2002:a5d:610f:0:0:0:0:0 with HTTP; Tue, 1 Feb 2022 10:12:42 -0800 (PST)
+From:   Aisha Al-Qaddafi <aishagaddafi1894@gmail.com>
+Date:   Tue, 1 Feb 2022 18:12:42 +0000
+X-Google-Sender-Auth: QMdJbinimWG0RG9dtsdvyTNIhxw
+Message-ID: <CA+F+MbZeY2Ff=hzwG9fiaaWJOBcKhM_LzS_C1SsSW=YQHR=n5w@mail.gmail.com>
+Subject: Investment offer,
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Dear Email ID Owner.
+Hello Dear Friend,
 
-The IMF is compensating all the email address that was funds as one of
-the ward win Victims and your email address and your name is among the
-listed one of approved to pay the sum of $3.6 million U.S Dollars. We
-have concluded to effect your own payment through Western Union Money
-Transfer for easy pick-up of those funds in good condition,$4000 twice
-daily,till the $3.6 million is completely transferred to you.We now
-need your information where we will be sending the funds,such
-as;Receiver name(Your full Name)address and phone number.Contact
-Western Union agent with this Email: ( westerunion995@gmail.com  ) for
-your payment fund.
+With due respect to your person and much sincerity of purpose I wish
+to write to you today for our mutual benefit in this investment
+transaction..
+I'm Mrs. Aisha Al-Gaddafi, presently residing herein Oman the
+Southeastern coast of the Arabian Peninsula in Western Asia, I'm a
+single Mother and a widow with three Children. I am the only
+biological Daughter of the late Libyan President (Late Colonel Muammar
+Gaddafi). I have an investment funds worth Twenty Seven Million Five
+Hundred Thousand United State Dollars ($27.500.000.00 ) and i need an
+investment Manager/Partner and because of my Asylum Status I will
+authorize you the ownership of the investment funds, However, I am
+interested in you for investment project assistance in your country,
+may be from there,. we can build a business relationship in the
+nearest future..
 
-Ms.Maria Zatto
-E-mail:westerunion995@gmail.com
-Telephone: +229 682 97 169
+I am willing to negotiate an investment/business profit sharing ratio
+with you based on the future investment earning profits. If you are
+willing to handle this project kindly reply urgently to enable me to
+provide you more information about the investment funds.
 
-Contact Ms.Maria,immediately you get this mail through western union
-email address above to enable her speed-up.your payment and release
-the $4000 dollars MTCN today for you to pick up the payment OK.
-
-You are expected to provide us with the details as prescribed below to
-enable safe and easy release of your funds today.
-
-(1)Your Full name:
-(2)Your Phone number:
-(3)Your Country:
-(4)Your Age:
-
-Thank you,
-Dr.Antonia Lloyd.
-Contact Dir.Western Union Money Transfer,
-Cotonou-Benin Republic.
+Your urgent reply will be appreciated if only you are interested in
+this investment project.
+Best Regards
+Mrs. Aisha Al-Gaddafi.
