@@ -2,88 +2,103 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B9C4A8A9C
-	for <lists+linux-sctp@lfdr.de>; Thu,  3 Feb 2022 18:48:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B425F4A9581
+	for <lists+linux-sctp@lfdr.de>; Fri,  4 Feb 2022 09:49:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239986AbiBCRsj (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 3 Feb 2022 12:48:39 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:48842 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232884AbiBCRsi (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 3 Feb 2022 12:48:38 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E68CB21123;
-        Thu,  3 Feb 2022 17:48:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1643910517;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=4evBO+POjQzamNc4DHb8Bx/EMzfDWMdsaLbNmOWVCa0=;
-        b=sS5h+fqayr9QJBnAV9sYn/AtXlxnjyEy2lVAShVgNmoPDPeLECJa9QcDjd2aKnsW7hGX1O
-        8VokbGeSjNX8FeitrahWGjzplq6rB8emKl9pMpxD+5OfBVsdDbDn5N+vBjH9pqkUt5+n+X
-        FJ6inRnHaALIP9dxoCndYZ/GwaDU3SY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1643910517;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=4evBO+POjQzamNc4DHb8Bx/EMzfDWMdsaLbNmOWVCa0=;
-        b=DJHNapkDoLtoeSVafMudNSqU3g8JEDtx4aacYoHeQgNDswhxFxqi0gN9xI5ugY2b3EoBP8
-        bVP3Syxe73c4AiBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0568513671;
-        Thu,  3 Feb 2022 17:48:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id nSj0OnQV/GEbTAAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Thu, 03 Feb 2022 17:48:36 +0000
-Date:   Thu, 3 Feb 2022 18:48:35 +0100
-From:   Petr Vorel <pvorel@suse.cz>
-To:     automated-testing@lists.yoctoproject.org
-Cc:     ltp@lists.linux.it, linux-sctp@vger.kernel.org,
-        Richard Purdie <richard.purdie@linuxfoundation.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Philip Li <philip.li@intel.com>, Tim Bird <tim.bird@sony.com>,
-        Cyril Hrubis <chrubis@suse.cz>, Li Wang <liwang@redhat.com>,
-        Jan Stancek <jstancek@redhat.com>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Erico Nunes <nunes.erico@gmail.com>,
-        Kory Maincent <kory.maincent@bootlin.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Veronika Kabatova <vkabatov@redhat.com>,
-        Joerg Vehlow <joerg.vehlow@aox-tech.de>
-Subject: SCTP testing
-Message-ID: <YfwVcwpZU/lusVlC@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
+        id S240818AbiBDItr (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 4 Feb 2022 03:49:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53272 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351386AbiBDItp (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 4 Feb 2022 03:49:45 -0500
+Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC857C061755
+        for <linux-sctp@vger.kernel.org>; Fri,  4 Feb 2022 00:49:44 -0800 (PST)
+Received: by mail-qv1-xf41.google.com with SMTP id o9so4766384qvy.13
+        for <linux-sctp@vger.kernel.org>; Fri, 04 Feb 2022 00:49:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=c5+oKL89+Al8opwNLgJ+ACvlbdVu/5l2SU8tvvvRvuM=;
+        b=CDFSOFN0ES/B21wE3c/wSpquNkr793M5PFrOQdCJsxTevf9i4PDztomaGoFpyfgVno
+         bWMxeKABDqYZHlD1Rb2n/ylkqnXcckhO0jMWmg+nR8AEMovcxRNNZMK/E36Qm213NNhW
+         AzcrLxoc2uFKz4xLEd7UlwJNet939wgy0A8noSqeMah08kcZIViRrwE7OWm9OliMPH+1
+         cHLqFBGCgkfT6tBx4ZtIw30xfapxf++bMutcYO6jZ8GvdXuYdu+tTVlsGw+yiut20gu3
+         6s3l3XxmAORLWaKSTmlxPsCdYrxDWH0jCnbJz7wvXMtMuo4bGmmobtvUnCXmRHy++MJK
+         zaOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=c5+oKL89+Al8opwNLgJ+ACvlbdVu/5l2SU8tvvvRvuM=;
+        b=e0NU8PtWJ+w3yFogWnwmH65ge88waOtJhGoKhwgbwIEiAhP8ZxKQB5PrPE3N3qjCyq
+         EeMwb+pmPb9p3FHtZhULGkhq+ENHOGPCC/9QYmrkTxtCqnXuqO7FcLdzQo5LTD2S6NF4
+         NCDGPd+BhXsr/yIxIIEMvPGepFGM+gTysaboj1Zo1/a07c50crMwCDETgOvzI5XrwIBo
+         jZjSn5E1gos6V1pQiaB2DOOo7/8T2idR0wYRlNfYjVD+HCKSP+D3Kh4xJAMW2I6NlIA6
+         PlA89UTTgUrVf7gQ8W/ghWbrfZQE3NWetUbeNOuOS84DL3l+UcOn0li0kOKbuZMYkzNP
+         aUUA==
+X-Gm-Message-State: AOAM530XKnHshjAv9xTLbcHtNALkj+jWsVa4DLPKH0wnHPOXZpxJhzZ/
+        GEa2bF2JSYwV9aF48VXNrr2RQA3HoZ46qgAsijCh/yEqfvU=
+X-Google-Smtp-Source: ABdhPJzBgJIWkxUgthIez0XVIVkawXypuSIwGbHqkMZJABOuvTAWPPs+EiyrqGbcJvlvGhCi4Co1YsBkhVs8U601hYQ=
+X-Received: by 2002:a17:902:c206:: with SMTP id 6mr1947976pll.153.1643964573397;
+ Fri, 04 Feb 2022 00:49:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Sender: bankcoris7@gmail.com
+Received: by 2002:a05:6a10:8ecc:0:0:0:0 with HTTP; Fri, 4 Feb 2022 00:49:32
+ -0800 (PST)
+From:   komi zongo <komizongo2020@gmail.com>
+Date:   Fri, 4 Feb 2022 08:49:32 +0000
+X-Google-Sender-Auth: DJ4IyUdVph8-23fUkF90YeQoGWo
+Message-ID: <CAF8uSvrUQL-7NJvmhBd5s-_YOWh6oBUNPdfHFBiSEKCB_vZFyw@mail.gmail.com>
+Subject: Very Very Urgent.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hi all,
+I NEED TRUST.
 
-we've been just discussing, which repository should be hosting SCTP tests [1].
+Hope you are in good health with your family.
 
-Do you use these SCTP tests? If yes, do you use it from LTP [2] or the official
-SCTP kernel developers repository [3] ? If you use integrated to some testing
-framework, would it be a problem if repository changes?
+I am Mr.Komi Zongo.  I work as the Foreign Operations Manager with
+one of the international banks here in Burkina Faso. Although the
+world is a very small place and hard place to meet people because you
+don't know who to trust or believe, as I have developed trust in you
+after my fasting and praying,  I made up my mind to confide this
+confidential business suggestion to you.
 
-Also, do you use LTP network tests at all?
+There is an overdue unclaimed sum of Ten Million Five Hundred Thousand
+United States Dollars ($10,500,000.00) in my bank, belonging to one of
+our dead foreign customers. There were no beneficiaries stated
+concerning these funds. Therefore, your request as a foreigner is
+necessary to apply for the claim and release of the fund smoothly into
+your reliable bank account  as the Foreign Business Partner to the
+deceased.
 
-Kind regards,
-Petr
+On the transfer of this fund in your account, you will take 40% as
+your share from the total fund, 5% will be shared to Charitable
+Organizations while Motherless Babies homes, disabled helpless as the
+balance of 55% will be for me. If you are really sure of your
+integrity, trustworthy, and confidentiality, reply urgently and to
+prove that, include your particulars as follows.
 
-[1] https://lore.kernel.org/linux-sctp/YfpnVfrto4Elshy5@pevik/
-[2] https://github.com/linux-test-project/ltp/tree/master/utils/sctp
-[3] https://github.com/sctp/lksctp-tools
+Please get back to me through this Email Address komizongo2020@gmail.com
+
+please fill in your personal information as indicated below and as
+soon as i receive this information below i will forward you a text of an
+application which you will fill and send to the bank for the claim of the
+fund as i will direct you on what to do.
+
+Your name in full.......................... ........
+Your country....................... ..................
+Your age........................... ....................
+Your cell phone......................... ...........
+Your occupation.................... ...............
+Your sex........................... ....................
+Your marital status........................ .......
+Your id card or passport...........................
+
+Best Regards,
+
+Mr.Komi Zongo.
