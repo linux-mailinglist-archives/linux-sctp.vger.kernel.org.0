@@ -2,111 +2,105 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6B34A99F3
-	for <lists+linux-sctp@lfdr.de>; Fri,  4 Feb 2022 14:30:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA70E4AD7EC
+	for <lists+linux-sctp@lfdr.de>; Tue,  8 Feb 2022 12:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356370AbiBDNaI (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 4 Feb 2022 08:30:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21792 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231856AbiBDNaI (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 4 Feb 2022 08:30:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643981407;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=v+eNq5uaI/eASnAIqIcgutbuvU96IBWgXC/XrViu/lQ=;
-        b=WEXSndmBk7xvdPsAS/lF64cTjdCqZmtb9X7zS6gGS0Z1Xh3q4kJ92yAigtmUbtF1/e1cud
-        Torvpu4KLTNuq6PQkKzM7majEUNkEto6SEol2pdAPjojEsJX5c+wmegeo3ms4NxgV6BbRh
-        /whEQjlfZYm6vPiKa/U2T8kiShq9EQM=
-Received: from mail-ua1-f72.google.com (mail-ua1-f72.google.com
- [209.85.222.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-562-troV_kboN-6x9Ylu5jwngg-1; Fri, 04 Feb 2022 08:30:05 -0500
-X-MC-Unique: troV_kboN-6x9Ylu5jwngg-1
-Received: by mail-ua1-f72.google.com with SMTP id f26-20020ab074da000000b0030ffb0782f4so3540050uaq.4
-        for <linux-sctp@vger.kernel.org>; Fri, 04 Feb 2022 05:30:05 -0800 (PST)
+        id S232256AbiBHLv7 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 8 Feb 2022 06:51:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42748 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240249AbiBHLvz (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 8 Feb 2022 06:51:55 -0500
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8145C07D68B
+        for <linux-sctp@vger.kernel.org>; Tue,  8 Feb 2022 03:51:54 -0800 (PST)
+Received: by mail-io1-xd41.google.com with SMTP id r144so20706684iod.9
+        for <linux-sctp@vger.kernel.org>; Tue, 08 Feb 2022 03:51:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=mTe6rsF1WlocKfWRCIawejpNJl6lRYSIlYxDz8jltlQ=;
+        b=EhMSDVSYztoG7AfHV4Vb3k3J5zgh/OHu1B7Q1T4DdnBYiZms20saGm7S3u1WG0KBDM
+         XVab0A5yk1WZD35+gINnMvuaRGrFVHnYqo7T9Xfm6Tiw5xfnx1QhGC5B4/Vs9meO1YcY
+         fsPn+MbWfK3Zqt+8JBFax8dgmuB2I7u1EHt76ndWmkcqACII7sHSiNU5QD+2Yb+uY70L
+         /d3uQ/ehDCKLH57c9Ro7Gj0ltXg7W5c6DDG3/gBmVRLPTuEkiRjFl3OUAmQqVxuM79Yz
+         V741U+9umIWbPqI1QKo4NPN2HthqJOdGfUqw+i4ICyOAKhEdllH5c1agejSw36dVUe4l
+         1Fkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v+eNq5uaI/eASnAIqIcgutbuvU96IBWgXC/XrViu/lQ=;
-        b=ttiYBVbe3ZWiBhU2xbNtD84YUrxRCdQ4EUxbF6ApSjRIY03H4riu4/+divFEqbWLnB
-         7MPIOF77khQad54xy4w88FljGuwUjmPQhnT19JYkXXPq05GR1ZbWMwj9XuBPGEZL+jIP
-         T5GTZgZ1gkgsCAsyRpi7FDIxfL6wK6GVsULHkFkQpfzRDpf6AwncIKAoRt8wYF7f+gFl
-         wcu3YTm1PNQ4+/Yu3Rqh4pU5ZBYLUHtXPVWuH8NO7MYUvHON2uHsqFjZedx5aFqTmN98
-         2GUl/5STA5mGjQBOoDxPn4KfN9q4bPUSnFSrTSNc6CByH6T0RQc9NiabhZ8IrrzY0TIn
-         4WSQ==
-X-Gm-Message-State: AOAM532jMPU2HsrrEX26HDvJ07qbc57RwzWLkTbI6G8rWP2uV/KhSpUB
-        aclan/5e6c/4sJ7DC+UOl2BngLRPqIfqvdztDmck3X+iMRXO/wzMo2rllM5VGwT8uByGk5cmrYX
-        5BGSuMFaasKLkwxiUZxA4P0pyvx5BkEBUcLNkIw==
-X-Received: by 2002:a05:6102:c11:: with SMTP id x17mr824413vss.57.1643981404802;
-        Fri, 04 Feb 2022 05:30:04 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyaKr50xKw+4RYig79nuurWVcWzvrtcIEHRT3ftuZe21sDmiYvpXNHX+qheh87skuSONWZyo8/Qk9HRRhef2b0=
-X-Received: by 2002:a05:6102:c11:: with SMTP id x17mr824408vss.57.1643981404569;
- Fri, 04 Feb 2022 05:30:04 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=mTe6rsF1WlocKfWRCIawejpNJl6lRYSIlYxDz8jltlQ=;
+        b=C9P/DHqU/t/wFuAxuBylqOGpD0qQ6r700RJKrW8VDWZhTGH4PzpeG79qIMZHkrSb84
+         sNQnjH3bJX9tAmqVg/D/z8beS5wFSiBqsSKSTaJ5HzfVX5KX8H/Xo7XqgRd0ABLZ/zGm
+         T+puvZutHAVbdrc9nqx5bsQXEcAiq/BhM/baxIm2wY5oVeMLRuLj/zaa/NQX72sosdi8
+         963tuxUyJcqXKTtXvJQEvYn1XzjlBuulU643V4r363ecPvcMul01nbr1UkoWxglD2/yY
+         e955ZQGQ/qDMrRBbdu1DzFzkT8vUxZOSNT5Cfv/KgHMHZ3hwHe3TDWz+UeFoFmkVhYAe
+         7UqQ==
+X-Gm-Message-State: AOAM532ZctUl+ndFE5DWsY6B90nZmmmBMCy/U8yS6FFbJsVuf0Rwj/vL
+        Zj5ECrLPNsuFfUoxtsJ7U54TLZaZPQn3pwUn9Ro=
+X-Google-Smtp-Source: ABdhPJy/lc7MtyU4VTqEPnHapchd9Kz0CmUIFbatepV5JUpa1O3wgGxcenOTjF5DAmH5IvUMOlo9fIcXkjWaCTYVskI=
+X-Received: by 2002:a5e:d610:: with SMTP id w16mr1784456iom.87.1644321113923;
+ Tue, 08 Feb 2022 03:51:53 -0800 (PST)
 MIME-Version: 1.0
-References: <YfwVcwpZU/lusVlC@pevik>
-In-Reply-To: <YfwVcwpZU/lusVlC@pevik>
-From:   Veronika Kabatova <vkabatov@redhat.com>
-Date:   Fri, 4 Feb 2022 14:29:01 +0100
-Message-ID: <CA+tGwnk9YO+0Df_BRqjOU4W5y-TgdJNE3PdnaB5RWWLRF0=8cQ@mail.gmail.com>
-Subject: Re: [Automated-testing] SCTP testing
-To:     Petr Vorel <pvorel@suse.cz>
-Cc:     automated-testing@lists.yoctoproject.org, ltp@lists.linux.it,
-        linux-sctp@vger.kernel.org
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=vkabatov@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
+Reply-To: zahirikeen@gmail.com
+Sender: aliwat885@gmail.com
+Received: by 2002:a05:6638:1ef:0:0:0:0 with HTTP; Tue, 8 Feb 2022 03:51:52
+ -0800 (PST)
+From:   Zahiri Keen <zahirikeen2@gmail.com>
+Date:   Tue, 8 Feb 2022 11:51:52 +0000
+X-Google-Sender-Auth: oiVTYPMk83A7Q2ch105CJaOXceI
+Message-ID: <CAA2insJQOZkq0LMo0QAwsxXRkLG5KKz1--z299vV1vyrazm33w@mail.gmail.com>
+Subject: Greetings to you.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:d41 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4879]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [aliwat885[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [zahirikeen2[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, Feb 3, 2022 at 6:51 PM Petr Vorel <pvorel@suse.cz> wrote:
->
-> Hi all,
->
-> we've been just discussing, which repository should be hosting SCTP tests [1].
->
-> Do you use these SCTP tests? If yes, do you use it from LTP [2] or the official
-> SCTP kernel developers repository [3] ? If you use integrated to some testing
-> framework, would it be a problem if repository changes?
->
-> Also, do you use LTP network tests at all?
->
+Good Day,
 
-Hi,
+I know this email might come to you as a surprise because is coming
+from someone you haven=E2=80=99t met with before.
 
-we're currently not running these, but if I may offer a suggestion from my
-experience: It's easier for people to pick up testing when it's already a
-part of a test suite, rather than a separate test that they have to figure
-out a) even exists b) how to run it
+I am Mr. Zahiri Keen, the bank manager with BOA bank i contact you for
+a deal relating to the funds which are in my position I shall furnish
+you with more detail once your response.
 
-There are large test suites like LTP, kselftests and xfstests that most
-people are aware of, but then you get a lot of smaller tests or random
-scripts that, unless you're already familiar with the subsystem or get
-them linked directly, people won't find easily. And if a CI system wants
-to start running those tests, they most likely need to create a wrapper
-to handle test specifics, while the enablement via a larger test suite
-is way easier (as they can already handle it and all that's needed is
-to enable that specific test subset).
-
-Consolidating smaller tests into LTP or kselftests, where applicable,
-would make the testing process more streamlined and easier to follow
-for new folks too, as the expected testing could be unified across
-subsystems and there would be no surprises.
-
-
-Veronika
-
-> Kind regards,
-> Petr
->
-> [1] https://lore.kernel.org/linux-sctp/YfpnVfrto4Elshy5@pevik/
-> [2] https://github.com/linux-test-project/ltp/tree/master/utils/sctp
-> [3] https://github.com/sctp/lksctp-tools
->
-
+Regards,
+Mr.Zahiri
