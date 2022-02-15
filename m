@@ -2,131 +2,105 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D7F34B67EB
-	for <lists+linux-sctp@lfdr.de>; Tue, 15 Feb 2022 10:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 872744B78F8
+	for <lists+linux-sctp@lfdr.de>; Tue, 15 Feb 2022 21:53:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232889AbiBOJmk (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 15 Feb 2022 04:42:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38316 "EHLO
+        id S243968AbiBOUD2 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 15 Feb 2022 15:03:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiBOJmj (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 15 Feb 2022 04:42:39 -0500
-X-Greylist: delayed 68 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Feb 2022 01:42:27 PST
-Received: from re-prd-fep-044.btinternet.com (mailomta25-re.btinternet.com [213.120.69.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F6D2C678;
-        Tue, 15 Feb 2022 01:42:27 -0800 (PST)
-Received: from re-prd-rgout-001.btmx-prd.synchronoss.net ([10.2.54.4])
-          by re-prd-fep-047.btinternet.com with ESMTP
-          id <20220215094117.GTWD23513.re-prd-fep-047.btinternet.com@re-prd-rgout-001.btmx-prd.synchronoss.net>;
-          Tue, 15 Feb 2022 09:41:17 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=btinternet.com; s=btmx201904; t=1644918077; 
-        bh=01Reov67Ak1ygfT60tyjXg/E5IFhGxMI7kxwA5g4ZyM=;
-        h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:MIME-Version;
-        b=onHcTnnrW4WCnKRqdkxuBRd07GbPtsX66B+GrLDMfQwWsohnkqMBz2DkaAIDBQzieWhz1toiEEuRGc7RmAHkp7Jd3TFlsSNPTS1dkdW91mvZ5+MsIgUzMElKeLyyQo1rgtB7eI/vvfQkQRjp9DEQHZNG2TfS2/y4NulukhnJHaT9FLZ+UOoT3WFuIsOTjX8Uf3OqpTEeuIW+EE4ZLYrRZ1eEC4Bb0W1nxIXVOAx7t80QUTfvvLkaLUC9HrRMVCOqldclPmbEccqvfHSCXSTRgbXOCyh3hlMZFbxjb99A6TpDGIQhX05CpdWTqBYa74nZ27GsKvaUoYybDewHHu6gjQ==
-Authentication-Results: btinternet.com;
-    auth=pass (LOGIN) smtp.auth=richard_c_haines@btinternet.com;
-    bimi=skipped
-X-SNCR-Rigid: 613A8CC314A977E6
-X-Originating-IP: [81.154.227.201]
-X-OWM-Source-IP: 81.154.227.201 (GB)
-X-OWM-Env-Sender: richard_c_haines@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvvddrjeeggddtiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkffuhffvffgjfhgtfggggfesthekredttderjeenucfhrhhomheptfhitghhrghrugcujfgrihhnvghsuceorhhitghhrghruggptggphhgrihhnvghssegsthhinhhtvghrnhgvthdrtghomheqnecuggftrfgrthhtvghrnhepueeitdegtdegvdffjeetfeeffedvgedvteetffeuueekueejkeevkefgfefffedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpghhithhhuhgsrdgtohhmnecukfhppeekuddrudehgedrvddvjedrvddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddrudelkegnpdhinhgvthepkedurdduheegrddvvdejrddvtddupdhmrghilhhfrhhomheprhhitghhrghruggptggphhgrihhnvghssegsthhinhhtvghrnhgvthdrtghomhdpnhgspghrtghpthhtohepudefpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqshgt
-        thhpsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqshgvtghurhhithihqdhmohguuhhlvgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehluhgtihgvnhdrgihinhesghhmrghilhdrtghomhdprhgtphhtthhopehmrghrtggvlhhordhlvghithhnvghrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepnhhhohhrmhgrnhesthhugigurhhivhgvrhdrtghomhdprhgtphhtthhopehomhhoshhnrggtvgesrhgvughhrghtrdgtohhmpdhrtghpthhtohepphgruhhlsehprghulhdqmhhoohhrvgdrtghomhdprhgtphhtthhopehsvghlihhnuhigsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvhihrghsvghvihgthhesghhmrghilhdrtghomh
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-X-SNCR-hdrdom: btinternet.com
-Received: from [192.168.1.198] (81.154.227.201) by re-prd-rgout-001.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as richard_c_haines@btinternet.com)
-        id 613A8CC314A977E6; Tue, 15 Feb 2022 09:41:17 +0000
-Message-ID: <cddf0d41fdc23b594780012df367ad8bdd9dc135.camel@btinternet.com>
-Subject: Re: [PATCH net v3 0/2] security: fixups for the security hooks in
- sctp
-From:   Richard Haines <richard_c_haines@btinternet.com>
-To:     Ondrej Mosnacek <omosnace@redhat.com>, netdev@vger.kernel.org,
-        davem@davemloft.net, kuba@kernel.org, selinux@vger.kernel.org,
-        Paul Moore <paul@paul-moore.com>
-Cc:     Xin Long <lucien.xin@gmail.com>,
+        with ESMTP id S243954AbiBOUD0 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 15 Feb 2022 15:03:26 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B1C74DF7
+        for <linux-sctp@vger.kernel.org>; Tue, 15 Feb 2022 12:03:04 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id u18so144520edt.6
+        for <linux-sctp@vger.kernel.org>; Tue, 15 Feb 2022 12:03:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=56tbQJVv90RABsQ0i0ptzrDmdvS83ZrjWE0KJ5/Juw8=;
+        b=sFifZ3ibKjhu/WnpE7XgZp/C2bXZ7ift+MmeAVSa1hznUw6Wm07gSdft5d2fUe2Vn2
+         RjiRCYgEeTYyWMTxD06Z5LMTyKQZ5RluV4mRPZ8hVkTVElWuISequYHNfnVgs1JVpq+h
+         xxaHe/Iv+2TTmvgqWPO0LZnQEBReR69V0AMuYUHxpEJAkG1St+MhQIgNHgZL37cOQaFq
+         LwC5kUW7OHpEbm/5XIti6ajkRvwQWpQC5DoqvzT+ZOX325bSVD1WtjOMcq8+I+dZAQAv
+         QXaY6x7vFTvffge/EC02QtULgmF6djGu6x5pF2BUtiqlB5PHHwiNmQmkGDrJbIl2VAHu
+         4iAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=56tbQJVv90RABsQ0i0ptzrDmdvS83ZrjWE0KJ5/Juw8=;
+        b=sa9yjqz9nBlErjArVuMOBUWhfBZqO7bzoftHYU4HtXEeqmPqaeljC/pDL/CTLaKEDj
+         mGxpooMBkvLCeCvYYpzRum4/JZ4ykaTOKRa+dSRsBoGtMsUimc5LFJHTRtDIIyQplG/6
+         mDaYap7ZY5pFTpMxjl2MytFXkvRlPiboXYLcslDfMCg9otaeOFMVFTNMtUdXLKHDRmMd
+         5HL0DKsMAy+8P4LvG0KEJJdHpG5RwLM+1ULNKZoat7B3EUuvwWlBiCoZlyxzYiVVoNzL
+         t0yvsJ4TuchKAWViesXuh987qfxf8BKCjowm4bHmBJ+t6FZTv9PBXFCFKsfLZJ/wnz6F
+         nowg==
+X-Gm-Message-State: AOAM533lBLG77yMCI5wkDH3VA5zEpiOIit0O1RIFifrqy005/03UG0xR
+        c05JuKTIPpE27LRINy0c+XoOl0z5RhvJ+aymHyb2
+X-Google-Smtp-Source: ABdhPJwSh+Lbt7VtTxO+bjCuU4YBvFJI07pOtqxY+X5Ac/RcvpsJaiEfY8EBo10iskp6ziZLHDs9nkyLfRPbTaESgFg=
+X-Received: by 2002:a05:6402:35ca:: with SMTP id z10mr606628edc.43.1644955382916;
+ Tue, 15 Feb 2022 12:03:02 -0800 (PST)
+MIME-Version: 1.0
+References: <20220212175922.665442-1-omosnace@redhat.com> <20220212175922.665442-3-omosnace@redhat.com>
+ <CAHC9VhT90617FoqQJBCrDQ8gceVVA6a1h74h6T4ZOwNk6RVB3g@mail.gmail.com>
+ <20220214165436.1f6a9987@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CAFSqH7zC-4Ti_mzK4ZrpCVtNVCxD8h729MezG2avJLGJ2JrMTg@mail.gmail.com> <CADvbK_e+TUuWhBQz1NPPS2aE59tzPKXPfUogrZ526hvm6OvY9Q@mail.gmail.com>
+In-Reply-To: <CADvbK_e+TUuWhBQz1NPPS2aE59tzPKXPfUogrZ526hvm6OvY9Q@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 15 Feb 2022 15:02:51 -0500
+Message-ID: <CAHC9VhSHxk0MUR1krpmbot6iG-vqH48sRgKOnJQ0LsFTs6Jvqg@mail.gmail.com>
+Subject: Re: [PATCH net v3 2/2] security: implement sctp_assoc_established
+ hook in selinux
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        SElinux list <selinux@vger.kernel.org>,
+        Richard Haines <richard_c_haines@btinternet.com>,
         Vlad Yasevich <vyasevich@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        linux-sctp@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 15 Feb 2022 09:41:17 +0000
-In-Reply-To: <20220212175922.665442-1-omosnace@redhat.com>
-References: <20220212175922.665442-1-omosnace@redhat.com>
+        "open list:SCTP PROTOCOL" <linux-sctp@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Prashanth Prahlad <pprahlad@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Sat, 2022-02-12 at 18:59 +0100, Ondrej Mosnacek wrote:
-> This is a third round of patches to fix the SCTP-SELinux interaction
-> w.r.t. client-side peeloff. The patches are a modified version of Xin
-> Long's patches posted previously, of which only a part was merged
-> (the
-> rest was merged for a while, but was later reverted):
-> https://lore.kernel.org/selinux/cover.1635854268.git.lucien.xin@gmail.com/T/
-> 
-> In gist, these patches replace the call to
-> security_inet_conn_established() in SCTP with a new hook
-> security_sctp_assoc_established() and implement the new hook in
-> SELinux
-> so that the client-side association labels are set correctly (which
-> matters in case the association eventually gets peeled off into a
-> separate socket).
-> 
-> Note that other LSMs than SELinux don't implement the SCTP hooks nor
-> inet_conn_established, so they shouldn't be affected by any of these
-> changes.
-> 
-> These patches were tested by selinux-testsuite [1] with an additional
-> patch [2] and by lksctp-tools func_tests [3].
-> 
-> Changes since v2:
-> - patches 1 and 2 dropped as they are already in mainline (not
-> reverted)
-> - in patch 3, the return value of security_sctp_assoc_established()
-> is
->   changed to int, the call is moved earlier in the function, and if
-> the
->   hook returns an error value, the packet will now be discarded,
->   aborting the association
-> - patch 4 has been changed a lot - please see the patch description
-> for
->   details on how the hook is now implemented and why
-> 
-> [1] https://github.com/SELinuxProject/selinux-testsuite/
-> [2]
-> https://patchwork.kernel.org/project/selinux/patch/20211021144543.740762-1-omosnace@redhat.com/
-> [3] https://github.com/sctp/lksctp-tools/tree/master/src/func_tests
-> 
-> Ondrej Mosnacek (2):
->   security: add sctp_assoc_established hook
->   security: implement sctp_assoc_established hook in selinux
-> 
->  Documentation/security/SCTP.rst | 22 ++++----
->  include/linux/lsm_hook_defs.h   |  2 +
->  include/linux/lsm_hooks.h       |  5 ++
->  include/linux/security.h        |  8 +++
->  net/sctp/sm_statefuns.c         |  8 +--
->  security/security.c             |  7 +++
->  security/selinux/hooks.c        | 90 ++++++++++++++++++++++++-------
-> --
->  7 files changed, 103 insertions(+), 39 deletions(-)
-> 
+On Mon, Feb 14, 2022 at 11:13 PM Xin Long <lucien.xin@gmail.com> wrote:
+> Looks okay to me.
+>
+> The difference from the old one is that: with
+> selinux_sctp_process_new_assoc() called in
+> selinux_sctp_assoc_established(), the client sksec->peer_sid is using
+> the first asoc's peer_secid, instead of the latest asoc's peer_secid.
+> And not sure if it will cause any problems when doing the extra check
+> sksec->peer_sid != asoc->peer_secid for the latest asoc and *returns
+> err*. But I don't know about selinux, I guess there must be a reason
+> from selinux side.
 
-Built this patchset on kernel 5.17-rc4 with no problems.
-Tested using [PATCH testsuite v3] tests/sctp: add client peeloff tests
+Generally speaking we don't want to change any SELinux socket labels
+once it has been created.  While the peer_sid is a bit different,
+changing it after userspace has access to the socket could be
+problematic.  In the case where the peer_sid differs between the two
+we have a permission check which allows policy to control this
+behavior which seems like the best option at this point.
 
-Tested-by: Richard Haines <richard_c_haines@btinternet.com>
+> I will ACK on patch 0/2.
 
+Thanks, I'm going to go ahead and merge these two patches into
+selinux/next right now.
 
+-- 
+paul-moore.com
