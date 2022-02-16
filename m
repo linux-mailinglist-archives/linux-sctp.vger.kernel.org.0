@@ -2,123 +2,112 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB45A4B77E2
-	for <lists+linux-sctp@lfdr.de>; Tue, 15 Feb 2022 21:51:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 526994B8093
+	for <lists+linux-sctp@lfdr.de>; Wed, 16 Feb 2022 07:19:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243980AbiBOUJG (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 15 Feb 2022 15:09:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41810 "EHLO
+        id S231811AbiBPGDq (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 16 Feb 2022 01:03:46 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:43344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241915AbiBOUJG (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 15 Feb 2022 15:09:06 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA20B0C46
-        for <linux-sctp@vger.kernel.org>; Tue, 15 Feb 2022 12:08:54 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id qx21so6895375ejb.13
-        for <linux-sctp@vger.kernel.org>; Tue, 15 Feb 2022 12:08:54 -0800 (PST)
+        with ESMTP id S229561AbiBPGDq (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 16 Feb 2022 01:03:46 -0500
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D139813CA1F
+        for <linux-sctp@vger.kernel.org>; Tue, 15 Feb 2022 22:03:34 -0800 (PST)
+Received: by mail-pf1-x444.google.com with SMTP id f6so1281034pfj.11
+        for <linux-sctp@vger.kernel.org>; Tue, 15 Feb 2022 22:03:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BhJlt5ZCYoidBqqNJ5EsFOz8HUlOmyfI7AV8Vc3JkYk=;
-        b=ADoOeEn89ke3US6l0YM5nqedXSf+e9ChVnMnFsvfT7bO8qng9v6Ta1Rj8Ds/J4fnho
-         JC3kI6BGKVlJgdUYnf82vkkoyXm/N71P0w6DJKZrzd5Cu2zgnNl0NhFzos5niPdtMbSU
-         /MILDymIqGvkOWWPqa6cWe4U7kVCqXpjwmKgrV1zBUhAGK3e/8SCtoYhjzWpNOQT9g6n
-         hCMwtfdf6Zb5rSnDACVc3b0BhSXs8+Jbakg1KlxkGOFZ/8pexlNdDMUNwSWZeFvOqi/o
-         1rnk/qIn72rf6ybZ3U8mlqscNN1JRZYSq23BpzPUuDC9AQzkkxmqYrHEGoA5LH1Pr/2N
-         c60A==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=CmuNpHT3Ghu1p9u8qrzNES2PUlPivqE0AKA17621SPk=;
+        b=iLHVrETnhGtopDR8UqvraeJNiDoKFDxKfNO6j7cmMRD+zWInSYs2IXKAUBerK/is4U
+         ZGusAlsLUsuEllpM9aDO+rwpMwKtLa+IwXF6jQ8nO/k1h1wT0jxH9Fx+pdFk25LidkNi
+         S4Sx8P5DqJ2swysTR9MhVM7PRz0yMU0mv9zkpZM5+QZK/rMDOLs/B7jBazwydj7GDQb8
+         MMtnkySImmpSqbNdqL5kxse1cFnyLHLkldpX6xGNavLJ4HXGnq9NL8kE7di9iM3SyDxv
+         ZUwB9cpz5JG4e/KjgU5MKTgVZFe0HVETcPMKLVrMARUSe7IdxckG5EUqNR/A/l2jnVAX
+         beEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BhJlt5ZCYoidBqqNJ5EsFOz8HUlOmyfI7AV8Vc3JkYk=;
-        b=BOp0Vd88kABDgN3bozrvsedEQtwgTxf7PowKvn1cxKn7GUt6bRKZiBgFtOXXuj9wmz
-         h+8GnK4vwPk0e8f/Naq/o6eu9GbSzcCUCrNO+EUyLKxOXPzqBvB5ffzG9uTf0CEwHMBh
-         vm20jfX1nRGLBtAGreNkO6pej89U38KogRIav6LHpWLtqwqC+0ExGFyhvo6VjIgc+Kk8
-         2dMzIx+hhpS1joIEDtI4s5nuPpQyfqXOCamAjIayzZFMHnku/+A4exx3AAhHIkaxEA6R
-         +w5ptP9CoIiT8YZ3E8Wc/KsjFaU9lRxjIUO0ALjK6IfHmHWShKXLBfRTdwPBy94djP/a
-         Tudw==
-X-Gm-Message-State: AOAM532HzvZieteFyCG5swhXkKFd5WQwWofpE32eZ1TtLkm9X0k+iYUE
-        uVjAvq8TXCVSV/odnrax6AWKNzjnOtfP3SndhL8u
-X-Google-Smtp-Source: ABdhPJwZfMoC74QO9F+UqNNbECHuXUN/j7hFbn1Broo/RJdOcztLDt/AZzopuLRcYVoSxv2IibHJvuduoX2biLV87Os=
-X-Received: by 2002:a17:906:6498:: with SMTP id e24mr639141ejm.12.1644955733109;
- Tue, 15 Feb 2022 12:08:53 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=CmuNpHT3Ghu1p9u8qrzNES2PUlPivqE0AKA17621SPk=;
+        b=jLO2O0ChFQ3/5dO1hpxL8cmDVGA1Wg4PEpAUQy0Qp6EdlhFXLwH/dfj4Ln9gd6LkDK
+         DqupUuclPtT0agpqhcFEHT+d0k2I/VMX+OAp3DjNoNIdWSsp1YOa/0cRUKBIOiOGGcNm
+         Lx82nncxeU6LpnZpCHYJFiBGxhOm78DWY1RzJHnkOBu5Yahl1CCbwXMEge33jedtM7Mv
+         YKfnlA9pbBmdGSJOP1NsPQaZfiAgJeiQ3rnt5IdLnu5WnFuRePPEvoS/+mxsiAGbA3+n
+         JSbh1q1lBpziOBB3Hhb0DCxXvKoWy1dtsaKbI6LBr1h4Ge+5OmjSxk3ZciaawL8n18p+
+         gm1w==
+X-Gm-Message-State: AOAM531dPfzXuT6VvIsiYDHWw9nKHAK0Ip/kjXyRlyJBkdD9fqTjLoMc
+        ypA3BDCPQQq7vMP11If3lFFPD9W/6QpDDtzgdAY=
+X-Google-Smtp-Source: ABdhPJyEuJijlrodT+udOmPKOeXDAbk8o0ZBbWPtlricnXHFoj5B9waxA1sm89C0LohRQC0fr0nC+mT8jSWQRh4WqfA=
+X-Received: by 2002:a63:1350:0:b0:344:21b6:8a18 with SMTP id
+ 16-20020a631350000000b0034421b68a18mr1035623pgt.498.1644991414224; Tue, 15
+ Feb 2022 22:03:34 -0800 (PST)
 MIME-Version: 1.0
-References: <20220212175922.665442-1-omosnace@redhat.com>
-In-Reply-To: <20220212175922.665442-1-omosnace@redhat.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 15 Feb 2022 15:08:42 -0500
-Message-ID: <CAHC9VhR3qjmq461HyO7OwgicmEmzDjgshdocSqvYEZMk_BfceQ@mail.gmail.com>
-Subject: Re: [PATCH net v3 0/2] security: fixups for the security hooks in sctp
-To:     Ondrej Mosnacek <omosnace@redhat.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        selinux@vger.kernel.org, Xin Long <lucien.xin@gmail.com>,
-        Richard Haines <richard_c_haines@btinternet.com>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        linux-sctp@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Received: by 2002:a05:6a10:e81e:0:0:0:0 with HTTP; Tue, 15 Feb 2022 22:03:33
+ -0800 (PST)
+Reply-To: wilfried.vogele@gmail.com
+From:   "wilfried.vogele" <vidal.charpentier@gmail.com>
+Date:   Wed, 16 Feb 2022 07:03:33 +0100
+Message-ID: <CAN7qQvQZY55p8X1htgEZXtqExtHnEvCNH_e3VVbA4Eir0pVH3g@mail.gmail.com>
+Subject: Geldverleih an Privatpersonen und Gewerbetreibende in weniger als 72 Stunden
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:444 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5530]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [vidal.charpentier[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Sat, Feb 12, 2022 at 12:59 PM Ondrej Mosnacek <omosnace@redhat.com> wrote:
->
-> This is a third round of patches to fix the SCTP-SELinux interaction
-> w.r.t. client-side peeloff. The patches are a modified version of Xin
-> Long's patches posted previously, of which only a part was merged (the
-> rest was merged for a while, but was later reverted):
-> https://lore.kernel.org/selinux/cover.1635854268.git.lucien.xin@gmail.com/T/
->
-> In gist, these patches replace the call to
-> security_inet_conn_established() in SCTP with a new hook
-> security_sctp_assoc_established() and implement the new hook in SELinux
-> so that the client-side association labels are set correctly (which
-> matters in case the association eventually gets peeled off into a
-> separate socket).
->
-> Note that other LSMs than SELinux don't implement the SCTP hooks nor
-> inet_conn_established, so they shouldn't be affected by any of these
-> changes.
->
-> These patches were tested by selinux-testsuite [1] with an additional
-> patch [2] and by lksctp-tools func_tests [3].
->
-> Changes since v2:
-> - patches 1 and 2 dropped as they are already in mainline (not reverted)
-> - in patch 3, the return value of security_sctp_assoc_established() is
->   changed to int, the call is moved earlier in the function, and if the
->   hook returns an error value, the packet will now be discarded,
->   aborting the association
-> - patch 4 has been changed a lot - please see the patch description for
->   details on how the hook is now implemented and why
->
-> [1] https://github.com/SELinuxProject/selinux-testsuite/
-> [2] https://patchwork.kernel.org/project/selinux/patch/20211021144543.740762-1-omosnace@redhat.com/
-> [3] https://github.com/sctp/lksctp-tools/tree/master/src/func_tests
->
-> Ondrej Mosnacek (2):
->   security: add sctp_assoc_established hook
->   security: implement sctp_assoc_established hook in selinux
->
->  Documentation/security/SCTP.rst | 22 ++++----
->  include/linux/lsm_hook_defs.h   |  2 +
->  include/linux/lsm_hooks.h       |  5 ++
->  include/linux/security.h        |  8 +++
->  net/sctp/sm_statefuns.c         |  8 +--
->  security/security.c             |  7 +++
->  security/selinux/hooks.c        | 90 ++++++++++++++++++++++++---------
->  7 files changed, 103 insertions(+), 39 deletions(-)
+Hallo,
 
-This patchset has been merged into selinux/next, thanks everyone!
+Sind Sie in einer schwierigen Situation, f=C3=BCr die Sie einen Kredit
+suchen? Ben=C3=B6tigen Sie eine Finanzierung zur Begleichung einer Schuld
+oder zur Finanzierung einer Aktivit=C3=A4t? Ben=C3=B6tigen Sie einen
+Konsumentenkredit, einen Immobilienkredit, einen Privatkredit, einen
+Hypothekarkredit, einen Investitionskredit, einen Kreditr=C3=BCckkauf oder
+anderes?
 
--- 
-paul-moore.com
+Ich bin ein privater Investor. Ich versorge Sie mit kurz-, mittel- und
+langfristigen Krediten. Meine Finanzierungskonditionen sind sehr
+einfach und der Zinssatz betr=C3=A4gt 3% pro Jahr.
+
+F=C3=BCr alle Informationsanfragen stehe ich Ihnen gerne zur Verf=C3=BCgung=
+.
+
+Vielen Dank f=C3=BCr Ihre Kontaktaufnahme per Mail an:
+
+wilfried.vogele@gmail.com
+
+Mit freundlichen Gr=C3=BC=C3=9Fen.
+
+Wilfried V=C3=B6gele
