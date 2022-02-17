@@ -2,77 +2,79 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3274BA14D
-	for <lists+linux-sctp@lfdr.de>; Thu, 17 Feb 2022 14:34:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED80C4BA1A4
+	for <lists+linux-sctp@lfdr.de>; Thu, 17 Feb 2022 14:45:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237077AbiBQNd2 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 17 Feb 2022 08:33:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58128 "EHLO
+        id S232910AbiBQNmb (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 17 Feb 2022 08:42:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240988AbiBQNd0 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 17 Feb 2022 08:33:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 408F11F68EC
-        for <linux-sctp@vger.kernel.org>; Thu, 17 Feb 2022 05:33:08 -0800 (PST)
+        with ESMTP id S241208AbiBQNmW (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 17 Feb 2022 08:42:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 894DD6FA27
+        for <linux-sctp@vger.kernel.org>; Thu, 17 Feb 2022 05:41:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645104783;
+        s=mimecast20190719; t=1645105306;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=R+uKxN/uQ3UdKZRYgJ9V9aHz1upM2XpQ82bT5M0IFbI=;
-        b=DZUyIb2HT/OMGqcLXsSBMlge30Z2W4/cBqiVIp4qrdlVAVR3X8kJxvk6xY9IHeg6Qkdht3
-        82xeV8Ud8Sxx105l+8lu1hPCsDci0Sgmhcv3gRYZZO3aSAZPVxlBfaJy3YVjycGU9df9N1
-        8eb6tb2x4OFOcI7C3SL0Khflhrx9kbA=
-Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
- [209.85.219.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=ReDjgTa0AKl3IhETSr6eHHzRQ7oTYlVeTlr0c09qyCU=;
+        b=DRvp7lWEebr7dYvlQag0Yw4cZsgqhilgfP6HiAJXRaeC7Lm3+cKFApTW5jsgl5ZBggykho
+        egWD5W+vyxwJE87Z1TGeE+rtp+EqE+T/5LYj69cW5r8mxN9Cv8kUrCZQ0qo8jtRNP8Cro5
+        G+z0MZfhncA691X+sASlO3XWjOaqw6c=
+Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com
+ [209.85.219.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-623-haEwgrZ1O0qm1GYCjBWUDg-1; Thu, 17 Feb 2022 08:33:02 -0500
-X-MC-Unique: haEwgrZ1O0qm1GYCjBWUDg-1
-Received: by mail-yb1-f199.google.com with SMTP id c10-20020a251c0a000000b0062272fc32bfso9942170ybc.17
-        for <linux-sctp@vger.kernel.org>; Thu, 17 Feb 2022 05:32:57 -0800 (PST)
+ us-mta-620-pDsdxg2mOkujLpHbdHRCJw-1; Thu, 17 Feb 2022 08:41:43 -0500
+X-MC-Unique: pDsdxg2mOkujLpHbdHRCJw-1
+Received: by mail-yb1-f197.google.com with SMTP id b12-20020a056902030c00b0061d720e274aso9943752ybs.20
+        for <linux-sctp@vger.kernel.org>; Thu, 17 Feb 2022 05:41:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=R+uKxN/uQ3UdKZRYgJ9V9aHz1upM2XpQ82bT5M0IFbI=;
-        b=to5j00uNs/a2J2gAk7s+n+hb6VgbPQTJlCD4iX76hcslNuDGn6mj/PUahe9HWu5qMj
-         KnYIGdbjK3SfLHRS4qx4w7En59B1TTyEY7ZKo5igkOaGcYfcwQV7QXYSsktqX8iVMBj1
-         zedVXGK0X2VAQkJojRs/N+Yh9ry0M+EjG6+6MuodIInThS/MmwKZYH/V/Ffp3eg17EZL
-         ptT9Dt1qkQF7XqFWHwEKiDXHl6TQE2lB6p4QPvkVVSmv8f9eAac6iZw9IC33u0/hPvcc
-         hpYzWEJ0VL1PvDDqW/T1+s+Lx7Blc/BkZ7Dew/t1aFoERhURTCFGzPclXVMkxmA9VPhz
-         rlWQ==
-X-Gm-Message-State: AOAM532EmQywUmF8WrI9rrxplb5TylajED0CXb6R2eTyOKKDVLNjTU6a
-        14fjBdFHlq8E2gQEhHkwAFs+dQm2huOWI/BbUdtC8mFOFylKX62C9MKknZqzKbSSVjdqkeSAyew
-        s/FA9X3GYSPHRV0EM8z4MC3dst8RqVUkhNhrvNA==
-X-Received: by 2002:a81:52cd:0:b0:2d6:93e0:f1b2 with SMTP id g196-20020a8152cd000000b002d693e0f1b2mr2533102ywb.245.1645104776597;
-        Thu, 17 Feb 2022 05:32:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxFefMUXhH6RLwk9ZmWiTLxleS0FIicYntXWMfUeWl3fFq0Bq5LTKQkneJWoctpaIWmiEqJxFMmMbodYIp8NzE=
-X-Received: by 2002:a81:52cd:0:b0:2d6:93e0:f1b2 with SMTP id
- g196-20020a8152cd000000b002d693e0f1b2mr2533075ywb.245.1645104776330; Thu, 17
- Feb 2022 05:32:56 -0800 (PST)
+        bh=ReDjgTa0AKl3IhETSr6eHHzRQ7oTYlVeTlr0c09qyCU=;
+        b=bppyDQu+yd98uDGQ9c6A22R+oxxOf8RzY8mjHqlV4IcrR1Jz8A0+yG6dZoLI+b+090
+         OIPU82wEOCqjl5uVCLfOLTE0F6CF0roFlzVNq+JhrcrfDi/78TNKtuaxd9b8toV02BVC
+         BzIvOAlYxXisBNztegV5jeS1GOrHSyv8Pd24MAi7nXPJ+arQOYYDTTs6dB0FoL+Uqwz5
+         CDpam7BBrPG9fUZ58S+fyLMFbfaU0LuKs3FXJ6fTUzwUMJLbRaaQap7zu6HFIMOvKvFP
+         eiXojJesKqhTI7ZsVlaWGREdRPohR+NnrTFe8LUCKLCT5h0XhH5L9MFLcQ98JcmHL9aR
+         /KnQ==
+X-Gm-Message-State: AOAM53099M+KIq4G+8q+/Kq86n1sRfu+OyFaGGFucnZYov1DbKfBaD/0
+        48MK5up1xMP1xHA4SUOO44WHasmDLkb6kE4P6pGAoxGSe2pkBhCb96mbcvexqeH15fdkvZd3Waq
+        zF1RjYk5+B6EkY4t6vRILVjXy1JwHKQlL6MVmwg==
+X-Received: by 2002:a25:be8a:0:b0:608:67d7:22fe with SMTP id i10-20020a25be8a000000b0060867d722femr2386874ybk.336.1645105302511;
+        Thu, 17 Feb 2022 05:41:42 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw/qTEHSLL3YCSmamzaOjBp+lXc80kYPlLLNqWjTzAirdIVkDe9EOxzg4C+QusYWruYzN7ip+2HvKyuPdKRbC0=
+X-Received: by 2002:a25:be8a:0:b0:608:67d7:22fe with SMTP id
+ i10-20020a25be8a000000b0060867d722femr2386846ybk.336.1645105302231; Thu, 17
+ Feb 2022 05:41:42 -0800 (PST)
 MIME-Version: 1.0
 References: <20220212175922.665442-1-omosnace@redhat.com> <20220212175922.665442-3-omosnace@redhat.com>
  <CAHC9VhT90617FoqQJBCrDQ8gceVVA6a1h74h6T4ZOwNk6RVB3g@mail.gmail.com>
-In-Reply-To: <CAHC9VhT90617FoqQJBCrDQ8gceVVA6a1h74h6T4ZOwNk6RVB3g@mail.gmail.com>
+ <20220214165436.1f6a9987@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CAFSqH7zC-4Ti_mzK4ZrpCVtNVCxD8h729MezG2avJLGJ2JrMTg@mail.gmail.com>
+ <CADvbK_e+TUuWhBQz1NPPS2aE59tzPKXPfUogrZ526hvm6OvY9Q@mail.gmail.com> <CAHC9VhSHxk0MUR1krpmbot6iG-vqH48sRgKOnJQ0LsFTs6Jvqg@mail.gmail.com>
+In-Reply-To: <CAHC9VhSHxk0MUR1krpmbot6iG-vqH48sRgKOnJQ0LsFTs6Jvqg@mail.gmail.com>
 From:   Ondrej Mosnacek <omosnace@redhat.com>
-Date:   Thu, 17 Feb 2022 14:32:44 +0100
-Message-ID: <CAFqZXNtRgYbZnL25aiDDXzq2ukujiipgJ32CfhfvROAQDHVgLA@mail.gmail.com>
+Date:   Thu, 17 Feb 2022 14:41:30 +0100
+Message-ID: <CAFqZXNtPZkozkzpOeW31pOn1r+xcWg6MDt7p8onTMoaUZVqzEw@mail.gmail.com>
 Subject: Re: [PATCH net v3 2/2] security: implement sctp_assoc_established
  hook in selinux
 To:     Paul Moore <paul@paul-moore.com>
-Cc:     network dev <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
+Cc:     Xin Long <lucien.xin@gmail.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
         SElinux list <selinux@vger.kernel.org>,
-        Xin Long <lucien.xin@gmail.com>,
         Richard Haines <richard_c_haines@btinternet.com>,
         Vlad Yasevich <vyasevich@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        "open list:SCTP PROTOCOL" <linux-sctp@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         Prashanth Prahlad <pprahlad@redhat.com>
 Authentication-Results: relay.mimecast.com;
         auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=omosnace@redhat.com
@@ -89,65 +91,37 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 11:14 PM Paul Moore <paul@paul-moore.com> wrote:
-> On Sat, Feb 12, 2022 at 12:59 PM Ondrej Mosnacek <omosnace@redhat.com> wrote:
+On Tue, Feb 15, 2022 at 9:03 PM Paul Moore <paul@paul-moore.com> wrote:
+> On Mon, Feb 14, 2022 at 11:13 PM Xin Long <lucien.xin@gmail.com> wrote:
+> > Looks okay to me.
 > >
-> > Do this by extracting the peer labeling per-association logic from
-> > selinux_sctp_assoc_request() into a new helper
-> > selinux_sctp_process_new_assoc() and use this helper in both
-> > selinux_sctp_assoc_request() and selinux_sctp_assoc_established(). This
-> > ensures that the peer labeling behavior as documented in
-> > Documentation/security/SCTP.rst is applied both on the client and server
-> > side:
-> > """
-> > An SCTP socket will only have one peer label assigned to it. This will be
-> > assigned during the establishment of the first association. Any further
-> > associations on this socket will have their packet peer label compared to
-> > the sockets peer label, and only if they are different will the
-> > ``association`` permission be validated. This is validated by checking the
-> > socket peer sid against the received packets peer sid to determine whether
-> > the association should be allowed or denied.
-> > """
-> >
-> > At the same time, it also ensures that the peer label of the association
-> > is set to the correct value, such that if it is peeled off into a new
-> > socket, the socket's peer label  will then be set to the association's
-> > peer label, same as it already works on the server side.
-> >
-> > While selinux_inet_conn_established() (which we are replacing by
-> > selinux_sctp_assoc_established() for SCTP) only deals with assigning a
-> > peer label to the connection (socket), in case of SCTP we need to also
-> > copy the (local) socket label to the association, so that
-> > selinux_sctp_sk_clone() can then pick it up for the new socket in case
-> > of SCTP peeloff.
-> >
-> > Careful readers will notice that the selinux_sctp_process_new_assoc()
-> > helper also includes the "IPv4 packet received over an IPv6 socket"
-> > check, even though it hadn't been in selinux_sctp_assoc_request()
-> > before. While such check is not necessary in
-> > selinux_inet_conn_request() (because struct request_sock's family field
-> > is already set according to the skb's family), here it is needed, as we
-> > don't have request_sock and we take the initial family from the socket.
-> > In selinux_sctp_assoc_established() it is similarly needed as well (and
-> > also selinux_inet_conn_established() already has it).
-> >
-> > Fixes: 72e89f50084c ("security: Add support for SCTP security hooks")
-> > Reported-by: Prashanth Prahlad <pprahlad@redhat.com>
-> > Based-on-patch-by: Xin Long <lucien.xin@gmail.com>
-> > Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
-> > ---
-> >  security/selinux/hooks.c | 90 +++++++++++++++++++++++++++++-----------
-> >  1 file changed, 66 insertions(+), 24 deletions(-)
+> > The difference from the old one is that: with
+> > selinux_sctp_process_new_assoc() called in
+> > selinux_sctp_assoc_established(), the client sksec->peer_sid is using
+> > the first asoc's peer_secid, instead of the latest asoc's peer_secid.
+> > And not sure if it will cause any problems when doing the extra check
+> > sksec->peer_sid != asoc->peer_secid for the latest asoc and *returns
+> > err*. But I don't know about selinux, I guess there must be a reason
+> > from selinux side.
 >
-> This patch, and patch 1/2, look good to me; I'm assuming this resolves
-> all of the known SELinux/SCTP problems identified before the new year?
+> Generally speaking we don't want to change any SELinux socket labels
+> once it has been created.  While the peer_sid is a bit different,
+> changing it after userspace has access to the socket could be
+> problematic.  In the case where the peer_sid differs between the two
+> we have a permission check which allows policy to control this
+> behavior which seems like the best option at this point.
 
-No, not really. There is still the inconsistency that peeloff sockets
-go through the socket_[post_]create hooks and then the label computed
-is overwritten by the sctp_sk_clone hook. But it's a different issue
-unrelated to this one. I'm still in the process of cooking up the
-patches and figuring out the consequences (other LSMs would be
-affected by the change, too, so it is tricky...).
+I think that maybe Xin was referring to the fact that on error return
+from the hook the return code information is lost and the assoc is
+just silently dropped (but I may have misunderstood). In case of a
+denial (avc_has_perm() returning -EACCESS) this isn't much of a
+problem, because the denial is logged in the audit log, so there is a
+way to figure out why opening the association failed. In case of other
+errors we could indeed do better and either log an SELINUX_ERR audit
+event or at least pr_err() into the console, but there are likely
+several other existing cases like this, so it would be best to do this
+cleanup independently in another patch (if anyone feels up to the
+task...).
 
 --
 Ondrej Mosnacek
