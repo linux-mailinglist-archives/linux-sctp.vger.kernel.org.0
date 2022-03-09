@@ -2,73 +2,66 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29EB14D254E
-	for <lists+linux-sctp@lfdr.de>; Wed,  9 Mar 2022 02:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EFAC4D3871
+	for <lists+linux-sctp@lfdr.de>; Wed,  9 Mar 2022 19:08:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiCIBEd (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 8 Mar 2022 20:04:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44500 "EHLO
+        id S233077AbiCISIU (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 9 Mar 2022 13:08:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiCIBE0 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 8 Mar 2022 20:04:26 -0500
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D0812D90C
-        for <linux-sctp@vger.kernel.org>; Tue,  8 Mar 2022 16:41:28 -0800 (PST)
-Received: by mail-ot1-x341.google.com with SMTP id w17-20020a056830111100b005b22c584b93so584173otq.11
-        for <linux-sctp@vger.kernel.org>; Tue, 08 Mar 2022 16:41:28 -0800 (PST)
+        with ESMTP id S231928AbiCISIT (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 9 Mar 2022 13:08:19 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC44C4578F
+        for <linux-sctp@vger.kernel.org>; Wed,  9 Mar 2022 10:07:19 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id o22so2561909qta.8
+        for <linux-sctp@vger.kernel.org>; Wed, 09 Mar 2022 10:07:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=+xCzDXKpurcBEhZ8+xr/1+qLsXYFBobYcsOzCn7TcBU=;
-        b=XSbt210YK3OwB8wIDmu53kgtJP38rHmAD5FaiHiVGlepJsJd696/T5xmG8hyg4Ae77
-         ZxNPfeeUrpNZShX9iA5wyFQk3u0qT1KaMBWquXgS0JED+6QHx4xODu9SSs51gkcrHhUJ
-         bhumKSlZqgQ+n0RwIaCWY5RHW5ly+DtsZSrpvyLNxMqe+rhUinBV36XXI7zju3lRwanW
-         qf/c++go6R/1B5TFxDbgQ2M+HNDmMEGei+7sykXvzOYdcd3TZXCT7r1i9m7wa5CzENY8
-         84jCUQQnLVizI/4tp8CKRcS/7DtBpeVxvlAF88TNX29g41+PbTrXXwJ1BW43LRDgCJye
-         HhYQ==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=WhWPQBc6+aeHTdCKV+dLwNIRJs+SxTcePufZKGXzmHw=;
+        b=a0HjMgGSam0mHnGfecFJ0fQComNe1+bNXJ+XbdEgleaJPzbYYAih0zEVY1rUrX8RY+
+         iv8pgnOCuTDV7+HyZ0uKPFGbE6b1Wt+Q6tp/NCrtXIn6au6SgSwF1XfDdd3/AymYQO2q
+         ZH6ZVDqGRQ+zOCWGYAGxp/pZeApCHu4nol2w9zaoUfEGaeZNt3XktmbzUDhpZPVms6AQ
+         +RXi1xHL9lioifwGZOmr3rEPxid+P8aNzlqLF4JfGduFjatWZcsMP/DJAckzzZANG1m4
+         kaxBwRpf7u0BWp20VDL3a5FQKA7eH4CF9xEAvY1FQ7/9reqzn5RfGN7fQRYkU55EgIKI
+         ONSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=+xCzDXKpurcBEhZ8+xr/1+qLsXYFBobYcsOzCn7TcBU=;
-        b=dLU9CvWec66quxSPCEzabYNsY3Sp8m5LH8Y+OHG4TjYC4I64/K36gFpLaRO8Bi3Rsu
-         t4L6T7HLq7RH4aVdR7Exrd8RbgXBWo5Gv+YS7qmAmU7OEZDgCbYVV6z49ar6PaNr4MVo
-         LL3UsrYmxRgXOnG6/LMsWpRg5XIfeiGHpyGgRF5LR/CE1WTqtjqoJccsiaJeDyW4/IPE
-         19vltaxeqR+MTurLEgyH3+MQ6t4vdL2naQqqK17Je2kORcZjjGoKGsQ13j4wUH1o4cN8
-         iC+b5wZ2PH2XbZHZt2O9zihe2iNtEp1iTDO0HS5Dzdf3plBetiWbxu6Vh7TN0f3KsNJu
-         4R5g==
-X-Gm-Message-State: AOAM531+9CuezY1p/SIhB/e8g/oZFRBAlYkaJOkbcOa0/nf7befvvtRS
-        r7QlSqTPiit8e7sFvfNfecxAfXLwrmGVrf/Zji361MTblNlWiMWTJD+iPg==
-X-Google-Smtp-Source: ABdhPJxQZfT5tk0JOwIvXXJjqTRxyPD2A8KYJwP0skjHYpTFU9Z2xKXN15qcHetWIZ+EM5IgpYI827WnYjRmM1AecZA=
-X-Received: by 2002:a05:6902:3cc:b0:628:73aa:9c7f with SMTP id
- g12-20020a05690203cc00b0062873aa9c7fmr14662951ybs.632.1646782712030; Tue, 08
- Mar 2022 15:38:32 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=WhWPQBc6+aeHTdCKV+dLwNIRJs+SxTcePufZKGXzmHw=;
+        b=wUAoghCd4wCnoW7l7alW3j6nno+9ZFz1oJ+wiqed+ChypjpF/PRe9HXqkkxDpdbCPt
+         vDUFpEOM70RRdOZAK+cCPPaHFsKnt1cqmcdYFiOE5USboZuylK30f4sjNiVFr81H54/I
+         U2J5ag78VqoStHgCVTQRI1oByNaAFEvNC5wmL9Ai4Mq6q4c+k+ZfBbaPgwlrsLz75TAm
+         Q9qlsCFySV77I4BsIiL16weE/Yf4Im3DpxBZ+kun3k2Zb/F7yqbr7n0Ttzh3Lo9CY4Bd
+         cNdvnv/DmFMKEik2Wr0FOgMfYP+fnbBHM5y0I8b5nWXbPMFqjU95wlBQjBRxbnhEf2Tf
+         0LNw==
+X-Gm-Message-State: AOAM532BZ7YL4FDxsznwiGAiINnqRigOPSFrsk9drXVHLF3EcrOkEJpE
+        iOnC2rf/s77JpYMW8eVsPYuf5iMWfpCs9Z5Cix4=
+X-Google-Smtp-Source: ABdhPJybLI1WHTSTmglzehJfdf8i+nQOIW3sbvxIOkTTpwvpy0KMa6HB+TG+mOhydYVqZr4llDtmTjZcqa5r38ayolc=
+X-Received: by 2002:ac8:5f87:0:b0:2df:f50f:f4c8 with SMTP id
+ j7-20020ac85f87000000b002dff50ff4c8mr806329qta.46.1646849239049; Wed, 09 Mar
+ 2022 10:07:19 -0800 (PST)
 MIME-Version: 1.0
-Sender: ojinemechibuzor1@gmail.com
-Received: by 2002:a05:7110:29c:b0:16f:abb9:57cb with HTTP; Tue, 8 Mar 2022
- 15:38:31 -0800 (PST)
-From:   Lisa Williams <lw23675851@gmail.com>
-Date:   Tue, 8 Mar 2022 23:38:31 +0000
-X-Google-Sender-Auth: QdEAS4Rygau5LxW4n9N0kaGX4-Q
-Message-ID: <CAAxBeg3RLCfg0hY+QYmx6L4mWADEyMQZak7LPw_BvHcLQrfNCg@mail.gmail.com>
-Subject: My name is Lisa Williams
+Received: by 2002:ad4:5f4f:0:0:0:0:0 with HTTP; Wed, 9 Mar 2022 10:07:18 -0800 (PST)
+Reply-To: blessingbrown.017@gmail.com
+From:   Blessing Brown <msouley115@gmail.com>
+Date:   Wed, 9 Mar 2022 18:07:18 +0000
+Message-ID: <CAPXpgPXz_TgcvH27Bv2MwzkznyWZ=jBYKO6QTtFs4AYpO9GBng@mail.gmail.com>
+Subject: Hi
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_20,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hi Dear,
-
-My name is Lisa  Williams, I am from the United States of America, Its
-my pleasure to contact you for new and special friendship, I will be
-glad to see your reply for us to know each other better.
-
-Yours
-Lisa
+I'm Mrs Blessing Brown. please i wish to communicate with you.
