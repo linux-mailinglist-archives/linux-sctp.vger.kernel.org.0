@@ -2,97 +2,72 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C80CC4E7CD4
-	for <lists+linux-sctp@lfdr.de>; Sat, 26 Mar 2022 01:22:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 809134E8A68
+	for <lists+linux-sctp@lfdr.de>; Mon, 28 Mar 2022 00:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232400AbiCYU7S (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 25 Mar 2022 16:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32822 "EHLO
+        id S236883AbiC0WPu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Sun, 27 Mar 2022 18:15:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232386AbiCYU7R (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 25 Mar 2022 16:59:17 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6014CB9192;
-        Fri, 25 Mar 2022 13:57:42 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id b188so9437281oia.13;
-        Fri, 25 Mar 2022 13:57:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uzAuqtwkm46GspJerldWifZpeS2uUUcdgFDDV4iF0Yc=;
-        b=kCPIJahkmzOtz09iL0VBxsl721inkNgOH3ZtvZsKBaopkIMxhCt9wXBCVZYMOlR09o
-         NJPOZusdSDjEUe1v1RHURtfLqkJdx3KH4JphrNnOXpWQEU96pRFb1VqPwVgAvJxtdEpG
-         bopMeVKGXfzygIfBVJOPU5wPvbIk6pW02zSNwJrXOqVnKl17SVYljisZiwRj1uSUCgDu
-         dQ0OCgdtwemBhxEYLAz4q8qK1XAix5DlRTSObG3pXdeNz7Czed057mimeD8qSS8xYrNI
-         qtA0mmZaonjBAf6+nYub+v08IcolTB1yB9z8WdlukM8astVozXDIy9Sva2nvkMUQ8a+j
-         R/+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uzAuqtwkm46GspJerldWifZpeS2uUUcdgFDDV4iF0Yc=;
-        b=5QRPida1CkAgPqKxYDPKyL5AGhpcay0D+8HmNO1SiTxFjHLGzciUSujfDLHosbKlfd
-         zm5SDNDpVkJmbx7jD0C0S9bOIXJQnm2kSnEiLr7l3zdLpsBBgPoOonkLbq8aYh3BJnmg
-         VHr+x8edA+RZsGRc7ln88aUpaD2GJ+rjHu9F4L+kE+OeozN/AbmA0ZVK18Spazjmf9Xx
-         nBgY3BJbW1WtsznTEeGdT0iG3kw7WWgTbRntca7wlEhgNTtJmwcHVi+oNrehikxM9Fn8
-         6lBzI/2Y+QACUDIK9ppyWitE7EfRkl3HDu3cXR598XIj65/1mHZgHhFlz6L5QMPY81ec
-         Ug+g==
-X-Gm-Message-State: AOAM531UEaLP8RW8fgjXG1OS7+xE9CF9wSgX20T8r+CpKsZIV8JvzoV6
-        pvK4jOOaSF4hPHk8SI1k3Qk=
-X-Google-Smtp-Source: ABdhPJy7ZXjFFrHR0aVM76ZkWCenQp0VXu5AZMjydR1p7at00cvcj9FndX4+x8BsGzBlg9+btiJKDA==
-X-Received: by 2002:a05:6808:1485:b0:2dc:d320:ce57 with SMTP id e5-20020a056808148500b002dcd320ce57mr6621661oiw.298.1648241861726;
-        Fri, 25 Mar 2022 13:57:41 -0700 (PDT)
-Received: from t14s.localdomain ([179.232.121.194])
-        by smtp.gmail.com with ESMTPSA id v8-20020a05683018c800b005cb39fc3e15sm3129743ote.13.2022.03.25.13.57.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 13:57:41 -0700 (PDT)
-Received: by t14s.localdomain (Postfix, from userid 1000)
-        id 2F1001D1F05; Fri, 25 Mar 2022 17:57:39 -0300 (-03)
-Date:   Fri, 25 Mar 2022 17:57:39 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [PATCH] sctp: replace usage of found with dedicated list
- iterator variable
-Message-ID: <Yj4sw30tZ8DRG5qT@t14s.localdomain>
-References: <20220324072257.62674-1-jakobkoschel@gmail.com>
+        with ESMTP id S236863AbiC0WPt (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sun, 27 Mar 2022 18:15:49 -0400
+X-Greylist: delayed 67 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 27 Mar 2022 15:14:09 PDT
+Received: from webmail.zap.co.ao (webmail.zap.co.ao [212.0.160.234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BE54D242;
+        Sun, 27 Mar 2022 15:14:09 -0700 (PDT)
+Received: from info.hysyjpwpcsguvijbr5pp1pvnge.lx.internal.cloudapp.net
+ (20.188.24.200) by FINMBX01.zap.co.ao (10.192.55.20) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.2; Sun, 27 Mar 2022 23:12:55 +0100
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324072257.62674-1-jakobkoschel@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Re: Assist People of Ukarine
+To:     Recipients <zap@zap.co.ao>
+From:   Alexei Navalny <zap@zap.co.ao>
+Date:   Sun, 27 Mar 2022 22:12:49 +0000
+Reply-To: <wetttttwwttrttr@yandex.com>
+Message-ID: <f2f78c63e2694eabbbdb41c0123f81bc@FINMBX01.zap.co.ao>
+X-ClientProxiedBy: FINCAS01.zap.co.ao (10.192.55.18) To FINMBX01.zap.co.ao
+ (10.192.55.20)
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=ADVANCE_FEE_5_NEW,BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO,HK_RANDOM_REPLYTO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_MSPIKE_H3 RBL: Good reputation (+3)
+        *      [212.0.160.234 listed in wl.mailspike.net]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  1.0 HK_RANDOM_REPLYTO Reply-To username looks random
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        * -0.0 RCVD_IN_MSPIKE_WL Mailspike good senders
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.6 ADVANCE_FEE_5_NEW Appears to be advance fee fraud (Nigerian
+        *      419)
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 08:22:57AM +0100, Jakob Koschel wrote:
-> To move the list iterator variable into the list_for_each_entry_*()
-> macro in the future it should be avoided to use the list iterator
-> variable after the loop body.
-> 
-> To *never* use the list iterator variable after the loop it was
-> concluded to use a separate iterator variable instead of a
-> found boolean [1].
-> 
-> This removes the need to use a found variable and simply checking if
-> the variable was set, can determine if the break/goto was hit.
-> 
-> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+My name is Alexei Navalny from Russia whom Vladimir Putin President of Russia the detects  is jailing me because I'm against his evil war plans against Ukraine. killing of Russia people  and the world in general.
 
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+You can read more with below links:
+https://www.bbc.com/news/world-europe-16057045
+https://www.theguardian.com/world/2022/feb/15/alexei-navalny-faces-10-more-years-prison-focus-ukraine-crisis-russia
+
+ I will be happy to serve the 15 years in jail imposed by Putin but I need to assist Ukraine's displaced people around the world with the money I secretly deposited in one of the Turkish private  banks, now such money will be returned to Russian because d western world has blocked Russia . If you agreed to assist me 25% of the total sum will be for your assistance and the 75% will be used to assist the Ukraine displaced by Putin war.
+
+If you agreed and are also willing to keep  this transaction confidential, I will send you all the details to approach the bank.
+
+I contacted you because I need somebody out of Russia to do this job.
+
+Please reply me here: aleshkanav@yandex.ru
+
+Regards,
+Alexei Navalny
