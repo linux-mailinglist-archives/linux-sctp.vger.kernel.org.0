@@ -2,159 +2,91 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0431B4F12E7
-	for <lists+linux-sctp@lfdr.de>; Mon,  4 Apr 2022 12:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77C644F1D9C
+	for <lists+linux-sctp@lfdr.de>; Mon,  4 Apr 2022 23:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356273AbiDDKRu (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 4 Apr 2022 06:17:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36256 "EHLO
+        id S1350600AbiDDVjZ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 4 Apr 2022 17:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356778AbiDDKRs (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 4 Apr 2022 06:17:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 983962F38A
-        for <linux-sctp@vger.kernel.org>; Mon,  4 Apr 2022 03:15:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649067351;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tkadsSkOjK69IKBzXKLPhJkIYMQazPSW8bFoteNrRDk=;
-        b=S7xfjBRu10TW8slfc87isXsdE+W2rU3mVGbdnt1TxgfPZaoU75pgICWi/wZl/pW3fZm+29
-        hropMfvxOwEDb1y2PTAit5MtsZblQa4THGc09Bk7h9FR2ZolSoq1V2gvPzrApYJet82cZA
-        e2mMLi6+xjyzYsBoUpLpUr6tQupM+jU=
-Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com
- [209.85.128.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-154-dUv3oUv6PoWILBrUVV-31g-1; Mon, 04 Apr 2022 06:15:50 -0400
-X-MC-Unique: dUv3oUv6PoWILBrUVV-31g-1
-Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-2eb689106e3so18105867b3.16
-        for <linux-sctp@vger.kernel.org>; Mon, 04 Apr 2022 03:15:50 -0700 (PDT)
+        with ESMTP id S1379720AbiDDR7B (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 4 Apr 2022 13:59:01 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2C234BB9;
+        Mon,  4 Apr 2022 10:57:04 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-df22f50e0cso11624114fac.3;
+        Mon, 04 Apr 2022 10:57:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AEWP21GM4E9cyOoL3qIS0CoFdLbJpmk5WXVV+auexAQ=;
+        b=A8fxSPNmIfaWYKrHBlZaLXcvOYLu9Vrcb+u7TNHqeRxaF/O8WR7cLJCST+Tc1H7is6
+         K61aviSX1tCeV7jaQPXPb4zsKtFjWO9V4ZXkcZMWTBJbX5E7+DtBaM2KQaQxQ4NXy12M
+         VggI/cg9xK/1reYGYov8SHIDOSbJxUe7LPJ70ptMywxwLmYO7nPkjdCIwb76sGskIGsH
+         uALkaOGEGL7Osw6CrmiCAlUGaa+Ld0GAWKTdFSdsJJFtyGoF9Cedmf4VX1KsJR0DU3WP
+         lSoHhWrB/Lqqtfj3cJlLUISYxaA/U8U70C+up7rODwk8A65eKh/FQz1Nf3MoeGSfayNz
+         4a9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tkadsSkOjK69IKBzXKLPhJkIYMQazPSW8bFoteNrRDk=;
-        b=gwkXmmwC4r2wPpWBeWgtDukyTQCeEVbwOpTfectt/Sfq8LJT1hozxXAe8sqNU1qt4H
-         XMAo8NAir6jxm7R8gIEBbRWpx/g6BAUN6Tk5Sk5NOJtVLTsPs0KcCY8GWXnsFrOk6noC
-         V9R3s1oi93uI0xnfho6DbblHaqwgvPfEorxh9oUoDOEMJ5jOTiSBDY3bfuD0BvZP3a4w
-         MmXPwW3/4kWI9wUR0YjQVcyQLT6WujOe+WJq3IC5GnR1TOD1Edpu+G/wHxB5a6/DzCuu
-         W5qckZOt2MF4i+p9imkoDLYqvoOujvMYwa8RKbHxZ7YKVh9ZeKrFs5q7/nC/h/AY2LGZ
-         U22g==
-X-Gm-Message-State: AOAM533UJgHNvZZd15XP5GLZFO7bJriHsxY+Nvd/Fy4rooj8lV3E1GSs
-        KtLMYOC/jMTEuMbYc9HcNeUjeY0/uN1YZmhA5DR0UrkCcvk0JmDxKmbc/S34FiwmxIpg/gE4Un6
-        9TVGU08A+tAGahFCfvcn1ALR7Q2iPMeUf1v/gWA==
-X-Received: by 2002:a05:6902:1351:b0:63d:d3ae:da8d with SMTP id g17-20020a056902135100b0063dd3aeda8dmr3484097ybu.445.1649067350033;
-        Mon, 04 Apr 2022 03:15:50 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy/FA2nG9CkjljMIizKp+3/BvFXdYTIKnSCHt2T/Y90OrnODavbrP29hqG+N35/79K//FRULtfAcH3chse8oaE=
-X-Received: by 2002:a05:6902:1351:b0:63d:d3ae:da8d with SMTP id
- g17-20020a056902135100b0063dd3aeda8dmr3484083ybu.445.1649067349845; Mon, 04
- Apr 2022 03:15:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <a77a584b3ce9761eb5dda5828192e1cab94571f0.1649037151.git.lucien.xin@gmail.com>
-In-Reply-To: <a77a584b3ce9761eb5dda5828192e1cab94571f0.1649037151.git.lucien.xin@gmail.com>
-From:   Ondrej Mosnacek <omosnace@redhat.com>
-Date:   Mon, 4 Apr 2022 12:15:38 +0200
-Message-ID: <CAFqZXNt=Ca+x7PaYgc1jXq-3cKxin-_=UNCSiyVHjbP7OYUKvA@mail.gmail.com>
-Subject: Re: [PATCH net] sctp: use the correct skb for security_sctp_assoc_request
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     network dev <netdev@vger.kernel.org>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AEWP21GM4E9cyOoL3qIS0CoFdLbJpmk5WXVV+auexAQ=;
+        b=gE96Z0MC6NmgPP/v47aYW3XQgJdH0McAT5AHeornhtrL32tWtJ9+JKKgwQVN/Ywjl3
+         KV2rpbe9/U9rHQo+U0IFvXubIZ276ygcFvPAjSAKhj4c5sK469k9lHwOFnhj6MqGnwrG
+         qu828fLS8W6Vq21PurYpALr07EuIu/Z2SeGNgTEGa1BRrmNk1m4y5cBtHiT8QcTyNG68
+         KyrbyVOULaBt6pXj97gft2Css1Xb/jXmoukrSWEwhVSUhf0Q7uQWgPcY/idsSDwK1eCX
+         uPt/p+77Q5+DFxMWo/yEUM/hJ70Al+2BonwBtislWkWxtMHNYH85fI2q4rCUmUrb+5CP
+         GHrQ==
+X-Gm-Message-State: AOAM532r/aPrPeXZzol95uJSoqNyZ5a3F/nsgGq6KqSCCzkNLxmSrjdc
+        7OhPDja/kkN3pENK2+ldQ08=
+X-Google-Smtp-Source: ABdhPJx18shL1wpUax/xhz8105BoWa0G7HpdbNUzdvsDRLqA5/2ZEilu8wWMeQGrEG3upCgBtBI+yA==
+X-Received: by 2002:a05:6870:f719:b0:d6:e0c0:af42 with SMTP id ej25-20020a056870f71900b000d6e0c0af42mr187736oab.165.1649095024221;
+        Mon, 04 Apr 2022 10:57:04 -0700 (PDT)
+Received: from t14s.localdomain ([2001:1284:f013:bc01:5a2:a886:8487:b8de])
+        by smtp.gmail.com with ESMTPSA id r23-20020a056830237700b005b2610517c8sm4930201oth.56.2022.04.04.10.57.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 10:57:03 -0700 (PDT)
+Received: by t14s.localdomain (Postfix, from userid 1000)
+        id 1B7191DB7C2; Mon,  4 Apr 2022 14:57:02 -0300 (-03)
+Date:   Mon, 4 Apr 2022 14:57:02 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Jamie Bainbridge <jamie.bainbridge@gmail.com>
+Cc:     Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        SElinux list <selinux@vger.kernel.org>
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=omosnace@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Paolo Abeni <pabeni@redhat.com>, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 net] sctp: count singleton chunks in assoc user stats
+Message-ID: <YksxbrRhtngGlERY@t14s.localdomain>
+References: <c9ba8785789880cf07923b8a5051e174442ea9ee.1649029663.git.jamie.bainbridge@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c9ba8785789880cf07923b8a5051e174442ea9ee.1649029663.git.jamie.bainbridge@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Adding LSM and SELinux lists to CC for awareness; the original patch
-is available at:
-https://lore.kernel.org/netdev/a77a584b3ce9761eb5dda5828192e1cab94571f0.1649037151.git.lucien.xin@gmail.com/T/
-https://patchwork.kernel.org/project/netdevbpf/patch/a77a584b3ce9761eb5dda5828192e1cab94571f0.1649037151.git.lucien.xin@gmail.com/
+On Mon, Apr 04, 2022 at 09:47:48AM +1000, Jamie Bainbridge wrote:
+> Singleton chunks (INIT, HEARTBEAT PMTU probes, and SHUTDOWN-
+> COMPLETE) are not counted in SCTP_GET_ASOC_STATS "sas_octrlchunks"
+> counter available to the assoc owner.
+> 
+> These are all control chunks so they should be counted as such.
+> 
+> Add counting of singleton chunks so they are properly accounted for.
+> 
+> Fixes: 196d67593439 ("sctp: Add support to per-association statistics via a new SCTP_GET_ASSOC_STATS call")
+> Signed-off-by: Jamie Bainbridge <jamie.bainbridge@gmail.com>
 
-On Mon, Apr 4, 2022 at 3:53 AM Xin Long <lucien.xin@gmail.com> wrote:
->
-> Yi Chen reported an unexpected sctp connection abort, and it occurred when
-> COOKIE_ECHO is bundled with DATA Fragment by SCTP HW GSO. As the IP header
-> is included in chunk->head_skb instead of chunk->skb, it failed to check
-> IP header version in security_sctp_assoc_request().
->
-> According to Ondrej, SELinux only looks at IP header (address and IPsec
-> options) and XFRM state data, and these are all included in head_skb for
-> SCTP HW GSO packets. So fix it by using head_skb when calling
-> security_sctp_assoc_request() in processing COOKIE_ECHO.
+Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 
-The logic looks good to me, but I still have one unanswered concern.
-The head_skb member of struct sctp_chunk is defined inside a union:
-
-struct sctp_chunk {
-        [...]
-        union {
-                /* In case of GSO packets, this will store the head one */
-                struct sk_buff *head_skb;
-                /* In case of auth enabled, this will point to the shkey */
-                struct sctp_shared_key *shkey;
-        };
-        [...]
-};
-
-What guarantees that this chunk doesn't have "auth enabled" and the
-head_skb pointer isn't actually a non-NULL shkey pointer? Maybe it's
-obvious to a Linux SCTP expert, but at least for me as an outsider it
-isn't - that's usually a good hint that there should be a code comment
-explaining it.
-
->
-> Fixes: e215dab1c490 ("security: call security_sctp_assoc_request in sctp_sf_do_5_1D_ce")
-> Reported-by: Yi Chen <yiche@redhat.com>
-> Signed-off-by: Xin Long <lucien.xin@gmail.com>
-> ---
->  net/sctp/sm_statefuns.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
-> index 7f342bc12735..883f9b849ee5 100644
-> --- a/net/sctp/sm_statefuns.c
-> +++ b/net/sctp/sm_statefuns.c
-> @@ -781,7 +781,7 @@ enum sctp_disposition sctp_sf_do_5_1D_ce(struct net *net,
->                 }
->         }
->
-> -       if (security_sctp_assoc_request(new_asoc, chunk->skb)) {
-> +       if (security_sctp_assoc_request(new_asoc, chunk->head_skb ?: chunk->skb)) {
->                 sctp_association_free(new_asoc);
->                 return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
->         }
-> @@ -2262,7 +2262,7 @@ enum sctp_disposition sctp_sf_do_5_2_4_dupcook(
->         }
->
->         /* Update socket peer label if first association. */
-> -       if (security_sctp_assoc_request(new_asoc, chunk->skb)) {
-> +       if (security_sctp_assoc_request(new_asoc, chunk->head_skb ?: chunk->skb)) {
->                 sctp_association_free(new_asoc);
->                 return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
->         }
-> --
-> 2.31.1
->
-
---
-Ondrej Mosnacek
-Software Engineer, Linux Security - SELinux kernel
-Red Hat, Inc.
-
+Thanks Jamie.
