@@ -2,85 +2,73 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777CB4F2BCD
-	for <lists+linux-sctp@lfdr.de>; Tue,  5 Apr 2022 13:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDF64F42CD
+	for <lists+linux-sctp@lfdr.de>; Tue,  5 Apr 2022 23:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243602AbiDEJPY (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 5 Apr 2022 05:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
+        id S1345141AbiDENeh (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 5 Apr 2022 09:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244017AbiDEIvZ (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 5 Apr 2022 04:51:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726ABD1CDF;
-        Tue,  5 Apr 2022 01:40:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 108D5B81C6F;
-        Tue,  5 Apr 2022 08:40:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9FF91C385A1;
-        Tue,  5 Apr 2022 08:40:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649148012;
-        bh=Zc1lPH1m7basa7ZzhirPvPyfn9KWw84TMvg3+N1Z3Iw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=FUBoPWaBBUeCm7ZIaQtsGiOm3qmKp+ZwPu10zFqFnHisNR+OYrz2B+817AwmUTTQz
-         Zwn7z1nDRS7lTzduKDR6Hb6mI4CxXmlBkEeir+RNjrzvtZUsTRg4c2qClAZ4Harj9x
-         G+9hrX6/rxo7o7kXVDtEWSSQb9Wyn1kfihWlFJsayS+OPAhudymvoCBZBxkTv5HJrW
-         yTIxe9fgcElmIW9hNkcLi048dH9GiRQ2ryIWs66h1FFP5AN3oYAZKSWCTgz/Xs6p2w
-         uepNGF+ajKgSiM5zhxwKWAdg5/TdZibiUuDZGBtpQrEajpzd7e+9Kr8yi932mYZx8N
-         tmGYwk0WOfdqg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7B208E85D15;
-        Tue,  5 Apr 2022 08:40:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S1380518AbiDELmj (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 5 Apr 2022 07:42:39 -0400
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A1310CF2B
+        for <linux-sctp@vger.kernel.org>; Tue,  5 Apr 2022 04:07:07 -0700 (PDT)
+Received: by mail-vk1-xa31.google.com with SMTP id p143so6271023vkf.5
+        for <linux-sctp@vger.kernel.org>; Tue, 05 Apr 2022 04:07:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Aq+6tU4I5tgzLqq7I6vrOIzeCDZgGUhZ499qJxkroak=;
+        b=LUKYp0mlh7reLBl7oR8L/G51Vvo43lBB2oHP0aKtp9U7SsTabNMnptHDnweM+uQp1x
+         Cn7UpK08m1LggGKcKTV69WiW5tiePT07Z9149egOkAtOlDZ1Vk1M/jxu+ozY9AzNMcjN
+         nbIEj8M47p9fYTwEiXP5DiXnQhUA0gQhaf4vdGcLaEQZ77ioWEq+j6rf/HAOwkX6fjDW
+         3NEN6F3zGYvKlkMt8qijefbvWwlsY5qfaJOnUff3Dm4N3WoOI8Zb1fgOurHMUKeK4rlO
+         dK1pHyCvhvZ211Hp3lUYpUocwu4+hMODQMglvj39lp4I3t0ZCyzdHZO2EsCcy4wRpE29
+         uhwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Aq+6tU4I5tgzLqq7I6vrOIzeCDZgGUhZ499qJxkroak=;
+        b=WUFKVaP81aIqYZWDsqoddrdkijMMNRdQL9KmWvD8FpMkuZVZnI0VnXhdcdR9f7Ojlk
+         n1k4HOIhT6LiXt+GJHHsvzMQuG8PxbbjCBOwHB8c7+k4cmsar4UO+qnM3hbw35ZQC4iP
+         DsZRzQxVvHJ5RB46Z/z/j3OVuxzXgQ5/4ChWrTWH1Tqucg7eYhFVPr2EnUcOqjts3adD
+         qWGKLrogIyrWEkklqkQ+t5GefY2pavIOqcRbXznubj8WlY6+KMGqZGDBSNoejwddto/Z
+         1/eGW4YjHmlAcN8ewfaeDqvMLdoMOyAu04GyoqZKdeQbWLqSRYMyBiZi+uchSOQ1YqfB
+         pTLQ==
+X-Gm-Message-State: AOAM530/M97bxe7EtOQZHq4sK8C6YMn17b+pSAa1NHx2ta4jDG9EMVQQ
+        AqdDuanGEhI7gD7xF9gIc8KVe+XTltH1mp6kMew=
+X-Google-Smtp-Source: ABdhPJyBwQS36on9bPUQM+/40RYo/nHGzeuGTlBZrRITFXguQsukspNlRu476f43wJOaghNXi/bYjCeBGdPSBaWAhCQ=
+X-Received: by 2002:a05:6122:793:b0:343:8c9a:37ea with SMTP id
+ k19-20020a056122079300b003438c9a37eamr1088721vkr.4.1649156826035; Tue, 05 Apr
+ 2022 04:07:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4 net] sctp: count singleton chunks in assoc user stats
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164914801250.9044.11217465324374083651.git-patchwork-notify@kernel.org>
-Date:   Tue, 05 Apr 2022 08:40:12 +0000
-References: <c9ba8785789880cf07923b8a5051e174442ea9ee.1649029663.git.jamie.bainbridge@gmail.com>
-In-Reply-To: <c9ba8785789880cf07923b8a5051e174442ea9ee.1649029663.git.jamie.bainbridge@gmail.com>
-To:     Jamie Bainbridge <jamie.bainbridge@gmail.com>
-Cc:     vyasevich@gmail.com, nhorman@tuxdriver.com,
-        marcelo.leitner@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a59:64a:0:b0:2a6:8fd2:f80b with HTTP; Tue, 5 Apr 2022
+ 04:07:05 -0700 (PDT)
+Reply-To: mrs.acostafahad@gmail.com
+From:   "MRS.ACOSTAFAHAD" <bmamadoualioucafe78@gmail.com>
+Date:   Tue, 5 Apr 2022 04:07:05 -0700
+Message-ID: <CAJSRbJre4yN=8yw4oCDUwbZhTvBq7qnByfFJiWd7rHihKZdnkg@mail.gmail.com>
+Subject: Hello my friend
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello:
+Hello Dear!!
 
-This patch was applied to netdev/net.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
+Please get back to me soon, i have some information for you.
 
-On Mon,  4 Apr 2022 09:47:48 +1000 you wrote:
-> Singleton chunks (INIT, HEARTBEAT PMTU probes, and SHUTDOWN-
-> COMPLETE) are not counted in SCTP_GET_ASOC_STATS "sas_octrlchunks"
-> counter available to the assoc owner.
-> 
-> These are all control chunks so they should be counted as such.
-> 
-> Add counting of singleton chunks so they are properly accounted for.
-> 
-> [...]
+best regard,
 
-Here is the summary with links:
-  - [v4,net] sctp: count singleton chunks in assoc user stats
-    https://git.kernel.org/netdev/net/c/e3d37210df5c
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Miss Acosta Fahad.
