@@ -2,73 +2,158 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CDF64F42CD
-	for <lists+linux-sctp@lfdr.de>; Tue,  5 Apr 2022 23:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8704F3E56
+	for <lists+linux-sctp@lfdr.de>; Tue,  5 Apr 2022 22:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345141AbiDENeh (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 5 Apr 2022 09:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35788 "EHLO
+        id S234378AbiDENjN (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 5 Apr 2022 09:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380518AbiDELmj (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 5 Apr 2022 07:42:39 -0400
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A1310CF2B
-        for <linux-sctp@vger.kernel.org>; Tue,  5 Apr 2022 04:07:07 -0700 (PDT)
-Received: by mail-vk1-xa31.google.com with SMTP id p143so6271023vkf.5
-        for <linux-sctp@vger.kernel.org>; Tue, 05 Apr 2022 04:07:07 -0700 (PDT)
+        with ESMTP id S1381525AbiDEMya (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 5 Apr 2022 08:54:30 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C701ECEC;
+        Tue,  5 Apr 2022 04:58:36 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id d5so22747843lfj.9;
+        Tue, 05 Apr 2022 04:58:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Aq+6tU4I5tgzLqq7I6vrOIzeCDZgGUhZ499qJxkroak=;
-        b=LUKYp0mlh7reLBl7oR8L/G51Vvo43lBB2oHP0aKtp9U7SsTabNMnptHDnweM+uQp1x
-         Cn7UpK08m1LggGKcKTV69WiW5tiePT07Z9149egOkAtOlDZ1Vk1M/jxu+ozY9AzNMcjN
-         nbIEj8M47p9fYTwEiXP5DiXnQhUA0gQhaf4vdGcLaEQZ77ioWEq+j6rf/HAOwkX6fjDW
-         3NEN6F3zGYvKlkMt8qijefbvWwlsY5qfaJOnUff3Dm4N3WoOI8Zb1fgOurHMUKeK4rlO
-         dK1pHyCvhvZ211Hp3lUYpUocwu4+hMODQMglvj39lp4I3t0ZCyzdHZO2EsCcy4wRpE29
-         uhwA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kHEqj5M158n+dGH/l2poz1rrg1KKwE9IbzvYK9DFF6U=;
+        b=VoVtihAxFWewhd6ZlzhhBU39ctV48Q8C4dQJB6R/JTmzssVOUh5k1I5yDPQOAoA7vO
+         NxTh7DNeI5r/a5xP8vj98bA/UPIGYJ1xTbB9tRmoF/G+LtwRrhn/ytBOuFaT5knOifoz
+         DMgYASiCFphlLhS9HUtpEiv5kq5nbLKqAUGHUSscxGERDm9jK68tW0OUsI6GTct2LnEC
+         3dPzZuckfY9g+wyYOlgH/04UxxyI91UVyGWlk2LqtB+qRVxQALwE2kc+sys7jfggX1Jh
+         H/1fmf6grIF2KRC6rl2/2assPNDu9L02KhjMgH1aYEVEZ42UWAc7oNaBRBe5FvIprv8p
+         O3Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Aq+6tU4I5tgzLqq7I6vrOIzeCDZgGUhZ499qJxkroak=;
-        b=WUFKVaP81aIqYZWDsqoddrdkijMMNRdQL9KmWvD8FpMkuZVZnI0VnXhdcdR9f7Ojlk
-         n1k4HOIhT6LiXt+GJHHsvzMQuG8PxbbjCBOwHB8c7+k4cmsar4UO+qnM3hbw35ZQC4iP
-         DsZRzQxVvHJ5RB46Z/z/j3OVuxzXgQ5/4ChWrTWH1Tqucg7eYhFVPr2EnUcOqjts3adD
-         qWGKLrogIyrWEkklqkQ+t5GefY2pavIOqcRbXznubj8WlY6+KMGqZGDBSNoejwddto/Z
-         1/eGW4YjHmlAcN8ewfaeDqvMLdoMOyAu04GyoqZKdeQbWLqSRYMyBiZi+uchSOQ1YqfB
-         pTLQ==
-X-Gm-Message-State: AOAM530/M97bxe7EtOQZHq4sK8C6YMn17b+pSAa1NHx2ta4jDG9EMVQQ
-        AqdDuanGEhI7gD7xF9gIc8KVe+XTltH1mp6kMew=
-X-Google-Smtp-Source: ABdhPJyBwQS36on9bPUQM+/40RYo/nHGzeuGTlBZrRITFXguQsukspNlRu476f43wJOaghNXi/bYjCeBGdPSBaWAhCQ=
-X-Received: by 2002:a05:6122:793:b0:343:8c9a:37ea with SMTP id
- k19-20020a056122079300b003438c9a37eamr1088721vkr.4.1649156826035; Tue, 05 Apr
- 2022 04:07:06 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kHEqj5M158n+dGH/l2poz1rrg1KKwE9IbzvYK9DFF6U=;
+        b=fYFdrLDG3VBuuCsVn7lRHsmSNHIDFxCJZJYWlYbqq/Sj3WhnGL9QPNxWMaz70eegVK
+         2LI8uRdz2XYdv+u1MWSwyjUtrYdXbk3m/mxGTt/eMKO7WWoM6O58ckfEc0duKnh1xVSH
+         yhf/z64JBqIK2rDtTxBulmV5j5xODBQ03H7wqGSIgUJ4V++iRxujLYKeww7Omu0qqjhG
+         ekoLXwuqKkG3T6vwSYbXapArAR/fxMvfZ2Zgl++32dto6df1VVk55vQqeyC8us4qvOt4
+         pcXMwt0ntqWqfrdH0X8sGLD9WZdKAv+T0xEpyAEispGhrp1XqGSGKne8eINJzfmoFoDq
+         Z26A==
+X-Gm-Message-State: AOAM531W+pETYIJjM2Yy0af4w1hbMrBVKSys+YGEipTjR7aMXKX7tpP8
+        Fi1eni00cF+qv6+SSpHjbV1MFB+9REWP07H1sO8=
+X-Google-Smtp-Source: ABdhPJzHY2DzJ/dKMTTA6hLzbE+/2cS2FWiicU36xSAhh2CeuZ55sVJEEyj7egPZFO5r6QCyKTgaktYWG3fYXdcd9Rw=
+X-Received: by 2002:ac2:510f:0:b0:44a:5ccc:99fb with SMTP id
+ q15-20020ac2510f000000b0044a5ccc99fbmr2399027lfb.38.1649159914944; Tue, 05
+ Apr 2022 04:58:34 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a59:64a:0:b0:2a6:8fd2:f80b with HTTP; Tue, 5 Apr 2022
- 04:07:05 -0700 (PDT)
-Reply-To: mrs.acostafahad@gmail.com
-From:   "MRS.ACOSTAFAHAD" <bmamadoualioucafe78@gmail.com>
-Date:   Tue, 5 Apr 2022 04:07:05 -0700
-Message-ID: <CAJSRbJre4yN=8yw4oCDUwbZhTvBq7qnByfFJiWd7rHihKZdnkg@mail.gmail.com>
-Subject: Hello my friend
-To:     undisclosed-recipients:;
+References: <a77a584b3ce9761eb5dda5828192e1cab94571f0.1649037151.git.lucien.xin@gmail.com>
+ <CAFqZXNt=Ca+x7PaYgc1jXq-3cKxin-_=UNCSiyVHjbP7OYUKvA@mail.gmail.com>
+In-Reply-To: <CAFqZXNt=Ca+x7PaYgc1jXq-3cKxin-_=UNCSiyVHjbP7OYUKvA@mail.gmail.com>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Tue, 5 Apr 2022 07:58:20 -0400
+Message-ID: <CADvbK_fTnWhnuxR7JkNYeoSB4a1nSX7O0jg4Mif6V_or-tOy3w@mail.gmail.com>
+Subject: Re: [PATCH net] sctp: use the correct skb for security_sctp_assoc_request
+To:     Ondrej Mosnacek <omosnace@redhat.com>
+Cc:     network dev <netdev@vger.kernel.org>,
+        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Linux Security Module list 
+        <linux-security-module@vger.kernel.org>,
+        SElinux list <selinux@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello Dear!!
+On Mon, Apr 4, 2022 at 6:15 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
+>
+> Adding LSM and SELinux lists to CC for awareness; the original patch
+> is available at:
+> https://lore.kernel.org/netdev/a77a584b3ce9761eb5dda5828192e1cab94571f0.1649037151.git.lucien.xin@gmail.com/T/
+> https://patchwork.kernel.org/project/netdevbpf/patch/a77a584b3ce9761eb5dda5828192e1cab94571f0.1649037151.git.lucien.xin@gmail.com/
+>
+> On Mon, Apr 4, 2022 at 3:53 AM Xin Long <lucien.xin@gmail.com> wrote:
+> >
+> > Yi Chen reported an unexpected sctp connection abort, and it occurred when
+> > COOKIE_ECHO is bundled with DATA Fragment by SCTP HW GSO. As the IP header
+> > is included in chunk->head_skb instead of chunk->skb, it failed to check
+> > IP header version in security_sctp_assoc_request().
+> >
+> > According to Ondrej, SELinux only looks at IP header (address and IPsec
+> > options) and XFRM state data, and these are all included in head_skb for
+> > SCTP HW GSO packets. So fix it by using head_skb when calling
+> > security_sctp_assoc_request() in processing COOKIE_ECHO.
+>
+> The logic looks good to me, but I still have one unanswered concern.
+> The head_skb member of struct sctp_chunk is defined inside a union:
+>
+> struct sctp_chunk {
+>         [...]
+>         union {
+>                 /* In case of GSO packets, this will store the head one */
+>                 struct sk_buff *head_skb;
+>                 /* In case of auth enabled, this will point to the shkey */
+>                 struct sctp_shared_key *shkey;
+>         };
+>         [...]
+> };
+>
+> What guarantees that this chunk doesn't have "auth enabled" and the
+> head_skb pointer isn't actually a non-NULL shkey pointer? Maybe it's
+> obvious to a Linux SCTP expert, but at least for me as an outsider it
+> isn't - that's usually a good hint that there should be a code comment
+> explaining it.
+Hi Ondrej,
 
-Please get back to me soon, i have some information for you.
+shkey is for tx skbs only, while head_skb is for skbs on rx path.
 
-best regard,
+Thanks.
 
-Miss Acosta Fahad.
+>
+> >
+> > Fixes: e215dab1c490 ("security: call security_sctp_assoc_request in sctp_sf_do_5_1D_ce")
+> > Reported-by: Yi Chen <yiche@redhat.com>
+> > Signed-off-by: Xin Long <lucien.xin@gmail.com>
+> > ---
+> >  net/sctp/sm_statefuns.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
+> > index 7f342bc12735..883f9b849ee5 100644
+> > --- a/net/sctp/sm_statefuns.c
+> > +++ b/net/sctp/sm_statefuns.c
+> > @@ -781,7 +781,7 @@ enum sctp_disposition sctp_sf_do_5_1D_ce(struct net *net,
+> >                 }
+> >         }
+> >
+> > -       if (security_sctp_assoc_request(new_asoc, chunk->skb)) {
+> > +       if (security_sctp_assoc_request(new_asoc, chunk->head_skb ?: chunk->skb)) {
+> >                 sctp_association_free(new_asoc);
+> >                 return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
+> >         }
+> > @@ -2262,7 +2262,7 @@ enum sctp_disposition sctp_sf_do_5_2_4_dupcook(
+> >         }
+> >
+> >         /* Update socket peer label if first association. */
+> > -       if (security_sctp_assoc_request(new_asoc, chunk->skb)) {
+> > +       if (security_sctp_assoc_request(new_asoc, chunk->head_skb ?: chunk->skb)) {
+> >                 sctp_association_free(new_asoc);
+> >                 return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
+> >         }
+> > --
+> > 2.31.1
+> >
+>
+> --
+> Ondrej Mosnacek
+> Software Engineer, Linux Security - SELinux kernel
+> Red Hat, Inc.
+>
