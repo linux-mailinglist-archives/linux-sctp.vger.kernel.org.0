@@ -2,80 +2,68 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77C644F1D9C
-	for <lists+linux-sctp@lfdr.de>; Mon,  4 Apr 2022 23:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 777CB4F2BCD
+	for <lists+linux-sctp@lfdr.de>; Tue,  5 Apr 2022 13:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350600AbiDDVjZ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 4 Apr 2022 17:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52360 "EHLO
+        id S243602AbiDEJPY (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 5 Apr 2022 05:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379720AbiDDR7B (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 4 Apr 2022 13:59:01 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2C234BB9;
-        Mon,  4 Apr 2022 10:57:04 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-df22f50e0cso11624114fac.3;
-        Mon, 04 Apr 2022 10:57:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AEWP21GM4E9cyOoL3qIS0CoFdLbJpmk5WXVV+auexAQ=;
-        b=A8fxSPNmIfaWYKrHBlZaLXcvOYLu9Vrcb+u7TNHqeRxaF/O8WR7cLJCST+Tc1H7is6
-         K61aviSX1tCeV7jaQPXPb4zsKtFjWO9V4ZXkcZMWTBJbX5E7+DtBaM2KQaQxQ4NXy12M
-         VggI/cg9xK/1reYGYov8SHIDOSbJxUe7LPJ70ptMywxwLmYO7nPkjdCIwb76sGskIGsH
-         uALkaOGEGL7Osw6CrmiCAlUGaa+Ld0GAWKTdFSdsJJFtyGoF9Cedmf4VX1KsJR0DU3WP
-         lSoHhWrB/Lqqtfj3cJlLUISYxaA/U8U70C+up7rODwk8A65eKh/FQz1Nf3MoeGSfayNz
-         4a9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AEWP21GM4E9cyOoL3qIS0CoFdLbJpmk5WXVV+auexAQ=;
-        b=gE96Z0MC6NmgPP/v47aYW3XQgJdH0McAT5AHeornhtrL32tWtJ9+JKKgwQVN/Ywjl3
-         KV2rpbe9/U9rHQo+U0IFvXubIZ276ygcFvPAjSAKhj4c5sK469k9lHwOFnhj6MqGnwrG
-         qu828fLS8W6Vq21PurYpALr07EuIu/Z2SeGNgTEGa1BRrmNk1m4y5cBtHiT8QcTyNG68
-         KyrbyVOULaBt6pXj97gft2Css1Xb/jXmoukrSWEwhVSUhf0Q7uQWgPcY/idsSDwK1eCX
-         uPt/p+77Q5+DFxMWo/yEUM/hJ70Al+2BonwBtislWkWxtMHNYH85fI2q4rCUmUrb+5CP
-         GHrQ==
-X-Gm-Message-State: AOAM532r/aPrPeXZzol95uJSoqNyZ5a3F/nsgGq6KqSCCzkNLxmSrjdc
-        7OhPDja/kkN3pENK2+ldQ08=
-X-Google-Smtp-Source: ABdhPJx18shL1wpUax/xhz8105BoWa0G7HpdbNUzdvsDRLqA5/2ZEilu8wWMeQGrEG3upCgBtBI+yA==
-X-Received: by 2002:a05:6870:f719:b0:d6:e0c0:af42 with SMTP id ej25-20020a056870f71900b000d6e0c0af42mr187736oab.165.1649095024221;
-        Mon, 04 Apr 2022 10:57:04 -0700 (PDT)
-Received: from t14s.localdomain ([2001:1284:f013:bc01:5a2:a886:8487:b8de])
-        by smtp.gmail.com with ESMTPSA id r23-20020a056830237700b005b2610517c8sm4930201oth.56.2022.04.04.10.57.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 10:57:03 -0700 (PDT)
-Received: by t14s.localdomain (Postfix, from userid 1000)
-        id 1B7191DB7C2; Mon,  4 Apr 2022 14:57:02 -0300 (-03)
-Date:   Mon, 4 Apr 2022 14:57:02 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Jamie Bainbridge <jamie.bainbridge@gmail.com>
-Cc:     Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 net] sctp: count singleton chunks in assoc user stats
-Message-ID: <YksxbrRhtngGlERY@t14s.localdomain>
-References: <c9ba8785789880cf07923b8a5051e174442ea9ee.1649029663.git.jamie.bainbridge@gmail.com>
+        with ESMTP id S244017AbiDEIvZ (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 5 Apr 2022 04:51:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726ABD1CDF;
+        Tue,  5 Apr 2022 01:40:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 108D5B81C6F;
+        Tue,  5 Apr 2022 08:40:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9FF91C385A1;
+        Tue,  5 Apr 2022 08:40:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649148012;
+        bh=Zc1lPH1m7basa7ZzhirPvPyfn9KWw84TMvg3+N1Z3Iw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=FUBoPWaBBUeCm7ZIaQtsGiOm3qmKp+ZwPu10zFqFnHisNR+OYrz2B+817AwmUTTQz
+         Zwn7z1nDRS7lTzduKDR6Hb6mI4CxXmlBkEeir+RNjrzvtZUsTRg4c2qClAZ4Harj9x
+         G+9hrX6/rxo7o7kXVDtEWSSQb9Wyn1kfihWlFJsayS+OPAhudymvoCBZBxkTv5HJrW
+         yTIxe9fgcElmIW9hNkcLi048dH9GiRQ2ryIWs66h1FFP5AN3oYAZKSWCTgz/Xs6p2w
+         uepNGF+ajKgSiM5zhxwKWAdg5/TdZibiUuDZGBtpQrEajpzd7e+9Kr8yi932mYZx8N
+         tmGYwk0WOfdqg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7B208E85D15;
+        Tue,  5 Apr 2022 08:40:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v4 net] sctp: count singleton chunks in assoc user stats
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164914801250.9044.11217465324374083651.git-patchwork-notify@kernel.org>
+Date:   Tue, 05 Apr 2022 08:40:12 +0000
+References: <c9ba8785789880cf07923b8a5051e174442ea9ee.1649029663.git.jamie.bainbridge@gmail.com>
 In-Reply-To: <c9ba8785789880cf07923b8a5051e174442ea9ee.1649029663.git.jamie.bainbridge@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Jamie Bainbridge <jamie.bainbridge@gmail.com>
+Cc:     vyasevich@gmail.com, nhorman@tuxdriver.com,
+        marcelo.leitner@gmail.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 09:47:48AM +1000, Jamie Bainbridge wrote:
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
+
+On Mon,  4 Apr 2022 09:47:48 +1000 you wrote:
 > Singleton chunks (INIT, HEARTBEAT PMTU probes, and SHUTDOWN-
 > COMPLETE) are not counted in SCTP_GET_ASOC_STATS "sas_octrlchunks"
 > counter available to the assoc owner.
@@ -84,9 +72,15 @@ On Mon, Apr 04, 2022 at 09:47:48AM +1000, Jamie Bainbridge wrote:
 > 
 > Add counting of singleton chunks so they are properly accounted for.
 > 
-> Fixes: 196d67593439 ("sctp: Add support to per-association statistics via a new SCTP_GET_ASSOC_STATS call")
-> Signed-off-by: Jamie Bainbridge <jamie.bainbridge@gmail.com>
+> [...]
 
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Here is the summary with links:
+  - [v4,net] sctp: count singleton chunks in assoc user stats
+    https://git.kernel.org/netdev/net/c/e3d37210df5c
 
-Thanks Jamie.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
