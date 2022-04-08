@@ -2,78 +2,68 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1944F9CD8
-	for <lists+linux-sctp@lfdr.de>; Fri,  8 Apr 2022 20:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F304F9F59
+	for <lists+linux-sctp@lfdr.de>; Fri,  8 Apr 2022 23:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238027AbiDHSkU (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 8 Apr 2022 14:40:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
+        id S233463AbiDHVwT (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 8 Apr 2022 17:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiDHSkT (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 8 Apr 2022 14:40:19 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 717D22DA8B;
-        Fri,  8 Apr 2022 11:38:12 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id e4so9726653oif.2;
-        Fri, 08 Apr 2022 11:38:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=j9URgvci6d6dMD9NFQmmsAHkmfmb5Enalauf6tbhJOA=;
-        b=jiPIr7GoWpN9FWlADHmNfwO/MmozypRL1uxibeNbh691ft2PekZcsPtGCCk9WvclG5
-         QYQoOR/hba/9yTNagQEEDMFQvLCvPuGQtw+o127QmSBUicvAqu62MmF6ctyTKbAlPs6b
-         yzDjJU+NFHY6dPV8dfso6Kt2vrVm8w0+yZaOSzr3Z+B/GbLnlC38yb9QGHWpQzYa2aud
-         ajWVzJJKKNmWhipgING1JXq7oRvn+q0G4ih5eSE8iWvJ5QBze+PMJCBThTNBC5Jv3vqk
-         niBezhG7WHje1KLJvsieO/0jiRGW+vFsM8NK8oPKUIOOZdcAu/u/ZjdQQfH6hImgh+6n
-         Fbag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=j9URgvci6d6dMD9NFQmmsAHkmfmb5Enalauf6tbhJOA=;
-        b=k2GUap/BeRlomnu5/EQHFSapzu1YdnUdMjWPk8sZ8x3P8bdAQ8cI9zinLUGdN6offb
-         rKsL5TZde4LbJizqPFnq1MjyZvd9THupscroJksjvBslChVI2WZYsa0Wbo2qfk5p42wa
-         LmR4NV/1pYcY8oPU9qkycvpaW7zEUmaWfgqtYIkflYiVBM9lVVphccOH6qu/TZpJ12IM
-         6w/FwXvATbhsbtQZLnOTwgfkXukF6SlX7a41FgtrBdoGhRlsT5+oP6k29Pl5/Zc7YLFH
-         rXNgl2fK1np1FiVi7JtkeNNkmO1KrWRDuztBLYrEvHrpLAV7KCN8az0LiK3yGnH29aZ7
-         Fm8Q==
-X-Gm-Message-State: AOAM533Or0dQsmkUQfRTcUsjvurGkDU8/M5sESGI7peE+vpr9CLHwcwP
-        Qd6h409rJOCwMvn/vk2EHj4=
-X-Google-Smtp-Source: ABdhPJwqrefsiW7isgWIaV3ZOtcz/4FusHzdZTTS/dCv7uqj1spWsUdkNMYrSPAU/W4EM+DJxXdYaQ==
-X-Received: by 2002:a05:6808:3ba:b0:2ec:f2ad:91a4 with SMTP id n26-20020a05680803ba00b002ecf2ad91a4mr512219oie.233.1649443091770;
-        Fri, 08 Apr 2022 11:38:11 -0700 (PDT)
-Received: from t14s.localdomain ([177.220.172.117])
-        by smtp.gmail.com with ESMTPSA id ms25-20020a0568706b9900b000e264986877sm2300773oab.48.2022.04.08.11.38.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 11:38:11 -0700 (PDT)
-Received: by t14s.localdomain (Postfix, from userid 1000)
-        id 1ECA41DFE33; Fri,  8 Apr 2022 15:38:09 -0300 (-03)
-Date:   Fri, 8 Apr 2022 15:38:09 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
-        davem@davemloft.net, kuba@kernel.org,
-        Neil Horman <nhorman@tuxdriver.com>, omosnace@redhat.com
+        with ESMTP id S230091AbiDHVwS (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 8 Apr 2022 17:52:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7A0269370;
+        Fri,  8 Apr 2022 14:50:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A411D62092;
+        Fri,  8 Apr 2022 21:50:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EEDC1C385A1;
+        Fri,  8 Apr 2022 21:50:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649454613;
+        bh=MMWxN9/pAcEmvP6x4QuOTX0OpH6h4Vv/E7V6sj/cSjg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=pF9LIGW3aXBw4VlnALd1CSaaJswJMRiYIlRFfI5GB9qkrM7I44/v8Pnc04qhFXkSU
+         HWQuv1QdqPBm3yKb7R18IrqPhBtC8sX1Zc08yEJUXx49XE85OfXZlc3T11mTSxx/Jk
+         emO/3ffaNnqfvurVn4BGBdzV0wGQY9S8pRe+dP7S4JaHHGFdes5eZ9fv3fvYZ5IzPI
+         iRnHN5SQ71DfqItLU/CuTbxtuo6CakaPC45IRCKDpj73+wEeDG2UzAHdM/GRXGdsu4
+         BWrZ6eREFsYT/2wIn2OPZtDYwjloMpCeUX3hsO1WJvFvrAJYnJCxumv6P/8wMGgimk
+         M5buK1TOPFD2A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C9469E8DD5E;
+        Fri,  8 Apr 2022 21:50:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Subject: Re: [PATCHv2 net] sctp: use the correct skb for
  security_sctp_assoc_request
-Message-ID: <YlCBEU6r8Oe8h3CK@t14s.localdomain>
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164945461280.21125.3636048110583865924.git-patchwork-notify@kernel.org>
+Date:   Fri, 08 Apr 2022 21:50:12 +0000
 References: <71becb489e51284edf0c11fc15246f4ed4cef5b6.1649337862.git.lucien.xin@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <71becb489e51284edf0c11fc15246f4ed4cef5b6.1649337862.git.lucien.xin@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org, marcelo.leitner@gmail.com,
+        nhorman@tuxdriver.com, omosnace@redhat.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 09:24:22AM -0400, Xin Long wrote:
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Thu,  7 Apr 2022 09:24:22 -0400 you wrote:
 > Yi Chen reported an unexpected sctp connection abort, and it occurred when
 > COOKIE_ECHO is bundled with DATA Fragment by SCTP HW GSO. As the IP header
 > is included in chunk->head_skb instead of chunk->skb, it failed to check
@@ -84,12 +74,15 @@ On Thu, Apr 07, 2022 at 09:24:22AM -0400, Xin Long wrote:
 > SCTP HW GSO packets. So fix it by using head_skb when calling
 > security_sctp_assoc_request() in processing COOKIE_ECHO.
 > 
-> v1->v2:
->   - As Ondrej noticed, chunk->head_skb should also be used for
->     security_sctp_assoc_established() in sctp_sf_do_5_1E_ca().
-> 
-> Fixes: e215dab1c490 ("security: call security_sctp_assoc_request in sctp_sf_do_5_1D_ce")
-> Reported-by: Yi Chen <yiche@redhat.com>
-> Signed-off-by: Xin Long <lucien.xin@gmail.com>
+> [...]
 
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Here is the summary with links:
+  - [PATCHv2,net] sctp: use the correct skb for security_sctp_assoc_request
+    https://git.kernel.org/netdev/net/c/e2d88f9ce678
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
