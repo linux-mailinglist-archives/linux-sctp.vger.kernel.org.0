@@ -2,91 +2,148 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7B294F95E5
-	for <lists+linux-sctp@lfdr.de>; Fri,  8 Apr 2022 14:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3366E4F97FE
+	for <lists+linux-sctp@lfdr.de>; Fri,  8 Apr 2022 16:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235853AbiDHMhv (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 8 Apr 2022 08:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
+        id S236874AbiDHO2f (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 8 Apr 2022 10:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235888AbiDHMhj (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 8 Apr 2022 08:37:39 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64CA27160
-        for <linux-sctp@vger.kernel.org>; Fri,  8 Apr 2022 05:35:31 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id n6so16968695ejc.13
-        for <linux-sctp@vger.kernel.org>; Fri, 08 Apr 2022 05:35:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=malat-biz.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/p7J0JatOLfOpGrcJDRASqxFzDSUNasj69j1HcOhYJk=;
-        b=TDWcRAJnQ2MctKQUUzyRclQhrSl7jgnnxMWOmZOI8SZC6XB6im5+JUdbB3hlVD419C
-         MlqW4t+otJu2tXbpDIwQpdUsDrun4CndeRhuSn/2kz4yeH7B7mxVUvWaeBdA8Ytg4WJB
-         uUf8nDKrSHe8yAkAFLR+Z/Il4zXmr+epqcZyPZfk0dLuLjO258qgAF0qFH9wu/R72Ghs
-         Dstci3RvGK+sXRi9eYTTgUgVUBCr6rc+SwY+NBJqhuQZAdbyBrTM8qa+He187616NvTR
-         0TE7Xah4/8lg791fKU0iPc3aVBxQzB6vdPPC2bAOSoh16SIcxZx7UKiHG9dGF2fu+k1L
-         2U8Q==
+        with ESMTP id S231684AbiDHO2c (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 8 Apr 2022 10:28:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 708B1353A86
+        for <linux-sctp@vger.kernel.org>; Fri,  8 Apr 2022 07:26:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649427987;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=U/YHMItOU+qanl1IKgeEpnW9Tb0W/QBY4RY/ynGzeOU=;
+        b=IgTaKzhXvsn7eek+9uC3V6NKfjm/cXarl3dJ7N2/zL420upMYe54wDZp9UW6KZWNmmUlz2
+        sYmHAT9Fu7WhZdafpNK8UcDyEVXvTpRDzKep0VoKTfMF7GYKRoYEBrZ63FsaZ9611j3bPa
+        61n3yenAd9j5v+emH9E1lbwO27e0nEY=
+Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com
+ [209.85.128.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-625-rGGWaH23PEWPWJLvs2iSaA-1; Fri, 08 Apr 2022 10:26:25 -0400
+X-MC-Unique: rGGWaH23PEWPWJLvs2iSaA-1
+Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-2eb5980c4f8so76700967b3.23
+        for <linux-sctp@vger.kernel.org>; Fri, 08 Apr 2022 07:26:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/p7J0JatOLfOpGrcJDRASqxFzDSUNasj69j1HcOhYJk=;
-        b=TUiiM/ySFLQGo/9vGCkBZozBpzUwiEH+Usy6no/tCzw8MRlBN5kcFpx4lr5UT6vE3h
-         OQnH2dhqEpk6GccNqRb3SIjFcvpastlWkS3NwHztDO3UrUXKcEvoCB1dtZpjCXPOOwOI
-         m8qUi85SEq/twFPLZ6sMKqPxCGogP4RR92a1rs3nhaLkI872vAOWtOmdzLyY7rLezWa8
-         nwsfuxtvSSzPFtQ+vsB4/P1SkGU9wvqW7Rh2cWabEyzceEgTwfAINkNP3ofiFtwHS88k
-         zemoVAtno6xpmOGL6jhI4Ez2Lgrk8wWfUB2FqQTFyRN9RZBkAAW4eDGWKRA6sBzHdajD
-         jQWg==
-X-Gm-Message-State: AOAM533YGzXr5P066ot+VZ6iHUqHG+d5LiDHNgk+vN1JpVjYBfVHPOYG
-        9NauTvJabpR+5pDN1WTYZ7JBQw==
-X-Google-Smtp-Source: ABdhPJybC6EAwGj8kRX5Vx8irHGZ7aNPOs1vP+pnmJsA9GUz7AkUyUKMSUjMwoiHsTC0xJE0rAkSmg==
-X-Received: by 2002:a17:907:6d96:b0:6e8:67da:6c17 with SMTP id sb22-20020a1709076d9600b006e867da6c17mr139204ejc.258.1649421330263;
-        Fri, 08 Apr 2022 05:35:30 -0700 (PDT)
-Received: from ntb.petris.klfree.czf ([2a02:8070:d4c1:3a00:ceb5:41c:b517:660f])
-        by smtp.gmail.com with ESMTPSA id a18-20020a170906671200b006e05929e66csm8625122ejp.20.2022.04.08.05.35.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 05:35:29 -0700 (PDT)
-Date:   Fri, 8 Apr 2022 14:35:22 +0200
-From:   Petr Malat <oss@malat.biz>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-sctp@vger.kernel.org, Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH] sctp: Initialize daddr on peeled off socket
-Message-ID: <YlAsCio+PCnuSmeK@ntb.petris.klfree.czf>
-References: <20220307195929.621359-1-oss@malat.biz>
- <20220307133321.5d5386f1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=U/YHMItOU+qanl1IKgeEpnW9Tb0W/QBY4RY/ynGzeOU=;
+        b=DGl/kwpYtAn3pzYKJX2mfL1bbvy72VxOGUEcjGfjLCkC6KpV76IWZREpRPk641Pts0
+         FJt9tqbLQFSa4QCqWgx0sfeBWfHsYhtaH9tx04bTRIS/Wd2cBEnr0iYHGwTyt2kTWORV
+         ebzqkt+vGUplmbzFX/lbH1TUjzftNohIHbmw1o1hbWtX3uQuBlJ0AfmITDSBYUUKMwfS
+         7JspkAEWvXaRJyQL6vL/C8q2o98pJP40z5HzFaRegqeIQS9sHWUPaZgPHgjibFpkf+Jj
+         TVGiuYFotHdfulX2gQugevBaJ/CrWNiU4TEjuOcZBMEXzO81kSyB+jgBiUXb+rqlr8sT
+         qd0A==
+X-Gm-Message-State: AOAM531OyAM75u4tTVcnzJyEnCf4JtyAB296zGttuCyNuvpTaZkl08Nm
+        IjxqYP8HbrkxSOD3FJJlzsbtDaJu5ZvpXuPEY4P/WjPQnuHv8S2PabOhgDEJ0ODCSh1+zidw/ew
+        ZKyMUgTSLRPlC1hS609fo1IasQCiAq1dRDlwI7g==
+X-Received: by 2002:a81:5707:0:b0:2eb:373b:cfad with SMTP id l7-20020a815707000000b002eb373bcfadmr1860372ywb.245.1649427984296;
+        Fri, 08 Apr 2022 07:26:24 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxDY7g4msku33cedhyATV50/zFOel9CLRy4+oIf9hSqv4+eV4sspV/jrxYgQab8+Gq5PXbThJHBA/tYa0GCgrk=
+X-Received: by 2002:a81:5707:0:b0:2eb:373b:cfad with SMTP id
+ l7-20020a815707000000b002eb373bcfadmr1860362ywb.245.1649427984130; Fri, 08
+ Apr 2022 07:26:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220307133321.5d5386f1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <71becb489e51284edf0c11fc15246f4ed4cef5b6.1649337862.git.lucien.xin@gmail.com>
+In-Reply-To: <71becb489e51284edf0c11fc15246f4ed4cef5b6.1649337862.git.lucien.xin@gmail.com>
+From:   Ondrej Mosnacek <omosnace@redhat.com>
+Date:   Fri, 8 Apr 2022 16:26:12 +0200
+Message-ID: <CAFqZXNukNQFROHqhrjnW0EyQjBiYC4LfNcAmu_Fq_mfCi-kd_g@mail.gmail.com>
+Subject: Re: [PATCHv2 net] sctp: use the correct skb for security_sctp_assoc_request
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     network dev <netdev@vger.kernel.org>,
+        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=omosnace@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 01:33:21PM -0800, Jakub Kicinski wrote:
-> On Mon,  7 Mar 2022 20:59:29 +0100 Petr Malat wrote:
-> > Function sctp_do_peeloff() wrongly initializes daddr of the original
-> > socket instead of the peeled off one, which makes getpeername() return
-> > zeroes instead of the primary address. Initialize the new socket
-> > instead.
-> 
-> Could you add a Fixes tag?
+On Thu, Apr 7, 2022 at 3:24 PM Xin Long <lucien.xin@gmail.com> wrote:
+> Yi Chen reported an unexpected sctp connection abort, and it occurred when
+> COOKIE_ECHO is bundled with DATA Fragment by SCTP HW GSO. As the IP header
+> is included in chunk->head_skb instead of chunk->skb, it failed to check
+> IP header version in security_sctp_assoc_request().
+>
+> According to Ondrej, SELinux only looks at IP header (address and IPsec
+> options) and XFRM state data, and these are all included in head_skb for
+> SCTP HW GSO packets. So fix it by using head_skb when calling
+> security_sctp_assoc_request() in processing COOKIE_ECHO.
+>
+> v1->v2:
+>   - As Ondrej noticed, chunk->head_skb should also be used for
+>     security_sctp_assoc_established() in sctp_sf_do_5_1E_ca().
+>
+> Fixes: e215dab1c490 ("security: call security_sctp_assoc_request in sctp_sf_do_5_1D_ce")
+> Reported-by: Yi Chen <yiche@redhat.com>
+> Signed-off-by: Xin Long <lucien.xin@gmail.com>
+> ---
+>  net/sctp/sm_statefuns.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
+> index 7f342bc12735..52edee1322fc 100644
+> --- a/net/sctp/sm_statefuns.c
+> +++ b/net/sctp/sm_statefuns.c
+> @@ -781,7 +781,7 @@ enum sctp_disposition sctp_sf_do_5_1D_ce(struct net *net,
+>                 }
+>         }
+>
+> -       if (security_sctp_assoc_request(new_asoc, chunk->skb)) {
+> +       if (security_sctp_assoc_request(new_asoc, chunk->head_skb ?: chunk->skb)) {
+>                 sctp_association_free(new_asoc);
+>                 return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
+>         }
+> @@ -932,7 +932,7 @@ enum sctp_disposition sctp_sf_do_5_1E_ca(struct net *net,
+>
+>         /* Set peer label for connection. */
+>         if (security_sctp_assoc_established((struct sctp_association *)asoc,
+> -                                           chunk->skb))
+> +                                           chunk->head_skb ?: chunk->skb))
+>                 return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
+>
+>         /* Verify that the chunk length for the COOKIE-ACK is OK.
+> @@ -2262,7 +2262,7 @@ enum sctp_disposition sctp_sf_do_5_2_4_dupcook(
+>         }
+>
+>         /* Update socket peer label if first association. */
+> -       if (security_sctp_assoc_request(new_asoc, chunk->skb)) {
+> +       if (security_sctp_assoc_request(new_asoc, chunk->head_skb ?: chunk->skb)) {
+>                 sctp_association_free(new_asoc);
+>                 return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
+>         }
+> --
+> 2.31.1
 
-Hi Jakub,
-have you got some time to review the updated version with "Fixes" tag
-added?
+FWIW:
 
-The issue has been in the kernel for a while, because my app is using
-peer addresses for storing sockets in a hash table and the hash table can
-handle collisions, thus I haven't noticed it's broken until I dumped
-the hash table while working on another problem.
-BR,
-  Petr
+Reviewed-by: Ondrej Mosnacek <omosnace@redhat.com>
+
+Thanks!
+
+-- 
+Ondrej Mosnacek
+Software Engineer, Linux Security - SELinux kernel
+Red Hat, Inc.
+
