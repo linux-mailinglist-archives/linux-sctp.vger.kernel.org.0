@@ -2,70 +2,68 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E54F04F9B79
-	for <lists+linux-sctp@lfdr.de>; Fri,  8 Apr 2022 19:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 748304F9BC1
+	for <lists+linux-sctp@lfdr.de>; Fri,  8 Apr 2022 19:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235596AbiDHRU1 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 8 Apr 2022 13:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52416 "EHLO
+        id S238180AbiDHRgM (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 8 Apr 2022 13:36:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238081AbiDHRU0 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 8 Apr 2022 13:20:26 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466B410242D
-        for <linux-sctp@vger.kernel.org>; Fri,  8 Apr 2022 10:18:22 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id b188so9457546oia.13
-        for <linux-sctp@vger.kernel.org>; Fri, 08 Apr 2022 10:18:22 -0700 (PDT)
+        with ESMTP id S233502AbiDHRgL (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 8 Apr 2022 13:36:11 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB6D1EAE0
+        for <linux-sctp@vger.kernel.org>; Fri,  8 Apr 2022 10:34:07 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id t21so9497777oie.11
+        for <linux-sctp@vger.kernel.org>; Fri, 08 Apr 2022 10:34:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=f/fF07zfJAJ+pEDSAOaPf8CfotVhGllGtUlJHdKcpnQ=;
-        b=QXRI1mlcAou0FYEwUkbX47t/NUoaw94a/N/EWK1OPhGKOC37zA33NX5EkzNr281yc6
-         tSXSJNPQXqYV++bQdJFzCsNotppOtxcaRSHKsodboKmMH7k+4CwDVRkW5qYmTs85ittA
-         0lbN9BT88apt+aX33r+2RmqC51NSvG2XFBnu0dvMbYFqTJu2WLDjgKpaVicRO79JiSv8
-         FLiUJ8KH5Wfuj/T3RxKzCRLNGwvlDlhwq4Fwc0cAkJ6KU/yEWLc6DlY01bdvbO0MaNsV
-         5c9wMzChPrnn4/Vi2bdri/4M2C6rISuCCDy8+H3U28GBFyJWkmKqAEve605rRs62UOGy
-         sw2A==
+        bh=DFjWoApz0UztoJCdhlYcRubg04qOOzzDBrTBaHLd63U=;
+        b=K3uEi0LtGb2Tatn4hICtUi54xFZiOax4luKt5U3yVXZcOTNs/48IMjMxP+mnKrmVmf
+         aM2uEi/3+mdrUKRmG1jmeo+F5CXRHaolJS3EwbSNtbBRHMcua0uaIjS68nPVP6eIPBkr
+         a8xb5SnjaRnDxAZxH6YhmXfYppcB5V+iUTD1+ZDi79dlk023USFjEcp7erMC5ratPIZZ
+         BltG436gIzoLmUJ2TWVEpA6wW42sSwVbwJTyts4YXM23ct3p+5b5kNsDwRV1Bgw0bN7s
+         NHshsj3moa5dmJQzj1L9pMz9MCpyOEuCcXOKTzlyLpPGEBOGFnhBOuX+QCWa/GHdhwNj
+         FL9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=f/fF07zfJAJ+pEDSAOaPf8CfotVhGllGtUlJHdKcpnQ=;
-        b=K2NxxGLJJNJsHNIpE4fBClPYOwoY11IFnyznuG7hAfURfg2ge52XhjTbznV9ejCQhV
-         iljtLwLAVdJPGx1cITEsOy3pbTIvLIQtv00CW/bb1z27xCSVd8szuU4y+ryKmrI7Wbs3
-         M9VmqAvVR4lkJvIqyvJHPo9443TNYWQ60+K0xscFTH5Q/vOLR/07mPM5O224hGkQD23o
-         wURo2Eiyka/6yo1a3+v1WXd0PSH/dwhtOjcScS/LCKcvOUq/hLZc7taiBAS5hiSxxBLP
-         8lVjsVOifQGlvbxd8cL1JeAoInYmNjuewqmCfkVGRtYZLpBcZl5c2+lEIBSFJbsH4aS7
-         GviQ==
-X-Gm-Message-State: AOAM5334oxXOajgIH3ZhNGTEUtWhSZ6pUATrG63wpiViV02E1XxyYDxW
-        B0gSdFwmwwBdFwM7HAw2mno=
-X-Google-Smtp-Source: ABdhPJzEHtJSfLcJBG//KSYOiNdgb7appsLnI0Q16MP5zb/f+FRkMrK/CRPyb9PWoi9QF4D9dd438A==
-X-Received: by 2002:a05:6808:d51:b0:2ec:b129:1197 with SMTP id w17-20020a0568080d5100b002ecb1291197mr401318oik.12.1649438300199;
-        Fri, 08 Apr 2022 10:18:20 -0700 (PDT)
-Received: from t14s.localdomain ([177.220.172.117])
-        by smtp.gmail.com with ESMTPSA id u16-20020a056808151000b002f734da0881sm9216951oiw.57.2022.04.08.10.18.19
+        bh=DFjWoApz0UztoJCdhlYcRubg04qOOzzDBrTBaHLd63U=;
+        b=zg9Z4h+JUlG63qyeCNzIN5c4mGojsE2jaKKmLxhiwPRNIiZW6+XkYGd/j/EuLrx3MT
+         1pThCV8a6OjnXbJaVNY4LegQY/7BK5SaI7YLyrHQOLdVyvj+ihQw8sE8ssyuZn2fn0sw
+         2465DqW8UjNZoCfGifjkdqzla0d0Ws/CXiBP/p3C8uEV2i2Y1HRsqvrTOd/LvzlnwYtO
+         exM7dEf1e6DaNf5Z68gNnZhnCdo2JLMwtYRyh0EPByE9E7C0OfmxK6c9EvkjHHrkc/Xo
+         JrguAQlH+FruYvql3AgRkcYbAW5Eke8HSm6NnAFN4xtAgbwfPqLqFJL7LSy9TyYZVQMT
+         idqw==
+X-Gm-Message-State: AOAM531U+X4t2oY2PO/M5OgoZHu0fViTFBlpcvgjbmhImdeWuJ8/ad44
+        nuYdIR2rktM524KG5XUEBQoflsBM/+E=
+X-Google-Smtp-Source: ABdhPJw7qGbf+GQbzWEMmUfqRwXRLDUHu/sMf2yYclpTMcAzQ4j/+wPd/ldNsmHn63PTIEee5t/FDA==
+X-Received: by 2002:a05:6808:1526:b0:2ec:f5ea:39a7 with SMTP id u38-20020a056808152600b002ecf5ea39a7mr414348oiw.175.1649439247096;
+        Fri, 08 Apr 2022 10:34:07 -0700 (PDT)
+Received: from t14s.localdomain ([2001:1284:f016:143b:c097:5c23:9732:767c])
+        by smtp.gmail.com with ESMTPSA id j12-20020a9d190c000000b005e6c6bf4db5sm694008ota.34.2022.04.08.10.34.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 10:18:19 -0700 (PDT)
+        Fri, 08 Apr 2022 10:34:06 -0700 (PDT)
 Received: by t14s.localdomain (Postfix, from userid 1000)
-        id D44151DFDC1; Fri,  8 Apr 2022 14:18:17 -0300 (-03)
-Date:   Fri, 8 Apr 2022 14:18:17 -0300
+        id 238E31DFDD0; Fri,  8 Apr 2022 14:34:05 -0300 (-03)
+Date:   Fri, 8 Apr 2022 14:34:05 -0300
 From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Petr Malat <oss@malat.biz>, linux-sctp@vger.kernel.org,
-        Vlad Yasevich <vyasevich@gmail.com>,
+To:     Petr Malat <oss@malat.biz>
+Cc:     linux-sctp@vger.kernel.org, Vlad Yasevich <vyasevich@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH] sctp: Initialize daddr on peeled off socket
-Message-ID: <YlBuWfEg/njGjSkt@t14s.localdomain>
-References: <20220307195929.621359-1-oss@malat.biz>
- <20220307133321.5d5386f1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <YlAsCio+PCnuSmeK@ntb.petris.klfree.czf>
- <20220408093342.022431f7@kernel.org>
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [PATCH v2] sctp: Initialize daddr on peeled off socket
+Message-ID: <YlByDe3YttU5K8dU@t14s.localdomain>
+References: <20220307133321.5d5386f1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <20220307220220.652293-1-oss@malat.biz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220408093342.022431f7@kernel.org>
+In-Reply-To: <20220307220220.652293-1-oss@malat.biz>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -76,33 +74,37 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 09:33:42AM -0700, Jakub Kicinski wrote:
-> On Fri, 8 Apr 2022 14:35:22 +0200 Petr Malat wrote:
-> > On Mon, Mar 07, 2022 at 01:33:21PM -0800, Jakub Kicinski wrote:
-> > > On Mon,  7 Mar 2022 20:59:29 +0100 Petr Malat wrote:  
-> > > > Function sctp_do_peeloff() wrongly initializes daddr of the original
-> > > > socket instead of the peeled off one, which makes getpeername() return
-> > > > zeroes instead of the primary address. Initialize the new socket
-> > > > instead.  
-> > > 
-> > > Could you add a Fixes tag?  
-> > 
-> > Hi Jakub,
-> > have you got some time to review the updated version with "Fixes" tag
-> > added?
+On Mon, Mar 07, 2022 at 11:02:21PM +0100, Petr Malat wrote:
+> Function sctp_do_peeloff() wrongly initializes daddr of the original
+> socket instead of the peeled off socket, which makes getpeername()
+> return zeroes instead of the primary address. Initialize the new socket
+> instead.
 > 
-> Thanks for adding the tag. Long story short if you got no replies from
-> SCTP folks on the posting to linux-sctp@ repost with netdev@ added.
-> That way it'll get into general networking patchwork / patch processing
-> queue.
+> Fixes: d570ee490fb1 ("[SCTP]: Correctly set daddr for IPv6 sockets during peeloff")
+> Signed-off-by: Petr Malat <oss@malat.biz>
 
-Yup. Also, the patch itself always need to be posted to netdev@
-anyway, because we can't take patches directly from linux-sctp@. Well,
-unless you mean to not officially submit the patch at a given time for
-some reason, that is.
+Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 
+You need to re-post it to netdev@, btw, but please feel free to carry
+the tag above on it.
+
+> ---
+>  net/sctp/socket.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> > The issue has been in the kernel for a while, because my app is using
-> > peer addresses for storing sockets in a hash table and the hash table can
-> > handle collisions, thus I haven't noticed it's broken until I dumped
-> > the hash table while working on another problem.
+> diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+> index 3e1a9600be5e..7b0427658056 100644
+> --- a/net/sctp/socket.c
+> +++ b/net/sctp/socket.c
+> @@ -5636,7 +5636,7 @@ int sctp_do_peeloff(struct sock *sk, sctp_assoc_t id, struct socket **sockp)
+>  	 * Set the daddr and initialize id to something more random and also
+>  	 * copy over any ip options.
+>  	 */
+> -	sp->pf->to_sk_daddr(&asoc->peer.primary_addr, sk);
+> +	sp->pf->to_sk_daddr(&asoc->peer.primary_addr, sock->sk);
+>  	sp->pf->copy_ip_options(sk, sock->sk);
+>  
+>  	/* Populate the fields of the newsk from the oldsk and migrate the
+> -- 
+> 2.30.2
+> 
