@@ -2,102 +2,69 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF954FA572
-	for <lists+linux-sctp@lfdr.de>; Sat,  9 Apr 2022 08:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8302E4FAB57
+	for <lists+linux-sctp@lfdr.de>; Sun, 10 Apr 2022 03:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234128AbiDIGi5 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sat, 9 Apr 2022 02:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40420 "EHLO
+        id S232864AbiDJBY3 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sat, 9 Apr 2022 21:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231337AbiDIGi5 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sat, 9 Apr 2022 02:38:57 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C2318C0D9
-        for <linux-sctp@vger.kernel.org>; Fri,  8 Apr 2022 23:36:50 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id bq8so21099174ejb.10
-        for <linux-sctp@vger.kernel.org>; Fri, 08 Apr 2022 23:36:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=malat-biz.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=QIadV+02aife5O5acIeg03pteZkbniQhtMavKParwPo=;
-        b=4TrE0p8nGdolXnaaBW8lx2AsYPF74Q+Ek8ggEGCM/y6gRyKGD2olfAfb5oBe/zf4om
-         s8Rf/FT+ZnJzY+/SVvC0BM/Cqn8DSzFWM4p+gFqA+/RteBXJtbeL7GqFDxc3zsz9WrNk
-         JoefpChTrqpQv+XBt2iDbnPr9ZVy8Xj3tduqY1Mjhh2LAtJCIVekq00fYXQPmlP/U/pF
-         rRZSEoKAeVQ3VEvFZ54jrfP9udoAuzEx7Tpi6x3OR8zU1t9gtdmfeIxgB2kym9NsMR54
-         IiYaOM4Fi7n/kBP+4/sTKvldkMMaf4tZVkBt6xg66sHfj/st+C6ZokGXFn79fDLgN8gz
-         bK2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=QIadV+02aife5O5acIeg03pteZkbniQhtMavKParwPo=;
-        b=yNwTGLZCtb2dWxtRN/No5wHMpMpMIzTk59AsJ9ZELlazRo3PzGwdEBqeTnrTsM1Z5z
-         UZ8DYJlHSwlDohrqaBHrwWHlhUCibX5h5vrcsYaUL2FUgQBe+WGT5DSS6GpfoFFXqMWb
-         I/DVdRcY7bM2UMoB9YQv/ExbqHpWUZR7RCaRJHXlL42PEhPFFz6c9+0Dq9R26vchkNbv
-         lJo3p1ktvLSRnQC/wc0+ZEhXvUUIdStpVOERGub/gcRG96bXA+kZeHh0YKmqNKRcx5rI
-         4Md50SX+HVVyI7JMP1rql6iS4d/O7TPWHM9VEd4WNrlBMFzxafIMMrcRJH5WhIPqtwet
-         5i8w==
-X-Gm-Message-State: AOAM532S/rxBhjxWDc/Rv9ZmxDQdeKMnvVqvaYZvf5JegJL060e9HYbU
-        1POhfoV5vgwzTym2aqH8AtvEhw==
-X-Google-Smtp-Source: ABdhPJw15MeLiCGc0ArY7J1Zn7ZYjAL0lhyP5omP3RmpQKrGvXdnKG3V7Ai9Uslk1sgeD/tWB4tPSQ==
-X-Received: by 2002:a17:907:3f18:b0:6e0:df2d:c76a with SMTP id hq24-20020a1709073f1800b006e0df2dc76amr22280753ejc.55.1649486208717;
-        Fri, 08 Apr 2022 23:36:48 -0700 (PDT)
-Received: from ntb.petris.klfree.czf ([2a02:8070:d4c1:3a00:ceb5:41c:b517:660f])
-        by smtp.googlemail.com with ESMTPSA id m3-20020a17090679c300b006cf9ce53354sm9381437ejo.190.2022.04.08.23.36.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 23:36:48 -0700 (PDT)
-From:   Petr Malat <oss@malat.biz>
-To:     netdev@vger.kernel.org
-Cc:     Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-sctp@vger.kernel.org,
-        Petr Malat <oss@malat.biz>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Subject: [PATCH] sctp: Initialize daddr on peeled off socket
-Date:   Sat,  9 Apr 2022 08:36:11 +0200
-Message-Id: <20220409063611.673193-1-oss@malat.biz>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <YlByDe3YttU5K8dU@t14s.localdomain>
-References: <YlByDe3YttU5K8dU@t14s.localdomain>
+        with ESMTP id S234135AbiDJBY1 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sat, 9 Apr 2022 21:24:27 -0400
+X-Greylist: delayed 625 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 09 Apr 2022 18:22:18 PDT
+Received: from guaco.floridaarsonseminar.com (guaco.floridaarsonseminar.com [85.202.169.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9875FBF53
+        for <linux-sctp@vger.kernel.org>; Sat,  9 Apr 2022 18:22:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=floridaarsonseminar.com;
+ h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding; i=rae.leo@floridaarsonseminar.com;
+ bh=MnUf62F7Cn+TYukvIUFpyVBy5Yk=;
+ b=A6RMQ7jl9eJXmKPV98Yqs7Z8wQ64qt928D5Pp/Wb/DW/L3JfQMgb3kzIMq45VJnvv5sgOYCKniL6
+   0ZS4wtyEsGm9TAmFdbSOKYFbGCMu5zX487B0hna13lVY7obUUF9Cb4wvUxyWGVpGVA1DbTh8YFl0
+   cb835ch3yLFHb0iY/w2PztRgHMmIgQoFFTljDVOkYLSA6fZxhxnAmvhDXyR1L5yOjrs4P7Vh0pgj
+   QoS0OGJaxIU72ewrp32qHiyfCtvWmxZgsJ23DI2wR0mi+iNBKCMqVjaBdhjKahC3SkaGUIHDmz0d
+   moy3XlZX/ns3V/1IbIMU90VGhRPnLM5r/mq1xQ==
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=floridaarsonseminar.com;
+ b=HLVLXQWMVE8g+k3sJ+kgpTfdrBs/5OTwAHcGUfP3xx88+8OGO8wfn+JTy0dmOlXmc9Sa6jBvqak1
+   9Lvb1l3Q6+7xQiB+TJ5a1Szgv/BHvY5gdeWmBLicHQgv6KOm08OsI7NZKkw3ZIEJVnpD5MdyH2aE
+   /PU29FbhN3m/QBne+GeWOEhsdYOGYaCv8pmu/ZmBmq3+8K7/V1i2uFCwxLsem64zzwXoiJW0YAvY
+   B9VgpqQYhLrqhLWGshpOppitEl0SDcC125oZQPNr2bnbngVP8+0HvSQa4u8e6wnLm/HDtWYWqFGP
+   ADcNf9PE3QiUFp5ivuyULhOOaE2P0AGbMETtTQ==;
+Reply-To: ayvamustafa22@gmail.com
+From:   rae.leo@floridaarsonseminar.com
+To:     linux-sctp@vger.kernel.org
+Subject: Hello
+Date:   10 Apr 2022 03:08:57 +0200
+Message-ID: <20220410030857.3E3ABA66AA0D68C5@floridaarsonseminar.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_MSPIKE_BL,
+        RCVD_IN_MSPIKE_L3,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Function sctp_do_peeloff() wrongly initializes daddr of the original
-socket instead of the peeled off socket, which makes getpeername()
-return zeroes instead of the primary address. Initialize the new socket
-instead.
+sauda=C3=A7=C3=B5es ,
 
-Fixes: d570ee490fb1 ("[SCTP]: Correctly set daddr for IPv6 sockets during peeloff")
-Signed-off-by: Petr Malat <oss@malat.biz>
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
----
- net/sctp/socket.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Estou procurando um parente do meu falecido cliente Sr. Robert,=20
+que perdeu a vida devido =C3=A0 doen=C3=A7a do Coronav=C3=ADrus, que ele=20=
 
-diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-index 3e1a9600be5e..7b0427658056 100644
---- a/net/sctp/socket.c
-+++ b/net/sctp/socket.c
-@@ -5636,7 +5636,7 @@ int sctp_do_peeloff(struct sock *sk, sctp_assoc_t id, struct socket **sockp)
- 	 * Set the daddr and initialize id to something more random and also
- 	 * copy over any ip options.
- 	 */
--	sp->pf->to_sk_daddr(&asoc->peer.primary_addr, sk);
-+	sp->pf->to_sk_daddr(&asoc->peer.primary_addr, sock->sk);
- 	sp->pf->copy_ip_options(sk, sock->sk);
- 
- 	/* Populate the fields of the newsk from the oldsk and migrate the
--- 
-2.30.2
+contraiu durante sua viagem de neg=C3=B3cios na China. Eu sou seu=20
+advogado pessoal e estou procurando seus parentes mais pr=C3=B3ximos,=20
+entrei em contato com voc=C3=AA para trabalhar comigo na garantia da=20
+transfer=C3=AAncia de um fundo fiduci=C3=A1rio, quatro milh=C3=B5es,=20
+quatrocentos e vinte mil d=C3=B3lares, legado por meu falecido=20
+cliente.
 
+Entre em contato comigo imediatamente para obter mais=20
+informa=C3=A7=C3=B5es.
+
+esperando
+Mustaf=C3=A1 Aivaz
