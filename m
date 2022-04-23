@@ -2,78 +2,67 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 736FE50CA83
-	for <lists+linux-sctp@lfdr.de>; Sat, 23 Apr 2022 15:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC8350CDC6
+	for <lists+linux-sctp@lfdr.de>; Sat, 23 Apr 2022 23:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235723AbiDWNVD (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sat, 23 Apr 2022 09:21:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
+        id S229887AbiDWVnM (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sat, 23 Apr 2022 17:43:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233341AbiDWNVC (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sat, 23 Apr 2022 09:21:02 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22F42118BE;
-        Sat, 23 Apr 2022 06:18:05 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id b188so12021768oia.13;
-        Sat, 23 Apr 2022 06:18:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JYVMgf42zZyHE8ws9U4WUn0NjIwADExX69tWsxjM9Gg=;
-        b=iYUmtX0ojjTY3J8G+AbIyjc3LvimrenBMym8O0PEtf+oAjW0c93j2yItsMEDa6J/HD
-         bz8fNUPHjyer2Z0/KLxgtmkvNTfdf7ztx+kzKvj0hy0OFv85iGiYcZ2TDG2KQc1zGNaE
-         4WAdBCCCzkqeKgzyM81M5qVEmwGBm+xMh0Qd2eY8AWPJPotrPTzCmDCL3fHQSE1kWzin
-         69gCIzhe+GwnPlKDMDftlVhjlapFBoSd3bP+b52ZBYWwAL/W8G8rysrS/XUVDK/vHpYH
-         MDRJ0+yzYdWBB3Fa2k/b7/eMTwFBU1TZcAICzJ7dnwOHVpVFW0ozj2/uLldMc7Fhw/hG
-         VBug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JYVMgf42zZyHE8ws9U4WUn0NjIwADExX69tWsxjM9Gg=;
-        b=e2jWwvREtl7KXsb4aEWCoxTi4JwKc2CitMroa8OotobKxB2mIqcNC7JOo1a2aownaU
-         3brE0N4JDwtvXUB/8M6WV0eeJgyhGHmkAVUp3N1IY708Etqs3LW4xXBsOBEIYAun+6Uz
-         +s1mOeTgIgdw5B1r5L9fodaXjfDdfL4XvTk6V7VpQFS/scuaOR6Cd+KL6gCOxc7vIKwY
-         /sgifzrjGPeXWsVV3Y4HwntIZShdDKetblK/E+ibkv5c6rETa+UoptsE6s53LfIapVku
-         lN9HBpt9l0WrQTA3l0Zd72VcPCfmO7TpS3L13nztXYD1qtXDbTicbymDT4qXhmEEKd66
-         9SpA==
-X-Gm-Message-State: AOAM530Nd7ykeLCdjSWm6UMtwToWMBf9pSKA/K6INp/ruWTWnTNqJFL7
-        eKLhBCV6lRCm1sOLp/uWILKOVUiAMwg=
-X-Google-Smtp-Source: ABdhPJwk+OuAoKwdhBlVTpO06hBNngkHd3nR4OkRAGq1oeYLtttjFODYIQ4uEDfs+GTHpKjIu8vyng==
-X-Received: by 2002:a05:6808:2386:b0:322:c9bb:4994 with SMTP id bp6-20020a056808238600b00322c9bb4994mr4375174oib.49.1650719885209;
-        Sat, 23 Apr 2022 06:18:05 -0700 (PDT)
-Received: from t14s.localdomain ([2001:1284:f016:fcfc:a063:e36a:1c56:cc6c])
-        by smtp.gmail.com with ESMTPSA id n66-20020acabd45000000b002ef6c6992e8sm1773407oif.42.2022.04.23.06.18.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 06:18:04 -0700 (PDT)
-Received: by t14s.localdomain (Postfix, from userid 1000)
-        id 07365200024; Sat, 23 Apr 2022 10:18:03 -0300 (-03)
-Date:   Sat, 23 Apr 2022 10:18:02 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
-        davem@davemloft.net, kuba@kernel.org,
-        Neil Horman <nhorman@tuxdriver.com>
+        with ESMTP id S229526AbiDWVnL (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sat, 23 Apr 2022 17:43:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2835DF66;
+        Sat, 23 Apr 2022 14:40:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DD9A61118;
+        Sat, 23 Apr 2022 21:40:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A4D57C385A9;
+        Sat, 23 Apr 2022 21:40:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650750010;
+        bh=m4LY2NLUTma2Fsk9bX9Jy0B0qFNEXbVzIk1njK/r90c=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=BRcmmVmRz9lXSQZtjb0W+bGsKQaUIiuDy5j//kCrquYUBtMJsXPLQWBkKk3yzQFUx
+         mbxctzxi9UpAhuZ8GujJjJMm8iaowMDF8Kt2JUvRy62fHGJsIVCYaaQ97277rzAxiY
+         OwNA6RjBo/BGNEqVpazX68Bp4x8Rshss/IPXi6jJmfZ55fHn2h2NP5BX+Y5l1if5Aj
+         GchK6uKfT5Rcr0HLZZrdOMnauDT4ifUqFhndw2pNl1t4IUIpnnJxjHvHoSg1h/jh/M
+         bLT9UFallvIB02TZZDCaUa1lNoG/yehuk2lYA4mVgmLYteV9wGSzdtccH50EIKfd8Y
+         F/vKuu1uWDhsg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 85DB0E8DBD4;
+        Sat, 23 Apr 2022 21:40:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Subject: Re: [PATCH net] sctp: check asoc strreset_chunk in
  sctp_generate_reconf_event
-Message-ID: <YmP8irnHklLbGNXZ@t14s.localdomain>
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165075001054.4343.8485395307076127833.git-patchwork-notify@kernel.org>
+Date:   Sat, 23 Apr 2022 21:40:10 +0000
 References: <3000f8b12920ae81b84dceead6dcc90bb00c0403.1650487961.git.lucien.xin@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <3000f8b12920ae81b84dceead6dcc90bb00c0403.1650487961.git.lucien.xin@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org, marcelo.leitner@gmail.com,
+        nhorman@tuxdriver.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 04:52:41PM -0400, Xin Long wrote:
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Wed, 20 Apr 2022 16:52:41 -0400 you wrote:
 > A null pointer reference issue can be triggered when the response of a
 > stream reconf request arrives after the timer is triggered, such as:
 > 
@@ -89,27 +78,15 @@ On Wed, Apr 20, 2022 at 04:52:41PM -0400, Xin Long wrote:
 >    continue the handler code, hold sk lock,
 >    and try to hold asoc->strreset_chunk, crash!
 > 
-> In Ying Xu's testing, the call trace is:
-> 
->   [ ] BUG: kernel NULL pointer dereference, address: 0000000000000010
->   [ ] RIP: 0010:sctp_chunk_hold+0xe/0x40 [sctp]
->   [ ] Call Trace:
->   [ ]  <IRQ>
->   [ ]  sctp_sf_send_reconf+0x2c/0x100 [sctp]
->   [ ]  sctp_do_sm+0xa4/0x220 [sctp]
->   [ ]  sctp_generate_reconf_event+0xbd/0xe0 [sctp]
->   [ ]  call_timer_fn+0x26/0x130
-> 
-> This patch is to fix it by returning from the timer handler if asoc
-> strreset_chunk is already set to NULL.
+> [...]
 
-Right. The timer callback didn't have a check on whether it was still
-needed or not, and per the description above, it would simply try to
-handle it twice then.
+Here is the summary with links:
+  - [net] sctp: check asoc strreset_chunk in sctp_generate_reconf_event
+    https://git.kernel.org/netdev/net/c/165e3e17fe8f
 
-> 
-> Fixes: 7b9438de0cd4 ("sctp: add stream reconf timer")
-> Reported-by: Ying Xu <yinxu@redhat.com>
-> Signed-off-by: Xin Long <lucien.xin@gmail.com>
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+
