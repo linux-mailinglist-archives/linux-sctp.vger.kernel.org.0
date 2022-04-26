@@ -2,91 +2,109 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBC8350CDC6
-	for <lists+linux-sctp@lfdr.de>; Sat, 23 Apr 2022 23:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B178350FAA2
+	for <lists+linux-sctp@lfdr.de>; Tue, 26 Apr 2022 12:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbiDWVnM (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sat, 23 Apr 2022 17:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39940 "EHLO
+        id S241345AbiDZKfO (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 26 Apr 2022 06:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiDWVnL (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sat, 23 Apr 2022 17:43:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2835DF66;
-        Sat, 23 Apr 2022 14:40:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DD9A61118;
-        Sat, 23 Apr 2022 21:40:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A4D57C385A9;
-        Sat, 23 Apr 2022 21:40:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650750010;
-        bh=m4LY2NLUTma2Fsk9bX9Jy0B0qFNEXbVzIk1njK/r90c=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=BRcmmVmRz9lXSQZtjb0W+bGsKQaUIiuDy5j//kCrquYUBtMJsXPLQWBkKk3yzQFUx
-         mbxctzxi9UpAhuZ8GujJjJMm8iaowMDF8Kt2JUvRy62fHGJsIVCYaaQ97277rzAxiY
-         OwNA6RjBo/BGNEqVpazX68Bp4x8Rshss/IPXi6jJmfZ55fHn2h2NP5BX+Y5l1if5Aj
-         GchK6uKfT5Rcr0HLZZrdOMnauDT4ifUqFhndw2pNl1t4IUIpnnJxjHvHoSg1h/jh/M
-         bLT9UFallvIB02TZZDCaUa1lNoG/yehuk2lYA4mVgmLYteV9wGSzdtccH50EIKfd8Y
-         F/vKuu1uWDhsg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 85DB0E8DBD4;
-        Sat, 23 Apr 2022 21:40:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S1349187AbiDZKfG (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 26 Apr 2022 06:35:06 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F3C1759DE
+        for <linux-sctp@vger.kernel.org>; Tue, 26 Apr 2022 03:14:32 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id m23so10462944ljc.0
+        for <linux-sctp@vger.kernel.org>; Tue, 26 Apr 2022 03:14:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=aPTFbZr4LhKGppGQDkO7tNLWiZLizgW3cwR+POXjY4E=;
+        b=iVRRXkOXoqY/EYM3m5fQzAZyEF7D95hbXONnhjKaAXxyHqk4G4fXAq3RAly4Tl5Xvt
+         zghEdgBbJJHVNTQ18UsOXbgfPlg2RIrwK6zw140XzIU+FIowWyRh7mUGE7j/0SsmIuSM
+         nv1UeaaRhYAnc9hfcHVkFW2P15rg23CFuuvYCUuTSUKpN3SH1NMWt57HV9GZgBtRaAVp
+         1s2RfWMpniBXNBVJpvzSHhhMNZhcBI/boGcAzNqZTBqFRpCGd6jEd/lTk1YSbcxaWGrA
+         zGaxB8yMnhidtfhCs8U5ilQWUDdVfcq8d3umqDw0D2kXQI69fsl4y5h3Qy+hKLbxUpt9
+         3ZSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=aPTFbZr4LhKGppGQDkO7tNLWiZLizgW3cwR+POXjY4E=;
+        b=MwJ12AkprYGsWCE6DqyScS1Sn47VbryOt/WkbXMa7442YU2+Wkh8IMrxygeY+9hzBj
+         g7Q2rvf/FVAclDb5/WFisMWoJm3/RooP5BV5w8VyXYUbRucuFmEe3Vs9tlB3ozVj8bZo
+         ko4gOu+qzZ3hfd77HUiD+ztTfKnFgpWCnVFAmgxFo9K06pHCJQlV0oD8KPMi5yY4rXsp
+         woTe4GvNY1tbhVkNhg9Did/1/KVx2BfBgcXVFerHLPXvEV5wwThCW5ELEtG8QVtK71KV
+         r71QcZnvd3HxTIJfWBPhPCjX8OS8+oeQm/0MnwzuUGct58jGptokxRv5dgC/b0MRBdMP
+         WT5Q==
+X-Gm-Message-State: AOAM532t+1ade9xYzeXVykttg+HX3qOVjBlm6W8NvXSh66CCNJCQPEf4
+        ALaMzBFsOeuE5n4ZUhbO8QLqDztF76FRZmG7/Uw=
+X-Google-Smtp-Source: ABdhPJyyX3E8H/gtK3/ybZX/llKQqtQOatCc0MWUfGSOAu9ZAWANOmalb+vlaI4Y5dOkkPhGN5uHnqXR0jdW6+sdIPA=
+X-Received: by 2002:a05:651c:2129:b0:24f:1a26:df1b with SMTP id
+ a41-20020a05651c212900b0024f1a26df1bmr1832764ljq.223.1650968070258; Tue, 26
+ Apr 2022 03:14:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] sctp: check asoc strreset_chunk in
- sctp_generate_reconf_event
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165075001054.4343.8485395307076127833.git-patchwork-notify@kernel.org>
-Date:   Sat, 23 Apr 2022 21:40:10 +0000
-References: <3000f8b12920ae81b84dceead6dcc90bb00c0403.1650487961.git.lucien.xin@gmail.com>
-In-Reply-To: <3000f8b12920ae81b84dceead6dcc90bb00c0403.1650487961.git.lucien.xin@gmail.com>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
-        davem@davemloft.net, kuba@kernel.org, marcelo.leitner@gmail.com,
-        nhorman@tuxdriver.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Reply-To: dr.tracymedicinemed1@gmail.com
+Sender: ra00028671@gmail.com
+Received: by 2002:aa6:c784:0:b0:1be:7e7e:6b3e with HTTP; Tue, 26 Apr 2022
+ 03:14:29 -0700 (PDT)
+From:   Dr Tracy William <ra6277708@gmail.com>
+Date:   Tue, 26 Apr 2022 18:14:29 +0800
+X-Google-Sender-Auth: di3btg4IKu5pT2yenoASHIFxA9A
+Message-ID: <CAEWKTYdMjoJ5NvavTGVxGF5hdrfpt50exuNQdZA4n8Cqjr5Tog@mail.gmail.com>
+Subject: From Dr Tracy from United States
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:243 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4967]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ra6277708[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [dr.tracymedicinemed1[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [ra00028671[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello:
+Hello Dear,
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+how are you today,I hope you are doing great.
 
-On Wed, 20 Apr 2022 16:52:41 -0400 you wrote:
-> A null pointer reference issue can be triggered when the response of a
-> stream reconf request arrives after the timer is triggered, such as:
-> 
->   send Incoming SSN Reset Request --->
->   CPU0:
->    reconf timer is triggered,
->    go to the handler code before hold sk lock
->                             <--- reply with Outgoing SSN Reset Request
->   CPU1:
->    process Outgoing SSN Reset Request,
->    and set asoc->strreset_chunk to NULL
->   CPU0:
->    continue the handler code, hold sk lock,
->    and try to hold asoc->strreset_chunk, crash!
-> 
-> [...]
+It is my great pleasure to contact you,I want to make a new and
+special friend,I hope you don't mind. My name is Tracy William from
+the United States, Am an English and French nationalities. I will give
+you pictures and more details about my self as soon as i hear from
+you Kisses.
 
-Here is the summary with links:
-  - [net] sctp: check asoc strreset_chunk in sctp_generate_reconf_event
-    https://git.kernel.org/netdev/net/c/165e3e17fe8f
+Pls resply to my personal email(dr.tracymedicinemed1@gmail.com)
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks.
+Tracy,
