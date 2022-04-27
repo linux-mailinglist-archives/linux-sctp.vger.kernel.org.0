@@ -2,51 +2,51 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71A66510F7D
-	for <lists+linux-sctp@lfdr.de>; Wed, 27 Apr 2022 05:22:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13C2D51233F
+	for <lists+linux-sctp@lfdr.de>; Wed, 27 Apr 2022 22:03:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357329AbiD0DZt (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 26 Apr 2022 23:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
+        id S235205AbiD0UGo (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 27 Apr 2022 16:06:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233352AbiD0DZq (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 26 Apr 2022 23:25:46 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BEC3205E2;
-        Tue, 26 Apr 2022 20:22:35 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id q75so471096qke.6;
-        Tue, 26 Apr 2022 20:22:35 -0700 (PDT)
+        with ESMTP id S230177AbiD0UGm (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 27 Apr 2022 16:06:42 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBC1C10;
+        Wed, 27 Apr 2022 13:03:28 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id t11so1970116qto.11;
+        Wed, 27 Apr 2022 13:03:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=sv6j3yQkqmqlnv/D43Xt3QFUU0mKBweO3ildOel+yQ0=;
-        b=Ld1vmZkGyG2s7Qy6YmhBjJjVlHN5hziODK/eqnpBIpSoA3YfP9pvA8eNtwJzXapp+O
-         vEHgO+PtIlaiBKajsGk9BXk1JdQw5n3pGPny9gK5ZL0Hr661YyqigweG9fT+Sm95CeUF
-         xcnqVRutKzMWHgeQaTrSJVYpJT/BUl13M8MbbnxXhZgII3MI8l7bJKxRu+8FKqMitFXw
-         PLFVVHMU/YXuMPfsZy8bHZR0pEOG3AuEBB58JHsFXw//IKfAxJjQ2vutGLwZ4xhaspZH
-         t0cp0OIXVUTW3i1q4W9RPy+FN0+qIb5rva3GeycqD9ZSicvz/Er3zFg2fpY3NrFNQHai
-         qKew==
+        bh=ahXl1YsEUSjHn7FELh1coWfAReaSSRgYPZG6O4GJXkk=;
+        b=U3seFTfKCofCy/F05zKSdO1SFjDRCEUHUCNNveCvftEq6iZZxgArhzQHknNpMe23pH
+         ovLQJ8deOpYzxtP19yH0kxO/fI8UsqBKc8WORLe/ifSF8HguUqoDF0TH5Kos8NZzJwvE
+         ZKyaFRW7ujvJiONfGYc8tAcVT/RxNusC6TKU68P4FzZe3qeWrpZiGMgUrEkFGe2HnzvC
+         0kbWO++LC2+2u3eDRS4sFOQ4BG4Ll00TmDn2XVmooF0sEhSaMwqVRLgf92fbuQTqFSKI
+         sxAup/u1xFFMKD474gl5jnmKeD+iitkOR6Bw2xgkSLU2Hyj+w6nunUlP11Zor0R/imfV
+         zl5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=sv6j3yQkqmqlnv/D43Xt3QFUU0mKBweO3ildOel+yQ0=;
-        b=e6AvmyxWGz+omNV8UM+XLUotWwsOtmJWMXPHyGoVJL8EYQsUpyxPmHqKedIJPzm/sR
-         ZqAOB0UzfTV81UQ5DZ5pegk45Frs6q3nCUE1y1qlhlY+exMjY1HlmLQtfkFGoeXpDYHQ
-         cjWFGKiHOnkACPRUaDLqZVgqWl0GhL7FD1GwULdKRswcXinUfII/GIhbCi1tK/STd/RX
-         yi46YUyYRsLsb4eRw6WG61BdaiwaRcIaOCaBWR/fZ+yXvnSFlPzxJf33neu+2i1N64jk
-         5nZbslkBuOExaimcfO8RwobNPMEvfL/RckjfUtMvQf1v77X/sTPphToFVVvq/D6DJMH0
-         tujQ==
-X-Gm-Message-State: AOAM530gu6qOMNUSq6yq0kKEjg8gsvI30m/oH0lTx8gv0baMtYYyylfF
-        Q9NH3/f8GMM8eQAlWgbEV5I=
-X-Google-Smtp-Source: ABdhPJzESuC/cwch4IxN3PDksjLOFNh9YqBLO8cV1FYh3am8pn5iP1U+58Am0SOHQ1afQjnEsj5zxg==
-X-Received: by 2002:a37:b984:0:b0:67f:64a2:313e with SMTP id j126-20020a37b984000000b0067f64a2313emr14684905qkf.3.1651029754451;
-        Tue, 26 Apr 2022 20:22:34 -0700 (PDT)
+        bh=ahXl1YsEUSjHn7FELh1coWfAReaSSRgYPZG6O4GJXkk=;
+        b=oPsbRtGGBjCJFe8R+Bp2s8M+56tvOcyHf0UNfoUtmUSfZVQTVpln8t1wPk71bvfXJr
+         gINT8XlBHafLb8Wyzde5/r+4cOOtg4V+OJimom3ElJVP1n/nJ5MjJgn50TJVzIc+z6UT
+         eih0LNrjLcu+1W67erIzNmDFuuh6DgNYv6ccdQZj/dPqQc4dOXvUf9jro2f38o2zwkDS
+         WTxYJj8oQVy4EkwrRKjREu+2aPlv+mSTo/lUnORU9qOnxMjWHY4nUppoZPC8PqGBgLFN
+         seYi2+Ga9AddMfutjVTVqzk5IOIxsTP3wPwsY0CLdMIWaZwgxZgnsDt7nM/TWpy8vClh
+         dLgA==
+X-Gm-Message-State: AOAM5338KnVpNPlp9MIh3exrIZ3za56LpSfXvMB5n6aULm9tTPov1CXn
+        Q1Iv2PzAzqUSh6+95ejkv4gfmtFpCEAVxYekQK0=
+X-Google-Smtp-Source: ABdhPJwPXIakKFpXHjVDP8XKXEJ7uNIGdfqnvJw8docz5tYwj0uqHeurylYrJHcixDE6yCgd5Ad/qQ==
+X-Received: by 2002:a05:622a:58f:b0:2f2:58:578a with SMTP id c15-20020a05622a058f00b002f20058578amr20229135qtb.180.1651089807529;
+        Wed, 27 Apr 2022 13:03:27 -0700 (PDT)
 Received: from emn.localdomain. ([104.245.1.41])
-        by smtp.googlemail.com with ESMTPSA id h5-20020a05622a170500b002f3818c7b92sm1237450qtk.49.2022.04.26.20.22.30
+        by smtp.googlemail.com with ESMTPSA id w83-20020a376256000000b0069f8a7cf7ffsm1707820qkb.32.2022.04.27.13.03.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 20:22:34 -0700 (PDT)
+        Wed, 27 Apr 2022 13:03:26 -0700 (PDT)
 From:   Erin MacNeil <lnx.erin@gmail.com>
 To:     lnx.erin@gmail.com
 Cc:     Richard Henderson <rth@twiddle.net>,
@@ -77,17 +77,17 @@ Cc:     Richard Henderson <rth@twiddle.net>,
         Neil Horman <nhorman@tuxdriver.com>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         Eric Dumazet <edumazet@google.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+        Martynas Pumputis <m@lambda.lt>,
         Akhmat Karakotov <hmukos@yandex-team.ru>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        Martynas Pumputis <m@lambda.lt>,
-        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
         Wei Wang <weiwan@google.com>, Yangbo Lu <yangbo.lu@nxp.com>,
         Florian Westphal <fw@strlen.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Richard Palethorpe <rpalethorpe@suse.com>,
-        Hangbin Liu <liuhangbin@gmail.com>,
         Willem de Bruijn <willemb@google.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
         Pablo Neira Ayuso <pablo@netfilter.org>,
         Richard Sanger <rsanger@wand.net.nz>,
         Yajun Deng <yajun.deng@linux.dev>,
@@ -98,9 +98,9 @@ Cc:     Richard Henderson <rth@twiddle.net>,
         linux-arch@vger.kernel.org, linux-bluetooth@vger.kernel.org,
         linux-can@vger.kernel.org, linux-wpan@vger.kernel.org,
         linux-sctp@vger.kernel.org
-Subject: [PATCH net-next v2] net: Add SO_RCVMARK socket option to provide SO_MARK with recvmsg().
-Date:   Tue, 26 Apr 2022 23:21:51 -0400
-Message-Id: <20220427032212.28470-1-lnx.erin@gmail.com>
+Subject: [PATCH net-next v3] net: SO_RCVMARK socket option for SO_MARK with recvmsg()
+Date:   Wed, 27 Apr 2022 16:02:37 -0400
+Message-Id: <20220427200259.2564-1-lnx.erin@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <202204270907.nUUrw3dS-lkp@intel.com>
 References: <202204270907.nUUrw3dS-lkp@intel.com>
@@ -126,7 +126,7 @@ Signed-off-by: Erin MacNeil <lnx.erin@gmail.com>
  arch/alpha/include/uapi/asm/socket.h    |  2 ++
  arch/mips/include/uapi/asm/socket.h     |  2 ++
  arch/parisc/include/uapi/asm/socket.h   |  2 ++
- arch/sparc/include/uapi/asm/socket.h    |  2 ++
+ arch/sparc/include/uapi/asm/socket.h    |  1 +
  include/net/sock.h                      | 18 ++++++++++--------
  include/uapi/asm-generic/socket.h       |  2 ++
  net/atm/common.c                        |  2 +-
@@ -146,7 +146,7 @@ Signed-off-by: Erin MacNeil <lnx.erin@gmail.com>
  net/sctp/socket.c                       |  2 +-
  net/socket.c                            | 15 ++++++++++++---
  tools/include/uapi/asm-generic/socket.h |  2 ++
- 23 files changed, 57 insertions(+), 27 deletions(-)
+ 23 files changed, 56 insertions(+), 27 deletions(-)
 
 diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
 index 7d81535893af..739891b94136 100644
@@ -188,15 +188,14 @@ index 654061e0964e..f486d3dfb6bb 100644
  
  #if __BITS_PER_LONG == 64
 diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
-index 666f81e617ea..ff08038fc2b2 100644
+index 666f81e617ea..2fda57a3ea86 100644
 --- a/arch/sparc/include/uapi/asm/socket.h
 +++ b/arch/sparc/include/uapi/asm/socket.h
-@@ -128,6 +128,8 @@
+@@ -128,6 +128,7 @@
  
  #define SO_TXREHASH              0x0053
  
 +#define SO_RCVMARK               0x0054
-+
  
  #if !defined(__KERNEL__)
  
