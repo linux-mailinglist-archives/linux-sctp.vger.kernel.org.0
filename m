@@ -2,74 +2,80 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EBD251730B
-	for <lists+linux-sctp@lfdr.de>; Mon,  2 May 2022 17:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F23F0518791
+	for <lists+linux-sctp@lfdr.de>; Tue,  3 May 2022 16:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385952AbiEBPot (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 2 May 2022 11:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52576 "EHLO
+        id S237613AbiECPCt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Tue, 3 May 2022 11:02:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385940AbiEBPos (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 2 May 2022 11:44:48 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FFAF09
-        for <linux-sctp@vger.kernel.org>; Mon,  2 May 2022 08:41:19 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id z99so17057638ede.5
-        for <linux-sctp@vger.kernel.org>; Mon, 02 May 2022 08:41:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=kdTSJmnbBK4N/virhew8A7fzQDKu0iWJnLEnGHSX4Dw=;
-        b=LiDnLEt9mMDcOUqe/y+G7PLlyLQ2PDwgp6TDpNZqUbbnzLevTkk2hqa5oP4qOkhVZp
-         TZF69jYA8rlqeLHQolaHiJaBRX/gD8RbJZVtnj/1DrQ/baBCHIkhL3Zj5Zjpu8yV6Hwn
-         SGZdKypbE7W780qgiJ+fz67GeKkj0J2r73jmahViqDnzjpSy8W1Vt13nv59wLr7o0r3b
-         zAdKAg4Qt6/WeKUbNfDIwug7M7j0sUaGfE4tQ/SMylmac3l7OPaxBSxuZWbrQ/tHvNXA
-         eRfhV1Np33vY302pf5LvB2W2zuBa0uYt3+zpoYWMWtBGmNX8ALOtqIalGGhM8BTu7Evv
-         BH1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=kdTSJmnbBK4N/virhew8A7fzQDKu0iWJnLEnGHSX4Dw=;
-        b=P/S61aSR3Cw5p4DuRM3fc/IFcMNpbbO+yCoH8XvIbaqT+U2Hgc9YMyfB4KCB3xQMf/
-         uEWRhFOOnfg00gV28fLfcI+boij3bFvI2+WYELQAkT6D/eMYXdCw5Ytbd0XIxJRz/yQi
-         cZmN1r+B03AY3W996NNkS0F+wPNX0zJxrhVmbPgm5FTLpjUHcamhTaDjDfhbuzRBGrfa
-         oByu/lbxMZ/mGt10azGtYzKtUeZvfU6Kr0c1lWih66yU98e5fvm5/Zri4UtZadVd16Pm
-         2KWfSnb3r56Ix108rcY2JTEl7jUZ9bvwnGEbQywkCZQDXuBX+yA3Puf93/0KlpT3Rc41
-         ax6g==
-X-Gm-Message-State: AOAM533sTqgPP1zZf7+mPP9hvW+M0MqRx7uzH2pY/dZBttQFOeJuSY+5
-        C/9mCC3ymsZZUG+F2IjRmyPG6N8DIFz+J8lvA13JLmIYLS0=
-X-Google-Smtp-Source: ABdhPJxQnoPAmGDkrnWenR9mItq06e4ef1D3WBimAj2Hf0fi9PpGTmNe2mQQ/IajB0EwH90WPecfV26+ZZYtEIqZSp8=
-X-Received: by 2002:a05:6512:2398:b0:473:9cf5:1750 with SMTP id
- c24-20020a056512239800b004739cf51750mr3834545lfv.300.1651506066453; Mon, 02
- May 2022 08:41:06 -0700 (PDT)
+        with ESMTP id S237606AbiECPCt (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 3 May 2022 11:02:49 -0400
+X-Greylist: delayed 438 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 03 May 2022 07:59:16 PDT
+Received: from mail.megasoftsol.com (mail.megasoftsol.com [43.231.250.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8D63980B
+        for <linux-sctp@vger.kernel.org>; Tue,  3 May 2022 07:59:16 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.megasoftsol.com (Postfix) with ESMTP id 2D76F90D916
+        for <linux-sctp@vger.kernel.org>; Tue,  3 May 2022 20:17:03 +0530 (IST)
+Received: from mail.megasoftsol.com ([127.0.0.1])
+        by localhost (mail.megasoftsol.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id MfARG5O5pTDe for <linux-sctp@vger.kernel.org>;
+        Tue,  3 May 2022 20:17:02 +0530 (IST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.megasoftsol.com (Postfix) with ESMTP id ADFA390D907
+        for <linux-sctp@vger.kernel.org>; Tue,  3 May 2022 20:17:02 +0530 (IST)
+X-Virus-Scanned: amavisd-new at megasoftsol.com
+Received: from mail.megasoftsol.com ([127.0.0.1])
+        by localhost (mail.megasoftsol.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id UY3LkY7K6-iZ for <linux-sctp@vger.kernel.org>;
+        Tue,  3 May 2022 20:17:02 +0530 (IST)
+Received: from asda.co.uk (unknown [20.97.211.134])
+        (Authenticated sender: admin)
+        by mail.megasoftsol.com (Postfix) with ESMTPSA id DDF9D90D8BD
+        for <linux-sctp@vger.kernel.org>; Tue,  3 May 2022 20:17:01 +0530 (IST)
+Reply-To: sales@asdaa.uk
+From:   ASDA Stores Limited <Hanes.Thomas23877@asda.co.uk>
+To:     linux-sctp@vger.kernel.org
+Subject: 2nd Quater puchase request
+Date:   03 May 2022 14:49:30 +0000
+Message-ID: <20220503092157.51005C725BE0C50E@asda.co.uk>
 MIME-Version: 1.0
-Sender: arunadogbe@gmail.com
-Received: by 2002:a05:6512:22c5:0:0:0:0 with HTTP; Mon, 2 May 2022 08:41:05
- -0700 (PDT)
-From:   Lisa Williams <lw4666555@gmail.com>
-Date:   Mon, 2 May 2022 16:41:05 +0100
-X-Google-Sender-Auth: Us32P7O15QDQmfhDpX_dAhvk4jw
-Message-ID: <CAPsVOGzyJPMeju17bbvX5hTyTOHJGABCr0Oy1WjZZxhKcxQcvQ@mail.gmail.com>
-Subject: Hi Dear!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_50,
+        RCVD_IN_BL_SPAMCOP_NET,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
--- 
-Hi Dear
+Dear linux-sctp
 
-My name is Lisa Williams, I am from United States of America, Its my
-pleasure to contact you for new and special friendship, I will be glad to
-see your reply for us to know each other better
-
-Yours
-Lisa
+We are interested in having some of your hot selling product in 
+our stores and outlets spread all over United Kingdom, Northern 
+Island and Africa. ASDA Stores Limited is one of the highest-
+ranking Wholesale & Retail outlets in the United Kingdom. 
+  
+We shall furnish our detailed company profile in our next 
+correspondent. However, it would be appreciated if you can send 
+us your catalog through email to learn more about your company's 
+products and wholesale quote. It is hopeful that we can start a 
+viable long-lasting business relationship (partnership) with you.  
+  
+  
+Your prompt response would be delightfully appreciated. 
+  
+Best Wishes 
+  
+  
+Hanes S. Thomas 
+Procurement Office. 
+ASDA Stores Limited 
+Tel:  + 44 - 7451271650 
+WhatsApp: + 44 – 7441440360 
+Website: www.asda.co.uk
