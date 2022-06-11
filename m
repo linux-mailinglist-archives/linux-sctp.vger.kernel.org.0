@@ -2,78 +2,68 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1943754689C
-	for <lists+linux-sctp@lfdr.de>; Fri, 10 Jun 2022 16:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2366C54722F
+	for <lists+linux-sctp@lfdr.de>; Sat, 11 Jun 2022 07:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349711AbiFJOnw (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 10 Jun 2022 10:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
+        id S229495AbiFKFUT (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sat, 11 Jun 2022 01:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349541AbiFJOnh (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 10 Jun 2022 10:43:37 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BED71BE67B;
-        Fri, 10 Jun 2022 07:43:36 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-fe32122311so3437541fac.7;
-        Fri, 10 Jun 2022 07:43:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8+Y5Di+U9XVzQitvydQ5HzYggBUrE5OarWSXzwYaJBk=;
-        b=XMRL6i5uYCIf15dFJeOa/PVQ6Sf1QnZC2EIEB1K/0Q9n2i0DxhH2QBnQWft7zUkA1R
-         xYhAd3/zGOPNABbKIHcNDPwSaQwiGaFhlpWcc0VKKnpzHZ68zxJib6+y3Xxf5I3W8BGd
-         1hEFCy0k4Mf53tJCQe//5kbuThF0M79VF4azr2FoWesSZwfsteKDVwQ8+esvrl25v2/Y
-         HokE8y/JokGKdaMGzBz51JI19ffAp8YgsqyNoFwQiBs+rmp8Udv4JKqhytL1Ld2ByOiT
-         oszBknWMr0OSbjY29znnzdPgsUyUlHK3/qJJa3nLl5iEH3PYLVfJROaYxbD1/CB/ORcx
-         H26w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8+Y5Di+U9XVzQitvydQ5HzYggBUrE5OarWSXzwYaJBk=;
-        b=BI575mUaeydO1K27WJaj3lJBgl2M6hQSYPJ1RLbYJzHuI5GYqGTcyESNWSAil3CKYf
-         4D9z/f5ZklsA4jY9G/TdS77w7WkDNfGQAZvBwteiWbdoXjigOOPSsCmlpZwe51kj6ERc
-         5Y9+AGNddgCpuvWoBq+RKdFo3ss9znmgnEUKwpdqALUPc2wyrdWgXalPVmo408/7Hp46
-         nSs+o9dOlJgrV0B947ABSboSEKhqFNki53NbEQ64zjnFFzvjA6L7ZqBle36bsbshCBLo
-         QOddimsW3ZxBJIaCtYAz7cXAtHdgBds8JWE1miPbfh2f7tXdlCpK7CjiAYiWmRf4W/DG
-         JaPg==
-X-Gm-Message-State: AOAM531Wcr8cmmn0Gm+su/fNeaT2NdASE7EtY444dnMdXwucNkmFMl/i
-        Rs+0eNGNpHAfdEOBXmgxpCHvaO0m8Og=
-X-Google-Smtp-Source: ABdhPJwRcumbpaJ8pNuhLqGCdOY+ysMMcLzfakMSTt/SPNLApRvkmYe3oKiVH1wf7MBNOtk1rEzDyA==
-X-Received: by 2002:a05:6870:89a5:b0:f3:3e2f:32da with SMTP id f37-20020a05687089a500b000f33e2f32damr54852oaq.145.1654872215413;
-        Fri, 10 Jun 2022 07:43:35 -0700 (PDT)
-Received: from t14s.localdomain ([2001:1284:f016:870:543d:60bf:4aa3:a732])
-        by smtp.gmail.com with ESMTPSA id a18-20020a0568300b9200b0060adcc87e37sm13501330otv.74.2022.06.10.07.43.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 07:43:34 -0700 (PDT)
-Received: by t14s.localdomain (Postfix, from userid 1000)
-        id 38EAC2DFA6E; Fri, 10 Jun 2022 11:43:33 -0300 (-03)
-Date:   Fri, 10 Jun 2022 11:43:33 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
-        davem@davemloft.net, kuba@kernel.org,
-        Neil Horman <nhorman@tuxdriver.com>
-Subject: Re: [PATCHv2 net 0/3] Documentation: add description for a couple of
- sctp sysctl options
-Message-ID: <YqNYldfDNeWdViKQ@t14s.localdomain>
-References: <cover.1654787716.git.lucien.xin@gmail.com>
+        with ESMTP id S229480AbiFKFUR (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sat, 11 Jun 2022 01:20:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C96F1F0;
+        Fri, 10 Jun 2022 22:20:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9411B83892;
+        Sat, 11 Jun 2022 05:20:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8AC5BC3411F;
+        Sat, 11 Jun 2022 05:20:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654924814;
+        bh=ekq1Y/T1TqC7nzW7M9+U+/ngE8vtcVc94z9y1KqxaT4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=szEFyCTNCyHQYQIjMav9YI1BHAgR5RuCDvDrF6056xyiI8w5YAD2pu1/115B/9q0i
+         3Jui6bi1UVCiL9tKunbYLIptvPWTf8g//q74eP4e9jUhrGsoGiEEaXocjS4r+lxPLd
+         ZgQ5Qx5B2pnjODv8374ej5A/QXClKwxzsSHfN6i38/EsyniCaI6MhZk8I2NW85UJqN
+         Xyqp6KkFtF6ulrPcgW44IItKWXl7DXx63+TTF5Hxlubbq66+N8O6WA9uWvvnozVyh+
+         l/vsp9pVPX0AQZNW+1gKYOJ1s5WucttYPaavPIAwOQg0t7tD6+DTSMM6gTVgpiuNl3
+         uYPxyBydp6BVQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6D8DEE73803;
+        Sat, 11 Jun 2022 05:20:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCHv2 net 0/3] Documentation: add description for a couple of sctp
+ sysctl options
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165492481444.17520.7811276570277303003.git-patchwork-notify@kernel.org>
+Date:   Sat, 11 Jun 2022 05:20:14 +0000
+References: <cover.1654787716.git.lucien.xin@gmail.com>
 In-Reply-To: <cover.1654787716.git.lucien.xin@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org, marcelo.leitner@gmail.com,
+        nhorman@tuxdriver.com
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 11:17:12AM -0400, Xin Long wrote:
+Hello:
+
+This series was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Thu,  9 Jun 2022 11:17:12 -0400 you wrote:
 > These are a couple of sysctl options I recently added, but missed adding
 > documents for them. Especially for net.sctp.intl_enable, it's hard for
 > users to setup stream interleaving, as it also needs to call some socket
@@ -81,12 +71,19 @@ On Thu, Jun 09, 2022 at 11:17:12AM -0400, Xin Long wrote:
 > 
 > This patchset is to add documents for them.
 > 
-> v1->v2:
->   - Improved the description on Patch 2/3, as Marcelo suggested.
-> 
-> Xin Long (3):
->   Documentation: add description for net.sctp.reconf_enable
->   Documentation: add description for net.sctp.intl_enable
->   Documentation: add description for net.sctp.ecn_enable
+> [...]
 
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Here is the summary with links:
+  - [PATCHv2,net,1/3] Documentation: add description for net.sctp.reconf_enable
+    https://git.kernel.org/netdev/net/c/c349ae5f831c
+  - [PATCHv2,net,2/3] Documentation: add description for net.sctp.intl_enable
+    https://git.kernel.org/netdev/net/c/e65775fdd389
+  - [PATCHv2,net,3/3] Documentation: add description for net.sctp.ecn_enable
+    https://git.kernel.org/netdev/net/c/249eddaf651f
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
