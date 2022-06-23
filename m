@@ -2,73 +2,66 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF53554E75
-	for <lists+linux-sctp@lfdr.de>; Wed, 22 Jun 2022 17:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7302B5571C8
+	for <lists+linux-sctp@lfdr.de>; Thu, 23 Jun 2022 06:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358904AbiFVPEP (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 22 Jun 2022 11:04:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36822 "EHLO
+        id S231654AbiFWEl4 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 23 Jun 2022 00:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358953AbiFVPEB (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 22 Jun 2022 11:04:01 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AF63EABE
-        for <linux-sctp@vger.kernel.org>; Wed, 22 Jun 2022 08:03:53 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id q140so16333119pgq.6
-        for <linux-sctp@vger.kernel.org>; Wed, 22 Jun 2022 08:03:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=vhZEVnaGNBjosB86GDUW8b2wHjB/+QU31bPXl36TqFE=;
-        b=Jt/qXO7TwQJF3EWuk5p4azKGOCxq/Rzk3KoLqC6Pwff+0tHhs8als9639cidnzFde4
-         ry7ero38QELHA22RBkZWtE0xNRPiiPEWIvKtPd0fZpNhUDrKHRyETW5WgRrbPPmi6/vT
-         vJpxoQNLrGfsMgIfV+PXszjD1nMaBRUe0Gxx0eYZw7YGtSc5pfRkGeshne5cjr5BaKxu
-         3INPcNuWqxw7/0puGY6UuhzUSAv6SoxD7Bz3CVHuDQWru55+lIHO02gOv78FJXnTYNjB
-         rbtWgbiyhkE21LXWR11Bk6fRJOPFFcU92J8XbdNavb7vvb9W0t8MjYRzeI2ufnWOCsiS
-         AGLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=vhZEVnaGNBjosB86GDUW8b2wHjB/+QU31bPXl36TqFE=;
-        b=oG+MEeD4M59fa8eCqNQNJqSlxFMsh5ZUgezJZ1GSITcFaE2OZh1ILtKHmvD8QKgk3Q
-         WPUt4IRAEZsYrwBDzPHQ33Y0ijAOfi7t3aSmVRJwJG95ZQe+lwQRWQjx1W8ZK20wp82G
-         X0nMxysTkk/MWRbJURC4fzNn/rpufdbjv2mCpTq726tekiCN58BUsHpnhvuFVZ4prKc0
-         A3JmUr6siaRnj2v6VXMtowdM/45BPW0F43wtCjDIt4qQ35sYz1mTYcpg1UX+G1nqTITG
-         igxjHoaWCH7CuYmlRTIKMu4ktiQqwYYeXzc3lK6eFai7v7e7jQ27XYJzuwV9hNdoYegp
-         gwXg==
-X-Gm-Message-State: AJIora/MW84dlOtwcHkTDrduAZBMHAVYA7vymBcrrSoiQgG6E664GHwh
-        CU2zekVctY8jiL1Df0I3jAfNmwOzcaEXGdFzETg=
-X-Google-Smtp-Source: AGRyM1uVFGSnpr+dTCH2B3yi91+xpZWxlNuq532hGAWMLDkFZu1Qrq3wwA6KogrJ63y1ppaQwcWp21NviyeWeo5Xswg=
-X-Received: by 2002:a63:af1c:0:b0:40c:f9fb:deca with SMTP id
- w28-20020a63af1c000000b0040cf9fbdecamr3305128pge.479.1655910232628; Wed, 22
- Jun 2022 08:03:52 -0700 (PDT)
+        with ESMTP id S244514AbiFWDz0 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 22 Jun 2022 23:55:26 -0400
+X-Greylist: delayed 399 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 22 Jun 2022 20:55:24 PDT
+Received: from uedakaya.co.jp (uedakaya.co.jp [161.34.6.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D726439
+        for <linux-sctp@vger.kernel.org>; Wed, 22 Jun 2022 20:55:24 -0700 (PDT)
+Received: (qmail 6405 invoked by SAV 20220622.008 by uid 49900001); 23 Jun 2022 12:48:43 +0900
+To:     linux-sctp@vger.kernel.org
+Subject: =?ISO-2022-JP?B?GyRCIVokKkxkJCQ5ZyRvJDskIiRqJCwkSCQmJDQkNiQkJF4kNyQ/IVsbKEI=?=
+Date:   Thu, 23 Jun 2022 03:48:43 +0000
+From:   =?ISO-2022-JP?B?GyRCPyJFRDJjRCIzdDwwMnE8UhsoQg==?= 
+        <info@uedakaya.co.jp>
+Message-ID: <689829d116049b5c9b7fbe377cd468ee@uedakaya.co.jp>
+X-Mailer: PHPMailer 5.2.22 (https://github.com/PHPMailer/PHPMailer)
 MIME-Version: 1.0
-Received: by 2002:a17:903:2308:b0:16a:1b3f:f74b with HTTP; Wed, 22 Jun 2022
- 08:03:51 -0700 (PDT)
-Reply-To: sales0212@asonmedsystemsinc.com
-From:   Prasad Ronni <lerwickfinance7@gmail.com>
-Date:   Wed, 22 Jun 2022 16:03:51 +0100
-Message-ID: <CAFkto5szY9scoLwccBhUx92cgUVnT2cx2c=WmxiOTkm7N_y9gg@mail.gmail.com>
-Subject: Service Needed.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=ISO-2022-JP
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,RCVD_IN_PSBL,
+        SHORT_SHORTNER,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5045]
+        *  2.7 RCVD_IN_PSBL RBL: Received via a relay in PSBL
+        *      [161.34.6.253 listed in psbl.surriel.com]
+        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.0 SHORT_SHORTNER Short body with little more than a link to a
+        *      shortener
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
--- 
-Hi,
+お問い合わせありがとうございます。
+下記の内容にて送信いたしました。
 
-Are you currently open to work as our executive company representative
-on contractual basis working remotely? If yes, we will be happy to
-share more details. Looking forward to your response.
+■お名前
+? Have you ever tried this sex game before? GIVE IT A TRY: https://sweet22.page.link/photos?x8p96 ?
 
-Regards,
+■ふりがな
+vl98w6
+
+■メールアドレス
+linux-sctp@vger.kernel.org
+
+■御社名
+kdj4nu
+
+■電話番号
+209678445016
+
+■お問い合わせ内容
+4xbvzb
+
