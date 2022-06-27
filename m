@@ -2,46 +2,63 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC6255B54B
-	for <lists+linux-sctp@lfdr.de>; Mon, 27 Jun 2022 04:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5845A55CA39
+	for <lists+linux-sctp@lfdr.de>; Tue, 28 Jun 2022 14:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbiF0CiU (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 26 Jun 2022 22:38:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53982 "EHLO
+        id S233239AbiF0Iqf (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 27 Jun 2022 04:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiF0CiU (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sun, 26 Jun 2022 22:38:20 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D0E2DC3;
-        Sun, 26 Jun 2022 19:38:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656297498; x=1687833498;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vqAGO4WsqTcOAwT6UqFx9w0d7monXGB2WJM15gkxapM=;
-  b=K5yHD85c2gy4fP3ooX36HshSVRTkjIeIUuTcWSC3zq6rt0xQeRtpOyvt
-   3kipBQbA78Cbj2sdOakHd8pWZ+6MxWg15ePknogw59dSemxvyZy8xZJ7D
-   Grv38keWv6B5ZEkOHh9gDHnBY+47XkAFwNRJ8tGodyMRTK7pFgVRORU9G
-   4+uY5FIzwMUFFpfFV2IRNUgPsszGG5PjOhnc2Y9a0FL46bJ7+CcBI6JX0
-   k7Y4EDCFrvP/H6uLOWYMkQlbhIOKBod9deVtw0GbG8CQcyady74bCzoFA
-   3HH/cZGicV5BZAiq5L56Mf3zpk+c87Vo6c4o2jZDeaN6DipjO+Y6qJa+j
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="264381695"
-X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
-   d="scan'208";a="264381695"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2022 19:38:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
-   d="scan'208";a="646203825"
-Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Jun 2022 19:38:13 -0700
-Date:   Mon, 27 Jun 2022 10:38:12 +0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     Shakeel Butt <shakeelb@google.com>,
-        Eric Dumazet <edumazet@google.com>
-Cc:     Linux MM <linux-mm@kvack.org>,
+        with ESMTP id S233224AbiF0Iqf (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 27 Jun 2022 04:46:35 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB21A6357
+        for <linux-sctp@vger.kernel.org>; Mon, 27 Jun 2022 01:46:33 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id v38so4816829ybi.3
+        for <linux-sctp@vger.kernel.org>; Mon, 27 Jun 2022 01:46:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4vsOnIc+C2gY1UVlbVz/JDciMvgYEap1WYGcSJm7nik=;
+        b=izm5TvVaySgpwnEQF9/y67fAWYu9B2xhHcC5MrbsqfKRyBWcvUJOefttP3U8C7H5yK
+         cf/c+G/MDFeL9d3jWR3ZM1W+uRZZqwp2hTAlphjRcQ4y5gzmknF6zrBjrzS5Oq9593TH
+         prMhKu/+/nH//vvJzE+A8myFZw0Vf2YB5togDcAyh2pSj1lg7+NXGygkUac2Pq5BEBXO
+         5+wwtXrzIkpK6w7dEXtmMbM9imlU0I4M6KLt1i3bZoyGQ30Vb87yxIZpNyIgjCBXAtgw
+         DSd6AsFRpnuauM1qBq8q0T/kLZUm8tLjA1oB1Fx/TPENkDLwNudIWg8vpilEWofAkp3b
+         qS3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4vsOnIc+C2gY1UVlbVz/JDciMvgYEap1WYGcSJm7nik=;
+        b=OxF/uJMVvr7aTzlgvBKeVA6d+gDGRDUVgBIsdfeuEKAl2QuYF/pMMgUTMm0Rj5qRMl
+         ZP2pxXFkwD4kmiSn+XjR8kyev0g4qQZQoTb4hml9GTDGn6xCyvTMIaDUHUWo8GDqns2h
+         eCoEKvFYxLPXcaDOcRpQx5iBPUvdeBU0cK80BNUxaIAzJl6J1pV/7/z6h7HZEU7eI26s
+         suFCvBBAZK7BTHGAZUC3ZRO0WeZ1v9mChyneMGtIgyujP2LpaVgrotQjZx1k3ctDG/mg
+         9N+XOW9W2aR6K4G3R3i0pHbv7BZ2gDFQJbbZHYINxnXvmmyQgk1YvytrPeqJFfJyO+aJ
+         zpGA==
+X-Gm-Message-State: AJIora8enPsjRWyqf0M6pcfeCRuY4sucxFU37VMUJDLmbJrFMGoq1gDF
+        UJIMDqt8K5DZ6HFZsWf3K+v3HQXYzsjYjOlPOXaONg==
+X-Google-Smtp-Source: AGRyM1tmdR+Xbj5kJ69vq4foOyHTSytqN33Xz6MWmkpMcamFreKrameDkaAL4/75vWqZ0Cye+/NLca9lf7qZmNQ/HPM=
+X-Received: by 2002:a25:6c5:0:b0:669:a17a:2289 with SMTP id
+ 188-20020a2506c5000000b00669a17a2289mr12352386ybg.231.1656319592797; Mon, 27
+ Jun 2022 01:46:32 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220619150456.GB34471@xsang-OptiPlex-9020> <20220622172857.37db0d29@kernel.org>
+ <CADvbK_csvmkKe46hT9792=+Qcjor2EvkkAnr--CJK3NGX-N9BQ@mail.gmail.com>
+ <CADvbK_eQUmb942vC+bG+NRzM1ki1LiCydEDR1AezZ35Jvsdfnw@mail.gmail.com>
+ <20220623185730.25b88096@kernel.org> <CANn89iLidqjiiV8vxr7KnUg0JvfoS9+TRGg=8ANZ8NBRjeQxsQ@mail.gmail.com>
+ <CALvZod7kULCvHAuk53FE-XBOi4-BbLdY3HCg6jfCZTJDxYsZow@mail.gmail.com>
+ <20220624070656.GE79500@shbuild999.sh.intel.com> <20220624144358.lqt2ffjdry6p5u4d@google.com>
+ <20220625023642.GA40868@shbuild999.sh.intel.com> <20220627023812.GA29314@shbuild999.sh.intel.com>
+In-Reply-To: <20220627023812.GA29314@shbuild999.sh.intel.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 27 Jun 2022 10:46:21 +0200
+Message-ID: <CANn89i+6NPujMyiQxriZRt6vhv6hNrAntXxi1uOhJ0SSqnJ47w@mail.gmail.com>
+Subject: Re: [net] 4890b686f4: netperf.Throughput_Mbps -69.4% regression
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Shakeel Butt <shakeelb@google.com>, Linux MM <linux-mm@kvack.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Roman Gushchin <roman.gushchin@linux.dev>,
         Michal Hocko <mhocko@kernel.org>,
@@ -60,107 +77,109 @@ Cc:     Linux MM <linux-mm@kvack.org>,
         Huang Ying <ying.huang@intel.com>,
         Xing Zhengjun <zhengjun.xing@linux.intel.com>,
         Yin Fengwei <fengwei.yin@intel.com>, Ying Xu <yinxu@redhat.com>
-Subject: Re: [net] 4890b686f4: netperf.Throughput_Mbps -69.4% regression
-Message-ID: <20220627023812.GA29314@shbuild999.sh.intel.com>
-References: <20220619150456.GB34471@xsang-OptiPlex-9020>
- <20220622172857.37db0d29@kernel.org>
- <CADvbK_csvmkKe46hT9792=+Qcjor2EvkkAnr--CJK3NGX-N9BQ@mail.gmail.com>
- <CADvbK_eQUmb942vC+bG+NRzM1ki1LiCydEDR1AezZ35Jvsdfnw@mail.gmail.com>
- <20220623185730.25b88096@kernel.org>
- <CANn89iLidqjiiV8vxr7KnUg0JvfoS9+TRGg=8ANZ8NBRjeQxsQ@mail.gmail.com>
- <CALvZod7kULCvHAuk53FE-XBOi4-BbLdY3HCg6jfCZTJDxYsZow@mail.gmail.com>
- <20220624070656.GE79500@shbuild999.sh.intel.com>
- <20220624144358.lqt2ffjdry6p5u4d@google.com>
- <20220625023642.GA40868@shbuild999.sh.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220625023642.GA40868@shbuild999.sh.intel.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 10:36:42AM +0800, Feng Tang wrote:
-> On Fri, Jun 24, 2022 at 02:43:58PM +0000, Shakeel Butt wrote:
-> > On Fri, Jun 24, 2022 at 03:06:56PM +0800, Feng Tang wrote:
-> > > On Thu, Jun 23, 2022 at 11:34:15PM -0700, Shakeel Butt wrote:
-> > [...]
-> > > > 
-> > > > Feng, can you please explain the memcg setup on these test machines
-> > > > and if the tests are run in root or non-root memcg?
-> > > 
-> > > I don't know the exact setup, Philip/Oliver from 0Day can correct me.
-> > > 
-> > > I logged into a test box which runs netperf test, and it seems to be
-> > > cgoup v1 and non-root memcg. The netperf tasks all sit in dir:
-> > > '/sys/fs/cgroup/memory/system.slice/lkp-bootstrap.service'
-> > > 
-> > 
-> > Thanks Feng. Can you check the value of memory.kmem.tcp.max_usage_in_bytes
-> > in /sys/fs/cgroup/memory/system.slice/lkp-bootstrap.service after making
-> > sure that the netperf test has already run?
-> 
-> memory.kmem.tcp.max_usage_in_bytes:0
- 
-Sorry, I made a mistake that in the original report from Oliver, it
-was 'cgroup v2' with a 'debian-11.1' rootfs. 
+On Mon, Jun 27, 2022 at 4:38 AM Feng Tang <feng.tang@intel.com> wrote:
+>
+> On Sat, Jun 25, 2022 at 10:36:42AM +0800, Feng Tang wrote:
+> > On Fri, Jun 24, 2022 at 02:43:58PM +0000, Shakeel Butt wrote:
+> > > On Fri, Jun 24, 2022 at 03:06:56PM +0800, Feng Tang wrote:
+> > > > On Thu, Jun 23, 2022 at 11:34:15PM -0700, Shakeel Butt wrote:
+> > > [...]
+> > > > >
+> > > > > Feng, can you please explain the memcg setup on these test machines
+> > > > > and if the tests are run in root or non-root memcg?
+> > > >
+> > > > I don't know the exact setup, Philip/Oliver from 0Day can correct me.
+> > > >
+> > > > I logged into a test box which runs netperf test, and it seems to be
+> > > > cgoup v1 and non-root memcg. The netperf tasks all sit in dir:
+> > > > '/sys/fs/cgroup/memory/system.slice/lkp-bootstrap.service'
+> > > >
+> > >
+> > > Thanks Feng. Can you check the value of memory.kmem.tcp.max_usage_in_bytes
+> > > in /sys/fs/cgroup/memory/system.slice/lkp-bootstrap.service after making
+> > > sure that the netperf test has already run?
+> >
+> > memory.kmem.tcp.max_usage_in_bytes:0
+>
+> Sorry, I made a mistake that in the original report from Oliver, it
+> was 'cgroup v2' with a 'debian-11.1' rootfs.
+>
+> When you asked about cgroup info, I tried the job on another tbox, and
+> the original 'job.yaml' didn't work, so I kept the 'netperf' test
+> parameters and started a new job which somehow run with a 'debian-10.4'
+> rootfs and acutally run with cgroup v1.
+>
+> And as you mentioned cgroup version does make a big difference, that
+> with v1, the regression is reduced to 1% ~ 5% on different generations
+> of test platforms. Eric mentioned they also got regression report,
+> but much smaller one, maybe it's due to the cgroup version?
 
-When you asked about cgroup info, I tried the job on another tbox, and
-the original 'job.yaml' didn't work, so I kept the 'netperf' test
-parameters and started a new job which somehow run with a 'debian-10.4'
-rootfs and acutally run with cgroup v1. 
+This was using the current net-next tree.
+Used recipe was something like:
 
-And as you mentioned cgroup version does make a big difference, that
-with v1, the regression is reduced to 1% ~ 5% on different generations
-of test platforms. Eric mentioned they also got regression report,
-but much smaller one, maybe it's due to the cgroup version?
+Make sure cgroup2 is mounted or mount it by mount -t cgroup2 none $MOUNT_POINT.
+Enable memory controller by echo +memory > $MOUNT_POINT/cgroup.subtree_control.
+Create a cgroup by mkdir $MOUNT_POINT/job.
+Jump into that cgroup by echo $$ > $MOUNT_POINT/job/cgroup.procs.
 
-Thanks,
-Feng
+<Launch tests>
 
-> And here is more memcg stats (let me know if you want to check more)
-> 
-> > If this is non-zero then network memory accounting is enabled and the
-> > slowdown is expected.
-> 
-> >From the perf-profile data in original report, both
-> __sk_mem_raise_allocated() and __sk_mem_reduce_allocated() are called
-> much more often, which call memcg charge/uncharge functions.
-> 
-> IIUC, the call chain is:
-> 
-> __sk_mem_raise_allocated
->     sk_memory_allocated_add
->     mem_cgroup_charge_skmem
->         charge memcg->tcpmem (for cgroup v2)
-> 	try_charge memcg (for v1)
-> 
-> Also from Eric's one earlier commit log:
-> 
-> "
-> net: implement per-cpu reserves for memory_allocated
-> ...
-> This means we are going to call sk_memory_allocated_add()
-> and sk_memory_allocated_sub() more often.
-> ...
-> "
-> 
-> So this slowdown is related to the more calling of charge/uncharge? 
-> 
+The regression was smaller than 1%, so considered noise compared to
+the benefits of the bug fix.
+
+>
 > Thanks,
 > Feng
-> 
-> > > And the rootfs is a debian based rootfs
-> > > 
-> > > Thanks,
-> > > Feng
-> > > 
-> > > 
-> > > > thanks,
-> > > > Shakeel
+>
+> > And here is more memcg stats (let me know if you want to check more)
+> >
+> > > If this is non-zero then network memory accounting is enabled and the
+> > > slowdown is expected.
+> >
+> > >From the perf-profile data in original report, both
+> > __sk_mem_raise_allocated() and __sk_mem_reduce_allocated() are called
+> > much more often, which call memcg charge/uncharge functions.
+> >
+> > IIUC, the call chain is:
+> >
+> > __sk_mem_raise_allocated
+> >     sk_memory_allocated_add
+> >     mem_cgroup_charge_skmem
+> >         charge memcg->tcpmem (for cgroup v2)
+> >       try_charge memcg (for v1)
+> >
+> > Also from Eric's one earlier commit log:
+> >
+> > "
+> > net: implement per-cpu reserves for memory_allocated
+> > ...
+> > This means we are going to call sk_memory_allocated_add()
+> > and sk_memory_allocated_sub() more often.
+> > ...
+> > "
+> >
+> > So this slowdown is related to the more calling of charge/uncharge?
+> >
+> > Thanks,
+> > Feng
+> >
+> > > > And the rootfs is a debian based rootfs
+> > > >
+> > > > Thanks,
+> > > > Feng
+> > > >
+> > > >
+> > > > > thanks,
+> > > > > Shakeel
