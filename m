@@ -2,38 +2,54 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E2355D881
-	for <lists+linux-sctp@lfdr.de>; Tue, 28 Jun 2022 15:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB2055C8D6
+	for <lists+linux-sctp@lfdr.de>; Tue, 28 Jun 2022 14:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240559AbiF0Si2 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 27 Jun 2022 14:38:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37490 "EHLO
+        id S241273AbiF0TyN (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 27 Jun 2022 15:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240436AbiF0SiC (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 27 Jun 2022 14:38:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9128FC34;
-        Mon, 27 Jun 2022 11:35:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5B84EB81A31;
-        Mon, 27 Jun 2022 18:35:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43D52C3411D;
-        Mon, 27 Jun 2022 18:35:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656354918;
-        bh=lSduwLf0URPGJXhzE2uMPDSka0BN2NuObX6s6wiVjLw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V1wgnhWIBSxTWZs7oVLQcgu6ow7j/nvOHPvXzsT1Nn9X7hdwGhqh7NAL8uHaamcIf
-         IY07sAxOhUQqndCnsaxA3ScC1kTdg2Yn9hsnKIlxq8rxFKlV7RaY+NRmyVh3m75Tb8
-         ZpcqX4hfVCDBy0N1EVQnXiwwX9rIvnnkMDcCS04gZPnAV3H3k5TZVX9FzOMlpLx209
-         8O1zovzb/AU8MtbMYOdG7MyCPnmJKw+tFasJC0wEQpVPIKC5aCfVMO84EEc2E/4TTl
-         9dxSDJTazopgz1hOdfhMFc0UNVAF149+GJwdJJ2/y5zxk6J7RR9WnMOk8pk02PIKf/
-         G0d/RZr8PVXzA==
-Date:   Mon, 27 Jun 2022 20:35:13 +0200
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Daniel Borkmann <daniel@iogearbox.net>
+        with ESMTP id S241269AbiF0Txv (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 27 Jun 2022 15:53:51 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6851AF09
+        for <linux-sctp@vger.kernel.org>; Mon, 27 Jun 2022 12:53:47 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 23so10047088pgc.8
+        for <linux-sctp@vger.kernel.org>; Mon, 27 Jun 2022 12:53:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=k/l4LcE4w+6LYrCo6/Ek+44r04gbnpHm9yyPA0qKR6A=;
+        b=ryYp2naL1201DMNfPmSbpexCs+zqiLsBQDBXHc9esFHxBJ8Ep2LLrsgHtxJtosu2+J
+         1iBYfvQQXv6NYwKQ2qXQCc4mHXYQGPYeeUC3hu2OgPUPjZXH+3Hi6Zqo5SyTeGerBVQA
+         p1Bh5daOuP6Q9UMRPxlj6vxZpUjBpxOPEYhjttl3pP6gtksJnO1wA5G3ERXmm3iOhFrs
+         MlyYmEaZt8I/cdZ0xlE1RQA9V/oE3k4e+iV7r8nrUlXmSvlRImOQktUmXD254MFh7ceV
+         2zbWTxt+/QD0MTYLBrv8xqePAliI2A59OkEqXOPrksIatTeOcW53aiRz+65e7KopsoX+
+         3osw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=k/l4LcE4w+6LYrCo6/Ek+44r04gbnpHm9yyPA0qKR6A=;
+        b=vDOW5LI4c0CHxSPcWUkltVKW40LYafpKLlmv+62QwSh+SjJixPcJBg7K0fXPp3i6a7
+         zm7f9wdqUxyu5ldsvtGxsQrXky62nW2+k+itgimJuC0qBqkvwYUlPO9gz5m9KzviWrqo
+         FV2yG8P3WMc6pAEAE8rNgRYR9OuXBLmPWyYqKIeZYYHk4aZWRaT4WAnCsjnZM7JPHmIV
+         xHx4ddXtki3hA1LBj98XI09i1IZ94fpnrgs6bq55YFsFZgU0dw/qLySXjRl9Lq5/ufvo
+         mngJxJCOm3sKoBOcSBTODd+Qfl29bPIbpq88gk4+OyVqCPceN4SXFXvV74i1Qy8OLTKW
+         ac+A==
+X-Gm-Message-State: AJIora+yBTl41iD+Mrh++giRoZWAnKMFfcCytrquzFqqIONJTvCi50a4
+        /0xft1ojZC9HnBW8PRseHXc2agU96s9lbPEY
+X-Google-Smtp-Source: AGRyM1ssDeW6Ux1oaY9ixgaaapzXMFszbxcRVeOWaHAYiiaVMZ4HUYtPzqxXzR6I8+fqeJNf8u9hpg==
+X-Received: by 2002:a63:7a5d:0:b0:40c:fcbe:4799 with SMTP id j29-20020a637a5d000000b0040cfcbe4799mr14428539pgn.297.1656359626928;
+        Mon, 27 Jun 2022 12:53:46 -0700 (PDT)
+Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
+        by smtp.gmail.com with ESMTPSA id c16-20020a056a00009000b0051c1b445094sm7821510pfj.7.2022.06.27.12.53.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 12:53:46 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 12:53:43 -0700
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
 Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
         x86@kernel.org, dm-devel@redhat.com,
         linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
@@ -56,86 +72,75 @@ Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
         alsa-devel@alsa-project.org, linux-hardening@vger.kernel.org
 Subject: Re: [PATCH][next] treewide: uapi: Replace zero-length arrays with
  flexible-array members
-Message-ID: <20220627183513.GA137875@embeddedor>
+Message-ID: <20220627125343.44e24c41@hermes.local>
+In-Reply-To: <20220627180432.GA136081@embeddedor>
 References: <20220627180432.GA136081@embeddedor>
- <6bc1e94c-ce1d-a074-7d0c-8dbe6ce22637@iogearbox.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6bc1e94c-ce1d-a074-7d0c-8dbe6ce22637@iogearbox.net>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 08:27:37PM +0200, Daniel Borkmann wrote:
-> On 6/27/22 8:04 PM, Gustavo A. R. Silva wrote:
-> > There is a regular need in the kernel to provide a way to declare
-> > having a dynamically sized set of trailing elements in a structure.
-> > Kernel code should always use “flexible array members”[1] for these
-> > cases. The older style of one-element or zero-length arrays should
-> > no longer be used[2].
-> > 
-> > This code was transformed with the help of Coccinelle:
-> > (linux-5.19-rc2$ spatch --jobs $(getconf _NPROCESSORS_ONLN) --sp-file script.cocci --include-headers --dir . > output.patch)
-> > 
-> > @@
-> > identifier S, member, array;
-> > type T1, T2;
-> > @@
-> > 
-> > struct S {
-> >    ...
-> >    T1 member;
-> >    T2 array[
-> > - 0
-> >    ];
-> > };
-> > 
-> > -fstrict-flex-arrays=3 is coming and we need to land these changes
-> > to prevent issues like these in the short future:
-> > 
-> > ../fs/minix/dir.c:337:3: warning: 'strcpy' will always overflow; destination buffer has size 0,
-> > but the source string has length 2 (including NUL byte) [-Wfortify-source]
-> > 		strcpy(de3->name, ".");
-> > 		^
-> > 
-> > Since these are all [0] to [] changes, the risk to UAPI is nearly zero. If
-> > this breaks anything, we can use a union with a new member name.
-> > 
-> > [1] https://en.wikipedia.org/wiki/Flexible_array_member
-> > [2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
-> > 
-> > Link: https://github.com/KSPP/linux/issues/78
-> > Build-tested-by: https://lore.kernel.org/lkml/62b675ec.wKX6AOZ6cbE71vtF%25lkp@intel.com/
-> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> > ---
-> > Hi all!
-> > 
-> > JFYI: I'm adding this to my -next tree. :)
-> 
-> Fyi, this breaks BPF CI:
+On Mon, 27 Jun 2022 20:04:32 +0200
+"Gustavo A. R. Silva" <gustavoars@kernel.org> wrote:
 
-Thanks for the report! It seems the 0-day robot didn't catch that one.
-I'll fix it up right away. :)
+> There is a regular need in the kernel to provide a way to declare
+> having a dynamically sized set of trailing elements in a structure.
+> Kernel code should always use =E2=80=9Cflexible array members=E2=80=9D[1]=
+ for these
+> cases. The older style of one-element or zero-length arrays should
+> no longer be used[2].
+>=20
+> This code was transformed with the help of Coccinelle:
+> (linux-5.19-rc2$ spatch --jobs $(getconf _NPROCESSORS_ONLN) --sp-file scr=
+ipt.cocci --include-headers --dir . > output.patch)
+>=20
+> @@
+> identifier S, member, array;
+> type T1, T2;
+> @@
+>=20
+> struct S {
+>   ...
+>   T1 member;
+>   T2 array[
+> - 0
+>   ];
+> };
+>=20
+> -fstrict-flex-arrays=3D3 is coming and we need to land these changes
+> to prevent issues like these in the short future:
+>=20
+> ../fs/minix/dir.c:337:3: warning: 'strcpy' will always overflow; destinat=
+ion buffer has size 0,
+> but the source string has length 2 (including NUL byte) [-Wfortify-source]
+> 		strcpy(de3->name, ".");
+> 		^
+>=20
+> Since these are all [0] to [] changes, the risk to UAPI is nearly zero. If
+> this breaks anything, we can use a union with a new member name.
+>=20
+> [1] https://en.wikipedia.org/wiki/Flexible_array_member
+> [2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-le=
+ngth-and-one-element-arrays
+>=20
+> Link: https://github.com/KSPP/linux/issues/78
+> Build-tested-by: https://lore.kernel.org/lkml/62b675ec.wKX6AOZ6cbE71vtF%2=
+5lkp@intel.com/
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
---
-Gustavo
-
-> 
-> https://github.com/kernel-patches/bpf/runs/7078719372?check_suite_focus=true
-> 
->   [...]
->   progs/map_ptr_kern.c:314:26: error: field 'trie_key' with variable sized type 'struct bpf_lpm_trie_key' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
->           struct bpf_lpm_trie_key trie_key;
->                                   ^
->   1 error generated.
->   make: *** [Makefile:519: /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/map_ptr_kern.o] Error 1
->   make: *** Waiting for unfinished jobs....
->   Error: Process completed with exit code 2.
+Thanks this fixes warning with gcc-12 in iproute2.
+In function =E2=80=98xfrm_algo_parse=E2=80=99,
+    inlined from =E2=80=98xfrm_state_modify.constprop=E2=80=99 at xfrm_stat=
+e.c:573:5:
+xfrm_state.c:162:32: warning: writing 1 byte into a region of size 0 [-Wstr=
+ingop-overflow=3D]
+  162 |                         buf[j] =3D val;
+      |                         ~~~~~~~^~~~~
