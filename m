@@ -2,74 +2,83 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9465855CDB6
-	for <lists+linux-sctp@lfdr.de>; Tue, 28 Jun 2022 15:04:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12FEC55C5CC
+	for <lists+linux-sctp@lfdr.de>; Tue, 28 Jun 2022 14:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244075AbiF1CW5 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 27 Jun 2022 22:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60944 "EHLO
+        id S243658AbiF1Dtg (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 27 Jun 2022 23:49:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243804AbiF1CWB (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 27 Jun 2022 22:22:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B476248F4;
-        Mon, 27 Jun 2022 19:21:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26F64B818E4;
-        Tue, 28 Jun 2022 02:21:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3298C341CB;
-        Tue, 28 Jun 2022 02:21:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656382894;
-        bh=pqPD6qoEi8JT199in7jg5DAol4iF8DjKFPgIGYlvQoc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GyqsByaDXQg5yOq6smuSw5cw5zuxTHl+rHrYo/OlHMZ1OuAvd9ONI8/jqrzLdImbD
-         VTWK7UP5itlkHBzyKuMpIHQb6qIkgBzcX3Jxv+GaaOi42Ij7zVfd0aNVRCj/2kEQLZ
-         O6R0SdzzjedD8BThjNur1AhOSXcjIOf8wUfiJdziqd597shekW5NqBhdePKYvvXsYS
-         oJiSFkiCFnaZl7loW+605mJuFv8NTwWJO3O6z94S5MRsftmK5FPbSEThNMZ5b+uoVL
-         ifMihZ1oD6Ug5EuhwczB9HuCayJu7LpnnMklqlMLvNn/Nf3BKVwwKkKVP3/5TDDlCW
-         d3gJG/ZMvv/2g==
-Date:   Tue, 28 Jun 2022 04:21:29 +0200
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org, x86@kernel.org, dm-devel@redhat.com,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        linux1394-devel@lists.sourceforge.net, io-uring@vger.kernel.org,
-        lvs-devel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        kasan-dev@googlegroups.com, linux-mmc@vger.kernel.org,
-        nvdimm@lists.linux.dev, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, linux-perf-users@vger.kernel.org,
-        linux-raid@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        v9fs-developer@lists.sourceforge.net, linux-rdma@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] treewide: uapi: Replace zero-length arrays with
- flexible-array members
-Message-ID: <20220628022129.GA8452@embeddedor>
-References: <20220627180432.GA136081@embeddedor>
- <6bc1e94c-ce1d-a074-7d0c-8dbe6ce22637@iogearbox.net>
- <20220628004052.GM23621@ziepe.ca>
- <20220628005825.GA161566@embeddedor>
+        with ESMTP id S243577AbiF1Dte (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 27 Jun 2022 23:49:34 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399AC20BED;
+        Mon, 27 Jun 2022 20:49:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656388173; x=1687924173;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=JCJ3t15hN0kX/PrCxPVD3oswwqwAU6aCjICQKC2sqZE=;
+  b=l5N3Q/+iOgc6ZujH8OeWhX+z7eZZX9M6KmVGgHRpS4oyB/c1VZfUYoL6
+   hCzyTKYKqFEoRpWOQHTpqJe2ZvtOYDEPd2HDng8aHF01KRZe9w1kimA3Y
+   felQVH7z9egx7WHAbSDQi1wZiID6ef9vWyp8GYoRqgS5RnkqtGciyBoo4
+   Ct89J93MfFMfQWxbWW0qffJRzWgNDQvk0ffhkus0tzWpMB2HwLTajiXLw
+   Kd41XDT5uoUvCnDpa42Z/KuGZZ+tKhSOEChTjDC7Q7LtTFbYO3GS6/4qH
+   zUXFezg/F9+pr9DUa8oH+fen71mJ7bs4g8tjoRPwIFVsC9Ttk6RRGeRnQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="280385326"
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="280385326"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 20:49:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="564924431"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
+  by orsmga006.jf.intel.com with ESMTP; 27 Jun 2022 20:49:27 -0700
+Date:   Tue, 28 Jun 2022 11:49:26 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Shakeel Butt <shakeelb@google.com>, Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Xin Long <lucien.xin@gmail.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        kernel test robot <oliver.sang@intel.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        network dev <netdev@vger.kernel.org>,
+        linux-s390@vger.kernel.org, MPTCP Upstream <mptcp@lists.linux.dev>,
+        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
+        lkp@lists.01.org, kbuild test robot <lkp@intel.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Yin Fengwei <fengwei.yin@intel.com>, Ying Xu <yinxu@redhat.com>
+Subject: Re: [net] 4890b686f4: netperf.Throughput_Mbps -69.4% regression
+Message-ID: <20220628034926.GA69004@shbuild999.sh.intel.com>
+References: <CALvZod7kULCvHAuk53FE-XBOi4-BbLdY3HCg6jfCZTJDxYsZow@mail.gmail.com>
+ <20220624070656.GE79500@shbuild999.sh.intel.com>
+ <20220624144358.lqt2ffjdry6p5u4d@google.com>
+ <20220625023642.GA40868@shbuild999.sh.intel.com>
+ <20220627023812.GA29314@shbuild999.sh.intel.com>
+ <CANn89i+6NPujMyiQxriZRt6vhv6hNrAntXxi1uOhJ0SSqnJ47w@mail.gmail.com>
+ <20220627123415.GA32052@shbuild999.sh.intel.com>
+ <CANn89iJAoYCebNbXpNMXRoDUkFMhg9QagetVU9NZUq+GnLMgqQ@mail.gmail.com>
+ <20220627144822.GA20878@shbuild999.sh.intel.com>
+ <CANn89iLSWm-c4XE79rUsxzOp3VwXVDhOEPTQnWgeQ48UwM=u7Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220628005825.GA161566@embeddedor>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <CANn89iLSWm-c4XE79rUsxzOp3VwXVDhOEPTQnWgeQ48UwM=u7Q@mail.gmail.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,99 +86,79 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 02:58:25AM +0200, Gustavo A. R. Silva wrote:
-> On Mon, Jun 27, 2022 at 09:40:52PM -0300, Jason Gunthorpe wrote:
-> > On Mon, Jun 27, 2022 at 08:27:37PM +0200, Daniel Borkmann wrote:
-> > > On 6/27/22 8:04 PM, Gustavo A. R. Silva wrote:
-> > > > There is a regular need in the kernel to provide a way to declare
-> > > > having a dynamically sized set of trailing elements in a structure.
-> > > > Kernel code should always use “flexible array members”[1] for these
-> > > > cases. The older style of one-element or zero-length arrays should
-> > > > no longer be used[2].
-> > > > 
-> > > > This code was transformed with the help of Coccinelle:
-> > > > (linux-5.19-rc2$ spatch --jobs $(getconf _NPROCESSORS_ONLN) --sp-file script.cocci --include-headers --dir . > output.patch)
-> > > > 
-> > > > @@
-> > > > identifier S, member, array;
-> > > > type T1, T2;
-> > > > @@
-> > > > 
-> > > > struct S {
-> > > >    ...
-> > > >    T1 member;
-> > > >    T2 array[
-> > > > - 0
-> > > >    ];
-> > > > };
-> > > > 
-> > > > -fstrict-flex-arrays=3 is coming and we need to land these changes
-> > > > to prevent issues like these in the short future:
-> > > > 
-> > > > ../fs/minix/dir.c:337:3: warning: 'strcpy' will always overflow; destination buffer has size 0,
-> > > > but the source string has length 2 (including NUL byte) [-Wfortify-source]
-> > > > 		strcpy(de3->name, ".");
-> > > > 		^
-> > > > 
-> > > > Since these are all [0] to [] changes, the risk to UAPI is nearly zero. If
-> > > > this breaks anything, we can use a union with a new member name.
-> > > > 
-> > > > [1] https://en.wikipedia.org/wiki/Flexible_array_member
-> > > > [2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
-> > > > 
-> > > > Link: https://github.com/KSPP/linux/issues/78
-> > > > Build-tested-by: https://lore.kernel.org/lkml/62b675ec.wKX6AOZ6cbE71vtF%25lkp@intel.com/
-> > > > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> > > > ---
-> > > > Hi all!
-> > > > 
-> > > > JFYI: I'm adding this to my -next tree. :)
-> > > 
-> > > Fyi, this breaks BPF CI:
-> > > 
-> > > https://github.com/kernel-patches/bpf/runs/7078719372?check_suite_focus=true
-> > > 
-> > >   [...]
-> > >   progs/map_ptr_kern.c:314:26: error: field 'trie_key' with variable sized type 'struct bpf_lpm_trie_key' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
-> > >           struct bpf_lpm_trie_key trie_key;
-> > >                                   ^
-> > 
-> > This will break the rdma-core userspace as well, with a similar
-> > error:
-> > 
-> > /usr/bin/clang-13 -DVERBS_DEBUG -Dibverbs_EXPORTS -Iinclude -I/usr/include/libnl3 -I/usr/include/drm -g -O2 -fdebug-prefix-map=/__w/1/s=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -Wmissing-prototypes -Wmissing-declarations -Wwrite-strings -Wformat=2 -Wcast-function-type -Wformat-nonliteral -Wdate-time -Wnested-externs -Wshadow -Wstrict-prototypes -Wold-style-definition -Werror -Wredundant-decls -g -fPIC   -std=gnu11 -MD -MT libibverbs/CMakeFiles/ibverbs.dir/cmd_flow.c.o -MF libibverbs/CMakeFiles/ibverbs.dir/cmd_flow.c.o.d -o libibverbs/CMakeFiles/ibverbs.dir/cmd_flow.c.o   -c ../libibverbs/cmd_flow.c
-> > In file included from ../libibverbs/cmd_flow.c:33:
-> > In file included from include/infiniband/cmd_write.h:36:
-> > In file included from include/infiniband/cmd_ioctl.h:41:
-> > In file included from include/infiniband/verbs.h:48:
-> > In file included from include/infiniband/verbs_api.h:66:
-> > In file included from include/infiniband/ib_user_ioctl_verbs.h:38:
-> > include/rdma/ib_user_verbs.h:436:34: error: field 'base' with variable sized type 'struct ib_uverbs_create_cq_resp' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
-> >         struct ib_uverbs_create_cq_resp base;
-> >                                         ^
-> > include/rdma/ib_user_verbs.h:644:34: error: field 'base' with variable sized type 'struct ib_uverbs_create_qp_resp' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
-> >         struct ib_uverbs_create_qp_resp base;
-> > 
-> > Which is why I gave up trying to change these..
-> > 
-> > Though maybe we could just switch off -Wgnu-variable-sized-type-not-at-end  during configuration ?
+On Mon, Jun 27, 2022 at 06:25:59PM +0200, Eric Dumazet wrote:
+> On Mon, Jun 27, 2022 at 4:48 PM Feng Tang <feng.tang@intel.com> wrote:
+> >
+> > Yes, I also analyzed the perf-profile data, and made some layout changes
+> > which could recover the changes from 69% to 40%.
+> >
+> > 7c80b038d23e1f4c 4890b686f4088c90432149bd6de 332b589c49656a45881bca4ecc0
+> > ---------------- --------------------------- ---------------------------
+> >      15722           -69.5%       4792           -40.8%       9300        netperf.Throughput_Mbps
+> >
 > 
-> No. I think now we can easily workaround these sorts of problems with
-> something like this:
+> I simply did the following and got much better results.
 > 
-> 	struct flex {
-> 		any_type any_member;
-> 		union {
-> 			type array[0];
-> 			__DECLARE_FLEX_ARRAY(type, array_flex);
-> 		};
-> 	};
+> But I am not sure if updates to ->usage are really needed that often...
+> 
+> 
+> diff --git a/include/linux/page_counter.h b/include/linux/page_counter.h
+> index 679591301994d316062f92b275efa2459a8349c9..e267be4ba849760117d9fd041e22c2a44658ab36
+> 100644
+> --- a/include/linux/page_counter.h
+> +++ b/include/linux/page_counter.h
+> @@ -3,12 +3,15 @@
+>  #define _LINUX_PAGE_COUNTER_H
+> 
+>  #include <linux/atomic.h>
+> +#include <linux/cache.h>
+>  #include <linux/kernel.h>
+>  #include <asm/page.h>
+> 
+>  struct page_counter {
+> -       atomic_long_t usage;
+> -       unsigned long min;
+> +       /* contended cache line. */
+> +       atomic_long_t usage ____cacheline_aligned_in_smp;
+> +
+> +       unsigned long min ____cacheline_aligned_in_smp;
+>         unsigned long low;
+>         unsigned long high;
+>         unsigned long max;
+> @@ -27,12 +30,6 @@ struct page_counter {
+>         unsigned long watermark;
+>         unsigned long failcnt;
+> 
+> -       /*
+> -        * 'parent' is placed here to be far from 'usage' to reduce
+> -        * cache false sharing, as 'usage' is written mostly while
+> -        * parent is frequently read for cgroup's hierarchical
+> -        * counting nature.
+> -        */
+>         struct page_counter *parent;
+>  };
 
-Mmmh... nope; this doesn't work[1].
+I just tested it, it does perform better (the 4th is with your patch),
+some perf-profile data is also listed.
 
-We need to think in a different strategy.
+ 7c80b038d23e1f4c 4890b686f4088c90432149bd6de 332b589c49656a45881bca4ecc0 e719635902654380b23ffce908d 
+---------------- --------------------------- --------------------------- --------------------------- 
+     15722           -69.5%       4792           -40.8%       9300           -27.9%      11341        netperf.Throughput_Mbps
 
---
-Gustavo
+      0.00            +0.3        0.26 ±  5%      +0.5        0.51            +1.3        1.27 ±  2%pp.self.__sk_mem_raise_allocated
+      0.00            +0.3        0.32 ± 15%      +1.7        1.74 ±  2%      +0.4        0.40 ±  2%  pp.self.propagate_protected_usage
+      0.00            +0.8        0.82 ±  7%      +0.9        0.90            +0.8        0.84        pp.self.__mod_memcg_state
+      0.00            +1.2        1.24 ±  4%      +1.0        1.01            +1.4        1.44        pp.self.try_charge_memcg
+      0.00            +2.1        2.06            +2.1        2.13            +2.1        2.11        pp.self.page_counter_uncharge
+      0.00            +2.1        2.14 ±  4%      +2.7        2.71            +2.6        2.60 ±  2%  pp.self.page_counter_try_charge
+      1.12 ±  4%      +3.1        4.24            +1.1        2.22            +1.4        2.51        pp.self.native_queued_spin_lock_slowpath
+      0.28 ±  9%      +3.8        4.06 ±  4%      +0.2        0.48            +0.4        0.68        pp.self.sctp_eat_data
+      0.00            +8.2        8.23            +0.8        0.83            +1.3        1.26        pp.self.__sk_mem_reduce_allocated
 
-[1] https://godbolt.org/z/av79Pqbfz
+And the size of 'mem_cgroup' is increased from 4224 Bytes to 4608.
+
+Another info is the perf hotspos are slightly different between
+tcp and sctp test cases.
+
+Thanks,
+Feng
