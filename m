@@ -2,108 +2,187 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1277F55ECD5
-	for <lists+linux-sctp@lfdr.de>; Tue, 28 Jun 2022 20:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EC7456372D
+	for <lists+linux-sctp@lfdr.de>; Fri,  1 Jul 2022 17:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232997AbiF1SoK (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 28 Jun 2022 14:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44722 "EHLO
+        id S229681AbiGAPrq (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 1 Jul 2022 11:47:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232378AbiF1SoJ (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 28 Jun 2022 14:44:09 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EDA237F9
-        for <linux-sctp@vger.kernel.org>; Tue, 28 Jun 2022 11:44:06 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id z1so4081089qvp.9
-        for <linux-sctp@vger.kernel.org>; Tue, 28 Jun 2022 11:44:06 -0700 (PDT)
+        with ESMTP id S231373AbiGAPrn (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 1 Jul 2022 11:47:43 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B523A71D
+        for <linux-sctp@vger.kernel.org>; Fri,  1 Jul 2022 08:47:41 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id z14so2792475pgh.0
+        for <linux-sctp@vger.kernel.org>; Fri, 01 Jul 2022 08:47:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=srd0vxfduo9pXREXizXvQ1Gwi/kEACFP1rdXcY0Aglg=;
-        b=QDfPPT0fYl+zbzIvYII9znFGb4s02ZWc7rdJXgoVlQii3pb6MPHXUbo2NQcshGpobE
-         dWlWXPBgu4AcM4BoWih7Z1Nr6ImLeGEz2FZoCblM4qyf8MsycIzs6ej4nXX7nwNpGP6Q
-         WS2wAoLm7tunOmWFHsCTXENR5aJ2dwangh3Hiy+KajaZLCQ31/GJ39i5LG+HlW0f/4Yp
-         DzCT3gMR3JvAVHruRt3NJZXTCo87e7XIf3RRiCTD40KLgGYQ8Oy9U016RK3fPhyNykEI
-         VcI+7whSObzV9gDqoR9iwpi6V1hWpQPbHnX1dl7fE5ec/owdsM9r7W03JXKpNXxaLmSi
-         lJng==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=9yv6QUWYDmgQjKt1P93gNeGHmUq3W/So/sIQeZFHIcA=;
+        b=rqzfXCul7tw0OtYOnP55pVCB7g/W9r+ESLzhXTbbeXFyAb7FsPVhGwWf1o6kj4AEw9
+         yy5yMHnLr97j5o8rrLFjKXtvNiVn9FBMx+OuaStaeI4VtIuzSQQMCYCKdG/m5/+ZvbtJ
+         mgVJXlM7Ih3nxS4V9lsQKs/m0R9tyRektkxlV6RlzNAGVnt03mZ7EX5LY/pDnGeggzJW
+         5yhjTlYGbhC7Tjeh7iltQpmTBPc0/ob4Ek3moFpXstDBXYsgrX+l1Ee4H94nhyirr8kt
+         PXIyVeGHxqvtHBp9W92BVREWrxfsXLcvqjppHbdeBuO4CTDShzDE2h5XITLVdfm3eTZi
+         0t7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=srd0vxfduo9pXREXizXvQ1Gwi/kEACFP1rdXcY0Aglg=;
-        b=mL/TTrMIPRePAx6Bk5xdtE/Veseyv7UEdpwC07eTkDCuWPGz3tkal7ViE8VgOQrEEt
-         zG36bAsl44PCJdFRDq3HvrZW7TBVaud6W0ke+fz/YZ8nYqlmTFGEfDkewhFqAlFxVSTx
-         M6aTrsrywNtVdbK/EEcSKQE4bMUXA9X5dLTUu7jy+CSXL5n5S4PqiHhnBfiVdsUr2yeB
-         b+bLyA2pXycj3hes+MWkfFdf2pi3q1EsxcFUJ9dRy47km/zi1xyqMlUPhpJyvtV6wOZS
-         kaWUW8srwi6lppEcPQPjvlRvk4U7pKTyuX8KBxgmazQzUsZk+/KT/dkomeYmQr8Vi7Nj
-         N/5Q==
-X-Gm-Message-State: AJIora8stnPRVqFLoCgEYMVe7qcWq3d6McqEfYYvquifWI5JteNjTX1/
-        f644lFIdtLCvfxyI6ZG7DiOXWQ==
-X-Google-Smtp-Source: AGRyM1uBRJ6m7mmrK5Ju1JW1doBHC+UzIgAGX/xwYqaVx3XSmh4juFCDP3TjiYp7BZ5iZ3elpoeXxg==
-X-Received: by 2002:a05:622a:7:b0:31b:74bd:1597 with SMTP id x7-20020a05622a000700b0031b74bd1597mr6494688qtw.677.1656441846052;
-        Tue, 28 Jun 2022 11:44:06 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id h9-20020ac85149000000b003050bd1f7c9sm9708477qtn.76.2022.06.28.11.44.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 11:44:05 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1o6GBw-0035y2-Fs; Tue, 28 Jun 2022 15:44:04 -0300
-Date:   Tue, 28 Jun 2022 15:44:04 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-kernel@vger.kernel.org, x86@kernel.org, dm-devel@redhat.com,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        linux1394-devel@lists.sourceforge.net, io-uring@vger.kernel.org,
-        lvs-devel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        kasan-dev@googlegroups.com, linux-mmc@vger.kernel.org,
-        nvdimm@lists.linux.dev, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, linux-perf-users@vger.kernel.org,
-        linux-raid@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        v9fs-developer@lists.sourceforge.net, linux-rdma@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] treewide: uapi: Replace zero-length arrays with
- flexible-array members
-Message-ID: <20220628184404.GS23621@ziepe.ca>
-References: <20220627180432.GA136081@embeddedor>
- <6bc1e94c-ce1d-a074-7d0c-8dbe6ce22637@iogearbox.net>
- <20220628004052.GM23621@ziepe.ca>
- <202206281009.4332AA33@keescook>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=9yv6QUWYDmgQjKt1P93gNeGHmUq3W/So/sIQeZFHIcA=;
+        b=7WiAgjrbZ1JLny/ghyII4ThDTM8A9cDaSqWxmYAOIfh0xMKLvOrgpzw5xcOuvsJ9A5
+         zN7/QhA02zubWffaNffIZNKq0TQqrKce7BE+iArShsAj2XuRLSxfU76YXg01R1dC5eIM
+         fEAMCdvFEMzYlbra2/dcx9L8Sm1ebmiMWiVZcJUTtQKwMgUm3R3RX9I+NN8yH7PNWifm
+         nbfnb/gsfX0oS1wdEiGdo16F8YnSQj/0UrAbQUOYw0+m2Idiu5Pm4Z+ty9KdCVjdMHPU
+         CpAOMsYQnGd0dKOWWcbmgxKiYgeWv+tocxm/CjJqjUiHMjnkbu3eI0bwMjP0CS8RvOKj
+         EGIA==
+X-Gm-Message-State: AJIora+3QL5lzd+Ew5DLL8Z9TZDf5SMb542kVdfdXmVdD04Qmb3Hqybx
+        1xx7XEuuVtWr+gJ2Jz9oqQnURZKzO4Rcku0V9Ew6yQ==
+X-Google-Smtp-Source: AGRyM1vA2J1Zo47ff1Z3g/0fDruleRJpKHeRmLkW3pftAi7eIEd7S1S7hhAlQL2NFpy1Yupar9lBK8glaB0jqxoYpPM=
+X-Received: by 2002:a05:6a00:3307:b0:527:cbdc:d7dc with SMTP id
+ cq7-20020a056a00330700b00527cbdcd7dcmr19540188pfb.85.1656690460501; Fri, 01
+ Jul 2022 08:47:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202206281009.4332AA33@keescook>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <CALvZod7kULCvHAuk53FE-XBOi4-BbLdY3HCg6jfCZTJDxYsZow@mail.gmail.com>
+ <20220624070656.GE79500@shbuild999.sh.intel.com> <20220624144358.lqt2ffjdry6p5u4d@google.com>
+ <20220625023642.GA40868@shbuild999.sh.intel.com> <20220627023812.GA29314@shbuild999.sh.intel.com>
+ <CANn89i+6NPujMyiQxriZRt6vhv6hNrAntXxi1uOhJ0SSqnJ47w@mail.gmail.com>
+ <20220627123415.GA32052@shbuild999.sh.intel.com> <CANn89iJAoYCebNbXpNMXRoDUkFMhg9QagetVU9NZUq+GnLMgqQ@mail.gmail.com>
+ <20220627144822.GA20878@shbuild999.sh.intel.com> <CANn89iLSWm-c4XE79rUsxzOp3VwXVDhOEPTQnWgeQ48UwM=u7Q@mail.gmail.com>
+ <20220628034926.GA69004@shbuild999.sh.intel.com>
+In-Reply-To: <20220628034926.GA69004@shbuild999.sh.intel.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Fri, 1 Jul 2022 08:47:29 -0700
+Message-ID: <CALvZod71Fti8yLC08mdpDk-TLYJVyfVVauWSj1zk=BhN1-GPdA@mail.gmail.com>
+Subject: Re: [net] 4890b686f4: netperf.Throughput_Mbps -69.4% regression
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Eric Dumazet <edumazet@google.com>, Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Xin Long <lucien.xin@gmail.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        kernel test robot <oliver.sang@intel.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        network dev <netdev@vger.kernel.org>,
+        linux-s390@vger.kernel.org, MPTCP Upstream <mptcp@lists.linux.dev>,
+        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
+        lkp@lists.01.org, kbuild test robot <lkp@intel.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Yin Fengwei <fengwei.yin@intel.com>, Ying Xu <yinxu@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 10:54:58AM -0700, Kees Cook wrote:
+On Mon, Jun 27, 2022 at 8:49 PM Feng Tang <feng.tang@intel.com> wrote:
+>
+> On Mon, Jun 27, 2022 at 06:25:59PM +0200, Eric Dumazet wrote:
+> > On Mon, Jun 27, 2022 at 4:48 PM Feng Tang <feng.tang@intel.com> wrote:
+> > >
+> > > Yes, I also analyzed the perf-profile data, and made some layout chan=
+ges
+> > > which could recover the changes from 69% to 40%.
+> > >
+> > > 7c80b038d23e1f4c 4890b686f4088c90432149bd6de 332b589c49656a45881bca4e=
+cc0
+> > > ---------------- --------------------------- ------------------------=
+---
+> > >      15722           -69.5%       4792           -40.8%       9300   =
+     netperf.Throughput_Mbps
+> > >
+> >
+> > I simply did the following and got much better results.
+> >
+> > But I am not sure if updates to ->usage are really needed that often...
+> >
+> >
+> > diff --git a/include/linux/page_counter.h b/include/linux/page_counter.=
+h
+> > index 679591301994d316062f92b275efa2459a8349c9..e267be4ba849760117d9fd0=
+41e22c2a44658ab36
+> > 100644
+> > --- a/include/linux/page_counter.h
+> > +++ b/include/linux/page_counter.h
+> > @@ -3,12 +3,15 @@
+> >  #define _LINUX_PAGE_COUNTER_H
+> >
+> >  #include <linux/atomic.h>
+> > +#include <linux/cache.h>
+> >  #include <linux/kernel.h>
+> >  #include <asm/page.h>
+> >
+> >  struct page_counter {
+> > -       atomic_long_t usage;
+> > -       unsigned long min;
+> > +       /* contended cache line. */
+> > +       atomic_long_t usage ____cacheline_aligned_in_smp;
+> > +
+> > +       unsigned long min ____cacheline_aligned_in_smp;
+> >         unsigned long low;
+> >         unsigned long high;
+> >         unsigned long max;
+> > @@ -27,12 +30,6 @@ struct page_counter {
+> >         unsigned long watermark;
+> >         unsigned long failcnt;
+> >
+> > -       /*
+> > -        * 'parent' is placed here to be far from 'usage' to reduce
+> > -        * cache false sharing, as 'usage' is written mostly while
+> > -        * parent is frequently read for cgroup's hierarchical
+> > -        * counting nature.
+> > -        */
+> >         struct page_counter *parent;
+> >  };
+>
+> I just tested it, it does perform better (the 4th is with your patch),
+> some perf-profile data is also listed.
+>
+>  7c80b038d23e1f4c 4890b686f4088c90432149bd6de 332b589c49656a45881bca4ecc0=
+ e719635902654380b23ffce908d
+> ---------------- --------------------------- --------------------------- =
+---------------------------
+>      15722           -69.5%       4792           -40.8%       9300       =
+    -27.9%      11341        netperf.Throughput_Mbps
+>
+>       0.00            +0.3        0.26 =C2=B1  5%      +0.5        0.51  =
+          +1.3        1.27 =C2=B1  2%pp.self.__sk_mem_raise_allocated
+>       0.00            +0.3        0.32 =C2=B1 15%      +1.7        1.74 =
+=C2=B1  2%      +0.4        0.40 =C2=B1  2%  pp.self.propagate_protected_us=
+age
+>       0.00            +0.8        0.82 =C2=B1  7%      +0.9        0.90  =
+          +0.8        0.84        pp.self.__mod_memcg_state
+>       0.00            +1.2        1.24 =C2=B1  4%      +1.0        1.01  =
+          +1.4        1.44        pp.self.try_charge_memcg
+>       0.00            +2.1        2.06            +2.1        2.13       =
+     +2.1        2.11        pp.self.page_counter_uncharge
+>       0.00            +2.1        2.14 =C2=B1  4%      +2.7        2.71  =
+          +2.6        2.60 =C2=B1  2%  pp.self.page_counter_try_charge
+>       1.12 =C2=B1  4%      +3.1        4.24            +1.1        2.22  =
+          +1.4        2.51        pp.self.native_queued_spin_lock_slowpath
+>       0.28 =C2=B1  9%      +3.8        4.06 =C2=B1  4%      +0.2        0=
+.48            +0.4        0.68        pp.self.sctp_eat_data
+>       0.00            +8.2        8.23            +0.8        0.83       =
+     +1.3        1.26        pp.self.__sk_mem_reduce_allocated
+>
+> And the size of 'mem_cgroup' is increased from 4224 Bytes to 4608.
 
- 
-> which must also be assuming it's a header. So probably better to just
-> drop the driver_data field? I don't see anything using it (that I can
-> find) besides as a sanity-check that the field exists and is at the end
-> of the struct.
-
-The field is guaranteeing alignment of the following structure. IIRC
-there are a few cases that we don't have a u64 already to force this.
-
-Jason
+Hi Feng, can you please try two more configurations? Take Eric's patch
+of adding ____cacheline_aligned_in_smp in page_counter and for first
+increase MEMCG_CHARGE_BATCH to 64 and for second increase it to 128.
+Basically batch increases combined with Eric's patch.
