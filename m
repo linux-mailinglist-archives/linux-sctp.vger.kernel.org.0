@@ -2,187 +2,193 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC7456372D
-	for <lists+linux-sctp@lfdr.de>; Fri,  1 Jul 2022 17:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA70E563D7D
+	for <lists+linux-sctp@lfdr.de>; Sat,  2 Jul 2022 03:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiGAPrq (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 1 Jul 2022 11:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43124 "EHLO
+        id S231938AbiGBBDr (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 1 Jul 2022 21:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbiGAPrn (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 1 Jul 2022 11:47:43 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B523A71D
-        for <linux-sctp@vger.kernel.org>; Fri,  1 Jul 2022 08:47:41 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id z14so2792475pgh.0
-        for <linux-sctp@vger.kernel.org>; Fri, 01 Jul 2022 08:47:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=9yv6QUWYDmgQjKt1P93gNeGHmUq3W/So/sIQeZFHIcA=;
-        b=rqzfXCul7tw0OtYOnP55pVCB7g/W9r+ESLzhXTbbeXFyAb7FsPVhGwWf1o6kj4AEw9
-         yy5yMHnLr97j5o8rrLFjKXtvNiVn9FBMx+OuaStaeI4VtIuzSQQMCYCKdG/m5/+ZvbtJ
-         mgVJXlM7Ih3nxS4V9lsQKs/m0R9tyRektkxlV6RlzNAGVnt03mZ7EX5LY/pDnGeggzJW
-         5yhjTlYGbhC7Tjeh7iltQpmTBPc0/ob4Ek3moFpXstDBXYsgrX+l1Ee4H94nhyirr8kt
-         PXIyVeGHxqvtHBp9W92BVREWrxfsXLcvqjppHbdeBuO4CTDShzDE2h5XITLVdfm3eTZi
-         0t7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9yv6QUWYDmgQjKt1P93gNeGHmUq3W/So/sIQeZFHIcA=;
-        b=7WiAgjrbZ1JLny/ghyII4ThDTM8A9cDaSqWxmYAOIfh0xMKLvOrgpzw5xcOuvsJ9A5
-         zN7/QhA02zubWffaNffIZNKq0TQqrKce7BE+iArShsAj2XuRLSxfU76YXg01R1dC5eIM
-         fEAMCdvFEMzYlbra2/dcx9L8Sm1ebmiMWiVZcJUTtQKwMgUm3R3RX9I+NN8yH7PNWifm
-         nbfnb/gsfX0oS1wdEiGdo16F8YnSQj/0UrAbQUOYw0+m2Idiu5Pm4Z+ty9KdCVjdMHPU
-         CpAOMsYQnGd0dKOWWcbmgxKiYgeWv+tocxm/CjJqjUiHMjnkbu3eI0bwMjP0CS8RvOKj
-         EGIA==
-X-Gm-Message-State: AJIora+3QL5lzd+Ew5DLL8Z9TZDf5SMb542kVdfdXmVdD04Qmb3Hqybx
-        1xx7XEuuVtWr+gJ2Jz9oqQnURZKzO4Rcku0V9Ew6yQ==
-X-Google-Smtp-Source: AGRyM1vA2J1Zo47ff1Z3g/0fDruleRJpKHeRmLkW3pftAi7eIEd7S1S7hhAlQL2NFpy1Yupar9lBK8glaB0jqxoYpPM=
-X-Received: by 2002:a05:6a00:3307:b0:527:cbdc:d7dc with SMTP id
- cq7-20020a056a00330700b00527cbdcd7dcmr19540188pfb.85.1656690460501; Fri, 01
- Jul 2022 08:47:40 -0700 (PDT)
+        with ESMTP id S231173AbiGBBDi (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 1 Jul 2022 21:03:38 -0400
+Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4682409E;
+        Fri,  1 Jul 2022 18:03:35 -0700 (PDT)
+Date:   Fri, 1 Jul 2022 18:03:10 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1656723813;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UefsvJWBOCsJEHG/jcpgIGR+KBtUCRUqjXcROu7qjh4=;
+        b=oGHlDm4tgr6UzDbC5z/sb7q2WEts5mi8mJ8aiIMXBOzW75BRr4BaIuszRL9hOCzoFfVxku
+        tmO6BM7R9GzDDzZbe/MQeyeOEOAx+3VHqH/w/8ecEZ7fImffcNYGlal4Cw/gQ26E9Sym1J
+        usYWeNXz8OdB9Vt23HLuxwKOwXbZ7ng=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        kernel test robot <lkp@intel.com>
+Cc:     virtualization@lists.linux-foundation.org,
+        usbb2k-api-dev@nongnu.org, tipc-discussion@lists.sourceforge.net,
+        target-devel@vger.kernel.org, sound-open-firmware@alsa-project.org,
+        samba-technical@lists.samba.org, rds-devel@oss.oracle.com,
+        patches@opensource.cirrus.com, osmocom-net-gprs@lists.osmocom.org,
+        openipmi-developer@lists.sourceforge.net, nvdimm@lists.linux.dev,
+        ntb@lists.linux.dev, netfilter-devel@vger.kernel.org,
+        netdev@vger.kernel.org, mjpeg-users@lists.sourceforge.net,
+        megaraidlinux.pdl@broadcom.com, linuxppc-dev@lists.ozlabs.org,
+        linux1394-devel@lists.sourceforge.net, linux-x25@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-unionfs@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        linux-sctp@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-raid@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-parport@lists.infradead.org,
+        linux-parisc@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-nfc@lists.01.org, linux-mtd@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-mm@kvack.org,
+        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-fpga@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-cifs@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-bcache@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linaro-mm-sig@lists.linaro.org,
+        legousb-devel@lists.sourceforge.net, kvm@vger.kernel.org,
+        keyrings@vger.kernel.org, isdn4linux@listserv.isdn4linux.de,
+        iommu@lists.linux.dev, iommu@lists.linux-foundation.org,
+        intel-wired-lan@lists.osuosl.org, dri-devel@lists.freedesktop.org,
+        dm-devel@redhat.com, devicetree@vger.kernel.org,
+        dev@openvswitch.org, dccp@vger.kernel.org, damon@lists.linux.dev,
+        coreteam@netfilter.org, cgroups@vger.kernel.org,
+        ceph-devel@vger.kernel.org, apparmor@lists.ubuntu.com,
+        amd-gfx@lists.freedesktop.org, alsa-devel@alsa-project.org,
+        accessrunner-general@lists.sourceforge.net
+Subject: Re: [linux-next:master] BUILD REGRESSION
+ 6cc11d2a1759275b856e464265823d94aabd5eaf
+Message-ID: <Yr+ZTnLb9lJk6fJO@castle>
+References: <62be3696.+PAAAVlbtWK6G2hk%lkp@intel.com>
 MIME-Version: 1.0
-References: <CALvZod7kULCvHAuk53FE-XBOi4-BbLdY3HCg6jfCZTJDxYsZow@mail.gmail.com>
- <20220624070656.GE79500@shbuild999.sh.intel.com> <20220624144358.lqt2ffjdry6p5u4d@google.com>
- <20220625023642.GA40868@shbuild999.sh.intel.com> <20220627023812.GA29314@shbuild999.sh.intel.com>
- <CANn89i+6NPujMyiQxriZRt6vhv6hNrAntXxi1uOhJ0SSqnJ47w@mail.gmail.com>
- <20220627123415.GA32052@shbuild999.sh.intel.com> <CANn89iJAoYCebNbXpNMXRoDUkFMhg9QagetVU9NZUq+GnLMgqQ@mail.gmail.com>
- <20220627144822.GA20878@shbuild999.sh.intel.com> <CANn89iLSWm-c4XE79rUsxzOp3VwXVDhOEPTQnWgeQ48UwM=u7Q@mail.gmail.com>
- <20220628034926.GA69004@shbuild999.sh.intel.com>
-In-Reply-To: <20220628034926.GA69004@shbuild999.sh.intel.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Fri, 1 Jul 2022 08:47:29 -0700
-Message-ID: <CALvZod71Fti8yLC08mdpDk-TLYJVyfVVauWSj1zk=BhN1-GPdA@mail.gmail.com>
-Subject: Re: [net] 4890b686f4: netperf.Throughput_Mbps -69.4% regression
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Eric Dumazet <edumazet@google.com>, Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Xin Long <lucien.xin@gmail.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        kernel test robot <oliver.sang@intel.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        network dev <netdev@vger.kernel.org>,
-        linux-s390@vger.kernel.org, MPTCP Upstream <mptcp@lists.linux.dev>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        lkp@lists.01.org, kbuild test robot <lkp@intel.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>, Ying Xu <yinxu@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <62be3696.+PAAAVlbtWK6G2hk%lkp@intel.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 8:49 PM Feng Tang <feng.tang@intel.com> wrote:
->
-> On Mon, Jun 27, 2022 at 06:25:59PM +0200, Eric Dumazet wrote:
-> > On Mon, Jun 27, 2022 at 4:48 PM Feng Tang <feng.tang@intel.com> wrote:
-> > >
-> > > Yes, I also analyzed the perf-profile data, and made some layout chan=
-ges
-> > > which could recover the changes from 69% to 40%.
-> > >
-> > > 7c80b038d23e1f4c 4890b686f4088c90432149bd6de 332b589c49656a45881bca4e=
-cc0
-> > > ---------------- --------------------------- ------------------------=
----
-> > >      15722           -69.5%       4792           -40.8%       9300   =
-     netperf.Throughput_Mbps
-> > >
-> >
-> > I simply did the following and got much better results.
-> >
-> > But I am not sure if updates to ->usage are really needed that often...
-> >
-> >
-> > diff --git a/include/linux/page_counter.h b/include/linux/page_counter.=
-h
-> > index 679591301994d316062f92b275efa2459a8349c9..e267be4ba849760117d9fd0=
-41e22c2a44658ab36
-> > 100644
-> > --- a/include/linux/page_counter.h
-> > +++ b/include/linux/page_counter.h
-> > @@ -3,12 +3,15 @@
-> >  #define _LINUX_PAGE_COUNTER_H
-> >
-> >  #include <linux/atomic.h>
-> > +#include <linux/cache.h>
-> >  #include <linux/kernel.h>
-> >  #include <asm/page.h>
-> >
-> >  struct page_counter {
-> > -       atomic_long_t usage;
-> > -       unsigned long min;
-> > +       /* contended cache line. */
-> > +       atomic_long_t usage ____cacheline_aligned_in_smp;
-> > +
-> > +       unsigned long min ____cacheline_aligned_in_smp;
-> >         unsigned long low;
-> >         unsigned long high;
-> >         unsigned long max;
-> > @@ -27,12 +30,6 @@ struct page_counter {
-> >         unsigned long watermark;
-> >         unsigned long failcnt;
-> >
-> > -       /*
-> > -        * 'parent' is placed here to be far from 'usage' to reduce
-> > -        * cache false sharing, as 'usage' is written mostly while
-> > -        * parent is frequently read for cgroup's hierarchical
-> > -        * counting nature.
-> > -        */
-> >         struct page_counter *parent;
-> >  };
->
-> I just tested it, it does perform better (the 4th is with your patch),
-> some perf-profile data is also listed.
->
->  7c80b038d23e1f4c 4890b686f4088c90432149bd6de 332b589c49656a45881bca4ecc0=
- e719635902654380b23ffce908d
-> ---------------- --------------------------- --------------------------- =
----------------------------
->      15722           -69.5%       4792           -40.8%       9300       =
-    -27.9%      11341        netperf.Throughput_Mbps
->
->       0.00            +0.3        0.26 =C2=B1  5%      +0.5        0.51  =
-          +1.3        1.27 =C2=B1  2%pp.self.__sk_mem_raise_allocated
->       0.00            +0.3        0.32 =C2=B1 15%      +1.7        1.74 =
-=C2=B1  2%      +0.4        0.40 =C2=B1  2%  pp.self.propagate_protected_us=
-age
->       0.00            +0.8        0.82 =C2=B1  7%      +0.9        0.90  =
-          +0.8        0.84        pp.self.__mod_memcg_state
->       0.00            +1.2        1.24 =C2=B1  4%      +1.0        1.01  =
-          +1.4        1.44        pp.self.try_charge_memcg
->       0.00            +2.1        2.06            +2.1        2.13       =
-     +2.1        2.11        pp.self.page_counter_uncharge
->       0.00            +2.1        2.14 =C2=B1  4%      +2.7        2.71  =
-          +2.6        2.60 =C2=B1  2%  pp.self.page_counter_try_charge
->       1.12 =C2=B1  4%      +3.1        4.24            +1.1        2.22  =
-          +1.4        2.51        pp.self.native_queued_spin_lock_slowpath
->       0.28 =C2=B1  9%      +3.8        4.06 =C2=B1  4%      +0.2        0=
-.48            +0.4        0.68        pp.self.sctp_eat_data
->       0.00            +8.2        8.23            +0.8        0.83       =
-     +1.3        1.26        pp.self.__sk_mem_reduce_allocated
->
-> And the size of 'mem_cgroup' is increased from 4224 Bytes to 4608.
+esOn Fri, Jul 01, 2022 at 07:49:42AM +0800, kbuild test robot wrote:
+> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> branch HEAD: 6cc11d2a1759275b856e464265823d94aabd5eaf  Add linux-next specific files for 20220630
+> 
+> Error/Warning reports:
+> 
+> https://lore.kernel.org/linux-mm/202206301859.UodBCrva-lkp@intel.com
+> 
+> Error/Warning: (recently discovered and may have been fixed)
+> 
+> arch/powerpc/kernel/interrupt.c:542:55: error: suggest braces around empty body in an 'if' statement [-Werror=empty-body]
+> arch/powerpc/kernel/interrupt.c:542:55: warning: suggest braces around empty body in an 'if' statement [-Wempty-body]
+> drivers/pci/endpoint/functions/pci-epf-vntb.c:975:5: warning: no previous prototype for 'pci_read' [-Wmissing-prototypes]
+> drivers/pci/endpoint/functions/pci-epf-vntb.c:984:5: warning: no previous prototype for 'pci_write' [-Wmissing-prototypes]
+> mm/shrinker_debug.c:143:9: warning: function 'shrinker_debugfs_rename' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+> mm/shrinker_debug.c:217:9: warning: function 'shrinker_debugfs_rename' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+> mm/vmscan.c:637:9: warning: function 'prealloc_shrinker' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+> mm/vmscan.c:642:9: warning: function 'prealloc_shrinker' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+> mm/vmscan.c:697:9: warning: function 'register_shrinker' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+> mm/vmscan.c:702:9: warning: function 'register_shrinker' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
 
-Hi Feng, can you please try two more configurations? Take Eric's patch
-of adding ____cacheline_aligned_in_smp in page_counter and for first
-increase MEMCG_CHARGE_BATCH to 64 and for second increase it to 128.
-Basically batch increases combined with Eric's patch.
+Shrinker-related warnings should be fixed by the following patch.
+
+Thanks!
+
+--
+
+From c399aff65c7745a209397a531c5b28fd404d83c2 Mon Sep 17 00:00:00 2001
+From: Roman Gushchin <roman.gushchin@linux.dev>
+Date: Fri, 1 Jul 2022 17:38:31 -0700
+Subject: [PATCH] mm:shrinkers: fix build warnings
+
+Add __printf(a, b) attributes to shrinker functions taking shrinker
+name as an argument to avoid compiler warnings like:
+
+mm/shrinker_debug.c:143:9: warning: function 'shrinker_debugfs_rename'
+  might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+mm/shrinker_debug.c:217:9: warning: function 'shrinker_debugfs_rename'
+  might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+mm/vmscan.c:637:9: warning: function 'prealloc_shrinker' might be a
+  candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+mm/vmscan.c:642:9: warning: function 'prealloc_shrinker' might be a
+  candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+mm/vmscan.c:697:9: warning: function 'register_shrinker' might be a
+  candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+mm/vmscan.c:702:9: warning: function 'register_shrinker' might be a
+  candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+
+Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+---
+ include/linux/shrinker.h | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/include/linux/shrinker.h b/include/linux/shrinker.h
+index 64416f3e0a1f..08e6054e061f 100644
+--- a/include/linux/shrinker.h
++++ b/include/linux/shrinker.h
+@@ -93,9 +93,11 @@ struct shrinker {
+  */
+ #define SHRINKER_NONSLAB	(1 << 3)
+ 
+-extern int prealloc_shrinker(struct shrinker *shrinker, const char *fmt, ...);
++extern int __printf(2, 3) prealloc_shrinker(struct shrinker *shrinker,
++					    const char *fmt, ...);
+ extern void register_shrinker_prepared(struct shrinker *shrinker);
+-extern int register_shrinker(struct shrinker *shrinker, const char *fmt, ...);
++extern int __printf(2, 3) register_shrinker(struct shrinker *shrinker,
++					    const char *fmt, ...);
+ extern void unregister_shrinker(struct shrinker *shrinker);
+ extern void free_prealloced_shrinker(struct shrinker *shrinker);
+ extern void synchronize_shrinkers(void);
+@@ -103,8 +105,8 @@ extern void synchronize_shrinkers(void);
+ #ifdef CONFIG_SHRINKER_DEBUG
+ extern int shrinker_debugfs_add(struct shrinker *shrinker);
+ extern void shrinker_debugfs_remove(struct shrinker *shrinker);
+-extern int shrinker_debugfs_rename(struct shrinker *shrinker,
+-				   const char *fmt, ...);
++extern int __printf(2, 3) shrinker_debugfs_rename(struct shrinker *shrinker,
++						  const char *fmt, ...);
+ #else /* CONFIG_SHRINKER_DEBUG */
+ static inline int shrinker_debugfs_add(struct shrinker *shrinker)
+ {
+@@ -113,8 +115,8 @@ static inline int shrinker_debugfs_add(struct shrinker *shrinker)
+ static inline void shrinker_debugfs_remove(struct shrinker *shrinker)
+ {
+ }
+-static inline int shrinker_debugfs_rename(struct shrinker *shrinker,
+-					  const char *fmt, ...)
++static inline __printf(2, 3)
++int shrinker_debugfs_rename(struct shrinker *shrinker, const char *fmt, ...)
+ {
+ 	return 0;
+ }
+-- 
+2.36.1
+
