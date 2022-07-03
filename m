@@ -2,136 +2,184 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E085646C3
-	for <lists+linux-sctp@lfdr.de>; Sun,  3 Jul 2022 12:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B782356472E
+	for <lists+linux-sctp@lfdr.de>; Sun,  3 Jul 2022 13:36:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231169AbiGCKoB (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 3 Jul 2022 06:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
+        id S231574AbiGCLgQ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 3 Jul 2022 07:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbiGCKoA (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sun, 3 Jul 2022 06:44:00 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF59C639E;
-        Sun,  3 Jul 2022 03:43:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656845039; x=1688381039;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=vTTAw9QKNXkaEQrbW3B9/sW65KKD9yPkaMxgTxRHzfs=;
-  b=Ukh7hMR4R/XLx5q7QiUVXYlcTqMnxCuoVkyoyn2mrt7A4qu9tmBHNzp5
-   TEgU2zwTOdsIYSV075ebgHRZahAnLQH5W2PJeFDaiBaaEcwyWfmUXoDLv
-   Tc3egSQYCOO+vj6DERkODn0IXu7FD+WOt6X50dLuDUUpmSi4tcnyLoA3L
-   o//zz+t6HBIMMfBR6rPB0ExchnUIRlOm20eyYIa57kNDC7WHTWfhrYu3/
-   oCM/HRGbUYyXAldC/dSFKOdEQeUu/Z8VRY88VuZ40dQkvehrKz/pXgvq1
-   bu6UYlDSYngF0NYHPUDSs+TlpBKUOMUlBR7JeZD6TtRL6gSZesanyGeRt
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10396"; a="281693798"
-X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
-   d="scan'208";a="281693798"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2022 03:43:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
-   d="scan'208";a="618916129"
-Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
-  by orsmga008.jf.intel.com with ESMTP; 03 Jul 2022 03:43:53 -0700
-Date:   Sun, 3 Jul 2022 18:43:53 +0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Eric Dumazet <edumazet@google.com>, Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Xin Long <lucien.xin@gmail.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        kernel test robot <oliver.sang@intel.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        network dev <netdev@vger.kernel.org>,
-        linux-s390@vger.kernel.org, MPTCP Upstream <mptcp@lists.linux.dev>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        lkp@lists.01.org, kbuild test robot <lkp@intel.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>, Ying Xu <yinxu@redhat.com>
-Subject: Re: [net] 4890b686f4: netperf.Throughput_Mbps -69.4% regression
-Message-ID: <20220703104353.GB62281@shbuild999.sh.intel.com>
-References: <20220624144358.lqt2ffjdry6p5u4d@google.com>
- <20220625023642.GA40868@shbuild999.sh.intel.com>
- <20220627023812.GA29314@shbuild999.sh.intel.com>
- <CANn89i+6NPujMyiQxriZRt6vhv6hNrAntXxi1uOhJ0SSqnJ47w@mail.gmail.com>
- <20220627123415.GA32052@shbuild999.sh.intel.com>
- <CANn89iJAoYCebNbXpNMXRoDUkFMhg9QagetVU9NZUq+GnLMgqQ@mail.gmail.com>
- <20220627144822.GA20878@shbuild999.sh.intel.com>
- <CANn89iLSWm-c4XE79rUsxzOp3VwXVDhOEPTQnWgeQ48UwM=u7Q@mail.gmail.com>
- <20220628034926.GA69004@shbuild999.sh.intel.com>
- <CALvZod71Fti8yLC08mdpDk-TLYJVyfVVauWSj1zk=BhN1-GPdA@mail.gmail.com>
+        with ESMTP id S229993AbiGCLgP (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sun, 3 Jul 2022 07:36:15 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1167162DF
+        for <linux-sctp@vger.kernel.org>; Sun,  3 Jul 2022 04:36:14 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 74EFE5C0079
+        for <linux-sctp@vger.kernel.org>; Sun,  3 Jul 2022 07:36:13 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Sun, 03 Jul 2022 07:36:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        aaronmdjones.net; h=cc:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1656848173; x=1656934573; bh=i6/7Pbn+2J
+        4N/whE1V6LCHkQ3QPwoQlcMbCO7bQuQg4=; b=f2UwEspef6YNJdN8Moz2r78jTb
+        dldCx4roLI+DJNMSn7sCvPKKWoG7r4bCEME9Jjt3VzUg1kKZYQzyhnV6qJAla1Dl
+        jHYK2417YzVsbVZXSxj7E1hEmPp0OogCqRAywuwX3GCdVtUpo57UbTjMPiTdyvXh
+        YUiYqupcZVDllhX1QDo8a5+UIiaaZZw0ijTwpnIBlMoQMrlVWaFpDm7cMRRDVuoC
+        YrAswpYvvrD+8DTCbLn8c6NiWFHfjsxnAXdvYjjBD8btB/FvgPhFpl3a32OwYQqf
+        cs1ZetmWUqAyTVY6XXyGK1dxoT78wKTAC4h+FfcqUP4hhKupmYduUl9tUZtw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:message-id:mime-version
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656848173; x=
+        1656934573; bh=i6/7Pbn+2J4N/whE1V6LCHkQ3QPwoQlcMbCO7bQuQg4=; b=D
+        4XpUbex2Ue4SzWnEhta6yZ72bV4oZGyNHg/mH8Oqpo91Tgghj5M1P+fSChweNauf
+        J23LH6zbP4OoaI1UEWA2XDPvCzilIHAvYYkTC3eNShyigBNtsnmqJ/MdtDrrnx9x
+        VoC1ybxJZzeLIUgGVPHU6hHxoP2/OzHOsSVTBfU/DlYKtlpIGFoBoj6U6CbgEGWC
+        CUZLNn+VzkDqN/JSmWt34sNI1lYsBz1XdM0rM10SvhZw5N+4gBl1crrW4G3mWxmg
+        Q6EHPhvVisfRh5PREAkwIhDa3pk8LRTEGKpotLbAHsVKxV5zcrrAJUJpcFq4T/DR
+        npI0u18YcnERKIBaedcpA==
+X-ME-Sender: <xms:LX_BYpwX3V4e0XU9IDjJvG-9v6KgF-YDzF0kLxWHCZK1MSbX8zF3zw>
+    <xme:LX_BYpRRH1tYacvEUwzDpkTQ23CqE3-ztQKQ1uRwQU_uUPTf9ovz2Y-goWBy5QDtR
+    vUDjg5RPbHpNVt54n0>
+X-ME-Received: <xmr:LX_BYjUMcXOTf8K83PAwyYfk7H--clAPWAD_oqardhJ2HkZ8gqrbDx3_0MnXNq--cEIf1cGtf0KztP5SFzlEmCpW47I5DyrZ-rB6s8uC8qDkrqVTBuo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehjedggeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucgoufhushhpvggtthffohhmrghinhculdegledmne
+    cujfgurheptgfkffggfgfvhffusehmtderredtfeejnecuhfhrohhmpeetrghrohhnucfl
+    ohhnvghsuceomhgvsegrrghrohhnmhgujhhonhgvshdrnhgvtheqnecuggftrfgrthhtvg
+    hrnhepgfekudfhudevkedvkeekgfehfefhjeevieekudejgeffgfeffefhveeggfelkeel
+    necuffhomhgrihhnpeguvggsihgrnhdrnhgvthdpihhmghhurhdrtghomhenucevlhhush
+    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmvgesrggrrhhonhhm
+    ughjohhnvghsrdhnvght
+X-ME-Proxy: <xmx:LX_BYrg82TNBirPG7i90zNlfZVJmpKlIBtjGzJqUD9nX6VxpihywCg>
+    <xmx:LX_BYrDu7wWjvSeFvv0p3KaxyyVes9hpVNPL3YGN-OlDWmfzDdBGXg>
+    <xmx:LX_BYkJdwUIFI_fOF6-1pGTuvrbQBWUjtPw4dnSEv5f3Bp3qdx9L-A>
+    <xmx:LX_BYu-i3FiOBOw5SUUaHQC_SfI6MBYuMnDsdm9BNjF99Lk58tg0IQ>
+Feedback-ID: idff947e1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA for
+ <linux-sctp@vger.kernel.org>; Sun, 3 Jul 2022 07:36:12 -0400 (EDT)
+Content-Type: multipart/mixed; boundary="------------drwzVA6fZyFfSaz5H8LvWVSb"
+Message-ID: <7e246db6-c78e-4d13-4a38-002ac64e3b41@aaronmdjones.net>
+Date:   Sun, 3 Jul 2022 11:36:12 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALvZod71Fti8yLC08mdpDk-TLYJVyfVVauWSj1zk=BhN1-GPdA@mail.gmail.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+To:     linux-sctp@vger.kernel.org
+Content-Language: en-GB
+From:   Aaron Jones <me@aaronmdjones.net>
+Subject: SCTP INIT chunks do not include multi-homing addresses if IPv6 is
+ used
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hi Shakeel,
+This is a multi-part message in MIME format.
+--------------drwzVA6fZyFfSaz5H8LvWVSb
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jul 01, 2022 at 08:47:29AM -0700, Shakeel Butt wrote:
-> On Mon, Jun 27, 2022 at 8:49 PM Feng Tang <feng.tang@intel.com> wrote:
-> > I just tested it, it does perform better (the 4th is with your patch),
-> > some perf-profile data is also listed.
-> >
-> >  7c80b038d23e1f4c 4890b686f4088c90432149bd6de 332b589c49656a45881bca4ecc0 e719635902654380b23ffce908d
-> > ---------------- --------------------------- --------------------------- ---------------------------
-> >      15722           -69.5%       4792           -40.8%       9300           -27.9%      11341        netperf.Throughput_Mbps
-> >
-> >       0.00            +0.3        0.26 ±  5%      +0.5        0.51            +1.3        1.27 ±  2%pp.self.__sk_mem_raise_allocated
-> >       0.00            +0.3        0.32 ± 15%      +1.7        1.74 ±  2%      +0.4        0.40 ±  2%  pp.self.propagate_protected_usage
-> >       0.00            +0.8        0.82 ±  7%      +0.9        0.90            +0.8        0.84        pp.self.__mod_memcg_state
-> >       0.00            +1.2        1.24 ±  4%      +1.0        1.01            +1.4        1.44        pp.self.try_charge_memcg
-> >       0.00            +2.1        2.06            +2.1        2.13            +2.1        2.11        pp.self.page_counter_uncharge
-> >       0.00            +2.1        2.14 ±  4%      +2.7        2.71            +2.6        2.60 ±  2%  pp.self.page_counter_try_charge
-> >       1.12 ±  4%      +3.1        4.24            +1.1        2.22            +1.4        2.51        pp.self.native_queued_spin_lock_slowpath
-> >       0.28 ±  9%      +3.8        4.06 ±  4%      +0.2        0.48            +0.4        0.68        pp.self.sctp_eat_data
-> >       0.00            +8.2        8.23            +0.8        0.83            +1.3        1.26        pp.self.__sk_mem_reduce_allocated
-> >
-> > And the size of 'mem_cgroup' is increased from 4224 Bytes to 4608.
-> 
-> Hi Feng, can you please try two more configurations? Take Eric's patch
-> of adding ____cacheline_aligned_in_smp in page_counter and for first
-> increase MEMCG_CHARGE_BATCH to 64 and for second increase it to 128.
-> Basically batch increases combined with Eric's patch.
+Hello.
 
-With increasing batch to 128, the regression could be reduced to -12.4%.
+While debugging SCTP multi-homing in an application over the last couple 
+of days, I discovered that the cause is because the application randomly 
+prefers IPv4 or IPv6 (literally; it does the equivalent of a dice roll).
 
-Some more details with perf-profile data below:
+If the application passes an IPv4 address first to sctp_bindx() and 
+sctp_connectx(), followed by an IPv6 address, then multi-homing works; 
+the SCTP INIT chunk includes both IP addresses passed to sctp_bindx(), 
+and /proc/net/sctp/assocs contains both. Blocking IPv4 traffic does not 
+break the connection; it falls back to IPv6.
 
-7c80b038d23e1f4c 4890b686f4088c90432149bd6de  Eric's patch                 Eric's patch + batch-64   Eric's patch + batch-128
----------------- --------------------------- --------------------------- --------------------------- --------------------------- 
-     15722           -69.5%       4792           -27.9%      11341           -14.0%      13521           -12.4%      13772        netperf.Throughput_Mbps
- 
-      0.05            +0.2        0.27 ± 18%      +0.0        0.08 ±  6%      -0.1        0.00            -0.0        0.03 ±100%  pp.self.timekeeping_max_deferment
-      0.00            +0.3        0.26 ±  5%      +1.3        1.27 ±  2%      +1.8        1.82 ± 10%      +2.0        1.96 ±  9%  pp.self.__sk_mem_raise_allocated
-      0.00            +0.3        0.32 ± 15%      +0.4        0.40 ±  2%      +0.1        0.10 ±  5%      +0.0        0.00        pp.self.propagate_protected_usage
-      0.00            +0.8        0.82 ±  7%      +0.8        0.84            +0.5        0.48            +0.4        0.36 ±  2%  pp.self.__mod_memcg_state
-      0.00            +1.2        1.24 ±  4%      +1.4        1.44            +0.4        0.40 ±  3%      +0.2        0.24 ±  6%  pp.self.try_charge_memcg
-      0.00            +2.1        2.06            +2.1        2.11            +0.5        0.50            +0.2        0.18 ±  8%  pp.self.page_counter_uncharge
-      0.00            +2.1        2.14 ±  4%      +2.6        2.60 ±  2%      +0.6        0.58            +0.2        0.20        pp.self.page_counter_try_charge
-      1.12 ±  4%      +3.1        4.24            +1.4        2.51            +1.0        2.10 ±  2%      +1.0        2.10 ±  9%  pp.self.native_queued_spin_lock_slowpath
-      0.28 ±  9%      +3.8        4.06 ±  4%      +0.4        0.68            +0.6        0.90 ±  9%      +0.7        1.00 ± 11%  pp.self.sctp_eat_data
-      0.00            +8.2        8.23            +1.3        1.26            +1.7        1.72 ±  6%      +2.0        1.95 ± 10%  pp.self.__sk_mem_reduce_allocated
- 
- Thanks,
- Feng
+However, in the reverse situation (IPv6 address followed by an IPv4 
+address), it does not; there are no IP addresses in the INIT chunk at 
+all. Thus, /proc/net/sctp/assocs contains only IPv6 addresses, and 
+blocking IPv6 traffic breaks the connection.
+
+I have written a minimal reproducer at [0] (which I am attaching to this 
+message), and you can observe the results at [1] (if you do not wish to 
+run it).
+
+I have managed to reproduce it on the following software combinations:
+
+- lksctp-tools 1.0.18 with Linux kernel 5.4 (Linux Mint 20.3)
+- lksctp-tools 1.0.19 with Linux kernel 5.10 (Debian 11)
+- lksctp-tools 1.0.19 with Linux kernel 4.14.278 (Gentoo)
+
+I do not know whether this is a bug in libsctp or in the kernel.
+
+Regards,
+Aaron Jones
+
+[0] <https://paste.debian.net/hidden/998cad29/>
+[1] <https://imgur.com/a/qbGrXXV>
+--------------drwzVA6fZyFfSaz5H8LvWVSb
+Content-Type: text/x-csrc; charset=UTF-8; name="repro.c"
+Content-Disposition: attachment; filename="repro.c"
+Content-Transfer-Encoding: base64
+
+LyogU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAKICoKICogUmVwcm9kdWNlciBm
+b3IgU0NUUCBtdWx0aWhvbWluZyBidWcgd2hlcmUgYW4gSVB2NiBhZGRyZXNzIGdpdmVuIGZp
+cnN0CiAqIGluIHRoZSBsaXN0IG9mIGFkZHJlc3NlcyBtZWFucyB0aGF0IHRoZSBTQ1RQIElO
+SVQgY2h1bmsgZG9lcyBub3QKICogaW5jbHVkZSBhbnkgSVAgYWRkcmVzc2VzIGFuZCBzbyB0
+aGUgYXNzb2NpYXRpb24gZG9lcyBub3QgbXVsdGktaG9tZS4KICoKICogQ29weXJpZ2h0IChD
+KSAyMDIyIEFhcm9uIE0uIEQuIEpvbmVzIDxtZUBhYXJvbm1kam9uZXMubmV0PgogKgogKiBn
+Y2MgLVdhbGwgLVdleHRyYSAtV3BlZGFudGljIC1zdGQ9Z251OTkgLWxzY3RwIHJlcHJvLmMg
+LW8gcmVwcm8KICogLi9yZXBybyA8cG9ydD4gPHJlbW90ZT4gPHJlbW90ZT4gWzxsb2NhbD4g
+PGxvY2FsPl0KICovCgojaW5jbHVkZSA8ZXJybm8uaD4KI2luY2x1ZGUgPGludHR5cGVzLmg+
+CiNpbmNsdWRlIDxzdGRpbnQuaD4KI2luY2x1ZGUgPHN0ZGlvLmg+CiNpbmNsdWRlIDxzdGRs
+aWIuaD4KI2luY2x1ZGUgPHN0cmluZy5oPgojaW5jbHVkZSA8dW5pc3RkLmg+CgojaW5jbHVk
+ZSA8YXJwYS9pbmV0Lmg+CiNpbmNsdWRlIDxuZXRpbmV0L2luLmg+CiNpbmNsdWRlIDxuZXRp
+bmV0L3NjdHAuaD4KCmludAptYWluKGludCBhcmdjLCBjaGFyICphcmd2W10pCnsKCXN0cnVj
+dCBzb2NrYWRkcl9zdG9yYWdlIHNzOwoJc3RydWN0IHNvY2thZGRyX2luICpzYTQgPSAoc3Ry
+dWN0IHNvY2thZGRyX2luICopICZzczsKCXN0cnVjdCBzb2NrYWRkcl9pbjYgKnNhNiA9IChz
+dHJ1Y3Qgc29ja2FkZHJfaW42ICopICZzczsKCXVpbnQ4X3QgbGFkZHJzW3NpemVvZihzdHJ1
+Y3Qgc29ja2FkZHJfc3RvcmFnZSkgKiAyXTsKCXVpbnQ4X3QgcmFkZHJzW3NpemVvZihzdHJ1
+Y3Qgc29ja2FkZHJfc3RvcmFnZSkgKiAyXTsKCXVpbnQ4X3QgKmxhZGRycCA9IGxhZGRyczsK
+CXVpbnQ4X3QgKnJhZGRycCA9IHJhZGRyczsKCXVpbnQxNl90IHBvcnQgPSAwOwoKCW1lbXNl
+dChsYWRkcnMsIDB4MDAsIHNpemVvZiBsYWRkcnMpOwoJbWVtc2V0KHJhZGRycywgMHgwMCwg
+c2l6ZW9mIHJhZGRycyk7CgoJY29uc3QgaW50IGZkID0gc29ja2V0KEFGX0lORVQ2LCBTT0NL
+X1NUUkVBTSwgSVBQUk9UT19TQ1RQKTsKCglpZiAoZmQgPT0gLTEpCgl7CgkJcGVycm9yKCJz
+b2NrZXQiKTsKCQlyZXR1cm4gRVhJVF9GQUlMVVJFOwoJfQoJaWYgKGFyZ2MgPCA0IHx8IGFy
+Z2MgPT0gNSB8fCBhcmdjID4gNikKCXsKCQlmcHJpbnRmKHN0ZGVyciwgIlVzYWdlOiAuL3Jl
+cHJvIDxwb3J0PiA8cmVtb3RlPiA8cmVtb3RlPiBbPGxvY2FsPiA8bG9jYWw+XVxuIik7CgkJ
+cmV0dXJuIEVYSVRfRkFJTFVSRTsKCX0KCWlmIChzc2NhbmYoYXJndlsxXSwgIiUiIFNDTnUx
+NiwgJnBvcnQpICE9IDEgfHwgcG9ydCA9PSAwKQoJewoJCWZwcmludGYoc3RkZXJyLCAiSW52
+YWxpZCBwb3J0IFwiJXNcIlxuIiwgYXJndlsxXSk7CgkJcmV0dXJuIEVYSVRfRkFJTFVSRTsK
+CX0KCWZvciAoaW50IGkgPSAyOyBpIDwgNDsgaSsrKQoJewoJCW1lbXNldCgmc3MsIDB4MDAs
+IHNpemVvZiBzcyk7CgoJCWlmIChpbmV0X3B0b24oQUZfSU5FVCwgYXJndltpXSwgJnNhNC0+
+c2luX2FkZHIpID09IDEpCgkJewoJCQlzYTQtPnNpbl9mYW1pbHkgPSBBRl9JTkVUOwoJCQlz
+YTQtPnNpbl9wb3J0ID0gaHRvbnMocG9ydCk7CgkJCW1lbWNweShyYWRkcnAsIHNhNCwgc2l6
+ZW9mICpzYTQpOwoJCQlyYWRkcnAgKz0gc2l6ZW9mICpzYTQ7CgkJfQoJCWVsc2UgaWYgKGlu
+ZXRfcHRvbihBRl9JTkVUNiwgYXJndltpXSwgJnNhNi0+c2luNl9hZGRyKSA9PSAxKQoJCXsK
+CQkJc2E2LT5zaW42X2ZhbWlseSA9IEFGX0lORVQ2OwoJCQlzYTYtPnNpbjZfcG9ydCA9IGh0
+b25zKHBvcnQpOwoJCQltZW1jcHkocmFkZHJwLCBzYTYsIHNpemVvZiAqc2E2KTsKCQkJcmFk
+ZHJwICs9IHNpemVvZiAqc2E2OwoJCX0KCQllbHNlCgkJewoJCQlmcHJpbnRmKHN0ZGVyciwg
+IkludmFsaWQgSVAgYWRkcmVzcyBcIiVzXCJcbiIsIGFyZ3ZbaV0pOwoJCQlyZXR1cm4gRVhJ
+VF9GQUlMVVJFOwoJCX0KCX0KCWZvciAoaW50IGkgPSA0OyBpIDwgYXJnYzsgaSsrKQoJewoJ
+CW1lbXNldCgmc3MsIDB4MDAsIHNpemVvZiBzcyk7CgoJCWlmIChpbmV0X3B0b24oQUZfSU5F
+VCwgYXJndltpXSwgJnNhNC0+c2luX2FkZHIpID09IDEpCgkJewoJCQlzYTQtPnNpbl9mYW1p
+bHkgPSBBRl9JTkVUOwoJCQlzYTQtPnNpbl9wb3J0ID0gaHRvbnMocG9ydCk7CgkJCW1lbWNw
+eShsYWRkcnAsIHNhNCwgc2l6ZW9mICpzYTQpOwoJCQlsYWRkcnAgKz0gc2l6ZW9mICpzYTQ7
+CgkJfQoJCWVsc2UgaWYgKGluZXRfcHRvbihBRl9JTkVUNiwgYXJndltpXSwgJnNhNi0+c2lu
+Nl9hZGRyKSA9PSAxKQoJCXsKCQkJc2E2LT5zaW42X2ZhbWlseSA9IEFGX0lORVQ2OwoJCQlz
+YTYtPnNpbjZfcG9ydCA9IGh0b25zKHBvcnQpOwoJCQltZW1jcHkobGFkZHJwLCBzYTYsIHNp
+emVvZiAqc2E2KTsKCQkJbGFkZHJwICs9IHNpemVvZiAqc2E2OwoJCX0KCQllbHNlCgkJewoJ
+CQlmcHJpbnRmKHN0ZGVyciwgIkludmFsaWQgSVAgYWRkcmVzcyBcIiVzXCJcbiIsIGFyZ3Zb
+aV0pOwoJCQlyZXR1cm4gRVhJVF9GQUlMVVJFOwoJCX0KCX0KCWlmIChhcmdjID09IDYgJiYg
+c2N0cF9iaW5keChmZCwgKHN0cnVjdCBzb2NrYWRkciAqKSBsYWRkcnMsIDIsIFNDVFBfQklO
+RFhfQUREX0FERFIpID09IC0xKQoJewoJCXBlcnJvcigic2N0cF9iaW5keCIpOwoJCXJldHVy
+biBFWElUX0ZBSUxVUkU7Cgl9CglpZiAoc2N0cF9jb25uZWN0eChmZCwgKHN0cnVjdCBzb2Nr
+YWRkciAqKSByYWRkcnMsIDIsIE5VTEwpID09IC0xKQoJewoJCXBlcnJvcigic2N0cF9jb25u
+ZWN0eCIpOwoJCXJldHVybiBFWElUX0ZBSUxVUkU7Cgl9CgoJY2xvc2UoZmQpOwoKCXJldHVy
+biBFWElUX1NVQ0NFU1M7Cn0K
+
+--------------drwzVA6fZyFfSaz5H8LvWVSb--
