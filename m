@@ -2,129 +2,113 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E965648D5
-	for <lists+linux-sctp@lfdr.de>; Sun,  3 Jul 2022 19:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A22564A68
+	for <lists+linux-sctp@lfdr.de>; Mon,  4 Jul 2022 00:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiGCR0i (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 3 Jul 2022 13:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55086 "EHLO
+        id S229835AbiGCWzn (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 3 Jul 2022 18:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiGCR0h (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sun, 3 Jul 2022 13:26:37 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F67200
-        for <linux-sctp@vger.kernel.org>; Sun,  3 Jul 2022 10:26:36 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id q140so6927915pgq.6
-        for <linux-sctp@vger.kernel.org>; Sun, 03 Jul 2022 10:26:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=xCOwDQy21Ld30SQ4BcPGwbGpkaFInErbW2YUBTkEmhY=;
-        b=ECxYszghauAevwUXi3SLjw8+qnYU5eHAxrAkxusNUaxNMvS4FZbNwGZpxI2fa3qzun
-         8Zd9sLWAi2dNc2bduFIYyOUGiQK+S3RmdngBndC22FuqyexyVdasphmNl8wXBCw3RCFj
-         NAzTUn+7GXrUfih8TbPGpDAMXuoBooi84BUdLaygGXZ9+BtrjXMzk/lxiWSDGL+Kkxf4
-         7l/uEUjuVDD1bjO5L69WzHsSrOWeuvZAl9i0HYViR2VD/Q/t99GPpAne25hcDkndiEod
-         wOQ+bQtM7N0dGA93GF3P+FpcYzoIyg6+hCT/0JFTSP0/Ij24gd9B3cTryn+w1cusi5A3
-         mi3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=xCOwDQy21Ld30SQ4BcPGwbGpkaFInErbW2YUBTkEmhY=;
-        b=dDI2VG944/ziYn2gItXJ96iP/D+qRXYukYdlr12Tm5AgWEtjZwrqoe8olJil4yqKo1
-         reCc200fVO07I1L/uXbM2f6t1c9DvltqNvXy0QCz2S2XAW3jQtmWwS7tro/wceCVmbFt
-         kehuigFKhh9KQ+hM4kjqAy2jEKrjVW9fKVdEi4GaQD6Wlf60sGaQdtxFpKk9fTVJ1pSh
-         ke6HllYMz7OATLXWtD5jVDYsgTfTUY7mXwhRfVxqp5K0X8xQJkaQCoS90EO3jjfgR63N
-         JcB91nFrV81bDyNPhrjPoqs4lCZ7N8XvphBt7Q4tZUXWkzL0HcuWPodK8p8n9eHgLFTu
-         iKtw==
-X-Gm-Message-State: AJIora/ZeuAbYSq/cFINZ/Ax3/cXQz3Z1mhZ3wXVWXBwrkyH73rR1flu
-        9KBQ7m07ng7rY5G+UwITNzqG/LGz0eYyJhRzAbI=
-X-Google-Smtp-Source: AGRyM1tgX1bA31nl/wxM9i+YalSYeD3KzN1AIERc3ZPqTiTgiTq81VYfdg19IbwxFbZ4IB50Nxs8prwBs8ah3HXTXDc=
-X-Received: by 2002:a63:9512:0:b0:40c:a165:a60e with SMTP id
- p18-20020a639512000000b0040ca165a60emr22111985pgd.398.1656869196009; Sun, 03
- Jul 2022 10:26:36 -0700 (PDT)
+        with ESMTP id S229484AbiGCWzm (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sun, 3 Jul 2022 18:55:42 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2652ADF;
+        Sun,  3 Jul 2022 15:55:41 -0700 (PDT)
+Date:   Sun, 3 Jul 2022 15:55:31 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1656888940;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UsoL24ELETfF3MSNiDW9I/K0Flpmei9riTSH6+si7ig=;
+        b=iUInCXasIip4wHrtoL/0lzsYtRCZFSsRqfLRPjoYwSOtiqscSWuPjZHfbG97LiaP3BzDIe
+        0ZXrzFwfVL/E2wq4AmYs4coUwxW0GVnJ6RLTvBjOWag7XFKXgSSe9R92erWjn2FlZkzP5K
+        kLcNL3GRn8tg7m+p4Hc6FjL36mprR04=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Shakeel Butt <shakeelb@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Xin Long <lucien.xin@gmail.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        kernel test robot <oliver.sang@intel.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        network dev <netdev@vger.kernel.org>,
+        linux-s390@vger.kernel.org, MPTCP Upstream <mptcp@lists.linux.dev>,
+        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
+        lkp@lists.01.org, kbuild test robot <lkp@intel.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Yin Fengwei <fengwei.yin@intel.com>, Ying Xu <yinxu@redhat.com>
+Subject: Re: [net] 4890b686f4: netperf.Throughput_Mbps -69.4% regression
+Message-ID: <YsIeYzEuj95PWMWO@castle>
+References: <20220625023642.GA40868@shbuild999.sh.intel.com>
+ <20220627023812.GA29314@shbuild999.sh.intel.com>
+ <CANn89i+6NPujMyiQxriZRt6vhv6hNrAntXxi1uOhJ0SSqnJ47w@mail.gmail.com>
+ <20220627123415.GA32052@shbuild999.sh.intel.com>
+ <CANn89iJAoYCebNbXpNMXRoDUkFMhg9QagetVU9NZUq+GnLMgqQ@mail.gmail.com>
+ <20220627144822.GA20878@shbuild999.sh.intel.com>
+ <CANn89iLSWm-c4XE79rUsxzOp3VwXVDhOEPTQnWgeQ48UwM=u7Q@mail.gmail.com>
+ <20220628034926.GA69004@shbuild999.sh.intel.com>
+ <CALvZod71Fti8yLC08mdpDk-TLYJVyfVVauWSj1zk=BhN1-GPdA@mail.gmail.com>
+ <20220703104353.GB62281@shbuild999.sh.intel.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:1790:0:0:0:0 with HTTP; Sun, 3 Jul 2022 10:26:35
- -0700 (PDT)
-Reply-To: kbreitenbach17@gmail.com
-From:   Kristina Breitenbach <dedadedvg2017@gmail.com>
-Date:   Sun, 3 Jul 2022 10:26:35 -0700
-Message-ID: <CAMnn89-xEeg1MPfp2DfY+WK3EnS97adYCHue-tyyPfBhYGQ0zw@mail.gmail.com>
-Subject: Re, gute Nachrichten
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        T_TVD_FUZZY_SECTOR,UNDISC_FREEM autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220703104353.GB62281@shbuild999.sh.intel.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:541 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5003]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [dedadedvg2017[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [dedadedvg2017[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [kbreitenbach17[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 T_TVD_FUZZY_SECTOR BODY: No description available.
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
---=20
-Hallo,
+On Sun, Jul 03, 2022 at 06:43:53PM +0800, Feng Tang wrote:
+> Hi Shakeel,
+> 
+> On Fri, Jul 01, 2022 at 08:47:29AM -0700, Shakeel Butt wrote:
+> > On Mon, Jun 27, 2022 at 8:49 PM Feng Tang <feng.tang@intel.com> wrote:
+> > > I just tested it, it does perform better (the 4th is with your patch),
+> > > some perf-profile data is also listed.
+> > >
+> > >  7c80b038d23e1f4c 4890b686f4088c90432149bd6de 332b589c49656a45881bca4ecc0 e719635902654380b23ffce908d
+> > > ---------------- --------------------------- --------------------------- ---------------------------
+> > >      15722           -69.5%       4792           -40.8%       9300           -27.9%      11341        netperf.Throughput_Mbps
+> > >
+> > >       0.00            +0.3        0.26 ±  5%      +0.5        0.51            +1.3        1.27 ±  2%pp.self.__sk_mem_raise_allocated
+> > >       0.00            +0.3        0.32 ± 15%      +1.7        1.74 ±  2%      +0.4        0.40 ±  2%  pp.self.propagate_protected_usage
+> > >       0.00            +0.8        0.82 ±  7%      +0.9        0.90            +0.8        0.84        pp.self.__mod_memcg_state
+> > >       0.00            +1.2        1.24 ±  4%      +1.0        1.01            +1.4        1.44        pp.self.try_charge_memcg
+> > >       0.00            +2.1        2.06            +2.1        2.13            +2.1        2.11        pp.self.page_counter_uncharge
+> > >       0.00            +2.1        2.14 ±  4%      +2.7        2.71            +2.6        2.60 ±  2%  pp.self.page_counter_try_charge
+> > >       1.12 ±  4%      +3.1        4.24            +1.1        2.22            +1.4        2.51        pp.self.native_queued_spin_lock_slowpath
+> > >       0.28 ±  9%      +3.8        4.06 ±  4%      +0.2        0.48            +0.4        0.68        pp.self.sctp_eat_data
+> > >       0.00            +8.2        8.23            +0.8        0.83            +1.3        1.26        pp.self.__sk_mem_reduce_allocated
+> > >
+> > > And the size of 'mem_cgroup' is increased from 4224 Bytes to 4608.
+> > 
+> > Hi Feng, can you please try two more configurations? Take Eric's patch
+> > of adding ____cacheline_aligned_in_smp in page_counter and for first
+> > increase MEMCG_CHARGE_BATCH to 64 and for second increase it to 128.
+> > Basically batch increases combined with Eric's patch.
+> 
+> With increasing batch to 128, the regression could be reduced to -12.4%.
 
-Wir sind eine registrierte Private Loan Investment Company, in der wir
-t=C3=A4tig sind Europa, Amerika und Asien.
+If we're going to bump it, I wonder if we should scale it dynamically depending
+on the size of the memory cgroup?
 
-
-Wir suchen Beg=C3=BCnstigte, die Mittel f=C3=BCr die Erweiterung/Verlagerun=
-g
-ihres Unternehmens beschaffen
-
-Gesch=C3=A4ftsinteressen im Ausland. Wir sind bereit, Projekte in Form von
-zu finanzieren
-
-Zinsg=C3=BCnstiger Kredit. Wir vergeben Kredite sowohl an Unternehmen als
-auch an Privatpersonen zu g=C3=BCnstigen Konditionen Zinssatz von 2 % R.O.I
-pro Jahr.
-
-
-Wir vergeben gerne Kredite in folgenden Branchen: =C3=96l/Gas, Banken, Real
-Immobilien, Aktienspekulation und Bergbau, Transportwesen,
-Gesundheitssektor und Tabak,  Kommunikationsdienste, Landwirtschaft,
-Forstwirtschaft und Fischerei, also jede Branche.
-
-Die Konditionen sind sehr flexibel und interessant.
-
-Bitte kontaktieren Sie uns f=C3=BCr weitere Details.
-Email: kbreitenbach17@gmail.com
-
-Mit freundlichen Gr=C3=BC=C3=9Fe
-Kapitalfinanzierung One Limited
+Thanks!
