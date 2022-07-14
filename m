@@ -2,60 +2,97 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2583D5736BE
-	for <lists+linux-sctp@lfdr.de>; Wed, 13 Jul 2022 14:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C11E9574739
+	for <lists+linux-sctp@lfdr.de>; Thu, 14 Jul 2022 10:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiGMM6p (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 13 Jul 2022 08:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
+        id S236884AbiGNIiI (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 14 Jul 2022 04:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230394AbiGMM6o (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 13 Jul 2022 08:58:44 -0400
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1CE15FF4
-        for <linux-sctp@vger.kernel.org>; Wed, 13 Jul 2022 05:58:43 -0700 (PDT)
-Received: from zimbra101-e18.priv.proxad.net (unknown [172.20.243.47])
-        by smtp3-g21.free.fr (Postfix) with ESMTP id C803113F84C;
-        Wed, 13 Jul 2022 14:58:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
-        s=smtp-20201208; t=1657717120;
-        bh=8Zk9bEIGsBQpNGubAmJWkYLSb5ZZlevbEJc7d20CdAw=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=lbzkT1koOimM7Qb3cKLryb235TG17fAZHP04FZAdEBQT4NLiyOzUIJm1hl2pEyTd3
-         iX/QkfMAwFVp/eJQ4oo6jAx5qMiGaZ6AtGULQsXevV1TnhQmVd5Bkq2kAVaGL74op3
-         AI0Hk+FU6SR+5AEyxWZDiE8I5eKfemSMcjoVTvS9wXT6HuoOxid7dXzOemF4CDOUaZ
-         7hR+odkB8lCGWyXaubVNOQ03O60tUZf6ql0UNcL0eJOPBvLMq4ga9mMonOfVyve+w6
-         3u4HX2vdtjA+fzMuw1U1E98l7C9qLS5F0a2D9SA+klYbzFG0VxhpLcrlxQ1+awrslw
-         DYUHQPzmQ8Z3g==
-Date:   Wed, 13 Jul 2022 14:58:40 +0200 (CEST)
-From:   o.evistel@free.fr
-To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     linux-sctp <linux-sctp@vger.kernel.org>
-Message-ID: <1937458162.418765580.1657717120765.JavaMail.zimbra@free.fr>
-In-Reply-To: <YsbiDrG1PQ2Gng5T@t14s.localdomain>
-References: <6f6f11b5c30bce3d6e77d719ef75112dee75250d.profile@marceloleitner.u.sourceforge.net> <YsbiDrG1PQ2Gng5T@t14s.localdomain>
-Subject: Linux SCTP performance question
+        with ESMTP id S236864AbiGNIhQ (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 14 Jul 2022 04:37:16 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5C63FA14
+        for <linux-sctp@vger.kernel.org>; Thu, 14 Jul 2022 01:37:14 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id z25so1667898lfr.2
+        for <linux-sctp@vger.kernel.org>; Thu, 14 Jul 2022 01:37:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
+        b=eOKhIHPUU5qPTZbjyQcWfvRUY0zDAP8hnIUzGBjF2Jn5DfdNsbEWN2bt7ALPYmKFVp
+         Dxr1gDHkbIBW6Zt+nHPJYVynuk8AW0yQZ/Zbg6Hs/Db/0s9SnaRXX8dPxs4FUxGCTJqt
+         PUYZva9zdBfTCaw+ACjLsUUgRvbYiV1yKAF3EhOBh+YW55bYBsAw2vjNobpxCrdB648X
+         A9Vj0WSfJubet8viXTg/I9X1Zmn6KwP7YNCJiSogQMOb5VTL9XQBYGsxHSC28kklqMwQ
+         Xqm1mx/as6lOSd/UexvuUJPMkR0uIfSfLSUsGSd7SP6mXh7BeziDYVk18AfHAMhcFado
+         ZNLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
+        b=UuOThMK76JN6BkEstbMLh+ao2owKCVsXtXMQ1RbobHpcE8ybYJ8Xo8Ya5Y2iOm1xvw
+         vxE7mm6m4IDIyLNsACOg+7YNeQs02d7O6UTTCELK6lCzVf9EPqZ8IGqgXvp1p0Zz6yUE
+         U7uMN/TIEKu8JOe4su8INDVwenZ4cwO+mgWWmhgjsIAasXGW42pVXsHIvDP34BSzJaHA
+         suTlWRNyKatWrAUDxvRP9NV+NP4pe8TR2hwQniI4oFAIACqejVNPpkjz4+C/9NiZ3tKr
+         jxuWaDppYKpHlCFgOZYE9QGI5pRrujMYM2bHl/PmlXAFp/vtrEwSRrtJdBGIcsdS1n9E
+         PhsA==
+X-Gm-Message-State: AJIora/gfjU9u0MnQs1QAG16oyAALER26Lp1pfUvuccFQH+L3gj1A4YB
+        HIDelXV7uaNVXg9wAKOJy5xdOsVZuAZEXiQwVvU=
+X-Google-Smtp-Source: AGRyM1suH6kpL0bxxrdPqBdRw7fjg6QmbYsIJ5KtUWeYknhIH8CIkHpjEQ1bnLxbFcENJg0E8wYhVlYhJeESVTPizkI=
+X-Received: by 2002:a05:6512:12c8:b0:489:efbf:18d1 with SMTP id
+ p8-20020a05651212c800b00489efbf18d1mr4734610lfg.192.1657787832538; Thu, 14
+ Jul 2022 01:37:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [78.197.34.136]
-X-Mailer: Zimbra 8.8.7_GA_1002 (ZimbraWebClient - FF101 (Linux)/8.8.7_GA_1002)
-Thread-Topic: Linux SCTP performance question
-Thread-Index: 2DGxpN6xV4C4bUClvJnyXq7vayuHvw==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        GB_FREEMAIL_DISPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a2e:9041:0:0:0:0:0 with HTTP; Thu, 14 Jul 2022 01:37:11
+ -0700 (PDT)
+Reply-To: abdwabbomaddahm@gmail.com
+From:   Abdwabbo Maddah <abdwabbomaddah746@gmail.com>
+Date:   Thu, 14 Jul 2022 09:37:11 +0100
+Message-ID: <CAFC-3icPrpmNqEMcqzAOFvzCPc-r5yv89mNAZ9SsCQvcOZ=+9g@mail.gmail.com>
+Subject: Get back to me... URGENT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:12a listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4900]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [abdwabbomaddah746[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [abdwabbomaddah746[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Dear Marcelo
-
-I am using linux-sctp as transport for SIGTRAN M3UA on RHEL 8.4 and I am using sctp_sendmsg() and sctp_recvmsg() to send/receive.
-I would like to know if the use of sctp_sendv() and sctp_recvv() enhances performances ?
-
-Regards
-Omar AIT AMRANE
+-- 
+Dear,
+I had sent you a mail but i don't think you received it that's why am
+writing you again.It is important you get back to me as soon as you
+can.
+Abd-Wabbo Maddah
