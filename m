@@ -2,61 +2,61 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 521F457BC42
-	for <lists+linux-sctp@lfdr.de>; Wed, 20 Jul 2022 19:04:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E5F57CDC1
+	for <lists+linux-sctp@lfdr.de>; Thu, 21 Jul 2022 16:35:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbiGTREp (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 20 Jul 2022 13:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33190 "EHLO
+        id S229668AbiGUOfx (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 21 Jul 2022 10:35:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236991AbiGTREm (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 20 Jul 2022 13:04:42 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979B06BC3B;
-        Wed, 20 Jul 2022 10:04:41 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-10d6e8990b9so8811062fac.7;
-        Wed, 20 Jul 2022 10:04:41 -0700 (PDT)
+        with ESMTP id S229502AbiGUOfw (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 21 Jul 2022 10:35:52 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E9D186EB;
+        Thu, 21 Jul 2022 07:35:50 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id r24so1374380qtx.6;
+        Thu, 21 Jul 2022 07:35:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DRRDvUhGg+XRjKdigaR0X/x0hmvUMO6VH2v80OeYkr4=;
-        b=Hzg47Ce57bKJQpKUXLmRt/A3U9MSi/nuq05G4YNOexuwXKt8HFg9czBNGI/lSjdpx5
-         fJAV/OHnvaqMAlTbklbDDeeA1NIv0frKKvUSOdyAdy1RZlr+9NI7BxmPcJwV9SyreSYO
-         45q03idsXJLwXDRRH4+lnDi9QQRpeu9+RR1pYm3lO5DcSkd1VevS50fsLrzfEGvC249l
-         aeRCOr6adfaUvDldzA9R2KmBjW4Ww0VEhdrzfshTtTCuIFMOtWjcjVPXK8wKGtilPGTj
-         PhIjoHcQfRcDJXXO7o00xLS9dVgpxW8+tiZ2Jg9CV2Pu/JqrrhcapKYLENvbfYJrDdql
-         tvmQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TNm3aXN1thCBh+umGTMO255119B8nj1I3dKmFNCEHvU=;
+        b=YCWFOqbwbpDDBfdHjdxnU94lcBxg08CwjCXk1EZUjbjBvWPuo3bfXOnM/lEGivq4wS
+         ia2Q+j4EPucBzXG0DfHPOOZK20UPeSRktKWAE8JTGyaAPJ1ByyVSvV+CYzSUtA+PCxBl
+         ohSl4H551LTW/9Zs/u9kdtlmmTrWHd0JIvjgWxo6QgGFp9KwCxqaV/b3dveRtD4xbMMC
+         RTPMO6RIq3DMusYPBhsCe70N9oiWae99WWJX3DI2jrCVX7l7Qg//vzGveaKt8W5KGmEX
+         pnVe538OweaMgtU4UlU7UhJ/a+4+QW3eDSEoqSVSyTCWAApb+vYhuAhH6CbNODWvvmHO
+         +d2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DRRDvUhGg+XRjKdigaR0X/x0hmvUMO6VH2v80OeYkr4=;
-        b=QDFQTzPDmNKevJnsVSsTJxbsk43dvkq2Mz+GcH8wh45eea2GQZZ+cK21Zwg60V1Q88
-         f2X30fLEfIAgHRj61xOIE5gEZh2tW1IPl7+gBAiQUpVPE9r0u2i3siStHykx/pxGhu70
-         u7ieaT/a4tqiUnvK1LAsUH4o7pJtLmMYruj5hS2TfCcN4vkQaWZ3nHuC2+jsZ8rLSW+t
-         HezLUueJHfrpGsFFfL/Xbkr70hfU3BHGGg3lDztSBP0jThtU+s3K7O5IUX+7eMXQb2Lr
-         VT7Y/NyolV5p8h/4x3LXQXwjsSEjjeeuiOy83UEJRgC2L+CZMTnZvc0DJssX0j7tdqnu
-         7Sog==
-X-Gm-Message-State: AJIora9iJUFZWizY3NtX8GbLa2qIYI467jXlPbi6z/dg0um4Hc0nSoHc
-        TBPZb+DvUFbdEGmpZQ29j7K9EgcHEYfGWHXEXYBI+QqTkOM=
-X-Google-Smtp-Source: AGRyM1uPOe53CvlPmI83IFhM84ZZmMexJ5f5+r9sqKdJ0kODBAuE/sBz/QwuQ8qQRMkrao8I4Iwa0n8hoEZYVo+jpRw=
-X-Received: by 2002:a05:6871:88e:b0:10b:f6bf:490 with SMTP id
- r14-20020a056871088e00b0010bf6bf0490mr3238585oaq.129.1658336680911; Wed, 20
- Jul 2022 10:04:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <0ad4093257791efe9651303b91ece0de244aafa4.1658166896.git.lucien.xin@gmail.com>
- <Ytb8ouxpPfV4MHru@t14s.localdomain>
-In-Reply-To: <Ytb8ouxpPfV4MHru@t14s.localdomain>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TNm3aXN1thCBh+umGTMO255119B8nj1I3dKmFNCEHvU=;
+        b=XXzA959wNajcDAEEQjNR0xFkQrrfycjxUMGCxfR3txaJX24b4iRN7oYzcBMpivfQmE
+         lLaK/FQSsGdWkwTjq21zhHV360Xmt8lNtd1cq3SpUzFLrtTBj1EC9rEyYjf+fTakt4KG
+         V+IxfdSj8a5AVl94u0aT3JEummnNiz/Y99meW/zM39lndh2kDgWFnw5eSm4KBh9UPamh
+         /CJwwdg21zHQFpeQ78brKBbkGHYCCEtklVaAYozyHN07GeOJ783Mx1uz7am2NVQbiLhr
+         b0tiGKzpqmO8wifsd1Eu98U0w0HWZ0Qe9sFWx7Gt0R731bcPt93O6m/5BsWS7F0DZzro
+         kQng==
+X-Gm-Message-State: AJIora+wNk2KN/ItHHA0DhK5RXND5Z9cctC/Jt24pplwYdBMtgJtOs7/
+        d9R1dpkHOnCnRj5uNbtuElcqgA/McFk=
+X-Google-Smtp-Source: AGRyM1uSy7GP6yBulr7nDh1U6Xo+MTIjhZNdr9VWz/vNGz5Ij/Ard9efpzAlTxvW+6u00OE9mrlDXg==
+X-Received: by 2002:a05:622a:13ce:b0:31a:b4ce:1679 with SMTP id p14-20020a05622a13ce00b0031ab4ce1679mr33653394qtk.330.1658414149350;
+        Thu, 21 Jul 2022 07:35:49 -0700 (PDT)
+Received: from wsfd-netdev15.ntdv.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id y5-20020a05620a44c500b006b4880b08a9sm207452qkp.88.2022.07.21.07.35.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 07:35:49 -0700 (PDT)
 From:   Xin Long <lucien.xin@gmail.com>
-Date:   Wed, 20 Jul 2022 13:03:56 -0400
-Message-ID: <CADvbK_dj83ajdamWDZpT1OUFBDJT-9udtKS97+W8Khw9XoVDrA@mail.gmail.com>
-Subject: Re: [PATCH net] Documentation: fix sctp_wmem in ip-sysctl.rst
-To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     network dev <netdev@vger.kernel.org>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        davem <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Subject: [PATCHv2 net] Documentation: fix sctp_wmem in ip-sysctl.rst
+Date:   Thu, 21 Jul 2022 10:35:46 -0400
+Message-Id: <eb4af790717c41995cd8bee67686d69e6fbb141d.1658414146.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -67,54 +67,40 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 2:49 PM Marcelo Ricardo Leitner
-<marcelo.leitner@gmail.com> wrote:
->
-> On Mon, Jul 18, 2022 at 01:54:56PM -0400, Xin Long wrote:
-> > Since commit 1033990ac5b2 ("sctp: implement memory accounting on tx path"),
-> > SCTP has supported memory accounting on tx path where 'sctp_wmem' is used
-> > by sk_wmem_schedule(). So we should fix the description for this option in
-> > ip-sysctl.rst accordingly.
-> >
-> > Fixes: 1033990ac5b2 ("sctp: implement memory accounting on tx path")
-> > Signed-off-by: Xin Long <lucien.xin@gmail.com>
-> > ---
-> >  Documentation/networking/ip-sysctl.rst | 9 ++++++++-
-> >  1 file changed, 8 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
-> > index 0e58001f8580..b7db2e5e5cc5 100644
-> > --- a/Documentation/networking/ip-sysctl.rst
-> > +++ b/Documentation/networking/ip-sysctl.rst
-> > @@ -2870,7 +2870,14 @@ sctp_rmem - vector of 3 INTEGERs: min, default, max
-> >       Default: 4K
-> >
-> >  sctp_wmem  - vector of 3 INTEGERs: min, default, max
-> > -     Currently this tunable has no effect.
-> > +     Only the first value ("min") is used, "default" and "max" are
-> > +     ignored.
-> > +
-> > +     min: Minimal size of send buffer used by SCTP socket.
->
-> I'm not a native English speaker, but this seems better:
-> "Minimum size of send buffer that can be used by an SCTP socket."
-This is from "sctp_rmem" part:
+Since commit 1033990ac5b2 ("sctp: implement memory accounting on tx path"),
+SCTP has supported memory accounting on tx path where 'sctp_wmem' is used
+by sk_wmem_schedule(). So we should fix the description for this option in
+ip-sysctl.rst accordingly.
 
-"min: Minimal size of receive buffer used by SCTP socket."
+v1->v2:
+  - Improve the description as Marcelo suggested.
 
-I think it was copied from "tcp_rmem", and yes it should be "SCTP sockets"
-or "an SCTP socket.", and "Minimum size" seems more common.
+Fixes: 1033990ac5b2 ("sctp: implement memory accounting on tx path")
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+---
+ Documentation/networking/ip-sysctl.rst | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-will post v2. Thanks.
+diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
+index 0e58001f8580..af2f0dfd50db 100644
+--- a/Documentation/networking/ip-sysctl.rst
++++ b/Documentation/networking/ip-sysctl.rst
+@@ -2870,7 +2870,14 @@ sctp_rmem - vector of 3 INTEGERs: min, default, max
+ 	Default: 4K
+ 
+ sctp_wmem  - vector of 3 INTEGERs: min, default, max
+-	Currently this tunable has no effect.
++	Only the first value ("min") is used, "default" and "max" are
++	ignored.
++
++	min: Minimum size of send buffer that can be used by SCTP sockets.
++	It is guaranteed to each SCTP socket (but not association) even
++	under moderate memory pressure.
++
++	Default: 4K
+ 
+ addr_scope_policy - INTEGER
+ 	Control IPv4 address scoping - draft-stewart-tsvwg-sctp-ipv4-00
+-- 
+2.31.1
 
->
-> > +     It is guaranteed to each SCTP socket (but not association) even
-> > +     under moderate memory pressure.
-> > +
-> > +     Default: 4K
-> >
-> >  addr_scope_policy - INTEGER
-> >       Control IPv4 address scoping - draft-stewart-tsvwg-sctp-ipv4-00
-> > --
-> > 2.31.1
-> >
