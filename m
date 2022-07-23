@@ -2,64 +2,52 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5E5F57CDC1
-	for <lists+linux-sctp@lfdr.de>; Thu, 21 Jul 2022 16:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A86B757EB28
+	for <lists+linux-sctp@lfdr.de>; Sat, 23 Jul 2022 03:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbiGUOfx (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 21 Jul 2022 10:35:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
+        id S234587AbiGWB6x (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 22 Jul 2022 21:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiGUOfw (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 21 Jul 2022 10:35:52 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E9D186EB;
-        Thu, 21 Jul 2022 07:35:50 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id r24so1374380qtx.6;
-        Thu, 21 Jul 2022 07:35:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TNm3aXN1thCBh+umGTMO255119B8nj1I3dKmFNCEHvU=;
-        b=YCWFOqbwbpDDBfdHjdxnU94lcBxg08CwjCXk1EZUjbjBvWPuo3bfXOnM/lEGivq4wS
-         ia2Q+j4EPucBzXG0DfHPOOZK20UPeSRktKWAE8JTGyaAPJ1ByyVSvV+CYzSUtA+PCxBl
-         ohSl4H551LTW/9Zs/u9kdtlmmTrWHd0JIvjgWxo6QgGFp9KwCxqaV/b3dveRtD4xbMMC
-         RTPMO6RIq3DMusYPBhsCe70N9oiWae99WWJX3DI2jrCVX7l7Qg//vzGveaKt8W5KGmEX
-         pnVe538OweaMgtU4UlU7UhJ/a+4+QW3eDSEoqSVSyTCWAApb+vYhuAhH6CbNODWvvmHO
-         +d2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TNm3aXN1thCBh+umGTMO255119B8nj1I3dKmFNCEHvU=;
-        b=XXzA959wNajcDAEEQjNR0xFkQrrfycjxUMGCxfR3txaJX24b4iRN7oYzcBMpivfQmE
-         lLaK/FQSsGdWkwTjq21zhHV360Xmt8lNtd1cq3SpUzFLrtTBj1EC9rEyYjf+fTakt4KG
-         V+IxfdSj8a5AVl94u0aT3JEummnNiz/Y99meW/zM39lndh2kDgWFnw5eSm4KBh9UPamh
-         /CJwwdg21zHQFpeQ78brKBbkGHYCCEtklVaAYozyHN07GeOJ783Mx1uz7am2NVQbiLhr
-         b0tiGKzpqmO8wifsd1Eu98U0w0HWZ0Qe9sFWx7Gt0R731bcPt93O6m/5BsWS7F0DZzro
-         kQng==
-X-Gm-Message-State: AJIora+wNk2KN/ItHHA0DhK5RXND5Z9cctC/Jt24pplwYdBMtgJtOs7/
-        d9R1dpkHOnCnRj5uNbtuElcqgA/McFk=
-X-Google-Smtp-Source: AGRyM1uSy7GP6yBulr7nDh1U6Xo+MTIjhZNdr9VWz/vNGz5Ij/Ard9efpzAlTxvW+6u00OE9mrlDXg==
-X-Received: by 2002:a05:622a:13ce:b0:31a:b4ce:1679 with SMTP id p14-20020a05622a13ce00b0031ab4ce1679mr33653394qtk.330.1658414149350;
-        Thu, 21 Jul 2022 07:35:49 -0700 (PDT)
-Received: from wsfd-netdev15.ntdv.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id y5-20020a05620a44c500b006b4880b08a9sm207452qkp.88.2022.07.21.07.35.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 07:35:49 -0700 (PDT)
-From:   Xin Long <lucien.xin@gmail.com>
-To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Subject: [PATCHv2 net] Documentation: fix sctp_wmem in ip-sysctl.rst
-Date:   Thu, 21 Jul 2022 10:35:46 -0400
-Message-Id: <eb4af790717c41995cd8bee67686d69e6fbb141d.1658414146.git.lucien.xin@gmail.com>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        with ESMTP id S229461AbiGWB6w (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 22 Jul 2022 21:58:52 -0400
+Received: from azure-sdnproxy-1.icoremail.net (azure-sdnproxy.icoremail.net [52.237.72.81])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1D0709B540
+        for <linux-sctp@vger.kernel.org>; Fri, 22 Jul 2022 18:58:50 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [106.117.76.127])
+        by mail-app4 (Coremail) with SMTP id cS_KCgC3L8+yVdtiwTkdAQ--.30584S2;
+        Sat, 23 Jul 2022 09:58:18 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-sctp@vger.kernel.org
+Cc:     vyasevich@gmail.com, nhorman@tuxdriver.com,
+        marcelo.leitner@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH net] sctp: fix sleep in atomic context bug in timer handlers
+Date:   Sat, 23 Jul 2022 09:58:09 +0800
+Message-Id: <20220723015809.11553-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cS_KCgC3L8+yVdtiwTkdAQ--.30584S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AF1DXrWruFWDKF4rKrWUXFb_yoW8Xw1rpr
+        yDuF4FqF17tF18ZFZ5ur4Fqw1akws7J34DKF40kwn5A398Jr4YgFy8KrWSyrWxurWUZFWY
+        va15K347Gr1jkFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1lc2xSY4AK67AK6w4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
+        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
+        17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
+        C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
+        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
+        73UjIFyTuYvjfUOMKZDUUUU
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgcAAVZdtay58AADsc
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,40 +55,51 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Since commit 1033990ac5b2 ("sctp: implement memory accounting on tx path"),
-SCTP has supported memory accounting on tx path where 'sctp_wmem' is used
-by sk_wmem_schedule(). So we should fix the description for this option in
-ip-sysctl.rst accordingly.
+There are sleep in atomic context bugs in timer handlers of sctp
+such as sctp_generate_t3_rtx_event(), sctp_generate_probe_event(),
+sctp_generate_t1_init_event(), sctp_generate_timeout_event(),
+sctp_generate_t3_rtx_event() and so on.
 
-v1->v2:
-  - Improve the description as Marcelo suggested.
+The root cause is sctp_sched_prio_init_sid() with GFP_KERNEL parameter
+that may sleep could be called by different timer handlers which is in
+interrupt context.
 
-Fixes: 1033990ac5b2 ("sctp: implement memory accounting on tx path")
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
+One of the call paths that could trigger bug is shown below:
+
+      (interrupt context)
+sctp_generate_probe_event
+  sctp_do_sm
+    sctp_side_effects
+      sctp_cmd_interpreter
+        sctp_outq_teardown
+          sctp_outq_init
+            sctp_sched_set_sched
+              n->init_sid(..,GFP_KERNEL)
+                sctp_sched_prio_init_sid //may sleep
+
+This patch changes gfp_t parameter of init_sid in sctp_sched_set_sched()
+from GFP_KERNEL to GFP_ATOMIC in order to prevent sleep in atomic
+context bugs.
+
+Fixes: 5bbbbe32a431 ("sctp: introduce stream scheduler foundations")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
 ---
- Documentation/networking/ip-sysctl.rst | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ net/sctp/stream_sched.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
-index 0e58001f8580..af2f0dfd50db 100644
---- a/Documentation/networking/ip-sysctl.rst
-+++ b/Documentation/networking/ip-sysctl.rst
-@@ -2870,7 +2870,14 @@ sctp_rmem - vector of 3 INTEGERs: min, default, max
- 	Default: 4K
+diff --git a/net/sctp/stream_sched.c b/net/sctp/stream_sched.c
+index 518b1b9bf89..1ad565ed562 100644
+--- a/net/sctp/stream_sched.c
++++ b/net/sctp/stream_sched.c
+@@ -160,7 +160,7 @@ int sctp_sched_set_sched(struct sctp_association *asoc,
+ 		if (!SCTP_SO(&asoc->stream, i)->ext)
+ 			continue;
  
- sctp_wmem  - vector of 3 INTEGERs: min, default, max
--	Currently this tunable has no effect.
-+	Only the first value ("min") is used, "default" and "max" are
-+	ignored.
-+
-+	min: Minimum size of send buffer that can be used by SCTP sockets.
-+	It is guaranteed to each SCTP socket (but not association) even
-+	under moderate memory pressure.
-+
-+	Default: 4K
- 
- addr_scope_policy - INTEGER
- 	Control IPv4 address scoping - draft-stewart-tsvwg-sctp-ipv4-00
+-		ret = n->init_sid(&asoc->stream, i, GFP_KERNEL);
++		ret = n->init_sid(&asoc->stream, i, GFP_ATOMIC);
+ 		if (ret)
+ 			goto err;
+ 	}
 -- 
-2.31.1
+2.17.1
 
