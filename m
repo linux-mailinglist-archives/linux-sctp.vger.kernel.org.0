@@ -2,52 +2,68 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A86B757EB28
-	for <lists+linux-sctp@lfdr.de>; Sat, 23 Jul 2022 03:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8798B57F525
+	for <lists+linux-sctp@lfdr.de>; Sun, 24 Jul 2022 15:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234587AbiGWB6x (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 22 Jul 2022 21:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
+        id S229578AbiGXNHM (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 24 Jul 2022 09:07:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiGWB6w (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 22 Jul 2022 21:58:52 -0400
-Received: from azure-sdnproxy-1.icoremail.net (azure-sdnproxy.icoremail.net [52.237.72.81])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1D0709B540
-        for <linux-sctp@vger.kernel.org>; Fri, 22 Jul 2022 18:58:50 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [106.117.76.127])
-        by mail-app4 (Coremail) with SMTP id cS_KCgC3L8+yVdtiwTkdAQ--.30584S2;
-        Sat, 23 Jul 2022 09:58:18 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-sctp@vger.kernel.org
-Cc:     vyasevich@gmail.com, nhorman@tuxdriver.com,
-        marcelo.leitner@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH net] sctp: fix sleep in atomic context bug in timer handlers
-Date:   Sat, 23 Jul 2022 09:58:09 +0800
-Message-Id: <20220723015809.11553-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cS_KCgC3L8+yVdtiwTkdAQ--.30584S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7AF1DXrWruFWDKF4rKrWUXFb_yoW8Xw1rpr
-        yDuF4FqF17tF18ZFZ5ur4Fqw1akws7J34DKF40kwn5A398Jr4YgFy8KrWSyrWxurWUZFWY
-        va15K347Gr1jkFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1lc2xSY4AK67AK6w4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
-        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
-        17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
-        C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
-        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
-        73UjIFyTuYvjfUOMKZDUUUU
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgcAAVZdtay58AADsc
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        with ESMTP id S235991AbiGXNG5 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sun, 24 Jul 2022 09:06:57 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5756713F88;
+        Sun, 24 Jul 2022 06:06:54 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-10d867a8358so11653733fac.10;
+        Sun, 24 Jul 2022 06:06:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=I3gfoVoanMe4gA4YnpGshVf32heT0CKZ5wuTqz0UZy0=;
+        b=C5m1Z2i8OtQVyB+jQYACBV8/s1FeF3Tjwc+QiaUQiB6H5K/DKb8k6GTM7LsLuru1Wv
+         AQN5NghjwLKaXT+pzAiqg6xAPqPYtEbJZarw+T/gX/ZK9pEBVZxBMJT2Uce6LgoddSqp
+         /7/atbfsWG9q/4VX3UYeuYJcZYLiKOq6B+nPyz/iUiFIA2rtCiRzo0mjz5KjjzbzmtYM
+         OE+sCBt9RwN42q/kJb8efz6uiwj3IjDeDFvLPh9ogG1Fm/IpD2TJrQx+JVG3DFofP9gO
+         G1DVaftT7nXbwHwAcbxMvDwVe2O3E1+iZ3iaWwe2OozxGYyBmZxtXMXgCRRw8EQL3zan
+         MG7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=I3gfoVoanMe4gA4YnpGshVf32heT0CKZ5wuTqz0UZy0=;
+        b=3EEZDbP17ohfw/BjrqziirbgIEQ0vCLTSDWiFtYfHpBjc46Cy3ZBp6Y3lwnxyivAqn
+         t2aaxB3dbzxvWLpjTTkn3ymdwgu3tt8PlQEW4M/pUbT1gLJG9I4L81haoSziRQ6wa3jy
+         quNmUWxurV8IAYwUZrTCWT0tk27K3hzhYUb9jQlwpFDH46/JybiLk6/LSyU9TOXMjFI5
+         iBxiEftcR9lblaji8qnzXx0q1XH3BEzd6JR6uOSyhqUnLxSadnBj4tirToKcgIKWojeG
+         eTqXwe7eIqkUhhdc2v1YgYERgqWOs66x6wGvkeuM/QSgnCmwrSx6G/HuXEF3mdFBhoGJ
+         5xwg==
+X-Gm-Message-State: AJIora+KS7tFfxKn5MSG6jMmesAP3MbManJg6NS//dJzpnXDnky6Mq9A
+        QgghiyCOixsglXfdJ5ovpW4O6NbCQvk=
+X-Google-Smtp-Source: AGRyM1u9kl3bNtKadWoK/4nbf/sj7b9aIZ9thyhhSCYznvdV+QG4XYsLXbEDti/EruGPHOb4l45vhg==
+X-Received: by 2002:a05:6870:79e:b0:101:48bf:7fa8 with SMTP id en30-20020a056870079e00b0010148bf7fa8mr11806523oab.291.1658668012836;
+        Sun, 24 Jul 2022 06:06:52 -0700 (PDT)
+Received: from t14s.localdomain ([2804:d59:ad0f:1800:4914:cce5:a4fb:5a6d])
+        by smtp.gmail.com with ESMTPSA id 63-20020a9d0dc5000000b0061c94e755d8sm2411255ots.58.2022.07.24.06.06.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Jul 2022 06:06:52 -0700 (PDT)
+Received: by t14s.localdomain (Postfix, from userid 1000)
+        id 1C46135B3A7; Sun, 24 Jul 2022 10:06:50 -0300 (-03)
+Date:   Sun, 24 Jul 2022 10:06:50 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org
+Subject: Re: [PATCHv2 net] Documentation: fix sctp_wmem in ip-sysctl.rst
+Message-ID: <Yt1D6l5FTpIVIltV@t14s.localdomain>
+References: <eb4af790717c41995cd8bee67686d69e6fbb141d.1658414146.git.lucien.xin@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <eb4af790717c41995cd8bee67686d69e6fbb141d.1658414146.git.lucien.xin@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,51 +71,16 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-There are sleep in atomic context bugs in timer handlers of sctp
-such as sctp_generate_t3_rtx_event(), sctp_generate_probe_event(),
-sctp_generate_t1_init_event(), sctp_generate_timeout_event(),
-sctp_generate_t3_rtx_event() and so on.
+On Thu, Jul 21, 2022 at 10:35:46AM -0400, Xin Long wrote:
+> Since commit 1033990ac5b2 ("sctp: implement memory accounting on tx path"),
+> SCTP has supported memory accounting on tx path where 'sctp_wmem' is used
+> by sk_wmem_schedule(). So we should fix the description for this option in
+> ip-sysctl.rst accordingly.
+> 
+> v1->v2:
+>   - Improve the description as Marcelo suggested.
+> 
+> Fixes: 1033990ac5b2 ("sctp: implement memory accounting on tx path")
+> Signed-off-by: Xin Long <lucien.xin@gmail.com>
 
-The root cause is sctp_sched_prio_init_sid() with GFP_KERNEL parameter
-that may sleep could be called by different timer handlers which is in
-interrupt context.
-
-One of the call paths that could trigger bug is shown below:
-
-      (interrupt context)
-sctp_generate_probe_event
-  sctp_do_sm
-    sctp_side_effects
-      sctp_cmd_interpreter
-        sctp_outq_teardown
-          sctp_outq_init
-            sctp_sched_set_sched
-              n->init_sid(..,GFP_KERNEL)
-                sctp_sched_prio_init_sid //may sleep
-
-This patch changes gfp_t parameter of init_sid in sctp_sched_set_sched()
-from GFP_KERNEL to GFP_ATOMIC in order to prevent sleep in atomic
-context bugs.
-
-Fixes: 5bbbbe32a431 ("sctp: introduce stream scheduler foundations")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
- net/sctp/stream_sched.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/sctp/stream_sched.c b/net/sctp/stream_sched.c
-index 518b1b9bf89..1ad565ed562 100644
---- a/net/sctp/stream_sched.c
-+++ b/net/sctp/stream_sched.c
-@@ -160,7 +160,7 @@ int sctp_sched_set_sched(struct sctp_association *asoc,
- 		if (!SCTP_SO(&asoc->stream, i)->ext)
- 			continue;
- 
--		ret = n->init_sid(&asoc->stream, i, GFP_KERNEL);
-+		ret = n->init_sid(&asoc->stream, i, GFP_ATOMIC);
- 		if (ret)
- 			goto err;
- 	}
--- 
-2.17.1
-
+Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
