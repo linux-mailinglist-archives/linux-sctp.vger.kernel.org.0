@@ -2,52 +2,80 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2059958E857
-	for <lists+linux-sctp@lfdr.de>; Wed, 10 Aug 2022 10:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4D5590FC5
+	for <lists+linux-sctp@lfdr.de>; Fri, 12 Aug 2022 12:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbiHJIEN (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 10 Aug 2022 04:04:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53726 "EHLO
+        id S233528AbiHLKzs (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 12 Aug 2022 06:55:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiHJIEM (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 10 Aug 2022 04:04:12 -0400
-X-Greylist: delayed 409 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 10 Aug 2022 01:04:10 PDT
-Received: from sh11309.ispgateway.de (sh11309.ispgateway.de [92.204.239.94])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3A674DF4
-        for <linux-sctp@vger.kernel.org>; Wed, 10 Aug 2022 01:04:10 -0700 (PDT)
-Received: from sh11309.ispgateway.de (php73.df_default [IPv6:fd00:dead:beef::e])
-        by sh11309.ispgateway.de (Postfix) with ESMTPS id 5CD3A1AA82F
-        for <linux-sctp@vger.kernel.org>; Wed, 10 Aug 2022 09:57:16 +0200 (CEST)
-Received: (from 356100-jugend@localhost)
-        by sh11309.ispgateway.de (8.15.2/8.15.2/Submit) id 27A7vG3t012117;
-        Wed, 10 Aug 2022 09:57:16 +0200
-X-Authentication-Warning: sh11309.ispgateway.de: 356100-jugend set sender to ricardo@xn--jugend-bnde-0hb.de using -f
-To:     linux-sctp@vger.kernel.org
-Subject: =?UTF-8?Q?Anfrage_an_Jugend-B=C3=BCnde:_"DIE_WELTFINANZKRISE?=  =?UTF-8?Q?_KANN_SIE_ZUM_MILLIONAR_MACHEN!"?=
-X-PHP-Originating-Script: 832140:PHPMailer.php
-Date:   Wed, 10 Aug 2022 07:57:16 +0000
-From:   =?UTF-8?Q?Jugend_B=C3=BCnde?= <wordpress@xn--jugend-bnde-0hb.de>
-Reply-To: buendywood@googlemail.com
-Message-ID: <YcZgfumVFve0S5qnM5dxwxlZwkkbDvgKEw9HO5u3NQ@www.xn--jugend-bnde-0hb.de>
-X-Mailer: PHPMailer 6.5.0 (https://github.com/PHPMailer/PHPMailer)
+        with ESMTP id S230105AbiHLKzq (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 12 Aug 2022 06:55:46 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4080685FA6
+        for <linux-sctp@vger.kernel.org>; Fri, 12 Aug 2022 03:55:45 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id q19so631285pfg.8
+        for <linux-sctp@vger.kernel.org>; Fri, 12 Aug 2022 03:55:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc;
+        bh=447DttLGWlnXVhl3+i4qWwJxEj6tFprhGwRHCuyrWEY=;
+        b=CJ8cmabUBS6s6xxd/K2d4ioKxSyRIqE+ZbMGdtOsB0xEii8PW96QxCDErfQIjC5BLN
+         N2ucmgiycJJWzTi4cqrjfE9/Qd9qFAIMAw3S3lJYynV7FOantBCVlh8p1SpJp0OmBkJd
+         zJ1W862js8LoAcODPIYF/9lavQGzrv9SxLLzKYwZYs+aFDugs4i1SnnikoRnH73/HBzk
+         m18p9qWtHEY7DEvtYfAV2/hTbPa+PdePCQgit6nPZjTo7qoxPOQVMH1Q9ud8T5lQAHsP
+         cKX6gM3XXgZAfM0H0ll1XdJ5ldBa3MmWx9WKcy61QJhphhLbPc4wMweOQcNzCq3zEyrE
+         y24w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=447DttLGWlnXVhl3+i4qWwJxEj6tFprhGwRHCuyrWEY=;
+        b=ILeAIAHfvZU4Ji7CKu+XD4P5ZfJ4fC6j82xDTK6ztNe9xkYAnNLMniHf1X/NJ25rrH
+         XSNmx2z4Wy6kwsRR54UHVVwWOavcPpC+QwxL4PjKCd0tGaKQnsynf06f1QCXKqJDzouB
+         hybUG960evGXNUWL6+NTMhDJMwaRhAT6IFCG5prxGJhuORbH9psl+SDvuZiW+1KFUHRm
+         nAt2iD2UNKd2jyPwop2TS3Qsbp6/pLHmYKKnu2AqeCaX/T6h5q52dipIPkd3KaPRggQs
+         pOBuxBUZY6F1P2bO2Rqps52wjbDzzjTXObnkl6hgsfCM0aHrld+Ryb+mV3ckCBpKbQSA
+         mItA==
+X-Gm-Message-State: ACgBeo3ukWCEtW8Ad8AkL0Gai3zqfFki6YQinj+ILa2rqohBEXRh8Nuv
+        pcLK5rReQQU5sq9KVI397VvMlA/pc5dsdvf0NaQ=
+X-Google-Smtp-Source: AA6agR5zQzBmW33GmQFIhAp2AFpk7CL7LTn9PCx8JAiUD3jKsaMXzwesI8XRy+JYh8XJgI9UhTgK6vqxdcdpvvJuJ30=
+X-Received: by 2002:a65:688f:0:b0:41d:e38a:e8c4 with SMTP id
+ e15-20020a65688f000000b0041de38ae8c4mr2677864pgt.437.1660301744807; Fri, 12
+ Aug 2022 03:55:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=4.2 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Sender: bazarkowanigeria@gmail.com
+Received: by 2002:a17:90a:9f91:0:0:0:0 with HTTP; Fri, 12 Aug 2022 03:55:44
+ -0700 (PDT)
+From:   "Mrs. Margaret Christopher" <mrsmargaretchristopher01@gmail.com>
+Date:   Fri, 12 Aug 2022 03:55:44 -0700
+X-Google-Sender-Auth: 9ez0BQ54ybr4-2FSOghKq3nW-Ek
+Message-ID: <CAPgaJa30zdehdauxJA=VaWKLgjKBywWenmnn-VngZ4tZAfQP_Q@mail.gmail.com>
+Subject: Humanitarian Project For Less Privileged.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Vielen Dank für deine Nachricht, wir werden uns in Kürze mit Dir in Verbindung setzen.
+-- 
+Hello Dear
 
-Deine gesendete Nachricht:
-Investieren Sie noch heute und werden Sie der nachste Milliardar... https://telegra.ph/Passives-Einkommen-und-7500000-Euro-auf-KryptowГ¤hrung-197420-08-09
+  Am a dying woman here in the hospital, i was diagnose as a
+Coronavirus patient over 2 months ago. I am A business woman who is
+dealing with Gold Exportation, I Am 59 year old from USA California i
+have a charitable and unfufilling  project that am about to handover
+to you, if you are interested to know more about this project please reply me.
 
---
-Diese E-Mail wurde von einem Kontaktformular von Jugend Bünde (http://www.jugend-bünde.de) gesendet
+ Hope to hear from you
 
+Best Regard
+
+Mrs. Margaret
