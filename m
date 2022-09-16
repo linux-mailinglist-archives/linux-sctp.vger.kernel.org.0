@@ -2,95 +2,137 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A005B363A
-	for <lists+linux-sctp@lfdr.de>; Fri,  9 Sep 2022 13:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85A1F5BA3D4
+	for <lists+linux-sctp@lfdr.de>; Fri, 16 Sep 2022 03:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbiIILUf (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 9 Sep 2022 07:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33240 "EHLO
+        id S229480AbiIPBRi (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 15 Sep 2022 21:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiIILUa (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 9 Sep 2022 07:20:30 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA415D132
-        for <linux-sctp@vger.kernel.org>; Fri,  9 Sep 2022 04:20:23 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-346cd4c3d7aso14932797b3.8
-        for <linux-sctp@vger.kernel.org>; Fri, 09 Sep 2022 04:20:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date;
-        bh=ZAWXVu39zFnl04zGGdGpvYsH4qt+1ICRBchO3T7GYKs=;
-        b=KFPpimkwDDKtEJX4z8jN6SW4ZtHgwTwgCztdDaJuWkqqpufQnAT7eVv4ZyCWZttlpZ
-         PtAMZCMB82iudvTxrCBz3sjWfbbeN14slfdIcTBDXYeCKJHGWvDGDyoI1knu4bAvm8Yc
-         uC+yD4yeUGSFLGAS1wO4klEehaKqC2KHVheeI/7yTvFCjo+Gu+e8q+kEnsCS8Iszcg6H
-         j77+DPo9BtFs536cHjQ0TWmHhnryBaytOrzr2ei8VEsaIa1fACQuiCBpYWAZzY6uvYjS
-         S9I9JNpTc2TCshEmUdbfqhmOEzDASyN+gwLuHrAXcEitB0eJHS8IWVJN4v5qx8cFZpS7
-         4NeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ZAWXVu39zFnl04zGGdGpvYsH4qt+1ICRBchO3T7GYKs=;
-        b=QmMFGbhr+WWtrKFr71I47UkL7n11YgSdDVraTk01c4RDuDLaQmwUTy21p7ZVdacfAt
-         85iCKJcKaZYTGGxHuiBMRVaNjiHlh6WM1zYsQJLyf6KMdS4dBZ7rhrohtrIHPqGpXEZu
-         wmW+6CMqP4kaz6AN6Vpyc62LFBmxj8qjWk3vuAHGQwCAEb99BmyKfuEPMRDxVAuGf+Ot
-         TFY0RZeOXdtRRwaCM9MriMcOvz70Aoy24wBVA0SL5XFXjJOff0trbiCXPhMoGuHP8s0V
-         wt9gSYzCZ7j6VALW0o/CuBbIzpP1CsynWJbFDx7KktMLHIEwn6nxN22zMAc7OE4VFjTh
-         lTdA==
-X-Gm-Message-State: ACgBeo0Yh9IX7qcDkALnzPG2pxVDuN/GwOH1zqonRZ1jGxCXWEMH/KKB
-        lJTfnr3AH20pCe08B9Qslx2LQplxmSyPHLdeUkI=
-X-Google-Smtp-Source: AA6agR71D4kEEkOcqfJ8DL2tf23Ul1t9/sooH6mAzXFbnKdFxWskFcKPDYpJcQQSV80y8LEK1iSRY4GJh3UVeXdnCig=
-X-Received: by 2002:a0d:efc4:0:b0:344:86fc:982a with SMTP id
- y187-20020a0defc4000000b0034486fc982amr11421384ywe.202.1662722422095; Fri, 09
- Sep 2022 04:20:22 -0700 (PDT)
+        with ESMTP id S229538AbiIPBRf (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 15 Sep 2022 21:17:35 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01hn2219.outbound.protection.outlook.com [52.100.164.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B8A7757A;
+        Thu, 15 Sep 2022 18:17:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=d4o83MdUwBzT/yGYHHri9JxKgvKAr1myKifExpoOG6RW/DJ6Hwx/HFWbCRTAcnalNMWZtiCfWWiv5BNRgudbeIRIrFA1aUpAMqgiR637yuSms6do4DF6jNeC1yKumQYHlgZ/a6HhOxwZtpo9C6zkL+bsu0JAtMId5JULDOXnfzA74uvlRxyoZiVHHEh/Uxv1/xdTJ3SjFGvN5cw/tu1nDH1AdI9DEHKG6moY6aDp85uW3+wP2ZL69Kx/X22OyF20hg7Jn3VKP6Yu1kJZQ6g9LvjUj7xhFxAzUAtOtHKQA12ks/Rp4h2PyduF+HYYaHU47spmmHU6GI+HZ8sqNniaWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Bs10Md+15nMnyayKLyd22Uv+/ZH79IcFcpzuzGLq1Fg=;
+ b=Z+6l5XN4eD0pGu0kvU1O/11m+Uv6YQ0Qd0vITH042WwFlhw/RN66l78Gi6CIsx+jk0c6wO03fHHPsVd/vmE9a2h7Z4mu0Dxy/sHonKIToUsqzJPoL2MGFIkZTWulAgfRVhIwUoOa/5+ajfIWHSwxqXysIlktUz9o4p9llcGX2U9ba9l6TAPweWQd0I4uGlHEqoSQkOQAgEuyGJNmlSaLKkSZCV26SzSt+/M0gqI/nHTMnYzNs7Yz1f4/JyocTsAQNUbeUxCBz1zX5m7n0+ACY8fap+nzx488tj/tt2Dh5SJ4O/v7mKBm6RA0+J5XwKp/44GqHMPEdBA/zmASs0FHZw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 45.14.71.5) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=t4.cims.jp;
+ dmarc=bestguesspass action=none header.from=t4.cims.jp; dkim=none (message
+ not signed); arc=none (0)
+Received: from SG2PR02CA0090.apcprd02.prod.outlook.com (2603:1096:4:90::30) by
+ PSAPR04MB4296.apcprd04.prod.outlook.com (2603:1096:301:3e::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5632.16; Fri, 16 Sep 2022 01:17:31 +0000
+Received: from SG2APC01FT0020.eop-APC01.prod.protection.outlook.com
+ (2603:1096:4:90:cafe::f3) by SG2PR02CA0090.outlook.office365.com
+ (2603:1096:4:90::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.16 via Frontend
+ Transport; Fri, 16 Sep 2022 01:17:31 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 45.14.71.5)
+ smtp.mailfrom=t4.cims.jp; dkim=none (message not signed)
+ header.d=none;dmarc=bestguesspass action=none header.from=t4.cims.jp;
+Received-SPF: Pass (protection.outlook.com: domain of t4.cims.jp designates
+ 45.14.71.5 as permitted sender) receiver=protection.outlook.com;
+ client-ip=45.14.71.5; helo=User; pr=M
+Received: from mail.prasarana.com.my (58.26.8.159) by
+ SG2APC01FT0020.mail.protection.outlook.com (10.13.36.117) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5632.12 via Frontend Transport; Fri, 16 Sep 2022 01:17:31 +0000
+Received: from MRL-EXH-02.prasarana.com.my (10.128.66.101) by
+ MRL-EXH-02.prasarana.com.my (10.128.66.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Fri, 16 Sep 2022 09:17:00 +0800
+Received: from User (45.14.71.5) by MRL-EXH-02.prasarana.com.my
+ (10.128.66.101) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
+ Transport; Fri, 16 Sep 2022 09:16:31 +0800
+Reply-To: <rhashimi202222@kakao.com>
+From:   Consultant Swift Capital Loans Ltd <info@t4.cims.jp>
+Subject: I hope you are doing well, and business is great!
+Date:   Fri, 16 Sep 2022 09:17:11 +0800
 MIME-Version: 1.0
-Received: by 2002:a05:7000:38c7:0:0:0:0 with HTTP; Fri, 9 Sep 2022 04:20:21
- -0700 (PDT)
-Reply-To: officialmanuelfranco606@gmail.com
-From:   Mr Manuel Franco <mathiasmisali@gmail.com>
-Date:   Fri, 9 Sep 2022 12:20:21 +0100
-Message-ID: <CA+mvYJphy6nZA48nfzEROYFpYJcH6P=C8H0GTeUbhfEpwG0LKw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <b88f6004-1774-41cd-b8dd-c9210b0ec8a2@MRL-EXH-02.prasarana.com.my>
+To:     Undisclosed recipients:;
+X-EOPAttributedMessage: 0
+X-MS-Exchange-SkipListedInternetSender: ip=[45.14.71.5];domain=User
+X-MS-Exchange-ExternalOriginalInternetSender: ip=[45.14.71.5];domain=User
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG2APC01FT0020:EE_|PSAPR04MB4296:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7aa05c1d-b4b1-4479-90f5-08da97813a4d
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 0
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: =?windows-1251?Q?Wlj+8wRk159ZZGYOMMQMsVGFU8Q2vffl1gPIM54q/xLej1O0onCPvKJ1?=
+ =?windows-1251?Q?db5cTfD+QYb/55NAe1/ezWpdAr4waGSS1/b8XaoOyRaH0SzrivWB8Hxs?=
+ =?windows-1251?Q?my4otFyzs/vJHRl1NZ7QJIqBm+gVlmVROAVTiLvr+caZFt0HGaxvP5Qk?=
+ =?windows-1251?Q?1+N2FcNB59nGWHDJNH8vMVawO4HRkqa77ryRIzrgxqiJVsmLVueKrjrC?=
+ =?windows-1251?Q?kLATBANyE8bLxCCH/E8wLUxkoGthHaJDt9B34muAt1G3Z98SO0B1zsvu?=
+ =?windows-1251?Q?99EMUJQIT0aJz5CrgddRkJBq6fRW+LwEF+PhCXPJCeo8Ngk6qO+Z6ey8?=
+ =?windows-1251?Q?+HMFsIzLNg3YyfuK5TnIU0jRjcPnLimz9yMBqSxeDovAeuhZujVGaAVh?=
+ =?windows-1251?Q?Qsa/el9xd9CwS2KEq+zJ7uoiVgg0zWvb7yzX6EcjY+xiAIWHrlacSlWO?=
+ =?windows-1251?Q?KSzRh+qugc79k82JfQQqpuHe/x0i9Xia2UIQFi4xnCZBhH9vJS+w5IGH?=
+ =?windows-1251?Q?I99iehXePIc/0eVgvh70AoTRdAP7Nsd/oqNeEeCl4mKQSd/oA8afkXf9?=
+ =?windows-1251?Q?TlfNjuN1S+FCG7eDpcKp1UIAxotWqyskoiybPvSrxIh4cYuVnrFAE+V5?=
+ =?windows-1251?Q?A5GY2O27nhABEwSTxzPzRhma8CALg00FgAFxtD17cPJuenlM5iPsEdGG?=
+ =?windows-1251?Q?QOYXyXHvEmDEEuLssmeeNT4mF3LUYJpgbqlpJ/cP3WrbE+0oobEFy8sV?=
+ =?windows-1251?Q?yLx37JE5Fd20f6vu1/egAjVCDR+LHhumsfZeCw8oIe6m8fxkVlIayxdZ?=
+ =?windows-1251?Q?RtB23v9WeVdYAFF19SM0RbHcwpOWBOAxxI5Dq1WYFEnOgVCl0/ufRHYZ?=
+ =?windows-1251?Q?X/AYDGvljLES7XEfe33NXnph16ztDgch9vkMzdZD04cw4ykMrgFwWh+j?=
+ =?windows-1251?Q?/Vl05CV2c0s4lzp+u2CkCbNj4+Ahz3AvOhaF/DFz+vW5od/4Fr4owDM6?=
+ =?windows-1251?Q?KV4sat4mdN0skjLoagoe0JiwybH3bjCx0hZFynxLPaB0lTsWGyLYrJ6a?=
+ =?windows-1251?Q?ANKe4FMW9yKi//rdG9vlbZYbRtf9jM96z3pDKMzBqSiI0EzwVZvE5jF5?=
+ =?windows-1251?Q?6BJhJrWVnVOiKFqGA8ZCU386n82z0lOmgtv9DMEA6zo/rOpXhbIMtd5w?=
+ =?windows-1251?Q?fL1OVUtDjLv0it/PB1uYZbTYDbWxF/+H+Sg0GPiVI47CeEJ73lmDGlAu?=
+ =?windows-1251?Q?3UQmL+UUzm5SGkBxt+fvyUDkCT5YsFyT0RqMqGEYDLZUwtmX9NGdd6WI?=
+ =?windows-1251?Q?sUYC1+yw4eArmU3uoLmLCdtgYwp9Iv1Iwr/q1bUQDSuVW4r1?=
+X-Forefront-Antispam-Report: CIP:58.26.8.159;CTRY:JP;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:User;PTR:45.14.71.5.static.xtom.com;CAT:OSPM;SFS:(13230022)(4636009)(396003)(346002)(136003)(39860400002)(376002)(451199015)(40470700004)(46966006)(82740400003)(66899012)(2906002)(156005)(32850700003)(31686004)(70586007)(4744005)(9686003)(26005)(70206006)(31696002)(40460700003)(47076005)(81166007)(5660300002)(7416002)(40480700001)(7366002)(86362001)(498600001)(109986005)(6666004)(956004)(7406005)(41300700001)(8936002)(316002)(36906005)(35950700001)(8676002)(82310400005)(336012)(2700400008);DIR:OUT;SFP:1501;
+X-OriginatorOrg: myprasarana.onmicrosoft.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2022 01:17:31.0458
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7aa05c1d-b4b1-4479-90f5-08da97813a4d
+X-MS-Exchange-CrossTenant-Id: 3cbb2ff2-27fb-4993-aecf-bf16995e64c0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3cbb2ff2-27fb-4993-aecf-bf16995e64c0;Ip=[58.26.8.159];Helo=[mail.prasarana.com.my]
+X-MS-Exchange-CrossTenant-AuthSource: SG2APC01FT0020.eop-APC01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR04MB4296
+X-Spam-Status: Yes, score=7.5 required=5.0 tests=AXB_XMAILER_MIMEOLE_OL_024C2,
+        AXB_X_FF_SEZ_S,BAYES_50,FORGED_MUA_OUTLOOK,FSL_CTYPE_WIN1251,
+        FSL_NEW_HELO_USER,HEADER_FROM_DIFFERENT_DOMAINS,NSL_RCVD_FROM_USER,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
         *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1132 listed in]
-        [list.dnswl.org]
-        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.6861]
+        *      [52.100.164.219 listed in list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5105]
+        *  0.0 NSL_RCVD_FROM_USER Received from User
+        *  0.0 FSL_CTYPE_WIN1251 Content-Type only seen in 419 spam
+        *  3.2 AXB_X_FF_SEZ_S Forefront sez this is spam
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [52.100.164.219 listed in bl.score.senderscore.com]
         * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mathiasmisali[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [officialmanuelfranco606[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  0.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
+        *  0.2 HEADER_FROM_DIFFERENT_DOMAINS From and EnvelopeFrom 2nd level
+        *      mail domains are different
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [52.100.164.219 listed in wl.mailspike.net]
+        *  0.0 AXB_XMAILER_MIMEOLE_OL_024C2 Yet another X header trait
+        *  0.0 FSL_NEW_HELO_USER Spam's using Helo and User
+        *  1.9 FORGED_MUA_OUTLOOK Forged mail pretending to be from MS Outlook
 X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,12 +140,17 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
---=20
-Hallo Sir/Madam Spende f=C3=BCr Sie
+Hello,
 
-Ich hei=C3=9Fe Manuel Franco und bin der Gewinner der Jackpot-Lotterie im
-Wert von 786 Millionen US-Dollar im Jahr 2019. Ich sende Ihnen diese
-E-Mail bez=C3=BCglich der Spende in H=C3=B6he von 2.000.000,00 =E2=82=AC, d=
-ie ich an
-Ihren Namen und Ihre Daten geleistet habe. Bitte kontaktieren Sie mich
-f=C3=BCr das weitere Verfahren.
+I hope you are doing well, and business is great!
+However, if you need working capital to further grow and expand your business, we may be a perfect fit for you. I am Ms. Kaori Ichikawa Swift Capital Loans Ltd Consultant, Our loans are NOT based on your personal credit, and NO collateral is required.
+
+We are a Direct Lender who can approve your loan today, and fund as Early as Tomorrow.
+
+Once your reply I will send you the official website to complete your application
+
+Waiting for your reply.
+
+Regards
+Ms. Kaori Ichikawa
+Consultant Swift Capital Loans Ltd
