@@ -2,78 +2,90 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 032425BBF02
-	for <lists+linux-sctp@lfdr.de>; Sun, 18 Sep 2022 18:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2384A5E9902
+	for <lists+linux-sctp@lfdr.de>; Mon, 26 Sep 2022 07:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbiIRQuI (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 18 Sep 2022 12:50:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45240 "EHLO
+        id S232965AbiIZFv5 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 26 Sep 2022 01:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiIRQuF (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sun, 18 Sep 2022 12:50:05 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962E2DECC
-        for <linux-sctp@vger.kernel.org>; Sun, 18 Sep 2022 09:50:03 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-1225219ee46so58902235fac.2
-        for <linux-sctp@vger.kernel.org>; Sun, 18 Sep 2022 09:50:03 -0700 (PDT)
+        with ESMTP id S233442AbiIZFvz (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 26 Sep 2022 01:51:55 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B9422BC3
+        for <linux-sctp@vger.kernel.org>; Sun, 25 Sep 2022 22:51:54 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id y8so7477281edc.10
+        for <linux-sctp@vger.kernel.org>; Sun, 25 Sep 2022 22:51:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date;
-        bh=/h9gKnMfrpB8UgQ8t9enyoIllg4YKOK1P8hel/POVkQ=;
-        b=UNU2p/hrbCw2/NNR01sPe5VjaPu1RGePKoJzGi95DZCUZGzznhAjpmPCop2pZJlA8B
-         ZhgoU3dsrKxjo5HGX13DHaCAoQQOA1MJukvnjbnsQHw8Ot0LL4LcRA5AVeayhPLOgrhE
-         ehcTdd3Ft61UoCTW90srYmugpUGo3p2lgpttiXTCJgZBlUHAT+sXTicv+z+XYqW9Cx5P
-         nQY9WgzcHd9Ek91UZ4d5tN3jK7BYQUmkP/NkZTj/JGvlkpfVET3TQ9hRCdfms/nTwOfK
-         h5cwjIzKSyZSD1VnvV0TeEOdYa8vjo8ZAQPX2jH/swIGJHioDFm290AJftEqwjFpgJ5o
-         011w==
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date;
+        bh=bP6gxJU2ceOtoiTrEoGM4pjb2aTL/DZUG5W0nNV8SUs=;
+        b=eq+/Wt52SO25ddq9qiPdhC6An5SKdhx4ldWp+qTX9buxoshEkersOuOGSxo6ZQSLbC
+         Q7L2jMxrlBVckgfyXS8fjlc3mMie4Fsx+1H8n4/xTfAvex8yhgDFbrr2qiiqw5ZBHCij
+         CyG/wskzANxV9FRThuV/hJCcyp5D48Xqq7/1KTh6Vb8HWNH+rPTr5fAyHZjmg/gJFFsJ
+         wGgyFZR4Lm7nG0fBbQaj+xQ0NiRgAHFpXU6xbgrfpdiI1gFDW4jgjUe4C7ICumPIdMna
+         WutfKBrXKnLwp8hD5+2OFlVlMdnT0ww96wR3QRDSelKyQcnbl940EGz71nkOVr9q7mSI
+         aWGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=/h9gKnMfrpB8UgQ8t9enyoIllg4YKOK1P8hel/POVkQ=;
-        b=Es/eA7EhpyopPaQCTc824ZFkqzdHHm2bgD552+Fm/x84NVqQSddr25nM96W/90jXbU
-         ohbriq2oF0bphJDpiPKIX9uRugbs2mMh2LI5eDXFKNMDwoI6GkcV8h9esmoM6HMfqtBH
-         SPBVz2eBOFbhwdMq/ZaNYMQloR7BtPPOOGmMbn9oxk3tR7KCI+e+fxr/kYTekwSA2MWU
-         FZq2c9mAWbv6dV8FoLkNU+2SaIJymtIWT8uVz5zVbdCbLK+hN/xG8JnQ5I16xks7F+RJ
-         t1GVWY2WIGVAqEPqe8cyO/CqzxRs8pAoq4QpfW2n1I+rnFH85JKWuBd5L+yew+DfQy36
-         R9mg==
-X-Gm-Message-State: ACgBeo08JJnpNVy5qyTOE3+xptaWnmpukcCQV9HluSeoq0pl27ueiPCI
-        8VeLcKvq1OJZVEy5fb3PfX+gTk011fZpHZoBjk8=
-X-Google-Smtp-Source: AA6agR6Lw0hX8lCNOPZRzDGyF08J01wUBW3MjkW0Ms580f0QwTJAw41b0/UEECmsGLG6/7opeIiFoGKisg+Kk/ZTItk=
-X-Received: by 2002:a05:6870:168c:b0:127:c627:3bad with SMTP id
- j12-20020a056870168c00b00127c6273badmr13031812oae.93.1663519802492; Sun, 18
- Sep 2022 09:50:02 -0700 (PDT)
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=bP6gxJU2ceOtoiTrEoGM4pjb2aTL/DZUG5W0nNV8SUs=;
+        b=msLn6YcV3wN5xPWB+/NggmuxHJ4o6r/X8nl5tO+HmflfnGQREfFeYb5eSNLRujG3uu
+         ThQWJ676oyukmWcG/1h7/Am7fHe7ZyEUK3bPBI48EeqdhbZRdMFggwhb2v4rvMoeg1A0
+         xThwbNjnTy3RB6LM5ph5ATehPH7MTTGE2lXmHROHxVenrf/u5DT8MrV6LFjEVL+jzomk
+         9gfBSoxhuMqPQtXAGU57grwRWeArY4Zdc3bnKBpbX3qh4GN+gwo0CFh4HyXvVpSoFB8W
+         Uni5SoD4Kd/7y9Ve7x/5b3Z/7ZunrXv2czonn2LBzd2GJk7CimtajKlzYrXlpLCOIAk3
+         N14A==
+X-Gm-Message-State: ACrzQf2URVCFtn5kYUM1YnndXbN4shVxMyb2rZMeNtdVVtUOA0qLlror
+        JEFGvGdm88D3uVaHrTPlDylVfsf5eQBeKGilPxE=
+X-Google-Smtp-Source: AMsMyM5zifNbDk/+TAuQWmdGIxKt0eDO0JgjBvc7UkPDluVOjkjusG33P12OGP/Nq4+BWgFDEFWrNJ2++RTMd1JFJik=
+X-Received: by 2002:a05:6402:847:b0:453:944a:ba8e with SMTP id
+ b7-20020a056402084700b00453944aba8emr20262556edz.326.1664171512649; Sun, 25
+ Sep 2022 22:51:52 -0700 (PDT)
 MIME-Version: 1.0
-Sender: onosetaleelishevaunuebholo@gmail.com
-Received: by 2002:a05:6850:7ad4:b0:32c:d8e3:2685 with HTTP; Sun, 18 Sep 2022
- 09:50:01 -0700 (PDT)
-From:   Dr Lisa Williams <lw4666555@gmail.com>
-Date:   Sun, 18 Sep 2022 09:50:01 -0700
-X-Google-Sender-Auth: x9Kde0_3TwV-UrYwNklAKbat7f4
-Message-ID: <CACBkC06eJ1EdbYjR1FsVrrCZh-Vjr5wSdnE70sTsw16C3QGjFA@mail.gmail.com>
-Subject: Hi Dear
+Received: by 2002:a55:93d0:0:b0:1b7:a0ef:ac79 with HTTP; Sun, 25 Sep 2022
+ 22:51:51 -0700 (PDT)
+Reply-To: petermalsam611@gmail.com
+From:   Peter MALSAM <vidal.charpentier@gmail.com>
+Date:   Mon, 26 Sep 2022 07:51:51 +0200
+Message-ID: <CAN7qQvRLMqfKc3D1Y-qiuSoaSGOxV-ow0FjqKHae7pdstwKyUQ@mail.gmail.com>
+Subject: Geldverleih an Privatpersonen und Gewerbetreibende in weniger als 72 Stunden
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hi Dear
+Hallo,
 
-My name is Dr Lisa Williams from the United States.I am a French and
-American nationality dual) living in the U.S and sometimes in France
-for Work Purpose. I hope you consider my friend request. I will share
-some of my pics and more details about myself when I get your
-response.
+Sind Sie in einer schwierigen Situation, f=C3=BCr die Sie einen Kredit
+suchen? Ben=C3=B6tigen Sie eine Finanzierung zur Begleichung einer Schuld
+oder zur Finanzierung einer Aktivit=C3=A4t? Ben=C3=B6tigen Sie einen
+Konsumentenkredit, einen Immobilienkredit, einen Privatkredit, einen
+Hypothekarkredit, einen Investitionskredit, einen Kreditr=C3=BCckkauf oder
+anderes?
 
-Thanks
+Ich bin ein privater Investor. Ich versorge Sie mit kurz-, mittel- und
+langfristigen Krediten. Meine Finanzierungskonditionen sind sehr
+einfach und der Zinssatz betr=C3=A4gt 3% pro Jahr.
 
-With love
-Lisa
+F=C3=BCr alle Informationsanfragen stehe ich Ihnen gerne zur Verf=C3=BCgung=
+.
+
+Vielen Dank f=C3=BCr Ihre Kontaktaufnahme per Mail an:
+
+petermalsam611@gmail.com
+
+Mit freundlichen Gr=C3=BC=C3=9Fen.
+
+Peter MALSAM
