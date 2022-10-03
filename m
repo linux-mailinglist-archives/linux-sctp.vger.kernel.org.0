@@ -2,88 +2,102 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA175F0ADD
-	for <lists+linux-sctp@lfdr.de>; Fri, 30 Sep 2022 13:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A28A95F3A1B
+	for <lists+linux-sctp@lfdr.de>; Tue,  4 Oct 2022 01:54:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231585AbiI3LpU (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 30 Sep 2022 07:45:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
+        id S229707AbiJCXym (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 3 Oct 2022 19:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231298AbiI3Lop (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 30 Sep 2022 07:44:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFFB8FD4B;
-        Fri, 30 Sep 2022 04:40:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D7DA0B8283A;
-        Fri, 30 Sep 2022 11:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 93F2FC43470;
-        Fri, 30 Sep 2022 11:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664538016;
-        bh=h3j7XysJOOc6Jp/kw/F6iqvqTOipGJ195F1m1aBvvl8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=nF8gK4Tr8cfpP2KeaBapoC25ItuiS6evjOgCrfAwT/ah1CL2ZDRlobnO097AJNj4a
-         EnUrSkK2MU/N554BAdcVyqcgy8i0xzFcQatb/goU3pcSCLXO9DCc0mlw8ldx5PGD2U
-         iAzeCmu2CZAlQGzuamsAMjMS+XImoJULbvA8MDVQ2KzUpX0qWJUBqyWv1tnNiYcSPC
-         QF0abc10sidt9Nbp+FtFg/fb5Wm68+YzQqg+ZchDO28qwv8bWjf0i6s+vBIEWkYDqy
-         a+ieujTs27h31Po8b6/VlpS83aFeya1HiPKfJ3VG0CW30XmDcHawC7xUuKuN907h8p
-         pBGWHMclc48EA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7AECFE49FA7;
-        Fri, 30 Sep 2022 11:40:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229495AbiJCXyl (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 3 Oct 2022 19:54:41 -0400
+X-Greylist: delayed 3595 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 03 Oct 2022 16:54:37 PDT
+Received: from mail-filter.k24.co.id (mail-filter.k24.co.id [117.20.63.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FC9E1C;
+        Mon,  3 Oct 2022 16:54:37 -0700 (PDT)
+Received: from mail-filter.k24.co.id (localhost.localdomain [127.0.0.1])
+        by mail-filter.k24.co.id (Proxmox) with ESMTP id 3B55750344F;
+        Tue,  4 Oct 2022 04:58:16 +0700 (WIB)
+Received: from mta-02.k24.co.id (mta-02.k24.co.id [192.168.2.11])
+        by mail-filter.k24.co.id (Proxmox) with ESMTPS id 29A595039F8;
+        Tue,  4 Oct 2022 04:58:16 +0700 (WIB)
+Received: from localhost (localhost [127.0.0.1])
+        by mta-02.k24.co.id (Postfix) with ESMTP id BD790A0FBF;
+        Tue,  4 Oct 2022 04:58:15 +0700 (WIB)
+Received: from mta-02.k24.co.id ([127.0.0.1])
+        by localhost (mta-02.k24.co.id [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id CtNj6BeHeIYk; Tue,  4 Oct 2022 04:58:15 +0700 (WIB)
+Received: from localhost (localhost [127.0.0.1])
+        by mta-02.k24.co.id (Postfix) with ESMTP id 3DBC9A0FF9;
+        Tue,  4 Oct 2022 04:58:14 +0700 (WIB)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mta-02.k24.co.id 3DBC9A0FF9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=k24.co.id;
+        s=201D0EFA-BD0A-11EB-90FB-4354FB48657B; t=1664834294;
+        bh=Yw62bKNhDK09NF2C5/gJe1ePr0AC5lJ8dr3g9D9gnpA=;
+        h=Date:From:Message-ID:MIME-Version;
+        b=eUel0ZyS4voooRXyAazrKUe9sSWvTOizWK/QjeafO1HHQov97lTtJ8zE/VKDW9kG/
+         4TXcKgbBadRJ3BgoKn/B2z5zwkAWMFvJ8SBdYfBK77Dlh7Fy5aGVrj3aoPsxUUd/xE
+         y65Dc84ASVq0gmCJBMtp+PFH0Qv5ZebfB3e/gzePfkauLe10Q2Ivk36A3qBe+YE3a5
+         vbkuLoN26XE7eZ7z1URW2wLY6gX9A5PKdjMKAq/8Y0Vy8UH/hGuYh/9hyfQb1cDpcy
+         Pk2k2jPTRZLjGbjjRAtbCtcr+Zr9O65rO7nxLtsU/OCybAlxauXdi0MbpIzGBrP+Cw
+         HdCgRe7dK//DQ==
+X-Virus-Scanned: amavisd-new at k24.co.id
+Received: from mta-02.k24.co.id ([127.0.0.1])
+        by localhost (mta-02.k24.co.id [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id J1sKnII_1ODb; Tue,  4 Oct 2022 04:58:14 +0700 (WIB)
+Received: from mailbox1.k24.co.id (mailbox1.k24.co.id [192.168.2.15])
+        by mta-02.k24.co.id (Postfix) with ESMTP id 198B0A0FAE;
+        Tue,  4 Oct 2022 04:57:51 +0700 (WIB)
+Date:   Tue, 4 Oct 2022 04:57:50 +0700 (WIB)
+From:   DIVERSITY CASH LOAN <fredy.daniswara@k24.co.id>
+Reply-To: BELINDA <belindasteenkamp14@gmail.com>
+Message-ID: <2129288997.3602620.1664834270921.JavaMail.zimbra@k24.co.id>
+Subject: New month promo
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] sctp: handle the error returned from
- sctp_auth_asoc_init_active_key
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166453801649.4225.16866924781982017977.git-patchwork-notify@kernel.org>
-Date:   Fri, 30 Sep 2022 11:40:16 +0000
-References: <035e28d623263b9c3ccbbea689883d6437aa5aa0.1664388613.git.lucien.xin@gmail.com>
-In-Reply-To: <035e28d623263b9c3ccbbea689883d6437aa5aa0.1664388613.git.lucien.xin@gmail.com>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
-        davem@davemloft.net, kuba@kernel.org, marcelo.leitner@gmail.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [192.168.2.10]
+X-Mailer: Zimbra 8.8.15_GA_4372 (zclient/8.8.15_GA_4372)
+Thread-Index: FEQ3IfcU2FvE+SDQCgXbHke9nAOpgg==
+Thread-Topic: New month promo
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,MISSING_HEADERS,REPLYTO_WITHOUT_TO_CC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  1.0 MISSING_HEADERS Missing To: header
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [belindasteenkamp14[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello:
+Whatever your goals are we will customize a loan just right for you from up=
+ to TEN MILLION RANDS
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+What can an unsecured loan do for you and your family and also your busines=
+s.
 
-On Wed, 28 Sep 2022 14:10:13 -0400 you wrote:
-> When it returns an error from sctp_auth_asoc_init_active_key(), the
-> active_key is actually not updated. The old sh_key will be freeed
-> while it's still used as active key in asoc. Then an use-after-free
-> will be triggered when sending patckets, as found by syzbot:
-> 
->   sctp_auth_shkey_hold+0x22/0xa0 net/sctp/auth.c:112
->   sctp_set_owner_w net/sctp/socket.c:132 [inline]
->   sctp_sendmsg_to_asoc+0xbd5/0x1a20 net/sctp/socket.c:1863
->   sctp_sendmsg+0x1053/0x1d50 net/sctp/socket.c:2025
->   inet_sendmsg+0x99/0xe0 net/ipv4/af_inet.c:819
->   sock_sendmsg_nosec net/socket.c:714 [inline]
->   sock_sendmsg+0xcf/0x120 net/socket.c:734
-> 
-> [...]
+??Pensioners, blacklisted, debt review clients and self-employed, no paysli=
+p are highly welcome ??
 
-Here is the summary with links:
-  - [net] sctp: handle the error returned from sctp_auth_asoc_init_active_key
-    https://git.kernel.org/netdev/net/c/022152aaebe1
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Call ??or what=E2=80=99s-app???? on...+27677352072
+Email??: belindasteenkamp14@gmail.com
 
