@@ -2,49 +2,56 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDEB5F6729
-	for <lists+linux-sctp@lfdr.de>; Thu,  6 Oct 2022 15:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2576B5F6764
+	for <lists+linux-sctp@lfdr.de>; Thu,  6 Oct 2022 15:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231337AbiJFNBv (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 6 Oct 2022 09:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43884 "EHLO
+        id S231482AbiJFNI4 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 6 Oct 2022 09:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiJFNBn (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 6 Oct 2022 09:01:43 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C8E8A1FC;
-        Thu,  6 Oct 2022 06:01:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665061302; x=1696597302;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ru6CnBvVhIEhYJCAeuuxpRt9HHeJLOxAuoa9BjBuh8k=;
-  b=AGWKWrAmNTte351h2k1feYl2fEi8rMwITVCJk7pNUXa1Ng0fQ3b2azOq
-   uKuvJLxK0mA9Tqu3UQrxcvZhNBZH7+ufyXr/eCl51aK2E+6alzDUNMpev
-   Nal/AmQePVXxf51aw66W9WRCAYm+XU/TtJLHLlzK0fLBMpvOkNSKnYU6a
-   G0RPB2YNDasi333P00LsC+HLiCjUDiLmBkQrJ9Dt5KAHtZ7QeMOcScwI0
-   yVVxu3xrA0z8zp+mB6pCuwFd+t1IPnDGoJrgOtk/mfFAE1KbrDX96OsuA
-   Q6dzk7SPLhjyK1/yFBt+FIYuNforlaW4X0SnFFSBR/uzfXEGd3cKuEo3f
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="283804515"
-X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
-   d="scan'208";a="283804515"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 06:01:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="767139765"
-X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
-   d="scan'208";a="767139765"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Oct 2022 06:01:22 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ogQUx-0039Oq-2J;
-        Thu, 06 Oct 2022 16:01:11 +0300
-Date:   Thu, 6 Oct 2022 16:01:11 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+        with ESMTP id S231464AbiJFNIg (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 6 Oct 2022 09:08:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D467AA7A8B;
+        Thu,  6 Oct 2022 06:07:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C42BD61999;
+        Thu,  6 Oct 2022 13:07:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E532EC433D6;
+        Thu,  6 Oct 2022 13:07:45 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="DVCxJ3eB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1665061660;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ot8N/NmxnMNw5DlaW1IKdsMRDrHlZI2nii4+1SScqOw=;
+        b=DVCxJ3eBFDffmsSfiqm4D2pguNtb+MkiNYLbCSTun9w0GCkACdjmZtOlA4sFQxU+f/GxWq
+        Sx50Psth8L/9mtGKTzUhdXzc9rNmnRLz08vSZhX8UFmpJqQof7Z0M1dQ4dKrY89Mgpq5Px
+        f/qouh8/zY5YPXmN6tL3QXRcpQ+w4gY=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d3107c28 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Thu, 6 Oct 2022 13:07:40 +0000 (UTC)
+Received: by mail-vk1-f170.google.com with SMTP id q83so783462vkb.2;
+        Thu, 06 Oct 2022 06:07:38 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0Pj/GWkM6QcW20xRxztBMKp3IA/0tYD904MEG0bs9TutBTnAQq
+        aegrtiJvPQ0sqGKuyV5RCytSBW2rmos5RDyXrwI=
+X-Google-Smtp-Source: AMsMyM6BF+j/3HMLZlCFG7Ed7OjfvEtEsn8MQiLRA+lNCu+ewWwBJG0d5DtOSPoGCkf/B/8oecSXwWjL7h9HnzQYb5w=
+X-Received: by 2002:a1f:1b45:0:b0:3a7:ba13:11ce with SMTP id
+ b66-20020a1f1b45000000b003a7ba1311cemr2288446vkb.3.1665061655693; Thu, 06 Oct
+ 2022 06:07:35 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221005214844.2699-1-Jason@zx2c4.com> <20221005214844.2699-4-Jason@zx2c4.com>
+ <20221006084331.4bdktc2zlvbaszym@quack3> <Yz7LCyIAHC6l5mG9@zx2c4.com> <Yz7Rl7BXamKQhRzH@smile.fi.intel.com>
+In-Reply-To: <Yz7Rl7BXamKQhRzH@smile.fi.intel.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Thu, 6 Oct 2022 07:07:24 -0600
+X-Gmail-Original-Message-ID: <CAHmME9r2u86Ga1UL_yD6x44OX84UJbRQyfhhDjF1daXyaYsbEw@mail.gmail.com>
+Message-ID: <CAHmME9r2u86Ga1UL_yD6x44OX84UJbRQyfhhDjF1daXyaYsbEw@mail.gmail.com>
+Subject: Re: [f2fs-dev] [PATCH v1 3/5] treewide: use get_random_u32() when possible
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Jan Kara <jack@suse.cz>, Andrew Lunn <andrew@lunn.ch>,
         "Darrick J . Wong" <djwong@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
@@ -113,11 +120,11 @@ Cc:     Jan Kara <jack@suse.cz>, Andrew Lunn <andrew@lunn.ch>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Hao Luo <haoluo@google.com>, Theodore Ts'o <tytso@mit.edu>,
+        Hao Luo <haoluo@google.com>, "Theodore Ts'o" <tytso@mit.edu>,
         Stephen Boyd <sboyd@kernel.org>,
         Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
         Florian Westphal <fw@strlen.de>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
         Jon Maloy <jmaloy@redhat.com>,
         Vlad Yasevich <vyasevich@gmail.com>,
         Anna Schumaker <anna@kernel.org>,
@@ -161,7 +168,7 @@ Cc:     Jan Kara <jack@suse.cz>, Andrew Lunn <andrew@lunn.ch>,
         netdev@vger.kernel.org, Ying Xue <ying.xue@windriver.com>,
         Manish Rangankar <mrangankar@marvell.com>,
         "David S . Miller" <davem@davemloft.net>,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@toke.dk>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Peter Zijlstra <peterz@infradead.org>,
         "H . Peter Anvin" <hpa@zytor.com>,
@@ -197,58 +204,50 @@ Cc:     Jan Kara <jack@suse.cz>, Andrew Lunn <andrew@lunn.ch>,
         linuxppc-dev@lists.ozlabs.org, David Ahern <dsahern@kernel.org>,
         Philipp Reisner <philipp.reisner@linbit.com>,
         Stephen Hemminger <stephen@networkplumber.org>,
-        Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
+        =?UTF-8?Q?Christoph_B=C3=B6hmwalder?= 
         <christoph.boehmwalder@linbit.com>, Vinod Koul <vkoul@kernel.org>,
         tipc-discussion@lists.sourceforge.net, Thomas Graf <tgraf@suug.ch>,
         Johannes Berg <johannes@sipsolutions.net>,
         Sungjong Seo <sj1557.seo@samsung.com>,
         Martin KaFai Lau <martin.lau@linux.dev>
-Subject: Re: [f2fs-dev] [PATCH v1 3/5] treewide: use get_random_u32() when
- possible
-Message-ID: <Yz7Rl7BXamKQhRzH@smile.fi.intel.com>
-References: <20221005214844.2699-1-Jason@zx2c4.com>
- <20221005214844.2699-4-Jason@zx2c4.com>
- <20221006084331.4bdktc2zlvbaszym@quack3>
- <Yz7LCyIAHC6l5mG9@zx2c4.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yz7LCyIAHC6l5mG9@zx2c4.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 06:33:15AM -0600, Jason A. Donenfeld wrote:
-> On Thu, Oct 06, 2022 at 10:43:31AM +0200, Jan Kara wrote:
+On Thu, Oct 6, 2022 at 7:01 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Thu, Oct 06, 2022 at 06:33:15AM -0600, Jason A. Donenfeld wrote:
+> > On Thu, Oct 06, 2022 at 10:43:31AM +0200, Jan Kara wrote:
+>
+> ...
+>
+> > > The code here is effectively doing the
+> > >
+> > >     parent_group = prandom_u32_max(ngroups);
+> > >
+> > > Similarly here we can use prandom_u32_max(ngroups) like:
+> > >
+> > >             if (qstr) {
+> > >                     ...
+> > >                     parent_group = hinfo.hash % ngroups;
+> > >             } else
+> > >                     parent_group = prandom_u32_max(ngroups);
+> >
+> > Nice catch. I'll move these to patch #1.
+>
+> I believe coccinelle is able to handle this kind of code as well
 
-...
+I'd be extremely surprised. The details were kind of non obvious. I
+just spent a decent amount of time manually checking those blocks, to
+make sure we didn't wind up with different behavior, given the
+variable reuse.
 
-> > The code here is effectively doing the
-> > 
-> > 	parent_group = prandom_u32_max(ngroups);
-> > 
-> > Similarly here we can use prandom_u32_max(ngroups) like:
-> > 
-> > 		if (qstr) {
-> > 			...
-> > 			parent_group = hinfo.hash % ngroups;
-> > 		} else
-> > 			parent_group = prandom_u32_max(ngroups);
-> 
-> Nice catch. I'll move these to patch #1.
-
-I believe coccinelle is able to handle this kind of code as well, so Kees'
-proposal to use it seems more plausible since it's less error prone and more
-flexible / powerful.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Jason
