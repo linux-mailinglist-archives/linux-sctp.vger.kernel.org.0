@@ -2,75 +2,59 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9099A5F5F28
-	for <lists+linux-sctp@lfdr.de>; Thu,  6 Oct 2022 04:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D455F622F
+	for <lists+linux-sctp@lfdr.de>; Thu,  6 Oct 2022 09:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbiJFCxV (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 5 Oct 2022 22:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37890 "EHLO
+        id S230241AbiJFH61 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 6 Oct 2022 03:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbiJFCvz (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 5 Oct 2022 22:51:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E718888DC7;
-        Wed,  5 Oct 2022 19:51:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C87D3B81ED2;
-        Thu,  6 Oct 2022 02:51:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B0C0C433C1;
-        Thu,  6 Oct 2022 02:51:15 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZjRINvwJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1665024674;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mw6mQIkw0EUTS+KZQ2KSjRHdoL9NDRAH5QoihL5z5WY=;
-        b=ZjRINvwJ8Y9RjW9mEsxvsruTRD/kCfvgVCkQ7u/7FdIMuudgLfBeipJujcK5PkA7gRibAE
-        3JueW/NR7m/oXbBMBVnvqYoxLNjKuH/oJSyVnlnwJCBcUbNW9D0yGDKzhSBYRR6jQJKX/l
-        SKoNsI97C5YuUj19TWpVavwkTswS1bY=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a3526377 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 6 Oct 2022 02:51:14 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        brcm80211-dev-list.pdl@broadcom.com, cake@lists.bufferbloat.net,
-        ceph-devel@vger.kernel.org, coreteam@netfilter.org,
-        dccp@vger.kernel.org, dev@openvswitch.org,
-        dmaengine@vger.kernel.org, drbd-dev@lists.linbit.com,
-        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
-        linux-actions@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-fbdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-hams@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mm@kvack.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-raid@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-sctp@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        lvs-devel@vger.kernel.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, rds-devel@oss.oracle.com,
-        SHA-cyfmac-dev-list@infineon.com, target-devel@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net
-Subject: [PATCH v1 5/5] prandom: remove unused functions
-Date:   Wed,  5 Oct 2022 23:48:44 +0200
-Message-Id: <20221005214844.2699-6-Jason@zx2c4.com>
-In-Reply-To: <20221005214844.2699-1-Jason@zx2c4.com>
-References: <20221005214844.2699-1-Jason@zx2c4.com>
+        with ESMTP id S230441AbiJFH61 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 6 Oct 2022 03:58:27 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99AD213E2C
+        for <linux-sctp@vger.kernel.org>; Thu,  6 Oct 2022 00:58:26 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id e20so1348799ybh.2
+        for <linux-sctp@vger.kernel.org>; Thu, 06 Oct 2022 00:58:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date;
+        bh=GcZaMLmrW6Bw6eGQLVZ9g1I+KUwzh2OBeMDdqnUGAOg=;
+        b=B6uYvn6b9uFfLFbd9WdEFYlPPfDVpVPsE28q4KmPMpI9ML2UwR0OqbTiX6kSFM/Nn6
+         Euyv+RNhHqrdT7HUmuRIzokyBjSmsK3XqWyY8MurC42jmQQxrqcgGWpGyfc4NA24CQhK
+         O0PVB9zK6SFAmGyP0rgbK01OIyRJTdZXwSeZ0uWSZwQfzf6CBL2BE0TUJ7PhSF918dmH
+         wvCG4iPQmnuOxGe0e6nZQahAiD31Rv0mEvoxI1/lypt2bVc9ZgI0+WE8aITxQrp2dj8Q
+         9jG8hWVNuHU266cJkD3Yw4qU31Rfe+ZgSasaA0CRtaAOCDxDqqExFEyuFfLz32nDH5mU
+         XaHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=GcZaMLmrW6Bw6eGQLVZ9g1I+KUwzh2OBeMDdqnUGAOg=;
+        b=ORsz5gErX+GYykQ6Zkz2XpIaQ6X/FE6IKrwqwx5iRN9K8P4a7KZjODdY3WGDxHslwj
+         K4nBM+H4ZiYVcrj+5FUrLpJMbEOqElob9KxhApWKq9R3UcGn3cV0BSL6WUX80P7pWjLl
+         vxSfJJoZg55UzugFUseMyIq1S+xddflRgoDPVoooK+yJ/Zy3x06Gthzqk/9CGZEQK/Az
+         OE5tFQC3wvW+4o7HxD6u/uAGZlyGgLfmZGCmg84RMduieyL626uscf10YO1FVpYMOWna
+         PZsCPAmGfhLj16zzO4QEfgo5FTYubisfjznDwadQgmSM8iOLZELtTfdB9pNQII8DLcOH
+         /PtA==
+X-Gm-Message-State: ACrzQf0tSjEsrbA9jT/UJ83uckw8KODPptz+QOdTYptRDbcQp2lcuccw
+        4F036iYKvWqIGH3UfeqzkawcGrXnLoIOxatM4VaQqyjTwzc=
+X-Google-Smtp-Source: AMsMyM5rHQIdY72Qhr47vaBwul3x6m66s6JoR+W1AkUggb5lfju8M3Iu3j0IyVEi1R4uVjeStayR+7/wM+/da6kM7xM=
+X-Received: by 2002:a25:4fc2:0:b0:6be:afb4:d392 with SMTP id
+ d185-20020a254fc2000000b006beafb4d392mr3461012ybb.604.1665043105763; Thu, 06
+ Oct 2022 00:58:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+From:   "Denis M." <xeronm@gmail.com>
+Date:   Thu, 6 Oct 2022 10:58:14 +0300
+Message-ID: <CAO4aA2BjT2hUk_U=xxidxz4=dwsd5uwuK-oTW5epFgeCrA3pog@mail.gmail.com>
+Subject: Subject: SCTP: Stateless multi-homing support with adjustment of the
+ Verification Tag
+To:     linux-sctp@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,37 +62,63 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-With no callers left of prandom_u32() and prandom_bytes(), remove these
-deprecated wrappers.
+Hello,
 
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- include/linux/prandom.h | 12 ------------
- 1 file changed, 12 deletions(-)
+Could you consider some improvements in linux SCTP implementation.
 
-diff --git a/include/linux/prandom.h b/include/linux/prandom.h
-index 78db003bc290..e0a0759dd09c 100644
---- a/include/linux/prandom.h
-+++ b/include/linux/prandom.h
-@@ -12,18 +12,6 @@
- #include <linux/percpu.h>
- #include <linux/random.h>
- 
--/* Deprecated: use get_random_u32 instead. */
--static inline u32 prandom_u32(void)
--{
--	return get_random_u32();
--}
--
--/* Deprecated: use get_random_bytes instead. */
--static inline void prandom_bytes(void *buf, size_t nbytes)
--{
--	return get_random_bytes(buf, nbytes);
--}
--
- struct rnd_state {
- 	__u32 s1, s2, s3, s4;
- };
--- 
-2.37.3
+Motivation: Implementation of the stateless balancing of the SCTP
+multi-homing inbound connections through L4 LB (for instance IPVS
+subsystem) based on Verification Tag.
 
+Idea:
+1. We need a deterministic algorithm to find a proper backend host. We
+may encode the host index into SCTP Verification Tag. I know that RFC
+recommends generating Verification Tag randomly, but this could
+drastically simplify implementation of the L4 LB.
+2. On the L4 LB side we restore the host index from Verification Tag
+and route the packet to a certain host from the backend pool.
+
+Implementation:
+
+1. add new sysctl parameter <sysctl.c>:
+
+> {
+> .procname = "vtag_hindex",
+> .data = &init_net.sctp_vtag_hindex,
+> .maxlen = sizeof(unsigned int),
+> .mode = 0644,
+> .proc_handler = proc_dointvec_minmax,
+> .extra1 = SYSCTL_ZERO,
+> .extra2 = &vtag_hindex_max,
+> },
+
+
+2. use this parameter in sctp_generate_tag function <sm_make_chunk.c>
+
+> /* Select a new verification tag.  */
+> __u32 sctp_generate_tag(const struct sctp_endpoint *ep)
+> {
+> /* I believe that this random number generator complies with RFC1750.
+> * A tag of 0 is reserved for special cases (e.g. INIT).
+> */
+> __u32 x;
+> unsigned char* cx = (unsigned char*)&x;
+> unsigned char hindex;
+>
+> do {
+> get_random_bytes(&x, sizeof(__u32));
+> } while (x == 0);
+>
+> hindex = ep->base.net->sctp_vtag_hindex;
+> if (hindex) {
+> cx[0] =  cx[1] ^ cx[2] ^ cx[3] ^ hindex;
+> pr_info("sctp_generate_tag(): adjust vtag=%u:%u\n", x, hindex);
+> }
+>
+> return x;
+> }
+
+
+
+Regards,
+Denis Muratov
