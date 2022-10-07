@@ -2,131 +2,91 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 816A45F67B4
-	for <lists+linux-sctp@lfdr.de>; Thu,  6 Oct 2022 15:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 996075F738B
+	for <lists+linux-sctp@lfdr.de>; Fri,  7 Oct 2022 06:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbiJFNUx (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 6 Oct 2022 09:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51258 "EHLO
+        id S229561AbiJGE05 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 7 Oct 2022 00:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiJFNUr (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 6 Oct 2022 09:20:47 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793B49AFFE;
-        Thu,  6 Oct 2022 06:20:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665062447; x=1696598447;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EU0abpI6YFdk3YA4KGgLZ9e2cnqNyTF/1r17KmA6WbU=;
-  b=H/rXg2onBw8kdQTJR9j91bg7GaQ9NTLI4VQaO5RUMKhgyGVdTsqC0ihZ
-   ZFrzupyxaktvnWl0/oAO1N0j+d7VdJ7vhM5jhQno6ZKD98/lmLTbJHLEk
-   YdnjF2+yZPR82O204zlslKkxKat4YQqK1Imt18zDrXqo1ccS1JJsVSyxk
-   MRKlQcD0RpszRcaGv0aLNg8NB07bkMRbNN5u6y9NvDUd9Pep7UTxlCSgc
-   gMlNjOL77ikXzd/PJ+sKmxYh/x98yvYK62uMdNxBx1YoiL7Kpv6EnctwN
-   rw/6E45iagBLiy4ub27Y6WReJAotEZtIYsSDo2cskapKSLTwKhAf1RYEB
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="290697978"
-X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
-   d="scan'208";a="290697978"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 06:20:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="729143418"
-X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
-   d="scan'208";a="729143418"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP; 06 Oct 2022 06:20:34 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ogQng-0039rX-0O;
-        Thu, 06 Oct 2022 16:20:32 +0300
-Date:   Thu, 6 Oct 2022 16:20:31 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com, cake@lists.bufferbloat.net,
-        ceph-devel@vger.kernel.org, coreteam@netfilter.org,
-        dccp@vger.kernel.org, dev@openvswitch.org,
-        dmaengine@vger.kernel.org, drbd-dev@lists.linbit.com,
-        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
-        linux-actions@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-fbdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-hams@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mm@kvack.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-raid@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-sctp@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        lvs-devel@vger.kernel.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, rds-devel@oss.oracle.com,
-        SHA-cyfmac-dev-list@infineon.com, target-devel@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net
-Subject: Re: [PATCH v1 3/5] treewide: use get_random_u32() when possible
-Message-ID: <Yz7WHyD+teLOh2ho@smile.fi.intel.com>
-References: <20221005214844.2699-1-Jason@zx2c4.com>
- <20221005214844.2699-4-Jason@zx2c4.com>
- <Yz7OdfKZeGkpZSKb@ziepe.ca>
- <CAHmME9r_vNRFFjUvqx8QkBddg_kQU=FMgpk9TqOVZdvX6zXHNg@mail.gmail.com>
+        with ESMTP id S229450AbiJGE05 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 7 Oct 2022 00:26:57 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AD8C5113
+        for <linux-sctp@vger.kernel.org>; Thu,  6 Oct 2022 21:26:54 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id y100so5428092ede.6
+        for <linux-sctp@vger.kernel.org>; Thu, 06 Oct 2022 21:26:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bP6gxJU2ceOtoiTrEoGM4pjb2aTL/DZUG5W0nNV8SUs=;
+        b=amXuCSwA9Ccebnc5IDqDPyvJNz3tYwAsMNIeqv0ut+A0ObShMrw1oHoaHQUjEhpqEK
+         wa0cMGZQbEGd7CmGNz9lJlxdJdw1kt1654JmueuFBBFlKGl8bHqyh3Hj3BC5fjOJLbLQ
+         TgWj7hlE+oHF+cdp5C9EfBvd7O5qYWczyHAyVzSsl1tS1j9l6CQphH4zp1y26TVe/zwj
+         HJjPZ9vZzo15M89zYNqLDM7aj1f9H49JwpR+vFNtCCbq6/5wg8vKjpJiyt6atYFBxhdn
+         VtbnAyM4iujImY//FUuYcTYYhl8lfolOunH1YgyzdWJsZnW+hJyDSUmAtOaoK5eBHvsT
+         uuFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bP6gxJU2ceOtoiTrEoGM4pjb2aTL/DZUG5W0nNV8SUs=;
+        b=NeE0jdRJwdotSqwfYmLicoTCJNuvFObwluYa4g2fBFHuPbFcrmNJ1Yyfrn8vFu0JTi
+         oRfgO1SfsjuFGPAEgQMAgGpX+hWPeH76N+YlpBIVj4REOkwVojB6QbKgGD889R4Vg1Sx
+         KL4BvrXx+RucTbuyzmOVZbgLU/0xqgV/AvYLJuNad7GtTLnp+g4t3nCnStHnY2DO6u7t
+         e4gShortOVcnJT0qfShmAO8eWsUgeOzXCx3zy3ES+GfW1MNb/5/rycxizQeptQqfp1kZ
+         H9PeiPJ1PdF2Tcx1+AdN0qzkL2VkFiiR16hwO4rPftDXhJzLTm+b38l/xRxCHvXStJ69
+         cX/w==
+X-Gm-Message-State: ACrzQf24IJezw9vHiFiXEGLk3Eunghu779HJ15VCpCW835sANXekQnfz
+        OlIz2Si7r5mBgHo5gXNRiXSaR3QHsdvT2NKWLR0=
+X-Google-Smtp-Source: AMsMyM7IlQN+0q1u+Gzw0pGF1YFbHs73hG74+G7NxIqvVqz6LRgI0I/hQrDEWwjSLTyagcLmvuVhmnW1gj0oXF0yVkA=
+X-Received: by 2002:a05:6402:254f:b0:45a:1799:d8fc with SMTP id
+ l15-20020a056402254f00b0045a1799d8fcmr1237057edb.237.1665116813282; Thu, 06
+ Oct 2022 21:26:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHmME9r_vNRFFjUvqx8QkBddg_kQU=FMgpk9TqOVZdvX6zXHNg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a55:b48b:0:b0:1bb:8593:1aab with HTTP; Thu, 6 Oct 2022
+ 21:26:52 -0700 (PDT)
+Reply-To: petermalsam611@gmail.com
+From:   Peter MALSAM <vidal.charpentier@gmail.com>
+Date:   Fri, 7 Oct 2022 06:26:52 +0200
+Message-ID: <CAN7qQvR8r9mr_2VE-Ef0aRDc3DpF6mav-5Md82x5gwn_-to6uQ@mail.gmail.com>
+Subject: Geldverleih an Privatpersonen und Gewerbetreibende in weniger als 72 Stunden
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 07:05:48AM -0600, Jason A. Donenfeld wrote:
-> On Thu, Oct 6, 2022 at 6:47 AM Jason Gunthorpe <jgg@ziepe.ca> wrote:
-> > On Wed, Oct 05, 2022 at 11:48:42PM +0200, Jason A. Donenfeld wrote:
+Hallo,
 
-...
+Sind Sie in einer schwierigen Situation, f=C3=BCr die Sie einen Kredit
+suchen? Ben=C3=B6tigen Sie eine Finanzierung zur Begleichung einer Schuld
+oder zur Finanzierung einer Aktivit=C3=A4t? Ben=C3=B6tigen Sie einen
+Konsumentenkredit, einen Immobilienkredit, einen Privatkredit, einen
+Hypothekarkredit, einen Investitionskredit, einen Kreditr=C3=BCckkauf oder
+anderes?
 
-> > > -     u32 isn = (prandom_u32() & ~7UL) - 1;
-> > > +     u32 isn = (get_random_u32() & ~7UL) - 1;
-> >
-> > Maybe this wants to be written as
-> >
-> > (prandom_max(U32_MAX >> 7) << 7) | 7
+Ich bin ein privater Investor. Ich versorge Sie mit kurz-, mittel- und
+langfristigen Krediten. Meine Finanzierungskonditionen sind sehr
+einfach und der Zinssatz betr=C3=A4gt 3% pro Jahr.
 
-> > ?
-> 
-> Holy smokes. Yea I guess maybe? It doesn't exactly gain anything or
-> make the code clearer though, and is a little bit more magical than
-> I'd like on a first pass.
+F=C3=BCr alle Informationsanfragen stehe ich Ihnen gerne zur Verf=C3=BCgung=
+.
 
-Shouldn't the two first 7s to be 3s?
+Vielen Dank f=C3=BCr Ihre Kontaktaufnahme per Mail an:
 
-...
+petermalsam611@gmail.com
 
-> > > -     psn = prandom_u32() & 0xffffff;
-> > > +     psn = get_random_u32() & 0xffffff;
-> >
-> >  prandom_max(0xffffff + 1)
-> 
-> That'd work, but again it's not more clear. Authors here are going for
-> a 24-bit number, and masking seems like a clear way to express that.
+Mit freundlichen Gr=C3=BC=C3=9Fen.
 
-We have some 24-bit APIs (and 48-bit) already in kernel, why not to have
-get_random_u24() ?
-
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Peter MALSAM
