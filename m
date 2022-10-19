@@ -2,113 +2,149 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D27D6604F7C
-	for <lists+linux-sctp@lfdr.de>; Wed, 19 Oct 2022 20:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7384605242
+	for <lists+linux-sctp@lfdr.de>; Wed, 19 Oct 2022 23:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbiJSSUL (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 19 Oct 2022 14:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
+        id S230351AbiJSVwm (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 19 Oct 2022 17:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231182AbiJSSUJ (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 19 Oct 2022 14:20:09 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44FE318352
-        for <linux-sctp@vger.kernel.org>; Wed, 19 Oct 2022 11:20:08 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id a6so23270909ljq.5
-        for <linux-sctp@vger.kernel.org>; Wed, 19 Oct 2022 11:20:08 -0700 (PDT)
+        with ESMTP id S229932AbiJSVwl (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 19 Oct 2022 17:52:41 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF07192996;
+        Wed, 19 Oct 2022 14:52:40 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-13ae8117023so743159fac.9;
+        Wed, 19 Oct 2022 14:52:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bell-sw-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GdMe4wNLlPasVGo4Wb6xEZk50ae59ENm+PGbWOO1sik=;
-        b=wEhRvLVVZEBCd5wkc5IQBPn0f047oHR5qiQtC5mDtGtN0eXPqe5Y6TCjm+87hoPEqY
-         UzoLnxtkPfzHq6cGsUGgPih1LRrDamQT5y0L04jA8nFy5m7nnH7ub/gde8+AW4MOkNo2
-         8Cw3klgCQgMyR/0gPbl/xElZb6S/suy5cUENQq3FCzBn3FH60KQ0lS2ta8iWiSLvAREv
-         QLzjxBRa2PX7Qk4bMu8axOvIgsgjXnfQW4b6GPGsAd2K8slL4HxWEa1nujzzpgjpsLpA
-         9OFjeW2Hpyfqpgzh5KPxnAEjC+y+n3Zsw/86ZApNvbRSb5wx4yT/eLj10lfHYjrNcmxE
-         BL0Q==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=f9RMYhC8HnulW5HipCdWjW2jvG1uG9+hyMRLGZVjYO4=;
+        b=Uh4ftnT0LUl73pP5iwf+uLlz7+W6lt/1oLfPU6OKkSDljGOmRDv5/9WuBygY043bfV
+         s6LaVF94fxFD2UnyqLNmUbxGirB48+fbgo+UBmcfCZl6cw4cFTagvN2XnJzLH5Rhxz1T
+         LLWi4+BLjJyGGNEm2LIuenmQnjBMQhtim6Jfx6MLEkYBF6qq+P/4QPOasWPTUXAZgAwV
+         vm96bQNx2vK1Onc02803yfM2vptja6Z5BpwEMGXdqQB/brKWJ1fpiJUZhx4Fn7p94Lux
+         y9t6L3CUZW3N1A6bOe3rk9aQHkdhcY/+Us7CG+N/ZRkaRX0AGuoJ5bpzHSYzYhdpBezI
+         qq/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GdMe4wNLlPasVGo4Wb6xEZk50ae59ENm+PGbWOO1sik=;
-        b=yhuRUO0lqdxvy0lAPib+jkXiezroxtZTsgHLFIg27V6zalzsjSrmNxCW6RANcDQVUy
-         srweN6sS90Xs+QFNemCQtH42ssxPzPmVv0IWZulxZE+WNdJIA2gU7VwLcfIZmUxLs9wN
-         +FTzaH5/RI8dg5uM+N3aM6UAGr69O5ubdAsZVlnC/4mwISLdB6qEfoAQU892daLm9FpT
-         l24Gt0fs7/pqCJlGg3k7XB6X0lnP2wt61CguRXa+21U99k2gBK3wKIR3skdIidqW9jQW
-         io/2R87ruaK3sswkKqZm/8LlTyfa+bXXaWgRfZ7m2LklCmQRaxH2PwR4i5Trqzq700Iv
-         ygGw==
-X-Gm-Message-State: ACrzQf36BuDCfaulLFrW8xm7dDA96qgCQEcvmMrAgDGkc8dNArBpzBId
-        grTjXAz8e0w3fh/CHmFb7uX8qhMMt9wp
-X-Google-Smtp-Source: AMsMyM7fUlk+9j02IdUBW1dVtCtdvm2N294zOE1+6/rsqQUY4kzQ1RcCT9GNGF/YGNF2Gty6jWU52w==
-X-Received: by 2002:a05:651c:1609:b0:26e:93e8:b6e with SMTP id f9-20020a05651c160900b0026e93e80b6emr3605472ljq.456.1666203605608;
-        Wed, 19 Oct 2022 11:20:05 -0700 (PDT)
-Received: from localhost.localdomain ([95.161.223.113])
-        by smtp.gmail.com with ESMTPSA id j23-20020ac24557000000b004a287c50c13sm2389916lfm.185.2022.10.19.11.20.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 11:20:05 -0700 (PDT)
-From:   Alexey Kodanev <aleksei.kodanev@bell-sw.com>
-To:     linux-sctp@vger.kernel.org
-Cc:     netdev@vger.kernel.org,
-        Alexey Kodanev <aleksei.kodanev@bell-sw.com>
-Subject: [PATCH net-next 3/3] sctp: remove unnecessary NULL checks in sctp_enqueue_event()
-Date:   Wed, 19 Oct 2022 21:07:35 +0300
-Message-Id: <20221019180735.161388-3-aleksei.kodanev@bell-sw.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221019180735.161388-1-aleksei.kodanev@bell-sw.com>
-References: <20221019180735.161388-1-aleksei.kodanev@bell-sw.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f9RMYhC8HnulW5HipCdWjW2jvG1uG9+hyMRLGZVjYO4=;
+        b=rSbXnCV/HfKKDg2YCpsLAjZngEX4QM38fcnQ8laEyfwT+AZOPg4n1RAlkR35VU4KE6
+         bWnWW3d6Fk0f7Q9VFdXDZIYBtqF8lV1cNN69+FAwPl64xPTUYky9tKtuHLa84UjJnkY8
+         7Qs4ahVbMl4K9eKrA/zwfAZI/GyZQIRr7eieAgLklISVrc3fcgf04pM1l9I5b+G+Kfq7
+         eB2ytlLhOEnNDdc+kO5EF2L9FPa8XMDFJXiH+So4PYcfPx7pX/5W9B07Q2u+tkQZX2/d
+         YBhfuMB71tL4NEdzPUpjbu783rrelgFIp6kqQm0/MN0rzgK5fVHOyO+tHCYoUz6CF6Rk
+         1uJw==
+X-Gm-Message-State: ACrzQf0bgSXrsipCpR/JfoveaQWxw93M389TRh7scK2MR22sukqSmw5g
+        JyIIyMhX9RxsCHkE8WnnmnHdVVFg0JN0/AHSP0lVDAhMvW0=
+X-Google-Smtp-Source: AMsMyM7iJQkhqI7bxWXaO/FqZum5ZcSmYhHtfC/rKvQCRET3anOifqis5Vbut1c5Dg/L8R8WUX6j91POILNeM4OugKg=
+X-Received: by 2002:a05:6870:9614:b0:11d:3906:18fc with SMTP id
+ d20-20020a056870961400b0011d390618fcmr23556205oaq.190.1666216360272; Wed, 19
+ Oct 2022 14:52:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20221019180735.161388-1-aleksei.kodanev@bell-sw.com>
+In-Reply-To: <20221019180735.161388-1-aleksei.kodanev@bell-sw.com>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Wed, 19 Oct 2022 17:25:10 -0400
+Message-ID: <CADvbK_fhsgfuuqOWp4Y=yJ-CbmU400U4PbGEran4BYW2zQfCbQ@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/3] sctp: remove unnecessary NULL check in sctp_association_init()
+To:     Alexey Kodanev <aleksei.kodanev@bell-sw.com>
+Cc:     linux-sctp@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-After commit 178ca044aa60 ("sctp: Make sctp_enqueue_event tak an
-skb list."), skb_list cannot be NULL.
-
-Detected using the static analysis tool - Svace.
-Signed-off-by: Alexey Kodanev <aleksei.kodanev@bell-sw.com>
----
- net/sctp/stream_interleave.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
-
-diff --git a/net/sctp/stream_interleave.c b/net/sctp/stream_interleave.c
-index bb22b71df7a3..94727feb07b3 100644
---- a/net/sctp/stream_interleave.c
-+++ b/net/sctp/stream_interleave.c
-@@ -490,11 +490,8 @@ static int sctp_enqueue_event(struct sctp_ulpq *ulpq,
- 	if (!sctp_ulpevent_is_enabled(event, ulpq->asoc->subscribe))
- 		goto out_free;
- 
--	if (skb_list)
--		skb_queue_splice_tail_init(skb_list,
--					   &sk->sk_receive_queue);
--	else
--		__skb_queue_tail(&sk->sk_receive_queue, skb);
-+	skb_queue_splice_tail_init(skb_list,
-+				   &sk->sk_receive_queue);
- 
- 	if (!sp->data_ready_signalled) {
- 		sp->data_ready_signalled = 1;
-@@ -504,10 +501,7 @@ static int sctp_enqueue_event(struct sctp_ulpq *ulpq,
- 	return 1;
- 
- out_free:
--	if (skb_list)
--		sctp_queue_purge_ulpevents(skb_list);
--	else
--		sctp_ulpevent_free(event);
-+	sctp_queue_purge_ulpevents(skb_list);
- 
- 	return 0;
- }
--- 
-2.25.1
-
+On Wed, Oct 19, 2022 at 2:29 PM Alexey Kodanev
+<aleksei.kodanev@bell-sw.com> wrote:
+>
+> '&asoc->ulpq' passed to sctp_ulpq_init() as the first argument,
+> then sctp_qlpq_init() initializes it and eventually returns the
+> address of the struct member back. Therefore, in this case, the
+> return pointer cannot be NULL.
+>
+> Moreover, it seems sctp_ulpq_init() has always been used only in
+> sctp_association_init(), so there's really no need to return ulpq
+> anymore.
+>
+> Detected using the static analysis tool - Svace.
+> Signed-off-by: Alexey Kodanev <aleksei.kodanev@bell-sw.com>
+> ---
+>  include/net/sctp/ulpqueue.h | 3 +--
+>  net/sctp/associola.c        | 4 +---
+>  net/sctp/ulpqueue.c         | 5 +----
+>  3 files changed, 3 insertions(+), 9 deletions(-)
+>
+> diff --git a/include/net/sctp/ulpqueue.h b/include/net/sctp/ulpqueue.h
+> index 0eaf8650e3b2..60f6641290c3 100644
+> --- a/include/net/sctp/ulpqueue.h
+> +++ b/include/net/sctp/ulpqueue.h
+> @@ -35,8 +35,7 @@ struct sctp_ulpq {
+>  };
+>
+>  /* Prototypes. */
+> -struct sctp_ulpq *sctp_ulpq_init(struct sctp_ulpq *,
+> -                                struct sctp_association *);
+> +void sctp_ulpq_init(struct sctp_ulpq *ulpq, struct sctp_association *asoc);
+>  void sctp_ulpq_flush(struct sctp_ulpq *ulpq);
+>  void sctp_ulpq_free(struct sctp_ulpq *);
+>
+> diff --git a/net/sctp/associola.c b/net/sctp/associola.c
+> index 3460abceba44..63ba5551c13f 100644
+> --- a/net/sctp/associola.c
+> +++ b/net/sctp/associola.c
+> @@ -226,8 +226,7 @@ static struct sctp_association *sctp_association_init(
+>         /* Create an output queue.  */
+>         sctp_outq_init(asoc, &asoc->outqueue);
+>
+> -       if (!sctp_ulpq_init(&asoc->ulpq, asoc))
+> -               goto fail_init;
+> +       sctp_ulpq_init(&asoc->ulpq, asoc);
+>
+>         if (sctp_stream_init(&asoc->stream, asoc->c.sinit_num_ostreams, 0, gfp))
+>                 goto stream_free;
+> @@ -277,7 +276,6 @@ static struct sctp_association *sctp_association_init(
+>
+>  stream_free:
+>         sctp_stream_free(&asoc->stream);
+> -fail_init:
+>         sock_put(asoc->base.sk);
+>         sctp_endpoint_put(asoc->ep);
+>         return NULL;
+> diff --git a/net/sctp/ulpqueue.c b/net/sctp/ulpqueue.c
+> index 0a8510a0c5e6..24960dcb6a21 100644
+> --- a/net/sctp/ulpqueue.c
+> +++ b/net/sctp/ulpqueue.c
+> @@ -38,8 +38,7 @@ static void sctp_ulpq_reasm_drain(struct sctp_ulpq *ulpq);
+>  /* 1st Level Abstractions */
+>
+>  /* Initialize a ULP queue from a block of memory.  */
+> -struct sctp_ulpq *sctp_ulpq_init(struct sctp_ulpq *ulpq,
+> -                                struct sctp_association *asoc)
+> +void sctp_ulpq_init(struct sctp_ulpq *ulpq, struct sctp_association *asoc)
+>  {
+>         memset(ulpq, 0, sizeof(struct sctp_ulpq));
+>
+> @@ -48,8 +47,6 @@ struct sctp_ulpq *sctp_ulpq_init(struct sctp_ulpq *ulpq,
+>         skb_queue_head_init(&ulpq->reasm_uo);
+>         skb_queue_head_init(&ulpq->lobby);
+>         ulpq->pd_mode  = 0;
+> -
+> -       return ulpq;
+>  }
+>
+>
+> --
+> 2.25.1
+>
+Reviewed-by: Xin Long <lucien.xin@gmail.com>
