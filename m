@@ -2,87 +2,94 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC11E606F34
-	for <lists+linux-sctp@lfdr.de>; Fri, 21 Oct 2022 07:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6213D60DA27
+	for <lists+linux-sctp@lfdr.de>; Wed, 26 Oct 2022 06:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiJUFLC (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 21 Oct 2022 01:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57696 "EHLO
+        id S232280AbiJZEDf (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 26 Oct 2022 00:03:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiJUFKg (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 21 Oct 2022 01:10:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48439182C73;
-        Thu, 20 Oct 2022 22:10:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C5BB61DDA;
-        Fri, 21 Oct 2022 05:10:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E351FC43140;
-        Fri, 21 Oct 2022 05:10:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666329021;
-        bh=F/tMApnh/5WoApY+2keidp9qeW8jwikBGU0pQPU4Y7Q=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=p7gDyh7VB4CHHiykHCxcvnRGO3QP+jr+M2gPudXzlB0kmsE7jETV0DclVAcA7ll4z
-         DpkY8MqVi5lJBC8jnj9/7cRVUU6e8c5cswohlZahRWdJT6Vf3Haxk7173uJp0sTEhH
-         JD1ixhtApGsrLEDvFDJ8zW+BMWer8t1wlfhays4qvxiLu6jucVL6uXRA1WhDcaEApP
-         lVvyZgHV6isq9CbTRmIgY4/af1QpByvyYvcB7TcLTX+Sv9GSRI4BEXkXC9aAxvYxLK
-         nMkm7kvWLAKCioaT3UycTzPKQSMSuWmffAvMEQuUZ/yhHD3x5vWo2GGWNyVv1Af+X3
-         +2ZxaAXpKZ7jg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D0971E270DF;
-        Fri, 21 Oct 2022 05:10:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S232949AbiJZEDd (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 26 Oct 2022 00:03:33 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76941A98D4
+        for <linux-sctp@vger.kernel.org>; Tue, 25 Oct 2022 21:03:30 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id q71so13641625pgq.8
+        for <linux-sctp@vger.kernel.org>; Tue, 25 Oct 2022 21:03:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pNCH53mecLYGasEWHq0PMVI0sGrG9B8snD4A/whETAE=;
+        b=OB/SvkaJsS14Ff5O0oQkTNiPs7dCFknP2bIctz14pZ0KPJ5BACR/R9dmmafBz+xqXH
+         jxe8gey+yHh2cmscJyWc+twf8ZIIdoDvWWIrEGq1CbntR4MuSA/WFb9OMYr2kMAO65Me
+         jt/ewMe4gl2md8+EqYat1Pqsf4qkRO5Ao92J55aDe1In2QlrPFbK3fuQUl9Ch5aonDpe
+         6iOSD0WSAXXYZvPogeIQ4rqpOqfV4/oABw0MvbOldmnKBGsaymHI9x2eB8OyhbjJRUA/
+         Id7xpfyKdwL5NAgWBeobJKhp+865ciQMa0Ij5n0k0aAMQzBR+Jq2/C/sHu2wNgD48VPk
+         woSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pNCH53mecLYGasEWHq0PMVI0sGrG9B8snD4A/whETAE=;
+        b=wzIk30kPhkyLpLjIP1DkWWsfN3MD/KjfEkzYXaU3z6g2EgzPsJOJ3eIbpgjnmxSYf5
+         pPuYlEORMfPV+hSSEVuzHl48IhfKGep4i+sTy8lVCaB9Gkzeo/peQ3jfUM1UZEyBn15P
+         CEHeLIUojm2zUc6xycy92XXMcEAkHoym6r1nvEBhabyPYFL7Goi1s4yyMcmpWMnMRg4d
+         ze1avUO1DGxiydCAFIsMBCsJx9PNBAa98JKEZ7z6ASxI4s0sEUZon5pSgbLu7dPLzjkK
+         zVN+ce1OE/0jnv8p45jHct1dmd3qZqI3Q2R6JazoYL/eP464CLNIMtXYI2hpNSRcj/8a
+         CsEw==
+X-Gm-Message-State: ACrzQf2Uz8jb/ZvA/Sq/gm4iI18bNt//JsPXYRejY1jm64hVxqS8vu6W
+        u9k4AqIGhhCtj949oKDIaJjRseN1/t7sIXqnDwU=
+X-Google-Smtp-Source: AMsMyM7rE/SXr2P3gNlnfsjzv0TZDd21IOOi75+tTBONt0bfHYvM+1UNfHskYHAzAAPf27HJZLXajfRWPjLz+qnzWU0=
+X-Received: by 2002:a63:86c1:0:b0:46f:1554:1f31 with SMTP id
+ x184-20020a6386c1000000b0046f15541f31mr10557455pgd.244.1666757009849; Tue, 25
+ Oct 2022 21:03:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 1/3] sctp: remove unnecessary NULL check in
- sctp_association_init()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166632902185.25874.4878921134477638550.git-patchwork-notify@kernel.org>
-Date:   Fri, 21 Oct 2022 05:10:21 +0000
-References: <20221019180735.161388-1-aleksei.kodanev@bell-sw.com>
-In-Reply-To: <20221019180735.161388-1-aleksei.kodanev@bell-sw.com>
-To:     Alexey Kodanev <aleksei.kodanev@bell-sw.com>
-Cc:     linux-sctp@vger.kernel.org, netdev@vger.kernel.org
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7300:8cac:b0:7f:44b7:477b with HTTP; Tue, 25 Oct 2022
+ 21:03:28 -0700 (PDT)
+Reply-To: petermalsam611@gmail.com
+From:   Peter MALSAM <ericmonvi@gmail.com>
+Date:   Wed, 26 Oct 2022 06:03:29 +0200
+Message-ID: <CAAtLeY_4ZBiDNyE6b6c3immrAU2HMDuhV-H-wvB0k_mnqfnCQA@mail.gmail.com>
+Subject: Geldverleih an Privatpersonen und Gewerbetreibende in weniger als 72 Stunden
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello:
+Hallo,
 
-This series was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Sind Sie in einer schwierigen Situation, f=C3=BCr die Sie einen Kredit
+suchen? Ben=C3=B6tigen Sie eine Finanzierung zur Begleichung einer Schuld
+oder zur Finanzierung einer Aktivit=C3=A4t? Ben=C3=B6tigen Sie einen
+Konsumentenkredit, einen Immobilienkredit, einen Privatkredit, einen
+Hypothekarkredit, einen Investitionskredit, einen Kreditr=C3=BCckkauf oder
+anderes?
 
-On Wed, 19 Oct 2022 21:07:33 +0300 you wrote:
-> '&asoc->ulpq' passed to sctp_ulpq_init() as the first argument,
-> then sctp_qlpq_init() initializes it and eventually returns the
-> address of the struct member back. Therefore, in this case, the
-> return pointer cannot be NULL.
-> 
-> Moreover, it seems sctp_ulpq_init() has always been used only in
-> sctp_association_init(), so there's really no need to return ulpq
-> anymore.
-> 
-> [...]
+Ich bin ein privater Investor. Ich versorge Sie mit kurz-, mittel- und
+langfristigen Krediten. Meine Finanzierungskonditionen sind sehr
+einfach und der Zinssatz betr=C3=A4gt 3% pro Jahr.
 
-Here is the summary with links:
-  - [net-next,1/3] sctp: remove unnecessary NULL check in sctp_association_init()
-    https://git.kernel.org/netdev/net-next/c/6fdfdef7fdb5
-  - [net-next,2/3] sctp: remove unnecessary NULL check in sctp_ulpq_tail_event()
-    https://git.kernel.org/netdev/net-next/c/b66aeddbe30c
-  - [net-next,3/3] sctp: remove unnecessary NULL checks in sctp_enqueue_event()
-    https://git.kernel.org/netdev/net-next/c/377eb9aab084
+F=C3=BCr alle Informationsanfragen stehe ich Ihnen gerne zur Verf=C3=BCgung=
+.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Vielen Dank f=C3=BCr Ihre Kontaktaufnahme per Mail an:
+
+petermalsam611@gmail.com
+
+Mit freundlichen Gr=C3=BC=C3=9Fen.
+
+Peter MALSAM
 
 
+KREDIT PARTENAIRES
