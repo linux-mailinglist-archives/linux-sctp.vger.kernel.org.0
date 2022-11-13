@@ -2,121 +2,131 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F2EB622333
-	for <lists+linux-sctp@lfdr.de>; Wed,  9 Nov 2022 05:46:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D716270E4
+	for <lists+linux-sctp@lfdr.de>; Sun, 13 Nov 2022 17:44:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbiKIEqN (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 8 Nov 2022 23:46:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34446 "EHLO
+        id S235423AbiKMQos (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 13 Nov 2022 11:44:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiKIEqM (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 8 Nov 2022 23:46:12 -0500
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B46647B
-        for <linux-sctp@vger.kernel.org>; Tue,  8 Nov 2022 20:46:11 -0800 (PST)
-Received: by mail-wm1-x343.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so486619wmb.0
-        for <linux-sctp@vger.kernel.org>; Tue, 08 Nov 2022 20:46:11 -0800 (PST)
+        with ESMTP id S233029AbiKMQor (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sun, 13 Nov 2022 11:44:47 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECB5DEE1;
+        Sun, 13 Nov 2022 08:44:46 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id hh9so5589351qtb.13;
+        Sun, 13 Nov 2022 08:44:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pNCH53mecLYGasEWHq0PMVI0sGrG9B8snD4A/whETAE=;
-        b=BKZ81MWCgpcaQvOZ7MCWyflBluFs9RoSm7pJsEO3segB+kKJVE7lMZ72/onicfiubW
-         dp5rj2XiA9lc/4DkJHMQHSipAFgBX/N0JC0kbfgGckZmlYkrFafH682uM1q6+dBQAH4c
-         KGdpqfgyzYWeNs4sURDOK+seJLbVa1oImb7r9mUQSHQbDMXu6hB/JfGhZmy6WsiRoDIm
-         A9t3+Gg5lJ/pW6+n/iT0mKUyVbKDNXEUyDDiYs1XPiQl/ynwhyOC3n7Wus83YLK66lcX
-         1pQiYYk56AzO62751Gdm632t0PsYZWt8z7wz8YLUQjlHx82k2fR/VG/+zAqYrx82+fSk
-         6T3A==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=R5DIZa7Rm2J6kfbCsXyn/ityWCIwsC4f7tL9B7j8cKg=;
+        b=KjCIdZrwWWMPj+i6JNp//zlmRdeo8ol9O/5mgWRnG8MmoCCkt6C6fRriEYcr0Hvpq2
+         vrKcu4X/qjMbn/ExUo+YlOrx7Rk6W9ezMzs/ZIeT0/8/ITgHG5WCd4pVJUGlK2RjjFEz
+         C4vROrM2WgzNJ22yL6sESLZO5mTd03aw7sE6naL5YALZeJIIX47K7+8StUXBgDFhBXCL
+         gopMFrQbHFiZLakm0avY/Y2hoUtce44Rkh/33WtjXl8dicMGC9vEmwLlDC7rMzOzDkOK
+         NmT9KyRGAE2u8ZibX7LZn0Zu/mdWTvXmBF/A3K/G1EWYz9Y0brw2pb/cFFM+x8vzJI6q
+         VcVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pNCH53mecLYGasEWHq0PMVI0sGrG9B8snD4A/whETAE=;
-        b=kGTh9UN6IZIf74pfiX/xtwpyGRCR7aY3fuTwdoVAKeMnOXc27M3XQv36ARsiERyHEz
-         iPNvMEL9LrkET2CotW+QjRHTqVDOi3pKa+Bz9QdPu+lSiYQQ8NYUyTb3qS0d+kCjZ+ci
-         D+UW9Gk6wm/QOQZeg3majiNX+hJo0s4TKD97RUV9B8hcaaS7qpxB6fHq9iSp+rTxm7m7
-         VS/c90WXjyDhcfvN3IUuRi3Q2hSSghWSeNq/nEYD8WKhbZx3hOOznTJR5HvuLcaysHDO
-         yjUCnC6UNlqAOcW8uJPoUxSPgo6+qbfgPTJiIRLSuvpQ6j/ybIjUWqcA+cZ/WZfViX19
-         F9lg==
-X-Gm-Message-State: ACrzQf2rrllvmas+N1q3dOuuEh7uT1DIWYYFnc2kE0tx/Ir5cdfJjBLP
-        8viKpUWqeT/Gop3SI5apuneO8hu/4JcotQBDlHc=
-X-Google-Smtp-Source: AMsMyM6ba2/dJ9iRZbT76qRwRcRJE/3sjBKFmIjTIBppsKujnYRcDsZf16j+AvBk1sZy0AlmcMvLgUH6Y2Ut6jFBVGg=
-X-Received: by 2002:a05:600c:42c9:b0:3cf:69d4:72d9 with SMTP id
- j9-20020a05600c42c900b003cf69d472d9mr36455964wme.93.1667969169590; Tue, 08
- Nov 2022 20:46:09 -0800 (PST)
+        bh=R5DIZa7Rm2J6kfbCsXyn/ityWCIwsC4f7tL9B7j8cKg=;
+        b=ZiqEpHyUdK6Q6lxx+8a6l3omMsrWuJEfhzJZwuqo0KJsPREHFtMe4at87qdWTgD2Qe
+         xCA/Ln4DLzYjCQ9EKssj+sl0hEDsHEEEO5qng1Jw37KnkRl0Zx5fac28zbLDzZ7bXrCV
+         4EQMMYJ4+sY3hYRHK4huYtEwtReG7cYdwewRWc+71YMocJQ9rDDkTGmy/QD8FNmGJDrF
+         xVgEmgBoXRkrS7yiXXSIO6rXwbDcvreDyARYkxO6fivsyMPwDrCYipmeWBgEx0DzZfra
+         c2qB4Y45O6R0VW24W5RN6YI6sbsVtARqxQiEcJ1swLjTr4R03rfwHX3EYHt7lsX09Nuk
+         ML5w==
+X-Gm-Message-State: ANoB5pkfC1vC+xPyfHcNUYOQCW/v4BlxMxKkCJx66CNJzM46XihsqJi1
+        TowupNqgGmGGjQYTsF/z/T0B8xAgUvsm/w==
+X-Google-Smtp-Source: AA0mqf6RlK/K8tgGGhfA38XtwNxbIeVuXgHGEyBsqo7LKwSvcioUxYM29TvOUwiqZKHnLC+E6Oosvg==
+X-Received: by 2002:a05:622a:151:b0:3a5:6a0e:db3c with SMTP id v17-20020a05622a015100b003a56a0edb3cmr9400000qtw.398.1668357885705;
+        Sun, 13 Nov 2022 08:44:45 -0800 (PST)
+Received: from wsfd-netdev15.ntdv.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id cf8-20020a05622a400800b0035d08c1da35sm4429191qtb.45.2022.11.13.08.44.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Nov 2022 08:44:45 -0800 (PST)
+From:   Xin Long <lucien.xin@gmail.com>
+To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        David Ahern <dsahern@gmail.com>,
+        Carlo Carraro <colrack@gmail.com>
+Subject: [PATCH net-next 0/7] sctp: support vrf processing
+Date:   Sun, 13 Nov 2022 11:44:36 -0500
+Message-Id: <cover.1668357542.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Received: by 2002:adf:ed47:0:0:0:0:0 with HTTP; Tue, 8 Nov 2022 20:46:08 -0800 (PST)
-Reply-To: petermalsam611@gmail.com
-From:   Peter MALSAM <philippefontaine14@gmail.com>
-Date:   Wed, 9 Nov 2022 05:46:08 +0100
-Message-ID: <CAL-e08Tc9149y-jRJBMyHKmLuBzQqzhGg7ZTgQ4-EtZxR9L20A@mail.gmail.com>
-Subject: Geldverleih an Privatpersonen und Gewerbetreibende in weniger als 72 Stunden
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:343 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [petermalsam611[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [philippefontaine14[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [philippefontaine14[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hallo,
+This patchset adds the VRF processing in SCTP. Simliar to TCP/UDP,
+it includes socket bind and socket/association lookup changes.
 
-Sind Sie in einer schwierigen Situation, f=C3=BCr die Sie einen Kredit
-suchen? Ben=C3=B6tigen Sie eine Finanzierung zur Begleichung einer Schuld
-oder zur Finanzierung einer Aktivit=C3=A4t? Ben=C3=B6tigen Sie einen
-Konsumentenkredit, einen Immobilienkredit, einen Privatkredit, einen
-Hypothekarkredit, einen Investitionskredit, einen Kreditr=C3=BCckkauf oder
-anderes?
+For socket bind change, it allows sockets to bind to a VRF device
+and allows multiple sockets with the same IP and PORT to bind to
+different interfaces in patch 1-3.
 
-Ich bin ein privater Investor. Ich versorge Sie mit kurz-, mittel- und
-langfristigen Krediten. Meine Finanzierungskonditionen sind sehr
-einfach und der Zinssatz betr=C3=A4gt 3% pro Jahr.
+For socket/association lookup change, it adds dif and sdif check
+in both asoc and ep lookup in patch 4 and 5, and when binding to
+nodev, users can decide if accept the packets received from one
+l3mdev by setup a sysctl option in patch 6.
 
-F=C3=BCr alle Informationsanfragen stehe ich Ihnen gerne zur Verf=C3=BCgung=
-.
+Note with VRF support, in a netns, an association will be decided
+by src ip + src port + dst ip + dst port + bound_dev_if, and it's
+possible for ss to have:
 
-Vielen Dank f=C3=BCr Ihre Kontaktaufnahme per Mail an:
+# ss --sctp -n
+  State       Local Address:Port      Peer Address:Port
+   ESTAB     192.168.1.2%vrf-s1:1234
+   `- ESTAB   192.168.1.2%veth1:1234   192.168.1.1:1234
+   ESTAB     192.168.1.2%vrf-s2:1234
+   `- ESTAB   192.168.1.2%veth2:1234   192.168.1.1:1234
 
-petermalsam611@gmail.com
+See the selftest in patch 7 for more usage.
 
-Mit freundlichen Gr=C3=BC=C3=9Fen.
+Also, thanks Carlo for testing this patch series on their use.
 
-Peter MALSAM
+Xin Long (7):
+  sctp: verify the bind address with the tb_id from l3mdev
+  sctp: check ipv6 addr with sk_bound_dev if set
+  sctp: check sk_bound_dev_if when matching ep in get_port
+  sctp: add skb_sdif in struct sctp_af
+  sctp: add dif and sdif check in asoc and ep lookup
+  sctp: add sysctl net.sctp.l3mdev_accept
+  selftests: add a selftest for sctp vrf
 
+ Documentation/networking/ip-sysctl.rst   |   9 ++
+ include/net/netns/sctp.h                 |   4 +
+ include/net/sctp/sctp.h                  |  16 ++-
+ include/net/sctp/structs.h               |   9 +-
+ net/sctp/diag.c                          |   3 +-
+ net/sctp/endpointola.c                   |  13 +-
+ net/sctp/input.c                         |  98 +++++++-------
+ net/sctp/ipv6.c                          |  22 +++-
+ net/sctp/protocol.c                      |  19 ++-
+ net/sctp/socket.c                        |   9 +-
+ net/sctp/sysctl.c                        |  11 ++
+ tools/testing/selftests/net/Makefile     |   2 +
+ tools/testing/selftests/net/sctp_hello.c | 139 ++++++++++++++++++++
+ tools/testing/selftests/net/sctp_vrf.sh  | 160 +++++++++++++++++++++++
+ 14 files changed, 445 insertions(+), 69 deletions(-)
+ create mode 100644 tools/testing/selftests/net/sctp_hello.c
+ create mode 100755 tools/testing/selftests/net/sctp_vrf.sh
 
-KREDIT PARTENAIRES
+-- 
+2.31.1
+
