@@ -2,41 +2,39 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0EAB62EB0C
-	for <lists+linux-sctp@lfdr.de>; Fri, 18 Nov 2022 02:37:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5881862EB48
+	for <lists+linux-sctp@lfdr.de>; Fri, 18 Nov 2022 02:47:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240834AbiKRBg7 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 17 Nov 2022 20:36:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
+        id S240776AbiKRBr4 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 17 Nov 2022 20:47:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240897AbiKRBg1 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 17 Nov 2022 20:36:27 -0500
+        with ESMTP id S241072AbiKRBrt (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 17 Nov 2022 20:47:49 -0500
 Received: from mail.nfschina.com (unknown [124.16.136.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB3C277229;
-        Thu, 17 Nov 2022 17:35:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 39FFD898F8;
+        Thu, 17 Nov 2022 17:47:38 -0800 (PST)
 Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id ABB721E80D72;
-        Fri, 18 Nov 2022 09:32:40 +0800 (CST)
+        by mail.nfschina.com (Postfix) with ESMTP id E6FD91E80D72;
+        Fri, 18 Nov 2022 09:44:25 +0800 (CST)
 X-Virus-Scanned: amavisd-new at test.com
 Received: from mail.nfschina.com ([127.0.0.1])
         by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 47yIjIXExCWa; Fri, 18 Nov 2022 09:32:38 +0800 (CST)
+        with ESMTP id 7puBGY77IZMt; Fri, 18 Nov 2022 09:44:23 +0800 (CST)
 Received: from localhost.localdomain (unknown [219.141.250.2])
         (Authenticated sender: zeming@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id F3E031E80D70;
-        Fri, 18 Nov 2022 09:32:37 +0800 (CST)
+        by mail.nfschina.com (Postfix) with ESMTPA id D465F1E80D70;
+        Fri, 18 Nov 2022 09:44:22 +0800 (CST)
 From:   Li zeming <zeming@nfschina.com>
-To:     pabeni@redhat.com
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
-        marcelo.leitner@gmail.com, netdev@vger.kernel.org,
-        nhorman@tuxdriver.com, vyasevich@gmail.com
-Subject: 
-Date:   Fri, 18 Nov 2022 09:35:21 +0800
-Message-Id: <20221118013522.2760-1-zeming@nfschina.com>
+To:     pabeni@redhat.com, vyasevich@gmail.com, nhorman@tuxdriver.com,
+        marcelo.leitner@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org
+Cc:     linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Li zeming <zeming@nfschina.com>
+Subject: =?UTF-8?q?=5BPATCH=20v2=5D=20sctp=3A=20sm=5Fstatefuns=3A=20Remove=20unnecessary=20=E2=80=98NULL=E2=80=99=20values=20from=20Pointer?=
+Date:   Fri, 18 Nov 2022 09:46:42 +0800
+Message-Id: <20221118014641.3035-1-zeming@nfschina.com>
 X-Mailer: git-send-email 2.18.2
-In-Reply-To: <1c43f0836d741a575b4805292d6dfff134ef6225.camel@redhat.com>
-References: <1c43f0836d741a575b4805292d6dfff134ef6225.camel@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -49,6 +47,29 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
+The 'packet' pointer is always set in the later code, no need to
+initialize it at definition time.
 
-Many thanks. I resubmit a patch.
+Signed-off-by: Li zeming <zeming@nfschina.com>
+---
+ v2: Modify the submitted description.
+
+ net/sctp/sm_statefuns.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
+index f6ee7f4040c1..714605746fee 100644
+--- a/net/sctp/sm_statefuns.c
++++ b/net/sctp/sm_statefuns.c
+@@ -3781,7 +3781,7 @@ static enum sctp_disposition sctp_sf_shut_8_4_5(
+ 					void *arg,
+ 					struct sctp_cmd_seq *commands)
+ {
+-	struct sctp_packet *packet = NULL;
++	struct sctp_packet *packet;
+ 	struct sctp_chunk *chunk = arg;
+ 	struct sctp_chunk *shut;
+ 
+-- 
+2.18.2
 
