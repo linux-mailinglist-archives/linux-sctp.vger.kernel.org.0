@@ -2,54 +2,43 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2985062ED94
-	for <lists+linux-sctp@lfdr.de>; Fri, 18 Nov 2022 07:30:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23DD662EFD9
+	for <lists+linux-sctp@lfdr.de>; Fri, 18 Nov 2022 09:44:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241102AbiKRGa2 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 18 Nov 2022 01:30:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44022 "EHLO
+        id S241436AbiKRIo3 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 18 Nov 2022 03:44:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241089AbiKRGa1 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 18 Nov 2022 01:30:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA6998250;
-        Thu, 17 Nov 2022 22:30:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 908AB6233E;
-        Fri, 18 Nov 2022 06:30:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D968EC43147;
-        Fri, 18 Nov 2022 06:30:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668753024;
-        bh=bRJ2+zhFpcHmJMyJI7mb75xTmf9/NG6tCX8mCqGhlb0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=I6cACDZjLButOUobuhE+fw0jyZ8vnJBexqPmHdiLNSRqtiMzRzgczTokZ6Cxwo+vc
-         C+P9HAYoa6yBUSm4m2PL1S4KAPE7GS3cE5mPw9ISuJ/PpYxG/fNHuYJHLJAF6brmzG
-         M3GXmAK5V5jT1UjfmN4qTzLyv7A6SWn2NzuzLFoIlKx/iXWZHOqZa+lo84okvjnnET
-         o05+dOLdGHuWnXTGXahPP1tw/j3OfmjZhcpPwOzlE6f0CYQVo2DI7JSfhjFPsxehTb
-         Kttjdho2g0D3dqY4ixwGFdlz/D1lSUCPNOgOasQamq0lok85Ju9xniziZpaH7+W3Z+
-         eh+jQuHKdselA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AF61FE50D72;
-        Fri, 18 Nov 2022 06:30:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S241523AbiKRIoK (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 18 Nov 2022 03:44:10 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A2910F6;
+        Fri, 18 Nov 2022 00:44:01 -0800 (PST)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4ND9Kq4pcXzHvgx;
+        Fri, 18 Nov 2022 16:43:27 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 18 Nov
+ 2022 16:43:59 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <linux-sctp@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <vyasevich@gmail.com>, <nhorman@tuxdriver.com>,
+        <marcelo.leitner@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>
+CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
+        <shaozhengchao@huawei.com>
+Subject: [PATCH net] sctp: fix memory leak in sctp_stream_outq_migrate()
+Date:   Fri, 18 Nov 2022 16:50:30 +0800
+Message-ID: <20221118085030.121297-1-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] sctp: change to include linux/sctp.h in
- net/sctp/checksum.h
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166875302471.3603.13293822718492668637.git-patchwork-notify@kernel.org>
-Date:   Fri, 18 Nov 2022 06:30:24 +0000
-References: <ca7ea96d62a26732f0491153c3979dc1c0d8d34a.1668526793.git.lucien.xin@gmail.com>
-In-Reply-To: <ca7ea96d62a26732f0491153c3979dc1c0d8d34a.1668526793.git.lucien.xin@gmail.com>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
-        davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
-        pabeni@redhat.com, marcelo.leitner@gmail.com, nhorman@tuxdriver.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,29 +46,59 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello:
+When sctp_stream_outq_migrate() is called to release stream out resources,
+the memory pointed to by prio_head in stream out is not released.
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+The memory leak information is as follows:
+unreferenced object 0xffff88801fe79f80 (size 64):
+  comm "sctp_repo", pid 7957, jiffies 4294951704 (age 36.480s)
+  hex dump (first 32 bytes):
+    80 9f e7 1f 80 88 ff ff 80 9f e7 1f 80 88 ff ff  ................
+    90 9f e7 1f 80 88 ff ff 90 9f e7 1f 80 88 ff ff  ................
+  backtrace:
+    [<ffffffff81b215c6>] kmalloc_trace+0x26/0x60
+    [<ffffffff88ae517c>] sctp_sched_prio_set+0x4cc/0x770
+    [<ffffffff88ad64f2>] sctp_stream_init_ext+0xd2/0x1b0
+    [<ffffffff88aa2604>] sctp_sendmsg_to_asoc+0x1614/0x1a30
+    [<ffffffff88ab7ff1>] sctp_sendmsg+0xda1/0x1ef0
+    [<ffffffff87f765ed>] inet_sendmsg+0x9d/0xe0
+    [<ffffffff8754b5b3>] sock_sendmsg+0xd3/0x120
+    [<ffffffff8755446a>] __sys_sendto+0x23a/0x340
+    [<ffffffff87554651>] __x64_sys_sendto+0xe1/0x1b0
+    [<ffffffff89978b49>] do_syscall_64+0x39/0xb0
+    [<ffffffff89a0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-On Tue, 15 Nov 2022 10:39:53 -0500 you wrote:
-> Currently "net/sctp/checksum.h" including "net/sctp/sctp.h" is
-> included in quite some places in netfilter and openswitch and
-> net/sched. It's not necessary to include "net/sctp/sctp.h" if
-> a module does not have dependence on SCTP, "linux/sctp.h" is
-> the right one to include.
-> 
-> Signed-off-by: Xin Long <lucien.xin@gmail.com>
-> 
-> [...]
+Fixes: 637784ade221 ("sctp: introduce priority based stream scheduler")
+Reported-by: syzbot+29c402e56c4760763cc0@syzkaller.appspotmail.com
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+---
+ net/sctp/stream.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Here is the summary with links:
-  - [net-next] sctp: change to include linux/sctp.h in net/sctp/checksum.h
-    https://git.kernel.org/netdev/net-next/c/b78c4162823d
-
-You are awesome, thank you!
+diff --git a/net/sctp/stream.c b/net/sctp/stream.c
+index ef9fceadef8d..a17dc368876f 100644
+--- a/net/sctp/stream.c
++++ b/net/sctp/stream.c
+@@ -70,6 +70,9 @@ static void sctp_stream_outq_migrate(struct sctp_stream *stream,
+ 		 * sctp_stream_update will swap ->out pointers.
+ 		 */
+ 		for (i = 0; i < outcnt; i++) {
++			if (SCTP_SO(new, i)->ext)
++				kfree(SCTP_SO(new, i)->ext->prio_head);
++
+ 			kfree(SCTP_SO(new, i)->ext);
+ 			SCTP_SO(new, i)->ext = SCTP_SO(stream, i)->ext;
+ 			SCTP_SO(stream, i)->ext = NULL;
+@@ -77,6 +80,9 @@ static void sctp_stream_outq_migrate(struct sctp_stream *stream,
+ 	}
+ 
+ 	for (i = outcnt; i < stream->outcnt; i++) {
++		if (SCTP_SO(stream, i)->ext)
++			kfree(SCTP_SO(stream, i)->ext->prio_head);
++
+ 		kfree(SCTP_SO(stream, i)->ext);
+ 		SCTP_SO(stream, i)->ext = NULL;
+ 	}
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.17.1
 
