@@ -2,68 +2,87 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 374FF63387E
-	for <lists+linux-sctp@lfdr.de>; Tue, 22 Nov 2022 10:31:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F486348C5
+	for <lists+linux-sctp@lfdr.de>; Tue, 22 Nov 2022 21:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbiKVJbG (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 22 Nov 2022 04:31:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35080 "EHLO
+        id S233701AbiKVUzp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-sctp@lfdr.de>); Tue, 22 Nov 2022 15:55:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232506AbiKVJbF (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 22 Nov 2022 04:31:05 -0500
-X-Greylist: delayed 2124 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Nov 2022 01:31:04 PST
-Received: from mail.axisfairfi.com (mail.axisfairfi.com [94.177.230.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C4F1CB39
-        for <linux-sctp@vger.kernel.org>; Tue, 22 Nov 2022 01:31:04 -0800 (PST)
-Received: by mail.axisfairfi.com (Postfix, from userid 1001)
-        id 485AE824B2; Tue, 22 Nov 2022 08:55:37 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=axisfairfi.com;
-        s=mail; t=1669107337;
-        bh=0BgaW9t8GFER5QecxVkFsHrVi3gO/4V5KAZgJaiRYBs=;
-        h=Date:From:To:Subject:From;
-        b=Ldo8/HvWZzx8iZt/kSx3QMWELpAgn/ilzZw9RVg8Wb+VeGYhVs7fIgP6d78XgSpuO
-         dEr5ecIXkl0LYoDLQNxWtSjtbtYL4Cmdco30AzpHWbgUSLDFrr5G5iPqkO8NrlbYN3
-         zL4AhwVNs6sduKyW8jRe8PWxjL/ANne9MPkz2szeHY5kZrzQd+mRMPthCZn0Q9ayRY
-         Zz7oR9qwoNsY6JI4tVmoHePb74w34xxXzExZpc5C+R/QiGaQFd1/XDirB6sLwfZlqt
-         LhO2uJnJhrgQhSjlk6rJ9W6BOiMcS7tk0eGSTWZx17ZiOpNlHjajydBq2N1KbTJaFC
-         NyCfgcDChja6Q==
-Received: by mail.axisfairfi.com for <linux-sctp@vger.kernel.org>; Tue, 22 Nov 2022 08:55:34 GMT
-Message-ID: <20221122074500-0.1.d.n2e.0.0jgmp2fjhy@axisfairfi.com>
-Date:   Tue, 22 Nov 2022 08:55:34 GMT
-From:   "Zbynek Spacek" <zbynek.spacek@axisfairfi.com>
-To:     <linux-sctp@vger.kernel.org>
-Subject: Silikonmischungen
-X-Mailer: mail.axisfairfi.com
+        with ESMTP id S233174AbiKVUzo (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 22 Nov 2022 15:55:44 -0500
+X-Greylist: delayed 17280 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Nov 2022 12:55:42 PST
+Received: from correos.bolipuertos.gob.ve.bolipuertos.gob.ve (correo.bolipuertos.gob.ve [190.202.28.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F26C79E34
+        for <linux-sctp@vger.kernel.org>; Tue, 22 Nov 2022 12:55:42 -0800 (PST)
+Received: from correo.bolipuertos.gob.ve ([10.50.23.160])
+        by correos.bolipuertos.gob.ve.bolipuertos.gob.ve  with ESMTP id 2AMG7E79026445-2AMG7E7B026445
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 22 Nov 2022 12:07:14 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by correo.bolipuertos.gob.ve (Postfix) with ESMTP id 94E56AC146E;
+        Tue, 22 Nov 2022 12:07:14 -0400 (-04)
+Received: from correo.bolipuertos.gob.ve ([127.0.0.1])
+        by localhost (correo.bolipuertos.gob.ve [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 4OzcA4lQ4YDk; Tue, 22 Nov 2022 12:07:14 -0400 (-04)
+Received: from localhost (localhost [127.0.0.1])
+        by correo.bolipuertos.gob.ve (Postfix) with ESMTP id 58C44AC179D;
+        Tue, 22 Nov 2022 12:07:14 -0400 (-04)
+X-Virus-Scanned: amavisd-new at bolipuertos.gob.ve
+Received: from correo.bolipuertos.gob.ve ([127.0.0.1])
+        by localhost (correo.bolipuertos.gob.ve [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 0cwSTpEW_69V; Tue, 22 Nov 2022 12:07:14 -0400 (-04)
+Received: from [103.125.190.179] (unknown [103.125.190.179])
+        by correo.bolipuertos.gob.ve (Postfix) with ESMTPSA id 365DCAC146E;
+        Tue, 22 Nov 2022 12:07:07 -0400 (-04)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM14,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Strategic plan on(ROI)
+To:     Recipients <cindy@cgracephoto.com>
+From:   "Mr.IgorS. Lvovich" <cindy@cgracephoto.com>
+Date:   Tue, 22 Nov 2022 08:07:01 -0800
+Reply-To: richad.tang@yahoo.com.hk
+Message-Id: <20221122160708.365DCAC146E@correo.bolipuertos.gob.ve>
+X-FE-Last-Public-Client-IP: 103.125.190.179
+X-FE-Policy-ID: 1:1:2:SYSTEM
+X-Spam-Status: Yes, score=6.7 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,HK_NAME_MR_MRS,KHOP_HELO_FCRDNS,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_MSPIKE_H2,RCVD_IN_SBL,
+        RCVD_IN_VALIDITY_RPBL,SPF_FAIL,SPF_HELO_NONE,TO_EQ_FM_DOM_SPF_FAIL,
+        TO_EQ_FM_SPF_FAIL autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
+        *      bl.spamcop.net
+        *      [Blocked - see <https://www.spamcop.net/bl.shtml?103.125.190.179>]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5068]
+        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
+        *      [103.125.190.179 listed in zen.spamhaus.org]
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [190.202.28.106 listed in bl.score.senderscore.com]
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [190.202.28.106 listed in wl.mailspike.net]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 SPF_FAIL SPF: sender does not match SPF record (fail)
+        *      [SPF failed: Please see http://www.openspf.org/Why?s=mfrom;id=cindy%40cgracephoto.com;ip=190.202.28.106;r=lindbergh.monkeyblade.net]
+        *  1.0 HK_NAME_MR_MRS No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+        *  0.0 TO_EQ_FM_SPF_FAIL To == From and external SPF failed
+        *  0.0 TO_EQ_FM_DOM_SPF_FAIL To domain == From domain and external SPF
+        *       failed
+        *  0.0 KHOP_HELO_FCRDNS Relay HELO differs from its IP's reverse DNS
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Good morning,
+Hello
+I will like to use the liberty of this medium to inform you as a consultant,that my principal is interested in investing his bond/funds as a silent business partner in your company.Taking into proper
+consideration the Return on Investment(ROI) based on a ten (10) year strategic plan.
+I shall give you details when you reply.
 
-do you need intermediates for processing, plastics (e.g. rubber) or silic=
-one mixtures?
-
-We provide a wide range of silicone rubbers with various properties, sili=
-cone mixtures from renowned manufacturers such as Wacker, Elastosil LR an=
-d dyes, stabilizers, primers and anti-adhesive additives.
-
-We also produce technical silicone compounds with increased resistance to=
- oils, resistant to high temperatures and water vapor, conductive and man=
-y more.
-
-We provide fast order fulfillment, timely deliveries and cost optimizatio=
-n.
-
-Can I introduce what we can offer you?
-
-
-Zbynek Spacek
+Regards,
