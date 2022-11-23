@@ -2,153 +2,175 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50804635A8B
-	for <lists+linux-sctp@lfdr.de>; Wed, 23 Nov 2022 11:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 422D8635F39
+	for <lists+linux-sctp@lfdr.de>; Wed, 23 Nov 2022 14:21:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237255AbiKWKvH (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 23 Nov 2022 05:51:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52336 "EHLO
+        id S238549AbiKWNVj (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 23 Nov 2022 08:21:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235953AbiKWKu1 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 23 Nov 2022 05:50:27 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F16122974
-        for <linux-sctp@vger.kernel.org>; Wed, 23 Nov 2022 02:36:32 -0800 (PST)
-Received: from fsav111.sakura.ne.jp (fsav111.sakura.ne.jp [27.133.134.238])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 2ANAa7LC003433;
-        Wed, 23 Nov 2022 19:36:07 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav111.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav111.sakura.ne.jp);
- Wed, 23 Nov 2022 19:36:07 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav111.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 2ANAa5pi003425
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 23 Nov 2022 19:36:06 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <c5ba2194-dbb6-586d-992d-9dfcd27062e7@I-love.SAKURA.ne.jp>
-Date:   Wed, 23 Nov 2022 19:36:00 +0900
+        with ESMTP id S236567AbiKWNVT (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 23 Nov 2022 08:21:19 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C021255C8;
+        Wed, 23 Nov 2022 05:00:12 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id p10-20020a9d76ca000000b0066d6c6bce58so11127136otl.7;
+        Wed, 23 Nov 2022 05:00:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=K4ZYfQ//8JxmSnWwTP0M4RgT7Cewn6kgcf+fVm07+o0=;
+        b=f9SGocttobr5iv9AxBeSrp68swrh9OM7wb0KL9CDgUQWBKoY77+CJkljw5GKxw9pVr
+         fKlWq4DBHLeRCYMQbS4kzz67FrL82Od/qtOST+m+z6DI0sijQ4M9hdRy2n0NSq2y3TmZ
+         HpLmtclTjoES5rp2G7elHSGvX4IUMAHPkideWT2/q93pgT1RaA2mmh1Kj9tTSY3AiZFY
+         f677+wFiRBS+/jcHEknbqfLYstuzUDDhkAtEsoUmoR1aiBtViAs2EvCDjndjA7L9Nwvo
+         s4L+O8Ats4YDySCw96awSp/w7sYzJIVTIaPUMUSucJz/mhyDRWuWGD835lmP71pN2iX7
+         PoRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K4ZYfQ//8JxmSnWwTP0M4RgT7Cewn6kgcf+fVm07+o0=;
+        b=j24jbCp/1XJJLa5+nnovk2qI+wqHnFbD2qklqsBcnogulpfhdxE6b+d56uqWW0bZr+
+         xf+9saIuhWg1yIzMJToUbbkimPs5uSgubEb0/EdrxeHV9vipG/gt8WyOKe2RnA/PO0Wb
+         JyR1xuJsM2mQH91w/AjzoR1BzynKTIG9+ajB7+YPaCWEhyDv24zILFJfCaJ+yoQKZmXz
+         fWubsppYmrJujSrPIlpBts4PH+LFVu9Nh7QFRyJT3rzwburZ6kUgjErQMVRd0l7npPvB
+         6gTas+WkGSHqd9r/PG/27WHOr1h8Gt9uAE/y0mhyYdcOrDdmyhrQI13OJm+EZ+3poXSL
+         C5Gg==
+X-Gm-Message-State: ANoB5plUQlxIuqOF1pact+3zvQHT4h+Y05m6aGSZ2PwNnJoLXlhJml+C
+        QdRGfd1XwITcLjPNKPL1GaA=
+X-Google-Smtp-Source: AA0mqf5b3W1P7Ye05qcAkMoY5K2OkuivuV2/hQ7idLXXh+0tdtrFJIbVWPqsny6OhdgQwh7ePtxd/g==
+X-Received: by 2002:a9d:6486:0:b0:66d:ca7a:8b1a with SMTP id g6-20020a9d6486000000b0066dca7a8b1amr5914858otl.55.1669208407200;
+        Wed, 23 Nov 2022 05:00:07 -0800 (PST)
+Received: from t14s.localdomain ([2001:1284:f016:5412:fa8e:2d33:bd7c:54c7])
+        by smtp.gmail.com with ESMTPSA id k17-20020a0568301bf100b0066dfa0d9c1dsm3114806otb.11.2022.11.23.05.00.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 05:00:06 -0800 (PST)
+Received: by t14s.localdomain (Postfix, from userid 1000)
+        id 18B5C459C23; Wed, 23 Nov 2022 10:00:04 -0300 (-03)
+Date:   Wed, 23 Nov 2022 10:00:04 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Firo Yang <firo.yang@suse.com>
+Cc:     vyasevich@gmail.com, nhorman@tuxdriver.com, mkubecek@suse.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        firogm@gmail.com
+Subject: Re: [PATCH 1/1] sctp: sysctl: referring the correct net namespace
+Message-ID: <Y34ZVEeSryB0UTFD@t14s.localdomain>
+References: <20221123094406.32654-1-firo.yang@suse.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: [PATCH] sctp: relese sctp_stream_priorities at
- sctp_stream_outq_migrate()
-Content-Language: en-US
-To:     syzbot <syzbot+29c402e56c4760763cc0@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        linux-sctp@vger.kernel.org
-References: <000000000000e99e2705edb7d6cf@google.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <000000000000e99e2705edb7d6cf@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221123094406.32654-1-firo.yang@suse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-syzbot is reporting memory leak on sctp_stream_priorities [1], for
-sctp_stream_outq_migrate() is resetting SCTP_SO(stream, i)->ext to NULL
-without clearing SCTP_SO(new, i)->ext->prio_head list allocated by
-sctp_sched_prio_new_head(). Since sctp_sched_prio_free() is too late to
-clear if stream->outcnt was already shrunk or SCTP_SO(stream, i)->ext
-was already NULL, add a callback for clearing that list before shrinking
-stream->outcnt and/or resetting SCTP_SO(stream, i)->ext.
+On Wed, Nov 23, 2022 at 05:44:06PM +0800, Firo Yang wrote:
+> Recently, a customer reported that from their container whose
+> net namespace is different to the host's init_net, they can't set
+> the container's net.sctp.rto_max to any value smaller than
+> init_net.sctp.rto_min.
+> 
+> For instance,
+> Host:
+> sudo sysctl net.sctp.rto_min
+> net.sctp.rto_min = 1000
+> 
+> Container:
+> echo 100 > /mnt/proc-net/sctp/rto_min
+> echo 400 > /mnt/proc-net/sctp/rto_max
+> echo: write error: Invalid argument
+> 
+> This is caused by the check made from this'commit 4f3fdf3bc59c
+> ("sctp: add check rto_min and rto_max in sysctl")'
+> When validating the input value, it's always referring the boundary
+> value set for the init_net namespace.
+> 
+> Having container's rto_max smaller than host's init_net.sctp.rto_min
+> does make sense. Considering that the rto between two containers on the
+> same host is very likely smaller than it for two hosts.
 
-Link: https://syzkaller.appspot.com/bug?exrid=29c402e56c4760763cc0 [1]
-Reported-by: syzbot <syzbot+29c402e56c4760763cc0@syzkaller.appspotmail.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
----
-I can observe that the reproducer no longer reports memory leak. But
-is this change correct and sufficient? Are there similar locations?
+Makes sense. And also, here, it is not using the init_net as
+boundaries for the values themselves. I mean, rto_min in init_net
+won't be the minimum allowed for rto_min in other netns. Ditto for
+rto_max.
 
- include/net/sctp/stream_sched.h |  2 ++
- net/sctp/stream.c               |  3 +++
- net/sctp/stream_sched_prio.c    | 20 ++++++++++++++++++++
- 3 files changed, 25 insertions(+)
+More below.
 
-diff --git a/include/net/sctp/stream_sched.h b/include/net/sctp/stream_sched.h
-index 01a70b27e026..1a59d0f8ad79 100644
---- a/include/net/sctp/stream_sched.h
-+++ b/include/net/sctp/stream_sched.h
-@@ -28,6 +28,8 @@ struct sctp_sched_ops {
- 	int (*init_sid)(struct sctp_stream *stream, __u16 sid, gfp_t gfp);
- 	/* Frees the entire thing */
- 	void (*free)(struct sctp_stream *stream);
-+	/* Free one sid */
-+	void (*free_sid)(struct sctp_stream *stream, __u16 sid);
- 
- 	/* Enqueue a chunk */
- 	void (*enqueue)(struct sctp_outq *q, struct sctp_datamsg *msg);
-diff --git a/net/sctp/stream.c b/net/sctp/stream.c
-index ef9fceadef8d..845a8173181e 100644
---- a/net/sctp/stream.c
-+++ b/net/sctp/stream.c
-@@ -60,6 +60,7 @@ static void sctp_stream_outq_migrate(struct sctp_stream *stream,
- 				     struct sctp_stream *new, __u16 outcnt)
- {
- 	int i;
-+	struct sctp_sched_ops *sched = sctp_sched_ops_from_stream(stream);
- 
- 	if (stream->outcnt > outcnt)
- 		sctp_stream_shrink_out(stream, outcnt);
-@@ -77,6 +78,8 @@ static void sctp_stream_outq_migrate(struct sctp_stream *stream,
- 	}
- 
- 	for (i = outcnt; i < stream->outcnt; i++) {
-+		if (sched->free_sid)
-+			sched->free_sid(stream, i);
- 		kfree(SCTP_SO(stream, i)->ext);
- 		SCTP_SO(stream, i)->ext = NULL;
- 	}
-diff --git a/net/sctp/stream_sched_prio.c b/net/sctp/stream_sched_prio.c
-index 80b5a2c4cbc7..bde5537984a9 100644
---- a/net/sctp/stream_sched_prio.c
-+++ b/net/sctp/stream_sched_prio.c
-@@ -230,6 +230,25 @@ static void sctp_sched_prio_free(struct sctp_stream *stream)
- 	}
- }
- 
-+static void sctp_sched_prio_free_sid(struct sctp_stream *stream, __u16 sid)
-+{
-+	struct sctp_stream_priorities *prio, *n;
-+	struct sctp_stream_out *sout = SCTP_SO(stream, sid);
-+	struct sctp_stream_out_ext *soute = sout->ext;
-+	LIST_HEAD(list);
-+
-+	if (!soute)
-+		return;
-+	prio = soute->prio_head;
-+	if (!prio || !list_empty(&prio->prio_sched))
-+		return;
-+	list_add(&prio->prio_sched, &list);
-+	list_for_each_entry_safe(prio, n, &list, prio_sched) {
-+		list_del_init(&prio->prio_sched);
-+		kfree(prio);
-+	}
-+}
-+
- static void sctp_sched_prio_enqueue(struct sctp_outq *q,
- 				    struct sctp_datamsg *msg)
- {
-@@ -323,6 +342,7 @@ static struct sctp_sched_ops sctp_sched_prio = {
- 	.get = sctp_sched_prio_get,
- 	.init = sctp_sched_prio_init,
- 	.init_sid = sctp_sched_prio_init_sid,
-+	.free_sid = sctp_sched_prio_free_sid,
- 	.free = sctp_sched_prio_free,
- 	.enqueue = sctp_sched_prio_enqueue,
- 	.dequeue = sctp_sched_prio_dequeue,
--- 
-2.34.1
+> 
+> So to fix this problem, just referring the boundary value from the net
+> namespace where the new input value came from shold be enough.
+> 
+> Signed-off-by: Firo Yang <firo.yang@suse.com>
+> ---
+>  net/sctp/sysctl.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/net/sctp/sysctl.c b/net/sctp/sysctl.c
+> index b46a416787ec..e167df4dc60b 100644
+> --- a/net/sctp/sysctl.c
+> +++ b/net/sctp/sysctl.c
+> @@ -429,6 +429,9 @@ static int proc_sctp_do_rto_min(struct ctl_table *ctl, int write,
+>  	else
+>  		tbl.data = &net->sctp.rto_min;
+>  
+> +	if (net != &init_net)
+> +		max = net->sctp.rto_max;
 
+This also affects other sysctls:
+
+$ grep -e procname -e extra sysctl.c | grep -B1 extra.*init_net
+                .extra1         = SYSCTL_ONE,
+                .extra2         = &init_net.sctp.rto_max
+                .procname       = "rto_max",
+                .extra1         = &init_net.sctp.rto_min,
+--
+                .extra1         = SYSCTL_ZERO,
+                .extra2         = &init_net.sctp.ps_retrans,
+                .procname       = "ps_retrans",
+                .extra1         = &init_net.sctp.pf_retrans,
+
+And apparently, SCTP is the only one doing such dynamic limits. At
+least in networking.
+
+While the issue you reported is fixable this way, for ps/pf_retrans,
+it is not, as it is using proc_dointvec_minmax() and it will simply
+consume those values (with no netns translation).
+
+So what about patching sctp_sysctl_net_register() instead, to update
+these pointers during netns creation? Right after where it update the
+'data' one in there:
+
+        for (i = 0; table[i].data; i++)
+                table[i].data += (char *)(&net->sctp) - (char *)&init_net.sctp;
+
+Thanks,
+Marcelo
+
+> +
+>  	ret = proc_dointvec(&tbl, write, buffer, lenp, ppos);
+>  	if (write && ret == 0) {
+>  		if (new_value > max || new_value < min)
+> @@ -457,6 +460,9 @@ static int proc_sctp_do_rto_max(struct ctl_table *ctl, int write,
+>  	else
+>  		tbl.data = &net->sctp.rto_max;
+>  
+> +	if (net != &init_net)
+> +		min = net->sctp.rto_min;
+> +
+>  	ret = proc_dointvec(&tbl, write, buffer, lenp, ppos);
+>  	if (write && ret == 0) {
+>  		if (new_value > max || new_value < min)
+> -- 
+> 2.26.2
+> 
