@@ -2,81 +2,66 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F14F463FA38
-	for <lists+linux-sctp@lfdr.de>; Thu,  1 Dec 2022 23:01:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BAB763FF7D
+	for <lists+linux-sctp@lfdr.de>; Fri,  2 Dec 2022 05:30:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231256AbiLAWBE (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 1 Dec 2022 17:01:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49716 "EHLO
+        id S231794AbiLBEa0 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 1 Dec 2022 23:30:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231234AbiLAWAc (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 1 Dec 2022 17:00:32 -0500
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50825C3FFB;
-        Thu,  1 Dec 2022 14:00:31 -0800 (PST)
-Received: by mail-oi1-x22e.google.com with SMTP id s141so3490817oie.10;
-        Thu, 01 Dec 2022 14:00:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CLhodCfebXacfzn8L0ng7IpfW1B6LHq2ScRWQhj4rlg=;
-        b=Kaw8ZjlS7oWKg84Djg/nc94uSjxONMAd1O9JQMJltpDELtloI695wOzOmspstcG8V+
-         Nrj8msAaD2hFXwDt1lTVmsyQyQkod/CDrqInaTHdp+vYeRr4LDutuy48b5/Z6m+G1v+x
-         V4c/6GdXv6UZCTFKzDiUUchxQMPClV0O1tH0RLnyDP+wChgs35GZC1tzTcHsIHaDoafE
-         rqyTkbJZb0CylLT4TODdLOARUmB0OkZfeRZ02c0ESAh3TYNF6r9wGY4qww7Y2nDyYCzy
-         IflCq1QtwBXAWcoFXZCjyP3m/XnM9/wfowM//uT86rkMryNliQMhVZTdG6x+YuNmS+VH
-         PR7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CLhodCfebXacfzn8L0ng7IpfW1B6LHq2ScRWQhj4rlg=;
-        b=ec8c2N/uprHT9Kmy60WjVCKkiz61XQKd2hupAAyi0R2LDecY/3OE0Q8NNlVdsWI3RM
-         hsCeFAHYdE+483FnUSDdTo6fbmjN4aUonxkSIVmKVWaHGGmFoy5QLgr4rV9MHtMN7eVi
-         E1loR41AAUTENc2b/ZZfvAYmc+tgnconHp53wf3j8ufniaVdGx7Xjbl4Urz+/argiYIS
-         oug5R4beyk3FnZyw2V/N7mw/HlmXu2yamMaCovigN7WdDZ7iSJI7K+aNPMWCSAUX5Q04
-         Zex7UyLTepvpaWDRD1DxX7qN4aN38rgpPsaKpcwWfssO3l7Yno+ozJeP0mYMcKcEkgcZ
-         hwOw==
-X-Gm-Message-State: ANoB5pm5+JW76RlTIQCuXFKivfDdwNPEmptCStfgVPHRVeefLUOIEC/Q
-        0q/gbmOr6Op6FgI59qf20yg=
-X-Google-Smtp-Source: AA0mqf6SItRmzib/rXONgSoka5uzg4GyQzIKbdUJU/SutPdeWnK1BiuOZ9Z/N3m9jyH5WJINA52zRg==
-X-Received: by 2002:a05:6808:1592:b0:35a:e1a7:c3b2 with SMTP id t18-20020a056808159200b0035ae1a7c3b2mr23183424oiw.223.1669932030592;
-        Thu, 01 Dec 2022 14:00:30 -0800 (PST)
-Received: from t14s.localdomain ([2001:1284:f016:92a5:79c5:cf91:ba47:c68])
-        by smtp.gmail.com with ESMTPSA id q23-20020a05683022d700b0066e7b30a98bsm708780otc.2.2022.12.01.14.00.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 14:00:30 -0800 (PST)
-Received: by t14s.localdomain (Postfix, from userid 1000)
-        id 18278479BE8; Thu,  1 Dec 2022 19:00:28 -0300 (-03)
-Date:   Thu, 1 Dec 2022 19:00:28 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
-        davem@davemloft.net, kuba@kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Neil Horman <nhorman@tuxdriver.com>
-Subject: Re: [PATCH net-next] sctp: delete free member from struct
- sctp_sched_ops
-Message-ID: <Y4kj/PXkDk/+qtzN@t14s.localdomain>
-References: <e10aac150aca2686cb0bd0570299ec716da5a5c0.1669849471.git.lucien.xin@gmail.com>
+        with ESMTP id S229893AbiLBEaZ (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 1 Dec 2022 23:30:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EDB3CEF99;
+        Thu,  1 Dec 2022 20:30:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BCD2CB820F3;
+        Fri,  2 Dec 2022 04:30:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5A2D4C433D7;
+        Fri,  2 Dec 2022 04:30:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669955422;
+        bh=S9i9zp1uh0wQ3iE76BOu2N95OCSQY5GNhfgtNtD7u0c=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ZlOAHL1lQFq6yLzAWgfAjtqHIJvDIaDox+V3G4/KG8goUIw6atEWwpiy8NCCdL4JS
+         lXXyp0SmXwkKOCsZKEPADqwf7WJ9hHUHzqUGAs9FqSswnct+UnM9q+cBSuPptuiFbC
+         SswbJWPazdkn4lkXt/QYfVvlOtBxlWXv7GPzD41E6jpysmi7Uos15MjuzLVazqr0hu
+         MyIXcprX2zowWXCrPUX0swsNcqByDxhmu3u/VvApnHbl+NEAUn0kSekXvUxWhOycNd
+         tqNpqvsuajyhJPtvRJDBqvFpK/N4qNVtaSzgKrSjt6yS2O0mhEsOuaKWT4BJxaB1hk
+         JQR6qwAg6CvPQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 19330C395EC;
+        Fri,  2 Dec 2022 04:30:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] sctp: delete free member from struct sctp_sched_ops
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166995542208.28954.2692340404836658489.git-patchwork-notify@kernel.org>
+Date:   Fri, 02 Dec 2022 04:30:22 +0000
+References: <e10aac150aca2686cb0bd0570299ec716da5a5c0.1669849471.git.lucien.xin@gmail.com>
 In-Reply-To: <e10aac150aca2686cb0bd0570299ec716da5a5c0.1669849471.git.lucien.xin@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
+        pabeni@redhat.com, marcelo.leitner@gmail.com, nhorman@tuxdriver.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 06:04:31PM -0500, Xin Long wrote:
+Hello:
+
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Wed, 30 Nov 2022 18:04:31 -0500 you wrote:
 > After commit 9ed7bfc79542 ("sctp: fix memory leak in
 > sctp_stream_outq_migrate()"), sctp_sched_set_sched() is the only
 > place calling sched->free(), and it can actually be replaced by
@@ -88,6 +73,15 @@ On Wed, Nov 30, 2022 at 06:04:31PM -0500, Xin Long wrote:
 > in sctp_sched_set_sched() and then deletes the unused free member
 > from struct sctp_sched_ops.
 > 
-> Signed-off-by: Xin Long <lucien.xin@gmail.com>
+> [...]
 
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Here is the summary with links:
+  - [net-next] sctp: delete free member from struct sctp_sched_ops
+    https://git.kernel.org/netdev/net-next/c/7d802c8098c5
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
