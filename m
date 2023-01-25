@@ -2,92 +2,87 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 541DD67A8CE
-	for <lists+linux-sctp@lfdr.de>; Wed, 25 Jan 2023 03:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D2967A8E2
+	for <lists+linux-sctp@lfdr.de>; Wed, 25 Jan 2023 03:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbjAYCds (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 24 Jan 2023 21:33:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
+        id S233915AbjAYCkV (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 24 Jan 2023 21:40:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjAYCdr (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 24 Jan 2023 21:33:47 -0500
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF464FAD3;
-        Tue, 24 Jan 2023 18:33:44 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id d6-20020a056830138600b0068585c52f86so10374147otq.4;
-        Tue, 24 Jan 2023 18:33:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yvS/osoXoyuM5QQs9Bhw9Oc0kNTSAYIFAoEjAactrnI=;
-        b=W4cszxis8qy6UraFHhoya3JNW4HuN33BdirHvHZg9UjnAFdRSyUz3YzThAGg9LHL5D
-         +Of0jOmaOLFf7B9/jaYAb1jGUtXYyq0vgb2P1dyiaWj6W2XnvX7j/pjwEanUIZnzbMzf
-         hiezT7Lc1g4iqeQkBTwHzg7ouNw5lhf9pah9P/fgVstpHeNAt3bps6+eSQskwHTihr+a
-         +7qOxOfWz2SSvJOKYRkvnr4tcX6twLfExEvdUgzJ01rFCr1Y02SAZpyMN51G2TOOv9j/
-         1HWPqz5+fM4YqBKJ31+zBdzd4WhNtyj2dBvEuhG4TZKUIIrsOzxKQuH+F0IgatCARP9R
-         9p8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yvS/osoXoyuM5QQs9Bhw9Oc0kNTSAYIFAoEjAactrnI=;
-        b=43Dq5rTgiGhWTQKPYSmaKzyXw2CJkpREJgmuplk7Pi3NJTeshiv4JeHg6sU6AT1Ma6
-         yKtcYwvrIPKwuc1ASYaNqqgGwIq7XH957UetEgSpP+p2BgdjFPQYBaTsAmnjBOrGXvrA
-         jXZP3FVwlvqGwBglmAEexchcxeFZ+7qxHNav0jm5xBtDHng/h/ZA3HzU08SIchlC/IT+
-         ZxHmHr3n+AQxzzAyrhz0CIHEwC7QqzAXymq/LeQRWwrd2SaoK366hvU0eu5X02M+R9he
-         t1JOdM7SFHHXKuTwaX1QZeRYOjR8Z9uFoOvUzcxU+81nyv5XzQHdYd42fyRCsmgAxw3z
-         mpag==
-X-Gm-Message-State: AFqh2ko9Li5JYbZ2LNYXdendk7JbI5C189IWFrtZWNJBKTt/D0dprVVy
-        Euau473qFUlaAT7ERsRaO6A=
-X-Google-Smtp-Source: AMrXdXv/rQPtIIMhnuQ5GyyvhVPq1ZQW0HQl/nM8A60EWZC7lfNAvjBC3btCNzAjo1/nHksF+KKTcw==
-X-Received: by 2002:a05:6830:61a:b0:685:e5d6:7539 with SMTP id w26-20020a056830061a00b00685e5d67539mr18033257oti.25.1674614023813;
-        Tue, 24 Jan 2023 18:33:43 -0800 (PST)
-Received: from t14s.localdomain ([177.220.174.102])
-        by smtp.gmail.com with ESMTPSA id 22-20020a9d0316000000b006864b75be16sm1664479otv.19.2023.01.24.18.33.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 18:33:43 -0800 (PST)
-Received: by t14s.localdomain (Postfix, from userid 1000)
-        id 076044AF042; Tue, 24 Jan 2023 23:33:40 -0300 (-03)
-Date:   Tue, 24 Jan 2023 23:33:40 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
-        Xin Long <lucien.xin@gmail.com>,
-        Pietro Borrello <borrello@diag.uniroma1.it>
-Subject: Re: [PATCH net] sctp: fail if no bound addresses can be used for a
- given scope
-Message-ID: <Y9CVBJV2B4MhEXab@t14s.localdomain>
-References: <9fcd182f1099f86c6661f3717f63712ddd1c676c.1674496737.git.marcelo.leitner@gmail.com>
- <20230124181416.6218adb7@kernel.org>
- <Y9CUPsuuYgdr/g+s@t14s.localdomain>
- <20230124183211.14b73da5@kernel.org>
+        with ESMTP id S233135AbjAYCkV (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 24 Jan 2023 21:40:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D973048A10;
+        Tue, 24 Jan 2023 18:40:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9269AB81886;
+        Wed, 25 Jan 2023 02:40:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 46B02C4339C;
+        Wed, 25 Jan 2023 02:40:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674614417;
+        bh=/b+hIy8+06ZVWzl1/SHY7PWcR2poSRoejhYKy3qcH6U=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=G26fBekI15fDkk5goGaxwbrrPuf6Cj+5KpBCb085kZ6dg43vWKI+5jKp+A/sVKpX3
+         X92M8+PJQpiamqDC6FSuVnGyvtDTXdia39VFfjtYTYnYl5CxdfXkPNwlRmxf2jD2sC
+         uyPT6PWDKp1K+zVIXmFEWSyZZQM3JCCo7kZk10kaaur/YfvlxHidao9/3udFmI5ZlC
+         JX+r8icDPU/MY25mR9JF6q0j09n93L4tTxCrb879cjUjNq7gJBfzC2t49fwt1i3cVn
+         rl0jqjULIoEBv93G8DzKWRIW56Dt0jOl9iZ56ZndkmpMyk6K4aC+PFRfUyTMFC86aa
+         //zSjkBXqmS4Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2BCCEE21EE1;
+        Wed, 25 Jan 2023 02:40:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230124183211.14b73da5@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] sctp: fail if no bound addresses can be used for a given
+ scope
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167461441717.2895.2981409753488921522.git-patchwork-notify@kernel.org>
+Date:   Wed, 25 Jan 2023 02:40:17 +0000
+References: <9fcd182f1099f86c6661f3717f63712ddd1c676c.1674496737.git.marcelo.leitner@gmail.com>
+In-Reply-To: <9fcd182f1099f86c6661f3717f63712ddd1c676c.1674496737.git.marcelo.leitner@gmail.com>
+To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
+        lucien.xin@gmail.com, borrello@diag.uniroma1.it
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 06:32:11PM -0800, Jakub Kicinski wrote:
-> On Tue, 24 Jan 2023 23:30:22 -0300 Marcelo Ricardo Leitner wrote:
-> > Lost in Narnia again, I suppose. :)
-> 
-> :D
-> 
-> > Ok, I had forgot it, but now checking, it predates git.
-> > What should I have used in this case again please? Perhaps just:
-> > 
-> > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> 
-> Yup, just slap the initial commit ID on it. Let me add when applying.
+Hello:
 
-Ok. Thanks!
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Mon, 23 Jan 2023 14:59:33 -0300 you wrote:
+> Currently, if you bind the socket to something like:
+>         servaddr.sin6_family = AF_INET6;
+>         servaddr.sin6_port = htons(0);
+>         servaddr.sin6_scope_id = 0;
+>         inet_pton(AF_INET6, "::1", &servaddr.sin6_addr);
+> 
+> And then request a connect to:
+>         connaddr.sin6_family = AF_INET6;
+>         connaddr.sin6_port = htons(20000);
+>         connaddr.sin6_scope_id = if_nametoindex("lo");
+>         inet_pton(AF_INET6, "fe88::1", &connaddr.sin6_addr);
+> 
+> [...]
+
+Here is the summary with links:
+  - [net] sctp: fail if no bound addresses can be used for a given scope
+    https://git.kernel.org/netdev/net/c/458e279f861d
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
