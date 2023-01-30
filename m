@@ -2,65 +2,70 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 943FA681645
-	for <lists+linux-sctp@lfdr.de>; Mon, 30 Jan 2023 17:25:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 807A8681678
+	for <lists+linux-sctp@lfdr.de>; Mon, 30 Jan 2023 17:32:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236302AbjA3QZh (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 30 Jan 2023 11:25:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
+        id S237552AbjA3Qcm (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 30 Jan 2023 11:32:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235891AbjA3QZh (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 30 Jan 2023 11:25:37 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF523B0C5;
-        Mon, 30 Jan 2023 08:25:36 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id o5so10513839qtr.11;
-        Mon, 30 Jan 2023 08:25:36 -0800 (PST)
+        with ESMTP id S237553AbjA3Qck (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 30 Jan 2023 11:32:40 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF384390D;
+        Mon, 30 Jan 2023 08:32:39 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-163ba2b7c38so3855945fac.4;
+        Mon, 30 Jan 2023 08:32:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=t1Lofa+1gMMiJHccJk+sMJ3ZPMPxoWE/XN7foApWXHM=;
-        b=S+OEVHB7eC+gLbOGk0sGAq4K2qzCssrIdv3u+QqZ1qkgk1BhHfGpTSAlJQmFOsBcBX
-         wlkOTkHC8Uu0v0bJZeQMgSIsnPAWtdELKPm51LspyPOKjdQbYijDCChAwkEt75jPGaST
-         OEz2SmDtQ6M3QQ1kGHFLzVBTxkYUYGpvhjCcqZJsUxTLyYysRALQ3JBhTKd0bdHROIBB
-         WlVeovtQMgs9IviXRVX3Ok++rg1LUFgnwO8aUGvpQsTUx1Lzi7FbSE4z2X0L8PVSkadg
-         xBsPEuaDREBoAnIm3qPHxf70zjwY4zlEQTJKLMlW2ilSZzlRehwT3+jE2HWNUbJn0Zpx
-         hjiQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mlhjVywI8R445RbMDqO/wi5Zp38Al4pNkK1C17RVc/U=;
+        b=fSmhHC2X7VRlXDpivBZd6giBBSZAyNS04cCWw86Z9CVAahbzXJVPrIrpB7Rivayn8M
+         Xu/9t5db0EkIBjkjm47tg+4xYJtTCtygmkphE/TurEKVOrl9AnxU5O9GPKSFcUI/YvPb
+         snMVClWAqEiqLGSsRg5xOU497OqJdz1C5iB9odkyhs7UEXqK/bCwV6Sj8blkz+5GnaoY
+         1ORg5+a0/Az5vznCv7JggwXyQs69cTDiW/QKiqMD1qA3SRN/792RJunJxI5lsGbdwoyw
+         PQTcVEvK0q0bg/cCTW1rztjikeDBQYxGumIeTkUJ/SigAdP7VIyU3k600XAoDRxzO7Mi
+         8rfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t1Lofa+1gMMiJHccJk+sMJ3ZPMPxoWE/XN7foApWXHM=;
-        b=M7suXrWamC1bcpbcJgYYCaGIMfZ6OcZEyF5eqaSulwmevPwPmVuQAQRo/9z/AnM7mS
-         PI3SOhrI7BGx/T3wmpOWN7cJ6czqe/CWnzhAD2X7+UzcwxyIOjXSR9y6eIIT9NZ4Ah2O
-         oXQYWBxRjFYQsPHvmMD0r8ww7ChLfLatu3KaejY/DBFHs2Bb5MMI4ZufOfJu/DnFj+Xe
-         fKt0oD9E2eaJJD/wZ7eIbEAEnfw9nF9jVpEVpWGJoCRpP4TG53MOjRfhtzXL4lpo+1in
-         CafZ9gefqiyABJ1D77PMcGqoV7zqqEFqttqi//JkbLUmCKw91Ww/OZgc14z0wGxUPBwd
-         4MSw==
-X-Gm-Message-State: AFqh2krEC1uFbJev7nDUaqaCxy2H7EiqFT189HublyXgEN5f0NRwg8Ps
-        XZBRrqoY2+R5ZYtZotiCQM1j5E1M8qP6Dw==
-X-Google-Smtp-Source: AMrXdXvYFJNieNtdvtaGOzfmmibEXFTe9uKNy5wmYBXatcz73lwjpQDR0yoqrR7GCk5ZZf4f1AopRA==
-X-Received: by 2002:ac8:70da:0:b0:39c:da21:6bb3 with SMTP id g26-20020ac870da000000b0039cda216bb3mr72862066qtp.56.1675095935109;
-        Mon, 30 Jan 2023 08:25:35 -0800 (PST)
-Received: from wsfd-netdev15.ntdv.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id s39-20020a05622a1aa700b003a7e38055c9sm8298660qtc.63.2023.01.30.08.25.34
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mlhjVywI8R445RbMDqO/wi5Zp38Al4pNkK1C17RVc/U=;
+        b=YTHEYfvkN2HAbLH4tTACsOEQBe7DPmam25S2PZ3dufrv/Ut0OTBldur3jOXyZl4WSY
+         Q/5f214w743QrVFNbMNt3vMXcYKuGjqsJ9w0Ox5x9WnLV19tTr+3VW9CuOtgPov3UU3/
+         ZlvPB9Y2aKZVYDbxErQA1hkegLpGx/RZoWDrtQcob3Up8ZLku2n421GZF3Z4JjYM/Rr9
+         BRxQAvDYKcRmtReqy+LrvH115W69yX1JVX8EP1o6wZE56DXlUlnxH0H8wr8rstUruN1I
+         t7FXrZ31S1L2aq/j9kAgU4EKafzrr8Y9h1jtPnBetx602eLKlo69xtxc5Mv8FUMKy7zu
+         9qdQ==
+X-Gm-Message-State: AFqh2kr5P5LaWj9Mf8xGQcOVxuNcgBv9GlfrXYtfPHNNSGqnLfA5LNFP
+        rw5AlLhjx9EYJsm+mdeAlNk=
+X-Google-Smtp-Source: AMrXdXvnleIjrd0Rbe1Mte85SybvWGkDn4/I0NFdLJLvEZhrXKaqdKj8dsmKXkLAYNmkVUUe7DpsLg==
+X-Received: by 2002:a05:6870:331e:b0:15f:c4f5:65a7 with SMTP id x30-20020a056870331e00b0015fc4f565a7mr22153599oae.52.1675096358449;
+        Mon, 30 Jan 2023 08:32:38 -0800 (PST)
+Received: from t14s.localdomain ([177.92.48.160])
+        by smtp.gmail.com with ESMTPSA id ld24-20020a0568702b1800b00163b3472300sm1482007oab.2.2023.01.30.08.32.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 08:25:34 -0800 (PST)
-From:   Xin Long <lucien.xin@gmail.com>
-To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org,
+        Mon, 30 Jan 2023 08:32:37 -0800 (PST)
+Received: by t14s.localdomain (Postfix, from userid 1000)
+        id A85E44AFFEE; Mon, 30 Jan 2023 13:32:35 -0300 (-03)
+Date:   Mon, 30 Jan 2023 13:32:35 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org,
         Eric Dumazet <edumazet@google.com>,
         Paolo Abeni <pabeni@redhat.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>
-Subject: [PATCH net] sctp: do not check hb_timer.expires when resetting hb_timer
-Date:   Mon, 30 Jan 2023 11:25:33 -0500
-Message-Id: <d958c06985713ec84049a2d5664879802710179a.1675095933.git.lucien.xin@gmail.com>
-X-Mailer: git-send-email 2.31.1
+Subject: Re: [PATCH net] sctp: do not check hb_timer.expires when resetting
+ hb_timer
+Message-ID: <Y9fxI5Ai5/1J8LFh@t14s.localdomain>
+References: <d958c06985713ec84049a2d5664879802710179a.1675095933.git.lucien.xin@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d958c06985713ec84049a2d5664879802710179a.1675095933.git.lucien.xin@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -71,43 +76,24 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-It tries to avoid the frequently hb_timer refresh in commit ba6f5e33bdbb
-("sctp: avoid refreshing heartbeat timer too often"), and it only allows
-mod_timer when the new expires is after hb_timer.expires. It means even
-a much shorter interval for hb timer gets applied, it will have to wait
-until the current hb timer to time out.
+On Mon, Jan 30, 2023 at 11:25:33AM -0500, Xin Long wrote:
+> It tries to avoid the frequently hb_timer refresh in commit ba6f5e33bdbb
+> ("sctp: avoid refreshing heartbeat timer too often"), and it only allows
+> mod_timer when the new expires is after hb_timer.expires. It means even
+> a much shorter interval for hb timer gets applied, it will have to wait
+> until the current hb timer to time out.
+> 
+> In sctp_do_8_2_transport_strike(), when a transport enters PF state, it
+> expects to update the hb timer to resend a heartbeat every rto after
+> calling sctp_transport_reset_hb_timer(), which will not work as the
+> change mentioned above.
+> 
+> The frequently hb_timer refresh was caused by sctp_transport_reset_timers()
+> called in sctp_outq_flush() and it was already removed in the commit above.
+> So we don't have to check hb_timer.expires when resetting hb_timer as it is
+> now not called very often.
+> 
+> Fixes: ba6f5e33bdbb ("sctp: avoid refreshing heartbeat timer too often")
+> Signed-off-by: Xin Long <lucien.xin@gmail.com>
 
-In sctp_do_8_2_transport_strike(), when a transport enters PF state, it
-expects to update the hb timer to resend a heartbeat every rto after
-calling sctp_transport_reset_hb_timer(), which will not work as the
-change mentioned above.
-
-The frequently hb_timer refresh was caused by sctp_transport_reset_timers()
-called in sctp_outq_flush() and it was already removed in the commit above.
-So we don't have to check hb_timer.expires when resetting hb_timer as it is
-now not called very often.
-
-Fixes: ba6f5e33bdbb ("sctp: avoid refreshing heartbeat timer too often")
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
----
- net/sctp/transport.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/net/sctp/transport.c b/net/sctp/transport.c
-index ca1eba95c293..2f66a2006517 100644
---- a/net/sctp/transport.c
-+++ b/net/sctp/transport.c
-@@ -196,9 +196,7 @@ void sctp_transport_reset_hb_timer(struct sctp_transport *transport)
- 
- 	/* When a data chunk is sent, reset the heartbeat interval.  */
- 	expires = jiffies + sctp_transport_timeout(transport);
--	if ((time_before(transport->hb_timer.expires, expires) ||
--	     !timer_pending(&transport->hb_timer)) &&
--	    !mod_timer(&transport->hb_timer,
-+	if (!mod_timer(&transport->hb_timer,
- 		       expires + get_random_u32_below(transport->rto)))
- 		sctp_transport_hold(transport);
- }
--- 
-2.31.1
-
+Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
