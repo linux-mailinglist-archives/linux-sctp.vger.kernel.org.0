@@ -2,74 +2,82 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F407B6AF7FB
-	for <lists+linux-sctp@lfdr.de>; Tue,  7 Mar 2023 22:49:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D766D6B2176
+	for <lists+linux-sctp@lfdr.de>; Thu,  9 Mar 2023 11:32:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231642AbjCGVtb (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 7 Mar 2023 16:49:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60052 "EHLO
+        id S231190AbjCIKcI (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 9 Mar 2023 05:32:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231660AbjCGVtM (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 7 Mar 2023 16:49:12 -0500
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F75A76A3;
-        Tue,  7 Mar 2023 13:49:07 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id 32-20020a9d0323000000b0069426a71d79so7956789otv.10;
-        Tue, 07 Mar 2023 13:49:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678225747;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=inTI/+esstsnj5i3TO7au6XY8GT7xoR846FlgOCno80=;
-        b=NOQqfzftEVVKszAGbqu1pMKSpEop/jxPi2WPOo6aoGfPKsySgDVEEbTVoEFzcMvAaK
-         M4n7dKCOrgb4jOAXRM/UfrZYa9OZOAGnRnKVO4aEw8Gna5qpT536njrruc9B2/Ty+TUR
-         IFSsn5XUOMvbIl82mHjR2RgrOh+4Ca7tfcwo8sQ0nKDKSE+r8eYcFMpEaOR1HtqW/RBP
-         dCIYyyOV4LfGsUPbJbZLPKhTNquyip34BayEx5hbJPmdx73bPKvFKDFNa7B/N9SWvoLz
-         g/mJnBwvZXy7zpZ4TW58ZCc/hTavBgVcvHFo43AHL9D2YKa/cuF0u6DsSmW74bsSnwgS
-         P9wg==
+        with ESMTP id S230000AbjCIKcF (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 9 Mar 2023 05:32:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4198A19C46
+        for <linux-sctp@vger.kernel.org>; Thu,  9 Mar 2023 02:31:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678357876;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GLUiKLF9AN3IhID+zo9c93EAAc9beIhHQ9nvddb8ZIk=;
+        b=c57S4SzyokZjddSK6r+ATquzT9Y6WZyO2vEuAnE6puIW8Ph/7T2Q/kzx3UnIh6PSGbZQh6
+        B+3ViaB5426AeNyQ9IkLTn1p2BvGhbQFbMMH1ODcFkviSWB0HyK5IRgit9j86WdJuwxLjj
+        aAnxntN6Hwxr+zpQs7sJ8PuS/DeELMw=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-527-Q9-GzUgTMEiRN-dk_3_6aQ-1; Thu, 09 Mar 2023 05:31:15 -0500
+X-MC-Unique: Q9-GzUgTMEiRN-dk_3_6aQ-1
+Received: by mail-wr1-f70.google.com with SMTP id x3-20020a5d6503000000b002c8c421fdfaso310089wru.15
+        for <linux-sctp@vger.kernel.org>; Thu, 09 Mar 2023 02:31:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678225747;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=inTI/+esstsnj5i3TO7au6XY8GT7xoR846FlgOCno80=;
-        b=5lqEeFhRUOYV20fmPyZ0kjXEvjCs1FTUEbP842k35WsN6TuPktJS3XHsPXercwwq0S
-         rAfPK855lBf1NOJ5k/a5oOqruiQkl5VP66IcTbYAkEo0n4H+h0K6Av+jjr/chMuTbZ/R
-         N9r3CYhAEs9Nzmrgvj4SyDOY0AuR8pUiJ1w6DXtAdYLfSlH06spWucWLeegSEZrDLb2T
-         q++CMykcwN33e9tdocV505viVDUshtl4nXNvoSl+V/qif0Z8pPbgfPWQmBFJtoLgZKhP
-         SUhC1s65dILCU/NcLl++I6o4768XlpH4ELEyi9PWdKPtJ+ZnxaC15eYeNnU6XgzEdNjW
-         4AYw==
-X-Gm-Message-State: AO0yUKUuHx0Zh2OfeBlThgnGIC29dcF+L/8c2ABRLNyJWeg6Ax4aSZWs
-        gEuX0UNyAGSOFS1TzKkO1dc=
-X-Google-Smtp-Source: AK7set/6PFIE756hbZR1j1qNVLBS/AP1Ix09VnSJhxzFkbB5APOEqg7YzvjUyuySWFBCBWJL9l5W7g==
-X-Received: by 2002:a9d:7206:0:b0:68b:dc52:10f9 with SMTP id u6-20020a9d7206000000b0068bdc5210f9mr8252916otj.5.1678225747122;
-        Tue, 07 Mar 2023 13:49:07 -0800 (PST)
-Received: from t14s.localdomain ([2001:1284:f016:d911:6e2b:27bc:8934:2423])
-        by smtp.gmail.com with ESMTPSA id w3-20020a9d70c3000000b0069451a9274bsm5196559otj.28.2023.03.07.13.49.06
+        d=1e100.net; s=20210112; t=1678357874;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=n68uNgs6PpJkrH3hTHjafe5p54xSC0RPGEH/q+n6tt8=;
+        b=O6AHZGCqHxhz5GJRSOg64cMwt8JVwDNdc1Tkq0XcF52LvSOKk/bVWJWI2W5CiFxc4d
+         W2vo2LsZLagIL4e18VYHiyfOrh73uztJyY0Y+T2SszABf7CvvuSmhuOpZ1nI45e6UNjg
+         VxU0ERuFChVaP5FRy5nNRSKpUrlMXr3iQwKStzhlTUZLMoIKyw4dKEoEa8663xJRJ6jg
+         8LWGVczTs7X/oT33xZzisuo/ih9DkhNQhPGvG9yZ9GYyKxfANBEs97dAJtZtZc9YAAAm
+         KHETLnqm2+KdIJAWR3vJhF1SXP0y/WeNzqgFtBGVwSxyFQhFr9JvK5kD7HBeJSvJyLv3
+         7DTg==
+X-Gm-Message-State: AO0yUKXOhgYt4d9lJhIIu5ZKIH8tLb54sP63fnZ8y9fa264VZBz1lOx6
+        CvwgX5hIVoeHD6Tk25EmRWN8AOdKtXBnnKv7LMipfOS+9ABeAGuX+WcfbPJ2Dru1ID1uj1ahjd8
+        DkPXtqsmH+XPc1bEYD1tJbw==
+X-Received: by 2002:a05:600c:4f50:b0:3eb:42f6:ac55 with SMTP id m16-20020a05600c4f5000b003eb42f6ac55mr17914614wmq.1.1678357873940;
+        Thu, 09 Mar 2023 02:31:13 -0800 (PST)
+X-Google-Smtp-Source: AK7set+UNKRTpKJwy/t8WZ8m3LFA6MnUeFm4+Nupc8WNJb6zQWAODikVHRL0uNPM96EPioeOKFXiKQ==
+X-Received: by 2002:a05:600c:4f50:b0:3eb:42f6:ac55 with SMTP id m16-20020a05600c4f5000b003eb42f6ac55mr17914599wmq.1.1678357873693;
+        Thu, 09 Mar 2023 02:31:13 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-121-28.dyn.eolo.it. [146.241.121.28])
+        by smtp.gmail.com with ESMTPSA id w7-20020a5d6087000000b002c567b58e9asm17744677wrt.56.2023.03.09.02.31.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 13:49:06 -0800 (PST)
-Received: by t14s.localdomain (Postfix, from userid 1000)
-        id 335F84EDE80; Tue,  7 Mar 2023 18:49:05 -0300 (-03)
-Date:   Tue, 7 Mar 2023 18:49:05 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
-        davem@davemloft.net, kuba@kernel.org,
+        Thu, 09 Mar 2023 02:31:13 -0800 (PST)
+Message-ID: <09cdc1990818a26fd0e3514b7619261ebc0da50f.camel@redhat.com>
+Subject: Re: [PATCH net-next 1/2] sctp: add fair capacity stream scheduler
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Xin Long <lucien.xin@gmail.com>,
+        network dev <netdev@vger.kernel.org>,
+        linux-sctp@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org,
         Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>
-Subject: Re: [PATCH net-next 2/2] sctp: add weighted fair queueing stream
- scheduler
-Message-ID: <ZAexUWGUCHPj1vXk@t14s.localdomain>
+Date:   Thu, 09 Mar 2023 11:31:12 +0100
+In-Reply-To: <3e977ca635d6b8ef8440d5eed2617a4f3a04b15b.1678224012.git.lucien.xin@gmail.com>
 References: <cover.1678224012.git.lucien.xin@gmail.com>
- <61dc1f980ae4cb8c7082446b1334d931404ec9c2.1678224012.git.lucien.xin@gmail.com>
+         <3e977ca635d6b8ef8440d5eed2617a4f3a04b15b.1678224012.git.lucien.xin@gmail.com>
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <61dc1f980ae4cb8c7082446b1334d931404ec9c2.1678224012.git.lucien.xin@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,25 +85,79 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 04:23:27PM -0500, Xin Long wrote:
-> As it says in rfc8260#section-3.6 about the weighted fair queueing
-> scheduler:
-> 
->    A Weighted Fair Queueing scheduler between the streams is used.  The
->    weight is configurable per outgoing SCTP stream.  This scheduler
->    considers the lengths of the messages of each stream and schedules
->    them in a specific way to use the capacity according to the given
->    weights.  If the weight of stream S1 is n times the weight of stream
->    S2, the scheduler should assign to stream S1 n times the capacity it
->    assigns to stream S2.  The details are implementation dependent.
->    Interleaving user messages allows for a better realization of the
->    capacity usage according to the given weights.
-> 
-> This patch adds Weighted Fair Queueing Scheduler actually based on
-> the code of Fair Capacity Scheduler by adding fc_weight into struct
-> sctp_stream_out_ext and taking it into account when sorting stream->
-> fc_list in sctp_sched_fc_sched() and sctp_sched_fc_dequeue_done().
-> 
-> Signed-off-by: Xin Long <lucien.xin@gmail.com>
+On Tue, 2023-03-07 at 16:23 -0500, Xin Long wrote:
+> diff --git a/net/sctp/stream_sched_fc.c b/net/sctp/stream_sched_fc.c
+> new file mode 100644
+> index 000000000000..b336c2f5486b
+> --- /dev/null
+> +++ b/net/sctp/stream_sched_fc.c
+> @@ -0,0 +1,183 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/* SCTP kernel implementation
+> + * (C) Copyright Red Hat Inc. 2022
+> + *
+> + * This file is part of the SCTP kernel implementation
+> + *
+> + * These functions manipulate sctp stream queue/scheduling.
+> + *
+> + * Please send any bug reports or fixes you make to the
+> + * email addresched(es):
+> + *    lksctp developers <linux-sctp@vger.kernel.org>
+> + *
+> + * Written or modified by:
+> + *    Xin Long <lucien.xin@gmail.com>
+> + */
+> +
+> +#include <linux/list.h>
+> +#include <net/sctp/sctp.h>
 
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Note that the above introduces a new compile warning:
+
+../net/sctp/stream_sched_fc.c: note: in included file (through ../include/n=
+et/sctp/sctp.h):
+../include/net/sctp/structs.h:335:41: warning: array of flexible structures
+
+that is not really a fault of the new code, it's due to:
+
+=09struct sctp_init_chunk peer_init[];
+
+struct sctp_init_chunk {
+        struct sctp_chunkhdr chunk_hdr;
+        struct sctp_inithdr init_hdr;
+};
+
+struct sctp_inithdr {
+        __be32 init_tag;
+        __be32 a_rwnd;
+        __be16 num_outbound_streams;
+        __be16 num_inbound_streams;
+        __be32 initial_tsn;
+        __u8  params[]; // <- this!
+};
+
+Any chance a future patch could remove the 'params' field from the
+struct included by sctp_init_chunk?
+
+e.g.=20
+
+struct sctp_inithdr_base {
+        __be32 init_tag;
+        __be32 a_rwnd;
+        __be16 num_outbound_streams;
+        __be16 num_inbound_streams;
+        __be32 initial_tsn;
+};
+
+struct sctp_init_chunk {
+        struct sctp_chunkhdr chunk_hdr;
+        struct sctp_inithdr_base init_hdr;
+};
+
+and then cast 'init_hdr' to 'struct sctp_inithdr' if/where needed.
+
+In any case, the above is not blocking this series.
+
+Cheers,
+
+Paolo
+
