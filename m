@@ -2,162 +2,84 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D766D6B2176
-	for <lists+linux-sctp@lfdr.de>; Thu,  9 Mar 2023 11:32:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 448F96B21B6
+	for <lists+linux-sctp@lfdr.de>; Thu,  9 Mar 2023 11:42:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbjCIKcI (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 9 Mar 2023 05:32:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
+        id S229733AbjCIKmM (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 9 Mar 2023 05:42:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbjCIKcF (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 9 Mar 2023 05:32:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4198A19C46
-        for <linux-sctp@vger.kernel.org>; Thu,  9 Mar 2023 02:31:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678357876;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GLUiKLF9AN3IhID+zo9c93EAAc9beIhHQ9nvddb8ZIk=;
-        b=c57S4SzyokZjddSK6r+ATquzT9Y6WZyO2vEuAnE6puIW8Ph/7T2Q/kzx3UnIh6PSGbZQh6
-        B+3ViaB5426AeNyQ9IkLTn1p2BvGhbQFbMMH1ODcFkviSWB0HyK5IRgit9j86WdJuwxLjj
-        aAnxntN6Hwxr+zpQs7sJ8PuS/DeELMw=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-527-Q9-GzUgTMEiRN-dk_3_6aQ-1; Thu, 09 Mar 2023 05:31:15 -0500
-X-MC-Unique: Q9-GzUgTMEiRN-dk_3_6aQ-1
-Received: by mail-wr1-f70.google.com with SMTP id x3-20020a5d6503000000b002c8c421fdfaso310089wru.15
-        for <linux-sctp@vger.kernel.org>; Thu, 09 Mar 2023 02:31:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678357874;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n68uNgs6PpJkrH3hTHjafe5p54xSC0RPGEH/q+n6tt8=;
-        b=O6AHZGCqHxhz5GJRSOg64cMwt8JVwDNdc1Tkq0XcF52LvSOKk/bVWJWI2W5CiFxc4d
-         W2vo2LsZLagIL4e18VYHiyfOrh73uztJyY0Y+T2SszABf7CvvuSmhuOpZ1nI45e6UNjg
-         VxU0ERuFChVaP5FRy5nNRSKpUrlMXr3iQwKStzhlTUZLMoIKyw4dKEoEa8663xJRJ6jg
-         8LWGVczTs7X/oT33xZzisuo/ih9DkhNQhPGvG9yZ9GYyKxfANBEs97dAJtZtZc9YAAAm
-         KHETLnqm2+KdIJAWR3vJhF1SXP0y/WeNzqgFtBGVwSxyFQhFr9JvK5kD7HBeJSvJyLv3
-         7DTg==
-X-Gm-Message-State: AO0yUKXOhgYt4d9lJhIIu5ZKIH8tLb54sP63fnZ8y9fa264VZBz1lOx6
-        CvwgX5hIVoeHD6Tk25EmRWN8AOdKtXBnnKv7LMipfOS+9ABeAGuX+WcfbPJ2Dru1ID1uj1ahjd8
-        DkPXtqsmH+XPc1bEYD1tJbw==
-X-Received: by 2002:a05:600c:4f50:b0:3eb:42f6:ac55 with SMTP id m16-20020a05600c4f5000b003eb42f6ac55mr17914614wmq.1.1678357873940;
-        Thu, 09 Mar 2023 02:31:13 -0800 (PST)
-X-Google-Smtp-Source: AK7set+UNKRTpKJwy/t8WZ8m3LFA6MnUeFm4+Nupc8WNJb6zQWAODikVHRL0uNPM96EPioeOKFXiKQ==
-X-Received: by 2002:a05:600c:4f50:b0:3eb:42f6:ac55 with SMTP id m16-20020a05600c4f5000b003eb42f6ac55mr17914599wmq.1.1678357873693;
-        Thu, 09 Mar 2023 02:31:13 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-121-28.dyn.eolo.it. [146.241.121.28])
-        by smtp.gmail.com with ESMTPSA id w7-20020a5d6087000000b002c567b58e9asm17744677wrt.56.2023.03.09.02.31.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 02:31:13 -0800 (PST)
-Message-ID: <09cdc1990818a26fd0e3514b7619261ebc0da50f.camel@redhat.com>
-Subject: Re: [PATCH net-next 1/2] sctp: add fair capacity stream scheduler
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Xin Long <lucien.xin@gmail.com>,
-        network dev <netdev@vger.kernel.org>,
-        linux-sctp@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>
-Date:   Thu, 09 Mar 2023 11:31:12 +0100
-In-Reply-To: <3e977ca635d6b8ef8440d5eed2617a4f3a04b15b.1678224012.git.lucien.xin@gmail.com>
-References: <cover.1678224012.git.lucien.xin@gmail.com>
-         <3e977ca635d6b8ef8440d5eed2617a4f3a04b15b.1678224012.git.lucien.xin@gmail.com>
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37)
+        with ESMTP id S229994AbjCIKlp (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 9 Mar 2023 05:41:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C995AE8CFA;
+        Thu,  9 Mar 2023 02:40:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A918B81DBB;
+        Thu,  9 Mar 2023 10:40:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A73F6C4339B;
+        Thu,  9 Mar 2023 10:40:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678358418;
+        bh=NjW+SCdBHVHl5OPHQTIfeNxrTkiTDwl6hAlCJn1rDyU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=auaAg2gXTNY0/P5bwZ/Qr+mQZvvgqPz8oCT/bsyO5xaY7+s4WWCfSE7RkOB6jm6TU
+         P0mLGy0HhPWtHxbCBE93QX3+Sh6iVv6hwOBPm3ttpj/3T+bMxsbrvoppvqXieAWjrx
+         8XMkbsjIeujhvADXIkxAVaSwdul827peQSHeNRgCzEzYPEsMUc/70ygTUJNhxnH0C4
+         QJc/VZpwhAZmPGwiaCKjoXfEzasWfQSE+Pn4A4phELiaWDd3bKv50ysfFOWX+ki2I5
+         hqE8vJCiYAQq9Kg/T11nMDa+mos/gXY+OIifjnJU8Joo3bpTrgWgTjud13cGD18Z+2
+         AkMl1wwdEwfTw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8393BE49F63;
+        Thu,  9 Mar 2023 10:40:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/2] sctp: add another two stream schedulers
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167835841852.16610.7402267659998000194.git-patchwork-notify@kernel.org>
+Date:   Thu, 09 Mar 2023 10:40:18 +0000
+References: <cover.1678224012.git.lucien.xin@gmail.com>
+In-Reply-To: <cover.1678224012.git.lucien.xin@gmail.com>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
+        pabeni@redhat.com, marcelo.leitner@gmail.com, nhorman@tuxdriver.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, 2023-03-07 at 16:23 -0500, Xin Long wrote:
-> diff --git a/net/sctp/stream_sched_fc.c b/net/sctp/stream_sched_fc.c
-> new file mode 100644
-> index 000000000000..b336c2f5486b
-> --- /dev/null
-> +++ b/net/sctp/stream_sched_fc.c
-> @@ -0,0 +1,183 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/* SCTP kernel implementation
-> + * (C) Copyright Red Hat Inc. 2022
-> + *
-> + * This file is part of the SCTP kernel implementation
-> + *
-> + * These functions manipulate sctp stream queue/scheduling.
-> + *
-> + * Please send any bug reports or fixes you make to the
-> + * email addresched(es):
-> + *    lksctp developers <linux-sctp@vger.kernel.org>
-> + *
-> + * Written or modified by:
-> + *    Xin Long <lucien.xin@gmail.com>
-> + */
-> +
-> +#include <linux/list.h>
-> +#include <net/sctp/sctp.h>
+Hello:
 
-Note that the above introduces a new compile warning:
+This series was applied to netdev/net-next.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-../net/sctp/stream_sched_fc.c: note: in included file (through ../include/n=
-et/sctp/sctp.h):
-../include/net/sctp/structs.h:335:41: warning: array of flexible structures
+On Tue,  7 Mar 2023 16:23:25 -0500 you wrote:
+> All SCTP stream schedulers are defined in rfc8260#section-3,
+> First-Come First-Served, Round-Robin and Priority-Based
+> Schedulers are already added in kernel.
+> 
+> This patchset adds another two schedulers: Fair Capacity
+> Scheduler and Weighted Fair Queueing Scheduler.
+> 
+> [...]
 
-that is not really a fault of the new code, it's due to:
+Here is the summary with links:
+  - [net-next,1/2] sctp: add fair capacity stream scheduler
+    https://git.kernel.org/netdev/net-next/c/4821a076eb60
+  - [net-next,2/2] sctp: add weighted fair queueing stream scheduler
+    https://git.kernel.org/netdev/net-next/c/42d452e7709f
 
-=09struct sctp_init_chunk peer_init[];
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-struct sctp_init_chunk {
-        struct sctp_chunkhdr chunk_hdr;
-        struct sctp_inithdr init_hdr;
-};
-
-struct sctp_inithdr {
-        __be32 init_tag;
-        __be32 a_rwnd;
-        __be16 num_outbound_streams;
-        __be16 num_inbound_streams;
-        __be32 initial_tsn;
-        __u8  params[]; // <- this!
-};
-
-Any chance a future patch could remove the 'params' field from the
-struct included by sctp_init_chunk?
-
-e.g.=20
-
-struct sctp_inithdr_base {
-        __be32 init_tag;
-        __be32 a_rwnd;
-        __be16 num_outbound_streams;
-        __be16 num_inbound_streams;
-        __be32 initial_tsn;
-};
-
-struct sctp_init_chunk {
-        struct sctp_chunkhdr chunk_hdr;
-        struct sctp_inithdr_base init_hdr;
-};
-
-and then cast 'init_hdr' to 'struct sctp_inithdr' if/where needed.
-
-In any case, the above is not blocking this series.
-
-Cheers,
-
-Paolo
 
