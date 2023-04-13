@@ -2,74 +2,84 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36FFA6EADFF
-	for <lists+linux-sctp@lfdr.de>; Fri, 21 Apr 2023 17:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7424F6E08CC
+	for <lists+linux-sctp@lfdr.de>; Thu, 13 Apr 2023 10:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232873AbjDUP0t convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-sctp@lfdr.de>); Fri, 21 Apr 2023 11:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
+        id S229656AbjDMIUr (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 13 Apr 2023 04:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232496AbjDUP0s (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 21 Apr 2023 11:26:48 -0400
-X-Greylist: delayed 22880 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 21 Apr 2023 08:26:46 PDT
-Received: from mail.iztacalco.cdmx.gob.mx (mail.iztacalco.cdmx.gob.mx [201.116.58.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430179EED
-        for <linux-sctp@vger.kernel.org>; Fri, 21 Apr 2023 08:26:45 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.iztacalco.cdmx.gob.mx (Postfix) with ESMTP id 4DB1317EF2F7;
-        Mon, 17 Apr 2023 06:53:35 -0600 (CST)
-Received: from mail.iztacalco.cdmx.gob.mx ([127.0.0.1])
-        by localhost (mail.iztacalco.cdmx.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 38RV__EYlYzr; Mon, 17 Apr 2023 06:53:35 -0600 (CST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.iztacalco.cdmx.gob.mx (Postfix) with ESMTP id D50EE1765281;
-        Fri, 14 Apr 2023 15:32:04 -0600 (CST)
-X-Virus-Scanned: amavisd-new at iztacalco.cdmx.gob.mx
-Received: from mail.iztacalco.cdmx.gob.mx ([127.0.0.1])
-        by localhost (mail.iztacalco.cdmx.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id a_NET6YNgnVr; Fri, 14 Apr 2023 15:32:04 -0600 (CST)
-Received: from [10.0.4.250] (unknown [200.25.50.23])
-        by mail.iztacalco.cdmx.gob.mx (Postfix) with ESMTPSA id 2BDE3170EBF7;
-        Wed, 12 Apr 2023 19:20:40 -0600 (CST)
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S230522AbjDMIUm (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 13 Apr 2023 04:20:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C4A86BC;
+        Thu, 13 Apr 2023 01:20:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A489E63B1D;
+        Thu, 13 Apr 2023 08:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 04244C4339C;
+        Thu, 13 Apr 2023 08:20:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681374018;
+        bh=9qRiTnPw3SjldYXMI+u4r64MI274VuebgRbzX+bBWKc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=nSVeaCC6DwaSJ7qMCjCRTI4rDD8IjoJmGc+E3K0UlEGaBF2iT7A6VU+U9apMhIUW/
+         QyZtx/9BMhONeI15EElwbfEWTJ6OOusg+DEkDObwEnpQETYIl5BH0iZLsumn2ati6Y
+         6/o+/sCAOSGrqq9hIqldAdyLRTjbWp/ZpY6SgQmvL4MYzVw+oT1xSv7tOqQKiD3KK3
+         jpxQS+9kXSjQ61fldxOSJVEmKI2N4flr1kVXk6ZqrOASwl57x4n7fFy8aWSbjqBSp7
+         WJ+8fI1hFclgBBb5bg2fqo4Y5WgBZxi3f9sfOlXTWoJt4YnrYLV50sw8kzSU2wa2cX
+         Fo3OBihAPW8qg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E056AE4508E;
+        Thu, 13 Apr 2023 08:20:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: I am a herbalist Doctor
-To:     Recipients <malbores-dgds@iztacalco.cdmx.gob.mx>
-From:   "Mr. X" <malbores-dgds@iztacalco.cdmx.gob.mx>
-Date:   Thu, 13 Apr 2023 02:20:11 +0100
-Reply-To: brigentjames@gmail.com
-Message-Id: <20230413012041.2BDE3170EBF7@mail.iztacalco.cdmx.gob.mx>
-X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_40,
-        FREEMAIL_FORGED_REPLYTO,HK_NAME_MR_MRS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] sctp: fix a potential overflow in sctp_ifwdtsn_skip
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168137401791.27296.7483755007672474522.git-patchwork-notify@kernel.org>
+Date:   Thu, 13 Apr 2023 08:20:17 +0000
+References: <2a71bffcd80b4f2c61fac6d344bb2f11c8fd74f7.1681155810.git.lucien.xin@gmail.com>
+In-Reply-To: <2a71bffcd80b4f2c61fac6d344bb2f11c8fd74f7.1681155810.git.lucien.xin@gmail.com>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
+        pabeni@redhat.com, marcelo.leitner@gmail.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
+Hello:
 
-I am a herbalist Doctor And my name is (Dr spiritual James Brigent ) We cure diffrent kind of illness physically and spiritually 
+This patch was applied to netdev/net.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-Infection of any type
-Heart Disease. ...
-Cancer. ...
-Chronic Respiratory Diseases. ...
-Obesity. ...
-Alzheimer's Disease. ...
-Diabetes. ...
-Substance Abuse. ...
-Infectious Diseases
-HIV AIDS 
-if you want a child we can also helo ....
-Marriage spell
-Divorce Spells
-Breakup Spells
-promoted in your office
-good job 
+On Mon, 10 Apr 2023 15:43:30 -0400 you wrote:
+> Currently, when traversing ifwdtsn skips with _sctp_walk_ifwdtsn, it only
+> checks the pos against the end of the chunk. However, the data left for
+> the last pos may be < sizeof(struct sctp_ifwdtsn_skip), and dereference
+> it as struct sctp_ifwdtsn_skip may cause coverflow.
+> 
+> This patch fixes it by checking the pos against "the end of the chunk -
+> sizeof(struct sctp_ifwdtsn_skip)" in sctp_ifwdtsn_skip, similar to
+> sctp_fwdtsn_skip.
+> 
+> [...]
 
-Contact us on  WhatsApp at +27 66 104 9296   for more info
+Here is the summary with links:
+  - [net] sctp: fix a potential overflow in sctp_ifwdtsn_skip
+    https://git.kernel.org/netdev/net/c/32832a2caf82
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
