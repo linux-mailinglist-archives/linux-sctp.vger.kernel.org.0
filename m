@@ -2,51 +2,52 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7424F6E08CC
-	for <lists+linux-sctp@lfdr.de>; Thu, 13 Apr 2023 10:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB4AD6E135D
+	for <lists+linux-sctp@lfdr.de>; Thu, 13 Apr 2023 19:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjDMIUr (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 13 Apr 2023 04:20:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58718 "EHLO
+        id S229782AbjDMRUV (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 13 Apr 2023 13:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbjDMIUm (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 13 Apr 2023 04:20:42 -0400
+        with ESMTP id S229959AbjDMRUU (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 13 Apr 2023 13:20:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C4A86BC;
-        Thu, 13 Apr 2023 01:20:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6ED86AA;
+        Thu, 13 Apr 2023 10:20:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A489E63B1D;
-        Thu, 13 Apr 2023 08:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 04244C4339C;
-        Thu, 13 Apr 2023 08:20:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98B9464071;
+        Thu, 13 Apr 2023 17:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C1C51C433A1;
+        Thu, 13 Apr 2023 17:20:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681374018;
-        bh=9qRiTnPw3SjldYXMI+u4r64MI274VuebgRbzX+bBWKc=;
+        s=k20201202; t=1681406417;
+        bh=S5sD31Jvp5OI+X4BKzorxYUkvSHH+n1K8mZYMNpqKqg=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=nSVeaCC6DwaSJ7qMCjCRTI4rDD8IjoJmGc+E3K0UlEGaBF2iT7A6VU+U9apMhIUW/
-         QyZtx/9BMhONeI15EElwbfEWTJ6OOusg+DEkDObwEnpQETYIl5BH0iZLsumn2ati6Y
-         6/o+/sCAOSGrqq9hIqldAdyLRTjbWp/ZpY6SgQmvL4MYzVw+oT1xSv7tOqQKiD3KK3
-         jpxQS+9kXSjQ61fldxOSJVEmKI2N4flr1kVXk6ZqrOASwl57x4n7fFy8aWSbjqBSp7
-         WJ+8fI1hFclgBBb5bg2fqo4Y5WgBZxi3f9sfOlXTWoJt4YnrYLV50sw8kzSU2wa2cX
-         Fo3OBihAPW8qg==
+        b=gByR3pL9H8TzNuqsmpzcPScTnsJXlX+cV+j2Kns5Kl53p3jyKxrlxoI0gFQotr3qW
+         KVgZTou7QwOQz246oF6y8eeLTnEsPcR++iPcCevadqOV1r06Qb/bEIKbDWdB1H1GB9
+         gTJF1TqIGY9Rg8WOorHIDrt+Bxof1SokLeT5MTqJgTAFJr2rFeSRy4ZA6dWnFM+KaA
+         jbSCloTURx5We9a/tNeUec9UJiOH1id/wQVSnVMcTItjMepCqZPg10BMG7EbLbN9A0
+         QOkAAqK012CMv7QQypB2iZBjPhLv+Cl6TbzMj2PycBrEVyk+/MNFZXOPZ1yIfvlswv
+         H34Xl5yDN71mw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E056AE4508E;
-        Thu, 13 Apr 2023 08:20:17 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ABEE6E21ED9;
+        Thu, 13 Apr 2023 17:20:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] sctp: fix a potential overflow in sctp_ifwdtsn_skip
+Subject: Re: [PATCH net] selftests: add the missing CONFIG_IP_SCTP in net config
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168137401791.27296.7483755007672474522.git-patchwork-notify@kernel.org>
-Date:   Thu, 13 Apr 2023 08:20:17 +0000
-References: <2a71bffcd80b4f2c61fac6d344bb2f11c8fd74f7.1681155810.git.lucien.xin@gmail.com>
-In-Reply-To: <2a71bffcd80b4f2c61fac6d344bb2f11c8fd74f7.1681155810.git.lucien.xin@gmail.com>
+Message-Id: <168140641769.8255.7960016481150853509.git-patchwork-notify@kernel.org>
+Date:   Thu, 13 Apr 2023 17:20:17 +0000
+References: <61dddebc4d2dd98fe7fb145e24d4b2430e42b572.1681312386.git.lucien.xin@gmail.com>
+In-Reply-To: <61dddebc4d2dd98fe7fb145e24d4b2430e42b572.1681312386.git.lucien.xin@gmail.com>
 To:     Xin Long <lucien.xin@gmail.com>
 Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
         davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
-        pabeni@redhat.com, marcelo.leitner@gmail.com
+        pabeni@redhat.com, marcelo.leitner@gmail.com,
+        naresh.kamboju@linaro.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,23 +60,21 @@ X-Mailing-List: linux-sctp@vger.kernel.org
 Hello:
 
 This patch was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+by Jakub Kicinski <kuba@kernel.org>:
 
-On Mon, 10 Apr 2023 15:43:30 -0400 you wrote:
-> Currently, when traversing ifwdtsn skips with _sctp_walk_ifwdtsn, it only
-> checks the pos against the end of the chunk. However, the data left for
-> the last pos may be < sizeof(struct sctp_ifwdtsn_skip), and dereference
-> it as struct sctp_ifwdtsn_skip may cause coverflow.
+On Wed, 12 Apr 2023 11:13:06 -0400 you wrote:
+> The selftest sctp_vrf needs CONFIG_IP_SCTP set in config
+> when building the kernel, so add it.
 > 
-> This patch fixes it by checking the pos against "the end of the chunk -
-> sizeof(struct sctp_ifwdtsn_skip)" in sctp_ifwdtsn_skip, similar to
-> sctp_fwdtsn_skip.
+> Fixes: a61bd7b9fef3 ("selftests: add a selftest for sctp vrf")
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Signed-off-by: Xin Long <lucien.xin@gmail.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - [net] sctp: fix a potential overflow in sctp_ifwdtsn_skip
-    https://git.kernel.org/netdev/net/c/32832a2caf82
+  - [net] selftests: add the missing CONFIG_IP_SCTP in net config
+    https://git.kernel.org/netdev/net/c/3a0385be133e
 
 You are awesome, thank you!
 -- 
