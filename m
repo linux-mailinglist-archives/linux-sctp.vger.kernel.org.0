@@ -2,104 +2,94 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB46B6E7E08
-	for <lists+linux-sctp@lfdr.de>; Wed, 19 Apr 2023 17:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF3796E7E4E
+	for <lists+linux-sctp@lfdr.de>; Wed, 19 Apr 2023 17:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233384AbjDSPTM (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 19 Apr 2023 11:19:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
+        id S232004AbjDSPbd (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 19 Apr 2023 11:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233449AbjDSPTI (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 19 Apr 2023 11:19:08 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DB483F7;
-        Wed, 19 Apr 2023 08:18:35 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id ff18so10916407qtb.13;
-        Wed, 19 Apr 2023 08:18:35 -0700 (PDT)
+        with ESMTP id S233212AbjDSPbb (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 19 Apr 2023 11:31:31 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D1C3AAA
+        for <linux-sctp@vger.kernel.org>; Wed, 19 Apr 2023 08:31:28 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1a92369761cso734815ad.3
+        for <linux-sctp@vger.kernel.org>; Wed, 19 Apr 2023 08:31:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681917400; x=1684509400;
+        d=networkplumber-org.20221208.gappssmtp.com; s=20221208; t=1681918287; x=1684510287;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3NzT/hpuNnryCcqzSUjen8isl1rZWNC+fIQh1MymFgo=;
-        b=lvc3TyOZQkLu7RUX9PDBPh181gatDjN+TE9ZFR2eJYwmqG4mURsq1KTJ1Tj0QCq7K8
-         MepYov5UzrWK1YruY9KU49NrHYcJ0VCQ3vaDti/F5Gu6DGxPkI+6D4zkhjqadfH7j4mj
-         59WM1rPoLdbznUDsuw3nqsnELM2mrCbVvo/Tz6ZCN1l/FFjZXqMiYKp+8qTZI/daqVVG
-         9EO9h2UfmevoxxqmY3RkRxZ4D4HodLAtTGslkBqEIrZn8zGV1o5x9LgRKt9vCU47scIU
-         TGjuPv/OWzM7qzBYclJxNpCDUgloKGKyw5C6BOuTVm6PLu3mkTN/aicPOi4nKwXkQK5A
-         aFOg==
+        bh=MWNFIKn7SRRd/10Gz2AxxCEIVDzTsvNCmu9Y2KI0jk0=;
+        b=H+rp0KhCc9amg67w1gw3zfc8qquYCPA59WWTG6rFFS+8bl5V4VJEkwGoiTgwRkqOh2
+         r+01l5TO1+gN8cnbyaAL9b24v4zxJ5SXaZFzi9EZQ3mpCvrP2ClJdRYqD5ffGBt6Q82s
+         VpMqtC6ksgvgN3gRMCainYWhyQJdixqGk8SipxxOi1GcSmgwJFD4/sALuEVrnf0JmMcV
+         gygXIaYOAHJgnsdj5Sv68V4YqhFbnqshowOp91UmZgB/Id7Y0MktDaSOWBQHXAAtFSx6
+         /ip8C9WwKtN40vJPDKcZusztpTfRvwF12vVJjGU/2eoFXAQ6bes2sFdCyuMzFObnlklJ
+         wCsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681917400; x=1684509400;
+        d=1e100.net; s=20221208; t=1681918287; x=1684510287;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3NzT/hpuNnryCcqzSUjen8isl1rZWNC+fIQh1MymFgo=;
-        b=EQoroHysNGFY/zA6818ScAqGTt2c3pllIscLKQBAJb9okxTIQlSJmjRgF0tFCQrPmc
-         WZxJ7BYSJmZwv/mFTghYMPvtWqCFeVIiVIJUj0X6jiLZZ+06KwzOIKn9OJk3lGTR69aV
-         Yrb9DzqnSI49xnMJtSm2EA48sCilZKE4Lt8N5loS+ufZ5OiB0by32axqqsXkjYoTwFzy
-         pydHtnPQr1+Wcdk6b9NyRwa4K+euo81QloDGFn5VCmlhWV7oekPJj4JEoF3w28XY9LlA
-         VAIznhV7dBFcj8s77pXZkY1FxwZ+BQcesVxgsho/DDKusvRQfHqllZ8bCZcblB/W2NWZ
-         wuoQ==
-X-Gm-Message-State: AAQBX9cIcIaw77hbwZyLExWcvkyQRBgIEl/3SVmrv+U3wy84jujlg1G4
-        qtoN5+zoT1QhlcE3cPjFdCit7irfeaqSWQ==
-X-Google-Smtp-Source: AKy350ZlfQixJ5eO1K9C6XWgyAnyKZduyo7kcHujkvd1ildzBYwQFjALxNRE9WoMi1DTYWqJQKU+Yw==
-X-Received: by 2002:ac8:5acb:0:b0:3ef:414e:fb6a with SMTP id d11-20020ac85acb000000b003ef414efb6amr5372187qtd.55.1681917400309;
-        Wed, 19 Apr 2023 08:16:40 -0700 (PDT)
-Received: from wsfd-netdev15.ntdv.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id v11-20020a05620a0f0b00b007469b5bc2c4sm4753336qkl.13.2023.04.19.08.16.39
+        bh=MWNFIKn7SRRd/10Gz2AxxCEIVDzTsvNCmu9Y2KI0jk0=;
+        b=jFJlcWPs0RS8VI0gZTivl2REK0wY4GlpUUuy2K+OiAT6tTgju8h6t1ZT5j3ZrfvcuV
+         o4Nwevo6HWsrg7xbEmHMAGbichruj/OhCeXjecnIZdpwzyTUR8H58pGKWGZiMe4e5+Ox
+         E13uawg/Wjm7oMJFD8i7lycYYffNqwre47/OcrUFeFvyKAJHxPW+CAgP4vNIppp4DVG6
+         Z5ldwo8lHUUY3k9RRA9zQRbEdLRztOzU1jMkBPSOh+iki8v2ItyNHeT09GyPlVy3luOO
+         OGFZPYf36XIKdvH9tuI0czbiwInQo4Oc1vtT+CzilhkMWKRC54oprrl2PolHyUaPLwMy
+         492Q==
+X-Gm-Message-State: AAQBX9fiFUeNp8Eta1Qrolz1fJmhqtDJsOu0khveXk1psXn2/g6JhwHb
+        PoysBBvbl++K/yf4BqP8Jxfr6Q==
+X-Google-Smtp-Source: AKy350ZaRcfGeKDrPwj8e7XG6HMk7yBHI8vsooXeAFwVIWNZYtSfRfSa6Zf6GohIT1OMzd+2cw1Q3Q==
+X-Received: by 2002:a17:902:eccb:b0:1a9:1b4:9fe3 with SMTP id a11-20020a170902eccb00b001a901b49fe3mr2155503plh.19.1681918287606;
+        Wed, 19 Apr 2023 08:31:27 -0700 (PDT)
+Received: from hermes.local (204-195-120-218.wavecable.com. [204.195.120.218])
+        by smtp.gmail.com with ESMTPSA id iz10-20020a170902ef8a00b001a4fa2f7a23sm5596309plb.274.2023.04.19.08.31.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 08:16:40 -0700 (PDT)
-From:   Xin Long <lucien.xin@gmail.com>
-To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org,
+        Wed, 19 Apr 2023 08:31:27 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 08:31:25 -0700
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org,
         Eric Dumazet <edumazet@google.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Subject: [PATCH net-next 6/6] sctp: delete the nested flexible array payload
-Date:   Wed, 19 Apr 2023 11:16:33 -0400
-Message-Id: <811ba34fc96b2ec46105af451be97cf87eb410f3.1681917361.git.lucien.xin@gmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <cover.1681917361.git.lucien.xin@gmail.com>
+Subject: Re: [PATCH net-next 2/6] sctp: delete the nested flexible array
+ skip
+Message-ID: <20230419083125.308b8732@hermes.local>
+In-Reply-To: <48a8d405dd4d81f7be75b7f39685e090867d858b.1681917361.git.lucien.xin@gmail.com>
 References: <cover.1681917361.git.lucien.xin@gmail.com>
+        <48a8d405dd4d81f7be75b7f39685e090867d858b.1681917361.git.lucien.xin@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-This patch deletes the flexible-array payload[] from the structure
-sctp_datahdr to avoid some sparse warnings:
+On Wed, 19 Apr 2023 11:16:29 -0400
+Xin Long <lucien.xin@gmail.com> wrote:
 
-  # make C=2 CF="-Wflexible-array-nested" M=./net/sctp/
-  net/sctp/socket.c: note: in included file (through include/net/sctp/structs.h, include/net/sctp/sctp.h):
-  ./include/linux/sctp.h:230:29: warning: nested flexible array
+> diff --git a/include/linux/sctp.h b/include/linux/sctp.h
+> index 0ff36a2737a3..9815b801fec0 100644
+> --- a/include/linux/sctp.h
+> +++ b/include/linux/sctp.h
+> @@ -603,7 +603,7 @@ struct sctp_fwdtsn_skip {
+>  
+>  struct sctp_fwdtsn_hdr {
+>  	__be32 new_cum_tsn;
+> -	struct sctp_fwdtsn_skip skip[];
+> +	/* struct sctp_fwdtsn_skip skip[]; */
+>  };
+>  
 
-This member is not even used anywhere.
-
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
----
- include/linux/sctp.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/sctp.h b/include/linux/sctp.h
-index d182e8c41985..836a7e200f39 100644
---- a/include/linux/sctp.h
-+++ b/include/linux/sctp.h
-@@ -222,7 +222,7 @@ struct sctp_datahdr {
- 	__be16 stream;
- 	__be16 ssn;
- 	__u32 ppid;
--	__u8  payload[];
-+	/* __u8  payload[]; */
- };
- 
- struct sctp_data_chunk {
--- 
-2.39.1
-
+Why leave the old structure in comments.
+Remove unused code and data structures please.
