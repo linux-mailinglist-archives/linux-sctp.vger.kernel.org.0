@@ -2,74 +2,123 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00EBD6E58F0
-	for <lists+linux-sctp@lfdr.de>; Tue, 18 Apr 2023 07:59:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A7C6E7E12
+	for <lists+linux-sctp@lfdr.de>; Wed, 19 Apr 2023 17:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbjDRF7l (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 18 Apr 2023 01:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43710 "EHLO
+        id S233464AbjDSPTr (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 19 Apr 2023 11:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbjDRF7g (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 18 Apr 2023 01:59:36 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BFA5B97
-        for <linux-sctp@vger.kernel.org>; Mon, 17 Apr 2023 22:59:33 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id q23so60759143ejz.3
-        for <linux-sctp@vger.kernel.org>; Mon, 17 Apr 2023 22:59:33 -0700 (PDT)
+        with ESMTP id S233647AbjDSPTi (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 19 Apr 2023 11:19:38 -0400
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E5A4486;
+        Wed, 19 Apr 2023 08:19:12 -0700 (PDT)
+Received: by mail-qt1-f177.google.com with SMTP id ei23so4702681qtb.2;
+        Wed, 19 Apr 2023 08:19:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681797571; x=1684389571;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
-        b=h2u+IvYIbnFxxtQG/ZtOJXOGODtmHZE6DE2kphmV5deUhBtI5SSl5ZpPS81I4DoyvM
-         cL/QsMoq/nZ79QoTUVBpjigDCpbkhNV4ihdOYSWAZCOke9dA/QR1VB/koOlQ9LVEDYMX
-         XtbtlwSc8k7WA+c3R6xpugIUkMv4IcvxiBX5jugHOkE6bIQRd6XIP4bPoYTYUOtLJ8cY
-         jqOSy7VahCSY+50nHqKMLAvtMY0jgSKZG9RLZ0VM4rlX3dlYAIwPmpAZEs5sdE1jKPzt
-         sUSa+Yt3rvdogEL685HX9OzzgKvbxUuLxSFiR0ubii95w3DTWRmDDneYGKBqJn2l6obd
-         7Bag==
+        d=gmail.com; s=20221208; t=1681917395; x=1684509395;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CdauQ/Rmbgxp2/jRo5uY0DdrwR55PkweyR5uZ5V4258=;
+        b=b67I4CdIp80I7qCE+cTV8+p6ScNgipDpMuQYR1CMfyM4y8MtilG3n5X4KzTeQv7h4X
+         IdHHoHLiMtZ5KrzKMqcPly1RDXxh1ESr3+35eTqB9SyMFNZER9c8h8CMDtrrXVRbztom
+         13ch0xM5waGe/UEM7P366vXHDvTR3X9Y9+r94AtTI9Nrv7PmrSaAKclq8KsW9Xk24Jdt
+         Z4RN1/stiEEp6RpKtetWr+OSxeKizBfZotOQcCo0z4BJ+oogx5lek2PUY1MuTvWSfGwk
+         PTkWcLbHCzIVzj0gfDAMpA9eDkzpAeHcRaNyGsGHZvbxk3E/DH1F26MStgg6rl9tHn98
+         GLyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681797571; x=1684389571;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
-        b=DJMGpsyzjAAOttQUmuUI70AvmA1Yb2G327ZQl6Ys5phqFEou79pWraI8SMEqM2DNlM
-         mKJkpM6onugquT29iWVnzox7Vyh8CYD6BKRRkc0WuyTM3gQNE7CkUEygp1llPP6Pnfhe
-         Rm9CLQ15Xr9lCr9+mLDULFwNV2XenrerbNIMzmtMLKOPTskK2+M91V2cU++xV14oaL3d
-         O7j/JvM9n7XcVYnXuvrNkyg1GirYH5c/p7wqx8NpuSRhFjJdWXzkMI02CjRBW6Xj9TGE
-         jCCRVs5BZ/4exIhpvybU6oVU+RP3DCf/5YxnoZsogMq5XUv4fL/5Mh1bLHPlZLUiqcQJ
-         3kWg==
-X-Gm-Message-State: AAQBX9emn888C02okW47hLRnBC8V0rF/sV220W5AM/bLVoWP4dEwNqny
-        FqRVya5GBukwvMVZEmXCoXLNFjtgsLBNtsctzhMxHkkvTo3LHjke
-X-Google-Smtp-Source: AKy350YRsUSKQ0+i58Lzun7WtY7IrRwSkm+DWIi2JdfS71rVYYWUT2OQ/a/Q5PRWIBazn3AQLm2dWBYGVxBajLvvRoE=
-X-Received: by 2002:a05:6512:96b:b0:4e8:4b7a:6b73 with SMTP id
- v11-20020a056512096b00b004e84b7a6b73mr2935594lft.4.1681797550844; Mon, 17 Apr
- 2023 22:59:10 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681917395; x=1684509395;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CdauQ/Rmbgxp2/jRo5uY0DdrwR55PkweyR5uZ5V4258=;
+        b=D1b9CEC8W+hOLJ2dukhiWdabIcWEwekWm4n5Fh7RcP892RkLiax0bdpy2kIkJ4IGqD
+         YIA/5gq7wv/MTXCoMu8Q14xxJ1XdyjkyIAQHBT53XpFtwtwD9DTKUVrEqu3Q5lnQCEUa
+         Hp1qcsjB9frHyzz/GQ9V3YQ+eWC16gJuZCBrRrYiBi7Y084h/kbqp2Ihrh0MietzCtij
+         eJz7puYBSqddGMVG1qEsI7duK7xS3hyq9QYBABG6RzpfybrvzGzTcTfWcYbL8AtEylYd
+         rExxxbAAvlLj/H/mYfZ1IXxX7BxGTzOLfTRFWIO2tmlARhHng4KxuW/BlFYcY9eclokK
+         E/KQ==
+X-Gm-Message-State: AAQBX9dZjByvYjqMBPR2B9mYEMlJRn9amfXXQokQdChsIxNt3NZ2Sdht
+        5G1VyvzaYxFoc+RVd/1gIfEMN/nuopaBbw==
+X-Google-Smtp-Source: AKy350bTCANRwIYs1kwfRndbZWC2E2axE7gT8yVekM7Z7U4SRwYyDP1Rnejfy/R+UVhymMV41SqEpw==
+X-Received: by 2002:a05:622a:1010:b0:3e6:55b2:35e with SMTP id d16-20020a05622a101000b003e655b2035emr8252496qte.26.1681917394959;
+        Wed, 19 Apr 2023 08:16:34 -0700 (PDT)
+Received: from wsfd-netdev15.ntdv.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id v11-20020a05620a0f0b00b007469b5bc2c4sm4753336qkl.13.2023.04.19.08.16.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 08:16:34 -0700 (PDT)
+From:   Xin Long <lucien.xin@gmail.com>
+To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Subject: [PATCH net-next 0/6] sctp: fix a plenty of flexible-array-nested warnings
+Date:   Wed, 19 Apr 2023 11:16:27 -0400
+Message-Id: <cover.1681917361.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Received: by 2002:ab2:2681:0:b0:1b6:840f:9075 with HTTP; Mon, 17 Apr 2023
- 22:59:10 -0700 (PDT)
-Reply-To: mariamkouame.info@myself.com
-From:   Mariam Kouame <mariamkouame1992@gmail.com>
-Date:   Mon, 17 Apr 2023 22:59:10 -0700
-Message-ID: <CADUz=agNY633M0qMXMnAP3Ms7-3rKuWtAZGCOQZKeYpCdBxT_w@mail.gmail.com>
-Subject: from mariam kouame
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Dear,
+Paolo noticed a compile warning in SCTP,
 
-Please grant me permission to share a very crucial discussion with
-you. I am looking forward to hearing from you at your earliest
-convenience.
+../net/sctp/stream_sched_fc.c: note: in included file (through ../include/net/sctp/sctp.h):
+../include/net/sctp/structs.h:335:41: warning: array of flexible structures
 
-Mrs. Mariam Kouame
+But not only this, there are actually quite a lot of such warnings in
+some SCTP structs. This patchset fixes most of warnings by deleting
+these nested flexible array members.
+
+After this patchset, there are still some warnings left:
+
+  # make C=2 CF="-Wflexible-array-nested" M=./net/sctp/
+  ./include/net/sctp/structs.h:1145:41: warning: nested flexible array
+  ./include/uapi/linux/sctp.h:641:34: warning: nested flexible array
+  ./include/uapi/linux/sctp.h:643:34: warning: nested flexible array
+  ./include/uapi/linux/sctp.h:644:33: warning: nested flexible array
+  ./include/uapi/linux/sctp.h:650:40: warning: nested flexible array
+  ./include/uapi/linux/sctp.h:653:39: warning: nested flexible array
+
+the 1st is caused by __data[] in struct ip_options, not in SCTP;
+the others are in uapi, and we should not touch them.
+
+Note that instead of completely deleting it, we just leave it as a
+comment in the struct, signalling to the reader that we do expect
+such variable parameters over there, as Marcelo suggested.
+
+Xin Long (6):
+  sctp: delete the nested flexible array params
+  sctp: delete the nested flexible array skip
+  sctp: delete the nested flexible array variable
+  sctp: delete the nested flexible array peer_init
+  sctp: delete the nested flexible array hmac
+  sctp: delete the nested flexible array payload
+
+ include/linux/sctp.h         | 18 +++++++++---------
+ include/net/sctp/sctp.h      | 12 ++++++------
+ include/net/sctp/structs.h   |  2 +-
+ net/sctp/associola.c         |  5 +++--
+ net/sctp/auth.c              |  2 +-
+ net/sctp/input.c             |  2 +-
+ net/sctp/outqueue.c          | 11 +++++++----
+ net/sctp/sm_make_chunk.c     | 22 +++++++++++-----------
+ net/sctp/sm_sideeffect.c     |  3 +--
+ net/sctp/sm_statefuns.c      | 14 ++++++--------
+ net/sctp/stream.c            |  2 +-
+ net/sctp/stream_interleave.c |  4 ++--
+ 12 files changed, 49 insertions(+), 48 deletions(-)
+
+-- 
+2.39.1
+
