@@ -2,94 +2,90 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF3796E7E4E
-	for <lists+linux-sctp@lfdr.de>; Wed, 19 Apr 2023 17:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 783146E8759
+	for <lists+linux-sctp@lfdr.de>; Thu, 20 Apr 2023 03:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232004AbjDSPbd (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 19 Apr 2023 11:31:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55670 "EHLO
+        id S232344AbjDTBS2 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 19 Apr 2023 21:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233212AbjDSPbb (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 19 Apr 2023 11:31:31 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D1C3AAA
-        for <linux-sctp@vger.kernel.org>; Wed, 19 Apr 2023 08:31:28 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1a92369761cso734815ad.3
-        for <linux-sctp@vger.kernel.org>; Wed, 19 Apr 2023 08:31:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20221208.gappssmtp.com; s=20221208; t=1681918287; x=1684510287;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MWNFIKn7SRRd/10Gz2AxxCEIVDzTsvNCmu9Y2KI0jk0=;
-        b=H+rp0KhCc9amg67w1gw3zfc8qquYCPA59WWTG6rFFS+8bl5V4VJEkwGoiTgwRkqOh2
-         r+01l5TO1+gN8cnbyaAL9b24v4zxJ5SXaZFzi9EZQ3mpCvrP2ClJdRYqD5ffGBt6Q82s
-         VpMqtC6ksgvgN3gRMCainYWhyQJdixqGk8SipxxOi1GcSmgwJFD4/sALuEVrnf0JmMcV
-         gygXIaYOAHJgnsdj5Sv68V4YqhFbnqshowOp91UmZgB/Id7Y0MktDaSOWBQHXAAtFSx6
-         /ip8C9WwKtN40vJPDKcZusztpTfRvwF12vVJjGU/2eoFXAQ6bes2sFdCyuMzFObnlklJ
-         wCsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681918287; x=1684510287;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MWNFIKn7SRRd/10Gz2AxxCEIVDzTsvNCmu9Y2KI0jk0=;
-        b=jFJlcWPs0RS8VI0gZTivl2REK0wY4GlpUUuy2K+OiAT6tTgju8h6t1ZT5j3ZrfvcuV
-         o4Nwevo6HWsrg7xbEmHMAGbichruj/OhCeXjecnIZdpwzyTUR8H58pGKWGZiMe4e5+Ox
-         E13uawg/Wjm7oMJFD8i7lycYYffNqwre47/OcrUFeFvyKAJHxPW+CAgP4vNIppp4DVG6
-         Z5ldwo8lHUUY3k9RRA9zQRbEdLRztOzU1jMkBPSOh+iki8v2ItyNHeT09GyPlVy3luOO
-         OGFZPYf36XIKdvH9tuI0czbiwInQo4Oc1vtT+CzilhkMWKRC54oprrl2PolHyUaPLwMy
-         492Q==
-X-Gm-Message-State: AAQBX9fiFUeNp8Eta1Qrolz1fJmhqtDJsOu0khveXk1psXn2/g6JhwHb
-        PoysBBvbl++K/yf4BqP8Jxfr6Q==
-X-Google-Smtp-Source: AKy350ZaRcfGeKDrPwj8e7XG6HMk7yBHI8vsooXeAFwVIWNZYtSfRfSa6Zf6GohIT1OMzd+2cw1Q3Q==
-X-Received: by 2002:a17:902:eccb:b0:1a9:1b4:9fe3 with SMTP id a11-20020a170902eccb00b001a901b49fe3mr2155503plh.19.1681918287606;
-        Wed, 19 Apr 2023 08:31:27 -0700 (PDT)
-Received: from hermes.local (204-195-120-218.wavecable.com. [204.195.120.218])
-        by smtp.gmail.com with ESMTPSA id iz10-20020a170902ef8a00b001a4fa2f7a23sm5596309plb.274.2023.04.19.08.31.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 08:31:27 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 08:31:25 -0700
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
-        davem@davemloft.net, kuba@kernel.org,
+        with ESMTP id S230335AbjDTBS2 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 19 Apr 2023 21:18:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413A346BD;
+        Wed, 19 Apr 2023 18:18:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE3F7623A2;
+        Thu, 20 Apr 2023 01:18:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D21A9C433D2;
+        Thu, 20 Apr 2023 01:18:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681953506;
+        bh=XPe5AY+r1t1QZkxzoMt8DRrTxiLc2RYeUZmspSq9lQg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=R7/lCHl3Hzgg0STf4gH+qvB9t/4hQ03pFv6tRq8Di868nTfzvaZmGajc86kUK5ch8
+         QZrE40JjIvdByuuf9By2e9CeGmDEIqEsTfIq9Zlz17mmRMYqPM7pgLuBlJVDlBC8qK
+         sRLYAOkHRg8KBvjzEzx2C+OUA2W6gudGtFQhhH13aEfu5aH+3bXAebpmoVc0hhqp+R
+         serTyMvYrtzH6EADbKtLoJ90mRKUmgpeQWkXnNE8aL2+KYlFHBdCgjK6RkqEhcWdpQ
+         CuMLf37lWi6PDpL5Q0sIZBBcGjlR0I1QlIwqa/+XT/PsD5ffH1ejXnKRVt/Q282sI3
+         quJ3QAvAhpAjA==
+Date:   Wed, 19 Apr 2023 18:18:24 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Xin Long <lucien.xin@gmail.com>,
+        network dev <netdev@vger.kernel.org>,
+        linux-sctp@vger.kernel.org, davem@davemloft.net,
         Eric Dumazet <edumazet@google.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Subject: Re: [PATCH net-next 2/6] sctp: delete the nested flexible array
- skip
-Message-ID: <20230419083125.308b8732@hermes.local>
-In-Reply-To: <48a8d405dd4d81f7be75b7f39685e090867d858b.1681917361.git.lucien.xin@gmail.com>
+Subject: Re: [PATCH net-next 0/6] sctp: fix a plenty of
+ flexible-array-nested warnings
+Message-ID: <20230419181824.10119070@kernel.org>
+In-Reply-To: <cover.1681917361.git.lucien.xin@gmail.com>
 References: <cover.1681917361.git.lucien.xin@gmail.com>
-        <48a8d405dd4d81f7be75b7f39685e090867d858b.1681917361.git.lucien.xin@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, 19 Apr 2023 11:16:29 -0400
-Xin Long <lucien.xin@gmail.com> wrote:
+On Wed, 19 Apr 2023 11:16:27 -0400 Xin Long wrote:
+> Paolo noticed a compile warning in SCTP,
+> 
+> ../net/sctp/stream_sched_fc.c: note: in included file (through ../include/net/sctp/sctp.h):
+> ../include/net/sctp/structs.h:335:41: warning: array of flexible structures
+> 
+> But not only this, there are actually quite a lot of such warnings in
+> some SCTP structs. This patchset fixes most of warnings by deleting
+> these nested flexible array members.
+> 
+> After this patchset, there are still some warnings left:
+> 
+>   # make C=2 CF="-Wflexible-array-nested" M=./net/sctp/
+>   ./include/net/sctp/structs.h:1145:41: warning: nested flexible array
+>   ./include/uapi/linux/sctp.h:641:34: warning: nested flexible array
+>   ./include/uapi/linux/sctp.h:643:34: warning: nested flexible array
+>   ./include/uapi/linux/sctp.h:644:33: warning: nested flexible array
+>   ./include/uapi/linux/sctp.h:650:40: warning: nested flexible array
+>   ./include/uapi/linux/sctp.h:653:39: warning: nested flexible array
+> 
+> the 1st is caused by __data[] in struct ip_options, not in SCTP;
+> the others are in uapi, and we should not touch them.
+> 
+> Note that instead of completely deleting it, we just leave it as a
+> comment in the struct, signalling to the reader that we do expect
+> such variable parameters over there, as Marcelo suggested.
 
-> diff --git a/include/linux/sctp.h b/include/linux/sctp.h
-> index 0ff36a2737a3..9815b801fec0 100644
-> --- a/include/linux/sctp.h
-> +++ b/include/linux/sctp.h
-> @@ -603,7 +603,7 @@ struct sctp_fwdtsn_skip {
->  
->  struct sctp_fwdtsn_hdr {
->  	__be32 new_cum_tsn;
-> -	struct sctp_fwdtsn_skip skip[];
-> +	/* struct sctp_fwdtsn_skip skip[]; */
->  };
->  
+Hi Kees, is there no workaround for nested flexible arrays within 
+the kernel?  Any recommendations?
 
-Why leave the old structure in comments.
-Remove unused code and data structures please.
+https://lore.kernel.org/all/cover.1681917361.git.lucien.xin@gmail.com/
