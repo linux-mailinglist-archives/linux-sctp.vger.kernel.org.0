@@ -2,56 +2,54 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D09F6E875B
-	for <lists+linux-sctp@lfdr.de>; Thu, 20 Apr 2023 03:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B17F86EA53F
+	for <lists+linux-sctp@lfdr.de>; Fri, 21 Apr 2023 09:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbjDTBUF (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 19 Apr 2023 21:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37150 "EHLO
+        id S231414AbjDUHup (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 21 Apr 2023 03:50:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbjDTBUE (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 19 Apr 2023 21:20:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A476B49C4;
-        Wed, 19 Apr 2023 18:20:03 -0700 (PDT)
+        with ESMTP id S230495AbjDUHum (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 21 Apr 2023 03:50:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9785D9025;
+        Fri, 21 Apr 2023 00:50:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 32D5163BBE;
-        Thu, 20 Apr 2023 01:20:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AECCC433D2;
-        Thu, 20 Apr 2023 01:20:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B5AB64E98;
+        Fri, 21 Apr 2023 07:50:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8B94BC433A4;
+        Fri, 21 Apr 2023 07:50:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681953602;
-        bh=AAD1RNUoCDTsOM9AZWqShakrG5fkFpKVZkDdmRFoae4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZClINHvv3DYhwAZg+qL9fQSYNdIdqAIx1TG9Nz41Hm5J52gEMCjX2tP3hcSt8LgKr
-         lwRaWVURc5dVq2YQIjunvSSMcOkXA0HKOQL8siILioVGHmS2jq6dqpa9XFKlFYvppP
-         Mz9Ymhq/h0nbC0eh0ZErcSWIY4GsDPB4a04gYg0MUcZA2RyA3oPfgisJlcwgV8HZql
-         M5lzL9vOkT6rhmbtkBPQKqQITtyb0GaiQhHBvpCAjf2BRQJapTxD4zoZhysKO+CLH9
-         rNRyRcDovqjVL2280iS2jfXjAa+eGXDBCMm7g9sSl310Rkw9VQd6n55ZCpgs1eegAV
-         SX4baLuMq+UIw==
-Date:   Wed, 19 Apr 2023 18:20:01 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Stephen Hemminger <stephen@networkplumber.org>
-Cc:     Xin Long <lucien.xin@gmail.com>,
-        network dev <netdev@vger.kernel.org>,
-        linux-sctp@vger.kernel.org, davem@davemloft.net,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Subject: Re: [PATCH net-next 2/6] sctp: delete the nested flexible array
- skip
-Message-ID: <20230419182001.7fe64d29@kernel.org>
-In-Reply-To: <20230419083125.308b8732@hermes.local>
-References: <cover.1681917361.git.lucien.xin@gmail.com>
-        <48a8d405dd4d81f7be75b7f39685e090867d858b.1681917361.git.lucien.xin@gmail.com>
-        <20230419083125.308b8732@hermes.local>
+        s=k20201202; t=1682063430;
+        bh=LfpNnW1PKWScQQRDi0FPp7M6CFkoG+CMOF1Scnj1nXo=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=PIbhWUY4yYGyrSSlIaHGL5XwjoIKBrg6QK0F3fsP9RBmUFSQi5zJYgdlMEZkB03cB
+         6ADk9uG2MjCSDr8+aOdQJwzn5p8//oDOHrw4aWDdW2aS3WDbpns1gCJWC6T95yjJ33
+         oNEkDjZhw7fg4EhIOlKkpfiCCYoHanEBiTcim+2trFIUZyOT7MWoGwPh1oXeVcVoDU
+         NFM5+NTa4NS2RY+hkfdhDy4+rijYSxZXYAMGEqrjPZ5FKc2Tr/Ku4WaXzxvECs9++H
+         FAr4WYEox6P+4mLj7WGPVwFfgrT2hkiQuhKuDYYDOhAW32E4KZsaWVsuGDutbo0s8K
+         WKAyah1dgkZHg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6FBA4E501E7;
+        Fri, 21 Apr 2023 07:50:30 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/6] sctp: fix a plenty of flexible-array-nested
+ warnings
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168206343045.30967.17832699819530024509.git-patchwork-notify@kernel.org>
+Date:   Fri, 21 Apr 2023 07:50:30 +0000
+References: <cover.1681917361.git.lucien.xin@gmail.com>
+In-Reply-To: <cover.1681917361.git.lucien.xin@gmail.com>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
+        pabeni@redhat.com, marcelo.leitner@gmail.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,17 +58,40 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, 19 Apr 2023 08:31:25 -0700 Stephen Hemminger wrote:
-> >  struct sctp_fwdtsn_hdr {
-> >  	__be32 new_cum_tsn;
-> > -	struct sctp_fwdtsn_skip skip[];
-> > +	/* struct sctp_fwdtsn_skip skip[]; */
-> >  };
-> >    
-> 
-> Why leave the old structure in comments.
-> Remove unused code and data structures please.
+Hello:
 
-Did you see the note in the cover letter?
-Is there any reason why this is not an acceptable way of documenting
-what follows?
+This series was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
+
+On Wed, 19 Apr 2023 11:16:27 -0400 you wrote:
+> Paolo noticed a compile warning in SCTP,
+> 
+> ../net/sctp/stream_sched_fc.c: note: in included file (through ../include/net/sctp/sctp.h):
+> ../include/net/sctp/structs.h:335:41: warning: array of flexible structures
+> 
+> But not only this, there are actually quite a lot of such warnings in
+> some SCTP structs. This patchset fixes most of warnings by deleting
+> these nested flexible array members.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,1/6] sctp: delete the nested flexible array params
+    https://git.kernel.org/netdev/net-next/c/add7370a3989
+  - [net-next,2/6] sctp: delete the nested flexible array skip
+    https://git.kernel.org/netdev/net-next/c/73175a042955
+  - [net-next,3/6] sctp: delete the nested flexible array variable
+    https://git.kernel.org/netdev/net-next/c/9789c1c6619e
+  - [net-next,4/6] sctp: delete the nested flexible array peer_init
+    https://git.kernel.org/netdev/net-next/c/f97278ff346a
+  - [net-next,5/6] sctp: delete the nested flexible array hmac
+    https://git.kernel.org/netdev/net-next/c/2ab399a931dd
+  - [net-next,6/6] sctp: delete the nested flexible array payload
+    https://git.kernel.org/netdev/net-next/c/dbda0fba7a14
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
