@@ -2,96 +2,127 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B17F86EA53F
-	for <lists+linux-sctp@lfdr.de>; Fri, 21 Apr 2023 09:50:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 410D76F3F27
+	for <lists+linux-sctp@lfdr.de>; Tue,  2 May 2023 10:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231414AbjDUHup (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 21 Apr 2023 03:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
+        id S233443AbjEBIfX (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 2 May 2023 04:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbjDUHum (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 21 Apr 2023 03:50:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9785D9025;
-        Fri, 21 Apr 2023 00:50:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B5AB64E98;
-        Fri, 21 Apr 2023 07:50:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8B94BC433A4;
-        Fri, 21 Apr 2023 07:50:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682063430;
-        bh=LfpNnW1PKWScQQRDi0FPp7M6CFkoG+CMOF1Scnj1nXo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=PIbhWUY4yYGyrSSlIaHGL5XwjoIKBrg6QK0F3fsP9RBmUFSQi5zJYgdlMEZkB03cB
-         6ADk9uG2MjCSDr8+aOdQJwzn5p8//oDOHrw4aWDdW2aS3WDbpns1gCJWC6T95yjJ33
-         oNEkDjZhw7fg4EhIOlKkpfiCCYoHanEBiTcim+2trFIUZyOT7MWoGwPh1oXeVcVoDU
-         NFM5+NTa4NS2RY+hkfdhDy4+rijYSxZXYAMGEqrjPZ5FKc2Tr/Ku4WaXzxvECs9++H
-         FAr4WYEox6P+4mLj7WGPVwFfgrT2hkiQuhKuDYYDOhAW32E4KZsaWVsuGDutbo0s8K
-         WKAyah1dgkZHg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6FBA4E501E7;
-        Fri, 21 Apr 2023 07:50:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S233158AbjEBIfW (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 2 May 2023 04:35:22 -0400
+X-Greylist: delayed 523 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 02 May 2023 01:35:17 PDT
+Received: from mx0.infotecs.ru (mx0.infotecs.ru [91.244.183.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99FCA3C0C;
+        Tue,  2 May 2023 01:35:17 -0700 (PDT)
+Received: from mx0.infotecs-nt (localhost [127.0.0.1])
+        by mx0.infotecs.ru (Postfix) with ESMTP id 644FD108AF9C;
+        Tue,  2 May 2023 11:26:30 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx0.infotecs.ru 644FD108AF9C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infotecs.ru; s=mx;
+        t=1683015990; bh=m8D8J1VQUATKJTZzY+gdxzLobO6f59B6cKPL1bk4e0M=;
+        h=From:To:CC:Subject:Date:From;
+        b=gASnqsd8nqMY+YDG/pklyCP2unjn/d8TDsDAWtMBrWnLb1tF4J9BqWuHZzSh71tGJ
+         YYEhTUuM6zlDrBaJht2r0GIg7WrP5u7fq92FnUrQsOoa+aH4ybB39xadhJbR3dCHwm
+         o6NtXsemCP1rS2cAeJwdrMGUq1Z5/e7xl0Z509uQ=
+Received: from msk-exch-01.infotecs-nt (msk-exch-01.infotecs-nt [10.0.7.191])
+        by mx0.infotecs-nt (Postfix) with ESMTP id 5AC0430633DA;
+        Tue,  2 May 2023 11:26:30 +0300 (MSK)
+From:   Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
+To:     Neil Horman <nhorman@tuxdriver.com>
+CC:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
+Subject: [PATCH] sctp: fix a potential buffer overflow in
+ sctp_sched_set_sched()
+Thread-Topic: [PATCH] sctp: fix a potential buffer overflow in
+ sctp_sched_set_sched()
+Thread-Index: AQHZfM/L3fQfyLzenEuG6u7YLaEbHQ==
+Date:   Tue, 2 May 2023 08:26:30 +0000
+Message-ID: <20230502082622.2392659-1-Ilia.Gavrilov@infotecs.ru>
+Accept-Language: ru-RU, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.17.0.10]
+x-exclaimer-md-config: 208ac3cd-1ed4-4982-a353-bdefac89ac0a
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/6] sctp: fix a plenty of flexible-array-nested
- warnings
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168206343045.30967.17832699819530024509.git-patchwork-notify@kernel.org>
-Date:   Fri, 21 Apr 2023 07:50:30 +0000
-References: <cover.1681917361.git.lucien.xin@gmail.com>
-In-Reply-To: <cover.1681917361.git.lucien.xin@gmail.com>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
-        davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
-        pabeni@redhat.com, marcelo.leitner@gmail.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-KLMS-Rule-ID: 1
+X-KLMS-Message-Action: clean
+X-KLMS-AntiSpam-Lua-Profiles: 177098 [May 02 2023]
+X-KLMS-AntiSpam-Version: 5.9.59.0
+X-KLMS-AntiSpam-Envelope-From: Ilia.Gavrilov@infotecs.ru
+X-KLMS-AntiSpam-Rate: 0
+X-KLMS-AntiSpam-Status: not_detected
+X-KLMS-AntiSpam-Method: none
+X-KLMS-AntiSpam-Auth: dkim=none
+X-KLMS-AntiSpam-Info: LuaCore: 510 510 bc345371020d3ce827abc4c710f5f0ecf15eaf2e, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;infotecs.ru:7.1.1
+X-MS-Exchange-Organization-SCL: -1
+X-KLMS-AntiSpam-Interceptor-Info: scan successful
+X-KLMS-AntiPhishing: Clean, bases: 2023/05/02 06:48:00
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2023/05/02 03:46:00 #21204364
+X-KLMS-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello:
+The 'sched' index value must be checked before accessing an element
+of the 'sctp_sched_ops' array. Otherwise, it can lead to buffer overflow.
 
-This series was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
+Note that it's harmless since the 'sched' parameter is checked before
+calling 'sctp_sched_set_sched'.
 
-On Wed, 19 Apr 2023 11:16:27 -0400 you wrote:
-> Paolo noticed a compile warning in SCTP,
-> 
-> ../net/sctp/stream_sched_fc.c: note: in included file (through ../include/net/sctp/sctp.h):
-> ../include/net/sctp/structs.h:335:41: warning: array of flexible structures
-> 
-> But not only this, there are actually quite a lot of such warnings in
-> some SCTP structs. This patchset fixes most of warnings by deleting
-> these nested flexible array members.
-> 
-> [...]
+Found by InfoTeCS on behalf of Linux Verification Center
+(linuxtesting.org) with SVACE.
 
-Here is the summary with links:
-  - [net-next,1/6] sctp: delete the nested flexible array params
-    https://git.kernel.org/netdev/net-next/c/add7370a3989
-  - [net-next,2/6] sctp: delete the nested flexible array skip
-    https://git.kernel.org/netdev/net-next/c/73175a042955
-  - [net-next,3/6] sctp: delete the nested flexible array variable
-    https://git.kernel.org/netdev/net-next/c/9789c1c6619e
-  - [net-next,4/6] sctp: delete the nested flexible array peer_init
-    https://git.kernel.org/netdev/net-next/c/f97278ff346a
-  - [net-next,5/6] sctp: delete the nested flexible array hmac
-    https://git.kernel.org/netdev/net-next/c/2ab399a931dd
-  - [net-next,6/6] sctp: delete the nested flexible array payload
-    https://git.kernel.org/netdev/net-next/c/dbda0fba7a14
+Fixes: 5bbbbe32a431 ("sctp: introduce stream scheduler foundations")
+Signed-off-by: Ilia.Gavrilov <Ilia.Gavrilov@infotecs.ru>
+---
+ net/sctp/stream_sched.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+diff --git a/net/sctp/stream_sched.c b/net/sctp/stream_sched.c
+index 330067002deb..a339917d7197 100644
+--- a/net/sctp/stream_sched.c
++++ b/net/sctp/stream_sched.c
+@@ -146,18 +146,19 @@ static void sctp_sched_free_sched(struct sctp_stream =
+*stream)
+ int sctp_sched_set_sched(struct sctp_association *asoc,
+ 			 enum sctp_sched_type sched)
+ {
+-	struct sctp_sched_ops *n =3D sctp_sched_ops[sched];
++	struct sctp_sched_ops *n;
+ 	struct sctp_sched_ops *old =3D asoc->outqueue.sched;
+ 	struct sctp_datamsg *msg =3D NULL;
+ 	struct sctp_chunk *ch;
+ 	int i, ret =3D 0;
+=20
+-	if (old =3D=3D n)
+-		return ret;
+-
+ 	if (sched > SCTP_SS_MAX)
+ 		return -EINVAL;
+=20
++	n =3D sctp_sched_ops[sched];
++	if (old =3D=3D n)
++		return ret;
++
+ 	if (old)
+ 		sctp_sched_free_sched(&asoc->stream);
+=20
+--=20
+2.30.2
