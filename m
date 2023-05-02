@@ -2,136 +2,133 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 725646F43CA
-	for <lists+linux-sctp@lfdr.de>; Tue,  2 May 2023 14:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E5126F449F
+	for <lists+linux-sctp@lfdr.de>; Tue,  2 May 2023 15:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233975AbjEBMZY (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 2 May 2023 08:25:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49496 "EHLO
+        id S234326AbjEBNF0 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 2 May 2023 09:05:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233833AbjEBMZR (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 2 May 2023 08:25:17 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55943A90;
-        Tue,  2 May 2023 05:25:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1683030316; x=1714566316;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AfQaRre7+aO2SPhdUxafi6pwxZAOj0wcrW0qgwl0DRA=;
-  b=vz5Qenk7OuaTD3XCR5GkCwsy22N3JNHkA2fqPju9RelJQvh3ecdD3lKA
-   AN5rEiulaCpM7f9urK1suXsoRGqw4b3NScGojLreBTm5bh3NKi3mvZtrU
-   7pc3CfzkD3mYWKiuiHSGkT5qpMkaCOX98Q9LB0/Q00regjvk0iwnng8+V
-   cbAmjyTW7ra5kPWMCoeUBrwXMfdEdkdG7lrlJ5jCCOcWrUqesTkywQNNF
-   jq3z0YneX15NLNuyKEvVYhB61Pnb/7PYxMaFZ//pcw7T7JwIsJi9mDZqp
-   MMprr1Qt7VQuIS7m4suk17l4dMqDCY4k8ANxwHE0JR6DaB5/vPbq53Q3d
-   w==;
-X-IronPort-AV: E=Sophos;i="5.99,244,1677567600"; 
-   d="scan'208";a="209234570"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 May 2023 05:25:05 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 2 May 2023 05:25:00 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Tue, 2 May 2023 05:24:59 -0700
-Date:   Tue, 2 May 2023 14:24:59 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
+        with ESMTP id S234029AbjEBNFD (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 2 May 2023 09:05:03 -0400
+Received: from mx0.infotecs.ru (mx0.infotecs.ru [91.244.183.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641CB5252;
+        Tue,  2 May 2023 06:04:07 -0700 (PDT)
+Received: from mx0.infotecs-nt (localhost [127.0.0.1])
+        by mx0.infotecs.ru (Postfix) with ESMTP id 00E2910B66F1;
+        Tue,  2 May 2023 16:03:25 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx0.infotecs.ru 00E2910B66F1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infotecs.ru; s=mx;
+        t=1683032605; bh=XeUJxsBSQd1pjrQXTV5YP3H+DxqnTGptCJyjoilPwJg=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=DGsaepVYzleqpK/ZFnyAanNKuYVsN+7vqFFjhly7VO7T2ke37yOfWvRGXkZkKAkQw
+         U5cZcETyQBiRXSLU5ucnK2YSPaOMlu/dH4gw1dUKpA4/vpWx5p2jNBcn5+Kn8wND+r
+         Uu8pTZnnuoV+0B8Ww4SC1ehiqo6qh4WznO9w6sy4=
+Received: from msk-exch-02.infotecs-nt (msk-exch-02.infotecs-nt [10.0.7.192])
+        by mx0.infotecs-nt (Postfix) with ESMTP id F0DE130A2CA0;
+        Tue,  2 May 2023 16:03:24 +0300 (MSK)
+From:   Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
+To:     Simon Horman <simon.horman@corigine.com>
 CC:     Neil Horman <nhorman@tuxdriver.com>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         Xin Long <lucien.xin@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        "Jakub Kicinski" <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
-Subject: Re: [PATCH] sctp: fix a potential buffer overflow in
+Subject: [PATCH net v2] sctp: fix a potential buffer overflow in
  sctp_sched_set_sched()
-Message-ID: <20230502122459.inxuqa5rt3iluec4@soft-dev3-1>
-References: <20230502082622.2392659-1-Ilia.Gavrilov@infotecs.ru>
+Thread-Topic: [PATCH net v2] sctp: fix a potential buffer overflow in
+ sctp_sched_set_sched()
+Thread-Index: AQHZfPZ6+AjI4Yq7k0+w8RGcNMvKHg==
+Date:   Tue, 2 May 2023 13:03:24 +0000
+Message-ID: <20230502130316.2680585-1-Ilia.Gavrilov@infotecs.ru>
+References: <ZFD6UgOFeUCbbIOC@corigine.com>
+In-Reply-To: <ZFD6UgOFeUCbbIOC@corigine.com>
+Accept-Language: ru-RU, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.17.0.10]
+x-exclaimer-md-config: 208ac3cd-1ed4-4982-a353-bdefac89ac0a
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20230502082622.2392659-1-Ilia.Gavrilov@infotecs.ru>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-KLMS-Rule-ID: 1
+X-KLMS-Message-Action: clean
+X-KLMS-AntiSpam-Lua-Profiles: 177118 [May 02 2023]
+X-KLMS-AntiSpam-Version: 5.9.59.0
+X-KLMS-AntiSpam-Envelope-From: Ilia.Gavrilov@infotecs.ru
+X-KLMS-AntiSpam-Rate: 0
+X-KLMS-AntiSpam-Status: not_detected
+X-KLMS-AntiSpam-Method: none
+X-KLMS-AntiSpam-Auth: dkim=none
+X-KLMS-AntiSpam-Info: LuaCore: 510 510 bc345371020d3ce827abc4c710f5f0ecf15eaf2e, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;infotecs.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-MS-Exchange-Organization-SCL: -1
+X-KLMS-AntiSpam-Interceptor-Info: scan successful
+X-KLMS-AntiPhishing: Clean, bases: 2023/05/02 11:01:00
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2023/05/02 09:07:00 #21205017
+X-KLMS-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-The 05/02/2023 08:26, Gavrilov Ilia wrote:
+The 'sched' index value must be checked before accessing an element
+of the 'sctp_sched_ops' array. Otherwise, it can lead to buffer overflow.
 
-Hi,
+Note that it's harmless since the 'sched' parameter is checked before
+calling 'sctp_sched_set_sched'.
 
-> 
-> The 'sched' index value must be checked before accessing an element
-> of the 'sctp_sched_ops' array. Otherwise, it can lead to buffer overflow.
-> 
-> Note that it's harmless since the 'sched' parameter is checked before
-> calling 'sctp_sched_set_sched'.
+Found by InfoTeCS on behalf of Linux Verification Center
+(linuxtesting.org) with SVACE.
 
-If the 'sched' parameter is already checked, is it not better to remove
-the check from this function?
+Fixes: 5bbbbe32a431 ("sctp: introduce stream scheduler foundations")
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Signed-off-by: Ilia.Gavrilov <Ilia.Gavrilov@infotecs.ru>
+---
+V2:
+ - Change the order of local variables=20
+ - Specify the target tree in the subject
+ net/sctp/stream_sched.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-> 
-> Found by InfoTeCS on behalf of Linux Verification Center
-> (linuxtesting.org) with SVACE.
-> 
-> Fixes: 5bbbbe32a431 ("sctp: introduce stream scheduler foundations")
-
-I am not sure how much this is net material because as you said, this
-issue can't happen.
-But don't forget to specify the target tree in the subject. You can do
-that when creating the patch using:
-git format-patch ... --subject-prefix "PATCH net"
-
-> Signed-off-by: Ilia.Gavrilov <Ilia.Gavrilov@infotecs.ru>
-> ---
->  net/sctp/stream_sched.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/net/sctp/stream_sched.c b/net/sctp/stream_sched.c
-> index 330067002deb..a339917d7197 100644
-> --- a/net/sctp/stream_sched.c
-> +++ b/net/sctp/stream_sched.c
-> @@ -146,18 +146,19 @@ static void sctp_sched_free_sched(struct sctp_stream *stream)
->  int sctp_sched_set_sched(struct sctp_association *asoc,
->                          enum sctp_sched_type sched)
->  {
-> -       struct sctp_sched_ops *n = sctp_sched_ops[sched];
-> +       struct sctp_sched_ops *n;
->         struct sctp_sched_ops *old = asoc->outqueue.sched;
->         struct sctp_datamsg *msg = NULL;
->         struct sctp_chunk *ch;
->         int i, ret = 0;
-> 
-> -       if (old == n)
-> -               return ret;
-> -
->         if (sched > SCTP_SS_MAX)
->                 return -EINVAL;
-> 
-> +       n = sctp_sched_ops[sched];
-> +       if (old == n)
-> +               return ret;
-> +
->         if (old)
->                 sctp_sched_free_sched(&asoc->stream);
-> 
-> --
-> 2.30.2
-
--- 
-/Horatiu
+diff --git a/net/sctp/stream_sched.c b/net/sctp/stream_sched.c
+index 330067002deb..4d076a9b8592 100644
+--- a/net/sctp/stream_sched.c
++++ b/net/sctp/stream_sched.c
+@@ -146,18 +146,19 @@ static void sctp_sched_free_sched(struct sctp_stream =
+*stream)
+ int sctp_sched_set_sched(struct sctp_association *asoc,
+ 			 enum sctp_sched_type sched)
+ {
+-	struct sctp_sched_ops *n =3D sctp_sched_ops[sched];
+ 	struct sctp_sched_ops *old =3D asoc->outqueue.sched;
+ 	struct sctp_datamsg *msg =3D NULL;
++	struct sctp_sched_ops *n;
+ 	struct sctp_chunk *ch;
+ 	int i, ret =3D 0;
+=20
+-	if (old =3D=3D n)
+-		return ret;
+-
+ 	if (sched > SCTP_SS_MAX)
+ 		return -EINVAL;
+=20
++	n =3D sctp_sched_ops[sched];
++	if (old =3D=3D n)
++		return ret;
++
+ 	if (old)
+ 		sctp_sched_free_sched(&asoc->stream);
+=20
+--=20
+2.30.2
