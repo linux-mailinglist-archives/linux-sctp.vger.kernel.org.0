@@ -2,163 +2,171 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A9906FE616
-	for <lists+linux-sctp@lfdr.de>; Wed, 10 May 2023 23:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4A36FF18D
+	for <lists+linux-sctp@lfdr.de>; Thu, 11 May 2023 14:32:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232958AbjEJVWr (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 10 May 2023 17:22:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
+        id S237587AbjEKMcp (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 11 May 2023 08:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjEJVWq (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 10 May 2023 17:22:46 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010AB2711
-        for <linux-sctp@vger.kernel.org>; Wed, 10 May 2023 14:22:43 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-644d9bf05b7so3695795b3a.3
-        for <linux-sctp@vger.kernel.org>; Wed, 10 May 2023 14:22:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683753763; x=1686345763;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fh63bNXirjYlRC/jjf1XoYxHkBysYc037BusnA4bKgc=;
-        b=qpFq5DN35+iZ3b0ZEsilIjueJskUlMqkFjMdlpH5/bEyxcnD8iSjOShjB4RwIYMmDA
-         U0qcftPEhKVYcefqB6iYXK0jc9GwWazTC+dF+niR9z4xJ8SqKuWhEUDg9MYh0yjfZf4P
-         suO1EjZdNi1pTBkecVsut9ZRb8gv/BDyJNkR8glJC2zWC7xlygGf8om6OVeipxO2T/+h
-         rpf7sgoMSFKSWFGMYV7KdOkWMg+AMmQ3jb41XT+2tyBBj5j39bVbIMWAdPrMZOXcgG8c
-         P2tzR1xJk/YPsfPucN49M9FgQvlJE1NhIzmvkbQh5jfs4eS7EodT3opF+uSjA8qL4TeM
-         HpQg==
+        with ESMTP id S236152AbjEKMco (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 11 May 2023 08:32:44 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E05F3C12
+        for <linux-sctp@vger.kernel.org>; Thu, 11 May 2023 05:32:37 -0700 (PDT)
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 573A93F4F7
+        for <linux-sctp@vger.kernel.org>; Thu, 11 May 2023 12:32:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1683808355;
+        bh=9aj9w2ur8U+Nd5DK5XALx0/M31BkBPR/KrjmUiEylFY=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=OjCKp4ctFGhisodOdljbpSXeWNYILocKeYFEtZEdvQNfzcJOj8teqDd350XrWoOfe
+         vU3JuDjSL02rAGp7hZmsNPkp+QYASLnEx7MBc91PWIk4MPLWJfKvlAf+RDMbMwtSye
+         t4l5WVX3xTLtIkPPBxCkcLsDqMpsPYbh4jrHkwoPupvXT0KFgu6brHtkqsLBfC2gvb
+         PHO19wB6lDsmxM9+W3uarAUJPG8caNfLt6Osr7LWGU+diMLwQMLoX6cSUZtANlyFqB
+         N/1DXP6L1eCCjSoAS3BmZw/+FqYtNVaZIQFU6AMQMBosn4dEJvtNnSDsnBNJih2pEB
+         jnN6w3CO2nQ6Q==
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-96640336558so698396766b.2
+        for <linux-sctp@vger.kernel.org>; Thu, 11 May 2023 05:32:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683753763; x=1686345763;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Fh63bNXirjYlRC/jjf1XoYxHkBysYc037BusnA4bKgc=;
-        b=F6VhnbsHn77Nkpv7ypIYepm63qbdFP7udHGM6XmX2xBZwFgRovMIqfGbjdco5NfGOV
-         fFxAq+NT2ksTMJSKFrC5lKDbFKb/LIsaxRArR+uwRuMrslV4SdJNUaTyFMelZuZd9R9C
-         lwr0+CYRfFI0C5/xRaOGW5tkQ7rEBUG3uH82Oo35pgxFT5j/jOwdES64jUuaGOLxikHs
-         NmImDBuvhMyP8Ru6rTTM16Yg2zNPO0EQ897nmlRM15X94JPj++p361yz8B/wLruVYUKm
-         RwuTUPaCknhpHJCroxi9rZfo3t/xS8jja/b7S/WCTr+dgraukydfbzI4XWi29dtUDLf8
-         YYJQ==
-X-Gm-Message-State: AC+VfDyufvO2aA/bE+NY5E/r1DSRSpetfN0xYcbbvPLn2p2T+Oy3bPF0
-        VbZiSxFghK6Bb6oAfaWsLCokF3iMO1qqyvZ6uXMDesQLXThstnFR6LnKPvm+
-X-Google-Smtp-Source: ACHHUZ4F60zdJfIGVeCFZMEiO2jO/sYbxXLpD1rC/KOF0HnGT2QEgARPFh8eZpBazOC9fVSVJsCADrLcXeMsvuVsUcg=
-X-Received: by 2002:a17:903:1d0:b0:1ac:7624:51d7 with SMTP id
- e16-20020a17090301d000b001ac762451d7mr12148111plh.69.1683753763223; Wed, 10
- May 2023 14:22:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230510131527.1244929-1-aleksandr.mikhalitsyn@canonical.com>
- <ZFusunmfAaQVmBE2@t14s.localdomain> <CAEivzxdfZaLD40cBKo7aqiwspwBeqeULR+RAv6jJ_wo-zV6UpQ@mail.gmail.com>
- <ZFu1qNUfV73dLUuo@t14s.localdomain>
-In-Reply-To: <ZFu1qNUfV73dLUuo@t14s.localdomain>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Wed, 10 May 2023 14:22:32 -0700
-Message-ID: <CAKH8qBttFS0-82tNFxnVaJfA489WoA=THuc7YzWtYNfatzaaZg@mail.gmail.com>
-Subject: Re: [PATCH net-next] sctp: add bpf_bypass_getsockopt proto callback
-To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        nhorman@tuxdriver.com, davem@davemloft.net,
+        d=1e100.net; s=20221208; t=1683808355; x=1686400355;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9aj9w2ur8U+Nd5DK5XALx0/M31BkBPR/KrjmUiEylFY=;
+        b=lMCJmxI620avpbRkldAq6wRPEoJnykAZsy+B5MPqEDZwYZkJvl/Hb73iVJyys1fpcr
+         4U3YXO/n6LJo59t/IaDg4HsC4iI7FmexojlDQdJwPLfmEcyQXSJAvBwp4Pvee3QbICxK
+         b92xF4BrVJVYB3taEtMahWMHEw3/fkmnsz6Q+W0HOvdA31e24/U70Rh/qAT9BSXPzb9I
+         HpbbQzfJ92bbfqLv9pGsQPSQluh8RxmTycuF5Tjx3wevE2Sq92RuZD+4Hg9mVjIbu1CW
+         IeJHCAjBqsyfaM6z+PumynpI+P2UUK2lyWlkWOV3pCQVKDGL6yTBPR9JEFe7aLBDXLt7
+         NxMg==
+X-Gm-Message-State: AC+VfDwIFhCKstnrkGcFDb/Qk3/DobWTvHBy9XKjsr8Dxh1sM8DlSTmb
+        GQsAYy1M2R0dkQxXIQ+R0TuOyn+ZOoMcbMsup4OwAfyD7r0mR7pR1LCAie4xJDBFEhbG8kw1EZS
+        weuDCYr+1FgZk1dvHBYp+VrTMnAh6V2KV+7WhpCw=
+X-Received: by 2002:a17:906:9b8b:b0:96a:7de4:dd24 with SMTP id dd11-20020a1709069b8b00b0096a7de4dd24mr587375ejc.66.1683808355013;
+        Thu, 11 May 2023 05:32:35 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7sXboCrcgZqmPwaiL+LsLQ9aAYIhDtjlw+ataSN9pCjs1hBQsMsovl64QzHlnIObw8hQfvqg==
+X-Received: by 2002:a17:906:9b8b:b0:96a:7de4:dd24 with SMTP id dd11-20020a1709069b8b00b0096a7de4dd24mr587346ejc.66.1683808354610;
+        Thu, 11 May 2023 05:32:34 -0700 (PDT)
+Received: from amikhalitsyn.. (ip5f5bf3d5.dynamic.kabel-deutschland.de. [95.91.243.213])
+        by smtp.gmail.com with ESMTPSA id ia2-20020a170907a06200b00959c07bdbc8sm3968534ejc.100.2023.05.11.05.32.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 05:32:34 -0700 (PDT)
+From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+To:     nhorman@tuxdriver.com
+Cc:     davem@davemloft.net,
+        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Christian Brauner <brauner@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         Xin Long <lucien.xin@gmail.com>, linux-sctp@vger.kernel.org,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH net-next v2] sctp: add bpf_bypass_getsockopt proto callback
+Date:   Thu, 11 May 2023 14:31:48 +0200
+Message-Id: <20230511123148.332043-1-aleksandr.mikhalitsyn@canonical.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Wed, May 10, 2023 at 8:18=E2=80=AFAM Marcelo Ricardo Leitner
-<marcelo.leitner@gmail.com> wrote:
->
-> On Wed, May 10, 2023 at 04:55:37PM +0200, Aleksandr Mikhalitsyn wrote:
-> > On Wed, May 10, 2023 at 4:39=E2=80=AFPM Marcelo Ricardo Leitner
-> > <marcelo.leitner@gmail.com> wrote:
-> > >
-> > > On Wed, May 10, 2023 at 03:15:27PM +0200, Alexander Mikhalitsyn wrote=
-:
-> > > > Add bpf_bypass_getsockopt proto callback and filter out
-> > > > SCTP_SOCKOPT_PEELOFF and SCTP_SOCKOPT_PEELOFF_FLAGS socket options
-> > > > from running eBPF hook on them.
-> > > >
-> > > > These options do fd_install(), and if BPF_CGROUP_RUN_PROG_GETSOCKOP=
-T
-> > > > hook returns an error after success of the original handler
-> > > > sctp_getsockopt(...), userspace will receive an error from getsocko=
-pt
-> > > > syscall and will be not aware that fd was successfully installed in=
-to fdtable.
-> > > >
-> > > > This patch was born as a result of discussion around a new SCM_PIDF=
-D interface:
-> > > > https://lore.kernel.org/all/20230413133355.350571-3-aleksandr.mikha=
-litsyn@canonical.com/
-> > >
-> > > I read some of the emails in there but I don't get why the fd leak is
-> > > special here. I mean, I get that it leaks, but masking the error
-> > > return like this can lead to several other problems in the applicatio=
-n
-> > > as well.
-> > >
-> > > For example, SCTP_SOCKOPT_CONNECTX3 will trigger a connect(). If it
-> > > failed, and the hook returns success, the user app will at least log =
-a
-> > > wrong "connection successful".
-> > >
-> > > If the hook can't be responsible for cleaning up before returning a
-> > > different value, then maybe we want to extend the list of sockopts in
-> > > here. AFAICT these would be the 3 most critical sockopts.
-> > >
-> >
-> > Dear Marcelo,
->
-> Hello!
->
-> >
-> > Thanks for pointing this out. Initially this problem was discovered by
-> > Christian Brauner and for SO_PEERPIDFD (a new SOL_SOCKET option that
-> > we want to add),
-> > after this I decided to check if we do fd_install in any other socket
-> > options in the kernel and found that we have 2 cases in SCTP. It was
-> > an accidental finding. :)
-> >
-> > So, this patch isn't specific to fd_install things and probably we
-> > should filter out bpf hook from being called for other socket options
-> > as well.
->
-> Understood.
->
-> >
-> > So, I need to filter out SCTP_SOCKOPT_CONNECTX3 and
-> > SCTP_SOCKOPT_PEELOFF* for SCTP, right?
->
-> Gotta say, it seems weird that it will filter out some of the most
-> important sockopts. But I'm not acquainted to bpf hooks so I won't
-> question (much? :) ) that.
+Add bpf_bypass_getsockopt proto callback and filter out
+SCTP_SOCKOPT_PEELOFF and SCTP_SOCKOPT_PEELOFF_FLAGS socket options
+from running eBPF hook on them.
 
-Thanks for raising this. Alexander, maybe you can respin your v2 to
-include these as well?
+These options do fd_install(), and if BPF_CGROUP_RUN_PROG_GETSOCKOPT
+hook returns an error after success of the original handler
+sctp_getsockopt(...), userspace will receive an error from getsockopt
+syscall and will be not aware that fd was successfully installed into fdtable.
 
-> Considering that filtering is needed, then yes, on getsock those are
-> ones I'm seeing that needs filtering. Otherwise they will either
-> trigger leakage or will confuse the application.
+This patch was born as a result of discussion around a new SCM_PIDFD interface:
+https://lore.kernel.org/all/20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com/
 
-[..]
+Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hooks")
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Stanislav Fomichev <sdf@google.com>
+Cc: Neil Horman <nhorman@tuxdriver.com>
+Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc: Xin Long <lucien.xin@gmail.com>
+Cc: linux-sctp@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Suggested-by: Stanislav Fomichev <sdf@google.com>
+Acked-by: Stanislav Fomichev <sdf@google.com>
+Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+---
+ net/sctp/socket.c | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-> Should we care about setsock as well? We have SCTP_SOCKOPT_CONNECTX
-> and SCTP_SOCKOPT_CONNECTX_OLD in there, and well, I guess any of those
-> would misbehave if they failed and yet the hook returns success.
+diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+index cda8c2874691..a211a203003c 100644
+--- a/net/sctp/socket.c
++++ b/net/sctp/socket.c
+@@ -8281,6 +8281,35 @@ static int sctp_getsockopt(struct sock *sk, int level, int optname,
+ 	return retval;
+ }
+ 
++static bool sctp_bpf_bypass_getsockopt(int level, int optname)
++{
++	if (level == SOL_SCTP) {
++		switch (optname) {
++		/*
++		 * These options do fd_install(), and if BPF_CGROUP_RUN_PROG_GETSOCKOPT
++		 * hook returns an error after success of the original handler
++		 * sctp_getsockopt(...), userspace will receive an error from getsockopt
++		 * syscall and will be not aware that fd was successfully installed into fdtable.
++		 *
++		 * Let's prevent bpf cgroup hook from running on them.
++		 */
++		case SCTP_SOCKOPT_PEELOFF:
++		case SCTP_SOCKOPT_PEELOFF_FLAGS:
++		/*
++		 * As pointed by Marcelo Ricardo Leitner it seems reasonable to skip
++		 * bpf getsockopt hook for this sockopt too. Because internaly, it
++		 * triggers connect() and if error will be masked userspace can be confused.
++		 */
++		case SCTP_SOCKOPT_CONNECTX3:
++			return true;
++		default:
++			return false;
++		}
++	}
++
++	return false;
++}
++
+ static int sctp_hash(struct sock *sk)
+ {
+ 	/* STUB */
+@@ -9650,6 +9679,7 @@ struct proto sctp_prot = {
+ 	.shutdown    =	sctp_shutdown,
+ 	.setsockopt  =	sctp_setsockopt,
+ 	.getsockopt  =	sctp_getsockopt,
++	.bpf_bypass_getsockopt	= sctp_bpf_bypass_getsockopt,
+ 	.sendmsg     =	sctp_sendmsg,
+ 	.recvmsg     =	sctp_recvmsg,
+ 	.bind        =	sctp_bind,
+@@ -9705,6 +9735,7 @@ struct proto sctpv6_prot = {
+ 	.shutdown	= sctp_shutdown,
+ 	.setsockopt	= sctp_setsockopt,
+ 	.getsockopt	= sctp_getsockopt,
++	.bpf_bypass_getsockopt	= sctp_bpf_bypass_getsockopt,
+ 	.sendmsg	= sctp_sendmsg,
+ 	.recvmsg	= sctp_recvmsg,
+ 	.bind		= sctp_bind,
+-- 
+2.34.1
 
-For setsockopt, the bpf program runs before the kernel, so setsockopt
-shouldn't have those issues we're observing with getsockopt (which
-runs after the kernel and has an option to ignore kernel value).
-
-> Thanks,
-> Marcelo
