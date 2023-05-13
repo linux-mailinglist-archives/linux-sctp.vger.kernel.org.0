@@ -2,87 +2,77 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB378700367
-	for <lists+linux-sctp@lfdr.de>; Fri, 12 May 2023 11:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6187F7015BE
+	for <lists+linux-sctp@lfdr.de>; Sat, 13 May 2023 11:31:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240407AbjELJKY (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 12 May 2023 05:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45732 "EHLO
+        id S238121AbjEMJbu (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sat, 13 May 2023 05:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240307AbjELJKX (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 12 May 2023 05:10:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F38D04D;
-        Fri, 12 May 2023 02:10:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DFE56541A;
-        Fri, 12 May 2023 09:10:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DEF56C433AC;
-        Fri, 12 May 2023 09:10:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683882621;
-        bh=XHnFAQ7ze9vEUkTeEUYx83aW+SNA9fUq3BXEuhSG/Ww=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=O7TRXXvl2KZxMoMZvkG/xx+RQYolf1u3/uP5wLVF8thJpu6H+isMNkhcZoXl3/3RB
-         bonmyJSB8SxIxT2pnBTMQrtmo1/4YDNcnJ1OisZiv8uNEO+F2wO5kXinQEoAFwcG2F
-         zBW70+9LzViWrahjGtBFGAjVFxACRp1HIgiRRdsCd2ZjCUYIeWWHdinOK+b0V5W01L
-         fbusXOb8PQFxxymNW9b+zWa+MDNEz89ELIlAr35xeSM8ZzTx9I4Q3RGwDHibks1t2R
-         gmbZmXCX1YfMbNqjjrh98sib8pAp/fcnIn21Hty8UrY1IZrH5llaNLqywX8wcw2nzm
-         tRkJqofI0G1Ow==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CBF1BE26D20;
-        Fri, 12 May 2023 09:10:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S238142AbjEMJbo (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sat, 13 May 2023 05:31:44 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D957583FA
+        for <linux-sctp@vger.kernel.org>; Sat, 13 May 2023 02:31:38 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2ad9f2926adso64687701fa.1
+        for <linux-sctp@vger.kernel.org>; Sat, 13 May 2023 02:31:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683970296; x=1686562296;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oDVdWICwavrWQ8UAVYhe8ynFXsBBW1vVQ7W08zgiq24=;
+        b=SLLhHtlhLsOwzgCf+9ODvlw4dTLaH3cZrdu7lC+dHdIV66WRVMOK4eYsd4b4Gvvs9x
+         o97LCm9QF+eqaS+XN6fwaz8zRAAde8OvfdND8NnDs9P4qgm7mZABgLqFkj2GDHkB5wfK
+         PMUswbxDcX+ob6U51fHySFGdUpw8J4twVi2i8Ix4WgPf4x9JIzAslaiXECgE9tC7AErD
+         xbFM9S0/xyRGsvVlE4F1Mg8tQY9imoiBCZ7DFdD2ddP0JXqdk6iZ8yzVl+WiZUBFWXoC
+         pk0QTRyjyuhk/EnbLUpIVb+0H/viRhRw7nnIUaffllglnPMVK7QqsQ3j9vq3fKaYrETj
+         89fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683970296; x=1686562296;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oDVdWICwavrWQ8UAVYhe8ynFXsBBW1vVQ7W08zgiq24=;
+        b=IvkoTMl6vgmgZSZ9al2mtCTmh99MmBuVNjhhlk4i95aB2NNUPnIz0utZdTetU2ik+b
+         rRwOGYN6bPevKrE5D5xFqAXWCr8PNndeORcj64t4v+cNgnzWZvLIekW7I0u7xv5ECM3g
+         0tVe3TaPYpQImh9+00KVXZtB0tCu+6SI7xpkhJZP9ftAXAN+pEBjiVGv0gjjTfDTcXj6
+         dQhc9SesFL0oP5awyzGzff/k/HypJ1llf6F7QyPHocyy+hyEF1o8CcO9zPRQZktzs1qn
+         9aw2/06KC3rQoOflzt8CX2HAElp8AsUT/vMPrEpmI9FDi1u1vFneISygaSOLAq753DNO
+         1fLA==
+X-Gm-Message-State: AC+VfDyyvSkQQbtCzQz/v/1G50bH8ttkYMd+zaX7KzNWyx14lCP2epm3
+        gFswBzQJpOThcQH9lZOZBFFLyNbFM+52aEuZC2A=
+X-Google-Smtp-Source: ACHHUZ69yZnOfKT7w5SfUoQY/Cu6wzxYh4muPSQB6E+OFUFLbN2XZi1yBozAa0YVISxiMDtckCQ4QvDJ0SHLEBfq0P0=
+X-Received: by 2002:a2e:350d:0:b0:2a8:c858:fb9 with SMTP id
+ z13-20020a2e350d000000b002a8c8580fb9mr5241206ljz.29.1683970296351; Sat, 13
+ May 2023 02:31:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3] sctp: add bpf_bypass_getsockopt proto callback
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168388262182.3920.17093137867529020681.git-patchwork-notify@kernel.org>
-Date:   Fri, 12 May 2023 09:10:21 +0000
-References: <20230511132506.379102-1-aleksandr.mikhalitsyn@canonical.com>
-In-Reply-To: <20230511132506.379102-1-aleksandr.mikhalitsyn@canonical.com>
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     nhorman@tuxdriver.com, davem@davemloft.net, daniel@iogearbox.net,
-        brauner@kernel.org, sdf@google.com, marcelo.leitner@gmail.com,
-        lucien.xin@gmail.com, linux-sctp@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a2e:98cf:0:b0:2ac:a011:b92d with HTTP; Sat, 13 May 2023
+ 02:31:35 -0700 (PDT)
+Reply-To: ninacoulibaly03@hotmail.com
+From:   nina coulibaly <info.ninacoulibaly11@gmail.com>
+Date:   Sat, 13 May 2023 02:31:35 -0700
+Message-ID: <CAKjR=URVXeQOJMp8Rh+g1gg9HYS5Usrx0OJzpyoQzruWKyn90w@mail.gmail.com>
+Subject: from nina coulibaly
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello:
+Dear,
 
-This patch was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
+I am interested to invest with you in your country with total trust
+and i hope you will give me total support, sincerity and commitment.
+Please get back to me as soon as possible so that i can give you my
+proposed details of funding and others.
 
-On Thu, 11 May 2023 15:25:06 +0200 you wrote:
-> Implement ->bpf_bypass_getsockopt proto callback and filter out
-> SCTP_SOCKOPT_PEELOFF, SCTP_SOCKOPT_PEELOFF_FLAGS and SCTP_SOCKOPT_CONNECTX3
-> socket options from running eBPF hook on them.
-> 
-> SCTP_SOCKOPT_PEELOFF and SCTP_SOCKOPT_PEELOFF_FLAGS options do fd_install(),
-> and if BPF_CGROUP_RUN_PROG_GETSOCKOPT hook returns an error after success of
-> the original handler sctp_getsockopt(...), userspace will receive an error
-> from getsockopt syscall and will be not aware that fd was successfully
-> installed into a fdtable.
-> 
-> [...]
+Best Regards.
 
-Here is the summary with links:
-  - [net-next,v3] sctp: add bpf_bypass_getsockopt proto callback
-    https://git.kernel.org/netdev/net-next/c/2598619e012c
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Mrs Nina Coulibaly
