@@ -2,54 +2,57 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D386A7026F4
-	for <lists+linux-sctp@lfdr.de>; Mon, 15 May 2023 10:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C76ED703D22
+	for <lists+linux-sctp@lfdr.de>; Mon, 15 May 2023 21:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjEOIQM (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 15 May 2023 04:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
+        id S243499AbjEOTAQ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 15 May 2023 15:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbjEOIQL (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 15 May 2023 04:16:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF59593;
-        Mon, 15 May 2023 01:16:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53ADF611BB;
-        Mon, 15 May 2023 08:16:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41258C433EF;
-        Mon, 15 May 2023 08:16:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684138569;
-        bh=gSL2tuOqWpZ0taEm46ptIuXp6+GiMkpZNYVxUrwODIU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GiDz6NH8jUbxkuD9+PfRQ/QYzm6NUnKBzmSBCiQGutfXjoCLsAG7OkKDiQHvfmT/S
-         97LZugsZmrFK2YEik54Iofh0vht55UfSWrIlmZjMjugdmgTYGqddgC9L5yis5/sLdm
-         XOJCiqQNLX3zT7pfJ5Gk81KPQ+KM+IQRTRAoe7I+v/qH6LXHjAkNkYHcRjuFJHMS1i
-         7SukXF1g6oX9uat9R50IKJFCaJDtZ6SsRjdpwiYqNvLvyYijoo7iK0d4FaO6XG2dGM
-         IJE1AfAYj0IGC5qvem7XPycnodYyhz3SHWZgO95GLFFW1s4JR06U7tEUJewbFSDI96
-         7yCBRU7dwQlDA==
-Date:   Mon, 15 May 2023 10:16:03 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     nhorman@tuxdriver.com, davem@davemloft.net,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Stanislav Fomichev <sdf@google.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>, linux-sctp@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v3] sctp: add bpf_bypass_getsockopt proto
- callback
-Message-ID: <20230515-unberechenbar-ergoss-4a2fc34870a0@brauner>
-References: <20230511132506.379102-1-aleksandr.mikhalitsyn@canonical.com>
+        with ESMTP id S242979AbjEOTAP (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 15 May 2023 15:00:15 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7151794B
+        for <linux-sctp@vger.kernel.org>; Mon, 15 May 2023 12:00:14 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f509ec3196so42018685e9.1
+        for <linux-sctp@vger.kernel.org>; Mon, 15 May 2023 12:00:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bluerivertech.com; s=google; t=1684177212; x=1686769212;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=4SdAWuFDBIP8isKGbBcjo1DKYyJN8ZY0LXZBRZMRQJ4=;
+        b=dMo4dul2EfVDaQ+B4rHCHkGPo1S/mbz3Otf2jMKPd5nGaTu3bp3rwG03pebLjJ4Rna
+         Omut6mVmjVEUM8b9d3+ifa6kMSTx5HJdJ3MSmtWlvbk5hjN6DlER7AsZBpVhEmskxPTa
+         kPcMhmogUH/rA5+ous2Mflt5HcDfXh5B2VN3mB5HIfZN2az1HJlJuulqXmt84+q2yNQc
+         neLnMRkw38IS4GMrZhYZ/IPZ+2sdj2ItMNbPTzPx3dOWwLC5eMh0N4iy7gjgWrIGuyDL
+         lc+O1XSVxYvkdRj30fuAEjU76uhoyS3sM2CrgtyWbKPxL6FlFXwGVxgQb9ZNXCleHwm+
+         cQHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684177212; x=1686769212;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4SdAWuFDBIP8isKGbBcjo1DKYyJN8ZY0LXZBRZMRQJ4=;
+        b=TmejEV2jsCeDvWkAE1tAORHG1xMcuexot6sbQk9nBIDkOH02cdhHlpqXsBkz+Zu3Dh
+         tDtRuuPGpZI4PiuhR2vdekH4HuU1jKO3koif33i7G67vxREPs0DtbHwz7UCq7boJJySr
+         +kgyKQxDuEQumvYl3CkdIETQJiTm0sa6Crwp7YHcFXZ8UMEGh9HYBJTNV+8tK6YU9sc7
+         yIEcfjYM5G7gLJmAX5TWnBEQFwX5uFguc4l4ChCcfGDYS+unK2ywZ9Zv5SlYf50Th8UZ
+         HwNtkr07G9eaiHKtKPcNZx9580ZFUZulKU4LU3U8BxJyJOEeEu5C20vY2YplXVVVTRrA
+         AQNw==
+X-Gm-Message-State: AC+VfDx1zSfgxunquS5oxdMy0aJvJfzNhLWcE3oYOig6+AVGTKIFAc5/
+        qkqUINsUJAnhDFpiOPUljS4hygyMB38bN9GIopwyryh/WadR0PNHJJQ=
+X-Google-Smtp-Source: ACHHUZ6wjLG8LPYLArDZwDyo+zf5ehz3/rgtIg2CWZrpXoNL2KXCtJ5UQ8/HefDxAiIGo/BGtushM97IhyUx8ot/Pgk=
+X-Received: by 2002:a05:600c:8507:b0:3f4:e432:7589 with SMTP id
+ gw7-20020a05600c850700b003f4e4327589mr13838609wmb.10.1684177212271; Mon, 15
+ May 2023 12:00:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230511132506.379102-1-aleksandr.mikhalitsyn@canonical.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+From:   Adam Snaider <adam.snaider@bluerivertech.com>
+Date:   Mon, 15 May 2023 12:00:00 -0700
+Message-ID: <CALP-OgmKKFb4gMH0L6WYsxonBLDHbFHgpbc1=QY1N9HnFctWxQ@mail.gmail.com>
+Subject: SCTP Authentication Current State and Examples
+To:     linux-sctp@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,38 +61,15 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, May 11, 2023 at 03:25:06PM +0200, Alexander Mikhalitsyn wrote:
-> Implement ->bpf_bypass_getsockopt proto callback and filter out
-> SCTP_SOCKOPT_PEELOFF, SCTP_SOCKOPT_PEELOFF_FLAGS and SCTP_SOCKOPT_CONNECTX3
-> socket options from running eBPF hook on them.
-> 
-> SCTP_SOCKOPT_PEELOFF and SCTP_SOCKOPT_PEELOFF_FLAGS options do fd_install(),
-> and if BPF_CGROUP_RUN_PROG_GETSOCKOPT hook returns an error after success of
-> the original handler sctp_getsockopt(...), userspace will receive an error
-> from getsockopt syscall and will be not aware that fd was successfully
-> installed into a fdtable.
-> 
-> As pointed by Marcelo Ricardo Leitner it seems reasonable to skip
-> bpf getsockopt hook for SCTP_SOCKOPT_CONNECTX3 sockopt too.
-> Because internaly, it triggers connect() and if error is masked
-> then userspace will be confused.
-> 
-> This patch was born as a result of discussion around a new SCM_PIDFD interface:
-> https://lore.kernel.org/all/20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com/
-> 
-> Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hooks")
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Stanislav Fomichev <sdf@google.com>
-> Cc: Neil Horman <nhorman@tuxdriver.com>
-> Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-> Cc: Xin Long <lucien.xin@gmail.com>
-> Cc: linux-sctp@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Suggested-by: Stanislav Fomichev <sdf@google.com>
-> Acked-by: Stanislav Fomichev <sdf@google.com>
-> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-> ---
+Hi folks,
 
-Reviewed-by: Christian Brauner <brauner@kernel.org>
+I would like to ask what the current state is for SCTP Authentication
+in the Linux kernel (as described by rfc4895). I've been attempting to
+use an SCTP authenticated socket in the 5.10 kernel but all my efforts
+are fruitless so far. Given the lack of examples around, I'm not sure
+if my setup is incorrect or if the linux implementation is incomplete.
+If there are any references or examples I can look at I would really
+appreciate it.
+
+Thank you,
+Adam
