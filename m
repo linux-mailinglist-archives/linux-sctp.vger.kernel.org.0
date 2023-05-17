@@ -2,74 +2,123 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C76ED703D22
-	for <lists+linux-sctp@lfdr.de>; Mon, 15 May 2023 21:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5F1705C4F
+	for <lists+linux-sctp@lfdr.de>; Wed, 17 May 2023 03:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243499AbjEOTAQ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 15 May 2023 15:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
+        id S231177AbjEQBWL (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 16 May 2023 21:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242979AbjEOTAP (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 15 May 2023 15:00:15 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7151794B
-        for <linux-sctp@vger.kernel.org>; Mon, 15 May 2023 12:00:14 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f509ec3196so42018685e9.1
-        for <linux-sctp@vger.kernel.org>; Mon, 15 May 2023 12:00:14 -0700 (PDT)
+        with ESMTP id S231264AbjEQBWK (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 16 May 2023 21:22:10 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61FF9E43;
+        Tue, 16 May 2023 18:22:06 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id af79cd13be357-7577ef2fa31so530558985a.0;
+        Tue, 16 May 2023 18:22:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bluerivertech.com; s=google; t=1684177212; x=1686769212;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=4SdAWuFDBIP8isKGbBcjo1DKYyJN8ZY0LXZBRZMRQJ4=;
-        b=dMo4dul2EfVDaQ+B4rHCHkGPo1S/mbz3Otf2jMKPd5nGaTu3bp3rwG03pebLjJ4Rna
-         Omut6mVmjVEUM8b9d3+ifa6kMSTx5HJdJ3MSmtWlvbk5hjN6DlER7AsZBpVhEmskxPTa
-         kPcMhmogUH/rA5+ous2Mflt5HcDfXh5B2VN3mB5HIfZN2az1HJlJuulqXmt84+q2yNQc
-         neLnMRkw38IS4GMrZhYZ/IPZ+2sdj2ItMNbPTzPx3dOWwLC5eMh0N4iy7gjgWrIGuyDL
-         lc+O1XSVxYvkdRj30fuAEjU76uhoyS3sM2CrgtyWbKPxL6FlFXwGVxgQb9ZNXCleHwm+
-         cQHw==
+        d=gmail.com; s=20221208; t=1684286525; x=1686878525;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nWDOYoEOENaCuKkbv0XCsl1s2LHOOoRO/TQzW6p4pII=;
+        b=bKiLXjn9Gryij1sauP+d3e7M5sMQDT8qWNR3ZX2KFN5Es3D4gy3FddvNeQqTrnBqe6
+         KUUEci+Cj9Z/XSvcIkCF0J6dimA3ASTw2SXLZU5wO1tNoT1cFRuTcMTjYGJLVNVyCPt1
+         T2OhHepL3lf93Uvs9KXKIkRq/6hiuDYIjeCkEINU1+dgSCQrpBsbEA1FWxNehYiTvqx1
+         iYBdJFSDLQ4ur9VoYSSDcKiEOBRi4zKiUXaauvpMa8sUbahA5PDQEuV4ce4xOCXCjWvb
+         YYCVqyRY0kJiWVSoBZAzjNvpCEIONIa5Rn15UAwAzr1lFw7Q2RnRlPgV/zJzSEpvkJmz
+         7CIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684177212; x=1686769212;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4SdAWuFDBIP8isKGbBcjo1DKYyJN8ZY0LXZBRZMRQJ4=;
-        b=TmejEV2jsCeDvWkAE1tAORHG1xMcuexot6sbQk9nBIDkOH02cdhHlpqXsBkz+Zu3Dh
-         tDtRuuPGpZI4PiuhR2vdekH4HuU1jKO3koif33i7G67vxREPs0DtbHwz7UCq7boJJySr
-         +kgyKQxDuEQumvYl3CkdIETQJiTm0sa6Crwp7YHcFXZ8UMEGh9HYBJTNV+8tK6YU9sc7
-         yIEcfjYM5G7gLJmAX5TWnBEQFwX5uFguc4l4ChCcfGDYS+unK2ywZ9Zv5SlYf50Th8UZ
-         HwNtkr07G9eaiHKtKPcNZx9580ZFUZulKU4LU3U8BxJyJOEeEu5C20vY2YplXVVVTRrA
-         AQNw==
-X-Gm-Message-State: AC+VfDx1zSfgxunquS5oxdMy0aJvJfzNhLWcE3oYOig6+AVGTKIFAc5/
-        qkqUINsUJAnhDFpiOPUljS4hygyMB38bN9GIopwyryh/WadR0PNHJJQ=
-X-Google-Smtp-Source: ACHHUZ6wjLG8LPYLArDZwDyo+zf5ehz3/rgtIg2CWZrpXoNL2KXCtJ5UQ8/HefDxAiIGo/BGtushM97IhyUx8ot/Pgk=
-X-Received: by 2002:a05:600c:8507:b0:3f4:e432:7589 with SMTP id
- gw7-20020a05600c850700b003f4e4327589mr13838609wmb.10.1684177212271; Mon, 15
- May 2023 12:00:12 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684286525; x=1686878525;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nWDOYoEOENaCuKkbv0XCsl1s2LHOOoRO/TQzW6p4pII=;
+        b=T/5MdiurpuCS/rc8mAmpJTG328QSUuKKU2tg/JJKeK1pcxTymxNk5S81D5jVv5ca6C
+         DDehaoGjJsRRyWOd6Ikgz8iU9BRGfgEG5CuPxwlyCzocEySF5j6pKA/c82fl8aNYYm1e
+         eIHYlixPYfklab2KbPcAANZHA9qoEcTB6h1uLl7683cIlqkPfouJqkaiUV95RxBvYkLX
+         mEsC3Om9b2Ql2h5ZqBHubcQQUaz8d0mjUaiYgMEDNq3OD3TGrsluvmFgup6UD/F4kS5V
+         BIfIIDLSCfXUEIrRP1xAy6hKfEku/p2jSRqtnzuJTWAFwSjcYTVBHF+24PZM+Unj1G7B
+         v6qA==
+X-Gm-Message-State: AC+VfDzNTvDPYYgRzBQS2yoFZsgWeB9pa3UUPRZmn/nYLKyK8q6PYeKI
+        VQ6MO+QcieFyECHcX/fBFuukSXtUMV0=
+X-Google-Smtp-Source: ACHHUZ5ZGERzwbymNH/F44jE4fHA9/ocojZX7IaTBN11IV+GgicN+7xNCY1iNwScbut+igrEgGQrlQ==
+X-Received: by 2002:a05:622a:a:b0:3f3:90a8:6902 with SMTP id x10-20020a05622a000a00b003f390a86902mr1322919qtw.14.1684286524702;
+        Tue, 16 May 2023 18:22:04 -0700 (PDT)
+Received: from wsfd-netdev15.ntdv.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id e16-20020a05620a12d000b0074fafbea974sm277287qkl.2.2023.05.16.18.22.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 18:22:04 -0700 (PDT)
+From:   Xin Long <lucien.xin@gmail.com>
+To:     network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Subject: [PATCH net] sctp: fix an issue that plpmtu can never go to complete state
+Date:   Tue, 16 May 2023 21:22:02 -0400
+Message-Id: <e72cc6c6ac5699659bb550fe04ec215ba393dd48.1684286522.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-From:   Adam Snaider <adam.snaider@bluerivertech.com>
-Date:   Mon, 15 May 2023 12:00:00 -0700
-Message-ID: <CALP-OgmKKFb4gMH0L6WYsxonBLDHbFHgpbc1=QY1N9HnFctWxQ@mail.gmail.com>
-Subject: SCTP Authentication Current State and Examples
-To:     linux-sctp@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hi folks,
+When doing plpmtu probe, the probe size is growing every time when it
+receives the ACK during the Search state until the probe fails. When
+the failure occurs, pl.probe_high is set and it goes to the Complete
+state.
 
-I would like to ask what the current state is for SCTP Authentication
-in the Linux kernel (as described by rfc4895). I've been attempting to
-use an SCTP authenticated socket in the 5.10 kernel but all my efforts
-are fruitless so far. Given the lack of examples around, I'm not sure
-if my setup is incorrect or if the linux implementation is incomplete.
-If there are any references or examples I can look at I would really
-appreciate it.
+However, if the link pmtu is huge, like 65535 in loopback_dev, the probe
+eventually keeps using SCTP_MAX_PLPMTU as the probe size and never fails.
+Because of that, pl.probe_high can not be set, and the plpmtu probe can
+never go to the Complete state.
 
-Thank you,
-Adam
+Fix it by setting pl.probe_high to SCTP_MAX_PLPMTU when the probe size
+grows to SCTP_MAX_PLPMTU in sctp_transport_pl_recv(). Also, increase
+the probe size only when the next is less than SCTP_MAX_PLPMTU.
+
+Fixes: b87641aff9e7 ("sctp: do state transition when a probe succeeds on HB ACK recv path")
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+---
+ net/sctp/transport.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/net/sctp/transport.c b/net/sctp/transport.c
+index 2f66a2006517..b0ccfaa4c1d1 100644
+--- a/net/sctp/transport.c
++++ b/net/sctp/transport.c
+@@ -324,9 +324,11 @@ bool sctp_transport_pl_recv(struct sctp_transport *t)
+ 		t->pl.probe_size += SCTP_PL_BIG_STEP;
+ 	} else if (t->pl.state == SCTP_PL_SEARCH) {
+ 		if (!t->pl.probe_high) {
+-			t->pl.probe_size = min(t->pl.probe_size + SCTP_PL_BIG_STEP,
+-					       SCTP_MAX_PLPMTU);
+-			return false;
++			if (t->pl.probe_size + SCTP_PL_BIG_STEP < SCTP_MAX_PLPMTU) {
++				t->pl.probe_size += SCTP_PL_BIG_STEP;
++				return false;
++			}
++			t->pl.probe_high = SCTP_MAX_PLPMTU;
+ 		}
+ 		t->pl.probe_size += SCTP_PL_MIN_STEP;
+ 		if (t->pl.probe_size >= t->pl.probe_high) {
+@@ -341,7 +343,8 @@ bool sctp_transport_pl_recv(struct sctp_transport *t)
+ 	} else if (t->pl.state == SCTP_PL_COMPLETE) {
+ 		/* Raise probe_size again after 30 * interval in Search Complete */
+ 		t->pl.state = SCTP_PL_SEARCH; /* Search Complete -> Search */
+-		t->pl.probe_size += SCTP_PL_MIN_STEP;
++		if (t->pl.probe_size + SCTP_PL_MIN_STEP < SCTP_MAX_PLPMTU)
++			t->pl.probe_size += SCTP_PL_MIN_STEP;
+ 	}
+ 
+ 	return t->pl.state == SCTP_PL_COMPLETE;
+-- 
+2.39.1
+
