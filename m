@@ -2,159 +2,222 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F1570CF96
-	for <lists+linux-sctp@lfdr.de>; Tue, 23 May 2023 02:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 193F070DE2A
+	for <lists+linux-sctp@lfdr.de>; Tue, 23 May 2023 15:55:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232331AbjEVXeS (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 22 May 2023 19:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33882 "EHLO
+        id S237060AbjEWNy5 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 23 May 2023 09:54:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235125AbjEVX2A (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 22 May 2023 19:28:00 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E471E9
-        for <linux-sctp@vger.kernel.org>; Mon, 22 May 2023 16:22:03 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f42d937d2eso42013705e9.2
-        for <linux-sctp@vger.kernel.org>; Mon, 22 May 2023 16:22:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bluerivertech.com; s=google; t=1684797721; x=1687389721;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j0ezRrv2kYErr3nNhvp9K6N5gLwGXfWht48m1xYMJH0=;
-        b=nFl5XPvGzCeDRQkSFEUfCrqWbPcS8PyK/VtGdgpW7UTv6GJfuGooJe40gAYU3Ps2wf
-         4Knfc3y3ZwnX4gt+sWWnkV2ZBzmz2EYz56KuRKdaZONaKTUq2BzBaGARAzvgd8842b6X
-         JFpryBkbL8KpsW3cmn1GW900c3P7gaAB0HeNp671sarmKIpE0rQ83oghlunvEJ1Qr0Fn
-         RrHHxpWJ5sf9VOJjBuWuYQzYDYTT13/5NTbNyZFBWsCWKyKLTGeJUTOVY39hjg4nBQNP
-         zyl9yuGi+BQYROLPaI3eqxz81mt2WagJarI69+qo29e2ZOnBuUF/tfnRNA2/jEgBpbEZ
-         M8yg==
+        with ESMTP id S237104AbjEWNys (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 23 May 2023 09:54:48 -0400
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B9DE56;
+        Tue, 23 May 2023 06:54:25 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-3f607dc98cdso14080365e9.1;
+        Tue, 23 May 2023 06:54:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684797721; x=1687389721;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j0ezRrv2kYErr3nNhvp9K6N5gLwGXfWht48m1xYMJH0=;
-        b=EVzM0nT/ZPT5aAiSS/4/smSY1bN8jVeB+fnvROwNH9vsjgc+2Y9IG7YJs6o3g5Y+oM
-         HRjSal2k0Rt4bMtwmu/wijl8aurAn5OvgOUth/bFa1u2EoIoi1wP42Axe+L0HfKapgNz
-         TMO2XyqFxOFbUz/jZ6o5HZWFxZ0ICZzdMHaCHZCRM8JyjtdTFm4goNSvhszHEqCqlBUg
-         /vJeaSgQR8Rl6KotZBolR4DocLOjByDxn/jTt/2mKJQF6Rx5nmMrp14WOWki5aIzNHe5
-         mnrT2PS8Yeh5FeyiTZCt5wUODlOludGeX1uN/yPO4g+iTZwnAM0uEgHl6cOmfKecVmay
-         duuA==
-X-Gm-Message-State: AC+VfDyFjnbd5S8a3L5D42KxavRwuckVhwpsPTJvpQE/BqSGNk6SFRtt
-        WEwcaBHfV1qm4Fm37aSoYeQaoUtIMG4xXxU/O11yhocn2U3Wcdzv
-X-Google-Smtp-Source: ACHHUZ4RX0/uyhzriEfU92HJFKAF+57ot++GUYnONGqyEPpvmy2nkSq9jEqvqCodZROoJUZm2/3up4Cr074wsBW0M6I=
-X-Received: by 2002:a7b:c7c3:0:b0:3f4:1cd8:3e86 with SMTP id
- z3-20020a7bc7c3000000b003f41cd83e86mr9629860wmk.25.1684797721438; Mon, 22 May
- 2023 16:22:01 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684850064; x=1687442064;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1mc3JRJZXPFyTZ68DrWTJks/5tRPJ+X1/0qnu16j9u0=;
+        b=ePpON6/4uFLrwOdodpNKjfCPYSYlAbys8ZZ9+B172iKliZwEGmw2wzozD5zmEnn+k2
+         FT2WpCQGqOj+ojUe240pOd425x3Ss49/GnhYgr3lwd9WJnTuzXDmOYUPvJozYSG/CyzY
+         rXmWWFJWQkqvTywTnCAVZ/0YMuwTU3DXQfH/CaBjctL1SOxLck06X0/888F/7of6KJRh
+         axYpozX+vN3h9gLIrBCz1Ck9oLQNbeVpUtX59EjYs+Fjyvkraokg789ApnK1g101JxdC
+         U0d4tOJfgDgLxqS6rQe0RDGC042Lrf0lSMF956X4zvV8Pq30BhBDzJUJ+X2gElsRHE/g
+         d88A==
+X-Gm-Message-State: AC+VfDw7LuSmJYwI++ZsCYXrwKT0SpypIeeDeADZ/BI2fqe+ypxsERYv
+        jtvbB4UtbDl4czT0Q5GRHag=
+X-Google-Smtp-Source: ACHHUZ5MUw5rOm0ITE9vg8BDUc0iTAtkxFjeM5WIw2g9raAjmkpaBHxiTeJ4Zr5YuxXaFBzLNFUnJw==
+X-Received: by 2002:a7b:cd8a:0:b0:3f6:a66:a372 with SMTP id y10-20020a7bcd8a000000b003f60a66a372mr1890685wmj.1.1684850063779;
+        Tue, 23 May 2023 06:54:23 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-012.fbsv.net. [2a03:2880:31ff:c::face:b00c])
+        by smtp.gmail.com with ESMTPSA id o5-20020a05600c378500b003f42314832fsm11741715wmr.18.2023.05.23.06.54.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 06:54:23 -0700 (PDT)
+Date:   Tue, 23 May 2023 06:54:21 -0700
+From:   Breno Leitao <leitao@debian.org>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <martineau@kernel.org>,
+        Remi Denis-Courmont <courmisch@gmail.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>, leit@fb.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        dccp@vger.kernel.org, linux-wpan@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-sctp@vger.kernel.org
+Subject: Re: [PATCH v2] net: ioctl: Use kernel memory on protocol ioctl
+ callbacks
+Message-ID: <ZGzFjQNKklyAmLaV@gmail.com>
+References: <20230522134735.2810070-1-leitao@debian.org>
+ <CAF=yD-+3SnE2gsE4S3=uxxEgW+2MCLdTLx24G72fkS=AkchCEA@mail.gmail.com>
 MIME-Version: 1.0
-References: <CALP-OgmKKFb4gMH0L6WYsxonBLDHbFHgpbc1=QY1N9HnFctWxQ@mail.gmail.com>
- <gthfvvjti4fz3z67373utythbfe5yxxhhayofbzusahy7ii4oq@drabuyrfycig>
- <CALP-OgntP2Tj3H_GK0ZODa95gJb5NnLt26O0YPkgx4VsMF-Yqg@mail.gmail.com> <CADvbK_f=TLj0M7zuF+3sE+91R2c+waDA2t30MvdH7KU619qQYw@mail.gmail.com>
-In-Reply-To: <CADvbK_f=TLj0M7zuF+3sE+91R2c+waDA2t30MvdH7KU619qQYw@mail.gmail.com>
-From:   Adam Snaider <adam.snaider@bluerivertech.com>
-Date:   Mon, 22 May 2023 16:21:50 -0700
-Message-ID: <CALP-OgmH8ZegbJDOj6QxXpNaLQT7cnRvBJzJ-67urfqMuWXe-w@mail.gmail.com>
-Subject: Re: SCTP Authentication Current State and Examples
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        linux-sctp@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAF=yD-+3SnE2gsE4S3=uxxEgW+2MCLdTLx24G72fkS=AkchCEA@mail.gmail.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Ah that makes sense! Thank you
+On Mon, May 22, 2023 at 03:26:55PM -0400, Willem de Bruijn wrote:
+> On Mon, May 22, 2023 at 9:51 AM Breno Leitao <leitao@debian.org> wrote:
+> >
+> > Most of the ioctls to net protocols  operates directly on userspace
+> > argument (arg). Usually doing get_user()/put_user() directly in the
+> > ioctl callback.  This is not flexible, because it is hard to reuse these
+> > functions without passing userspace buffers.
+> >
+> > Change the "struct proto" ioctls to avoid touching userspace memory and
+> > operate on kernel buffers, i.e., all protocol's ioctl callbacks is
+> > adapted to operate on a kernel memory other than on userspace (so, no
+> > more {put,get}_user() and friends being called in the ioctl callback).
+> >
+> > This changes the "struct proto" ioctl format in the following way:
+> >
+> >     int                     (*ioctl)(struct sock *sk, int cmd,
+> > -                                        unsigned long arg);
+> > +                                        int *karg);
+> >
+> > So, the "karg" argument, which is passed to the ioctl callback, is a
+> > pointer allocated to kernel space memory (inside a function wrapper -
+> > sk_ioctl()). This buffer (karg) may contain input argument
+> > (copied from userspace in a prep function) and it might return a
+> > value/buffer, which is copied back to userspace if necessary. There is
+> > not one-size-fits-all format (that is I am using 'may' above), but
+> > basically, there are three type of ioctls:
+> >
+> > 1) Do not read from userspace, returns a result to userspace
+> > 2) Read an input parameter from userspace, and does not return anything
+> >   to userspace
+> > 3) Read an input from userspace, and return a buffer to userspace.
+> >
+> > The default case (1) (where no input parameter is given, and an "int" is
+> > returned to userspace) encompasses more than 90% of the cases, but there
+> > are two other exceptions. Here is a list of exceptions:
+> >
+> > * Protocol RAW:
+> >    * cmd = SIOCGETVIFCNT:
+> >      * input and output = struct sioc_vif_req
+> >    * cmd = SIOCGETSGCNT
+> >      * input and output = struct sioc_sg_req
+> >    * Explanation: for the SIOCGETVIFCNT case, userspace passes the input
+> >      argument, which is struct sioc_vif_req. Then the callback populates
+> >      the struct, which is copied back to userspace.
+> >
+> > * Protocol RAW6:
+> >    * cmd = SIOCGETMIFCNT_IN6
+> >      * input and output = struct sioc_mif_req6
+> >    * cmd = SIOCGETSGCNT_IN6
+> >      * input and output = struct sioc_sg_req6
+> >
+> > * Protocol PHONET:
+> >   * cmd == SIOCPNADDRESOURCE | SIOCPNDELRESOURCE
+> >      * input int (4 bytes)
+> >   * Nothing is copied back to userspace.
+> >
+> > For the exception cases, functions sk_ioctl_in{out}() will
+> > copy the userspace input, and copy it back to kernel space.
+> >
+> > The wrapper that prepare the buffer and put the buffer back to user is
+> > sk_ioctl(), so, instead of calling sk->sk_prot->ioctl(), the
+> > callee now calls sk_ioctl(), which will handle all cases.
+> >
+> > Signed-off-by: Breno Leitao <leitao@debian.org>
+> 
+> Going forward, please mark patches for net-next with [PATCH net-next v2]
+> 
+> > --- a/include/net/udp.h
+> > +++ b/include/net/udp.h
+> > @@ -283,7 +283,7 @@ void udp_flush_pending_frames(struct sock *sk);
+> >  int udp_cmsg_send(struct sock *sk, struct msghdr *msg, u16 *gso_size);
+> >  void udp4_hwcsum(struct sk_buff *skb, __be32 src, __be32 dst);
+> >  int udp_rcv(struct sk_buff *skb);
+> > -int udp_ioctl(struct sock *sk, int cmd, unsigned long arg);
+> > +int udp_ioctl(struct sock *sk, int cmd, int *karg);
+> >  int udp_init_sock(struct sock *sk);
+> >  int udp_pre_connect(struct sock *sk, struct sockaddr *uaddr, int addr_len);
+> >  int __udp_disconnect(struct sock *sk, int flags);
+> > diff --git a/net/core/sock.c b/net/core/sock.c
+> > index 5440e67bcfe3..a2cea95aec99 100644
+> > --- a/net/core/sock.c
+> > +++ b/net/core/sock.c
+> > @@ -114,6 +114,8 @@
+> >  #include <linux/memcontrol.h>
+> >  #include <linux/prefetch.h>
+> >  #include <linux/compat.h>
+> > +#include <linux/mroute.h>
+> > +#include <linux/mroute6.h>
+> 
+> This is for the ioctl constants only, right.
 
-On Mon, May 22, 2023 at 12:58=E2=80=AFPM Xin Long <lucien.xin@gmail.com> wr=
-ote:
->
-> Hi, Adam,
->
-> Thanks for the scripts.
->
-> In SCTP, after 'sysctl net.sctp.auth_enable=3D1' and
-> setsockopt(SCTP_AUTH_CHUNK), it will tell the peer that this side
-> supports auth. Meanwhile, the kernel creates a 'null_key' (key_id =3D 0)
-> as the default one.
->
-> The peer uses the shared key (key_id =3D 0) for the auth chunk if it
-> doesn't set up any key, like on your client side. On your server side,
-> it added a new shared key (key_id =3D 1), but the server still can
-> process the incoming auth chunk with the shared key (key_id =3D 0), even
-> if it's not the active key,  unless you deleted the shared key (key_id
-> =3D 0).
->
-> Just note that it's the peer's choice which sh_key it will use, and it
-> uses key_id =3D 0 by default. If you want the authentication to fail in
-> your case, try to delete the shared key (key_id =3D 0) after you set up
-> the new one (key_id =3D 1):
->
->         authkeyid.scact_keynumber =3D 0;
->         ASSERT(setsockopt(fd, IPPROTO_SCTP, SCTP_AUTH_DELETE_KEY,
-> &authkeyid, sizeof(authkeyid)) =3D=3D 0,
->                "fail to del key");
->
-> Make sense?
->
-> Thanks.
->
-> On Mon, May 22, 2023 at 1:52=E2=80=AFPM Adam Snaider
-> <adam.snaider@bluerivertech.com> wrote:
+Right.
+
+> Then like those header files, include the uapi header, and only that,
+> to minimize the dependencies added to net/core/sock.c
+
+ack!
+
+> 
+> >  #include <linux/uaccess.h>
 > >
-> > Hi Marcelo,
+> > @@ -138,6 +140,7 @@
 > >
-> > Thank you for your response. The issue I'm facing is that if I set up a=
- server with authentication using some random key, then I'm still able to r=
-eceive data from a client that didn't set up the shared key itself. However=
-, if the client also sets up authentication but the key is incorrect, then =
-the server refuses the message and it tries again (which is similar to what=
- I would expect).
-> > The code I'm using is here: https://gist.github.com/brt-adam-snaider/30=
-76ab06f846384f5a7f87ad54ddd276, where the server calls `Bind` and the clien=
-t calls `Unbound` to create their respective sockets. (Note how I purposely=
- only set up the authentication key in the `Bind` call). Running tcpdump ho=
-wever, I can see that there are authenticated chunks being sent (since the =
-chunk type is 0xf), so I'm not sure why the server is receiving those witho=
-ut errors.
+> >  #include <net/tcp.h>
+> >  #include <net/busy_poll.h>
+> > +#include <net/phonet/phonet.h>
 > >
-> > Thank you for the help! And for what it's worth, I would love to contri=
-bute some documentation once I'm done working with this :)
+> >  #include <linux/ethtool.h>
 > >
-> > Best,
-> > Adam
-> >
-> >
-> > On Fri, May 19, 2023 at 6:09=E2=80=AFPM Marcelo Ricardo Leitner <marcel=
-o.leitner@gmail.com> wrote:
-> >>
-> >> On Mon, May 15, 2023 at 12:00:00PM -0700, Adam Snaider wrote:
-> >> > Hi folks,
-> >> >
-> >> > I would like to ask what the current state is for SCTP Authenticatio=
-n
-> >> > in the Linux kernel (as described by rfc4895). I've been attempting =
-to
-> >> > use an SCTP authenticated socket in the 5.10 kernel but all my effor=
-ts
-> >> > are fruitless so far. Given the lack of examples around, I'm not sur=
-e
-> >> > if my setup is incorrect or if the linux implementation is incomplet=
-e.
-> >> > If there are any references or examples I can look at I would really
-> >> > appreciate it.
-> >>
-> >> Hi Adam,
-> >>
-> >> The support should be complete, but yeah, I am not aware of examples
-> >> with Auth. Would you mind sharing a minimal reproducer that didn't
-> >> work for you?
-> >>
-> >> Thanks,
-> >> Marcelo
+> > @@ -4106,3 +4109,112 @@ int sock_bind_add(struct sock *sk, struct sockaddr *addr, int addr_len)
+> >         return sk->sk_prot->bind_add(sk, addr, addr_len);
+> >  }
+> >  EXPORT_SYMBOL(sock_bind_add);
+> > +
+> > +#ifdef CONFIG_PHONET
+> > +/* Copy u32 value from userspace and do not return anything back */
+> > +static int sk_ioctl_in(struct sock *sk, unsigned int cmd, void __user *arg)
+> 
+> The pointer can be const.
+> 
+> > +{
+> > +       int karg;
+> > +
+> > +       if (get_user(karg, (u32 __user *)arg))
+> > +               return -EFAULT;
+> 
+> The comment and cast are u32, but the datatype is int. Is there a
+> reason for that.
+
+I just copied what we have in pn_ioctl()[1]
+
+	static int pn_ioctl(struct sock *sk, int cmd, unsigned long arg)
+	{
+
+		switch (cmd) {
+		case SIOCPNADDRESOURCE:
+		case SIOCPNDELRESOURCE: {
+				u32 res;
+				if (get_user(res, (u32 __user *)arg))
+				....
+
+
+I will cast it to "int" on V3.
+
+[1] https://github.com/torvalds/linux/blob/ae8373a5add4ea39f032563cf12a02946d1e3546/net/phonet/datagram.c#L47
