@@ -2,60 +2,46 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3E7710F12
-	for <lists+linux-sctp@lfdr.de>; Thu, 25 May 2023 17:06:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E242C710FAE
+	for <lists+linux-sctp@lfdr.de>; Thu, 25 May 2023 17:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240923AbjEYPGU (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 25 May 2023 11:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46362 "EHLO
+        id S241389AbjEYPeR (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 25 May 2023 11:34:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231576AbjEYPGT (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 25 May 2023 11:06:19 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF4EA3;
-        Thu, 25 May 2023 08:06:18 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3f6b2f1a04bso11524121cf.3;
-        Thu, 25 May 2023 08:06:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685027178; x=1687619178;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KeTVaGcp8mf3R6o1m6w+QLJatVKY9fsQyGy4GYdH3/U=;
-        b=fAtd5/htRUFMBa6f2nihULsyk2krg4KuX1xoWANa66q5xQnrzl33EhjI7zDw/HAwyP
-         I+8jc6OlE/v38ijMp7n0KEs7MgDBx4is5tOGMyFslK7i0G9KI24TpDdkiJSwRGIEeBQw
-         ggqMtD24W8lTsA7GshRDvyDkhP2OGnjSpqzEz0OOMJrWuBIt4u3sSx0gMejYsnKbhx9v
-         7mjg1PZKVnmUJw41QmGV92z17mH6Prf/cBXyn5Cvi8HnhZzZaRgp0g8QmkOmj0J8j/hu
-         K+GjM6ifOJuG8aP0rLPjJxH82SDp4MV8J8hXDZ8v11Eiw2ZzbTfZmuvBKBB3W5t7PPIa
-         KfMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685027178; x=1687619178;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KeTVaGcp8mf3R6o1m6w+QLJatVKY9fsQyGy4GYdH3/U=;
-        b=lHsUElvk7Fv6mLeF9q9JHNMBphjYw/wt9oyl4m1pa8cBhIfMNPyZvq5BlpjAwZMeyC
-         Es8mgbMR3Xssun0EwL0CIFDTYsPAP+/vswLrnkg0RWphybRZNkncu6uQlccTpNMfsoZh
-         S5ji7Dxn+5P07XXWGj+L6Yr4lhp9SHegNBeNUnnmcNrL4sKVBe5R/IfzrvTH9rqsffcg
-         Z0vzrrEV0Q0udiWDOXtkkHAwPtzXuwFZ7gChUViJ1wKnltuaY0Q4Pckd4v6hYD8ZyK3d
-         m2V9LRkyjYR5cf6rJ76ID3oYNOy7xq/5GiN8ieWur8NAk9UOXs/VJGGQyTl+f/9Nk64H
-         boeg==
-X-Gm-Message-State: AC+VfDwrmX6Ux0GWlK59uPI7UsY76p0Yr60tXM08C95GlzCOSPAXQVFa
-        PKr6IXoAS+jUZN1U5JlVoOSvC6wD01LahbnMgss=
-X-Google-Smtp-Source: ACHHUZ7UCznfEjmcmpbGGznthDIVRdV0Ywo844eEoZVqoIgAM1pxMcr4sL+6PvSj6oRGzSLaHoa3ww2gR4P5ptHqPYQ=
-X-Received: by 2002:ac8:5e53:0:b0:3eb:1512:91c5 with SMTP id
- i19-20020ac85e53000000b003eb151291c5mr31239024qtx.12.1685027177888; Thu, 25
- May 2023 08:06:17 -0700 (PDT)
+        with ESMTP id S233645AbjEYPeQ (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 25 May 2023 11:34:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6C1198;
+        Thu, 25 May 2023 08:34:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 950BC611AA;
+        Thu, 25 May 2023 15:34:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11C46C433D2;
+        Thu, 25 May 2023 15:34:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685028854;
+        bh=ZwxDw4oLnHr9NVa2Db8a36we5S0GgqD9byINGJspxSk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KehClfljd08SNiuPE4jni76oBuDKLXGUmANCqL7/UO6wUHMuyIm+n6ggIVVhoUlmY
+         LREtu62b1a1RCt93q7jbljeXRCl9QNxYgWMn4GUm577jivEdaP/AXvOIs8fJc35k0R
+         W5VQNhj/k4TlaFwOnpY2sTmJ/dVZpS509wvLrM8BojgLntvl5xUQq34Doi9w1Lty+9
+         9MmOX8aaMLPUqgeAAdpNvzF0oKVdnzkrCUvtq90WqfMlNODzJgdZ7DNKOuWG1krc+g
+         Km06GOnkf69sxnPQTjBzhzozkwkVi41IYH2B5rC+ZVAwySJNZ5I31mHb7vj28Gs+IR
+         8RMVYyqfndX+g==
+Message-ID: <a1074987-c3ce-56cd-3005-beb5a3c55ef9@kernel.org>
+Date:   Thu, 25 May 2023 09:34:12 -0600
 MIME-Version: 1.0
-References: <20230525125503.400797-1-leitao@debian.org>
-In-Reply-To: <20230525125503.400797-1-leitao@debian.org>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Thu, 25 May 2023 11:05:40 -0400
-Message-ID: <CAF=yD-LHQNkgPb-R==53-2auVxkP9r=xqrz2A8oe61vkoDdWjg@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
 Subject: Re: [PATCH net-next v3] net: ioctl: Use kernel memory on protocol
  ioctl callbacks
-To:     Breno Leitao <leitao@debian.org>
-Cc:     dsahern@kernel.org, Remi Denis-Courmont <courmisch@gmail.com>,
+Content-Language: en-US
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Breno Leitao <leitao@debian.org>
+Cc:     Remi Denis-Courmont <courmisch@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -71,11 +57,15 @@ Cc:     dsahern@kernel.org, Remi Denis-Courmont <courmisch@gmail.com>,
         netdev@vger.kernel.org, dccp@vger.kernel.org,
         linux-wpan@vger.kernel.org, mptcp@lists.linux.dev,
         linux-sctp@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230525125503.400797-1-leitao@debian.org>
+ <CAF=yD-LHQNkgPb-R==53-2auVxkP9r=xqrz2A8oe61vkoDdWjg@mail.gmail.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <CAF=yD-LHQNkgPb-R==53-2auVxkP9r=xqrz2A8oe61vkoDdWjg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,127 +73,33 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, May 25, 2023 at 8:55=E2=80=AFAM Breno Leitao <leitao@debian.org> wr=
-ote:
->
-> Most of the ioctls to net protocols operates directly on userspace
-> argument (arg). Usually doing get_user()/put_user() directly in the
-> ioctl callback.  This is not flexible, because it is hard to reuse these
-> functions without passing userspace buffers.
->
-> Change the "struct proto" ioctls to avoid touching userspace memory and
-> operate on kernel buffers, i.e., all protocol's ioctl callbacks is
-> adapted to operate on a kernel memory other than on userspace (so, no
-> more {put,get}_user() and friends being called in the ioctl callback).
->
-> This changes the "struct proto" ioctl format in the following way:
->
->     int                     (*ioctl)(struct sock *sk, int cmd,
-> -                                        unsigned long arg);
-> +                                        int *karg);
->
-> So, the "karg" argument, which is passed to the ioctl callback, is a
-> pointer allocated to kernel space memory (inside a function wrapper).
-> This buffer (karg) may contain input argument (copied from userspace in
-> a prep function) and it might return a value/buffer, which is copied
-> back to userspace if necessary. There is not one-size-fits-all format
-> (that is I am using 'may' above), but basically, there are three type of
-> ioctls:
->
-> 1) Do not read from userspace, returns a result to userspace
-> 2) Read an input parameter from userspace, and does not return anything
->   to userspace
-> 3) Read an input from userspace, and return a buffer to userspace.
->
-> The default case (1) (where no input parameter is given, and an "int" is
-> returned to userspace) encompasses more than 90% of the cases, but there
-> are two other exceptions. Here is a list of exceptions:
->
-> * Protocol RAW:
->    * cmd =3D SIOCGETVIFCNT:
->      * input and output =3D struct sioc_vif_req
->    * cmd =3D SIOCGETSGCNT
->      * input and output =3D struct sioc_sg_req
->    * Explanation: for the SIOCGETVIFCNT case, userspace passes the input
->      argument, which is struct sioc_vif_req. Then the callback populates
->      the struct, which is copied back to userspace.
->
-> * Protocol RAW6:
->    * cmd =3D SIOCGETMIFCNT_IN6
->      * input and output =3D struct sioc_mif_req6
->    * cmd =3D SIOCGETSGCNT_IN6
->      * input and output =3D struct sioc_sg_req6
->
-> * Protocol PHONET:
->   * cmd =3D=3D SIOCPNADDRESOURCE | SIOCPNDELRESOURCE
->      * input int (4 bytes)
->   * Nothing is copied back to userspace.
->
-> For the exception cases, functions sock_sk_ioctl_inout() will
-> copy the userspace input, and copy it back to kernel space.
->
-> The wrapper that prepare the buffer and put the buffer back to user is
-> sk_ioctl(), so, instead of calling sk->sk_prot->ioctl(), the callee now
-> calls sk_ioctl(), which will handle all cases.
->
-> Signed-off-by: Breno Leitao <leitao@debian.org>
+On 5/25/23 9:05 AM, Willem de Bruijn wrote:
+>> +/* A wrapper around sock ioctls, which copies the data from userspace
+>> + * (depending on the protocol/ioctl), and copies back the result to userspace.
+>> + * The main motivation for this function is to pass kernel memory to the
+>> + * protocol ioctl callbacks, instead of userspace memory.
+>> + */
+>> +int sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
+>> +{
+>> +       int rc = 1;
+>> +
+>> +       if (ipmr_is_sk(sk))
+>> +               rc = ipmr_sk_ioctl(sk, cmd, arg);
+>> +       else if (ip6mr_is_sk(sk))
+>> +               rc = ip6mr_sk_ioctl(sk, cmd, arg);
+>> +       else if (phonet_is_sk(sk))
+>> +               rc = phonet_sk_ioctl(sk, cmd, arg);
+> 
+> I don't understand what this buys us vs testing the sk_family,
+> sk_protocol and cmd here.
 
-> +/* A wrapper around sock ioctls, which copies the data from userspace
-> + * (depending on the protocol/ioctl), and copies back the result to user=
-space.
-> + * The main motivation for this function is to pass kernel memory to the
-> + * protocol ioctl callbacks, instead of userspace memory.
-> + */
-> +int sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
-> +{
-> +       int rc =3D 1;
-> +
-> +       if (ipmr_is_sk(sk))
-> +               rc =3D ipmr_sk_ioctl(sk, cmd, arg);
-> +       else if (ip6mr_is_sk(sk))
-> +               rc =3D ip6mr_sk_ioctl(sk, cmd, arg);
-> +       else if (phonet_is_sk(sk))
-> +               rc =3D phonet_sk_ioctl(sk, cmd, arg);
+To keep protocol specific code out of core files is the reason I
+suggested it.
 
-I don't understand what this buys us vs testing the sk_family,
-sk_protocol and cmd here.
-
-It introduces even deeper dependencies on the protocol specific
-header files. And the CONFIG issues that result from that. And it
-adds a bunch of wrappers that are only used once.
-
-> @@ -1547,6 +1547,28 @@ int ip_mroute_setsockopt(struct sock *sk, int optn=
-ame, sockptr_t optval,
->         return ret;
->  }
->
-> +/* Execute if this ioctl is a special mroute ioctl */
-> +int ipmr_sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
-> +{
-> +       switch (cmd) {
-> +       /* These userspace buffers will be consumed by ipmr_ioctl() */
-> +       case SIOCGETVIFCNT: {
-> +               struct sioc_vif_req buffer;
-> +
-> +               return sock_ioctl_inout(sk, cmd, arg, &buffer,
-> +                                     sizeof(buffer));
-> +               }
-
-More importantly, if we go down the path of demultiplexing in protocol
-independent code to call protocol specific handlers, then there there
-is no need to have them call protocol independent helpers like
-sock_ioct_inout again. Just call the protocol-specific ioctl handlers
-directly?
+> 
+> It introduces even deeper dependencies on the protocol specific
+> header files. And the CONFIG issues that result from that. And it
+> adds a bunch of wrappers that are only used once.
+> 
 
 
-
-> +       case SIOCGETSGCNT: {
-> +               struct sioc_sg_req buffer;
-> +
-> +               return sock_ioctl_inout(sk, cmd, arg, &buffer,
-> +                                     sizeof(buffer));
-> +               }
-> +       }
-> +       /* return code > 0 means that the ioctl was not executed */
-> +       return 1;
-> +}
