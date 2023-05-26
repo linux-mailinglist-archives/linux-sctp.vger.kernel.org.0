@@ -2,45 +2,46 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E57BA7122A2
-	for <lists+linux-sctp@lfdr.de>; Fri, 26 May 2023 10:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFAB571230A
+	for <lists+linux-sctp@lfdr.de>; Fri, 26 May 2023 11:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242631AbjEZItU (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 26 May 2023 04:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
+        id S242926AbjEZJI1 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 26 May 2023 05:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242614AbjEZItT (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 26 May 2023 04:49:19 -0400
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA92F119;
-        Fri, 26 May 2023 01:49:17 -0700 (PDT)
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-307d20548adso248866f8f.0;
-        Fri, 26 May 2023 01:49:17 -0700 (PDT)
+        with ESMTP id S236818AbjEZJI0 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 26 May 2023 05:08:26 -0400
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1D3119;
+        Fri, 26 May 2023 02:08:24 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-3f6e4554453so3497665e9.3;
+        Fri, 26 May 2023 02:08:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685090956; x=1687682956;
+        d=1e100.net; s=20221208; t=1685092103; x=1687684103;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=s4Sjrbm6d6EO6iQQ0zbM7JAHxdD9NnQEGIWbfdTn3q4=;
-        b=kxgIC8qndyOU6bBu/akOD1HMJGDqlMOtFDUf9zvh9AZM9TVABXXL2+0tIWkKt1fxyZ
-         lYBNooGA0eF5O+l3Y313YWx2f9JM/z1+M3/+BAOwy46EPzp+vNfqwKIFGEPTxFCNiYdB
-         V63mS88EBcXZoC559mhAnRlbvF9zfyyJbWLH5CJxxTJDNseyi1SywddrokGGl2sOaIpK
-         B9AxRL4cWMsxLCspdWxK1/W8ywpbyySVuCQ/MWxfU8sJ8s7y2yVlvEqGCOiUlXFSqW0q
-         BGc+byNO39HcbPKooV6WoeFT4ce1FiJtKzTBcRktMx0J/76CTdZ1MRsggBcs8Dy5/R+L
-         zM3A==
-X-Gm-Message-State: AC+VfDyi1IZP6u9nGOoA+9q+CAm6cs09BP3rP28LtSSyvYrruXB0Jbpe
-        2k2DXZ+hGkwWlFlLtflJOhk=
-X-Google-Smtp-Source: ACHHUZ7zycneQMT5MV6N2pE69nG7qYgQwCpYDyX2JqqJ+e0B9ZF6lJoMXa9DIxgrYpSDUMuFvhezxA==
-X-Received: by 2002:a05:6000:196b:b0:30a:b4e1:a89b with SMTP id da11-20020a056000196b00b0030ab4e1a89bmr731849wrb.67.1685090956051;
-        Fri, 26 May 2023 01:49:16 -0700 (PDT)
-Received: from gmail.com (fwdproxy-cln-005.fbsv.net. [2a03:2880:31ff:5::face:b00c])
-        by smtp.gmail.com with ESMTPSA id y3-20020a5d4703000000b002f103ca90cdsm4338479wrq.101.2023.05.26.01.49.14
+        bh=hnjdta2dE7cZUbShKCPALgc1x0BwY8fg4ZbOYZFxvDQ=;
+        b=ABUg+EIe8KVmD2x8ux8xk4yeF8I8pbtyhNrkkuqu+VkfVkeoXQca7o1E0GvjQzMgW1
+         8lM8y57VqWfjx/GxPL0l/14BM/Ru8bG2Bpe2CQn0kbt15Y6oWWgUuLr5NmhD1mCeGLtX
+         cW4LU5Z8cUlkwedS8PEGuUd8I1avdniZzrzI/AxijVQEG3Qki3h5iuyULm1CDIYUZmGA
+         U2GRVPxcMtUYYmhlUkn3iZoIXe5IL7EPpLml/WgQwUxG1wWchJf9zeXfBSey/yD8qpO2
+         QdCl/VMTlppn0UzIzeSWgXq0STqvdHVdqxqIwpReJilL706bnd1KmewMI/bi/BbB+2Lt
+         082A==
+X-Gm-Message-State: AC+VfDyelqBLPGKtndmF6D7bx8E871E8EB/HtsTc1w1KlMhMzpgIxXN6
+        kYqZxOjgYEh9FIXZb+lj3Vw=
+X-Google-Smtp-Source: ACHHUZ4p/3nG8JacOu4lntf8PDsfNQAKdvHffpyYEWND/ODkY+3Ld0CZ7UeCriq3kid1vvZt5c+H3A==
+X-Received: by 2002:a1c:7c19:0:b0:3f6:3e9:e2dd with SMTP id x25-20020a1c7c19000000b003f603e9e2ddmr866855wmc.3.1685092103333;
+        Fri, 26 May 2023 02:08:23 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-116.fbsv.net. [2a03:2880:31ff:74::face:b00c])
+        by smtp.gmail.com with ESMTPSA id e2-20020adffc42000000b002ff2c39d072sm4399743wrs.104.2023.05.26.02.08.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 01:49:15 -0700 (PDT)
-Date:   Fri, 26 May 2023 01:49:10 -0700
+        Fri, 26 May 2023 02:08:22 -0700 (PDT)
+Date:   Fri, 26 May 2023 02:08:20 -0700
 From:   Breno Leitao <leitao@debian.org>
 To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc:     dsahern@kernel.org, Remi Denis-Courmont <courmisch@gmail.com>,
+Cc:     David Ahern <dsahern@kernel.org>,
+        Remi Denis-Courmont <courmisch@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -58,14 +59,16 @@ Cc:     dsahern@kernel.org, Remi Denis-Courmont <courmisch@gmail.com>,
         linux-sctp@vger.kernel.org
 Subject: Re: [PATCH net-next v3] net: ioctl: Use kernel memory on protocol
  ioctl callbacks
-Message-ID: <ZHByhjt2xYf5xKAu@gmail.com>
+Message-ID: <ZHB3BNopbx+5AnIa@gmail.com>
 References: <20230525125503.400797-1-leitao@debian.org>
  <CAF=yD-LHQNkgPb-R==53-2auVxkP9r=xqrz2A8oe61vkoDdWjg@mail.gmail.com>
+ <a1074987-c3ce-56cd-3005-beb5a3c55ef9@kernel.org>
+ <CAF=yD-LXcufhJBpkEcUuphFpR1TA4=QwUXw4sKFsSiEL_mwG4Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAF=yD-LHQNkgPb-R==53-2auVxkP9r=xqrz2A8oe61vkoDdWjg@mail.gmail.com>
+In-Reply-To: <CAF=yD-LXcufhJBpkEcUuphFpR1TA4=QwUXw4sKFsSiEL_mwG4Q@mail.gmail.com>
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
@@ -76,37 +79,50 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, May 25, 2023 at 11:05:40AM -0400, Willem de Bruijn wrote:
-> On Thu, May 25, 2023 at 8:55 AM Breno Leitao <leitao@debian.org> wrote:
-> > @@ -1547,6 +1547,28 @@ int ip_mroute_setsockopt(struct sock *sk, int optname, sockptr_t optval,
-> >         return ret;
-> >  }
+On Thu, May 25, 2023 at 12:06:00PM -0400, Willem de Bruijn wrote:
+> On Thu, May 25, 2023 at 11:34 AM David Ahern <dsahern@kernel.org> wrote:
+> > On 5/25/23 9:05 AM, Willem de Bruijn wrote:
+> > > I don't understand what this buys us vs testing the sk_family,
+> > > sk_protocol and cmd here.
 > >
-> > +/* Execute if this ioctl is a special mroute ioctl */
-> > +int ipmr_sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
-> > +{
-> > +       switch (cmd) {
-> > +       /* These userspace buffers will be consumed by ipmr_ioctl() */
-> > +       case SIOCGETVIFCNT: {
-> > +               struct sioc_vif_req buffer;
-> > +
-> > +               return sock_ioctl_inout(sk, cmd, arg, &buffer,
-> > +                                     sizeof(buffer));
-> > +               }
+> > To keep protocol specific code out of core files is the reason I
+> > suggested it.
 > 
-> More importantly, if we go down the path of demultiplexing in protocol
-> independent code to call protocol specific handlers, then there there
-> is no need to have them call protocol independent helpers like
-> sock_ioct_inout again. Just call the protocol-specific ioctl handlers
-> directly?
+> I guess you object to demultiplexing based on per-family
+> protocol and ioctl cmd constants directly in this file?
+> 
+> That only requires including the smaller uapi headers.
+> 
+> But now net/core/sock.h now still has to add includes
+> linux/mroute.h, linux/mroute6.h and net/phonet/phonet.h.
+> 
+> Aside on phonet_is_sk, if we're keeping this: this should be
+> sk_is_phonet? Analogous to sk_is_tcp and such. And, it should suffice
+> to  demultiplex based on the protocol family, without testing the
+> type or protocol. The family is defined in protocol-independent header
+> linux/socket.h. The differences between
+> PN_PROTO_PHONET and PN_PROTO_PIPE should be handled inside the family
+> code. So I think it is cleaner just to open-coded as `if
+> (sk->sk_family == PF_PHONET)`
 
-That is what I was expecting, but, the code is exactly the same and I
-kept it in the generic section. This is what this code needs to do:
+Should we do the same for ipmr as well? Currently I am checking it
+using:
 
- * Copy X byte from userspace
- * sk->sk_prot->ioctl()
- * Copy X bytes back to userspace
+	return sk->sk_type == SOCK_RAW && inet_sk(sk)->inet_num == IPPROTO_ICMPV6;
 
-I tried to keep the code generic enough that it could be reused.
-I can definitely push the same code to two different protocols, if you
-prefer, no strong opinion. 
+This is what ip{6}mr functions[1] are use to check if `sk` is using ip{6}mr.
+If we just use `sk->family`, then I suppose that `sk_is_ip6mr` would be
+something as coded below. Is this correct?
+
+	static inline int sk_is_ip6mr(struct sock *sk)
+	{
+		return sk->sk_family == PF_INET6;
+	}
+
+Anyway, should we continue with the current (V3) approach, where we keep
+the protocol code out of core files, or, should I come back to the
+previous (V2) approach, where the protocol checks is coded directly in
+the core file?
+
+Thanks for the review!
+[1] Link: https://github.com/torvalds/linux/blob/0d85b27b0cc6b5cf54567c5ad913a247a71583ce/net/ipv6/ip6mr.c#L1666
