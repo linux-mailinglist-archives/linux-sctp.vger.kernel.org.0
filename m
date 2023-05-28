@@ -2,205 +2,145 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6998B71351D
-	for <lists+linux-sctp@lfdr.de>; Sat, 27 May 2023 16:14:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F02713B71
+	for <lists+linux-sctp@lfdr.de>; Sun, 28 May 2023 20:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232322AbjE0OOD (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sat, 27 May 2023 10:14:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
+        id S229496AbjE1SGV (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 28 May 2023 14:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjE0OOC (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sat, 27 May 2023 10:14:02 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2091.outbound.protection.outlook.com [40.107.101.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930E4E1;
-        Sat, 27 May 2023 07:13:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KtacG3VqE8sDHh/UmGU9U+12p6VigjPu6a5L9tZysE2My7w/IYAy4zE9qYsA4+qXb55GquoGuy3sA/FeRrfFkBwBJPthDK0gQaQoIUf+ssglVkjilvfk2/Gqd+IPgmLESCvzidib93aKXC6ZwXdVS9pG9GL2zWH5ssN6GdhlWFqjUrmVVzHh5aSmja/i4uVDEs6JfJPKMc3qk8udcL38phJTt4wU/qka03faNaMn4So8Stb33Z+XYWGDEFOlSG8Sk2LROV+0KV6UrGv1R0j42m9JevpwY+ROBz+BRRkZ0Nzrp42aRZb/7yAeYn4p2u5f9SXhveZ24faLkdcRpNNWkA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xS9Coa+2txA4KyUllsZLmdVQgwbwxtnHV9Zx66hxvA4=;
- b=CyyyITFajwtr0QunQMgCNeLF+Gw4vif6I7z+Yk8zcwE5ykipufhlof+enqJargJoLDDku3HR6Ex4uLtBTsQX79vt6+BPZHBxYo1zYX7nqDRi0FlGbmqfLxvRQz2C0KwEXQYF6Ka5IVB0puHp0FWM+UN+OysLk2O+Ftjd7F1xVfl70j20EVrK8jD+z7JT1ZuHFuAnVmx0LlkaTs9F6XiPyslJIvbH5RCqHODoCIyEfv70JJNXHV1iR0YzGsHLnMq+sMLvX38cy9gCuVIgAxmNZf34CnHvyO9rEKwBdycQU4ZLyZMmIaOc0fCZXqOBGmCuaxe58GzYbAspkUQvC+Ikeg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xS9Coa+2txA4KyUllsZLmdVQgwbwxtnHV9Zx66hxvA4=;
- b=IKrlOKfmEok3Fb2BqTtrnk2ySOffwNkoCdufAd41K7hEHSsTDkLEpMLUhrP8R8EolqeHkBl2tF81F1rXOKHe21JdDEZa0sysQAjxde8nF58T8xp12MBRgVH8zhFz8AzeXCd4e3WT0HfpO2kwiT2dETeDMtwsqMQDYapbU/VrxKA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by DM8PR13MB5191.namprd13.prod.outlook.com (2603:10b6:8:d::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6433.19; Sat, 27 May 2023 14:13:54 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.018; Sat, 27 May 2023
- 14:13:52 +0000
-Date:   Sat, 27 May 2023 16:13:25 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Ashwin Dayanand Kamat <kashwindayan@vmware.com>
-Cc:     Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
+        with ESMTP id S229457AbjE1SGV (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sun, 28 May 2023 14:06:21 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83A8A3;
+        Sun, 28 May 2023 11:06:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685297179; x=1716833179;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=n1G3073duu9zebJvOfP4bDW93rS2yyqVqrYzBTqEQVI=;
+  b=c8o37eg7aQNu+Uhv5Hx20n7/+23YNNaP3nbde+cTV+Bg165GWJeV2/AJ
+   YKIsZvy5wCu8aEAeSszvoQYM9cYA+xbgYkNKXU4Nb4JHYw8ylwZV9Mz6N
+   pKBKIVykgX1UAAmJmg+ps11vTl8DXeZaabf9JDN0a4ea6ubfSjCMT6obx
+   FxBY7GdBsIFcJ7ukrAjgxnKrw5r3/UWZbhWCeY9+dlYGNZnJy4g5Pwg8r
+   i+0G6gB1U+en+WMCKkOb7OTQvTkeRcIXrYjU/npyV4jFIXRWqGj/ISd0d
+   N4m9ZWcq6wfhJ1HHzh4mbpThazUyoaV8m7VtdN6Odp8kqc18eqrdWmAqE
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="420302749"
+X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
+   d="scan'208";a="420302749"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2023 11:06:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="738897686"
+X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
+   d="scan'208";a="738897686"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 28 May 2023 11:06:13 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q3KmS-000KhW-1C;
+        Sun, 28 May 2023 18:06:12 +0000
+Date:   Mon, 29 May 2023 02:05:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Breno Leitao <leitao@debian.org>, dsahern@kernel.org,
+        willemdebruijn.kernel@gmail.com,
+        Remi Denis-Courmont <courmisch@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Srivatsa Bhat <srivatsab@vmware.com>,
-        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
-        Ajay Kaher <akaher@vmware.com>,
-        Tapas Kundu <tkundu@vmware.com>,
-        Keerthana Kalyanasundaram <keerthanak@vmware.com>
-Subject: Re: [PATCH v2] net/sctp: Make sha1 as default algorithm if fips is
- enabled
-Message-ID: <ZHIQBUEvo49G9j/0@corigine.com>
-References: <1679493880-26421-1-git-send-email-kashwindayan@vmware.com>
- <ZBtpJO3ycoNHXj0p@corigine.com>
- <4BCFED42-2BBD-42B0-91C5-B12FEE000812@vmware.com>
- <964CD5A7-95E2-406D-9A52-F80390DC9F79@vmware.com>
- <B70BBC83-2B9F-4C49-943D-74C424EA4DCE@vmware.com>
+        Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <martineau@kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        netdev@vger.kernel.org, leit@fb.com, axboe@kernel.dk,
+        asml.silence@gmail.com, linux-kernel@vger.kernel.org,
+        dccp@vger.kernel.org, linux-wpan@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-sctp@vger.kernel.org
+Subject: Re: [PATCH net-next v3] net: ioctl: Use kernel memory on protocol
+ ioctl callbacks
+Message-ID: <202305290107.hs8sbfYc-lkp@intel.com>
+References: <20230525125503.400797-1-leitao@debian.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <B70BBC83-2B9F-4C49-943D-74C424EA4DCE@vmware.com>
-X-ClientProxiedBy: AM0PR06CA0097.eurprd06.prod.outlook.com
- (2603:10a6:208:fa::38) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM8PR13MB5191:EE_
-X-MS-Office365-Filtering-Correlation-Id: b43cd07e-86c5-4dac-1fc6-08db5ebc9964
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BUwXo9tsA57GRDS6U6L1MYhHnHDa2f2JVc45QItuY0vJtk/TqrJOdV/Avr8gAiK4jwrgyNRhs9Hp5VtGe5oMDq79cSMH3umPbxmdWbA3mtcDtV6u+ZugutOzK86XsnYnl1eY1Ng0J/aJnuZWDCAjtPjR1y6tJgGTpMgp/XrjMgll7oBmWp8fkoyW+X+Z/9t/DHzFnUmiSsvQkwf0N5hN4uFsBUAW9BkHDkpzeoupE32S1OBvwzRFa1wJG5P11bKKkC9YUNLx661zKiG8ACQzi47QjMaOuf/7tIc1Q9Dq4ieMDNweLjLIZ/Ce5V43HWJIOlA6YFJbEgCmk6tqn5q2XPVx+S/L0kp61Wtp7iyU5zTweRIUJRzg4UH9fq9GU4Eo2Jv5W1DjbQBBhvQo8MOOsZIc9qkQnD0jkBwdFqkYTRtLsp1n6kpGoJca7lTxVNETLxEGIm6dQiXnb8yXyvBfyMZoMe1V+14W7GRpQgxmdhTi2TybgBW1oqKMtME1yAA6G5DVTX3Tc2Hl6opHGmc3efzV26O7Drza/N0v64m695qaBleowmGCP02A+JIVXMUa
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39830400003)(376002)(346002)(136003)(396003)(451199021)(4326008)(86362001)(36756003)(186003)(8936002)(53546011)(8676002)(41300700001)(83380400001)(6512007)(6506007)(2616005)(7416002)(5660300002)(54906003)(478600001)(6916009)(66946007)(66476007)(66556008)(316002)(6486002)(6666004)(38100700002)(44832011)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?e2Ch5nh7MFAqDZlKL5WXiZdrFLQngnlqyVD+HtagM1yIk+GBf5LjMBb7C03+?=
- =?us-ascii?Q?lyog2SUeJnDRQE4jkClyLCzFkCc8emaWXoTyPOs+jwHdVxWmoD4fL2niL675?=
- =?us-ascii?Q?L7e1EfTv55JYLCjhXsF2FTgj2zGyKUK2+lUPqyU/iTp6ebW9sDhHE3Q9pp7b?=
- =?us-ascii?Q?WOuCXNv+wtchtHQKNXqD7DAnjUACEfEK+umANYDBJeTpfmFxoBdO9JIOWWwg?=
- =?us-ascii?Q?gUJGPiCcLKqvWeLKUjlMbAaixoGrSbVokH8khvjXhUf/aT73gMmXTeV5iEwI?=
- =?us-ascii?Q?DDkP6FVoZvoLLEgstCKzGpiEK24NRHvEcly4c1ZE4VO8CViTogTnOQ4YdI5C?=
- =?us-ascii?Q?3Ra9HTSwUL5C30sDrQsgL/XcMkz+aXlMfyM6ELUby9vuw3JwZ6T2aqL+9ieL?=
- =?us-ascii?Q?uWn6d1wXRsz6+VjfJ0ng5mRmuQzdo9lzlbeXTTcO5z16oVNPBenxljHKJ10L?=
- =?us-ascii?Q?J+BfbZzXKU2LUi/epo+YA/O2ywyxSwB1oRqfF8BjxfSZj5/KUF/hkNuEzZt5?=
- =?us-ascii?Q?ZMfx3IF3uRC/YBPnlz1RXcDUWFiN7DW4YrsEyypkfOqIBzH+XI69KUcetBul?=
- =?us-ascii?Q?k3CgXrDR8bI7dAHeSPhkrN+Y3XzRBaVPQXvZjgtBZjjNzyFqS7pf9nC1FMTb?=
- =?us-ascii?Q?TfxTR18InEOENfaJnIix3g7FmuRf6x79MoDk7JPcXLqrAw14TdpjJ1VJggRo?=
- =?us-ascii?Q?jIy+ypWiArc3rAIh8oMQW3dgnW1fpeAS4SKUUwechh6GQBLOfUmsaK6ByCuv?=
- =?us-ascii?Q?LBiJJP/VKBGFOZlwL4EqkZAQa8Xpi2DYggmSTdFy+QQhRK3v+M+9fTlCB5GD?=
- =?us-ascii?Q?VtfW0GnSyVllqbEAMCYdvhpsUlyFnc/C3UJYsEcs9ikrdyLIV9Hu10HYEMnT?=
- =?us-ascii?Q?6OxDZjTNzBtXbmEnXJD8a8rAMoOAJYLOsyerotE+uV1hzdaF1YmjNdONVFxY?=
- =?us-ascii?Q?0oH7rgSJvHATchtoYcLJVogcOU+umY2pLyDlRBqjT8vpFwViRtxj7yGnzGUg?=
- =?us-ascii?Q?3qwKOMvwgyNWVf5IMd2BUhKk2NDTC5UicuhpwC8u21jBnh9bMednZpe8ZkTQ?=
- =?us-ascii?Q?U6z/z6bGMUFi9FAReFhDMTL9HMzneSJNVqu/vcUTQR4Z8s/RNOseNs0JT8sz?=
- =?us-ascii?Q?CSVe9dtzoG9VqyjpVVWES8L4ibkRH0pTF6nuT4gl92nGXZbidGPMwGl5WlI/?=
- =?us-ascii?Q?iYRa/8z191a9MQWkMTF1eLFARB9aUTe1Xdg2WL8HK7wGwCsOWKliprxOEnvh?=
- =?us-ascii?Q?pJ9Leh+oLSFEPe1NQC0Q9lCYcxyM7aR19v4g29wJJyKr/CxHLDPELPR/5ipM?=
- =?us-ascii?Q?3ZSmljc5y7wuAWbZxB2XorVG80LtGUClMJEg4X9muhnnJshPcXzIzbMYhQJ6?=
- =?us-ascii?Q?QgnfUmt2rkGvMf/aBnb5l5gIB9N4o15DPotQ0DI5kGlZY86yWgiNnFoJYWsU?=
- =?us-ascii?Q?qFCQ5oAQwbaCVAj85StXb1MInRodJPQbnHoKhuqE4Cz3Bt9+MmKr3xGdjh9w?=
- =?us-ascii?Q?pMmc4ix5JNdTNbYEEFzNOj444InN+BM4YcFKPGfCfpFu8gng5WeM4moYE7CV?=
- =?us-ascii?Q?x73ezmuNcd4TG5aWEXAi6dA+FFj+4YzmuzWeYsfx2uak9CKHO4LnQJMlxVL3?=
- =?us-ascii?Q?IA3qgDpJK1A2WeguRJHTDbqOk8KpHp3mmFg/1s2Qw9yva/tKzCI+quQsnjZP?=
- =?us-ascii?Q?WqhPdw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b43cd07e-86c5-4dac-1fc6-08db5ebc9964
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 May 2023 14:13:52.6728
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OAk/xCzs0OAaNlob69tn3fqx2XSay+7pRJdDxoC6Pt/t9vDh6V7fvPNLxD3tmuGFi3iymPLkaLqMkeqUcW/t3avs3M6oc2NL5Mwg3JoyXXc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR13MB5191
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230525125503.400797-1-leitao@debian.org>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Sat, May 27, 2023 at 07:49:26AM +0000, Ashwin Dayanand Kamat wrote:
-> 
-> 
-> > On 25-Mar-2023, at 12:03 PM, Ashwin Dayanand Kamat <kashwindayan@vmware.com> wrote:
-> > 
-> > 
-> >> On 23-Mar-2023, at 2:16 AM, Simon Horman <simon.horman@corigine.com> wrote:
-> >> 
-> >> !! External Email
-> >> 
-> >> On Wed, Mar 22, 2023 at 07:34:40PM +0530, Ashwin Dayanand Kamat wrote:
-> >>> MD5 is not FIPS compliant. But still md5 was used as the default
-> >>> algorithm for sctp if fips was enabled.
-> >>> Due to this, listen() system call in ltp tests was failing for sctp
-> >>> in fips environment, with below error message.
-> >>> 
-> >>> [ 6397.892677] sctp: failed to load transform for md5: -2
-> >>> 
-> >>> Fix is to not assign md5 as default algorithm for sctp
-> >>> if fips_enabled is true. Instead make sha1 as default algorithm.
-> >>> 
-> >>> Fixes: ltp testcase failure "cve-2018-5803 sctp_big_chunk"
-> >>> Signed-off-by: Ashwin Dayanand Kamat <kashwindayan@vmware.com>
-> >>> ---
-> >>> v2:
-> >>> the listener can still fail if fips mode is enabled after
-> >>> that the netns is initialized. So taking action in sctp_listen_start()
-> >>> and buming a ratelimited notice the selected hmac is changed due to fips.
-> >>> ---
-> >>> net/sctp/socket.c | 10 ++++++++++
-> >>> 1 file changed, 10 insertions(+)
-> >>> 
-> >>> diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-> >>> index b91616f819de..a1107f42869e 100644
-> >>> --- a/net/sctp/socket.c
-> >>> +++ b/net/sctp/socket.c
-> >>> @@ -49,6 +49,7 @@
-> >>> #include <linux/poll.h>
-> >>> #include <linux/init.h>
-> >>> #include <linux/slab.h>
-> >>> +#include <linux/fips.h>
-> >>> #include <linux/file.h>
-> >>> #include <linux/compat.h>
-> >>> #include <linux/rhashtable.h>
-> >>> @@ -8496,6 +8497,15 @@ static int sctp_listen_start(struct sock *sk, int backlog)
-> >>> struct crypto_shash *tfm = NULL;
-> >>> char alg[32];
-> >>> 
-> >>> + if (fips_enabled && !strcmp(sp->sctp_hmac_alg, "md5")) {
-> >>> +#if (IS_ENABLED(CONFIG_SCTP_DEFAULT_COOKIE_HMAC_SHA1))
-> >> 
-> >> I'm probably misunderstanding things, but would
-> >> IS_ENABLED(CONFIG_SCTP_COOKIE_HMAC_SHA1)
-> >> be more appropriate here?
-> >> 
-> > 
-> > Hi Simon,
-> > I have moved the same check from sctp_init() to here based on the review for v1 patch.
-> > Please let me know if there is any alternative which can be used?
-> > 
-> > Thanks,
-> > Ashwin Kamat
-> > 
-> Hi Team,
-> Any update on this?
+Hi Breno,
 
-Hi Ashwin,
+kernel test robot noticed the following build errors:
 
-I don't recall exactly what I was thinking 2 months ago.
-But looking at this a second time it seems that I may have misread your
-patch: I now have no objections to it in its original form.
+[auto build test ERROR on net-next/main]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Breno-Leitao/net-ioctl-Use-kernel-memory-on-protocol-ioctl-callbacks/20230525-205741
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20230525125503.400797-1-leitao%40debian.org
+patch subject: [PATCH net-next v3] net: ioctl: Use kernel memory on protocol ioctl callbacks
+config: i386-randconfig-i061-20230525 (https://download.01.org/0day-ci/archive/20230529/202305290107.hs8sbfYc-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/dbeb44f8503d11da0219fc6ef8a56c28cfde1511
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Breno-Leitao/net-ioctl-Use-kernel-memory-on-protocol-ioctl-callbacks/20230525-205741
+        git checkout dbeb44f8503d11da0219fc6ef8a56c28cfde1511
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/phonet/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305290107.hs8sbfYc-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> net/phonet/af_phonet.c:43:5: error: redefinition of 'phonet_sk_ioctl'
+   int phonet_sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
+       ^
+   include/net/phonet/phonet.h:125:19: note: previous definition is here
+   static inline int phonet_sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
+                     ^
+   1 error generated.
+
+
+vim +/phonet_sk_ioctl +43 net/phonet/af_phonet.c
+
+    42	
+  > 43	int phonet_sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
+    44	{
+    45		int karg;
+    46	
+    47		switch (cmd) {
+    48		case SIOCPNADDRESOURCE:
+    49		case SIOCPNDELRESOURCE:
+    50			if (get_user(karg, (int __user *)arg))
+    51				return -EFAULT;
+    52	
+    53			return sk->sk_prot->ioctl(sk, cmd, &karg);
+    54		}
+    55		/* A positive return value means that the ioctl was not processed */
+    56		return 1;
+    57	}
+    58	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
