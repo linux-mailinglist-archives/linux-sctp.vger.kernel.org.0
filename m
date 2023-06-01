@@ -2,47 +2,47 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48255718210
-	for <lists+linux-sctp@lfdr.de>; Wed, 31 May 2023 15:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5838071914E
+	for <lists+linux-sctp@lfdr.de>; Thu,  1 Jun 2023 05:28:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235904AbjEaNhl (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 31 May 2023 09:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53332 "EHLO
+        id S231151AbjFAD2I (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 31 May 2023 23:28:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235992AbjEaNhc (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 31 May 2023 09:37:32 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6761F13D;
-        Wed, 31 May 2023 06:37:31 -0700 (PDT)
+        with ESMTP id S229588AbjFAD2G (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 31 May 2023 23:28:06 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E764D124;
+        Wed, 31 May 2023 20:28:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685540251; x=1717076251;
+  t=1685590085; x=1717126085;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=4j+SR6j6Y91MTRtLsgAmtEiec0cpzY168prO2t2ffXI=;
-  b=QwiOrhxXqu8xzIkBlfyR1A4WYFd0Zlhe2q+F1oe/KDJVD4A1Js4SnhGp
-   0sneh+JEp/EW7Py/XTnxmneL3TLE3lJjknty80kmnLqYxIWc7/BPav+GX
-   yPxKCxDdCMtdxNLjNMJQF6ZmgUUxTxys7imWPJ51zVOwGcVsvWcIdbR8f
-   VDFORMg90Oh2y74i8vVuwQ3G8cIQyrVc8C9ZOaLaZYFSKpu8qAuF+OkkX
-   0hmn4dMk4x7ZnlMkZUA9H55tIXeSnAbCU/ZnMaX1GO1Nz2HxfczxHbYMN
-   +BUivC13agqRZmlw/e9aO6dzqC30ZPpf+DojIB8DD3zMD8+LHx+RHipsi
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="421005390"
+  bh=+xq448q5qTkKIgFiYOhT+ecVXzgHvJWPPv1d0I8oCrk=;
+  b=Xr0zQSdnLb1YUATP3SkBcSrMq7Ej5OhOr3RiVBO37hWhQRAH7Q/7mcQY
+   dOISuqIGW7re9tROk3CmqnMn0u9wFvBjpYFENLUkb5t47V36YLiZ390tV
+   odz1BIlbdD5sQcp+38av27FAAM7Mu8skNpyUHie/5LJXLRWk5G47uH/pQ
+   xNcYPBbY2UnqrXEd7zOvi2BxIkySsazbKpLYBojyy3ElGeOw4EBAOjdiF
+   8pTI9fi0Ofs614Bji0BiFOsMNwt/lqSdMZqdoZoSYrSv27XDDFCqZO2DB
+   wMDm2qwYN8tL7CDRuyD0C4QCnG0Iz9+ENWXZy7pMdfivz8ybm0AMg1Dy7
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="357839165"
 X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
-   d="scan'208";a="421005390"
+   d="scan'208";a="357839165"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 06:37:30 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 20:28:04 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="736673988"
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="736913522"
 X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
-   d="scan'208";a="736673988"
+   d="scan'208";a="736913522"
 Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 31 May 2023 06:37:25 -0700
+  by orsmga008.jf.intel.com with ESMTP; 31 May 2023 20:27:59 -0700
 Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1q4M0y-0001Mx-1R;
-        Wed, 31 May 2023 13:37:24 +0000
-Date:   Wed, 31 May 2023 21:36:39 +0800
+        id 1q4Yyk-0001s0-1r;
+        Thu, 01 Jun 2023 03:27:58 +0000
+Date:   Thu, 1 Jun 2023 11:27:43 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Breno Leitao <leitao@debian.org>, dsahern@kernel.org,
         willemdebruijn.kernel@gmail.com,
@@ -65,7 +65,7 @@ Cc:     oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org, leit@fb.com,
         linux-sctp@vger.kernel.org
 Subject: Re: [PATCH net-next v4] net: ioctl: Use kernel memory on protocol
  ioctl callbacks
-Message-ID: <202305312111.1m4i6rKU-lkp@intel.com>
+Message-ID: <202306011128.2sM3vsBl-lkp@intel.com>
 References: <20230530175403.2434218-1-leitao@debian.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -73,8 +73,8 @@ Content-Disposition: inline
 In-Reply-To: <20230530175403.2434218-1-leitao@debian.org>
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -91,8 +91,8 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Breno-Leitao/net-ioctl-Us
 base:   net-next/main
 patch link:    https://lore.kernel.org/r/20230530175403.2434218-1-leitao%40debian.org
 patch subject: [PATCH net-next v4] net: ioctl: Use kernel memory on protocol ioctl callbacks
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20230531/202305312111.1m4i6rKU-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.3.0
+config: mips-allmodconfig (https://download.01.org/0day-ci/archive/20230601/202306011128.2sM3vsBl-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 12.3.0
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -103,17 +103,17 @@ reproduce (this is a W=1 build):
         git checkout f97a3206f5ae59ecb0c7105225c5230b343c6c54
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305312111.1m4i6rKU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306011128.2sM3vsBl-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   m68k-linux-ld: net/core/sock.o: in function `sk_ioctl':
->> sock.c:(.text+0xc7e): undefined reference to `ip6mr_sk_ioctl'
+   mips-linux-ld: net/core/sock.o: in function `sk_ioctl':
+>> sock.c:(.text.sk_ioctl+0x12c): undefined reference to `ip6mr_sk_ioctl'
 
 -- 
 0-DAY CI Kernel Test Service
