@@ -2,112 +2,132 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C68E071F1A9
-	for <lists+linux-sctp@lfdr.de>; Thu,  1 Jun 2023 20:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 625F571F1B2
+	for <lists+linux-sctp@lfdr.de>; Thu,  1 Jun 2023 20:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbjFASSN (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 1 Jun 2023 14:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54668 "EHLO
+        id S229612AbjFASV2 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 1 Jun 2023 14:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjFASSM (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 1 Jun 2023 14:18:12 -0400
-Received: from CY4PR02CU008.outbound.protection.outlook.com (mail-westcentralusazon11012009.outbound.protection.outlook.com [40.93.200.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8517FE7;
-        Thu,  1 Jun 2023 11:18:11 -0700 (PDT)
+        with ESMTP id S231334AbjFASV1 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 1 Jun 2023 14:21:27 -0400
+Received: from MW2PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012004.outbound.protection.outlook.com [52.101.48.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E856F19D;
+        Thu,  1 Jun 2023 11:21:22 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ixonITHFWvlv64PAr4xTFKyfiKUXT+bzRJRXYW0oHiCVNtLHIJYnMl344Pi3TxMHzP0eExAavRV6E8SqeTPYgn1KaSjCdTQ5ogS3uC7qS0+wjdjSqgBt9jWp5YMsdqRFK0+oxOwC7BCLkVlW91qo5k0Y4bxWu3xBQdRIS958AnTqKjlapgnD4+cRwjWwDleKdgQ8sLDd1DOk6VeJTcdMxfKN6IJdbLS0m60AGtYyp9dkjPSgSukfJgMv5mPhlBLptMZNzEw3bMCvCRD7g6Z1fDksNdUm+YILzUAORDstWBLy4WiIhe+eQvJii/nFskmF+b1MOa9h9UJqz/2pIjLGsQ==
+ b=EAyLn394Jostiz6JU53A4pCghmSg+gMuhjivOpYMlfG+QQA4lD+69NhHNlj5ZiIkjBKsNaRqPR5W/v1FGQAMD2ae8mMRBznbM0NC5VTCQr811Yc6X3PHjxIG4kVyz3Prr3HmUTAahhdcjUaX9eVFCxWx0/xrBIlwR0ifDjKvfCDM8pBrdQ58Nm5faGGQxi7r/KB53iqCdrAQIdnk2BE81yXT2ptWzRfZqfgO7xtJZxOexc9z8QET/mbAoEF34i/flY3p5O92u6i6OQV5auzyVXB3wXNtbZbAc6qqxTTxF24O13Uq2HagVQdn5giQ+mbaq/zzF2CoXTS3E3u8+gkdug==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ghjs5z5mmd1lT6YotAc106XIlQJUph/8bIxbNPbIEW8=;
- b=BH9YuFiuawudvz8F53FIXyrxSRq70VrVQVuZCACaxLk+awhdhn/AqfbNE7aJBZwVGlvDO9ozwBOovFysocgCU13kByrXlIG4hRwAYEYNuXnRO7P4yDf4hFz+RxSb+WVGbVWeNO3ynuJ0CAera6huZLZTmZ/pO9i9LySCVQngq2pHLYpuZM3nDBygjQ8R19CitksovMgouUqPGuIcnlWobBFqWvVG1cU3NCBBCbOgUqyW/twfCnbq8amrCuRxow/Eksan061OametCEzoolHfjOwGYydz0HXFZJrkd8M4Ggt3D3uRPHiJK7W305zZVyyD0QIBhF9FmPpKUuFESBICvw==
+ bh=MHoRpvw8HSyWR9vu8KTOeT9kWZQz8g9cVS9bFOkoSq4=;
+ b=KCdMX60ZoiNLhwNo1+yJroW3ukNNzYecBNeLIyqgNNb1z3m2oimsrDG+fhICjhx0ZxtDTpSNeE4BlPG/CwxaGIqAektYjeSwOOT78NPezE2AWdF2Ei1TQygNbgiYCllJRiWHdjmoRQAmCj5kZIMU+ryXDaUDBo7d7RAc9hJrrETMdsDZj6BgsizH71mWSue7wz0ubVeU6JBn9EQdRccUGeOtClsdpASCZrGNsaXJtCdtgsZKU8uhUmhqNX2vhpyqhVkBvGJse2rUZ/wRJps9PIY7Ldlby6zDd453xSyAvYLIXSWZQ64Pu1kqkil2PMD/TsSWNfElSgSUcDjSi2oYiw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
  dkim=pass header.d=vmware.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ghjs5z5mmd1lT6YotAc106XIlQJUph/8bIxbNPbIEW8=;
- b=O0wCLMVmqVd6QR6gbCHhVHuFXj+LvaYlIUdyYiHEUPR1bxaglueSSLng4HpMkeRRQO8jFyeFNin1S5XZ7GP/K/9iZqW7b78dDaLHCERZPAwxF8HdhKBesWPNF3HSNzNE+7dmTOCbUwPeoXpU2GG+aRwhTNlFM1wGTnhtOCFnlbU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
+ bh=MHoRpvw8HSyWR9vu8KTOeT9kWZQz8g9cVS9bFOkoSq4=;
+ b=tbEK/Mysyn58peLRNVXPpY+KkVMBDE3kq/ZBYwPC3RNLehzrAEgWIZGN0DStPA9L8MbBnHVOG4LACzpVFz6Cub7ciPOzwkVdApR6tXm4aNgmO+PlEhvgCnGjX9wBlGu5J2aehG9T5E2PvaxeqjTteiDXVi5Z4ipxUaOzjBvmrmE=
 Received: from DM6PR05MB5418.namprd05.prod.outlook.com (2603:10b6:5:5d::31) by
- CO1PR05MB7958.namprd05.prod.outlook.com (2603:10b6:303:f2::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.23; Thu, 1 Jun 2023 18:18:08 +0000
+ SJ0PR05MB8152.namprd05.prod.outlook.com (2603:10b6:a03:395::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Thu, 1 Jun
+ 2023 18:21:19 +0000
 Received: from DM6PR05MB5418.namprd05.prod.outlook.com
  ([fe80::e933:485f:bd5b:a090]) by DM6PR05MB5418.namprd05.prod.outlook.com
  ([fe80::e933:485f:bd5b:a090%6]) with mapi id 15.20.6455.020; Thu, 1 Jun 2023
- 18:18:08 +0000
+ 18:21:19 +0000
 From:   Ashwin Dayanand Kamat <kashwindayan@vmware.com>
-To:     Vlad Yasevich <vyasevich@gmail.com>,
+To:     Simon Horman <simon.horman@corigine.com>
+CC:     Vlad Yasevich <vyasevich@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ashwin Dayanand Kamat <kashwindayan@vmware.com>,
-        Simon Horman <simon.horman@corigine.com>, amakhalov@vmware.com,
-        vsirnapalli@vmware.com, akaher@vmware.com, tkundu@vmware.com,
-        keerthanak@vmware.com
-Subject: [PATCH v3] net/sctp: Make sha1 as default algorithm if fips is enabled
-Date:   Thu,  1 Jun 2023 23:47:54 +0530
-Message-Id: <1685643474-18654-1-git-send-email-kashwindayan@vmware.com>
-X-Mailer: git-send-email 2.7.4
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR13CA0195.namprd13.prod.outlook.com
- (2603:10b6:a03:2c3::20) To DM6PR05MB5418.namprd05.prod.outlook.com
- (2603:10b6:5:5d::31)
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
+        Ajay Kaher <akaher@vmware.com>,
+        Tapas Kundu <tkundu@vmware.com>,
+        Keerthana Kalyanasundaram <keerthanak@vmware.com>
+Subject: Re: [PATCH v2] net/sctp: Make sha1 as default algorithm if fips is
+ enabled
+Thread-Topic: [PATCH v2] net/sctp: Make sha1 as default algorithm if fips is
+ enabled
+Thread-Index: AQHZXMdG4h0xVBWDyEeNOj/spVySWK8HRTEAgAPH+wCAAFzigIBiu+UAgABrS4CACCDsgA==
+Date:   Thu, 1 Jun 2023 18:21:19 +0000
+Message-ID: <9996C569-B942-4E46-978D-AF91C7543B53@vmware.com>
+References: <1679493880-26421-1-git-send-email-kashwindayan@vmware.com>
+ <ZBtpJO3ycoNHXj0p@corigine.com>
+ <4BCFED42-2BBD-42B0-91C5-B12FEE000812@vmware.com>
+ <964CD5A7-95E2-406D-9A52-F80390DC9F79@vmware.com>
+ <B70BBC83-2B9F-4C49-943D-74C424EA4DCE@vmware.com>
+ <ZHIQBUEvo49G9j/0@corigine.com>
+In-Reply-To: <ZHIQBUEvo49G9j/0@corigine.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM6PR05MB5418:EE_|SJ0PR05MB8152:EE_
+x-ms-office365-filtering-correlation-id: f89b3755-018c-43c3-496c-08db62ccff3f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: QECUQXBdD+Gvzf6Wnv24BVYH8158eoszXsb89Ms8K/LYeb4ME94CeFLr1hBf8iCpnUowbuNHmD8WILUQG3l77hUgsk1lXvd50lfxsZRvAh+NxSPld5Wl9z26/SQSPWItQ1FsU2YKHpsiIwd0fNiu5JqrRBDh0nazFdvDBoJaGgeHK+JwIjzSRXmCdWCwIyA97VIbH4ZgxBN4tC+lOdX0fDIYMXlnFcilQqEEbfcdKUH3Etmgd4PkrDpTDkg9c/UYnJy+WqY0fr/iEcA1YCBGKZTCQXwZgzUMssSlSur6z5rT8u4+MsnkUbFPqVECUsvzVgzD/58GYeD/b5ApBPBRlIpNFEfh4QbNZzhhjG09wIY/lNBcH0jajAujDJJpG2kQjeL9gnPR1qwHX7fwKgCqqdNjtXMnb0BzbK2QYKa8PuNW3B7K5NuNwg/mNn3H7A5hbpXGvXOgD1Ma5FlTHP3mcI3f7EpocobcHSZoUIHWbzbYq0fgDd1KXyyWwG44uvYpmqNnX83n3SzGAkwvJwDuSyNu2GfY1pDtxKsizH56X2IGkOI9ETZ6oKGYGwphRmTR3MFsRYhsUXevztE69BiREXECvOtAEL/so12n72WeQU/Mhhlvafk3GuFnwvE2ZjmsEPSCssXof6/8vUigwe4fCA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR05MB5418.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(366004)(136003)(39860400002)(396003)(451199021)(186003)(107886003)(41300700001)(38100700002)(2616005)(71200400001)(83380400001)(6506007)(6512007)(53546011)(6486002)(478600001)(54906003)(66946007)(122000001)(66556008)(4326008)(66476007)(64756008)(76116006)(316002)(91956017)(6916009)(7416002)(5660300002)(8676002)(8936002)(38070700005)(33656002)(86362001)(2906002)(66446008)(36756003)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?QSqqwVdaAgRqueQ5PuVaTY06dL/ZpI5Gbhom1WMnqvuuz0fGSMuSCkWh7NYW?=
+ =?us-ascii?Q?TuRKrWTI+7UhrJMzUGIXgZ0fU4UcL1KPdzkazK3tzfI0KrFMuFb5eowbU9TG?=
+ =?us-ascii?Q?nBuTbLgpFMwzeOfR1UgpbxdMtjfcr2PHIafB1HgegEnBcwLYCbd78J9auwue?=
+ =?us-ascii?Q?jVXdzT779IC8HiFKUEjBVc9T9eoQUTwEIvSZOoU5S3YTf6WOju9cBgYbYpUd?=
+ =?us-ascii?Q?wVJ9c2DD0uK7nM6cJGmEVNpLBg9tXnbeu1qQQBT+cBsj3GvYACVchJ/r45rp?=
+ =?us-ascii?Q?CY9QeoqRNZ9kOekIVdpYv7c21HWegFfgBD8SU1qDBpzHipMD1m7Gq/icG5Cc?=
+ =?us-ascii?Q?qWhjW+7NguwNbEDHoGHvfiQw9FSXZaPvM6B+uSkoiEVLYBX1eS0raR6T2d94?=
+ =?us-ascii?Q?UHYRFkMyMwB5JkKrJ4TiTJLqPlj2gXuthomYXMJrcgG/M7UfPaEqUb8vbePz?=
+ =?us-ascii?Q?j4en1og+bmpwONCC0vhYoiCYL5yC8yyWOY1ZaoX6Law00MN+j/p24Hvq3cQk?=
+ =?us-ascii?Q?rhwKD5nsLp3v3qhkv5pHObI5ns3ivjen97hRXXMuabYx9rfPH+649Gd4vxn2?=
+ =?us-ascii?Q?sSOaaLchbu1kMLEr2a8HaXGimW1P1AT49Yl0a52VWf0cRYG6oYr3vo4EIXlK?=
+ =?us-ascii?Q?paxg+V1OGS7JQoN01Lr36OaRbu0wM/XKa6tIK3j6gLbbmljh2qX1MbJSwIGz?=
+ =?us-ascii?Q?bJcpcP28dzlUEl8Vy4r7T5ZIqV9C+kqh8rjLClMDFRFGwfSK/0ytcIVbset4?=
+ =?us-ascii?Q?t+Va9GMQl7tRtUwyULJL1e2bjjTcy/Jb/TqCvDeJ6OtCheCwu1d/OcegAgq6?=
+ =?us-ascii?Q?6ZHxm/0iY4uInigWoKesxSJzupu5H+8gy7dSfUa//WBkHitKZLH8wc02DRJR?=
+ =?us-ascii?Q?8ay53h3+WoH8mMS/cPS5ZVLqJMWIfsfF6XK22gwxVXebftQU2Xzg+3eS8T7M?=
+ =?us-ascii?Q?k05rtlxzLjYK8Pvw1bB6yCtx/4+JOv4AYb5GO0PpKhtTz6jQRZw0u4PAahag?=
+ =?us-ascii?Q?eWl1IdPKVdG2UY9WhKEoZvXbyHzR+PqarJagEntJGDHdHXtONM9xh+hl/QT/?=
+ =?us-ascii?Q?IBn/SB9S3KB0Mvj9Wbv2D3wPDEGSLUU55p+142QRyLyDT6ZKvWbW98mjdtwG?=
+ =?us-ascii?Q?Ol/nKzeeA+PxFXoLNtN/WrTQ5aiTTRMohR+WN862iqNtSOoMMrf0WYy0pJYI?=
+ =?us-ascii?Q?pVf4yzQeO9WfAqg1y2beOU96UTOVDRwaXb10Ypu5Q+I/iUWe9uW4imtmN9TX?=
+ =?us-ascii?Q?tHmb5zVC4dXOvo+DjF0Ux+lDtO6OZha/75fdMvQgjrGudXjVq+NQ+0zw4/0l?=
+ =?us-ascii?Q?AVGDnXNM88y4WLGI5b8QaxzVC/B25wf39lLeLakiYZEE1nV+77QleNmWpMCG?=
+ =?us-ascii?Q?FHVcBqmXY4nnVewTltHlmdySSr/TeJo2cwzyNScqaQ3zMqL5mRUcxo/0eIBj?=
+ =?us-ascii?Q?kQtM85nQZYTyQhpvBV88DkBBo2ZgiJ7qFi71F84gO2lSG21aZ5xgjI7Qt93i?=
+ =?us-ascii?Q?Fze7tt9VO9DElDrFFhyk7KZX9Y226GnU8by4894U0sEG2dE8fqv1SpwyN5ol?=
+ =?us-ascii?Q?R+sOoErZed0KXaQrc4yQsDXGFPSP6f21GAeZO6gWsKcHuCZrKvPJUAxYdU3y?=
+ =?us-ascii?Q?BalIFdYCuUD+Z/FXcvYTGtqVn6HoJ5+0Q+7vord31ppyLnsfT66x6ZvlZsTw?=
+ =?us-ascii?Q?s07duQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <32D7682B59FBF54CAA422C71C536CA8D@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR05MB5418:EE_|CO1PR05MB7958:EE_
-X-MS-Office365-Filtering-Correlation-Id: 80e54ea2-fbac-4b42-ea7f-08db62cc8cec
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qYlamIlCEMBCX5Te14iuGIrUoEBF2+hu1nX2RSO6SxLyw3nGPf5vqrMQL3BDkdfVgEAhczYn0AAc3VMbOa7UhQ5Fv8mblidqbs59J5TFjA4AKY2HWCLv8Xm+FTjN9GN/KXvwleLy9fW88YaeklVXr+9d0nQL0ID33U9+jj+rCGzZQNAgPODDoMQHblcPd2CNHN/4qOFVtGWTRtO9IwrsQltL3QnyfUSsh5OswjwaA8R2npm2S4nI7iQbHzUPxDet5lgRQCMAsji93N2EXlmgCGQ3rYa0pgFZTrhu1iFZwCqyh9UbA+U0yGNQw6WkKUCKA4/yOz/DxLefbt+aIDqVoeYOwLh1DatUimkU0TP+RE+Nzeb36UaxY5lH+eA+MnDMFul3Ix2lEofZgqoSbmdkMFrnne4btg+Fbtu1yNaI5GipPE/fBrraAqdI45/mAT58kO6yRp4InG+MA/KpfJhRBp19PIXKN+izGjPI02EJABqjbkeNT+Da9Np/EsEjjxGBEMEPnMrfFFUZSHEw0g5wk8eJH9TdiRdoZagWfVQ1HB6lTBx1rCX/IMA/XI5bYZovVnScIQh6OkqvH/RTT9yCDC7j8z5KwcM46/D7KVzIlX6I7wAQdlcuJUDdg+ID9x2jVPylEG5oLNf5misLDVGnAyILsnRFvLWRD6vU7Nwer7Rkl7+JE7OQp1YoihVg4gnw
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR05MB5418.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(366004)(346002)(136003)(376002)(451199021)(6512007)(26005)(6506007)(107886003)(186003)(6666004)(52116002)(2616005)(83380400001)(6486002)(41300700001)(316002)(2906002)(7416002)(5660300002)(8676002)(8936002)(66476007)(4326008)(66946007)(66556008)(110136005)(86362001)(54906003)(36756003)(478600001)(921005)(38100700002)(38350700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gjtIvy8lETeOvulURYYK6CT6biYo8fRYlmhNY+2nc4lP1X8+6/qFHCh4O/ry?=
- =?us-ascii?Q?xnuvpTDzE3S29o1NI9qiSR97d6XS+uPt6UXcBvSO/6ipasuyem/9vsK6g+BH?=
- =?us-ascii?Q?61ZnzzsHPG60T+kjvf7uEZAjIom2GbCqvq5wDOAi4+zhio4peoXpd1aPKetu?=
- =?us-ascii?Q?BhKBJiDjrUwcISnUfVwMy2Z3k4bWDieiY05PNFJ5C1K/mkBptoVF+D38FOvn?=
- =?us-ascii?Q?NY6YLp3vYzfIHz+mseH8v8bugOZWx8Jl5+/WsmT7yg4Gyn4BAHuRpgkMupdm?=
- =?us-ascii?Q?B1eI0F+UILukAMaWAQvdeAy4omVbGaiJIHIiGPPapaMbg/inlMKErJRzMd8B?=
- =?us-ascii?Q?ql0gqS+mHIoTQcCsgiSZBloGP+ycV84d31B+WI/kInN+hq1rAVlNCNLEmOe5?=
- =?us-ascii?Q?aE7w9gxEQNreixyJfLrqQrka5ZQGYAarqaopP1SrIzyAhABv4NpR1oYPr1Rk?=
- =?us-ascii?Q?rqDizu0N4AZsDJNkG8qMBOEvkSjpn/HDIs1biYkTXAijwNc61pbo877nNx3m?=
- =?us-ascii?Q?91rEz6FTnAMTQPgdBsr1arXJP/aPQU2DMn4RfeIXhUIH6AZKe5mtiYakSknA?=
- =?us-ascii?Q?c/CG1XmpB0Wsq8Id7I8Y+x2Rl7PHDl061mcztMXCDOayLRAZxOi2ZnlQodlh?=
- =?us-ascii?Q?7kSTWdbskxjf47jMoZr1SmHwFe7MY+kvvWfuhr429/ntv9YB6Ws0hHG+vgRz?=
- =?us-ascii?Q?Znzeez5eLtwv0cx4IOL6e6XUVFBLIr2/pL7+cy9dE0ZIKPMBDen8YhKESIq5?=
- =?us-ascii?Q?b8fnI0uXLQM8O227bbjIRk9CwrYny2RMgsZ3Ql93FlkPzREeFdLHQSExpfdV?=
- =?us-ascii?Q?p231+7uOXgkwMi8DwHOXbzRcUp/MtFzjF7kkiVKuSTL53+PxWmvVQYSflTEP?=
- =?us-ascii?Q?qOzMO6CcQD1W8NHEt6HD9SlAlB6N2lGX32sTT6ypvmpByN3NJtQ3QuvHx2gV?=
- =?us-ascii?Q?ua6S8NtlEIzZ4SzoTu73Hd1CNBJRkG+86OJPBpG0sfnxNhe03mZLNkaDx3F5?=
- =?us-ascii?Q?cLw3cAgEsbe/9JDTwxmAYo4jGpGdiTz7Kii+yChODf4RLEi3O7WKi1GvjcDR?=
- =?us-ascii?Q?Y7rv+WyT0kUSvx4fcHkik/C8G2gX2SZWSMAsJclUkbHhgumiYhNNgq7qvjQM?=
- =?us-ascii?Q?g4gH2KdHgpOv7IsQLKj0/hKxrTVou5CiZ3MOQN+4keetwVpxJGWVmAp0FRHI?=
- =?us-ascii?Q?0yk+gtLuVlVln5gRzmXgMEoYWgk3Ht9JFNTCVx7xuwAUEjTXg5IlAQ/aBBAK?=
- =?us-ascii?Q?+jUxaKiQZ738/uwPR2U7GraykKcRH+19w2Co7Kqg2aRfOKviB6i5jme0s4PH?=
- =?us-ascii?Q?BfiTPIHsZIPvdtbLFsZNGa/dwe35KrVr124yO/tI+Pcya6Ksa+7GNAxZcIIG?=
- =?us-ascii?Q?cjtZXV1WkMv04AW05HU/pwWQmv3p64blWFP1E+IUKVqKr5DENxxPRgzlY+xC?=
- =?us-ascii?Q?WpBMQaFgBX84fZJhbYK2nvgNmfqx2xLC/4mx/p0sER7HTIxI5ppe+8mf0HoN?=
- =?us-ascii?Q?iEaw5UBMN1lUZy/8Xwy6dY8QEYToGqC103uTuGQU+jDwS8IW3mo61beqkOCK?=
- =?us-ascii?Q?pp64S9+z6A3DXvO3lnVzjq0gqeOXlB/+kfpHj/rD?=
 X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 80e54ea2-fbac-4b42-ea7f-08db62cc8cec
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR05MB5418.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 18:18:08.2257
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR05MB5418.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f89b3755-018c-43c3-496c-08db62ccff3f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2023 18:21:19.7865
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 20jdAEd9YZjnjh2/LLo8HuRZElxKcpVtagTaV3TfrZvxel46JzPhZ1rwDRQTFLjVy1DE17DwpeFx2yTBUildfQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR05MB7958
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: CsbtG+Id23hkdJaSTKPw2y3egrKgETjQ+b4aC0jXiksQev2jCpmeTULlB61Y4aVpRMC9ZVV9V4IddZg8odRVVg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR05MB8152
 X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -118,60 +138,95 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-MD5 is not FIPS compliant. But still md5 was used as the
-default algorithm for sctp if fips was enabled.
-Due to this, listen() system call in ltp tests was
-failing for sctp in fips environment, with below error message.
 
-[ 6397.892677] sctp: failed to load transform for md5: -2
 
-Fix is to not assign md5 as default algorithm for sctp
-if fips_enabled is true. Instead make sha1 as default algorithm.
-The issue fixes ltp testcase failure "cve-2018-5803 sctp_big_chunk"
+> On 27-May-2023, at 7:43 PM, Simon Horman <simon.horman@corigine.com> wrot=
+e:
+>=20
+> !! External Email
+>=20
+> On Sat, May 27, 2023 at 07:49:26AM +0000, Ashwin Dayanand Kamat wrote:
+>>=20
+>>=20
+>>> On 25-Mar-2023, at 12:03 PM, Ashwin Dayanand Kamat <kashwindayan@vmware=
+.com> wrote:
+>>>=20
+>>>=20
+>>>> On 23-Mar-2023, at 2:16 AM, Simon Horman <simon.horman@corigine.com> w=
+rote:
+>>>>=20
+>>>> !! External Email
+>>>>=20
+>>>> On Wed, Mar 22, 2023 at 07:34:40PM +0530, Ashwin Dayanand Kamat wrote:
+>>>>> MD5 is not FIPS compliant. But still md5 was used as the default
+>>>>> algorithm for sctp if fips was enabled.
+>>>>> Due to this, listen() system call in ltp tests was failing for sctp
+>>>>> in fips environment, with below error message.
+>>>>>=20
+>>>>> [ 6397.892677] sctp: failed to load transform for md5: -2
+>>>>>=20
+>>>>> Fix is to not assign md5 as default algorithm for sctp
+>>>>> if fips_enabled is true. Instead make sha1 as default algorithm.
+>>>>>=20
+>>>>> Fixes: ltp testcase failure "cve-2018-5803 sctp_big_chunk"
+>>>>> Signed-off-by: Ashwin Dayanand Kamat <kashwindayan@vmware.com>
+>>>>> ---
+>>>>> v2:
+>>>>> the listener can still fail if fips mode is enabled after
+>>>>> that the netns is initialized. So taking action in sctp_listen_start(=
+)
+>>>>> and buming a ratelimited notice the selected hmac is changed due to f=
+ips.
+>>>>> ---
+>>>>> net/sctp/socket.c | 10 ++++++++++
+>>>>> 1 file changed, 10 insertions(+)
+>>>>>=20
+>>>>> diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+>>>>> index b91616f819de..a1107f42869e 100644
+>>>>> --- a/net/sctp/socket.c
+>>>>> +++ b/net/sctp/socket.c
+>>>>> @@ -49,6 +49,7 @@
+>>>>> #include <linux/poll.h>
+>>>>> #include <linux/init.h>
+>>>>> #include <linux/slab.h>
+>>>>> +#include <linux/fips.h>
+>>>>> #include <linux/file.h>
+>>>>> #include <linux/compat.h>
+>>>>> #include <linux/rhashtable.h>
+>>>>> @@ -8496,6 +8497,15 @@ static int sctp_listen_start(struct sock *sk, =
+int backlog)
+>>>>> struct crypto_shash *tfm =3D NULL;
+>>>>> char alg[32];
+>>>>>=20
+>>>>> + if (fips_enabled && !strcmp(sp->sctp_hmac_alg, "md5")) {
+>>>>> +#if (IS_ENABLED(CONFIG_SCTP_DEFAULT_COOKIE_HMAC_SHA1))
+>>>>=20
+>>>> I'm probably misunderstanding things, but would
+>>>> IS_ENABLED(CONFIG_SCTP_COOKIE_HMAC_SHA1)
+>>>> be more appropriate here?
+>>>>=20
+>>>=20
+>>> Hi Simon,
+>>> I have moved the same check from sctp_init() to here based on the revie=
+w for v1 patch.
+>>> Please let me know if there is any alternative which can be used?
+>>>=20
+>>> Thanks,
+>>> Ashwin Kamat
+>>>=20
+>> Hi Team,
+>> Any update on this?
+>=20
+> Hi Ashwin,
+>=20
+> I don't recall exactly what I was thinking 2 months ago.
+> But looking at this a second time it seems that I may have misread your
+> patch: I now have no objections to it in its original form.
+Thanks Simon.
+I have Updated the v3 patch with some minor changes.  Please review the sam=
+e.
 
-Signed-off-by: Ashwin Dayanand Kamat <kashwindayan@vmware.com>
----
-v3:
-* Resolved hunk failures.
-* Changed the ratelimited notice to be more meaningful.
-* Used ternary condition for if/else condtion.
-v2:
-* The listener can still fail if fips mode is enabled after
-  that the netns is initialized.
-* Fixed this in sctp_listen_start() as suggested by
-  Paolo Abeni <pabeni@redhat.com>
----
- net/sctp/socket.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-index cda8c2874691..d7cde9cc706e 100644
---- a/net/sctp/socket.c
-+++ b/net/sctp/socket.c
-@@ -49,6 +49,7 @@
- #include <linux/poll.h>
- #include <linux/init.h>
- #include <linux/slab.h>
-+#include <linux/fips.h>
- #include <linux/file.h>
- #include <linux/compat.h>
- #include <linux/rhashtable.h>
-@@ -8501,6 +8502,15 @@ static int sctp_listen_start(struct sock *sk, int backlog)
- 	struct crypto_shash *tfm = NULL;
- 	char alg[32];
- 
-+	if (fips_enabled && !strcmp(sp->sctp_hmac_alg, "md5")) {
-+		sp->sctp_hmac_alg = IS_ENABLED(CONFIG_SCTP_DEFAULT_COOKIE_HMAC_SHA1) ?
-+				    "sha1" : NULL;
-+
-+		net_info_ratelimited("changing the hmac algorithm to %s "
-+				     "as md5 is not supported when fips is enabled",
-+				      sp->sctp_hmac_alg);
-+	}
-+
- 	/* Allocate HMAC for generating cookie. */
- 	if (!sp->hmac && sp->sctp_hmac_alg) {
- 		sprintf(alg, "hmac(%s)", sp->sctp_hmac_alg);
--- 
-2.39.0
+>=20
+> !! External Email: This email originated from outside of the organization=
+. Do not click links or open attachments unless you recognize the sender.
 
