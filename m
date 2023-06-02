@@ -2,152 +2,111 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27CB27205B2
-	for <lists+linux-sctp@lfdr.de>; Fri,  2 Jun 2023 17:15:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C649720748
+	for <lists+linux-sctp@lfdr.de>; Fri,  2 Jun 2023 18:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236400AbjFBPPc (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 2 Jun 2023 11:15:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
+        id S236655AbjFBQTP (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 2 Jun 2023 12:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236394AbjFBPPX (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 2 Jun 2023 11:15:23 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0599CE43;
-        Fri,  2 Jun 2023 08:15:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=E2fKISemOoUpStM4T3ibnKvZzkH6I2Ol/3BN+9cur8ccaFaJ2rQy6pKLbjuaXWULetjXO77kkdC9/x+QtWrrYO5GiyIIW93YNT45WHwRSjk17KBBCJyaeEt2kvuEvsxPYbFCnsb0Dh1TFCSaB2zLvGQw8exg3PtSaBHD5tptl6STWc/uejUtQQiUbkvEkeEAZybghg7tjGfZpTxGKCv/7l0ugbwSnQgQQOryM8zheYvEfEWvcFx4firA/CSRdz0Oh+1zeIlAS8JWS0KdPyfuXnHCw1/k+uzNfQ8IeLRBmBf1Q/URNZES3UkjrbMxA6LkFkKWr+fD5Tn/gojNLkACsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tAERUP7tWwE4MNECYCM5/ajFW/6s/EdqUivVr3TQOU8=;
- b=PPAa6jX7TLdQXeVSykTMTQUopqiLOzWW4/xgsdbbvTHXUkx65eqqImge3+rj1Rca+KBhmAvkOgrukvSazMN3ahGkZLtaM7d6N8Mx/WoJr5U8KaDuRgofRAmoQfxb/Qf9tigcLfbebRNfCMRZ0+SRAYizRxUu1N4hR1onN3BkOdkqbyzBUd3H7+E7MFsmBHAxwHCNIPamc6war9b/L9dy/2adr6zaZkJ/OQANf63mGm95h8/R62fEZ11aFAOHL3r6ZLHrXmRdrLtwiqauQbFoU8FQ39NYEiFsVVCGapq66EhTeT5VJFDdfxo9cHNRdDgIEO/tFFEkfF7lYjYNVPaIYA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tAERUP7tWwE4MNECYCM5/ajFW/6s/EdqUivVr3TQOU8=;
- b=Gy9LvfJiuNS2cAtxM+YzL/AwZ+KKxES/EQOReLY/tj7Vl0gLa8vGl+kc60jLZFJyGfkEv3tDHpCDXOji4qywIezXSrTC/oeD0vJD56b7iaJaao6waMNBt+51vL8zIL24l20CWuqKd9+/N0qFmuhdLxU0EOruuq6qr7XxBRJJ4ug=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH7PR13MB6220.namprd13.prod.outlook.com (2603:10b6:510:24b::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Fri, 2 Jun
- 2023 15:15:17 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6455.026; Fri, 2 Jun 2023
- 15:15:17 +0000
-Date:   Fri, 2 Jun 2023 17:15:09 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Ashwin Dayanand Kamat <kashwindayan@vmware.com>
-Cc:     Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
+        with ESMTP id S236596AbjFBQTO (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 2 Jun 2023 12:19:14 -0400
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CA61AB;
+        Fri,  2 Jun 2023 09:19:10 -0700 (PDT)
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3078cc99232so2053910f8f.3;
+        Fri, 02 Jun 2023 09:19:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685722749; x=1688314749;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Df45G13freHV7qKaooKW3cbNcYiTjIevZWnDBJV0Ngs=;
+        b=hUEnD0Ofsj+rzl64sA0vaThqsrkqYoUsUTISenW0qLKAQ6C2Tj+Ai/OLheoQunlaZm
+         PgY00AZi/c/BBWf2gvi5+EOJIAiLgEVFv8EFysrxkP6vDXpGXCWf/eDyY4KTXetUalQi
+         C9PLWxGVedEaoH7U13Lfthaak9DuD+EOg64RDjVtHrBQ8lh24+j4hec3Xg5brqQTY+5A
+         /QpBQKwpwY8phDgnTuKsxSv31Xotp/weBsvGpSDUMiOsIAHJgtNoNk8toAXNrV/LNtNo
+         d3EGoUkTfSHZarrhxesSlnafEdD/F8g7cWQfaqUVNtJe+0VdjORtShHTm1LKlJrkeJqc
+         UCCw==
+X-Gm-Message-State: AC+VfDw6i4lLwfE81t/W2aMQPrNK/X90TvuHKIyBpfavNNIXD9tzio1l
+        Yxvi1yh3A2QGxJGeonJ225o=
+X-Google-Smtp-Source: ACHHUZ7V6s1LqVdQdevjsk3RKa1VPwpouEu01j6+gnTKwWbWp9RyusXrlmogJW9nb4M2BtQB8hHwHg==
+X-Received: by 2002:a5d:65c2:0:b0:30a:dfb4:e300 with SMTP id e2-20020a5d65c2000000b0030adfb4e300mr389381wrw.28.1685722749158;
+        Fri, 02 Jun 2023 09:19:09 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-116.fbsv.net. [2a03:2880:31ff:74::face:b00c])
+        by smtp.gmail.com with ESMTPSA id k2-20020a5d4282000000b003047ea78b42sm2075225wrq.43.2023.06.02.09.19.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 09:19:08 -0700 (PDT)
+Date:   Fri, 2 Jun 2023 09:19:06 -0700
+From:   Breno Leitao <leitao@debian.org>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     dsahern@kernel.org, Remi Denis-Courmont <courmisch@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        amakhalov@vmware.com, vsirnapalli@vmware.com, akaher@vmware.com,
-        tkundu@vmware.com, keerthanak@vmware.com,
-        Xin Long <lucien.xin@gmail.com>
-Subject: Re: [PATCH v3] net/sctp: Make sha1 as default algorithm if fips is
- enabled
-Message-ID: <ZHoHfcMgYqO3l7Np@corigine.com>
-References: <1685643474-18654-1-git-send-email-kashwindayan@vmware.com>
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <martineau@kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>, leit@fb.com, axboe@kernel.dk,
+        asml.silence@gmail.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, dccp@vger.kernel.org,
+        linux-wpan@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-sctp@vger.kernel.org
+Subject: Re: [PATCH net-next v4] net: ioctl: Use kernel memory on protocol
+ ioctl callbacks
+Message-ID: <ZHoWeiDVoLV1VMpT@gmail.com>
+References: <20230530175403.2434218-1-leitao@debian.org>
+ <6476f0e4b0182_3c8862294b2@willemb.c.googlers.com.notmuch>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1685643474-18654-1-git-send-email-kashwindayan@vmware.com>
-X-ClientProxiedBy: AS4P192CA0036.EURP192.PROD.OUTLOOK.COM
- (2603:10a6:20b:658::29) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH7PR13MB6220:EE_
-X-MS-Office365-Filtering-Correlation-Id: ae704a03-8b8c-48e2-d673-08db637c2c1e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: llNwST21VM1nWJmYHFDD4E6Y5JUUGeAcBZqsUDTxV2FHJP2xYWVrao7B2Vxj82eTG4d6dCDDHXLYrk27tHOgWqXGpEYNASt5NFrC0KWRtdknx8NiUBnK+n7MLVbmm9Ru49EawveQ6fmwotCWJ0s2YxkvOC1339/GZ0kyBiZv7++wd3sfucWRC0p76ynzY2hjoA+2CtOHT2+fKjn2BRLLouQ3xEleyI2Mh5gCIjeiswfAsyMnMNW/nq/Y/q+BpZqtKbUJyhg9MCWi+mSxd3thusQlT1UM20l/49U2lc9QC9TDf3J6KM4GcBCefwxo3WNKBAWs/apmAOmxn4EQx2zadJSeQA9VMbh/owaSqvVXV1LMAr6m4WUlvvYW6OOiwaSd18zMx82kNE6ltgYMcCTGaI0zEb0OEF1QOWiYY/8aP3fUotoX4P85968xmus94EexfMHE9Mqgj2QynTemw+Ag/kg6GAhdhirF7eS79/0AgbcoQqYP1e58q86+tgwogfsASes2vFSYOo/Dlsxu31jCmx+qnc+LWpgaxk7VODLBHT/0d+zLZZDH8lVS3DKaxV6aUC89TIoV431kCcJ+SfWoOrZLaAU5sqskJpzEhykTKhQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39840400004)(376002)(136003)(366004)(346002)(451199021)(316002)(186003)(54906003)(6666004)(6486002)(86362001)(41300700001)(83380400001)(478600001)(2616005)(2906002)(26005)(44832011)(66476007)(66556008)(6916009)(66946007)(6512007)(5660300002)(7416002)(6506007)(36756003)(8676002)(38100700002)(4326008)(8936002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?R/NxoXN21GTc1zH5YEfN7JhEYk9wdq/dfYC8iIAJD08Wj19SEG6Duus1MmtQ?=
- =?us-ascii?Q?1m8SQJCxV043oa95+xsaDTcoAws4/t4n5jDpwJr+8mnOv8qQCkKuDpe/j46H?=
- =?us-ascii?Q?MeripAI/anaf5BBLFoEGLdhSD77v2b9akfk2DETXAIVeHcDXADra07WKDBHG?=
- =?us-ascii?Q?CgofPXFiMr7U/4wmsBxFE/13DI1To7frUkx23A8HLk3AYp2NjqlsprX8xfKK?=
- =?us-ascii?Q?TAT8IMabp3zerXclJq2KOoxnvBtOYtn60WjpPreSemvdDrrYPBfaJ65LrWNA?=
- =?us-ascii?Q?3TByAIk//fwvEosSeTSSPiF9Szq52XB9jEjE05ft3g6LS8L28CKbTW1Xp8HH?=
- =?us-ascii?Q?nxx1NbUU+THBN+Vzdl5m1l2ylqUsB6wzm0bk1iVTEdA6kir+7jf19gG70DyB?=
- =?us-ascii?Q?sq2r3725vmNK8QQSVLwdvqL3R9ibqPFXKFA/7Z0ZMs9GPxUSRU3w+yPAByfS?=
- =?us-ascii?Q?BZgXFG2JytJUVzH5gfv7CPGasglhN/tx/YI7XkmmXqHHilhN1/eiTe05jAgZ?=
- =?us-ascii?Q?F1H1ue4cWHCwq8xahmXPAgtOKTmISmGSUdCmh4RuHOnpvaL+hQMfj+oodySv?=
- =?us-ascii?Q?FuQ72ry/XXMjsIw74WsoGAJTsMjPhWsXiGhNmq/mEBzBiZXdvZLviP4L7e/6?=
- =?us-ascii?Q?x2c9LoAgyqPfidhjw0etMklWL6m+bnSvXPZvNIAFY4FOj+tQ96DcQjHtYYRh?=
- =?us-ascii?Q?FRj5YlqM930T8XP8NNic8rDMca06woKenEol8CQlxLBrGRFj1YtcewetsGVi?=
- =?us-ascii?Q?RfRpfyOCEPAidhQ+k260rM9MJw0JkqaGP58WjsgJSTM2h+2jydfU//Sgx24E?=
- =?us-ascii?Q?K5dVu7gZqTGeszCIq1Qg2fcyZG3oZTeXbupqg+6rXNNYugYYR3XSoonc3MZ5?=
- =?us-ascii?Q?cKA1Gw9uuCaK+q3jzxyPFBweUdPGIxzgfKPOyFh8+7NzoXubzCUrpmT9XMk2?=
- =?us-ascii?Q?HlWTUmI0WWd7iMfFqytWrMAHF4u7E9pHLDy3o1ywF4g2yv4qAWfEbrqLC6v+?=
- =?us-ascii?Q?jlhqYROysIq+WKicMePPEbhRWoCbxwschQPoulKa00oSt/sPlJM1pw2QvfvM?=
- =?us-ascii?Q?nXDVLWOb58oJ9ce1AKypiKgi1Qd7ppUxci2hKR9io0JpxW7/M6LvEXgroeRz?=
- =?us-ascii?Q?fLQy7SLCPDNpjlcdj9t/oI2P/GUdxhFdoRFz57jog5hYV7EiICbPDX/zxSex?=
- =?us-ascii?Q?yMd//LC7s53G8f7woXMb9i00lDAc/s0RukWFkUQKgP3yqMjZpvhV+xCKqj8L?=
- =?us-ascii?Q?kQNuMkzCudpyVUpH3yQHq6j3kRETDik8piAkpLeo0GQgLes2wHXvrPxmI/ND?=
- =?us-ascii?Q?YzAV0i7mulvTw1p1MROTf6MwCNsxCqsrsJyLxHdJLNcIvG5tHDeYkpU2/VxK?=
- =?us-ascii?Q?xh58BShXNALiwIZzjGlSiKFd/laSOMm+vj3AJEfx5xjXkkO0Z/XQwXviFgAj?=
- =?us-ascii?Q?bAx0yo366alItbY2kEUviRugTrSPCPdun+TBNKC7bXG0Bx/q6WTQjnFrQcCS?=
- =?us-ascii?Q?eHLbyHuGuWwS9/mRwlqqlQsGUlTa1+XMJPMLk/d2nqKu7+Ym68aqraeZgwFc?=
- =?us-ascii?Q?lx4269LSZJutSJmA2uy43VyrqaAbJu06qOOoKukhj4+q3OGxWbGu84n4HwH9?=
- =?us-ascii?Q?YQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ae704a03-8b8c-48e2-d673-08db637c2c1e
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 15:15:17.2277
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eXvoIGFWYI6yz2X5ZMpJKuRYPm4m/B8nbq7M5WHAMgrvQB4+R8+nYwXyvp+tNMsJBkEC4Oh+vw1KAFXd6mE9JWzr5wODoThoZtyEkBXeBLg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR13MB6220
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <6476f0e4b0182_3c8862294b2@willemb.c.googlers.com.notmuch>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FSL_HELO_FAKE,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-+ Xin Long
+On Wed, May 31, 2023 at 03:01:56AM -0400, Willem de Bruijn wrote:
+> Breno Leitao wrote:
+> > +int ip6mr_sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg);
+> > +static inline int sk_is_ip6mr(struct sock *sk)
+> > +{
+> > +	return sk->sk_family == AF_INET6 &&
+> > +		inet_sk(sk)->inet_num == IPPROTO_ICMPV6;
+> > +}
+ 
+> Technically, this is just sk_is_icmpv6, which is broader than IPv6
+> multicast routing.
 
-On Thu, Jun 01, 2023 at 11:47:54PM +0530, Ashwin Dayanand Kamat wrote:
-> MD5 is not FIPS compliant. But still md5 was used as the
-> default algorithm for sctp if fips was enabled.
-> Due to this, listen() system call in ltp tests was
-> failing for sctp in fips environment, with below error message.
-> 
-> [ 6397.892677] sctp: failed to load transform for md5: -2
-> 
-> Fix is to not assign md5 as default algorithm for sctp
-> if fips_enabled is true. Instead make sha1 as default algorithm.
-> The issue fixes ltp testcase failure "cve-2018-5803 sctp_big_chunk"
-> 
-> Signed-off-by: Ashwin Dayanand Kamat <kashwindayan@vmware.com>
-> ---
-> v3:
-> * Resolved hunk failures.
-> * Changed the ratelimited notice to be more meaningful.
-> * Used ternary condition for if/else condtion.
-> v2:
-> * The listener can still fail if fips mode is enabled after
->   that the netns is initialized.
-> * Fixed this in sctp_listen_start() as suggested by
->   Paolo Abeni <pabeni@redhat.com>
+Right, let me rename it to reflect this properly.
 
-FWIIW, this seems reasonable to me.
+> No other concerns from me.
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Thanks for the detailed review.
+
+> Two small asides, that are fine to ignore.
+> 
+> The $PROTO_sk_ioctl functions could conceivably call directly into
+> the $PROTO_ioctl functions without the indirect function pointer.
+> But that would require open coding the sock_sk_ioctl_inout helpers.
+> 
+> The demux now first checks relatively unlikely multicast routing
+> and phonet before falling through to the more common protocols. But
+> ioctl is not a hot path operation.
+
+I am more than happy to open code sock_sk_ioctl_inout into protocol
+functions, but, I would prefer to do it in a follow up patch, since this
+one is close (I hope) to address the original problem. I hope it works
+for you.
+
+Thanks!
