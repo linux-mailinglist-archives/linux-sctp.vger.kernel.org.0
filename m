@@ -2,59 +2,44 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E46A720EBA
-	for <lists+linux-sctp@lfdr.de>; Sat,  3 Jun 2023 10:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D38A3721570
+	for <lists+linux-sctp@lfdr.de>; Sun,  4 Jun 2023 09:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231472AbjFCIWa (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sat, 3 Jun 2023 04:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60184 "EHLO
+        id S229813AbjFDH7i (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 4 Jun 2023 03:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjFCIWa (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sat, 3 Jun 2023 04:22:30 -0400
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF81299;
-        Sat,  3 Jun 2023 01:22:28 -0700 (PDT)
-Received: by mail-ua1-x92c.google.com with SMTP id a1e0cc1a2514c-7841f18f9f7so750588241.0;
-        Sat, 03 Jun 2023 01:22:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685780548; x=1688372548;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j8g2hnOGOg2sxpTnLUbSGzAiSvvgwyqIgGFTiGWjGU0=;
-        b=rk5jL5mSq6M2gxVyXs4AUO7B65MmZArJzj3wGRXaSqEsGRuwpHAWF2E9/hMFbKk3c8
-         e4J5pa9SUHMps06XsQ+RxYXPuzuni8NHeYDSYI2xO/UQ49l2A5gS6/4jG3OFwBMYmE81
-         y79noa98hW4pqR2rjBCeCl8nPDi012PX9gVFQNQGk1UXVr4m4XmDvNUqYULKwOFf6Xar
-         2DBh/N6PETCeNBD9+r0VjTjxasPJFUVqVKsrvMFAPkd/Fs7Sx8Pn6rEs/ZTuD7nZ0HIY
-         mfIQvZWI3I+JzOEx6t22cO64rgX3pncWQqcG2P/ECJzu0HB3GMWlTtGYLcMlUX/oO4Mc
-         Bpnw==
+        with ESMTP id S229490AbjFDH7h (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sun, 4 Jun 2023 03:59:37 -0400
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D378EC1;
+        Sun,  4 Jun 2023 00:59:32 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-973bf581759so585956866b.0;
+        Sun, 04 Jun 2023 00:59:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685780548; x=1688372548;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j8g2hnOGOg2sxpTnLUbSGzAiSvvgwyqIgGFTiGWjGU0=;
-        b=RRKZ4/6zYB4JdsufrgTPGIPqUlUFPeNDjmjItfl49H8xQA1i+mH98Mduh/ZBj8t/57
-         ef2sAfzd/23oZpPZps+FTR9F3RlhbMAT5IfAcxc6KDJTu8GmlrWtVFOyZwvNzBqzejZ7
-         xer1a5jEdEvK0hW8+RDRNagCYmLSP+bgL/rWMkfwBbWLkUvi7aHRqgCnGm5l6o6EoIcV
-         nAhdWCQQPiH1Ph1I6SRKrSekVPJ/BCVggfnmOPDDjvkjfRMmP4DXtZ0UR8Uie17Uueag
-         BXIrHR0kwWGZAvpsZHuvEXgqOqjT2XZeLV+28av0/4bNmc5tp5fRDyNN8f0Gx8Ep+qfP
-         OiQQ==
-X-Gm-Message-State: AC+VfDwwaAQ8NRkA7U1br8JHDNtz3ovjgFSmQWrBbbyH7LQUxK+6G7CK
-        1m3wwduG2mWBj7y5FRxCYe2Ny4A1Qm0EmcjklE8=
-X-Google-Smtp-Source: ACHHUZ5ZX5Rv93vS+T0aa4l7PxWVuS+bIALakx92H3qwe7964NQXeeZKVsd/UNfQ8dr18rTvPckahEu218QkzqjD+rk=
-X-Received: by 2002:a1f:6017:0:b0:461:479d:745d with SMTP id
- u23-20020a1f6017000000b00461479d745dmr985295vkb.8.1685780547644; Sat, 03 Jun
- 2023 01:22:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230602163044.1820619-1-leitao@debian.org>
-In-Reply-To: <20230602163044.1820619-1-leitao@debian.org>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Sat, 3 Jun 2023 10:21:50 +0200
-Message-ID: <CAF=yD-Kk9mVWPZN50NUu8uGwEbySNS-WzvJ=1HTTcVsA6OOuvA@mail.gmail.com>
-Subject: Re: [PATCH net-next v5] net: ioctl: Use kernel memory on protocol
- ioctl callbacks
-To:     Breno Leitao <leitao@debian.org>
+        d=1e100.net; s=20221208; t=1685865571; x=1688457571;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L5qs9/6uJ8IloMQNdJLVtRnVIUUbYS4OgcobJioBuxs=;
+        b=IOyS9YJN2q1l5k7+XFWXCLD79i9Fon8o6PvMP92XKembdHx7SWcjy8rnzijOan0sjJ
+         mxmK6KPk8iC/hYJQKbH0RpXFMW9/1VerLTbgjLKrJre8wEFidMkgCwD4KetTJIv4gfx3
+         YMa9ujX9mzlMM3VS5Ghak+Wplq8ksfsvNYmaX4M1wMeI2CQmWCg1quH1J+k6kKjO6ZtD
+         DScuzKKtAv/RYN5hHxlsXAMlv1dOjv7nctV0W7clSD8F6P+cwQFEOQ8CkIvJFVWGqBig
+         HGTyGDtVDPGWm2ltlo3JEPjvQUV6t/cgx+Nb5fa4QGdCQRgiDMFIlP2wFV+nOpbF6cbR
+         L/AQ==
+X-Gm-Message-State: AC+VfDwkQLnopZfQH/oxLWHuBu2xFynCK5zE+Z7+feKunigi1tE64ZtL
+        ikOeSmEszCk3vE2FxrmpJ2/KNl7AaCLqaw==
+X-Google-Smtp-Source: ACHHUZ5YcxrSr3RoUr9BpB/eNrGolI0P3RzHaj6jkcll2hTu+W/ZqJE8aYJUHyyTtYhUyjhQJWqKcQ==
+X-Received: by 2002:a17:907:3f1f:b0:974:5480:171e with SMTP id hq31-20020a1709073f1f00b009745480171emr4761698ejc.32.1685865570735;
+        Sun, 04 Jun 2023 00:59:30 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-011.fbsv.net. [2a03:2880:31ff:b::face:b00c])
+        by smtp.gmail.com with ESMTPSA id u12-20020a05600c00cc00b003f7678a07c4sm383178wmm.29.2023.06.04.00.59.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Jun 2023 00:59:30 -0700 (PDT)
+Date:   Sun, 4 Jun 2023 00:59:27 -0700
+From:   Breno Leitao <leitao@debian.org>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 Cc:     Remi Denis-Courmont <courmisch@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
@@ -72,123 +57,84 @@ Cc:     Remi Denis-Courmont <courmisch@gmail.com>,
         netdev@vger.kernel.org, dccp@vger.kernel.org,
         linux-wpan@vger.kernel.org, mptcp@lists.linux.dev,
         linux-sctp@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net-next v5] net: ioctl: Use kernel memory on protocol
+ ioctl callbacks
+Message-ID: <ZHxEX0TlXX7VV9kX@gmail.com>
+References: <20230602163044.1820619-1-leitao@debian.org>
+ <CAF=yD-Kk9mVWPZN50NUu8uGwEbySNS-WzvJ=1HTTcVsA6OOuvA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAF=yD-Kk9mVWPZN50NUu8uGwEbySNS-WzvJ=1HTTcVsA6OOuvA@mail.gmail.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FSL_HELO_FAKE,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 6:31=E2=80=AFPM Breno Leitao <leitao@debian.org> wro=
-te:
->
-> Most of the ioctls to net protocols operates directly on userspace
-> argument (arg). Usually doing get_user()/put_user() directly in the
-> ioctl callback.  This is not flexible, because it is hard to reuse these
-> functions without passing userspace buffers.
->
-> Change the "struct proto" ioctls to avoid touching userspace memory and
-> operate on kernel buffers, i.e., all protocol's ioctl callbacks is
-> adapted to operate on a kernel memory other than on userspace (so, no
-> more {put,get}_user() and friends being called in the ioctl callback).
->
-> This changes the "struct proto" ioctl format in the following way:
->
->     int                     (*ioctl)(struct sock *sk, int cmd,
-> -                                        unsigned long arg);
-> +                                        int *karg);
->
-> So, the "karg" argument, which is passed to the ioctl callback, is a
-> pointer allocated to kernel space memory (inside a function wrapper).
-> This buffer (karg) may contain input argument (copied from userspace in
-> a prep function) and it might return a value/buffer, which is copied
-> back to userspace if necessary. There is not one-size-fits-all format
-> (that is I am using 'may' above), but basically, there are three type of
-> ioctls:
->
-> 1) Do not read from userspace, returns a result to userspace
-> 2) Read an input parameter from userspace, and does not return anything
->   to userspace
-> 3) Read an input from userspace, and return a buffer to userspace.
->
-> The default case (1) (where no input parameter is given, and an "int" is
-> returned to userspace) encompasses more than 90% of the cases, but there
-> are two other exceptions. Here is a list of exceptions:
->
-> * Protocol RAW:
->    * cmd =3D SIOCGETVIFCNT:
->      * input and output =3D struct sioc_vif_req
->    * cmd =3D SIOCGETSGCNT
->      * input and output =3D struct sioc_sg_req
->    * Explanation: for the SIOCGETVIFCNT case, userspace passes the input
->      argument, which is struct sioc_vif_req. Then the callback populates
->      the struct, which is copied back to userspace.
->
-> * Protocol RAW6:
->    * cmd =3D SIOCGETMIFCNT_IN6
->      * input and output =3D struct sioc_mif_req6
->    * cmd =3D SIOCGETSGCNT_IN6
->      * input and output =3D struct sioc_sg_req6
->
-> * Protocol PHONET:
->   * cmd =3D=3D SIOCPNADDRESOURCE | SIOCPNDELRESOURCE
->      * input int (4 bytes)
->   * Nothing is copied back to userspace.
->
-> For the exception cases, functions sock_sk_ioctl_inout() will
-> copy the userspace input, and copy it back to kernel space.
->
-> The wrapper that prepare the buffer and put the buffer back to user is
-> sk_ioctl(), so, instead of calling sk->sk_prot->ioctl(), the callee now
-> calls sk_ioctl(), which will handle all cases.
->
-> Signed-off-by: Breno Leitao <leitao@debian.org>
+Hello Willem 
 
-Please check the checkpatch output
+On Sat, Jun 03, 2023 at 10:21:50AM +0200, Willem de Bruijn wrote:
+> On Fri, Jun 2, 2023 at 6:31 PM Breno Leitao <leitao@debian.org> wrote:
+> > Signed-off-by: Breno Leitao <leitao@debian.org>
+> 
+> Please check the checkpatch output
+> 
+> https://patchwork.hopto.org/static/nipa/753609/13265673/checkpatch/stdout
 
-https://patchwork.hopto.org/static/nipa/753609/13265673/checkpatch/stdout
+I am checking my current checkpatch before sending the patch, but I am
+not seeing the problems above.
 
-> +static inline int phonet_sk_ioctl(struct sock *sk, unsigned int cmd, voi=
-d __user *arg)
-> +{
-> +       int karg;
-> +
-> +       switch (cmd) {
-> +       case SIOCPNADDRESOURCE:
-> +       case SIOCPNDELRESOURCE:
-> +               if (get_user(karg, (int __user *)arg))
-> +                       return -EFAULT;
-> +
-> +               return sk->sk_prot->ioctl(sk, cmd, &karg);
-> +       }
-> +       /* A positive return value means that the ioctl was not processed=
- */
-> +       return 1;
-> +}
->  #endif
+My tree is at 44c026a73be8038 ("Linux 6.4-rc3"), and I am not able to
+reproduce the problems above.
 
-> +/* A wrapper around sock ioctls, which copies the data from userspace
-> + * (depending on the protocol/ioctl), and copies back the result to user=
-space.
-> + * The main motivation for this function is to pass kernel memory to the
-> + * protocol ioctl callbacks, instead of userspace memory.
-> + */
-> +int sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
-> +{
-> +       int rc =3D 1;
-> +
-> +       if (sk_is_ipmr(sk))
-> +               rc =3D ipmr_sk_ioctl(sk, cmd, arg);
-> +       else if (sk_is_icmpv6(sk))
-> +               rc =3D ip6mr_sk_ioctl(sk, cmd, arg);
-> +       else if (sk_is_phonet(sk))
-> +               rc =3D phonet_sk_ioctl(sk, cmd, arg);
+	$ scripts/checkpatch.pl v5/v5-0001-net-ioctl-Use-kernel-memory-on-protocol-ioctl-cal.patch
+	total: 0 errors, 0 warnings, 0 checks, 806 lines checked
+	v5/v5-0001-net-ioctl-Use-kernel-memory-on-protocol-ioctl-cal.patch has no obvious style problems and is ready for submission.
 
-Does this handle all phonet ioctl cases correctly?
+Let me investigate what options I am missing when running checkpatch.
 
-Notably pn_socket_ioctl has a SIOCPNGETOBJECT that reads and writes a u16.
+> > +/* A wrapper around sock ioctls, which copies the data from userspace
+> > + * (depending on the protocol/ioctl), and copies back the result to userspace.
+> > + * The main motivation for this function is to pass kernel memory to the
+> > + * protocol ioctl callbacks, instead of userspace memory.
+> > + */
+> > +int sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
+> > +{
+> > +       int rc = 1;
+> > +
+> > +       if (sk_is_ipmr(sk))
+> > +               rc = ipmr_sk_ioctl(sk, cmd, arg);
+> > +       else if (sk_is_icmpv6(sk))
+> > +               rc = ip6mr_sk_ioctl(sk, cmd, arg);
+> > +       else if (sk_is_phonet(sk))
+> > +               rc = phonet_sk_ioctl(sk, cmd, arg);
+> 
+> Does this handle all phonet ioctl cases correctly?
+> 
+> Notably pn_socket_ioctl has a SIOCPNGETOBJECT that reads and writes a u16.
+
+We are not touching  "struct proto_ops" in this patch at all.  And
+pn_socket_ioctl() is part of "struct proto_ops".
+
+	const struct proto_ops phonet_stream_ops = {
+		  ...
+		  .ioctl          = pn_socket_ioctl,
+	}
+
+That said, all the "struct proto_ops" ioctl calls backs continue to use
+"unsigned long arg" with userspace information, at least for now.
+
+	struct proto_ops {
+		...
+		int             (*ioctl)     (struct socket *sock, unsigned int cmd,
+					      unsigned long arg);
+	}
+
+This patch only changes the "struct proto".
