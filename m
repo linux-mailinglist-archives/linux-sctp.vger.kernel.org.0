@@ -2,42 +2,42 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D38A3721570
-	for <lists+linux-sctp@lfdr.de>; Sun,  4 Jun 2023 09:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85419721597
+	for <lists+linux-sctp@lfdr.de>; Sun,  4 Jun 2023 10:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbjFDH7i (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sun, 4 Jun 2023 03:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52616 "EHLO
+        id S230360AbjFDIcZ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sun, 4 Jun 2023 04:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjFDH7h (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sun, 4 Jun 2023 03:59:37 -0400
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D378EC1;
-        Sun,  4 Jun 2023 00:59:32 -0700 (PDT)
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-973bf581759so585956866b.0;
-        Sun, 04 Jun 2023 00:59:32 -0700 (PDT)
+        with ESMTP id S229755AbjFDIcY (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sun, 4 Jun 2023 04:32:24 -0400
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0F4CF;
+        Sun,  4 Jun 2023 01:32:22 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-3f6dfc4e01fso37681345e9.0;
+        Sun, 04 Jun 2023 01:32:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685865571; x=1688457571;
+        d=1e100.net; s=20221208; t=1685867541; x=1688459541;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L5qs9/6uJ8IloMQNdJLVtRnVIUUbYS4OgcobJioBuxs=;
-        b=IOyS9YJN2q1l5k7+XFWXCLD79i9Fon8o6PvMP92XKembdHx7SWcjy8rnzijOan0sjJ
-         mxmK6KPk8iC/hYJQKbH0RpXFMW9/1VerLTbgjLKrJre8wEFidMkgCwD4KetTJIv4gfx3
-         YMa9ujX9mzlMM3VS5Ghak+Wplq8ksfsvNYmaX4M1wMeI2CQmWCg1quH1J+k6kKjO6ZtD
-         DScuzKKtAv/RYN5hHxlsXAMlv1dOjv7nctV0W7clSD8F6P+cwQFEOQ8CkIvJFVWGqBig
-         HGTyGDtVDPGWm2ltlo3JEPjvQUV6t/cgx+Nb5fa4QGdCQRgiDMFIlP2wFV+nOpbF6cbR
-         L/AQ==
-X-Gm-Message-State: AC+VfDwkQLnopZfQH/oxLWHuBu2xFynCK5zE+Z7+feKunigi1tE64ZtL
-        ikOeSmEszCk3vE2FxrmpJ2/KNl7AaCLqaw==
-X-Google-Smtp-Source: ACHHUZ5YcxrSr3RoUr9BpB/eNrGolI0P3RzHaj6jkcll2hTu+W/ZqJE8aYJUHyyTtYhUyjhQJWqKcQ==
-X-Received: by 2002:a17:907:3f1f:b0:974:5480:171e with SMTP id hq31-20020a1709073f1f00b009745480171emr4761698ejc.32.1685865570735;
-        Sun, 04 Jun 2023 00:59:30 -0700 (PDT)
-Received: from gmail.com (fwdproxy-cln-011.fbsv.net. [2a03:2880:31ff:b::face:b00c])
-        by smtp.gmail.com with ESMTPSA id u12-20020a05600c00cc00b003f7678a07c4sm383178wmm.29.2023.06.04.00.59.29
+        bh=tmjbEwC+EvHpQJk1Twlv6P50KkxdTvbJYvHxD52w32Q=;
+        b=N1iEs2yZcbJ7foA1E6fJk8/1eHV0Jagxm5o46OYb1wxjSmzM0ht1D8bsqG0fWFFq2a
+         M5IP2sKuKSMMpwwA6HjzkUhLxoQ3Mn7brLO7YYbjOq3Q5jKqxRN8rHJHaXnMzg9dtiP2
+         Gr0RF7vyxh3/sUMe3PDBzcUHPCrTMdghMiV1Mdcz7Q79AkuC+z48kdWeJ/ZxAqN/y7oW
+         0yv6h3Glqiq68h7D4zKrDBuSgqMMdyhficLEfzX8LeThrBXlPlABCrb4A4Xfvp0sw8a0
+         PaSq6j3bGosD8+DNkgZJXe+yUQKo41gmBHhDZKi5Xw+ssvcWxm3ftJVdwXGMe/NHj4cp
+         sfmA==
+X-Gm-Message-State: AC+VfDy/0xt51xcTpz1b2ReeKvd4OpWG+FwDXAaY2TO3s2VBKtjxdhMK
+        ZAWgSZNW55ECHs8jhMexCUI=
+X-Google-Smtp-Source: ACHHUZ6+cxwT0hZDrAH8rQs4fsyRjVuc4sEaQ/pR2fTzJOb+wpcfcWkPwMFwZcGbbSj+lt0x8UeDRA==
+X-Received: by 2002:a7b:c40a:0:b0:3f5:ce4:6c3f with SMTP id k10-20020a7bc40a000000b003f50ce46c3fmr5311256wmi.7.1685867540788;
+        Sun, 04 Jun 2023 01:32:20 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-003.fbsv.net. [2a03:2880:31ff:3::face:b00c])
+        by smtp.gmail.com with ESMTPSA id w11-20020a1cf60b000000b003f423f5b659sm7172057wmc.10.2023.06.04.01.32.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Jun 2023 00:59:30 -0700 (PDT)
-Date:   Sun, 4 Jun 2023 00:59:27 -0700
+        Sun, 04 Jun 2023 01:32:20 -0700 (PDT)
+Date:   Sun, 4 Jun 2023 01:32:18 -0700
 From:   Breno Leitao <leitao@debian.org>
 To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 Cc:     Remi Denis-Courmont <courmisch@gmail.com>,
@@ -59,82 +59,59 @@ Cc:     Remi Denis-Courmont <courmisch@gmail.com>,
         linux-sctp@vger.kernel.org
 Subject: Re: [PATCH net-next v5] net: ioctl: Use kernel memory on protocol
  ioctl callbacks
-Message-ID: <ZHxEX0TlXX7VV9kX@gmail.com>
+Message-ID: <ZHxMErkF/Yi/OD8z@gmail.com>
 References: <20230602163044.1820619-1-leitao@debian.org>
  <CAF=yD-Kk9mVWPZN50NUu8uGwEbySNS-WzvJ=1HTTcVsA6OOuvA@mail.gmail.com>
+ <ZHxEX0TlXX7VV9kX@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAF=yD-Kk9mVWPZN50NUu8uGwEbySNS-WzvJ=1HTTcVsA6OOuvA@mail.gmail.com>
+In-Reply-To: <ZHxEX0TlXX7VV9kX@gmail.com>
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FSL_HELO_FAKE,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Hello Willem 
-
-On Sat, Jun 03, 2023 at 10:21:50AM +0200, Willem de Bruijn wrote:
-> On Fri, Jun 2, 2023 at 6:31 PM Breno Leitao <leitao@debian.org> wrote:
-> > Signed-off-by: Breno Leitao <leitao@debian.org>
+On Sun, Jun 04, 2023 at 12:59:27AM -0700, Breno Leitao wrote:
+> Hello Willem 
 > 
-> Please check the checkpatch output
+> On Sat, Jun 03, 2023 at 10:21:50AM +0200, Willem de Bruijn wrote:
+> > On Fri, Jun 2, 2023 at 6:31 PM Breno Leitao <leitao@debian.org> wrote:
+> > > Signed-off-by: Breno Leitao <leitao@debian.org>
+> > 
+> > Please check the checkpatch output
+> > 
+> > https://patchwork.hopto.org/static/nipa/753609/13265673/checkpatch/stdout
 > 
-> https://patchwork.hopto.org/static/nipa/753609/13265673/checkpatch/stdout
-
-I am checking my current checkpatch before sending the patch, but I am
-not seeing the problems above.
-
-My tree is at 44c026a73be8038 ("Linux 6.4-rc3"), and I am not able to
-reproduce the problems above.
-
-	$ scripts/checkpatch.pl v5/v5-0001-net-ioctl-Use-kernel-memory-on-protocol-ioctl-cal.patch
-	total: 0 errors, 0 warnings, 0 checks, 806 lines checked
-	v5/v5-0001-net-ioctl-Use-kernel-memory-on-protocol-ioctl-cal.patch has no obvious style problems and is ready for submission.
-
-Let me investigate what options I am missing when running checkpatch.
-
-> > +/* A wrapper around sock ioctls, which copies the data from userspace
-> > + * (depending on the protocol/ioctl), and copies back the result to userspace.
-> > + * The main motivation for this function is to pass kernel memory to the
-> > + * protocol ioctl callbacks, instead of userspace memory.
-> > + */
-> > +int sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
-> > +{
-> > +       int rc = 1;
-> > +
-> > +       if (sk_is_ipmr(sk))
-> > +               rc = ipmr_sk_ioctl(sk, cmd, arg);
-> > +       else if (sk_is_icmpv6(sk))
-> > +               rc = ip6mr_sk_ioctl(sk, cmd, arg);
-> > +       else if (sk_is_phonet(sk))
-> > +               rc = phonet_sk_ioctl(sk, cmd, arg);
+> I am checking my current checkpatch before sending the patch, but I am
+> not seeing the problems above.
 > 
-> Does this handle all phonet ioctl cases correctly?
+> My tree is at 44c026a73be8038 ("Linux 6.4-rc3"), and I am not able to
+> reproduce the problems above.
 > 
-> Notably pn_socket_ioctl has a SIOCPNGETOBJECT that reads and writes a u16.
+> 	$ scripts/checkpatch.pl v5/v5-0001-net-ioctl-Use-kernel-memory-on-protocol-ioctl-cal.patch
+> 	total: 0 errors, 0 warnings, 0 checks, 806 lines checked
+> 	v5/v5-0001-net-ioctl-Use-kernel-memory-on-protocol-ioctl-cal.patch has no obvious style problems and is ready for submission.
+> 
+> Let me investigate what options I am missing when running checkpatch.
 
-We are not touching  "struct proto_ops" in this patch at all.  And
-pn_socket_ioctl() is part of "struct proto_ops".
+Investigating these issues, I see 4 of the following messages:
 
-	const struct proto_ops phonet_stream_ops = {
-		  ...
-		  .ioctl          = pn_socket_ioctl,
-	}
+	WARNING: line length of 84 exceeds 80 columns
 
-That said, all the "struct proto_ops" ioctl calls backs continue to use
-"unsigned long arg" with userspace information, at least for now.
+This implies that checkpatch.pl is being called with
+`--max-line-length=80` parameter, or, the system is using an older
+version, before bdc48fa11e46f ("checkpatch/coding-style: deprecate
+80-column warning").
 
-	struct proto_ops {
-		...
-		int             (*ioctl)     (struct socket *sock, unsigned int cmd,
-					      unsigned long arg);
-	}
+Since I am not familiar with patchwork.hopto.org, I am not sure what is
+the case. Do you know how can I find out?
 
-This patch only changes the "struct proto".
+Thanks!
