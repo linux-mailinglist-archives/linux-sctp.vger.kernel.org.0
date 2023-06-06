@@ -2,119 +2,152 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ACB4723EEA
-	for <lists+linux-sctp@lfdr.de>; Tue,  6 Jun 2023 12:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3030F723F00
+	for <lists+linux-sctp@lfdr.de>; Tue,  6 Jun 2023 12:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233011AbjFFKIh (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 6 Jun 2023 06:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
+        id S236419AbjFFKMC (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 6 Jun 2023 06:12:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjFFKIg (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 6 Jun 2023 06:08:36 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3992E1B8
-        for <linux-sctp@vger.kernel.org>; Tue,  6 Jun 2023 03:08:34 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f6ef9a928fso49300725e9.3
-        for <linux-sctp@vger.kernel.org>; Tue, 06 Jun 2023 03:08:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686046113; x=1688638113;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1KOoXg0khb7ub9aS1y7PhG31PfQuNeSSJdf34wiyC3w=;
-        b=JqUVQ85WSi85kqMLiuybRJT0zT89pRtMOwo3kfSJIt2LFPujbOAdhCo/lJQQA5sxCu
-         cV+YS4w6KGdDNqfHAjjaeGuV5ryaqvgQz0iGfmVgT1L0ABgsDI2QsjjYAwK2x48W35HT
-         5MYiWIkjI5X75iLrHZOqZVfX/APpP3KvlDNNyJecnzRQKJdCQOV8ypDPvODjDZtX0Rre
-         cOS8yzUwLNOrPfLvEfGXtwhaecLmlotcZ7vFJszC4UVQSdTjdXEEknvp14+P0ZLU1co/
-         mkIE7ePFPJE4lodB0LKQ6C4DyJLbXPHvUbVgK/A9iUliJvAt+jqe/GyS1BF66Eqv8Me0
-         CbWQ==
+        with ESMTP id S233195AbjFFKMB (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 6 Jun 2023 06:12:01 -0400
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C96196;
+        Tue,  6 Jun 2023 03:11:59 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-3f7a8089709so22427265e9.1;
+        Tue, 06 Jun 2023 03:11:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686046113; x=1688638113;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1KOoXg0khb7ub9aS1y7PhG31PfQuNeSSJdf34wiyC3w=;
-        b=fvKvF8FVFuPMdxmOmAXnzeuaeOo9WcueSG343TFBe0ShOvfJdZica0fqNm1EbSgBsV
-         lwcFn65NR/A+My/DgROJnfvGSaZ6u7u6E4gQFhD7XRZ9OUZDZev+C33NTR3SwPYdBlpQ
-         Y6XyQjWj5CEVXAA00NXP4d/i1WRCIDVUH4pwdDGZdquArZX6uUZHruVTfdbvqYeRlVdA
-         yacbTsUBg0AsxNwkYpt0TC3HvWlcD3QocFZvZyu2x1n9IK9euNYOWk4KPvXZYliG+RkO
-         6S8VTJWnRLavebldhRTauHevZzTpfY2h//63TxWW9GgCdUspOVRhpGeJ9vzAW480juOl
-         eu+g==
-X-Gm-Message-State: AC+VfDzJI+f/Rd4Jz8TuHghCqcXLnXFRgW0LAssVFzjvXGsjtFya08bU
-        /gZZgXpS0qmJpzJFZIQmWsw1yV6HThGUCeJaFP4=
-X-Google-Smtp-Source: ACHHUZ6mfhT6U7FAkZb+xd1P/k9+7YdZ6LodIrkJBEkJVn2BjMNUVSWWmZYZWAaW1rwIvLJdY7GOnbgtIItulGAk9lk=
-X-Received: by 2002:a1c:4b0b:0:b0:3f6:c8c:7048 with SMTP id
- y11-20020a1c4b0b000000b003f60c8c7048mr1446431wma.20.1686046112730; Tue, 06
- Jun 2023 03:08:32 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686046318; x=1688638318;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PjZD64nD9uDw2ysYWjBEluXV8UBaLP33LjAprrSBmFs=;
+        b=e26A0YwrFbBuZYyZFRc/EKk6+KmfM3WVuxfPJAoj3p1pVup17RaiYZo1f6cxIiDsO/
+         yaaM9yqUXsAyiQ3a5XyBvoCqVoZaB2TdKehR2na3U2fdJ9CYw4BjDolM7GRPD4uqNw8y
+         Go8WZpYgZ+QclFKRPuKCDoRxQMaCQ6luL4NfllCdR24vKRdx6waJB9YoR//cobyilsX4
+         agj8G0H/OvVVZ4u6DKE/bNRR7bRrzLGpvVKlZuEKiUwwZZzBf8GhJO6ily3SFAglFX6H
+         vcYJKl3mXGnRdpc8ioRqHyQH3WinnQwrREGKWHqqIZLgGxBMg/DnJfOJN5+FqOrKX4Ku
+         jZVA==
+X-Gm-Message-State: AC+VfDwmaCkWkWJYyWKBNZ9eBBONEMNNoJU0aL5jtmFr5PcL511//V4z
+        1gUYSnvpoBZJxbdTRFaPfVI=
+X-Google-Smtp-Source: ACHHUZ5VuRy6tj2/a+/ZVk3bcFIrCucyH/hLYU0AvfurxedS1PxfbUZxr/R70tGP9osBH0Iu3y7fBA==
+X-Received: by 2002:a05:600c:114c:b0:3f7:6bd9:2819 with SMTP id z12-20020a05600c114c00b003f76bd92819mr1701438wmz.29.1686046317704;
+        Tue, 06 Jun 2023 03:11:57 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-006.fbsv.net. [2a03:2880:31ff:6::face:b00c])
+        by smtp.gmail.com with ESMTPSA id z19-20020a7bc7d3000000b003f7ead9be7fsm1323903wmk.38.2023.06.06.03.11.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 03:11:57 -0700 (PDT)
+Date:   Tue, 6 Jun 2023 03:11:55 -0700
+From:   Breno Leitao <leitao@debian.org>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     Remi Denis-Courmont <courmisch@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <martineau@kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>, axboe@kernel.dk,
+        asml.silence@gmail.com, leit@fb.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, dccp@vger.kernel.org,
+        linux-wpan@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-sctp@vger.kernel.org
+Subject: Re: [PATCH net-next v5] net: ioctl: Use kernel memory on protocol
+ ioctl callbacks
+Message-ID: <ZH8Ga15IFIUUA7j8@gmail.com>
+References: <20230602163044.1820619-1-leitao@debian.org>
+ <CAF=yD-Kk9mVWPZN50NUu8uGwEbySNS-WzvJ=1HTTcVsA6OOuvA@mail.gmail.com>
+ <ZHxEX0TlXX7VV9kX@gmail.com>
+ <CAF=yD-LvTDmWp+wAqwuQ7vKLT0hAHcQjV9Ef2rEag5J4cSZrkA@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a5d:4d87:0:b0:30a:df6b:5e53 with HTTP; Tue, 6 Jun 2023
- 03:08:31 -0700 (PDT)
-Reply-To: 07445678an@gmail.com
-From:   "Miss.Ann Daniel" <kouakouedoukouedoukou@gmail.com>
-Date:   Tue, 6 Jun 2023 10:08:31 +0000
-Message-ID: <CAMp67Qz75_3W4cdg56gUdLUXug4v=-yLQ4HuRX-Wc8js2HbUTg@mail.gmail.com>
-Subject: Ich brauche deine Assistentin
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:32f listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [kouakouedoukouedoukou[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  0.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  1.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *****
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAF=yD-LvTDmWp+wAqwuQ7vKLT0hAHcQjV9Ef2rEag5J4cSZrkA@mail.gmail.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FSL_HELO_FAKE,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Ich brauche deine Assistentin
+On Sun, Jun 04, 2023 at 11:17:56AM +0200, Willem de Bruijn wrote:
+> > On Sat, Jun 03, 2023 at 10:21:50AM +0200, Willem de Bruijn wrote:
+> > > On Fri, Jun 2, 2023 at 6:31 PM Breno Leitao <leitao@debian.org> wrote:
+> > > > Signed-off-by: Breno Leitao <leitao@debian.org>
+> > >
+> > > Please check the checkpatch output
+> > >
+> > > https://patchwork.hopto.org/static/nipa/753609/13265673/checkpatch/stdout
+> >
+> > I am checking my current checkpatch before sending the patch, but I am
+> > not seeing the problems above.
+> >
+> > My tree is at 44c026a73be8038 ("Linux 6.4-rc3"), and I am not able to
+> > reproduce the problems above.
+> >
+> >         $ scripts/checkpatch.pl v5/v5-0001-net-ioctl-Use-kernel-memory-on-protocol-ioctl-cal.patch
+> >         total: 0 errors, 0 warnings, 0 checks, 806 lines checked
+> >         v5/v5-0001-net-ioctl-Use-kernel-memory-on-protocol-ioctl-cal.patch has no obvious style problems and is ready for submission.
+> >
+> > Let me investigate what options I am missing when running checkpatch.
+> 
+> The reference is to the checkpatch as referenced by patchwork:
+> 
+> https://patchwork.kernel.org/project/netdevbpf/patch/20230602163044.1820619-1-leitao@debian.org/
+> 
+> The 80 character limit is a soft limit. But also note the CHECK
+> statements on whitespace.
 
-Ich bin Miss Ann Daniel, die Tochter des verstorbenen Herrn Gilbert
-Daniel? Ich habe keine Eltern,
+Right. In order to enable the "CHECK" statments, we need to pass the
+"--subjective" parameter to checpatch.pl
 
-Ich brauche Ihren Assistenten, um mein Erbe und meinen Umzug in Ihr
-Land auf Ihr Bankkonto zu =C3=BCberweisen.Ich habe von meinem Vater geerbt
-(4,8 Millionen US-Dollar), die er bei einer der gr=C3=B6=C3=9Ften Banken hi=
-er in
-Abidjan hinterlegt hat.Wenn Sie bereit sind, mit mir
-zusammenzuarbeiten und mir zu helfen,Bitte erwidern Sie Ihr Interesse
-an mir, damit ich Ihnen die notwendigen Informationen und
-Vorgehensweisen zukommen lassen kann, Ich werde dir 20% des Geldes
-geben, um mir zu helfen
+That said, I am able to reproduce the same output now, using the
+following command line:
 
-M=C3=B6ge Gott Sie f=C3=BCr Ihre sofortige Aufmerksamkeit Segnen.Kontaktier=
-en
-Sie mich f=C3=BCr weitere Details und Erkl=C3=A4rungen, damit wir Ihre best=
-en
-Gr=C3=BC=C3=9Fe an Sie und Ihre Familie weitergeben k=C3=B6nnen.
+	$ scripts/checkpatch.pl --subjective --max-line-length=80
 
-Sch=C3=B6ne Gr=C3=BC=C3=9Fe
-Fr=C3=A4ulein Ann
+> > > > +/* A wrapper around sock ioctls, which copies the data from userspace
+> > > > + * (depending on the protocol/ioctl), and copies back the result to userspace.
+> > > > + * The main motivation for this function is to pass kernel memory to the
+> > > > + * protocol ioctl callbacks, instead of userspace memory.
+> > > > + */
+> > > > +int sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
+> > > > +{
+> > > > +       int rc = 1;
+> > > > +
+> > > > +       if (sk_is_ipmr(sk))
+> > > > +               rc = ipmr_sk_ioctl(sk, cmd, arg);
+> > > > +       else if (sk_is_icmpv6(sk))
+> > > > +               rc = ip6mr_sk_ioctl(sk, cmd, arg);
+> > > > +       else if (sk_is_phonet(sk))
+> > > > +               rc = phonet_sk_ioctl(sk, cmd, arg);
+> > >
+> > > Does this handle all phonet ioctl cases correctly?
+> > >
+> > > Notably pn_socket_ioctl has a SIOCPNGETOBJECT that reads and writes a u16.
+> >
+> > We are not touching  "struct proto_ops" in this patch at all.  And
+> > pn_socket_ioctl() is part of "struct proto_ops".
+> >
+> >         const struct proto_ops phonet_stream_ops = {
+> >                   ...
+> >                   .ioctl          = pn_socket_ioctl,
+> >         }
+> >
+> > That said, all the "struct proto_ops" ioctl calls backs continue to use
+> > "unsigned long arg" with userspace information, at least for now.
+> 
+> Ok. Perhaps good to call out in the commit message that this does not
+> convert all protocol ioctl callbacks.
+
+Sure, let me send a V6 with this information in the patch summary.
