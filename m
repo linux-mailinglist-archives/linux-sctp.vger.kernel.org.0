@@ -2,67 +2,169 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 333297256AC
-	for <lists+linux-sctp@lfdr.de>; Wed,  7 Jun 2023 10:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 621CE725E62
+	for <lists+linux-sctp@lfdr.de>; Wed,  7 Jun 2023 14:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232094AbjFGIAy (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 7 Jun 2023 04:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48546 "EHLO
+        id S240238AbjFGMPe (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 7 Jun 2023 08:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234162AbjFGIAx (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 7 Jun 2023 04:00:53 -0400
-Received: from mail.mahavavy.com (mail.mahavavy.com [92.222.170.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FEA810F8
-        for <linux-sctp@vger.kernel.org>; Wed,  7 Jun 2023 01:00:51 -0700 (PDT)
-Received: by mail.mahavavy.com (Postfix, from userid 1002)
-        id 54008232B1; Wed,  7 Jun 2023 08:00:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mahavavy.com; s=mail;
-        t=1686124850; bh=IfqQW79nVX/qUpmHcJiWDpV9BQnOf/s+Zcq9ON74QJY=;
-        h=Date:From:To:Subject:From;
-        b=lXyZ99O2oPOg9ZLojEeuoSX370A3hD0gHUqjewzESEHzirJp7+oQMFYN+/2bTxiX6
-         FgH1DnBmFbEUd8Yc6aluACL99eLHBj+rFbLe9s2N1qnN193vdninUzJ6wQAd0J4Yuz
-         gIZSg56irmi6/p/kNLwM92cjy0UKvQ7ms9RsVvgMRNtbNduVdU2bbTNap/oqRBseHu
-         qi5zbXnypJcXjmeh/91UVf7lONAgta/1sbGmXM4tWjpf6AWFkWBi9fEjgs9wXY6wr6
-         Ko8UhW/wf06PDhVhOgXDJq0KvqPYHMI2G5GAKXLjYdrIDJ/urli4VpXZNceBmGpQgD
-         U5ap+5YX2Onqw==
-Received: by mail.mahavavy.com for <linux-sctp@vger.kernel.org>; Wed,  7 Jun 2023 08:00:41 GMT
-Message-ID: <20230607064500-0.1.2z.5zfc.0.4bimj5ham5@mahavavy.com>
-Date:   Wed,  7 Jun 2023 08:00:41 GMT
-From:   =?UTF-8?Q? "Kristi=C3=A1n_Plet=C3=A1nek" ?= 
-        <kristian.pletanek@mahavavy.com>
-To:     <linux-sctp@vger.kernel.org>
-Subject: =?UTF-8?Q?Tlakov=C4=9B_lit=C3=BD?=
-X-Mailer: mail.mahavavy.com
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIXED_ES,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        with ESMTP id S239884AbjFGMPd (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 7 Jun 2023 08:15:33 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B3C1BD6;
+        Wed,  7 Jun 2023 05:15:31 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id 6a1803df08f44-626157a186bso2335226d6.1;
+        Wed, 07 Jun 2023 05:15:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686140131; x=1688732131;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u8XZPPmOXy+covKv0eQSNPQLMzOY+EavY6mLoP79rZc=;
+        b=RGQvr3p04xUWWIeDw2dJD14fHUEH+t2fQJULdyu1HiFLPmDI93BCxfeKaEMR6OzRbd
+         2WdXR6a5p62AeHvJvwoV1ag5/VvKU+reaumHWcxfGhuRRQrpkLx+EUKwC9srrIxu445f
+         /AZ9jWJXl4MnmsS/bFhQbMOmnD8X2eUfGQzORHyDA6I5697PukxVm6Xmbud0o0CAxHK9
+         JfXOAKYktCDvSWwqUgzrd/jtv+e9Ed6IQcXReyd+np1mX+awYFT7eDnCIFt0s3vb740y
+         FSpTAzbTFF/jMXT3fcdJMStR4lwyafdpb0sOXTsAQEDI4VventjDj0eUBgHwXMVS0Agg
+         sxQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686140131; x=1688732131;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=u8XZPPmOXy+covKv0eQSNPQLMzOY+EavY6mLoP79rZc=;
+        b=Cvn5iXqrWDQsWKrPXmUZrsj7Hf/8jtKDTpcqGeNXr0h/BBnXWtVS1Dq0pwcYWOR5ES
+         2aJBr9h9VLWaUN9v6X+MYGuhdZOAMhnq7ODIBaVJ84Lq+NTTw09F4Moz8U4PlLRKXWCG
+         ZeWRJjUEiL5VOLxtqcXuq5mNBjKXWVYxe8FCkXsHu+lnfYoVx0r6SZoKN1VdVBPDQ88T
+         6idpLBG2guzpCgypnyjwZC+pjdS7r+VcG+zSpuff58MdUxkX8uPG2zdq4BA0of2UzSUT
+         +6RCPEtzxhOsW3hBgjJ/G7sbleekRlJf7MWP8CDSnZL+OjWfDRjxcSkVxQy+HHnLCK0L
+         WDKQ==
+X-Gm-Message-State: AC+VfDyJhiVQKwo8eXgiEXAZayEEsIJ/9kA5CnmF3b/CpoSQibkY1TmF
+        Bu2McYJMwDpAGr3yLWgcUFw=
+X-Google-Smtp-Source: ACHHUZ40wZwVfAH1nA4kaYq3UbMkylR8h6hcTZi3Wc3cqIzz8ZU0CMZc79z0MEk7u52LeM2nzhofNQ==
+X-Received: by 2002:a05:6214:518b:b0:621:65de:f600 with SMTP id kl11-20020a056214518b00b0062165def600mr3011629qvb.1.1686140130585;
+        Wed, 07 Jun 2023 05:15:30 -0700 (PDT)
+Received: from localhost (172.174.245.35.bc.googleusercontent.com. [35.245.174.172])
+        by smtp.gmail.com with ESMTPSA id bz5-20020ad44c05000000b005f227de6b1bsm6029533qvb.116.2023.06.07.05.15.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 05:15:29 -0700 (PDT)
+Date:   Wed, 07 Jun 2023 08:15:28 -0400
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To:     Breno Leitao <leitao@debian.org>,
+        Remi Denis-Courmont <courmisch@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <martineau@kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>
+Cc:     axboe@kernel.dk, asml.silence@gmail.com, leit@fb.com,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Jason Xing <kernelxing@tencent.com>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Hangyu Hua <hbh25y@gmail.com>,
+        Guillaume Nault <gnault@redhat.com>,
+        Andrea Righi <andrea.righi@canonical.com>,
+        Wojciech Drewek <wojciech.drewek@intel.com>,
+        linux-kernel@vger.kernel.org (open list),
+        netdev@vger.kernel.org (open list:NETWORKING [GENERAL]),
+        dccp@vger.kernel.org (open list:DCCP PROTOCOL),
+        linux-wpan@vger.kernel.org (open list:IEEE 802.15.4 SUBSYSTEM),
+        mptcp@lists.linux.dev (open list:NETWORKING [MPTCP]),
+        linux-sctp@vger.kernel.org (open list:SCTP PROTOCOL)
+Message-ID: <648074e0e52d9_143118294e0@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20230606180045.827659-1-leitao@debian.org>
+References: <20230606180045.827659-1-leitao@debian.org>
+Subject: RE: [PATCH net-next v6] net: ioctl: Use kernel memory on protocol
+ ioctl callbacks
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Dobr=C3=A9 r=C3=A1no,
+Breno Leitao wrote:
+> Most of the ioctls to net protocols operates directly on userspace
+> argument (arg). Usually doing get_user()/put_user() directly in the
+> ioctl callback.  This is not flexible, because it is hard to reuse these
+> functions without passing userspace buffers.
+> 
+> Change the "struct proto" ioctls to avoid touching userspace memory and
+> operate on kernel buffers, i.e., all protocol's ioctl callbacks is
+> adapted to operate on a kernel memory other than on userspace (so, no
+> more {put,get}_user() and friends being called in the ioctl callback).
+> 
+> This changes the "struct proto" ioctl format in the following way:
+> 
+>     int                     (*ioctl)(struct sock *sk, int cmd,
+> -                                        unsigned long arg);
+> +                                        int *karg);
+> 
+> (Important to say that this patch does not touch the "struct proto_ops"
+> protocols)
+> 
+> So, the "karg" argument, which is passed to the ioctl callback, is a
+> pointer allocated to kernel space memory (inside a function wrapper).
+> This buffer (karg) may contain input argument (copied from userspace in
+> a prep function) and it might return a value/buffer, which is copied
+> back to userspace if necessary. There is not one-size-fits-all format
+> (that is I am using 'may' above), but basically, there are three type of
+> ioctls:
+> 
+> 1) Do not read from userspace, returns a result to userspace
+> 2) Read an input parameter from userspace, and does not return anything
+>   to userspace
+> 3) Read an input from userspace, and return a buffer to userspace.
+> 
+> The default case (1) (where no input parameter is given, and an "int" is
+> returned to userspace) encompasses more than 90% of the cases, but there
+> are two other exceptions. Here is a list of exceptions:
+> 
+> * Protocol RAW:
+>    * cmd = SIOCGETVIFCNT:
+>      * input and output = struct sioc_vif_req
+>    * cmd = SIOCGETSGCNT
+>      * input and output = struct sioc_sg_req
+>    * Explanation: for the SIOCGETVIFCNT case, userspace passes the input
+>      argument, which is struct sioc_vif_req. Then the callback populates
+>      the struct, which is copied back to userspace.
+> 
+> * Protocol RAW6:
+>    * cmd = SIOCGETMIFCNT_IN6
+>      * input and output = struct sioc_mif_req6
+>    * cmd = SIOCGETSGCNT_IN6
+>      * input and output = struct sioc_sg_req6
+> 
+> * Protocol PHONET:
+>   * cmd == SIOCPNADDRESOURCE | SIOCPNDELRESOURCE
+>      * input int (4 bytes)
+>   * Nothing is copied back to userspace.
+> 
+> For the exception cases, functions sock_sk_ioctl_inout() will
+> copy the userspace input, and copy it back to kernel space.
+> 
+> The wrapper that prepare the buffer and put the buffer back to user is
+> sk_ioctl(), so, instead of calling sk->sk_prot->ioctl(), the callee now
+> calls sk_ioctl(), which will handle all cases.
+> 
+> Signed-off-by: Breno Leitao <leitao@debian.org>
 
-zaji=C5=A1=C5=A5ujeme technologii tlakov=C3=A9ho lit=C3=AD hlin=C3=ADku.
-
-M=C3=A1me v=C3=BDrobn=C3=AD z=C3=A1vody v Polsku, =C5=A0v=C3=A9dsku a =C4=
-=8C=C3=ADn=C4=9B se schopnost=C3=AD flexibiln=C4=9B p=C5=99esouvat v=C3=BD=
-robu mezi lokalitami.
-
-Na=C5=A1e lic=C3=AD bu=C5=88ky jsou v=C4=9Bt=C5=A1inou automatick=C3=A9 n=
-ebo poloautomatick=C3=A9, co=C5=BE umo=C5=BE=C5=88uje v=C3=BDrobu velk=C3=
-=BDch v=C3=BDrobn=C3=ADch s=C3=A9ri=C3=AD s vysokou flexibilitou detail=C5=
-=AF.
-=20
-Poskytujeme podporu v ka=C5=BEd=C3=A9 f=C3=A1zi v=C3=BDvoje projektu, vyv=
-=C3=ADj=C3=ADme strukturu detailu.
-
-Cht=C4=9Bli byste mluvit o spolupr=C3=A1ci v t=C3=A9to oblasti?
-
-Pozdravy
-Kristi=C3=A1n Plet=C3=A1nek
+Reviewed-by: Willem de Bruijn <willemb@google.com>
