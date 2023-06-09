@@ -2,112 +2,151 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 870CA72A056
-	for <lists+linux-sctp@lfdr.de>; Fri,  9 Jun 2023 18:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35E2C72A3F8
+	for <lists+linux-sctp@lfdr.de>; Fri,  9 Jun 2023 22:00:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbjFIQlr (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 9 Jun 2023 12:41:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46280 "EHLO
+        id S229845AbjFIUAp (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 9 Jun 2023 16:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjFIQlp (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 9 Jun 2023 12:41:45 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FBD3AA3
-        for <linux-sctp@vger.kernel.org>; Fri,  9 Jun 2023 09:41:39 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f7ff69824dso12214365e9.1
-        for <linux-sctp@vger.kernel.org>; Fri, 09 Jun 2023 09:41:39 -0700 (PDT)
+        with ESMTP id S229831AbjFIUAm (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 9 Jun 2023 16:00:42 -0400
+Received: from smtp-fw-52004.amazon.com (smtp-fw-52004.amazon.com [52.119.213.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B6135AA;
+        Fri,  9 Jun 2023 13:00:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686328897; x=1688920897;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+1AVcllAn3iwjU08yRkcnifxFt3/r67zY2TJ0SgpYBA=;
-        b=foi5I/JjKsd9mKLtadBqvhTs09YbWm1o2f3JMKkQFRGoYngq/yElwdYE2s3mtS26FB
-         dpNAfgiU03NFa0HNsUf8HDsr5ZFhLGEKcrEKGTKa6UKlZdx8ACFtLJgm1ifBH+FEo4qG
-         Hz9RDJeoH1Qg/SYjW05Z6GUlHMq2gVZffPoITVHqFqmZeI3vh4jkujBUwNWzP3ghWPhl
-         Xj3mTI5Q89KPZGlFdl6nODpz8eK9ALAWSbViHpojR3DehTbHJrHz+TPVhlzABqzthIvq
-         5Y8AAscfUMVBzjkm6hxVepTi758I0aaMiNqEMZcQBiqBzvx4uYO48AMKxaPVTVhMePtK
-         QpxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686328897; x=1688920897;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+1AVcllAn3iwjU08yRkcnifxFt3/r67zY2TJ0SgpYBA=;
-        b=h3aUOdXeH7Rd/3S7EqC53bmEcHFVMjphL4z711U7tUBwt9QI9Qu/cWMpVptrEMksN6
-         o0USktBi9+qTWk4OsM9kFxnNtgfDuD8UZxCmM5PWiNIGdvFZcWaO9nv0PrPwVJEUbBXo
-         +eZarpJwqwcSj098bS3W1MpU8010sui1P4Q7F3tBy01Kpy9nVGhE/k/mh26zCWschSCt
-         jNDXopSX+szEBT6w2QK/Kf2hWr3ehu1DYwFO3AskBzvZFGihbN72pHRCHzncc7Soigs1
-         wzh08ZJ2M9cXQ4eEC9bhWlu1I3v4ha+YTf3qsdS/eJQkWGusefimP30k06K7+MU8Gc1M
-         CmSQ==
-X-Gm-Message-State: AC+VfDxyqts8Q+qG6JbPCTnU08wgamw8UKG1UQ5Ab4klznXT8aeWGAHZ
-        ZhNffJScfxyQcagkwamkPn01jA==
-X-Google-Smtp-Source: ACHHUZ4Hsb2q/diC3uQ3TI+OPWBWwVbviqd4QrCSbVAoe/3VEZOtD+ToJA9prjtmGOy2j4UO99NBZw==
-X-Received: by 2002:a1c:7417:0:b0:3f6:84:3df6 with SMTP id p23-20020a1c7417000000b003f600843df6mr1925729wmc.10.1686328897648;
-        Fri, 09 Jun 2023 09:41:37 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id x15-20020a5d650f000000b0030adfa48e1esm4877615wru.29.2023.06.09.09.41.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 09:41:35 -0700 (PDT)
-Date:   Fri, 9 Jun 2023 19:41:31 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     Vlad Yasevich <vladislav.yasevich@hp.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH 2/2 net] sctp: fix an error code in sctp_sf_eat_auth()
-Message-ID: <7899ff13-ab06-4970-a306-85b218486571@kadam.mountain>
-References: <4629fee1-4c9f-4930-a210-beb7921fa5b3@moroto.mountain>
- <bfb9c077-b9a6-47f4-8cd8-a7a86b056a21@moroto.mountain>
- <CADvbK_f25PEaR1bSuyqeGQsoOp0v1Psaeu2zPhfEi8Zcu-J5Tw@mail.gmail.com>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1686340840; x=1717876840;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=AwzwnMbVO3rl3y00p/gpeO98vFDZVAnUq22KZ6hErmQ=;
+  b=jyn13C1ZQ3xxp3pqtqBze7Ha+LvMkFcYL/Za6NNJBFmvXCy1xPwqo9K+
+   gY0qt6pcaOhIOCIe4XOBQL16p423n0BklEsh6YUwQCeqqzaz6drhML7++
+   qam99DOMOn8HLraLXFAq6zOzcfXFasIb2puOviIs01Sc0QhxGM0fNjMGQ
+   k=;
+X-IronPort-AV: E=Sophos;i="6.00,230,1681171200"; 
+   d="scan'208";a="136187882"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-b538c141.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-52004.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 20:00:37 +0000
+Received: from EX19MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1e-m6i4x-b538c141.us-east-1.amazon.com (Postfix) with ESMTPS id 84D72A11E1;
+        Fri,  9 Jun 2023 20:00:28 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 9 Jun 2023 20:00:27 +0000
+Received: from 88665a182662.ant.amazon.com (10.106.101.20) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.26;
+ Fri, 9 Jun 2023 20:00:21 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <leitao@debian.org>
+CC:     <alex.aring@gmail.com>, <andrea.righi@canonical.com>,
+        <asml.silence@gmail.com>, <ast@kernel.org>, <axboe@kernel.dk>,
+        <courmisch@gmail.com>, <davem@davemloft.net>,
+        <dccp@vger.kernel.org>, <dsahern@kernel.org>,
+        <edumazet@google.com>, <hbh25y@gmail.com>,
+        <joannelkoong@gmail.com>, <kernelxing@tencent.com>,
+        <kuba@kernel.org>, <kuniyu@amazon.com>, <leit@fb.com>,
+        <linux-kernel@vger.kernel.org>, <linux-sctp@vger.kernel.org>,
+        <linux-wpan@vger.kernel.org>, <lucien.xin@gmail.com>,
+        <marcelo.leitner@gmail.com>, <martin.lau@kernel.org>,
+        <martineau@kernel.org>, <matthieu.baerts@tessares.net>,
+        <miquel.raynal@bootlin.com>, <mptcp@lists.linux.dev>,
+        <netdev@vger.kernel.org>, <pabeni@redhat.com>,
+        <stefan@datenfreihafen.org>, <willemb@google.com>,
+        <willemdebruijn.kernel@gmail.com>, <wojciech.drewek@intel.com>
+Subject: Re: [PATCH net-next v7] net: ioctl: Use kernel memory on protocol ioctl callbacks
+Date:   Fri, 9 Jun 2023 13:00:10 -0700
+Message-ID: <20230609200010.27991-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230609152800.830401-1-leitao@debian.org>
+References: <20230609152800.830401-1-leitao@debian.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADvbK_f25PEaR1bSuyqeGQsoOp0v1Psaeu2zPhfEi8Zcu-J5Tw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.106.101.20]
+X-ClientProxiedBy: EX19D045UWC001.ant.amazon.com (10.13.139.223) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 11:13:03AM -0400, Xin Long wrote:
-> This one looks good to me.
+From: Breno Leitao <leitao@debian.org>
+Date: Fri,  9 Jun 2023 08:27:42 -0700
+> Most of the ioctls to net protocols operates directly on userspace
+> argument (arg). Usually doing get_user()/put_user() directly in the
+> ioctl callback.  This is not flexible, because it is hard to reuse these
+> functions without passing userspace buffers.
 > 
-> But for the patch 1/2 (somehow it doesn't show up in my mailbox):
+> Change the "struct proto" ioctls to avoid touching userspace memory and
+> operate on kernel buffers, i.e., all protocol's ioctl callbacks is
+> adapted to operate on a kernel memory other than on userspace (so, no
+> more {put,get}_user() and friends being called in the ioctl callback).
 > 
->   default:
->   pr_err("impossible disposition %d in state %d, event_type %d, event_id %d\n",
->         status, state, event_type, subtype.chunk);
-> - BUG();
-> + error = status;
-> + if (error >= 0)
-> + error = -EINVAL;
-> + WARN_ON_ONCE(1);
+> This changes the "struct proto" ioctl format in the following way:
 > 
-> I think from the sctp_do_sm() perspective, it expects the state_fn
-> status only from
-> enum sctp_disposition. It is a BUG to receive any other values and
-> must be fixed,
-> as you did in 2/2. It does the same thing as other functions in SCTP code, like
-> sctp_sf_eat_data_*(), sctp_retransmit() etc.
+>     int                     (*ioctl)(struct sock *sk, int cmd,
+> -                                        unsigned long arg);
+> +                                        int *karg);
+> 
+> (Important to say that this patch does not touch the "struct proto_ops"
+> protocols)
+> 
+> So, the "karg" argument, which is passed to the ioctl callback, is a
+> pointer allocated to kernel space memory (inside a function wrapper).
+> This buffer (karg) may contain input argument (copied from userspace in
+> a prep function) and it might return a value/buffer, which is copied
+> back to userspace if necessary. There is not one-size-fits-all format
+> (that is I am using 'may' above), but basically, there are three type of
+> ioctls:
+> 
+> 1) Do not read from userspace, returns a result to userspace
+> 2) Read an input parameter from userspace, and does not return anything
+>   to userspace
+> 3) Read an input from userspace, and return a buffer to userspace.
+> 
+> The default case (1) (where no input parameter is given, and an "int" is
+> returned to userspace) encompasses more than 90% of the cases, but there
+> are two other exceptions. Here is a list of exceptions:
+> 
+> * Protocol RAW:
+>    * cmd = SIOCGETVIFCNT:
+>      * input and output = struct sioc_vif_req
+>    * cmd = SIOCGETSGCNT
+>      * input and output = struct sioc_sg_req
+>    * Explanation: for the SIOCGETVIFCNT case, userspace passes the input
+>      argument, which is struct sioc_vif_req. Then the callback populates
+>      the struct, which is copied back to userspace.
+> 
+> * Protocol RAW6:
+>    * cmd = SIOCGETMIFCNT_IN6
+>      * input and output = struct sioc_mif_req6
+>    * cmd = SIOCGETSGCNT_IN6
+>      * input and output = struct sioc_sg_req6
+> 
+> * Protocol PHONET:
+>   * cmd == SIOCPNADDRESOURCE | SIOCPNDELRESOURCE
+>      * input int (4 bytes)
+>   * Nothing is copied back to userspace.
+> 
+> For the exception cases, functions sock_sk_ioctl_inout() will
+> copy the userspace input, and copy it back to kernel space.
+> 
+> The wrapper that prepare the buffer and put the buffer back to user is
+> sk_ioctl(), so, instead of calling sk->sk_prot->ioctl(), the callee now
+> calls sk_ioctl(), which will handle all cases.
+> 
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> Reviewed-by: Willem de Bruijn <willemb@google.com>
+> Reviewed-by: David Ahern <dsahern@kernel.org>
 
-It is a bug, sure.  And after my patch is applied it will still trigger
-a stack trace.  But we should only call the actual BUG() function
-in order to prevent filesystem corruption or a privilege escalation or
-something along those lines.
+Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-Calling BUG() makes the system unusable so it makes bugs harder to
-debug.  This is even mentioned in checkpatch.pl "Do not crash the kernel
-unless it is absolutely unavoidable--use WARN_ON_ONCE() plus recovery
-code (if feasible) instead of BUG() or variants".
-
-regards,
-dan carpenter
-
+Thanks!
