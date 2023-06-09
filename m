@@ -2,119 +2,114 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C447282D0
-	for <lists+linux-sctp@lfdr.de>; Thu,  8 Jun 2023 16:35:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D8DD7297BD
+	for <lists+linux-sctp@lfdr.de>; Fri,  9 Jun 2023 13:05:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235521AbjFHOf6 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 8 Jun 2023 10:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35732 "EHLO
+        id S231357AbjFILFS (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 9 Jun 2023 07:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235991AbjFHOf5 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 8 Jun 2023 10:35:57 -0400
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1872D58;
-        Thu,  8 Jun 2023 07:35:52 -0700 (PDT)
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-3f732d37d7cso6156945e9.2;
-        Thu, 08 Jun 2023 07:35:52 -0700 (PDT)
+        with ESMTP id S238708AbjFILEw (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 9 Jun 2023 07:04:52 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E061F1FF3
+        for <linux-sctp@vger.kernel.org>; Fri,  9 Jun 2023 04:04:50 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-30af20f5f67so1586275f8f.1
+        for <linux-sctp@vger.kernel.org>; Fri, 09 Jun 2023 04:04:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686308689; x=1688900689;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hXj1WwjbvB9/pMgnlgZ+4nn9ohz+hnVKVJRXwh0hBUI=;
+        b=RPTqyNKRXVwFr2f498zOolCmS/QaBuMCBH2XsgfgSo9Ec2d51VIgjo3ANXJgxMwpdy
+         Tadmr/fFjfY88AUjE5l4BNyB9Xe2TrKJCurkEVvshdhe0p0UsbVjjjVpRc+X9ZnaHyPz
+         EUc0uhqzAm3fnLZnt3VyYvQ3vQoBYuTLMaOC+jf5otjZ9a+/eI1ViZBOxwVEFLc1FneB
+         /3WHyiqm6hU08L2TNYiX2OwZsKr/PenI5uboqCTjak90Fr7ZR11XkXacbsTgDJ+6c8rl
+         5kN+LnvROdePOiYCzH0sqMgEyFP9JIzSnzx0I20oDeO5VZX2n5duKfN5I0cRiM0nfH5L
+         NlTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686234951; x=1688826951;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=40BlcYIOiCiG2tmKHXdb8ewCMjsbNxSjJq3O+2btqpQ=;
-        b=LVrKO6oUKvcg8/2nyEi5q5+WzyFpfXLtC9snIpVkUhAF/im6GPJ9K1UHCkpj3grB7i
-         Tga1U0dBib2zApXx2OAuv4qnBbIRYP+Zp+pQz7juSH74Bqv2ggKKvImI9gi1dyKxO+a0
-         WZ8K8GJyV2pElh6tPS0H7FvPJNgRTmk36qRWGy07BY6JbkvMtBhsjLiRHNortriPPEiK
-         tVV4VYD3ELDTAvCL8LgkQsqudKFsOlczE1r9jY07Pu2PwvTyX2pMxNKpDV/72LDtsVJD
-         9DUmRM0itaOUoPRDPLce+z26UaJx5r7RtLoiwHt1ZspbI/fw7SIZ3zSHB0f+CLjMDF+y
-         Hmqg==
-X-Gm-Message-State: AC+VfDzFYv4Os6ikUPuim7meOkSrFWoM2rHKy33n8MVaIGSVIiDuocVf
-        SZ2E+4ruHgz0f6tcVjzENdY=
-X-Google-Smtp-Source: ACHHUZ7lcmNByqTAh5kYMjYbTAGup97yib7alUhZBsoWDIpWRK0lV++ETpqXpbGcOWVV1+uiD32naw==
-X-Received: by 2002:a05:600c:21cf:b0:3f6:143:7c4b with SMTP id x15-20020a05600c21cf00b003f601437c4bmr1728617wmj.6.1686234951071;
-        Thu, 08 Jun 2023 07:35:51 -0700 (PDT)
-Received: from gmail.com (fwdproxy-cln-027.fbsv.net. [2a03:2880:31ff:1b::face:b00c])
-        by smtp.gmail.com with ESMTPSA id s5-20020a7bc385000000b003f7e60622f0sm2212389wmj.6.2023.06.08.07.35.49
+        d=1e100.net; s=20221208; t=1686308689; x=1688900689;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hXj1WwjbvB9/pMgnlgZ+4nn9ohz+hnVKVJRXwh0hBUI=;
+        b=Et6q+Y5cWgM0uU1rQ/Sbe60a32UCMSPFOx36TNUPYproxLKe93xwDIhxpzq8Fq43Wm
+         Ssbo8uNd7IxEioe5BVvbkVNialhjYusT/VFnmCInBL4LJTCKom/5aulTtEbcGFCl4eT8
+         ua447UpHPSQl9ie81wgUH/s+AwsZhmZxn5dOao8UeERtAZJYwh763jIRuez+IXw8OMS6
+         9DSKZZXjbvz6urdps0N9qaP9zq3volQtmxlA+sFTxgmjti68bb53TFwXDepL80eT082e
+         xRn2hqELqmCKq1T6rw85WDCYw30cNylzRY7QF4zvzCPsNLIAa58D9XdLUa2Bsfak5DpE
+         BwBg==
+X-Gm-Message-State: AC+VfDwkdpfP1ot2Irk2aBGE1B9Z3X/CTUbywnr+5zOZsJFkeN3X8AzI
+        AByWma/kkpq9EiuSMw64/gdSUrk1TCwps39oUEU=
+X-Google-Smtp-Source: ACHHUZ62BlqjebHJfa/aFzpvqpty56hZMNVb2Jao/A4jGFspbi9nX77fCrW3yRU6jOw7a4mSysm05w==
+X-Received: by 2002:a5d:67c9:0:b0:30a:d747:b357 with SMTP id n9-20020a5d67c9000000b0030ad747b357mr720722wrw.56.1686308689368;
+        Fri, 09 Jun 2023 04:04:49 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id bl18-20020adfe252000000b0030adc30e9f1sm4147402wrb.68.2023.06.09.04.04.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 07:35:50 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 07:35:48 -0700
-From:   Breno Leitao <leitao@debian.org>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     Kuniyuki Iwashima <kuniyu@amazon.com>, alex.aring@gmail.com,
-        andrea.righi@canonical.com, asml.silence@gmail.com, ast@kernel.org,
-        axboe@kernel.dk, courmisch@gmail.com, davem@davemloft.net,
-        dccp@vger.kernel.org, dsahern@kernel.org, edumazet@google.com,
-        gnault@redhat.com, hbh25y@gmail.com, joannelkoong@gmail.com,
-        kernelxing@tencent.com, kuba@kernel.org, leit@fb.com,
-        linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-wpan@vger.kernel.org, lucien.xin@gmail.com,
-        marcelo.leitner@gmail.com, martin.lau@kernel.org,
-        martineau@kernel.org, matthieu.baerts@tessares.net,
-        miquel.raynal@bootlin.com, mptcp@lists.linux.dev,
-        netdev@vger.kernel.org, stefan@datenfreihafen.org,
-        willemdebruijn.kernel@gmail.com, wojciech.drewek@intel.com
-Subject: Re: [PATCH net-next v6] net: ioctl: Use kernel memory on protocol
- ioctl callbacks
-Message-ID: <ZIHnRFu0ceUxOOvg@gmail.com>
-References: <20230606180045.827659-1-leitao@debian.org>
- <20230607173142.86395-1-kuniyu@amazon.com>
- <ZIGUofpP4k24qfQs@gmail.com>
- <5bd6ced877e97ac674d1308eab0b8d2107b7ab85.camel@redhat.com>
+        Fri, 09 Jun 2023 04:04:48 -0700 (PDT)
+Date:   Fri, 9 Jun 2023 14:04:43 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc:     Xin Long <lucien.xin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH 1/2 net] sctp: handle invalid error codes without calling
+ BUG()
+Message-ID: <4629fee1-4c9f-4930-a210-beb7921fa5b3@moroto.mountain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5bd6ced877e97ac674d1308eab0b8d2107b7ab85.camel@redhat.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FSL_HELO_FAKE,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Mailer: git-send-email haha only kidding
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 03:57:48PM +0200, Paolo Abeni wrote:
-> On Thu, 2023-06-08 at 01:43 -0700, Breno Leitao wrote:
-> > Hello Kuniyuki,
-> > On Wed, Jun 07, 2023 at 10:31:42AM -0700, Kuniyuki Iwashima wrote:
-> > > > +/* This is the most common ioctl prep function, where the result (4 bytes) is
-> > > > + * copied back to userspace if the ioctl() returns successfully. No input is
-> > > > + * copied from userspace as input argument.
-> > > > + */
-> > > > +static int sock_ioctl_out(struct sock *sk, unsigned int cmd, void __user *arg)
-> > > > +{
-> > > > +	int ret, karg = 0;
-> > > > +
-> > > > +	ret = sk->sk_prot->ioctl(sk, cmd, &karg);
-> > > 
-> > > We need READ_ONCE(sk->sk_prot) as IPv4 conversion or ULP chnage could
-> > > occur at the same time.
-> > 
-> > Thanks for the heads-up. I would like to pick you brain and understand
-> > a bit more about READ_ONCE() and what is the situation that READ_ONCE()
-> > will solve.
-> 
-> AFAICS, in this specific case READ_ONCE() should not address any "real"
-> bug causing visible issue.
-> 
-> Still the lack of it will likely cause syzkaller report for (harmless,
-> AFAICS) 'data races' around sk->sk_prot. We want to avoid such reports,
-> even if harmless, because they can end-up hiding more relevant bugs.
-> 
-> > Is the situation related to when sock_ioctl_out() start to execute, and
-> > "sk->sk_prot" changes in a different thread? If that is the case, the
-> > arguments (cmd and arg) will be from the "previous" instance.
-> > 
-> > Also, grepping for "sk->sk_prot->", I see more than a bunch of calls
-> > that do not use READ_ONCE() barrier. Why is this case different?
-> 
-> Races on sk->sk_prot can happen only on inet6_stream_ops (due to ulp
-> and/or ADDRFORM) inet6_dgram_ops (due to ADDRFORM). AFAICS here
-> READ_ONCE() is  needed as we can reach here via inet6_stream_ops-
-> >inet6_ioctl
+The sctp_sf_eat_auth() function is supposed to return enum sctp_disposition
+values but if the call to sctp_ulpevent_make_authkey() fails, it returns
+-ENOMEM.
 
-Thanks for the clarification, I will send a v6 with the READ_ONCE().
+This results in calling BUG() inside the sctp_side_effects() function.
+Calling BUG() is an over reaction and not helpful.  Call WARN_ON_ONCE()
+instead.
 
-Breno
+This code predates git.
+
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+---
+This is just from reviewing the code and not tested.
+
+To be honest, the WARN_ON_ONCE() stack trace is not very helpful either
+because it wouldn't include sctp_sf_eat_auth().  It's the best I can
+think of though.
+
+ net/sctp/sm_sideeffect.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/net/sctp/sm_sideeffect.c b/net/sctp/sm_sideeffect.c
+index 7fbeb99d8d32..8c88045f26c6 100644
+--- a/net/sctp/sm_sideeffect.c
++++ b/net/sctp/sm_sideeffect.c
+@@ -1250,7 +1250,10 @@ static int sctp_side_effects(enum sctp_event_type event_type,
+ 	default:
+ 		pr_err("impossible disposition %d in state %d, event_type %d, event_id %d\n",
+ 		       status, state, event_type, subtype.chunk);
+-		BUG();
++		error = status;
++		if (error >= 0)
++			error = -EINVAL;
++		WARN_ON_ONCE(1);
+ 		break;
+ 	}
+ 
+-- 
+2.39.2
+
