@@ -2,56 +2,61 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D363A72A962
-	for <lists+linux-sctp@lfdr.de>; Sat, 10 Jun 2023 08:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2FD72AE19
+	for <lists+linux-sctp@lfdr.de>; Sat, 10 Jun 2023 20:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbjFJG3E (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sat, 10 Jun 2023 02:29:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
+        id S231757AbjFJS2a (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sat, 10 Jun 2023 14:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230444AbjFJG3D (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sat, 10 Jun 2023 02:29:03 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7113AB7
-        for <linux-sctp@vger.kernel.org>; Fri,  9 Jun 2023 23:28:58 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f732d37d7cso24611855e9.2
-        for <linux-sctp@vger.kernel.org>; Fri, 09 Jun 2023 23:28:58 -0700 (PDT)
+        with ESMTP id S231725AbjFJS23 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sat, 10 Jun 2023 14:28:29 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FB730CD;
+        Sat, 10 Jun 2023 11:28:27 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-bc492cb6475so413325276.2;
+        Sat, 10 Jun 2023 11:28:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686378537; x=1688970537;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Z4tPBmLxbgqH6kRcASvaW6A5pQpwvBDn158bXOcNA0I=;
-        b=Q5RmxHP+gg7pbWn2D5hFQpNyX1ss8jh5NWLurox0v9DwuuvNtEyIxtMmRGVEr7Njkl
-         9hW5tnfCN6Y/18k6joqKEnxVFwme3Ea2LxQDzHcZK6NtLA+wP/OmRwrKGKVbdDmO8J8d
-         R7PVSHSi2is1kO1xdBWiwE5dXJKklEkVlINx3ggJFv0SUPXmst5Yv754kn8wvcgusJ6O
-         yVFszCwQElFtZDbYAAuZm20VOfM5TY+3Aujel7lxlb8+MCz1S7FQ75MhhRbCSweKCO/P
-         0lzLfufRLBKRYJNat4l3CswqSTYyk+GB+zowgyznz5PZEVMtqkvkYNW7Mnrja5WcSz4s
-         OQyA==
+        d=gmail.com; s=20221208; t=1686421707; x=1689013707;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VHAWJjlyJJkiqxSyII1vi5yzFtPXpOtnMaBNFDEAO5E=;
+        b=lWiXt+cY+yfrdznX/8ayKp3jjqLadQcv2DTPp010F067o75MVVU1wpgh0JSfH++ZzP
+         n4RiRdmcVtlPEEb/0iOdmpr5zh1kDfedxS1FRlOKJU2IrKgflBHTD1BJ9l4a7OFE+kNp
+         UaXR4pgmxBzP7/QFXyXUh+ryIxSFyWcWzLti7zref9AK//zJw++/tFeO8uyXvIF7uesf
+         QrEi1qLZ+TrhC+xs0DlWpplF13nX0Nwhmomemp2Vj2jx9yBUxH9E49ye3lr+3zVRVPqV
+         U6E6XHKkOyHMppVRsV2vsyyOgBjOeYaq3j4bFQqZAjn6n5SDPZos8qSnPdKatO3dmNcm
+         KhGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686378537; x=1688970537;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z4tPBmLxbgqH6kRcASvaW6A5pQpwvBDn158bXOcNA0I=;
-        b=Njwa/1JhiWMe02b4V3J7R9DU8DnUnKL8QCZxx4WyQ1rGu+iXVgP5dUfVzqE/d/lvdB
-         XIVk3uVM7gPY+N05Fdjil/OgjwdU5fadoeZdItNRDa/AnPiNEToRfJeOH/jAPluz6zpb
-         pC2vJaspBjAKNTqaLTPp6cDif34mDDYjuZOtSXxG56sr7wkWPfEi01siZVkb+JOJeaXJ
-         v8RFwKHYPAAhs0wd15yNf7DULR4lq7jbww6q0IssdioXyUTwXEcJO8/Lr5Rz9LSVkwMy
-         X9jB27YNz1+US2HYK3qwAt6jrazHUnX83QOl7QyP6q20GSxd6Fj0yZWu1+V/CosMnkDl
-         HvZg==
-X-Gm-Message-State: AC+VfDyol2vGLL46THvcHWIoW7zuQ1uLRsGZEPq3QCOg3SWsGPQ3oun7
-        vMTdN4lTrehtnLN0+epyQsAEDQ==
-X-Google-Smtp-Source: ACHHUZ6+ar2K/agrBFiY981/9KcoVl6RN5cGk1+iH+PBYjdvQfrQis9Y2cHw+dGdMD1EZ+1x+h4jZw==
-X-Received: by 2002:a05:600c:3793:b0:3f6:683:627d with SMTP id o19-20020a05600c379300b003f60683627dmr2773647wmr.18.1686378537038;
-        Fri, 09 Jun 2023 23:28:57 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id l8-20020a1c7908000000b003f7f4dc6d14sm4635503wme.14.2023.06.09.23.28.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 23:28:55 -0700 (PDT)
-Date:   Sat, 10 Jun 2023 09:28:51 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Xin Long <lucien.xin@gmail.com>
+        d=1e100.net; s=20221208; t=1686421707; x=1689013707;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VHAWJjlyJJkiqxSyII1vi5yzFtPXpOtnMaBNFDEAO5E=;
+        b=Jp3q0zBaNypx/iv826tmFam2tBtMKK+PIAs4OmC0t/2xnNrWICazVSkgVAjkr/wAFP
+         q0tFFiMss/YYl98okplqd+p14mTBIip08/dCuwZLayintjkWMT90KbJHU7mJ3P2elWlm
+         hUHkGsAYCcFzouAoe5XV2+rC5Q7CKBHWe3RxwfrecrW8Y2iQF44vhC35i2W3LfPsyiAk
+         1/SxIYQyGdGr/IZl7ixSJb8l34IwkWzZiClkkSbfa5PqqvjCh4JiPQVuhIKYcov2g0Z1
+         me903Kdcty5wb60wUeP+OCb1OkSM4lVRBX5+Y2BmwqHutJKJw4K5U/dBM+GvQns3iUgD
+         Z4wA==
+X-Gm-Message-State: AC+VfDzGwzrUk5zpErwZIHbroLhrX19Uuef4eBHKZFrr9jCalrnh3agL
+        kg8Ar3Xl5HpnqlswQHxg91mXYCiD7Xd2GQQ1Z+U=
+X-Google-Smtp-Source: ACHHUZ4ycn8+h+Fm0lIiWoMFRAUM2pdP0YO3NBeKs5I5Ea4uWOwGzm7VUEBJ6IG//luRic2L9Movqd0Hv41kyQalR04=
+X-Received: by 2002:a0d:dfc3:0:b0:561:8c78:bd14 with SMTP id
+ i186-20020a0ddfc3000000b005618c78bd14mr3862807ywe.3.1686421706846; Sat, 10
+ Jun 2023 11:28:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <4629fee1-4c9f-4930-a210-beb7921fa5b3@moroto.mountain>
+ <bfb9c077-b9a6-47f4-8cd8-a7a86b056a21@moroto.mountain> <CADvbK_f25PEaR1bSuyqeGQsoOp0v1Psaeu2zPhfEi8Zcu-J5Tw@mail.gmail.com>
+ <7899ff13-ab06-4970-a306-85b218486571@kadam.mountain> <CADvbK_e2JwH3OqFSu89EvrtGbBbuCvD-C=Db_sExjvD1EcVLrw@mail.gmail.com>
+ <a4eebbcc-a4a5-42f3-8db9-5d604ced6201@kadam.mountain>
+In-Reply-To: <a4eebbcc-a4a5-42f3-8db9-5d604ced6201@kadam.mountain>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Sat, 10 Jun 2023 14:27:39 -0400
+Message-ID: <CADvbK_f4=pHJ2pftf2mqXO_-9BaZkBM0wSbqvA0iy93H4YFztg@mail.gmail.com>
+Subject: Re: [PATCH 2/2 net] sctp: fix an error code in sctp_sf_eat_auth()
+To:     Dan Carpenter <dan.carpenter@linaro.org>
 Cc:     Vlad Yasevich <vladislav.yasevich@hp.com>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
@@ -59,86 +64,93 @@ Cc:     Vlad Yasevich <vladislav.yasevich@hp.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, linux-sctp@vger.kernel.org,
         netdev@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH 2/2 net] sctp: fix an error code in sctp_sf_eat_auth()
-Message-ID: <a4eebbcc-a4a5-42f3-8db9-5d604ced6201@kadam.mountain>
-References: <4629fee1-4c9f-4930-a210-beb7921fa5b3@moroto.mountain>
- <bfb9c077-b9a6-47f4-8cd8-a7a86b056a21@moroto.mountain>
- <CADvbK_f25PEaR1bSuyqeGQsoOp0v1Psaeu2zPhfEi8Zcu-J5Tw@mail.gmail.com>
- <7899ff13-ab06-4970-a306-85b218486571@kadam.mountain>
- <CADvbK_e2JwH3OqFSu89EvrtGbBbuCvD-C=Db_sExjvD1EcVLrw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADvbK_e2JwH3OqFSu89EvrtGbBbuCvD-C=Db_sExjvD1EcVLrw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 07:04:17PM -0400, Xin Long wrote:
-> On Fri, Jun 9, 2023 at 12:41 PM Dan Carpenter <dan.carpenter@linaro.org> wrote:
+On Sat, Jun 10, 2023 at 2:28=E2=80=AFAM Dan Carpenter <dan.carpenter@linaro=
+.org> wrote:
+>
+> On Fri, Jun 09, 2023 at 07:04:17PM -0400, Xin Long wrote:
+> > On Fri, Jun 9, 2023 at 12:41=E2=80=AFPM Dan Carpenter <dan.carpenter@li=
+naro.org> wrote:
+> > >
+> > > On Fri, Jun 09, 2023 at 11:13:03AM -0400, Xin Long wrote:
+> > > It is a bug, sure.  And after my patch is applied it will still trigg=
+er
+> > > a stack trace.  But we should only call the actual BUG() function
+> > > in order to prevent filesystem corruption or a privilege escalation o=
+r
+> > > something along those lines.
+> > Hi, Dan,
 > >
-> > On Fri, Jun 09, 2023 at 11:13:03AM -0400, Xin Long wrote:
-> > It is a bug, sure.  And after my patch is applied it will still trigger
-> > a stack trace.  But we should only call the actual BUG() function
-> > in order to prevent filesystem corruption or a privilege escalation or
-> > something along those lines.
-> Hi, Dan,
-> 
-> Sorry, I'm not sure about this.
-> 
-> Look at the places where it's using  BUG(), it's not exactly the case, like
-> in ping_err() or ping_common_sendmsg(), BUG() are used more for
-> unexpected cases, which don't cause any filesystem corruption or a
-> privilege escalation.
-> 
-> You may also check more others under net/*.
-> 
+> > Sorry, I'm not sure about this.
+> >
+> > Look at the places where it's using  BUG(), it's not exactly the case, =
+like
+> > in ping_err() or ping_common_sendmsg(), BUG() are used more for
+> > unexpected cases, which don't cause any filesystem corruption or a
+> > privilege escalation.
+> >
+> > You may also check more others under net/*.
+> >
+>
+> Linus has been very clear that the BUG() in ping_err() is wrong and
+> should be removed.  But to me if you're very very sure a BUG() can't be
+> triggered that's more like a style or philosophy debate than a real life
+> issue.
+>
+> https://lore.kernel.org/all/CAHk-=3Dwg40EAZofO16Eviaj7mfqDhZ2gVEbvfsMf6gY=
+zspRjYvw@mail.gmail.com/
+I see, didn't know that there are so many BUG() uses that are historic
+in the kernel, including net/*.
 
-Linus has been very clear that the BUG() in ping_err() is wrong and
-should be removed.  But to me if you're very very sure a BUG() can't be
-triggered that's more like a style or philosophy debate than a real life
-issue.
+>
+> When you look at ping_err() then it's like.  Ugh...  If we leave off the
+> else statement then GCC and other static checkers will complain that the
+> variables are uninitialized.  It we add a return then it communicates to
+> the reader that this path is possible.  But the BUG() silences the
+> static checker warning and communicates that the path is impossible.
+>
+> A different solution might be to do a WARN(); followed by a return.  Or
+> unreachable();.  But the last time I proposed using unreachable() for
+> annotating impossible paths it lead to link errors and I haven't had
+> time to investigate.  Another idea is that we could create a WARN() that
+> included an unreachable() annotation.
+>
+>         } else {
+>                 IMPOSSIBLE("An impossible thing has occured");
+>         }
+>
+> As a static analysis developer, I have made Smatch ignore WARN()
+> information because warnings happen regularly and the information they
+> provide is not useful.  Smatch does consider unreachable() annotations
+> as accurate.
+Got it, thanks for the extra information.
+A WARN() with unreachable() annotation sounds like a good idea.
 
-https://lore.kernel.org/all/CAHk-=wg40EAZofO16Eviaj7mfqDhZ2gVEbvfsMf6gYzspRjYvw@mail.gmail.com/
+>
+> Anyway, in this patch the situation is completely different.  Returning
+> wrong error codes is a very common bug.  It's already happened once and
+> it will likely happen again.
+>
+> My main worry with this patch is that the networking maintainers will
+> say, "Thanks, but please delete all the calls to BUG() in this function".
+> I just selected this one because it was particularly bad and it needs to
+> be handled a bit specially.  Deleting all the other calls to BUG() isn't
+> something that I want to take on.
+>
+Yeah, we should gradually replace these bogus BUG()s.
 
-When you look at ping_err() then it's like.  Ugh...  If we leave off the
-else statement then GCC and other static checkers will complain that the
-variables are uninitialized.  It we add a return then it communicates to
-the reader that this path is possible.  But the BUG() silences the
-static checker warning and communicates that the path is impossible.
+Anyway, for these two patches:
+Acked-by: Xin Long <lucien.xin@gmail.com>
 
-A different solution might be to do a WARN(); followed by a return.  Or
-unreachable();.  But the last time I proposed using unreachable() for
-annotating impossible paths it lead to link errors and I haven't had
-time to investigate.  Another idea is that we could create a WARN() that
-included an unreachable() annotation.
-
-	} else {
-		IMPOSSIBLE("An impossible thing has occured");
-	}
-
-As a static analysis developer, I have made Smatch ignore WARN()
-information because warnings happen regularly and the information they
-provide is not useful.  Smatch does consider unreachable() annotations
-as accurate.
-
-Anyway, in this patch the situation is completely different.  Returning
-wrong error codes is a very common bug.  It's already happened once and
-it will likely happen again.
-
-My main worry with this patch is that the networking maintainers will
-say, "Thanks, but please delete all the calls to BUG() in this function".
-I just selected this one because it was particularly bad and it needs to
-be handled a bit specially.  Deleting all the other calls to BUG() isn't
-something that I want to take on.
-
-regards,
-dan carpenter
-
+Thanks.
