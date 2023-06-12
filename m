@@ -2,155 +2,88 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2FD72AE19
-	for <lists+linux-sctp@lfdr.de>; Sat, 10 Jun 2023 20:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 877AD72BAEE
+	for <lists+linux-sctp@lfdr.de>; Mon, 12 Jun 2023 10:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231757AbjFJS2a (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sat, 10 Jun 2023 14:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
+        id S233243AbjFLIkn (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 12 Jun 2023 04:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231725AbjFJS23 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sat, 10 Jun 2023 14:28:29 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FB730CD;
-        Sat, 10 Jun 2023 11:28:27 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-bc492cb6475so413325276.2;
-        Sat, 10 Jun 2023 11:28:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686421707; x=1689013707;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VHAWJjlyJJkiqxSyII1vi5yzFtPXpOtnMaBNFDEAO5E=;
-        b=lWiXt+cY+yfrdznX/8ayKp3jjqLadQcv2DTPp010F067o75MVVU1wpgh0JSfH++ZzP
-         n4RiRdmcVtlPEEb/0iOdmpr5zh1kDfedxS1FRlOKJU2IrKgflBHTD1BJ9l4a7OFE+kNp
-         UaXR4pgmxBzP7/QFXyXUh+ryIxSFyWcWzLti7zref9AK//zJw++/tFeO8uyXvIF7uesf
-         QrEi1qLZ+TrhC+xs0DlWpplF13nX0Nwhmomemp2Vj2jx9yBUxH9E49ye3lr+3zVRVPqV
-         U6E6XHKkOyHMppVRsV2vsyyOgBjOeYaq3j4bFQqZAjn6n5SDPZos8qSnPdKatO3dmNcm
-         KhGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686421707; x=1689013707;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VHAWJjlyJJkiqxSyII1vi5yzFtPXpOtnMaBNFDEAO5E=;
-        b=Jp3q0zBaNypx/iv826tmFam2tBtMKK+PIAs4OmC0t/2xnNrWICazVSkgVAjkr/wAFP
-         q0tFFiMss/YYl98okplqd+p14mTBIip08/dCuwZLayintjkWMT90KbJHU7mJ3P2elWlm
-         hUHkGsAYCcFzouAoe5XV2+rC5Q7CKBHWe3RxwfrecrW8Y2iQF44vhC35i2W3LfPsyiAk
-         1/SxIYQyGdGr/IZl7ixSJb8l34IwkWzZiClkkSbfa5PqqvjCh4JiPQVuhIKYcov2g0Z1
-         me903Kdcty5wb60wUeP+OCb1OkSM4lVRBX5+Y2BmwqHutJKJw4K5U/dBM+GvQns3iUgD
-         Z4wA==
-X-Gm-Message-State: AC+VfDzGwzrUk5zpErwZIHbroLhrX19Uuef4eBHKZFrr9jCalrnh3agL
-        kg8Ar3Xl5HpnqlswQHxg91mXYCiD7Xd2GQQ1Z+U=
-X-Google-Smtp-Source: ACHHUZ4ycn8+h+Fm0lIiWoMFRAUM2pdP0YO3NBeKs5I5Ea4uWOwGzm7VUEBJ6IG//luRic2L9Movqd0Hv41kyQalR04=
-X-Received: by 2002:a0d:dfc3:0:b0:561:8c78:bd14 with SMTP id
- i186-20020a0ddfc3000000b005618c78bd14mr3862807ywe.3.1686421706846; Sat, 10
- Jun 2023 11:28:26 -0700 (PDT)
+        with ESMTP id S233668AbjFLIkW (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 12 Jun 2023 04:40:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8422CA8;
+        Mon, 12 Jun 2023 01:40:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D74C612DB;
+        Mon, 12 Jun 2023 08:40:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6FBBBC433D2;
+        Mon, 12 Jun 2023 08:40:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686559220;
+        bh=89ak23KuxmgNnQPMFU5iJGei6tr8rWqGIYeuVSAnKaE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ZnQruuSUgodDxarX9ASl68F8uSE0iYW7oMPfGpckfoJebKCuVX5D29GxTyS+Mw1A+
+         HvMa0COqzmqAbFnUOOORtzdVczT2TtTKE+QXa/qQb8avxuGGhjCBhvWfF5sl1iPaxO
+         +q3tJ/AB4xWP3k17uB6JBvI43KLXxxXlF9L5tRjFuvfN7ZFL5nSn3dMM0a335b6xFu
+         qiVLKEriqkBqMYpPSZK54r/jrPKjRXHUCYcD/44QFMYKCZkFWTQ1RmMQlmtDqZRrG0
+         oECqJ8DSjLcF0+5SIqjlt15IGcgDBA9w4UAlmM+ITclcc3EnGj4fpf3yPd2M7Umll1
+         2do/wT5/JHeNQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4D788E29F37;
+        Mon, 12 Jun 2023 08:40:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 1/2 net] sctp: handle invalid error codes without calling
+ BUG()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168655922031.2912.11244679238666177727.git-patchwork-notify@kernel.org>
+Date:   Mon, 12 Jun 2023 08:40:20 +0000
 References: <4629fee1-4c9f-4930-a210-beb7921fa5b3@moroto.mountain>
- <bfb9c077-b9a6-47f4-8cd8-a7a86b056a21@moroto.mountain> <CADvbK_f25PEaR1bSuyqeGQsoOp0v1Psaeu2zPhfEi8Zcu-J5Tw@mail.gmail.com>
- <7899ff13-ab06-4970-a306-85b218486571@kadam.mountain> <CADvbK_e2JwH3OqFSu89EvrtGbBbuCvD-C=Db_sExjvD1EcVLrw@mail.gmail.com>
- <a4eebbcc-a4a5-42f3-8db9-5d604ced6201@kadam.mountain>
-In-Reply-To: <a4eebbcc-a4a5-42f3-8db9-5d604ced6201@kadam.mountain>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Sat, 10 Jun 2023 14:27:39 -0400
-Message-ID: <CADvbK_f4=pHJ2pftf2mqXO_-9BaZkBM0wSbqvA0iy93H4YFztg@mail.gmail.com>
-Subject: Re: [PATCH 2/2 net] sctp: fix an error code in sctp_sf_eat_auth()
+In-Reply-To: <4629fee1-4c9f-4930-a210-beb7921fa5b3@moroto.mountain>
 To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     Vlad Yasevich <vladislav.yasevich@hp.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-sctp@vger.kernel.org,
+Cc:     marcelo.leitner@gmail.com, lucien.xin@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-sctp@vger.kernel.org,
         netdev@vger.kernel.org, kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Sat, Jun 10, 2023 at 2:28=E2=80=AFAM Dan Carpenter <dan.carpenter@linaro=
-.org> wrote:
->
-> On Fri, Jun 09, 2023 at 07:04:17PM -0400, Xin Long wrote:
-> > On Fri, Jun 9, 2023 at 12:41=E2=80=AFPM Dan Carpenter <dan.carpenter@li=
-naro.org> wrote:
-> > >
-> > > On Fri, Jun 09, 2023 at 11:13:03AM -0400, Xin Long wrote:
-> > > It is a bug, sure.  And after my patch is applied it will still trigg=
-er
-> > > a stack trace.  But we should only call the actual BUG() function
-> > > in order to prevent filesystem corruption or a privilege escalation o=
-r
-> > > something along those lines.
-> > Hi, Dan,
-> >
-> > Sorry, I'm not sure about this.
-> >
-> > Look at the places where it's using  BUG(), it's not exactly the case, =
-like
-> > in ping_err() or ping_common_sendmsg(), BUG() are used more for
-> > unexpected cases, which don't cause any filesystem corruption or a
-> > privilege escalation.
-> >
-> > You may also check more others under net/*.
-> >
->
-> Linus has been very clear that the BUG() in ping_err() is wrong and
-> should be removed.  But to me if you're very very sure a BUG() can't be
-> triggered that's more like a style or philosophy debate than a real life
-> issue.
->
-> https://lore.kernel.org/all/CAHk-=3Dwg40EAZofO16Eviaj7mfqDhZ2gVEbvfsMf6gY=
-zspRjYvw@mail.gmail.com/
-I see, didn't know that there are so many BUG() uses that are historic
-in the kernel, including net/*.
+Hello:
 
->
-> When you look at ping_err() then it's like.  Ugh...  If we leave off the
-> else statement then GCC and other static checkers will complain that the
-> variables are uninitialized.  It we add a return then it communicates to
-> the reader that this path is possible.  But the BUG() silences the
-> static checker warning and communicates that the path is impossible.
->
-> A different solution might be to do a WARN(); followed by a return.  Or
-> unreachable();.  But the last time I proposed using unreachable() for
-> annotating impossible paths it lead to link errors and I haven't had
-> time to investigate.  Another idea is that we could create a WARN() that
-> included an unreachable() annotation.
->
->         } else {
->                 IMPOSSIBLE("An impossible thing has occured");
->         }
->
-> As a static analysis developer, I have made Smatch ignore WARN()
-> information because warnings happen regularly and the information they
-> provide is not useful.  Smatch does consider unreachable() annotations
-> as accurate.
-Got it, thanks for the extra information.
-A WARN() with unreachable() annotation sounds like a good idea.
+This series was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
 
->
-> Anyway, in this patch the situation is completely different.  Returning
-> wrong error codes is a very common bug.  It's already happened once and
-> it will likely happen again.
->
-> My main worry with this patch is that the networking maintainers will
-> say, "Thanks, but please delete all the calls to BUG() in this function".
-> I just selected this one because it was particularly bad and it needs to
-> be handled a bit specially.  Deleting all the other calls to BUG() isn't
-> something that I want to take on.
->
-Yeah, we should gradually replace these bogus BUG()s.
+On Fri, 9 Jun 2023 14:04:43 +0300 you wrote:
+> The sctp_sf_eat_auth() function is supposed to return enum sctp_disposition
+> values but if the call to sctp_ulpevent_make_authkey() fails, it returns
+> -ENOMEM.
+> 
+> This results in calling BUG() inside the sctp_side_effects() function.
+> Calling BUG() is an over reaction and not helpful.  Call WARN_ON_ONCE()
+> instead.
+> 
+> [...]
 
-Anyway, for these two patches:
-Acked-by: Xin Long <lucien.xin@gmail.com>
+Here is the summary with links:
+  - [1/2,net] sctp: handle invalid error codes without calling BUG()
+    https://git.kernel.org/netdev/net/c/a0067dfcd941
+  - [2/2,net] sctp: fix an error code in sctp_sf_eat_auth()
+    https://git.kernel.org/netdev/net/c/75e6def3b267
 
-Thanks.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
