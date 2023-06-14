@@ -2,142 +2,147 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCA9372FC0A
-	for <lists+linux-sctp@lfdr.de>; Wed, 14 Jun 2023 13:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2190B73033F
+	for <lists+linux-sctp@lfdr.de>; Wed, 14 Jun 2023 17:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243761AbjFNLKx (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 14 Jun 2023 07:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34860 "EHLO
+        id S1343672AbjFNPPa (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 14 Jun 2023 11:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243558AbjFNLKa (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 14 Jun 2023 07:10:30 -0400
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E1F91BF8;
-        Wed, 14 Jun 2023 04:10:29 -0700 (PDT)
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-3f7368126a6so4440265e9.0;
-        Wed, 14 Jun 2023 04:10:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686741027; x=1689333027;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Yc88muMtZ5aM3IzShu9BL/RZOvuDqFEnp6zrvGSRn1A=;
-        b=lCGDgBpjVoHWjtVL+jFcdLuj6zQq44H9cEy/NwrKQEew8Okc5Z6Fcod9wDJpHkrlAQ
-         06SPd67KDa0PirISrBgFnPFCFlZtCrEQ2pKpAN8cl5isSedqJlEtlCFFXUZmFAHSigcr
-         8uSMIcaxyaAab2XbwmgEnLjOxgvCJ9CkWg9bJ6yd/eOVwM0BDOHDAx00o3GXAEQT+0Ii
-         1IsMqRtcV8KuSrZ4g4uTzgyDsYwozl0348bg83wsj/HkfhWE19pmfYrx1oPcWhS793T2
-         N/aWo8WZJGXZtgqHnX1gzCmkgbgTw95m9LsHvKgStRAgq5MisHs0RPm6kp5q36oxumaj
-         1Faw==
-X-Gm-Message-State: AC+VfDzIF7HQK1EIitcpL/zadnjCPRHnfu3IjiSrHdSFX96sFgkSYL0i
-        IzKhpz0DZzhWomasRp0qm7BbajfjPt4W8w==
-X-Google-Smtp-Source: ACHHUZ4k4bNVhAwwh4cWI5s0XnVNt2ZSgMEAItWI6KF3CDfDaNTq6g3yXmyXIxm5Jr2zHNeQlfIsMg==
-X-Received: by 2002:a05:600c:364f:b0:3f6:d09:5d46 with SMTP id y15-20020a05600c364f00b003f60d095d46mr9656122wmq.20.1686741027064;
-        Wed, 14 Jun 2023 04:10:27 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-020.fbsv.net. [2a03:2880:31ff:14::face:b00c])
-        by smtp.gmail.com with ESMTPSA id i10-20020a05600c290a00b003f819dfa0ddsm9941676wmd.28.2023.06.14.04.10.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 04:10:26 -0700 (PDT)
-From:   Breno Leitao <leitao@debian.org>
-To:     io-uring@vger.kernel.org, axboe@kernel.dk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        David Ahern <dsahern@kernel.org>
-Cc:     leit@fb.com, asml.silence@gmail.com, matthieu.baerts@tessares.net,
-        martineau@kernel.org, marcelo.leitner@gmail.com,
-        lucien.xin@gmail.com, netdev@vger.kernel.org,
+        with ESMTP id S1343661AbjFNPPS (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 14 Jun 2023 11:15:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D551FFA;
+        Wed, 14 Jun 2023 08:15:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 817E464385;
+        Wed, 14 Jun 2023 15:15:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C5B3C433C0;
+        Wed, 14 Jun 2023 15:15:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686755715;
+        bh=73UmdjDyuEXZ7gArpn6gSWI0sp8/agt77ljLETOlDDw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=No99p1uTWUoT9RkFP/K8Yo418x9uc8mDrJ5k2SJUUGwnaLKemQb6rLwedlXuhTrnJ
+         SutUvrwQA77W+cDbnsAlEsGqOPSblSrhPipnD4fmTNOQLFExWSZ0OWPje3PsOo4BGY
+         EsJGhRpAe1muqMWsXKl0Eq6MYlT3bwCYx/DCztztgXrjmFy5XUblw0kWMeMRXhlHkq
+         Jsxc69llL6n4jBA7EuHg+8dSD59f6YXXDLesjCwotlola01NdKJ/yITVCJjfa9D8N9
+         5YOPWa8JQXgW8/LCH0XQzTdojO9UNZd+zIPG2uoNRsUk8XMIdVj3wjLA3Yc3lzYYr1
+         0ayAlbq8tZtmQ==
+Message-ID: <6b5e5988-3dc7-f5d6-e447-397696c0d533@kernel.org>
+Date:   Wed, 14 Jun 2023 08:15:10 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.2
+Subject: Re: [RFC PATCH v2 1/4] net: wire up support for
+ file_operations->uring_cmd()
+Content-Language: en-US
+To:     Breno Leitao <leitao@debian.org>, io-uring@vger.kernel.org,
+        axboe@kernel.dk, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <martineau@kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>
+Cc:     leit@fb.com, asml.silence@gmail.com, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, dccp@vger.kernel.org,
         mptcp@lists.linux.dev, linux-sctp@vger.kernel.org, ast@kernel.org,
-        kuniyu@amazon.com, martin.lau@kernel.org
-Subject: [RFC PATCH v2 4/4] net: add uring_cmd callback to raw "protocol"
-Date:   Wed, 14 Jun 2023 04:07:57 -0700
-Message-Id: <20230614110757.3689731-5-leitao@debian.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230614110757.3689731-1-leitao@debian.org>
+        kuniyu@amazon.com, martin.lau@kernel.org,
+        Jason Xing <kernelxing@tencent.com>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Guillaume Nault <gnault@redhat.com>,
+        Andrea Righi <andrea.righi@canonical.com>
 References: <20230614110757.3689731-1-leitao@debian.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+ <20230614110757.3689731-2-leitao@debian.org>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20230614110757.3689731-2-leitao@debian.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-This is the implementation of uring_cmd for the raw "protocol". It
-basically encompasses SOCKET_URING_OP_SIOCOUTQ and
-SOCKET_URING_OP_SIOCINQ, which call raw_ioctl with SIOCOUTQ and SIOCINQ.
+On 6/14/23 5:07 AM, Breno Leitao wrote:
+> diff --git a/include/linux/net.h b/include/linux/net.h
+> index 8defc8f1d82e..58dea87077af 100644
+> --- a/include/linux/net.h
+> +++ b/include/linux/net.h
+> @@ -182,6 +182,8 @@ struct proto_ops {
+>  	int	 	(*compat_ioctl) (struct socket *sock, unsigned int cmd,
+>  				      unsigned long arg);
+>  #endif
+> +	int		(*uring_cmd)(struct socket *sock, struct io_uring_cmd *cmd,
+> +				     unsigned int issue_flags);
+>  	int		(*gettstamp) (struct socket *sock, void __user *userstamp,
+>  				      bool timeval, bool time32);
+>  	int		(*listen)    (struct socket *sock, int len);
+> diff --git a/include/net/sock.h b/include/net/sock.h
+> index 62a1b99da349..a49b8b19292b 100644
+> --- a/include/net/sock.h
+> +++ b/include/net/sock.h
+> @@ -111,6 +111,7 @@ typedef struct {
+>  struct sock;
+>  struct proto;
+>  struct net;
+> +struct io_uring_cmd;
+>  
+>  typedef __u32 __bitwise __portpair;
+>  typedef __u64 __bitwise __addrpair;
+> @@ -1259,6 +1260,9 @@ struct proto {
+>  
+>  	int			(*ioctl)(struct sock *sk, int cmd,
+>  					 int *karg);
+> +	int			(*uring_cmd)(struct sock *sk,
+> +					     struct io_uring_cmd *cmd,
+> +					     unsigned int issue_flags);
+>  	int			(*init)(struct sock *sk);
+>  	void			(*destroy)(struct sock *sk);
+>  	void			(*shutdown)(struct sock *sk, int how);
+> @@ -1934,6 +1938,8 @@ int sock_common_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
+>  			int flags);
+>  int sock_common_setsockopt(struct socket *sock, int level, int optname,
+>  			   sockptr_t optval, unsigned int optlen);
+> +int sock_common_uring_cmd(struct socket *sock, struct io_uring_cmd *cmd,
+> +			  unsigned int issue_flags);
+>  
+>  void sk_common_release(struct sock *sk);
+>  
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index 1df7e432fec5..339fa74db60f 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -3668,6 +3668,18 @@ int sock_common_setsockopt(struct socket *sock, int level, int optname,
+>  }
+>  EXPORT_SYMBOL(sock_common_setsockopt);
+>  
+> +int sock_common_uring_cmd(struct socket *sock, struct io_uring_cmd *cmd,
+> +			  unsigned int issue_flags)
+> +{
+> +	struct sock *sk = sock->sk;
+> +
+> +	if (!sk->sk_prot || !sk->sk_prot->uring_cmd)
+> +		return -EOPNOTSUPP;
+> +
+> +	return sk->sk_prot->uring_cmd(sk, cmd, issue_flags);
+> +}
+> +EXPORT_SYMBOL(sock_common_uring_cmd);
+> +
 
-These two commands (SIOCOUTQ and SIOCINQ), are the only two commands
-that are handled by raw_ioctl().
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- include/net/raw.h |  3 +++
- net/ipv4/raw.c    | 23 +++++++++++++++++++++++
- 2 files changed, 26 insertions(+)
-
-diff --git a/include/net/raw.h b/include/net/raw.h
-index 32a61481a253..5d5ec63274a8 100644
---- a/include/net/raw.h
-+++ b/include/net/raw.h
-@@ -96,4 +96,7 @@ static inline bool raw_sk_bound_dev_eq(struct net *net, int bound_dev_if,
- #endif
- }
- 
-+int raw_uring_cmd(struct sock *sk, struct io_uring_cmd *cmd,
-+		  unsigned int issue_flags);
-+
- #endif	/* _RAW_H */
-diff --git a/net/ipv4/raw.c b/net/ipv4/raw.c
-index 7782ff5e6539..31c3f9c41354 100644
---- a/net/ipv4/raw.c
-+++ b/net/ipv4/raw.c
-@@ -75,6 +75,7 @@
- #include <linux/netfilter_ipv4.h>
- #include <linux/compat.h>
- #include <linux/uio.h>
-+#include <linux/io_uring.h>
- 
- struct raw_frag_vec {
- 	struct msghdr *msg;
-@@ -885,6 +886,27 @@ static int raw_ioctl(struct sock *sk, int cmd, int *karg)
- 	}
- }
- 
-+int raw_uring_cmd(struct sock *sk, struct io_uring_cmd *cmd,
-+		  unsigned int issue_flags)
-+{
-+	int ret;
-+
-+	switch (cmd->sqe->cmd_op) {
-+	case SOCKET_URING_OP_SIOCINQ: {
-+		if (raw_ioctl(sk, SIOCINQ, &ret))
-+			return -EFAULT;
-+		return ret;
-+	}
-+	case SOCKET_URING_OP_SIOCOUTQ:
-+		if (raw_ioctl(sk, SIOCOUTQ, &ret))
-+			return -EFAULT;
-+		return ret;
-+	default:
-+		return -ENOIOCTLCMD;
-+	}
-+}
-+EXPORT_SYMBOL_GPL(raw_uring_cmd);
-+
- #ifdef CONFIG_COMPAT
- static int compat_raw_ioctl(struct sock *sk, unsigned int cmd, unsigned long arg)
- {
-@@ -924,6 +946,7 @@ struct proto raw_prot = {
- 	.connect	   = ip4_datagram_connect,
- 	.disconnect	   = __udp_disconnect,
- 	.ioctl		   = raw_ioctl,
-+	.uring_cmd	   = raw_uring_cmd,
- 	.init		   = raw_sk_init,
- 	.setsockopt	   = raw_setsockopt,
- 	.getsockopt	   = raw_getsockopt,
--- 
-2.34.1
+io_uring is just another in-kernel user of sockets. There is no reason
+for io_uring references to be in core net code. It should be using
+exposed in-kernel APIs and doing any translation of its op codes in
+io_uring/  code.
 
