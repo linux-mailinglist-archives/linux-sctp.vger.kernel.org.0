@@ -2,95 +2,118 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12D8272F572
-	for <lists+linux-sctp@lfdr.de>; Wed, 14 Jun 2023 09:05:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3B672FBF8
+	for <lists+linux-sctp@lfdr.de>; Wed, 14 Jun 2023 13:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243102AbjFNHFy (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 14 Jun 2023 03:05:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60556 "EHLO
+        id S236214AbjFNLKY (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 14 Jun 2023 07:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243206AbjFNHF2 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 14 Jun 2023 03:05:28 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10C31FD7
-        for <linux-sctp@vger.kernel.org>; Wed, 14 Jun 2023 00:05:03 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id ca18e2360f4ac-77b210292c5so82701939f.1
-        for <linux-sctp@vger.kernel.org>; Wed, 14 Jun 2023 00:05:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rmuti.ac.th; s=dkim; t=1686726303; x=1689318303;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=up2eIalEPJnVHBT4m9NMNp4RM0R+bEuvowOLz20NAF4=;
-        b=XYd2YWgWZ8ksNFKxXsW8IcKuwgBsXdc/DMPQVNtLo6rk7wiEMwjjtasqk5aw+MGjiH
-         3QflKAeI9Pt1A88FA8OpQX6Dxy4lEBiwF7gVzKAtEWuqhrFGWERXv1eE8Rm3pLmjZX1t
-         jcxu72thFG/SSoo3gDlpAJ9z5LTQMP3TpvE10=
+        with ESMTP id S243366AbjFNLKU (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 14 Jun 2023 07:10:20 -0400
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8580F1BF6;
+        Wed, 14 Jun 2023 04:10:15 -0700 (PDT)
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-3f8d0e814dfso4311455e9.3;
+        Wed, 14 Jun 2023 04:10:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686726303; x=1689318303;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=up2eIalEPJnVHBT4m9NMNp4RM0R+bEuvowOLz20NAF4=;
-        b=LhTQvLxeXkEsJIgF4vO3XBlSwEaAPnUZbTKtqLZ7OCjAeZ3UPBtd1LCbji0zNWlbFL
-         q3Nptt9bHx9ghjONMge1bGIdOUU4bvsu7iddZ/782yE+j76X1WOrp4F7MuD8FsBe5RRl
-         qCtVo47zFpx0twiJuusJDJjnvnp1GwS/Q6zWU+JDaunExPbQXCf7Woiq8yP7fmHGTQeK
-         22FzRtwHKN6e2Qg17fULVCynBu02Yq3TNowUl2MqDfFkyQfFfmrPTdyGfn2WREbYrkJp
-         gEj7dCzOhaqT41Oc3kgVnhMXEdcKGxGy3FDMINYf21N7qfd3lVcUMHjwvcEhvkb/4MXJ
-         qbrQ==
-X-Gm-Message-State: AC+VfDzjkBGsUJt3FLQvqwzDEZsF8Upo/Of9Eu1tgqP+ShaTyYQy1c5M
-        zhw6Dl1tarivoMvJQ6bDhxSOF6S1/0gy4iWh986cuw==
-X-Google-Smtp-Source: ACHHUZ4VXsxJrvfuzcpGRICRgZvKFCweIR3Ry7nKbDcWXqqjN6pdKdHXHdLbxtl8jJ6D05965u+3FM3GNdW9CzwITX0=
-X-Received: by 2002:a5e:dc45:0:b0:778:65fb:5e25 with SMTP id
- s5-20020a5edc45000000b0077865fb5e25mr12044059iop.4.1686726302936; Wed, 14 Jun
- 2023 00:05:02 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686741013; x=1689333013;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uaBKkQp1n+OMyFkJ4TccLXFe9/y5NjGE3wk3E7F2JvA=;
+        b=aEQGBhuOhMcvepCZIHegFR8Z3BhLUEvvbWEn58YGVzQpFalk3Z1VE2mnjFNyoadmYo
+         8vKcEtvcq4FyB8fhgwcUjGkHt9P3Vv0txXRkH4Arv26GcZaanWDsaz080KjinfxNdYwz
+         YV2Z9O7moHXbRVMb95XyOtCL3QM923J3kimARa5/6rd0+B/vZDUjnBSDdYxZgQPZdfs0
+         zGReWQHNmey1/c3G414HeOUQsIGSL6RBptQ62mfbsOlWUwfoEQusDacy8JpKHIsH1sjL
+         7ie1QgbARdo5SdHxKIt4v+EAT0LQmcJPo/Zybev+B+TS3FbNN/6fN6bdATYEVEb469YV
+         l4cg==
+X-Gm-Message-State: AC+VfDwH+ydwPNtPwbR1y1hzkYIW+hLlMVYt45JbHSG3L6bTvEeKjgow
+        MLDm/wpLmVN7N4xiQZtTcHAc2h5kp15bpQ==
+X-Google-Smtp-Source: ACHHUZ79Tg78hSeMYf8i80+UZt8j9D/RlqBQsLBMUfXLapLy25sgMHC6tE+7wSGFK8RGyoW5cYNMeQ==
+X-Received: by 2002:a05:600c:257:b0:3f8:dac6:58ee with SMTP id 23-20020a05600c025700b003f8dac658eemr645823wmj.5.1686741013367;
+        Wed, 14 Jun 2023 04:10:13 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-007.fbsv.net. [2a03:2880:31ff:7::face:b00c])
+        by smtp.gmail.com with ESMTPSA id u26-20020a05600c211a00b003f42314832fsm17115663wml.18.2023.06.14.04.10.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 04:10:12 -0700 (PDT)
+From:   Breno Leitao <leitao@debian.org>
+To:     io-uring@vger.kernel.org, axboe@kernel.dk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     leit@fb.com, asml.silence@gmail.com, dsahern@kernel.org,
+        matthieu.baerts@tessares.net, martineau@kernel.org,
+        marcelo.leitner@gmail.com, lucien.xin@gmail.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dccp@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-sctp@vger.kernel.org, ast@kernel.org, kuniyu@amazon.com,
+        martin.lau@kernel.org
+Subject: [RFC PATCH v2 0/4] add initial io_uring_cmd support for sockets
+Date:   Wed, 14 Jun 2023 04:07:53 -0700
+Message-Id: <20230614110757.3689731-1-leitao@debian.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Received: by 2002:a05:6638:1504:b0:420:bd39:e2b0 with HTTP; Wed, 14 Jun 2023
- 00:05:02 -0700 (PDT)
-Reply-To: konnia4loveth@gmail.com
-From:   "Mrs.Loveth Konnia" <khanisabodee.pa@rmuti.ac.th>
-Date:   Wed, 14 Jun 2023 07:05:02 +0000
-Message-ID: <CAF4ig4GAACRwKgGBDZ8hvqWTeT4QAD84uaBYM2yewBm3MTO6rA@mail.gmail.com>
-Subject: hi
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        HK_NAME_MR_MRS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,URIBL_DBL_SPAM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
-        *      blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [URIs: rmuti.ac.th]
-        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:d30 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4998]
-        *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
-        *      blocklist
-        *      [URIs: rmuti.ac.th]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  1.0 HK_NAME_MR_MRS No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: ******
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Zweimal habe ich Ihnen eine E-Mail geschickt, auf die Sie nicht
-geantwortet haben. Finden Sie jetzt Zeit, mir zu antworten?
-...............................................
-On two occasions, I have sent an email to you which you have not
-responded to.Can you find time to respond to me now?
+This patchset creates the initial plumbing for a io_uring command for
+sockets.
+
+For now, create two uring commands for sockets, SOCKET_URING_OP_SIOCOUTQ
+and SOCKET_URING_OP_SIOCINQ, which are available in TCP, UDP and RAW
+sockets.
+
+In order to test this code, I created a liburing test, which is
+currently located at [1], and I will create a pull request once we are
+good with this patchset.
+
+V1 submission was sent a while ago[2], but it required more plumbing
+that were done in different patch submissions[3][4].
+
+PS: This patchset depends on a commit[4] that is not committed to the
+tree yet (but close too, IMO).
+
+[1] Link: https://github.com/leitao/liburing/blob/master/test/socket-io-cmd.c
+[2] Link: https://lore.kernel.org/lkml/20230406144330.1932798-1-leitao@debian.org/
+[3] Link: https://lore.kernel.org/lkml/0a50fae3-1cf4-475e-48ae-25f41967842f@kernel.dk/
+[4] Link: https://lore.kernel.org/lkml/20230609152800.830401-1-leitao@debian.org/
+
+V1->V2:
+	* Rely on a generic socket->ioctl infrastructure instead of
+	  reimplementing it
+
+Breno Leitao (4):
+  net: wire up support for file_operations->uring_cmd()
+  net: add uring_cmd callback to UDP
+  net: add uring_cmd callback to TCP
+  net: add uring_cmd callback to raw "protocol"
+
+ include/linux/net.h      |  2 ++
+ include/net/raw.h        |  3 +++
+ include/net/sock.h       |  6 ++++++
+ include/net/tcp.h        |  2 ++
+ include/net/udp.h        |  2 ++
+ include/uapi/linux/net.h |  5 +++++
+ net/core/sock.c          | 17 +++++++++++++++--
+ net/dccp/ipv4.c          |  1 +
+ net/ipv4/af_inet.c       |  3 +++
+ net/ipv4/raw.c           | 23 +++++++++++++++++++++++
+ net/ipv4/tcp.c           | 21 +++++++++++++++++++++
+ net/ipv4/tcp_ipv4.c      |  1 +
+ net/ipv4/udp.c           | 22 ++++++++++++++++++++++
+ net/l2tp/l2tp_ip.c       |  1 +
+ net/mptcp/protocol.c     |  1 +
+ net/sctp/protocol.c      |  1 +
+ net/socket.c             | 13 +++++++++++++
+ 17 files changed, 122 insertions(+), 2 deletions(-)
+
+-- 
+2.34.1
+
