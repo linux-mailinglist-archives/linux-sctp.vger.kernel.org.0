@@ -2,41 +2,41 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 971547335B4
-	for <lists+linux-sctp@lfdr.de>; Fri, 16 Jun 2023 18:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD77A7340D5
+	for <lists+linux-sctp@lfdr.de>; Sat, 17 Jun 2023 14:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345585AbjFPQQ3 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 16 Jun 2023 12:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
+        id S1346306AbjFQMPE (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Sat, 17 Jun 2023 08:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343945AbjFPQPU (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 16 Jun 2023 12:15:20 -0400
+        with ESMTP id S1345853AbjFQMOr (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Sat, 17 Jun 2023 08:14:47 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EFC3A8B
-        for <linux-sctp@vger.kernel.org>; Fri, 16 Jun 2023 09:14:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59F42738
+        for <linux-sctp@vger.kernel.org>; Sat, 17 Jun 2023 05:13:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686932049;
+        s=mimecast20190719; t=1687003985;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9ok21jKa9JTRfr0EgD5rkJiHkpUvOE/SxsqUKJteXzk=;
-        b=B1f1MeNGkvTF9d0DD+ijJ2QnvkS++tZyop2zAUFakIAdYhm7ZgZKm9C8+FFiTJrQVvGN5j
-        /nBo85WrZCRUEAQScE+vmLiW+dRYwfve7oumwYSpOimtXezF0/LhOGw20UflgXL0oYUSLw
-        TNuH3Y7d6bpXoDHTU38ByM1PVbdWMDs=
+        bh=19v+Lajf7lnhz9v6fw2J37sejyO32q8wb4jQJiQ5IMY=;
+        b=HcthK4X/qlutF8GHZbUKEjF9KhlStJXBdKfIjNtZLgiQ8+IdVlgUHx+PtbA56Sml7xgfC0
+        Ud/Zr5LwV0Rle7hRJSKWS7nOchIJOa88WUht1LeufbMoCizR2IJHlgiKx99rQ4tXvIxDPk
+        CRNrJ2LOOJotEPn+LmVwVKp/5MaNn+E=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-450-3muM8gjnNUa-IzLLpU8eBQ-1; Fri, 16 Jun 2023 12:14:04 -0400
-X-MC-Unique: 3muM8gjnNUa-IzLLpU8eBQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+ us-mta-128-Gg3-w8CsO-OjfKoO18NV1w-1; Sat, 17 Jun 2023 08:13:00 -0400
+X-MC-Unique: Gg3-w8CsO-OjfKoO18NV1w-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 097FC101A56C;
-        Fri, 16 Jun 2023 16:14:03 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9A0DF85A58A;
+        Sat, 17 Jun 2023 12:12:58 +0000 (UTC)
 Received: from warthog.procyon.org.com (unknown [10.42.28.51])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B1C7640D1B60;
-        Fri, 16 Jun 2023 16:13:56 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D0C501415102;
+        Sat, 17 Jun 2023 12:12:54 +0000 (UTC)
 From:   David Howells <dhowells@redhat.com>
 To:     netdev@vger.kernel.org
 Cc:     David Howells <dhowells@redhat.com>,
@@ -54,19 +54,20 @@ Cc:     David Howells <dhowells@redhat.com>,
         dccp@vger.kernel.org, linux-afs@lists.infradead.org,
         linux-arm-msm@vger.kernel.org, linux-can@vger.kernel.org,
         linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-hams@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-hams@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-rdma@vger.kernel.org,
         linux-sctp@vger.kernel.org, linux-wpan@vger.kernel.org,
         linux-x25@vger.kernel.org, mptcp@lists.linux.dev,
         rds-devel@oss.oracle.com, tipc-discussion@lists.sourceforge.net,
         virtualization@lists.linux-foundation.org
-Subject: [PATCH net-next 16/17] sock: Remove ->sendpage*() in favour of sendmsg(MSG_SPLICE_PAGES)
-Date:   Fri, 16 Jun 2023 17:12:59 +0100
-Message-ID: <20230616161301.622169-17-dhowells@redhat.com>
-In-Reply-To: <20230616161301.622169-1-dhowells@redhat.com>
-References: <20230616161301.622169-1-dhowells@redhat.com>
+Subject: [PATCH net-next v2 16/17] sock: Remove ->sendpage*() in favour of sendmsg(MSG_SPLICE_PAGES)
+Date:   Sat, 17 Jun 2023 13:11:45 +0100
+Message-ID: <20230617121146.716077-17-dhowells@redhat.com>
+In-Reply-To: <20230617121146.716077-1-dhowells@redhat.com>
+References: <20230617121146.716077-1-dhowells@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -97,8 +98,9 @@ cc: linux-arm-msm@vger.kernel.org
 cc: linux-can@vger.kernel.org
 cc: linux-crypto@vger.kernel.org
 cc: linux-doc@vger.kernel.org
+cc: linux-fsdevel@vger.kernel.org
 cc: linux-hams@vger.kernel.org
-cc: linux-kernel@vger.kernel.org
+cc: linux-nfs@vger.kernel.org
 cc: linux-rdma@vger.kernel.org
 cc: linux-sctp@vger.kernel.org
 cc: linux-wpan@vger.kernel.org
@@ -109,6 +111,11 @@ cc: rds-devel@oss.oracle.com
 cc: tipc-discussion@lists.sourceforge.net
 cc: virtualization@lists.linux-foundation.org
 ---
+
+Notes:
+    ver #2)
+     - Removed duplicate word in comment.
+
  Documentation/bpf/map_sockmap.rst             | 10 ++--
  Documentation/filesystems/locking.rst         |  2 -
  Documentation/filesystems/vfs.rst             |  1 -
@@ -285,7 +292,7 @@ index 7d4b6016b83d..11229f3bcf84 100644
   * af_alg_free_resources - release resources required for crypto request
   * @areq: Request holding the TX and RX SGL
 diff --git a/crypto/algif_aead.c b/crypto/algif_aead.c
-index 35bfa283748d..633a7d87bed6 100644
+index 35bfa283748d..7d58cbbce4af 100644
 --- a/crypto/algif_aead.c
 +++ b/crypto/algif_aead.c
 @@ -9,10 +9,10 @@
@@ -296,7 +303,7 @@ index 35bfa283748d..633a7d87bed6 100644
 - * the TX SGL does not cause a crypto operation -- the data will only be
 - * tracked by the kernel. Upon receipt of one recvmsg call, the caller must
 - * provide a buffer which is tracked with the RX SGL.
-+ * filled by user space with the data submitted via sendmsg (maybe with with
++ * filled by user space with the data submitted via sendmsg (maybe with
 + * MSG_SPLICE_PAGES).  Filling up the TX SGL does not cause a crypto operation
 + * -- the data will only be tracked by the kernel. Upon receipt of one recvmsg
 + * call, the caller must provide a buffer which is tracked with the RX SGL.
