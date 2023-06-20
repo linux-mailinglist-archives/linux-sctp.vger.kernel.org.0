@@ -2,73 +2,90 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD0CA736162
-	for <lists+linux-sctp@lfdr.de>; Tue, 20 Jun 2023 04:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A138736C7E
+	for <lists+linux-sctp@lfdr.de>; Tue, 20 Jun 2023 14:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjFTCJb (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 19 Jun 2023 22:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36892 "EHLO
+        id S232118AbjFTM7X (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 20 Jun 2023 08:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjFTCJa (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 19 Jun 2023 22:09:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B066910E;
-        Mon, 19 Jun 2023 19:09:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DE3060EA5;
-        Tue, 20 Jun 2023 02:09:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 910E7C433C8;
-        Tue, 20 Jun 2023 02:09:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687226968;
-        bh=TBAuPDZ4ZIJJqnKHAAtmN9rFin/Sn5+rIr+zk1Fviiw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VhAGSw+8AxIJS0XH/VyoJz0CgNamR62jHZV6R4jjyHJyClJtOi+P4yF+QgKT4x6ql
-         kQSHnfpqYY7mz/meatf5sNYRl9JWyf3A4O86rHtssihIwi/Xdg5ZIT8B2JxrjH1FeJ
-         YPrkB6q2NFjt0ZNTfEY86/X6CBLDgQ2V/12YNyY6FkWCzuLA3wZmUqMeU0ZIezvLXH
-         we75IHXE78D5FHaZyBBwWxwf8dcmdg1qXOdNr7yzdWYKtVcBvWY2yPnLNWexoDQvZs
-         82+yLU6Pm7s4XD10AZCFdStwWu2lMwwtrMktRwYCPwAxSKkOGAk7+I3CpWi+NAzv1J
-         ZEcdY7ufoVlTA==
-Message-ID: <d289ab2c-dd5a-fd35-2a2a-7ccdfb947873@kernel.org>
-Date:   Mon, 19 Jun 2023 19:09:27 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [RFC PATCH v2 1/4] net: wire up support for
- file_operations->uring_cmd()
-Content-Language: en-US
-To:     Pavel Begunkov <asml.silence@gmail.com>,
-        Breno Leitao <leitao@debian.org>, io-uring@vger.kernel.org,
-        axboe@kernel.dk, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <martineau@kernel.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>
-Cc:     leit@fb.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dccp@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-sctp@vger.kernel.org, ast@kernel.org, kuniyu@amazon.com,
-        martin.lau@kernel.org, Jason Xing <kernelxing@tencent.com>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Guillaume Nault <gnault@redhat.com>,
-        Andrea Righi <andrea.righi@canonical.com>
-References: <20230614110757.3689731-1-leitao@debian.org>
- <20230614110757.3689731-2-leitao@debian.org>
- <6b5e5988-3dc7-f5d6-e447-397696c0d533@kernel.org>
- <d9c9bd5f-b17e-fbd8-5646-4f51b927cc6b@gmail.com>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <d9c9bd5f-b17e-fbd8-5646-4f51b927cc6b@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+        with ESMTP id S231211AbjFTM7W (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 20 Jun 2023 08:59:22 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF2810FF;
+        Tue, 20 Jun 2023 05:59:20 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id af79cd13be357-7624e8ceef7so346133885a.2;
+        Tue, 20 Jun 2023 05:59:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687265960; x=1689857960;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4RvNVFujZzQ9FH/nRDQhxgK8HOnuVe0ilksjI7/FigQ=;
+        b=V7CBqsvwa7HO9941Gx9rU48fbSNnkTARJq3hU0s4FJKqNq7uyQJvuWMi48BFYirjd9
+         Z+CSYTenkWtjPExrbuK55Lr4LajYIvMVcZS1i2H4hkmnnVf92/3eU5+256AdSIU7TTh1
+         xwVepNxy0+wSCXEIn2FLnq5fwolgWObqyrXGJD4a4dArZIDrRTCCQbOXeliLMdRNukOE
+         bfBqEL3D5v18ty2Fda4DTUDINVko/+/f9bRuKWlc9As/MXSXKCsqRSAvjLHgGSN+PYBz
+         OhKP930iRzIK8HICV0ZdtEG/GKM89Wb5av0m6K808diQPwrVMMP/ZUSrK2PjzRbzzuKs
+         Xiqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687265960; x=1689857960;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4RvNVFujZzQ9FH/nRDQhxgK8HOnuVe0ilksjI7/FigQ=;
+        b=TXgc61V4R/4/uHY2QZsPXgAX2Rf37It/aP8tEzZXkexa1Utxq2r8RE3sBLePmzTuoD
+         Dg/24MZVRUWEeB9qLSuWh9TxnBk3C9xAbLBjodnoCNHP4jSZs14NOCFeN5e5O5/OJJyU
+         9GE1yCOApc5CfQJxBmFnXVMD61xCjgHWd9RJT1do3WkwFPH0npMZTU3gKqWofrJdDGgu
+         qXndaATjAJrGxzyM2onxl5nsbdIT81r60FXCvnzC0rq/1EPneitwbOnIpJbj3rrubQw5
+         xJcJHr54Exltplonli1SVVhaeuevVfouQJAGylb1lVkNVADLArf5jY1csDryORRiJq3/
+         w1pg==
+X-Gm-Message-State: AC+VfDw+AvcpB+kzcrU2tO8dary8v4OzIEJ2EVlGXjUryXMHJcwWKhEV
+        ljMDIV+uw0uRJ28AUUbBK2o=
+X-Google-Smtp-Source: ACHHUZ5DO7ilI0HCjRl4Lbeq4UH3F7W+AS3gn0PcL1py6Hb93MUCpM1EgmXOFtEL5TVj5cEqHyVw6w==
+X-Received: by 2002:a05:6214:1306:b0:628:2e08:78b7 with SMTP id pn6-20020a056214130600b006282e0878b7mr5517848qvb.31.1687265959785;
+        Tue, 20 Jun 2023 05:59:19 -0700 (PDT)
+Received: from localhost (172.174.245.35.bc.googleusercontent.com. [35.245.174.172])
+        by smtp.gmail.com with ESMTPSA id m17-20020a0cf191000000b00631ecb1052esm1216204qvl.74.2023.06.20.05.59.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 05:59:19 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 08:59:18 -0400
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To:     David Howells <dhowells@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        dccp@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-hams@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-x25@vger.kernel.org,
+        mptcp@lists.linux.dev, rds-devel@oss.oracle.com,
+        tipc-discussion@lists.sourceforge.net,
+        virtualization@lists.linux-foundation.org
+Message-ID: <6491a2a6f1488_3bcfec294d7@willemb.c.googlers.com.notmuch>
+In-Reply-To: <784658.1687176327@warthog.procyon.org.uk>
+References: <648f36d02fe6e_33cfbc2944f@willemb.c.googlers.com.notmuch>
+ <20230617121146.716077-1-dhowells@redhat.com>
+ <20230617121146.716077-18-dhowells@redhat.com>
+ <784658.1687176327@warthog.procyon.org.uk>
+Subject: Re: [PATCH net-next v2 17/17] net: Kill MSG_SENDPAGE_NOTLAST
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,20 +93,48 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On 6/19/23 2:28 AM, Pavel Begunkov wrote:
-> That callback is all about file dependent operations, just like ioctl.
-> And as the patch in question is doing socket specific stuff, I think
-> architecturally it fits well. I also believe Breno wants to extend it
-> later to support more operations.
+David Howells wrote:
+> Willem de Bruijn <willemdebruijn.kernel@gmail.com> wrote:
 > 
-> Sockets are a large chunk of use cases, it can be implemented as a
-> separate io_uring request type if nothing else works, but in general
-> that might not be as scalable.
+> > Is it intentional to add MSG_MORE here in this patch?
+> > 
+> > I do see that patch 3 removes this branch:
+> 
+> Yeah.  I think I may have tcp_bpf a bit wrong with regard to handling
+> MSG_MORE.
+> 
+> How about the attached version of tcp_bpf_push()?
+> 
+> I wonder if it's save to move the setting of MSG_SENDPAGE_NOPOLICY out of the
+> loop as I've done here.  The caller holds the socket lock.
+> 
+> Also, I'm not sure whether to take account of apply/apply_bytes when setting
+> MSG_MORE mid-message, or whether to just go on whether we've reached
+> sge->length yet.  (I'm not sure exactly how tcp_bpf works).
 
-The io_uring commands are wrappers to existing networking APIs - doing
-via io_uring what userspace apps can do via system calls. As such, the
-translations should be done in io_uring code and then invoking in-kernel
-APIs.
+I'm not very familiar with it either.
 
-Same comment applies to sockopts when those come around and any other
-future extensions.
+Instead of inferring whether MSG_MORE is safe to set, as below, sufficient to
+rely on the caller to pass it when appropriate?
+
+size = min(apply_bytes, sge->length). I doubt that size < apply_bytes is
+ever intended.
+
+And instead of this former branch
+
+                if (flags & MSG_SENDPAGE_NOTLAST)
+                        msghdr.msg_flags |= MSG_MORE;
+
+update any caller to pass MSG_MORE instead of MSG_SENDPAGE_NOTLAST, if not yet
+done so.
+
+> 		msghdr.msg_flags = flags;
+> 
+> 		/* Determine if we need to set MSG_MORE. */
+> 		if (!(msghdr.msg_flags & MSG_MORE)) {
+> 			if (apply && size < apply_bytes)
+> 				msghdr.msg_flags |= MSG_MORE;
+> 			else if (!apply && size < sge->length &&
+> 				 msg->sg.start != msg->sg.end)
+> 				msghdr.msg_flags |= MSG_MORE;
+> 		}
