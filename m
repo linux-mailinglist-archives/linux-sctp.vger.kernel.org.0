@@ -2,397 +2,188 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD7F738303
-	for <lists+linux-sctp@lfdr.de>; Wed, 21 Jun 2023 14:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DED9573A3BF
+	for <lists+linux-sctp@lfdr.de>; Thu, 22 Jun 2023 16:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231902AbjFUMD6 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 21 Jun 2023 08:03:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37052 "EHLO
+        id S231954AbjFVOyb (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 22 Jun 2023 10:54:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231791AbjFUMDf (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 21 Jun 2023 08:03:35 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5176B1737;
-        Wed, 21 Jun 2023 05:03:30 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230621120328euoutp02c5707f1f8db51fe5712290c971959904~qqvutf1pT0885508855euoutp02y;
-        Wed, 21 Jun 2023 12:03:28 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230621120328euoutp02c5707f1f8db51fe5712290c971959904~qqvutf1pT0885508855euoutp02y
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1687349008;
-        bh=UhbTj7rbSuIz0wQAIgRbt5npWj7iwCf9ys8+fT26dmg=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=GKxv5RAvXgxBewzVmQQ972Cjcp5klA3uKmvo3IQPk3I6RYA1PA6V4xOCUWVaFLxNl
-         JDUWVOuWvxr33giiXju03VnTLQDdGSgCl3k4Izp8oglyncIxJ9ZI6d8HydRQb71iZ8
-         7mXk6Jouf9L3c4d+NVR0ASAr4r9Y8BUUs95K6b78=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230621120328eucas1p1fda92019a773b938e579c6b1330f6749~qqvuerCuc1536715367eucas1p15;
-        Wed, 21 Jun 2023 12:03:28 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id B4.C9.37758.F07E2946; Wed, 21
-        Jun 2023 13:03:27 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230621120327eucas1p1c148cfc468823fbd592e0f24992d7b74~qqvt8HnZl1538815388eucas1p1p;
-        Wed, 21 Jun 2023 12:03:27 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230621120327eusmtrp14df30445bdb3be5d54096bf3a264c34f~qqvt67ZKp0101701017eusmtrp1F;
-        Wed, 21 Jun 2023 12:03:27 +0000 (GMT)
-X-AuditID: cbfec7f5-815ff7000002937e-b9-6492e70f7e30
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id C7.5B.10549.F07E2946; Wed, 21
-        Jun 2023 13:03:27 +0100 (BST)
-Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230621120327eusmtip1c54e59bf6315793873fd19bfdbc5cd8c~qqvtlH5Nz2473324733eusmtip1A;
-        Wed, 21 Jun 2023 12:03:27 +0000 (GMT)
-Received: from localhost (106.210.248.248) by CAMSVWEXC02.scsc.local
-        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Wed, 21 Jun 2023 13:03:26 +0100
-Date:   Wed, 21 Jun 2023 14:03:24 +0200
-From:   Joel Granados <j.granados@samsung.com>
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-CC:     <mcgrof@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        with ESMTP id S232003AbjFVOya (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 22 Jun 2023 10:54:30 -0400
+Received: from MW2PR02CU002.outbound.protection.outlook.com (mail-westus2azon11013011.outbound.protection.outlook.com [52.101.49.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E45A1BD1;
+        Thu, 22 Jun 2023 07:54:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NkFlL1BmcEOZBLOXgNGfCZIXC26+ZG9rWLFFkDUjvtP12KaoM58/2BtBlgEvNRlkFljKiRZuMx9wlq+5dtzXlmj+IXlBpxlSBToDdtG4VQEfmS/8GhoVllNim+0IrJSajZfmxXiu1ykak6Ccj6NVCMB5kKSUtozuIbfALCJIznMkKyFn1qQQMjZGGBgy9Tg4vy7oNmDrFX+YOYyaXt7Li4/GLzmIy8ajxnPM3w2zk1oQlgYJd2QciROZRP0seO/xjOcFNvjhaODUzmKELQNcfIX7V7xDCfVrvjHC+SBDBdxgK2lqOmzutv5JSplHKRnMbehN3l6g1Y2N0RevMWavYQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+rz6HTRol4AVrVwQ2NZhxzVzW0QkGJ5oDQTxETvofQc=;
+ b=S472lWSv+Kq7unfIVy0KUPd5MhrdhINSTjD13jG7QXHwmDIiuLkYHxDxd6ctcM5ZFCiy10QCia3Pbs+P88Akb3kbHB5h/suCXAE7q5EQGJ0/4sLudVhtPS8dRt1wF+Dz/bLLyDEdtSAhZq5/iYyK7hiLnipmc5JYOX6xRNEAXopAbdBc+ouaHtsalXPYNJW5+CeQuFbdmBVXFqejWDdT2mM+wV1n+pEuxIsYonb2gUmWjma6z2RySmq2UitkX4GeLC3ccAKwqdh4MBjywmioDkMI2IHj9aabZiPiPzAEOp9z5l6evb+GpMGfTq/lDBoxhFwpEZF1GKIJlD/UmTvJCg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+rz6HTRol4AVrVwQ2NZhxzVzW0QkGJ5oDQTxETvofQc=;
+ b=IHzeHGAgAQgqrEX1bHPjzpSSS9iPAJBe+1YL3Rd/wTS7mFBwLYFUiAVcBy+Y/JS1/eIdhnuivSEDeFzy4+6Vjd2IRvSUGOupAikpuiNtSK75Lg/Rm1Ma299o9+OCGYvyJwGdiF0hf1mLZDXta27oFnwyObTDTGunF7DZcN43GTQ=
+Received: from BL0PR05MB5409.namprd05.prod.outlook.com (2603:10b6:208:6e::17)
+ by PH0PR05MB8076.namprd05.prod.outlook.com (2603:10b6:510:97::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Thu, 22 Jun
+ 2023 14:54:24 +0000
+Received: from BL0PR05MB5409.namprd05.prod.outlook.com
+ ([fe80::68a4:3da6:4981:4793]) by BL0PR05MB5409.namprd05.prod.outlook.com
+ ([fe80::68a4:3da6:4981:4793%7]) with mapi id 15.20.6521.024; Thu, 22 Jun 2023
+ 14:54:23 +0000
+From:   Ashwin Dayanand Kamat <kashwindayan@vmware.com>
+To:     Xin Long <lucien.xin@gmail.com>
+CC:     Simon Horman <simon.horman@corigine.com>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Joerg Reuter <jreuter@yaina.de>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <martineau@kernel.org>,
-        Simon Horman <horms@verge.net.au>,
-        Julian Anastasov <ja@ssi.bg>,
-        Remi Denis-Courmont <courmisch@gmail.com>,
-        Santosh Shilimkar <santosh.shilimkar@oracle.com>,
-        David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        Karsten Graul <kgraul@linux.ibm.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>,
-        Jan Karcher <jaka@linux.ibm.com>,
-        Jon Maloy <jmaloy@redhat.com>,
-        Ying Xue <ying.xue@windriver.com>,
-        Martin Schiller <ms@dev.tdt.de>, <linux-rdma@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-hams@vger.kernel.org>, <netfilter-devel@vger.kernel.org>,
-        <coreteam@netfilter.org>, <bridge@lists.linux-foundation.org>,
-        <dccp@vger.kernel.org>, <linux-wpan@vger.kernel.org>,
-        <mptcp@lists.linux.dev>, <lvs-devel@vger.kernel.org>,
-        <rds-devel@oss.oracle.com>, <linux-afs@lists.infradead.org>,
-        <linux-sctp@vger.kernel.org>, <linux-s390@vger.kernel.org>,
-        <tipc-discussion@lists.sourceforge.net>,
-        <linux-x25@vger.kernel.org>
-Subject: Re: [PATCH 06/11] sysctl: Add size to register_net_sysctl function
-Message-ID: <20230621120324.cl2admxrku7ilecm@localhost>
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
+        Ajay Kaher <akaher@vmware.com>,
+        Tapas Kundu <tkundu@vmware.com>,
+        Keerthana Kalyanasundaram <keerthanak@vmware.com>
+Subject: Re: [PATCH v3] net/sctp: Make sha1 as default algorithm if fips is
+ enabled
+Thread-Topic: [PATCH v3] net/sctp: Make sha1 as default algorithm if fips is
+ enabled
+Thread-Index: AQHZlLVqGf2QnmjSNEO1bZtdH71JDa93oJ6AgACGZICAHuJwgA==
+Date:   Thu, 22 Jun 2023 14:54:23 +0000
+Message-ID: <7BD8EC18-86EA-411B-9155-8A7633747C7F@vmware.com>
+References: <1685643474-18654-1-git-send-email-kashwindayan@vmware.com>
+ <ZHoHfcMgYqO3l7Np@corigine.com>
+ <CADvbK_fCPPHto4XjPeTJPJ9NTXoJGgO7jjEcy1Bq3nQSFAzR9A@mail.gmail.com>
+In-Reply-To: <CADvbK_fCPPHto4XjPeTJPJ9NTXoJGgO7jjEcy1Bq3nQSFAzR9A@mail.gmail.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL0PR05MB5409:EE_|PH0PR05MB8076:EE_
+x-ms-office365-filtering-correlation-id: db9bedcc-003b-4fe1-566a-08db73309170
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ZB9QAQZmJtOUEk69PsS0VcD7XQCN859aiZDJ4g8wvY+aXKjo1DbfiPLn++pPMAS0j/nS/NkBo+b6xlsmRz9EG6yy7U7fYUhgXGcNB/dlpqC9a4BETFPJVeKNFHKrHiupAkfPeHvSXFDbPn5PjGay43NWoAhICgXzilxgUnjeJuKvfLsvzw+zSuiuOP5SZ8MKQIz1GIcbhL+l894MrMAt9nUJKQPbdWJ9r6OK81PHGaD9Rue0THTFy690Lh0L6UYo8YJVDcKpfUbrADPIxCeAQE/GaieWu7CwGltFFWnYc7KV5KYUyR5aBMRNREVGbszYALZtNsB5P2zZz4Fy9PCb7Q8U85PLuqE4APpfic31gTz97ga6DK42Iy0UQd1Lftjuv9ZdjsQ/aJlR1MoMLRuLmsbn1vYnqNdprVIuY7p7Mb+HQjwZVRs0/GztMbQRrinhUqtEaHm4M/RgczshuBgZLrTsigyfpcTxnTycUCERA5ufzpM+jfqDdU6XEYe1NyUssKi2i+db7KyxStIyFn5zUWWUAmG1JYHPV3zYYqRRoi1v61/szvX1Jf9yKM35ZZShsAtuxFKbcaSUzcuJR4ZGwfppD4g4b3FLQAzX72tUDtPCKLxWeEkCry8ZWuKF0AlVHY71XhPPSqx9VvmTQk+toA3r5dYT5CTHppbGcuDXiRzeBgQ4tWINPH1DyN9ItGjSkrsXgm1badJb9DTjwVo95A==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR05MB5409.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(136003)(396003)(39860400002)(346002)(451199021)(107886003)(33656002)(122000001)(53546011)(6512007)(6506007)(71200400001)(186003)(6486002)(478600001)(54906003)(2616005)(86362001)(6916009)(64756008)(66446008)(66476007)(76116006)(66946007)(4326008)(66556008)(83380400001)(7416002)(41300700001)(316002)(5660300002)(2906002)(38100700002)(36756003)(8936002)(8676002)(38070700005)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?V3hURHppdmt1VmNaYmtnVDdCclM1VFk1eUVEOEJhQ2JSUUNyd2FpSlZiR3lT?=
+ =?utf-8?B?L2t4QVh3KzR0c3FlT2NrbmJhRWZzbXJYY01BNUNPWi9VTGhoMGlWL09Zcnhi?=
+ =?utf-8?B?dElMc0lINDVDRS8rYkE5cnhYT3BEOUNmNENHdXpTTXlMV1M0SEc2YTFJamRa?=
+ =?utf-8?B?bGVuMUhwUzRYZU5neUdpREJ2SE8vNmRtaXl3WUE3bmlDeVdMVUsyUW9vd3A1?=
+ =?utf-8?B?VXFycDVldDBwSkZoTnRScEtPRlY4aFdFOWVhdEhmd2RPRk5DcTEzYnArYkpN?=
+ =?utf-8?B?aEdNZk93Qk1IcjgzUkxWNWg3bjBVKzY2R2pkbW56bGw0S3kyTFRlOUErUmV1?=
+ =?utf-8?B?T3JhdEJJci9TTjhoVlFYUGJmUnFoaTNXZ2NQUTBWWkhFNEVLeGFnMnJtK2cv?=
+ =?utf-8?B?Ti9pZU1EMlJBZDFwQTFiTU8rWnF1Y1Jpd1ZCdTk4eXgzd0xLd3huejZMeStS?=
+ =?utf-8?B?RC9BRW9UenRSRlhJVTRob2l6OVR1cStzdFJyMERnRVpRMjdrc3ZyeHJjNXVJ?=
+ =?utf-8?B?alF5K3JObVVqWU5PYzZjZGJPVDhGYU44Ui9WbHFwUUpIc0lmL2F6UUlMYXRS?=
+ =?utf-8?B?QmJieUo2YWI0RlBlR0w1YVJ4dTBibjlzVTFzSS9WQkJ6S2NBWCtWUDVTekZz?=
+ =?utf-8?B?TGRFOEExQ0pvUnFnWVkrdndHbnlBYUwxRDNMY0lzMzZpaG0wVzNkN2h0Qmgw?=
+ =?utf-8?B?bjVrVWFUYU9jLzhFRFNXSUFRbm1BRjB3SEJHelVzVDZQSFdDTUNqaTV4S3B0?=
+ =?utf-8?B?VzZ5cGRYS25jRktxc2tLdDlVbU5PbUtuUlZHUWRNQzNpM3haOXVoVWJvR2Rx?=
+ =?utf-8?B?K1pOQ1F3WkZTVmttbmc2WjFSVU82eXlEM1IzTHNoYlVXSCthZFNOUmlqQU8w?=
+ =?utf-8?B?c05XTWtsU3FHdTM2cERMMi9jRWFETE1tcmxtVnB5NFdvQ0Y5S1MxSitYekJF?=
+ =?utf-8?B?REp1ZzVmR2RCRktaYlBPNFZXdEE5bFBySEtZTzdqWm9zVzcwWG95TFN0eitJ?=
+ =?utf-8?B?QlpPa1ZmTVhyOFlKVnB1bE9zTEJiNXZ6UCtvN0pwMlFXRGw3VkdyUmlDNVkv?=
+ =?utf-8?B?ZjdrUXFoV1d0eTJEdGRSSjRvdTBoeDRDYklrUXJNclFtQlNoaVBHNTRxRDY4?=
+ =?utf-8?B?QWtiSjFmRVVhTHFXVFNDUE0rVzJXc3pHcXVZT0lkVk5Ma1NMS0dVSGhZZ1or?=
+ =?utf-8?B?ejNBK1hkcmtZRkpFcDgzenNUaEZoVTYyL2pGNXNkMTA2QWFhVWc4QlRQeEMx?=
+ =?utf-8?B?eEZpVG1VcGtocFBRWU9YUk9QekorL1RmSVZqMHJjN1hhWHkxejZPTFJ3Nnp0?=
+ =?utf-8?B?cldQcG9aVmp1cjVoS1BDek45NjBQakoydTdGSmpHOWw2Q29ISnBNM2YrV2Fu?=
+ =?utf-8?B?cDdDY2duSzlLSmlwYjNZeXZOY0xVVWk3czU4a3ZhSENLbkpsZGIwd0tjR0Y1?=
+ =?utf-8?B?V0VNc1NzY2JEalc3QTZpeGNuekdncG5JbWhlUDNIWVAyK3Rla2MrVmNMY1FT?=
+ =?utf-8?B?aVRoT2VSOGJyVU50a1VHZ0lkMGtpN0RqbVIraGQwSm1SWWhDai9jRllJaEtE?=
+ =?utf-8?B?Q3ZxRUpKREQyZkdRRzFKWlBSS0ptUUVNbDJ1cmkyWm81K2pnVVRnb3Z1RWZQ?=
+ =?utf-8?B?TG1oOER6T28wVGl5bWoxY3lXNnBWUTlxMG5maGlURE16VnFJTnV3WENwQTlU?=
+ =?utf-8?B?cEM5NEJPeTFDOFYzWEUwUTJFUDF2OUF4WGxqWUlBWjhIei9XWk5GN09YRzcz?=
+ =?utf-8?B?VTFiNkFKVGtwajNPUmFnNUN5VVVJZWpqTFpGclkvaXp1RW1MS21Sd2ZjcW1K?=
+ =?utf-8?B?K0lvT1BCTHJoYkpmRnVTMEVhRXhOZnd6RjR5Z3BGRUxjdy83Yk83cENsSXNq?=
+ =?utf-8?B?KzNaUzRqYllFdkVKajFoTCtZYnBDMTdjV0lWUFpxa3JreUdDVEYxYWQ1cUw3?=
+ =?utf-8?B?ZnVreG5Mb0NEcThiMmpYQ1VtTGZESytwaDU3TTI5V280Mm43SlN3Uk5IaVZ3?=
+ =?utf-8?B?TXAvV0J2RnZ3d2RMNFRWd2tQMkFRQ2w0VllaeGdnYzBTMTh2WDBNbHZiNnh4?=
+ =?utf-8?B?dmM2NUtnZHJYeElxSnhLbGExRm5NZGt4SDk1TnB3bFAvT2t5azlyanAwVktG?=
+ =?utf-8?B?OXlFZzg5Lzl1QnMyVzNrVDRuWk1vVnVNVlZ3NHBvM2huYjNmYXB3WlI3S3A2?=
+ =?utf-8?B?NjZ3S1UzU256eFd4M1YvcE1FZUJDUGRKODNDRXV0NVUvQ3BOa0l0NW5WaDlI?=
+ =?utf-8?B?SlVBWnhwaytlUEdLWlNJSm04Tm1RPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <32985418D1938E40A243D32C3EEB97B3@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="je5dyz423x2mm343"
-Content-Disposition: inline
-In-Reply-To: <5aba7eee-7a6e-4f3b-9921-e4220d479346@kadam.mountain>
-X-Originating-IP: [106.210.248.248]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA2WTaVBTZxSG+917kxuwkUu05RuX1qJoq6h1rPV0rFtHO7dl2tH+YNpilwi3
-        LtWgiViXsYKJpZKCkbQgIWAEgSARZEtVEDGUEJZJqKJgxC2CKAJSQ6zYBku42DrTf895z3m/
-        c94fn4iUdNMTRBtk2zi5TLopWOhPma2D9tkBXclRb+arACyxC8FmukqD93Q8Ce5bXQLoz9xP
-        g96hosDbqhZC376/KCg8s5+ATquLBnNiAQJ19yRQlnsQdBx0CaAlt18IaYdtCG54XBQMJo2B
-        tAQlAQ9S0gloNicJ4OcnOSRoGubB5V+vEXDxjF4IdyyJFGiOKknoNNwXQLs2l4Lqs0cQuIoe
-        EKA88pAEpfs2CU+MdQKwJz4lwdh0h4A2TSeCmvgqATQV7aPhUaaNBKvhZdAUNlDgVNYL4VFj
-        D4LUnkskXKicBg0DTwmwl7oF4Na/Drc0Dgq0xjICKg48pqHMsRHimsw03G5tJZctZJ0uD8n2
-        2esRm2nazT4ZnMmW5V8hWPVv3SR7WneNZs3VIayhJIYtOX5AyLZfrhSytfknCFaTVY3Y0mN7
-        WW1bHmLvlqahVVM+9383itu0YTsnn7vka//1Kqub3nJk9Y7s2Ho6FsUtT0B+Isy8hc+rYwUJ
-        yF8kYYwI/16nJvhiAGF7ZS3JF26Ej9sOoWeWoqsFlI8lTB7CKaqX/h1SF3eNOsoRbjdeEvqm
-        KCYE601e2sdCJhQ7etpJH48f5iGvlvIZSKY4AN8/c2VkxTgmDPfHpoyYxcxCnG1sFPAciOvT
-        OkZWk8wO3Nh8YfhR0TBPxHlDIp/sx7yHE4ayCP7Sqbi1KlvI8x7cUOYcyYYZ3Yu4XTNE8o0V
-        2K7sFPA8DnfXldE8T8KN2p8o3qBF+NxQP80XBQjnxnlGVyzCqpaOUcdyvM+bRfouwsxY3NYb
-        yB86FiebU0dlMf7xBwk/PR0XXO+hNGiq7rlouuei6f6Lxsuh2FDxUPg/eRbOPXqf5HkxLix8
-        QBkQfRwFcTGKzes4xXwZ990chXSzIka2bk5k9OYSNPwFG4fqPKeQsfuPORZEiJAFTRs2u04W
-        NKMJlCxaxgWPF08uSY6SiKOkO3dx8uiv5DGbOIUFTRRRwUHiWYvrIyXMOuk27luO28LJn3UJ
-        kd+EWCLx2Pf3OgTfOHsLBg/XPXbsX/H++RBJQMj4Mdu5+erUyvCNq0gP+vK1vKXpb9huNC/I
-        vElFBIW/Y33bzzT3lx4mSFpVQ1BFM0pnqD/1ZohyFzSHHhLB3SUZe3qXJZ0YU6vbNXtStr0p
-        4UPB0shTN4tDZVktyRfvXepqNk936Hp2hjNma4S+RdgX1rvyujh76w5sy4lImRxhyKqm1u6O
-        11cqukrDzmUEWNJj2hb5l7yyrOKDor6cm+VfrHKbIj6KVn/y5/y/nWFxU/KDxY3Fe1VnSzYc
-        vHtwwaPa8hdUa67nmOrDHLUfO+NXnFzz2daBwJWei8k1Jqv3ctrSzNy1leGvam2rAyXBlGK9
-        dN5MUq6Q/gOuFxqq/QQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA2WTeUxUVxTGc997s0ClTgHbF4qpGbW1iCPDesANG6vPNI3FNqmlWhzlCbQw
-        4AwQlFqRgbDrAFOEYRUKDjAFWZVFi4DsBWMrIAMah60sZSk7MtCBaVOT/ve73/nOd05ucti4
-        YRjLhO0h9KVFQoEnl6lPtK429u3ZPBznahGTbgS1QXbQpFSxQFMRhsPMy2EGTKWFsiClI4QA
-        TVcUEyaCXxFQUBmKwWCDmgXlMfkIokZNQVI2h2DghpoBv+dMMSEpsQnBizk1AUvX34CkSAkG
-        kwnJGDwuv84A2XI2DtIWPnTe7cPgt8oUJgzVxhAgvSXBYTBjjAG98TkE1NxPR6AunMRAkv4X
-        DpKZfhyWFY0MaI9Zw0HRNoRBt3QQQV3YAwa0FQazYD6tCYeGjLdBWtBCQI+kmQnzreMIbo4/
-        xeFJ9Q5omV3DoL1khgEzKbvgpbSDgHhFKQZVEYssKO34Fq61lbOgv6sLd7SjetRzODXR3oyo
-        NGUgtbxkRpXmPsOoqPpRnKqQ97Go8pqdVEaxH1WcF8GkejurmdSj3J8xSppZg6iSn65S8d23
-        EfVHSRL6bJszb7/I28+X3ubuLfY9wP2aD5Y8vj3wLK3teXwruzMOljbcvQf3u9KeHv60aO/B
-        szz3lepUlk+qU8DzRSUjCK05RiI9NsmxJgtV+UQk0mcbcrIR2Vq0ROgKpmTR7FOGjo3Ilc5I
-        ps40jcjE+rv/PMoQmdyYjq+7CM5OMkWpYa0zk2NOdoz3bujGWl7VxG+MwDlFm8nxaOXGCCPO
-        J+RUUAJznQ04dmSWopWhSy3ByMX2PzFd4S2yOWlgowHn+JMrqVKtia3ld8nbq+x1WY/zERm5
-        monpVt1Odj3IYur4CjmjGUJSZCR/LUn+WpL8vySdbEZ2r45g/5N3kzm3xnAdHyALCiaJDMTK
-        Q8a0n9jLzUvM54kFXmI/oRvvvLdXMdJeQXnDUsk9lDY6zatFGBvVoh3aTvWd/MfIhBB6C2mu
-        scHW4jhXQwNXwaXLtMjbReTnSYtrkY32G2Nxky3nvbUnJfR14dta2PCtbe0tbOxtrbjvGBz3
-        CRcYctwEvvR3NO1Di/7tw9h6JkGYUraWWcbJjksWygOvvbiYbXa00HxZ7xzuiG0VfPl8/ljZ
-        p0myYYPhNx1ORs9dPb1wwZl2jp1wSntSdXSfbKwo49QHoydufv+DwoXKyx25f655pX5gu9Px
-        qdGkaNmNTd8kmF+qyBP0q6ot3VxPvwe4/i7VRQ+72KIFh4Ue4S+D4QGWuUt1XAV3LtFlpdP4
-        w/DA5ODiKy3dASGiQ1Uhn0ccqfQ/+/6zrPm+6cVDNWcO3/tY9jBo/thD10R986k9s6FfjJLW
-        r0Ymuo3Zl+f8fy3TUFamyqKUlFM/suvrdnes7ev8KmfyxCOZ15GIDlOJmTJDvoW609TeoqIa
-        GIc3yS+UqU8KVJNcQuwu4JvhIrHgb+hkHU2aBAAA
-X-CMS-MailID: 20230621120327eucas1p1c148cfc468823fbd592e0f24992d7b74
-X-Msg-Generator: CA
-X-RootMTR: 20230621091022eucas1p1c097da50842b23e902e1a674e117e1aa
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230621091022eucas1p1c097da50842b23e902e1a674e117e1aa
-References: <20230621091000.424843-1-j.granados@samsung.com>
-        <CGME20230621091022eucas1p1c097da50842b23e902e1a674e117e1aa@eucas1p1.samsung.com>
-        <20230621091000.424843-7-j.granados@samsung.com>
-        <dab06c20-f8b0-4e34-b885-f3537e442d54@kadam.mountain>
-        <5aba7eee-7a6e-4f3b-9921-e4220d479346@kadam.mountain>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR05MB5409.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: db9bedcc-003b-4fe1-566a-08db73309170
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jun 2023 14:54:23.8648
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: SgsymRhGeG/j4eRIi250YnGQrikeGqHsm9O2GvLNyC0UpHGl5k/BmPZG6rkyXIt06X3406pZcIGSHazythBhsQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR05MB8076
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
---je5dyz423x2mm343
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hey Dan
-
-On Wed, Jun 21, 2023 at 01:23:52PM +0300, Dan Carpenter wrote:
-> On Wed, Jun 21, 2023 at 12:47:30PM +0300, Dan Carpenter wrote:
-> > The patchset doesn't include the actual interesting changes, just a
-> > bunch of mechanical prep work.
-> >=20
-> > On Wed, Jun 21, 2023 at 11:09:55AM +0200, Joel Granados wrote:
-> > > diff --git a/net/ieee802154/6lowpan/reassembly.c b/net/ieee802154/6lo=
-wpan/reassembly.c
-> > > index a91283d1e5bf..7b717434368c 100644
-> > > --- a/net/ieee802154/6lowpan/reassembly.c
-> > > +++ b/net/ieee802154/6lowpan/reassembly.c
-> > > @@ -379,7 +379,8 @@ static int __net_init lowpan_frags_ns_sysctl_regi=
-ster(struct net *net)
-> > >  	table[1].extra2	=3D &ieee802154_lowpan->fqdir->high_thresh;
-> > >  	table[2].data	=3D &ieee802154_lowpan->fqdir->timeout;
-> > > =20
-> > > -	hdr =3D register_net_sysctl(net, "net/ieee802154/6lowpan", table);
-> > > +	hdr =3D register_net_sysctl(net, "net/ieee802154/6lowpan", table,
-> > > +				  ARRAY_SIZE(lowpan_frags_ns_ctl_table));
-> >=20
-> > For example, in lowpan_frags_ns_sysctl_register() the sentinel is
-> > sometimes element zero if the user doesn't have enough permissions.  I
-> > would want to ensure that was handled correctly, but that's going to be
-> > done later in a completely different patchset.  I'm definitely not going
-> > to remember to check.
->=20
-> On reflecting the patch is obviously wrong.  It should be pass zero as
-> table_size in that case.  See diff at the end.
-yes
-
->=20
-> There is a similar bug in neigh_sysctl_register() where we use memset to
-> zero out the whole table.  And another in __ip_vs_lblc_init().  I used
-> the smatch cross function database
-> 	`smdb.py where ctl_table procname | grep '(null)' | grep min-max`
-> to make a list of functions which set procname to zero.
-Awesome. That is homework on my part for V2. It gives me a way forward.
-Thx!!!
-
->=20
-> Probably we should add a WARN_ON() if procname is zero in the new code
-> which doesn't use sentinels.
-Yes
-
->=20
-> regards,
-> dan carpenter
->=20
-> drivers/char/random.c          | proc_do_uuid                   | (struct=
- ctl_table)->procname | 0
-> fs/proc/proc_sysctl.c          | new_dir                        | (struct=
- ctl_table)->procname | 48,3906148897379000352
-> fs/proc/proc_sysctl.c          | new_links                      | (struct=
- ctl_table)->procname | 4096-ptr_max
-> arch/arm64/kernel/fpsimd.c     | vec_proc_do_default_vl         | (struct=
- ctl_table)->procname | 0
-> arch/arm64/kernel/armv8_deprecated.c | register_insn_emulation        | (=
-struct ctl_table)->procname | 0-u64max
-> kernel/sysctl-test.c           | sysctl_test_api_dointvec_null_tbl_data |=
- (struct ctl_table)->procname | 7612622206476333056
-> kernel/sysctl-test.c           | sysctl_test_api_dointvec_table_maxlen_un=
-set | (struct ctl_table)->procname | 7612622206476333056
-> kernel/sysctl-test.c           | sysctl_test_api_dointvec_table_len_is_ze=
-ro | (struct ctl_table)->procname | 7612622206476333056
-> kernel/sysctl-test.c           | sysctl_test_api_dointvec_table_read_but_=
-position_set | (struct ctl_table)->procname | 7612622206476333056
-> kernel/sysctl-test.c           | sysctl_test_dointvec_read_happy_single_p=
-ositive | (struct ctl_table)->procname | 7612622206476333056
-> kernel/sysctl-test.c           | sysctl_test_dointvec_read_happy_single_n=
-egative | (struct ctl_table)->procname | 7612622206476333056
-> kernel/sysctl-test.c           | sysctl_test_dointvec_write_happy_single_=
-positive | (struct ctl_table)->procname | 7612622206476333056
-> kernel/sysctl-test.c           | sysctl_test_dointvec_write_happy_single_=
-negative | (struct ctl_table)->procname | 7612622206476333056
-> kernel/sysctl-test.c           | sysctl_test_api_dointvec_write_single_le=
-ss_int_min | (struct ctl_table)->procname | 7612622206476333056
-> kernel/sysctl-test.c           | sysctl_test_api_dointvec_write_single_gr=
-eater_int_max | (struct ctl_table)->procname | 7612622206476333056
-> kernel/sysctl.c                | proc_do_static_key             | (struct=
- ctl_table)->procname | 0
-> kernel/kexec_core.c            | kexec_limit_handler            | (struct=
- ctl_table)->procname | 0
-> kernel/bpf/syscall.c           | bpf_stats_handler              | (struct=
- ctl_table)->procname | 0
-> net/core/sysctl_net_core.c     | rps_sock_flow_sysctl           | (struct=
- ctl_table)->procname | 0
-> net/core/sysctl_net_core.c     | set_default_qdisc              | (struct=
- ctl_table)->procname | 0
-> net/core/neighbour.c           | neigh_sysctl_register          | (struct=
- ctl_table)->procname | 0
-> net/netfilter/ipvs/ip_vs_lblc.c | __ip_vs_lblc_init              | (struc=
-t ctl_table)->procname | 0-u64max
-> net/netfilter/ipvs/ip_vs_lblcr.c | __ip_vs_lblcr_init             | (stru=
-ct ctl_table)->procname | 0-u64max
-> net/netfilter/ipvs/ip_vs_ctl.c | proc_do_defense_mode           | (struct=
- ctl_table)->procname | 0
-> net/netfilter/ipvs/ip_vs_ctl.c | proc_do_sync_threshold         | (struct=
- ctl_table)->procname | 0
-> net/netfilter/ipvs/ip_vs_ctl.c | proc_do_sync_ports             | (struct=
- ctl_table)->procname | 0
-> net/netfilter/ipvs/ip_vs_ctl.c | ipvs_proc_est_nice             | (struct=
- ctl_table)->procname | 0
-> net/netfilter/ipvs/ip_vs_ctl.c | ipvs_proc_run_estimation       | (struct=
- ctl_table)->procname | 0
-> net/netfilter/ipvs/ip_vs_ctl.c | ip_vs_control_net_init_sysctl  | (struct=
- ctl_table)->procname | 0-u64max
-> net/netfilter/nf_log.c         | netfilter_log_sysctl_init      | (struct=
- ctl_table)->procname | 0-u64max
-> net/sctp/sysctl.c              | proc_sctp_do_hmac_alg          | (struct=
- ctl_table)->procname | 0
-> net/sctp/sysctl.c              | proc_sctp_do_rto_min           | (struct=
- ctl_table)->procname | 0
-> net/sctp/sysctl.c              | proc_sctp_do_rto_max           | (struct=
- ctl_table)->procname | 0
-> net/sctp/sysctl.c              | proc_sctp_do_auth              | (struct=
- ctl_table)->procname | 0
-> net/sctp/sysctl.c              | proc_sctp_do_udp_port          | (struct=
- ctl_table)->procname | 0
-> net/sctp/sysctl.c              | proc_sctp_do_probe_interval    | (struct=
- ctl_table)->procname | 0
-> net/ipv6/route.c               | ipv6_route_sysctl_init         | (struct=
- ctl_table)->procname | 0-u64max
-> net/ipv6/addrconf.c            | addrconf_sysctl_addr_gen_mode  | (struct=
- ctl_table)->procname | 0
-> net/ieee802154/6lowpan/reassembly.c | lowpan_frags_ns_sysctl_register | (=
-struct ctl_table)->procname | 0-u64max
-> net/xfrm/xfrm_sysctl.c         | xfrm_sysctl_init               | (struct=
- ctl_table)->procname | 0-u64max
-> net/phonet/sysctl.c            | proc_local_port_range          | (struct=
- ctl_table)->procname | 0
-> net/ipv4/route.c               | sysctl_route_net_init          | (struct=
- ctl_table)->procname | 0-u64max
-> net/ipv4/sysctl_net_ipv4.c     | ipv4_local_port_range          | (struct=
- ctl_table)->procname | 0
-> net/ipv4/sysctl_net_ipv4.c     | ipv4_privileged_ports          | (struct=
- ctl_table)->procname | 0
-> net/ipv4/sysctl_net_ipv4.c     | ipv4_ping_group_range          | (struct=
- ctl_table)->procname | 0
-> net/ipv4/sysctl_net_ipv4.c     | proc_tcp_congestion_control    | (struct=
- ctl_table)->procname | 0
-> net/ipv4/sysctl_net_ipv4.c     | proc_tcp_available_congestion_control | =
-(struct ctl_table)->procname | 0
-> net/ipv4/sysctl_net_ipv4.c     | proc_allowed_congestion_control | (struc=
-t ctl_table)->procname | 0
-> net/ipv4/sysctl_net_ipv4.c     | proc_tcp_fastopen_key          | (struct=
- ctl_table)->procname | 0
-> net/ipv4/sysctl_net_ipv4.c     | proc_tcp_available_ulp         | (struct=
- ctl_table)->procname | 0
-> net/ipv4/sysctl_net_ipv4.c     | proc_tcp_ehash_entries         | (struct=
- ctl_table)->procname | 0
-> net/ipv4/sysctl_net_ipv4.c     | proc_udp_hash_entries          | (struct=
- ctl_table)->procname | 0
->=20
-> diff --git a/net/ieee802154/6lowpan/reassembly.c b/net/ieee802154/6lowpan=
-/reassembly.c
-> index a91283d1e5bf..749238d38014 100644
-> --- a/net/ieee802154/6lowpan/reassembly.c
-> +++ b/net/ieee802154/6lowpan/reassembly.c
-> @@ -360,6 +360,7 @@ static int __net_init lowpan_frags_ns_sysctl_register=
-(struct net *net)
->  	struct ctl_table_header *hdr;
->  	struct netns_ieee802154_lowpan *ieee802154_lowpan =3D
->  		net_ieee802154_lowpan(net);
-> +	size_t table_size =3D ARRAY_SIZE(lowpan_frags_ns_ctl_table);
-> =20
->  	table =3D lowpan_frags_ns_ctl_table;
->  	if (!net_eq(net, &init_net)) {
-> @@ -369,8 +370,10 @@ static int __net_init lowpan_frags_ns_sysctl_registe=
-r(struct net *net)
->  			goto err_alloc;
-> =20
->  		/* Don't export sysctls to unprivileged users */
-> -		if (net->user_ns !=3D &init_user_ns)
-> +		if (net->user_ns !=3D &init_user_ns) {
->  			table[0].procname =3D NULL;
-> +			table_size =3D 0;
-> +		}
->  	}
-> =20
->  	table[0].data	=3D &ieee802154_lowpan->fqdir->high_thresh;
-> @@ -379,7 +382,7 @@ static int __net_init lowpan_frags_ns_sysctl_register=
-(struct net *net)
->  	table[1].extra2	=3D &ieee802154_lowpan->fqdir->high_thresh;
->  	table[2].data	=3D &ieee802154_lowpan->fqdir->timeout;
-> =20
-> -	hdr =3D register_net_sysctl(net, "net/ieee802154/6lowpan", table);
-> +	hdr =3D register_net_sysctl(net, "net/ieee802154/6lowpan", table, table=
-_size);
->  	if (hdr =3D=3D NULL)
->  		goto err_reg;
-> =20
-
---=20
-
-Joel Granados
-
---je5dyz423x2mm343
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmSS5wsACgkQupfNUreW
-QU9ERQwAgEMy70wE4h18ynQTGRx76Q41zwefjWXFjEGR0K3NIsFmJQ0zHEbUM4QJ
-IAZlo1uMboPLnI3bAsabEclKxOWcFy09FHUrVxLBEA2W6++zEHwohyoCKbOTxX47
-T8PRYwwPkowWc4cF1iRrHsJlBU9xPYDzNpwFIM/hx/OFxPgcs4jpLZPN9i49q0Lx
-ikkO54H2IHbPeRQb65JbXwFqG4KwDDJw3Y4pdmItfiqSuRqTmAS+9yLSOqnMn6Nc
-f3C8/IzSg+3FYe4VBKnDur0si+IDxn+BOCHTJoPr+J/Lb9wk8/ZtS3dtxy+wf/41
-CdEhbC17uw6GqbdzvAh6uENWMUfACrEPQnjZmu1IulsnpaP2U6fOJNRvVuibR9vh
-KwdpxWSezi8xZ29gYfJbYjl5ckpT1H9zZhaSO23hgYzq7KVLr45hR/A+IQGamBYc
-K/GWPGudYiQgXWTyk+CUA6rCvIVQDY0g92E5iONzE9JweFTG9pCFztodAJL16fPI
-wgfgt0fB
-=XFZg
------END PGP SIGNATURE-----
-
---je5dyz423x2mm343--
+DQoNCj4gT24gMDMtSnVuLTIwMjMsIGF0IDQ6NDYgQU0sIFhpbiBMb25nIDxsdWNpZW4ueGluQGdt
+YWlsLmNvbT4gd3JvdGU6DQo+IA0KPiAhISBFeHRlcm5hbCBFbWFpbA0KPiANCj4gT24gRnJpLCBK
+dW4gMiwgMjAyMyBhdCAxMToxNeKAr0FNIFNpbW9uIEhvcm1hbiA8c2ltb24uaG9ybWFuQGNvcmln
+aW5lLmNvbT4gd3JvdGU6DQo+PiANCj4+ICsgWGluIExvbmcNCj4+IA0KPj4gT24gVGh1LCBKdW4g
+MDEsIDIwMjMgYXQgMTE6NDc6NTRQTSArMDUzMCwgQXNod2luIERheWFuYW5kIEthbWF0IHdyb3Rl
+Og0KPj4+IE1ENSBpcyBub3QgRklQUyBjb21wbGlhbnQuIEJ1dCBzdGlsbCBtZDUgd2FzIHVzZWQg
+YXMgdGhlDQo+Pj4gZGVmYXVsdCBhbGdvcml0aG0gZm9yIHNjdHAgaWYgZmlwcyB3YXMgZW5hYmxl
+ZC4NCj4+PiBEdWUgdG8gdGhpcywgbGlzdGVuKCkgc3lzdGVtIGNhbGwgaW4gbHRwIHRlc3RzIHdh
+cw0KPj4+IGZhaWxpbmcgZm9yIHNjdHAgaW4gZmlwcyBlbnZpcm9ubWVudCwgd2l0aCBiZWxvdyBl
+cnJvciBtZXNzYWdlLg0KPj4+IA0KPj4+IFsgNjM5Ny44OTI2NzddIHNjdHA6IGZhaWxlZCB0byBs
+b2FkIHRyYW5zZm9ybSBmb3IgbWQ1OiAtMg0KPj4+IA0KPj4+IEZpeCBpcyB0byBub3QgYXNzaWdu
+IG1kNSBhcyBkZWZhdWx0IGFsZ29yaXRobSBmb3Igc2N0cA0KPj4+IGlmIGZpcHNfZW5hYmxlZCBp
+cyB0cnVlLiBJbnN0ZWFkIG1ha2Ugc2hhMSBhcyBkZWZhdWx0IGFsZ29yaXRobS4NCj4+PiBUaGUg
+aXNzdWUgZml4ZXMgbHRwIHRlc3RjYXNlIGZhaWx1cmUgImN2ZS0yMDE4LTU4MDMgc2N0cF9iaWdf
+Y2h1bmsiDQo+IEhpLCBBc2h3aW4sDQo+IA0KPiBJIGhhdmUgdGhlIHNhbWUgcXVlc3Rpb24gYXMg
+UGFvbG8gYWJvdXQgInRoaXMgcGF0Y2ggZ2V0cyBmaXBzIGNvbXBsaWFuY2UNCj4gX2Rpc2FibGlu
+Z18gdGhlIGVuY3J5cHRpb24iLCBpcyBpdCBmcm9tIGFueSBzdGFuZGFyZD8NCj4gDQo+IElmIG5v
+dCwgIGNhbid0IHlvdSBmaXggdGhlIGx0cCB0ZXN0Y2FzZSBmb3IgZmlwcyBlbnZpcm9ubWVudCBi
+eSBzeXNjdGw/DQo+IG9yIHNldCAnQ09ORklHX1NDVFBfREVGQVVMVF9DT09LSUVfSE1BQ19TSEEx
+PXknIGluc3RlYWQgaW4gY29uZmlnLg0KPiANCj4gU29ycnkgaWYgSSBkb24ndCB1bmRlcnN0YW5k
+IHRoaXMgd2VsbC4gWW91J3JlIHRyeWluZyB0byBhdm9pZCBTQ1RQIGNvZGUNCj4gY2FsbGluZyBj
+cnlwdG9fYWxsb2Nfc2hhc2goTUQ1KSwgcmlnaHQ/IFdoYXQgYWJvdXQgb3RoZXIgcGxhY2VzDQo+
+IHdoZXJlIGl0IG1heSBhbHNvIGRvIGl0IGluIGtlcm5lbD8gKHdoZXJlIGx0cCBqdXN0IGRvZXNu
+J3QgY292ZXIpDQo+IA0KPiBJIGRvbid0IHRoaW5rIGl0IG1ha2VzIHNlbnNlIHRvIGxldCBTQ1RQ
+IGhhdmUgc29tZSBjb2RlIHJlcGx5IG9uDQo+IEZJUFMgb25seSB0byBtYWtlIGx0cCB0ZXN0Y2Fz
+ZSBoYXBweSwgd2hpbGUgd2UgY2FuIGFjdHVhbGx5IGZpeCBpdA0KPiBpbiBsdHAgYnkgInN5c2N0
+bCIuDQo+IA0KPiBUaGFua3MuDQo+IA0KSGkgWGksDQpUaGFua3MgZm9yIHlvdXIgaW5wdXRzLiBJ
+IGhhdmUgc2VudCB0aGUgcGF0Y2hlcyB0byBsdHAgdXBzdHJlYW0gdG8gaGFuZGxlIHRoZSBmaXgg
+ZnJvbSBsdHAgY29kZWJhc2UuDQoNClJlZ2FyZHMsDQpBc2h3aW4gS2FtYXQNCj4+PiANCj4+PiBT
+aWduZWQtb2ZmLWJ5OiBBc2h3aW4gRGF5YW5hbmQgS2FtYXQgPGthc2h3aW5kYXlhbkB2bXdhcmUu
+Y29tPg0KPj4+IC0tLQ0KPj4+IHYzOg0KPj4+ICogUmVzb2x2ZWQgaHVuayBmYWlsdXJlcy4NCj4+
+PiAqIENoYW5nZWQgdGhlIHJhdGVsaW1pdGVkIG5vdGljZSB0byBiZSBtb3JlIG1lYW5pbmdmdWwu
+DQo+Pj4gKiBVc2VkIHRlcm5hcnkgY29uZGl0aW9uIGZvciBpZi9lbHNlIGNvbmR0aW9uLg0KPj4+
+IHYyOg0KPj4+ICogVGhlIGxpc3RlbmVyIGNhbiBzdGlsbCBmYWlsIGlmIGZpcHMgbW9kZSBpcyBl
+bmFibGVkIGFmdGVyDQo+Pj4gIHRoYXQgdGhlIG5ldG5zIGlzIGluaXRpYWxpemVkLg0KPj4+ICog
+Rml4ZWQgdGhpcyBpbiBzY3RwX2xpc3Rlbl9zdGFydCgpIGFzIHN1Z2dlc3RlZCBieQ0KPj4+ICBQ
+YW9sbyBBYmVuaSA8cGFiZW5pQHJlZGhhdC5jb20+DQo+PiANCj4+IEZXSUlXLCB0aGlzIHNlZW1z
+IHJlYXNvbmFibGUgdG8gbWUuDQo+PiANCj4+IFJldmlld2VkLWJ5OiBTaW1vbiBIb3JtYW4gPHNp
+bW9uLmhvcm1hbkBjb3JpZ2luZS5jb20+DQo+IA0KPiAhISBFeHRlcm5hbCBFbWFpbDogVGhpcyBl
+bWFpbCBvcmlnaW5hdGVkIGZyb20gb3V0c2lkZSBvZiB0aGUgb3JnYW5pemF0aW9uLiBEbyBub3Qg
+Y2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91IHJlY29nbml6ZSB0aGUg
+c2VuZGVyLg0KDQo=
