@@ -2,142 +2,71 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DED9573A3BF
-	for <lists+linux-sctp@lfdr.de>; Thu, 22 Jun 2023 16:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A0873B6D2
+	for <lists+linux-sctp@lfdr.de>; Fri, 23 Jun 2023 13:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231954AbjFVOyb (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 22 Jun 2023 10:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
+        id S230459AbjFWLzU (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 23 Jun 2023 07:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232003AbjFVOya (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 22 Jun 2023 10:54:30 -0400
-Received: from MW2PR02CU002.outbound.protection.outlook.com (mail-westus2azon11013011.outbound.protection.outlook.com [52.101.49.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E45A1BD1;
-        Thu, 22 Jun 2023 07:54:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NkFlL1BmcEOZBLOXgNGfCZIXC26+ZG9rWLFFkDUjvtP12KaoM58/2BtBlgEvNRlkFljKiRZuMx9wlq+5dtzXlmj+IXlBpxlSBToDdtG4VQEfmS/8GhoVllNim+0IrJSajZfmxXiu1ykak6Ccj6NVCMB5kKSUtozuIbfALCJIznMkKyFn1qQQMjZGGBgy9Tg4vy7oNmDrFX+YOYyaXt7Li4/GLzmIy8ajxnPM3w2zk1oQlgYJd2QciROZRP0seO/xjOcFNvjhaODUzmKELQNcfIX7V7xDCfVrvjHC+SBDBdxgK2lqOmzutv5JSplHKRnMbehN3l6g1Y2N0RevMWavYQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+rz6HTRol4AVrVwQ2NZhxzVzW0QkGJ5oDQTxETvofQc=;
- b=S472lWSv+Kq7unfIVy0KUPd5MhrdhINSTjD13jG7QXHwmDIiuLkYHxDxd6ctcM5ZFCiy10QCia3Pbs+P88Akb3kbHB5h/suCXAE7q5EQGJ0/4sLudVhtPS8dRt1wF+Dz/bLLyDEdtSAhZq5/iYyK7hiLnipmc5JYOX6xRNEAXopAbdBc+ouaHtsalXPYNJW5+CeQuFbdmBVXFqejWDdT2mM+wV1n+pEuxIsYonb2gUmWjma6z2RySmq2UitkX4GeLC3ccAKwqdh4MBjywmioDkMI2IHj9aabZiPiPzAEOp9z5l6evb+GpMGfTq/lDBoxhFwpEZF1GKIJlD/UmTvJCg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+rz6HTRol4AVrVwQ2NZhxzVzW0QkGJ5oDQTxETvofQc=;
- b=IHzeHGAgAQgqrEX1bHPjzpSSS9iPAJBe+1YL3Rd/wTS7mFBwLYFUiAVcBy+Y/JS1/eIdhnuivSEDeFzy4+6Vjd2IRvSUGOupAikpuiNtSK75Lg/Rm1Ma299o9+OCGYvyJwGdiF0hf1mLZDXta27oFnwyObTDTGunF7DZcN43GTQ=
-Received: from BL0PR05MB5409.namprd05.prod.outlook.com (2603:10b6:208:6e::17)
- by PH0PR05MB8076.namprd05.prod.outlook.com (2603:10b6:510:97::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Thu, 22 Jun
- 2023 14:54:24 +0000
-Received: from BL0PR05MB5409.namprd05.prod.outlook.com
- ([fe80::68a4:3da6:4981:4793]) by BL0PR05MB5409.namprd05.prod.outlook.com
- ([fe80::68a4:3da6:4981:4793%7]) with mapi id 15.20.6521.024; Thu, 22 Jun 2023
- 14:54:23 +0000
-From:   Ashwin Dayanand Kamat <kashwindayan@vmware.com>
-To:     Xin Long <lucien.xin@gmail.com>
-CC:     Simon Horman <simon.horman@corigine.com>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
-        Ajay Kaher <akaher@vmware.com>,
-        Tapas Kundu <tkundu@vmware.com>,
-        Keerthana Kalyanasundaram <keerthanak@vmware.com>
-Subject: Re: [PATCH v3] net/sctp: Make sha1 as default algorithm if fips is
- enabled
-Thread-Topic: [PATCH v3] net/sctp: Make sha1 as default algorithm if fips is
- enabled
-Thread-Index: AQHZlLVqGf2QnmjSNEO1bZtdH71JDa93oJ6AgACGZICAHuJwgA==
-Date:   Thu, 22 Jun 2023 14:54:23 +0000
-Message-ID: <7BD8EC18-86EA-411B-9155-8A7633747C7F@vmware.com>
-References: <1685643474-18654-1-git-send-email-kashwindayan@vmware.com>
- <ZHoHfcMgYqO3l7Np@corigine.com>
- <CADvbK_fCPPHto4XjPeTJPJ9NTXoJGgO7jjEcy1Bq3nQSFAzR9A@mail.gmail.com>
-In-Reply-To: <CADvbK_fCPPHto4XjPeTJPJ9NTXoJGgO7jjEcy1Bq3nQSFAzR9A@mail.gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL0PR05MB5409:EE_|PH0PR05MB8076:EE_
-x-ms-office365-filtering-correlation-id: db9bedcc-003b-4fe1-566a-08db73309170
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ZB9QAQZmJtOUEk69PsS0VcD7XQCN859aiZDJ4g8wvY+aXKjo1DbfiPLn++pPMAS0j/nS/NkBo+b6xlsmRz9EG6yy7U7fYUhgXGcNB/dlpqC9a4BETFPJVeKNFHKrHiupAkfPeHvSXFDbPn5PjGay43NWoAhICgXzilxgUnjeJuKvfLsvzw+zSuiuOP5SZ8MKQIz1GIcbhL+l894MrMAt9nUJKQPbdWJ9r6OK81PHGaD9Rue0THTFy690Lh0L6UYo8YJVDcKpfUbrADPIxCeAQE/GaieWu7CwGltFFWnYc7KV5KYUyR5aBMRNREVGbszYALZtNsB5P2zZz4Fy9PCb7Q8U85PLuqE4APpfic31gTz97ga6DK42Iy0UQd1Lftjuv9ZdjsQ/aJlR1MoMLRuLmsbn1vYnqNdprVIuY7p7Mb+HQjwZVRs0/GztMbQRrinhUqtEaHm4M/RgczshuBgZLrTsigyfpcTxnTycUCERA5ufzpM+jfqDdU6XEYe1NyUssKi2i+db7KyxStIyFn5zUWWUAmG1JYHPV3zYYqRRoi1v61/szvX1Jf9yKM35ZZShsAtuxFKbcaSUzcuJR4ZGwfppD4g4b3FLQAzX72tUDtPCKLxWeEkCry8ZWuKF0AlVHY71XhPPSqx9VvmTQk+toA3r5dYT5CTHppbGcuDXiRzeBgQ4tWINPH1DyN9ItGjSkrsXgm1badJb9DTjwVo95A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR05MB5409.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(136003)(396003)(39860400002)(346002)(451199021)(107886003)(33656002)(122000001)(53546011)(6512007)(6506007)(71200400001)(186003)(6486002)(478600001)(54906003)(2616005)(86362001)(6916009)(64756008)(66446008)(66476007)(76116006)(66946007)(4326008)(66556008)(83380400001)(7416002)(41300700001)(316002)(5660300002)(2906002)(38100700002)(36756003)(8936002)(8676002)(38070700005)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?V3hURHppdmt1VmNaYmtnVDdCclM1VFk1eUVEOEJhQ2JSUUNyd2FpSlZiR3lT?=
- =?utf-8?B?L2t4QVh3KzR0c3FlT2NrbmJhRWZzbXJYY01BNUNPWi9VTGhoMGlWL09Zcnhi?=
- =?utf-8?B?dElMc0lINDVDRS8rYkE5cnhYT3BEOUNmNENHdXpTTXlMV1M0SEc2YTFJamRa?=
- =?utf-8?B?bGVuMUhwUzRYZU5neUdpREJ2SE8vNmRtaXl3WUE3bmlDeVdMVUsyUW9vd3A1?=
- =?utf-8?B?VXFycDVldDBwSkZoTnRScEtPRlY4aFdFOWVhdEhmd2RPRk5DcTEzYnArYkpN?=
- =?utf-8?B?aEdNZk93Qk1IcjgzUkxWNWg3bjBVKzY2R2pkbW56bGw0S3kyTFRlOUErUmV1?=
- =?utf-8?B?T3JhdEJJci9TTjhoVlFYUGJmUnFoaTNXZ2NQUTBWWkhFNEVLeGFnMnJtK2cv?=
- =?utf-8?B?Ti9pZU1EMlJBZDFwQTFiTU8rWnF1Y1Jpd1ZCdTk4eXgzd0xLd3huejZMeStS?=
- =?utf-8?B?RC9BRW9UenRSRlhJVTRob2l6OVR1cStzdFJyMERnRVpRMjdrc3ZyeHJjNXVJ?=
- =?utf-8?B?alF5K3JObVVqWU5PYzZjZGJPVDhGYU44Ui9WbHFwUUpIc0lmL2F6UUlMYXRS?=
- =?utf-8?B?QmJieUo2YWI0RlBlR0w1YVJ4dTBibjlzVTFzSS9WQkJ6S2NBWCtWUDVTekZz?=
- =?utf-8?B?TGRFOEExQ0pvUnFnWVkrdndHbnlBYUwxRDNMY0lzMzZpaG0wVzNkN2h0Qmgw?=
- =?utf-8?B?bjVrVWFUYU9jLzhFRFNXSUFRbm1BRjB3SEJHelVzVDZQSFdDTUNqaTV4S3B0?=
- =?utf-8?B?VzZ5cGRYS25jRktxc2tLdDlVbU5PbUtuUlZHUWRNQzNpM3haOXVoVWJvR2Rx?=
- =?utf-8?B?K1pOQ1F3WkZTVmttbmc2WjFSVU82eXlEM1IzTHNoYlVXSCthZFNOUmlqQU8w?=
- =?utf-8?B?c05XTWtsU3FHdTM2cERMMi9jRWFETE1tcmxtVnB5NFdvQ0Y5S1MxSitYekJF?=
- =?utf-8?B?REp1ZzVmR2RCRktaYlBPNFZXdEE5bFBySEtZTzdqWm9zVzcwWG95TFN0eitJ?=
- =?utf-8?B?QlpPa1ZmTVhyOFlKVnB1bE9zTEJiNXZ6UCtvN0pwMlFXRGw3VkdyUmlDNVkv?=
- =?utf-8?B?ZjdrUXFoV1d0eTJEdGRSSjRvdTBoeDRDYklrUXJNclFtQlNoaVBHNTRxRDY4?=
- =?utf-8?B?QWtiSjFmRVVhTHFXVFNDUE0rVzJXc3pHcXVZT0lkVk5Ma1NMS0dVSGhZZ1or?=
- =?utf-8?B?ejNBK1hkcmtZRkpFcDgzenNUaEZoVTYyL2pGNXNkMTA2QWFhVWc4QlRQeEMx?=
- =?utf-8?B?eEZpVG1VcGtocFBRWU9YUk9QekorL1RmSVZqMHJjN1hhWHkxejZPTFJ3Nnp0?=
- =?utf-8?B?cldQcG9aVmp1cjVoS1BDek45NjBQakoydTdGSmpHOWw2Q29ISnBNM2YrV2Fu?=
- =?utf-8?B?cDdDY2duSzlLSmlwYjNZeXZOY0xVVWk3czU4a3ZhSENLbkpsZGIwd0tjR0Y1?=
- =?utf-8?B?V0VNc1NzY2JEalc3QTZpeGNuekdncG5JbWhlUDNIWVAyK3Rla2MrVmNMY1FT?=
- =?utf-8?B?aVRoT2VSOGJyVU50a1VHZ0lkMGtpN0RqbVIraGQwSm1SWWhDai9jRllJaEtE?=
- =?utf-8?B?Q3ZxRUpKREQyZkdRRzFKWlBSS0ptUUVNbDJ1cmkyWm81K2pnVVRnb3Z1RWZQ?=
- =?utf-8?B?TG1oOER6T28wVGl5bWoxY3lXNnBWUTlxMG5maGlURE16VnFJTnV3WENwQTlU?=
- =?utf-8?B?cEM5NEJPeTFDOFYzWEUwUTJFUDF2OUF4WGxqWUlBWjhIei9XWk5GN09YRzcz?=
- =?utf-8?B?VTFiNkFKVGtwajNPUmFnNUN5VVVJZWpqTFpGclkvaXp1RW1MS21Sd2ZjcW1K?=
- =?utf-8?B?K0lvT1BCTHJoYkpmRnVTMEVhRXhOZnd6RjR5Z3BGRUxjdy83Yk83cENsSXNq?=
- =?utf-8?B?KzNaUzRqYllFdkVKajFoTCtZYnBDMTdjV0lWUFpxa3JreUdDVEYxYWQ1cUw3?=
- =?utf-8?B?ZnVreG5Mb0NEcThiMmpYQ1VtTGZESytwaDU3TTI5V280Mm43SlN3Uk5IaVZ3?=
- =?utf-8?B?TXAvV0J2RnZ3d2RMNFRWd2tQMkFRQ2w0VllaeGdnYzBTMTh2WDBNbHZiNnh4?=
- =?utf-8?B?dmM2NUtnZHJYeElxSnhLbGExRm5NZGt4SDk1TnB3bFAvT2t5azlyanAwVktG?=
- =?utf-8?B?OXlFZzg5Lzl1QnMyVzNrVDRuWk1vVnVNVlZ3NHBvM2huYjNmYXB3WlI3S3A2?=
- =?utf-8?B?NjZ3S1UzU256eFd4M1YvcE1FZUJDUGRKODNDRXV0NVUvQ3BOa0l0NW5WaDlI?=
- =?utf-8?B?SlVBWnhwaytlUEdLWlNJSm04Tm1RPT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <32985418D1938E40A243D32C3EEB97B3@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        with ESMTP id S230280AbjFWLzT (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 23 Jun 2023 07:55:19 -0400
+X-Greylist: delayed 1800 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Jun 2023 04:55:16 PDT
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF7FBA;
+        Fri, 23 Jun 2023 04:55:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=From:Cc:To:Date:Message-ID;
+        bh=6vQmPuTY7+r8oEGoWdR7QXjNWbWLdLq/qWIKBX65su4=; b=hUuItrjAtIysZde3kgHWlnwafr
+        moYHXuqnRPgxEYFBCYrTLaHEKl/KxJXo1YqGg4cxOD1gw0Xa6fw7NOd5bhpKPMc1UedWHKm6yrykJ
+        Fkl9vrxuPJq4tDpQPnoc6Ot25Nq5dGmSjATqJsliEnXOwg5clY/psKFYSkYox95ULsB7OJ71QB8xA
+        rfpZk9upLEDGZdlD0d+MOhs0xdBCNtxKRykUd/+JEt9+NUcjFbXvWWQdasNYsRnPUGq2xCH0jOP0k
+        kIxd9lSVVQ1JZ2dGPnR97mpY05PHCGCIRZ5PxrZgDUifrbqYRQDg53gv41AxIf94ZW3iJrNdC4Kuy
+        Y+QvkgsA+piaOj4V2UBtfiWCZWFXBMs3DdmEWsCB78QxxTT1po0X2pAy7y0ZKx/+PM+2QVoojWt6B
+        Ysag1oWZZbi5TYYjarcEjySnL8FwrjTuR2ZV/SfkG7MrFvJvvqDkcZu9s/jmRmHipleTM9OTRR+v1
+        R03VUBIlMC5G7xCcO19jmgUA;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1qCdql-003wDq-29;
+        Fri, 23 Jun 2023 10:17:07 +0000
+Message-ID: <e72f4c43-02a7-936c-e755-1b23596fc312@samba.org>
+Date:   Fri, 23 Jun 2023 12:17:35 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR05MB5409.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: db9bedcc-003b-4fe1-566a-08db73309170
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jun 2023 14:54:23.8648
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SgsymRhGeG/j4eRIi250YnGQrikeGqHsm9O2GvLNyC0UpHGl5k/BmPZG6rkyXIt06X3406pZcIGSHazythBhsQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR05MB8076
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RFC PATCH v2 1/4] net: wire up support for
+ file_operations->uring_cmd()
+Content-Language: en-US, de-DE
+To:     Breno Leitao <leitao@debian.org>, axboe@kernel.dk,
+        dsahern@kernel.org, asml.silence@gmail.com
+Cc:     io-uring@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <martineau@kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>, leit@fb.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dccp@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-sctp@vger.kernel.org, ast@kernel.org, kuniyu@amazon.com,
+        martin.lau@kernel.org, Jason Xing <kernelxing@tencent.com>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Guillaume Nault <gnault@redhat.com>,
+        Andrea Righi <andrea.righi@canonical.com>
+References: <20230614110757.3689731-1-leitao@debian.org>
+ <20230614110757.3689731-2-leitao@debian.org>
+ <6b5e5988-3dc7-f5d6-e447-397696c0d533@kernel.org>
+ <ZJA6AwbRWtSiJ5pL@gmail.com>
+From:   Stefan Metzmacher <metze@samba.org>
+In-Reply-To: <ZJA6AwbRWtSiJ5pL@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -145,45 +74,149 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-DQoNCj4gT24gMDMtSnVuLTIwMjMsIGF0IDQ6NDYgQU0sIFhpbiBMb25nIDxsdWNpZW4ueGluQGdt
-YWlsLmNvbT4gd3JvdGU6DQo+IA0KPiAhISBFeHRlcm5hbCBFbWFpbA0KPiANCj4gT24gRnJpLCBK
-dW4gMiwgMjAyMyBhdCAxMToxNeKAr0FNIFNpbW9uIEhvcm1hbiA8c2ltb24uaG9ybWFuQGNvcmln
-aW5lLmNvbT4gd3JvdGU6DQo+PiANCj4+ICsgWGluIExvbmcNCj4+IA0KPj4gT24gVGh1LCBKdW4g
-MDEsIDIwMjMgYXQgMTE6NDc6NTRQTSArMDUzMCwgQXNod2luIERheWFuYW5kIEthbWF0IHdyb3Rl
-Og0KPj4+IE1ENSBpcyBub3QgRklQUyBjb21wbGlhbnQuIEJ1dCBzdGlsbCBtZDUgd2FzIHVzZWQg
-YXMgdGhlDQo+Pj4gZGVmYXVsdCBhbGdvcml0aG0gZm9yIHNjdHAgaWYgZmlwcyB3YXMgZW5hYmxl
-ZC4NCj4+PiBEdWUgdG8gdGhpcywgbGlzdGVuKCkgc3lzdGVtIGNhbGwgaW4gbHRwIHRlc3RzIHdh
-cw0KPj4+IGZhaWxpbmcgZm9yIHNjdHAgaW4gZmlwcyBlbnZpcm9ubWVudCwgd2l0aCBiZWxvdyBl
-cnJvciBtZXNzYWdlLg0KPj4+IA0KPj4+IFsgNjM5Ny44OTI2NzddIHNjdHA6IGZhaWxlZCB0byBs
-b2FkIHRyYW5zZm9ybSBmb3IgbWQ1OiAtMg0KPj4+IA0KPj4+IEZpeCBpcyB0byBub3QgYXNzaWdu
-IG1kNSBhcyBkZWZhdWx0IGFsZ29yaXRobSBmb3Igc2N0cA0KPj4+IGlmIGZpcHNfZW5hYmxlZCBp
-cyB0cnVlLiBJbnN0ZWFkIG1ha2Ugc2hhMSBhcyBkZWZhdWx0IGFsZ29yaXRobS4NCj4+PiBUaGUg
-aXNzdWUgZml4ZXMgbHRwIHRlc3RjYXNlIGZhaWx1cmUgImN2ZS0yMDE4LTU4MDMgc2N0cF9iaWdf
-Y2h1bmsiDQo+IEhpLCBBc2h3aW4sDQo+IA0KPiBJIGhhdmUgdGhlIHNhbWUgcXVlc3Rpb24gYXMg
-UGFvbG8gYWJvdXQgInRoaXMgcGF0Y2ggZ2V0cyBmaXBzIGNvbXBsaWFuY2UNCj4gX2Rpc2FibGlu
-Z18gdGhlIGVuY3J5cHRpb24iLCBpcyBpdCBmcm9tIGFueSBzdGFuZGFyZD8NCj4gDQo+IElmIG5v
-dCwgIGNhbid0IHlvdSBmaXggdGhlIGx0cCB0ZXN0Y2FzZSBmb3IgZmlwcyBlbnZpcm9ubWVudCBi
-eSBzeXNjdGw/DQo+IG9yIHNldCAnQ09ORklHX1NDVFBfREVGQVVMVF9DT09LSUVfSE1BQ19TSEEx
-PXknIGluc3RlYWQgaW4gY29uZmlnLg0KPiANCj4gU29ycnkgaWYgSSBkb24ndCB1bmRlcnN0YW5k
-IHRoaXMgd2VsbC4gWW91J3JlIHRyeWluZyB0byBhdm9pZCBTQ1RQIGNvZGUNCj4gY2FsbGluZyBj
-cnlwdG9fYWxsb2Nfc2hhc2goTUQ1KSwgcmlnaHQ/IFdoYXQgYWJvdXQgb3RoZXIgcGxhY2VzDQo+
-IHdoZXJlIGl0IG1heSBhbHNvIGRvIGl0IGluIGtlcm5lbD8gKHdoZXJlIGx0cCBqdXN0IGRvZXNu
-J3QgY292ZXIpDQo+IA0KPiBJIGRvbid0IHRoaW5rIGl0IG1ha2VzIHNlbnNlIHRvIGxldCBTQ1RQ
-IGhhdmUgc29tZSBjb2RlIHJlcGx5IG9uDQo+IEZJUFMgb25seSB0byBtYWtlIGx0cCB0ZXN0Y2Fz
-ZSBoYXBweSwgd2hpbGUgd2UgY2FuIGFjdHVhbGx5IGZpeCBpdA0KPiBpbiBsdHAgYnkgInN5c2N0
-bCIuDQo+IA0KPiBUaGFua3MuDQo+IA0KSGkgWGksDQpUaGFua3MgZm9yIHlvdXIgaW5wdXRzLiBJ
-IGhhdmUgc2VudCB0aGUgcGF0Y2hlcyB0byBsdHAgdXBzdHJlYW0gdG8gaGFuZGxlIHRoZSBmaXgg
-ZnJvbSBsdHAgY29kZWJhc2UuDQoNClJlZ2FyZHMsDQpBc2h3aW4gS2FtYXQNCj4+PiANCj4+PiBT
-aWduZWQtb2ZmLWJ5OiBBc2h3aW4gRGF5YW5hbmQgS2FtYXQgPGthc2h3aW5kYXlhbkB2bXdhcmUu
-Y29tPg0KPj4+IC0tLQ0KPj4+IHYzOg0KPj4+ICogUmVzb2x2ZWQgaHVuayBmYWlsdXJlcy4NCj4+
-PiAqIENoYW5nZWQgdGhlIHJhdGVsaW1pdGVkIG5vdGljZSB0byBiZSBtb3JlIG1lYW5pbmdmdWwu
-DQo+Pj4gKiBVc2VkIHRlcm5hcnkgY29uZGl0aW9uIGZvciBpZi9lbHNlIGNvbmR0aW9uLg0KPj4+
-IHYyOg0KPj4+ICogVGhlIGxpc3RlbmVyIGNhbiBzdGlsbCBmYWlsIGlmIGZpcHMgbW9kZSBpcyBl
-bmFibGVkIGFmdGVyDQo+Pj4gIHRoYXQgdGhlIG5ldG5zIGlzIGluaXRpYWxpemVkLg0KPj4+ICog
-Rml4ZWQgdGhpcyBpbiBzY3RwX2xpc3Rlbl9zdGFydCgpIGFzIHN1Z2dlc3RlZCBieQ0KPj4+ICBQ
-YW9sbyBBYmVuaSA8cGFiZW5pQHJlZGhhdC5jb20+DQo+PiANCj4+IEZXSUlXLCB0aGlzIHNlZW1z
-IHJlYXNvbmFibGUgdG8gbWUuDQo+PiANCj4+IFJldmlld2VkLWJ5OiBTaW1vbiBIb3JtYW4gPHNp
-bW9uLmhvcm1hbkBjb3JpZ2luZS5jb20+DQo+IA0KPiAhISBFeHRlcm5hbCBFbWFpbDogVGhpcyBl
-bWFpbCBvcmlnaW5hdGVkIGZyb20gb3V0c2lkZSBvZiB0aGUgb3JnYW5pemF0aW9uLiBEbyBub3Qg
-Y2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91IHJlY29nbml6ZSB0aGUg
-c2VuZGVyLg0KDQo=
+Am 19.06.23 um 13:20 schrieb Breno Leitao:
+> On Wed, Jun 14, 2023 at 08:15:10AM -0700, David Ahern wrote:
+>> On 6/14/23 5:07 AM, Breno Leitao wrote:
+>> io_uring is just another in-kernel user of sockets. There is no reason
+>> for io_uring references to be in core net code. It should be using
+>> exposed in-kernel APIs and doing any translation of its op codes in
+>> io_uring/  code.
+> 
+> Thanks for the feedback. If we want to keep the network subsystem
+> untouched, then I we can do it using an approach similar to the
+> following. Is this a better approach moving forward?
+
+I'd like to keep it passed to socket layer, so that sockets could
+implement some extra features in an async fashion.
+
+What about having the function you posted below (and in v3)
+as a default implementation if proto_ops->uring_cmd is NULL?
+
+metze
+
+> --
+> 
+> From: Breno Leitao <leitao@debian.org>
+> Date: Mon, 19 Jun 2023 03:37:40 -0700
+> Subject: [RFC PATCH v2] io_uring: add initial io_uring_cmd support for sockets
+> 
+> Enable io_uring command operations on sockets. Create two
+> SOCKET_URING_OP commands that will operate on sockets.
+> 
+> For that, use the file_operations->uring_cmd callback, and map it to a
+> uring socket callback, which handles the SOCKET_URING_OP accordingly.
+> 
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> ---
+>   include/linux/io_uring.h      |  6 ++++++
+>   include/uapi/linux/io_uring.h |  8 ++++++++
+>   io_uring/uring_cmd.c          | 27 +++++++++++++++++++++++++++
+>   net/socket.c                  |  2 ++
+>   4 files changed, 43 insertions(+)
+> 
+> diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
+> index 7fe31b2cd02f..d1b20e2a9fb0 100644
+> --- a/include/linux/io_uring.h
+> +++ b/include/linux/io_uring.h
+> @@ -71,6 +71,7 @@ static inline void io_uring_free(struct task_struct *tsk)
+>   	if (tsk->io_uring)
+>   		__io_uring_free(tsk);
+>   }
+> +int uring_sock_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags);
+>   #else
+>   static inline int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+>   			      struct iov_iter *iter, void *ioucmd)
+> @@ -102,6 +103,11 @@ static inline const char *io_uring_get_opcode(u8 opcode)
+>   {
+>   	return "";
+>   }
+> +static inline int uring_sock_cmd(struct io_uring_cmd *cmd,
+> +				 unsigned int issue_flags)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+>   #endif
+>   
+>   #endif
+> diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+> index 0716cb17e436..d93a5ee7d984 100644
+> --- a/include/uapi/linux/io_uring.h
+> +++ b/include/uapi/linux/io_uring.h
+> @@ -703,6 +703,14 @@ struct io_uring_recvmsg_out {
+>   	__u32 flags;
+>   };
+>   
+> +/*
+> + * Argument for IORING_OP_URING_CMD when file is a socket
+> + */
+> +enum {
+> +	SOCKET_URING_OP_SIOCINQ         = 0,
+> +	SOCKET_URING_OP_SIOCOUTQ,
+> +};
+> +
+>   #ifdef __cplusplus
+>   }
+>   #endif
+> diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+> index 5e32db48696d..dcbe6493b03f 100644
+> --- a/io_uring/uring_cmd.c
+> +++ b/io_uring/uring_cmd.c
+> @@ -7,6 +7,7 @@
+>   #include <linux/nospec.h>
+>   
+>   #include <uapi/linux/io_uring.h>
+> +#include <uapi/asm-generic/ioctls.h>
+>   
+>   #include "io_uring.h"
+>   #include "rsrc.h"
+> @@ -156,3 +157,29 @@ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+>   	return io_import_fixed(rw, iter, req->imu, ubuf, len);
+>   }
+>   EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
+> +
+> +int uring_sock_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags)
+> +{
+> +	struct socket *sock = cmd->file->private_data;
+> +	struct sock *sk = sock->sk;
+> +	int ret, arg = 0;
+> +
+> +	if (!sk->sk_prot || !sk->sk_prot->ioctl)
+> +		return -EOPNOTSUPP;
+> +
+> +	switch (cmd->sqe->cmd_op) {
+> +	case SOCKET_URING_OP_SIOCINQ:
+> +		ret = sk->sk_prot->ioctl(sk, SIOCINQ, &arg);
+> +		if (ret)
+> +			return ret;
+> +		return arg;
+> +	case SOCKET_URING_OP_SIOCOUTQ:
+> +		ret = sk->sk_prot->ioctl(sk, SIOCOUTQ, &arg);
+> +		if (ret)
+> +			return ret;
+> +		return arg;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(uring_sock_cmd);
+> diff --git a/net/socket.c b/net/socket.c
+> index b778fc03c6e0..db11e94d2259 100644
+> --- a/net/socket.c
+> +++ b/net/socket.c
+> @@ -88,6 +88,7 @@
+>   #include <linux/xattr.h>
+>   #include <linux/nospec.h>
+>   #include <linux/indirect_call_wrapper.h>
+> +#include <linux/io_uring.h>
+>   
+>   #include <linux/uaccess.h>
+>   #include <asm/unistd.h>
+> @@ -159,6 +160,7 @@ static const struct file_operations socket_file_ops = {
+>   #ifdef CONFIG_COMPAT
+>   	.compat_ioctl = compat_sock_ioctl,
+>   #endif
+> +	.uring_cmd =    uring_sock_cmd,
+>   	.mmap =		sock_mmap,
+>   	.release =	sock_close,
+>   	.fasync =	sock_fasync,
+
