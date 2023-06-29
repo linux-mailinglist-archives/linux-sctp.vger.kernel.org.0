@@ -2,82 +2,93 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B120C74023D
-	for <lists+linux-sctp@lfdr.de>; Tue, 27 Jun 2023 19:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2B974237F
+	for <lists+linux-sctp@lfdr.de>; Thu, 29 Jun 2023 11:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231547AbjF0ReV (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 27 Jun 2023 13:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52800 "EHLO
+        id S231882AbjF2JuK (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 29 Jun 2023 05:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231555AbjF0ReR (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 27 Jun 2023 13:34:17 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B00270C;
-        Tue, 27 Jun 2023 10:34:16 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-5769e6a6818so38800447b3.1;
-        Tue, 27 Jun 2023 10:34:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687887256; x=1690479256;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BFeHm9bU8RrhQ+qc5bzdZqgetskKJ+S12T31+KyGXkA=;
-        b=VGiNpJNiI5vl1huK2HIJqIZy9oyI6WX52GvPhRlyA65lAmumA/7Cdo6BL654x5gYt4
-         hkg16ML16rcVSw/IM9/2JfFFjsxWnD9GJPk8CoYwt+EDa3qKbcXxcmPckEslURsQz7Im
-         OC3lXFjimUsF5zKKOiO1dbWS2ApoMHcXh/L5+uSlRlL7gd+lSfTn9QQ9cOYadBEi5dLA
-         NDWlEcmdKSL9+gHT3yBOVVKVlf5OeepO7xGzk3GVWGB7f3MtquW83lYidsLo3MLF+oGv
-         7nLIzMHpx6cpRlRCj1XxeHm120zdlBCt41P6twvM7UONy5yrCjSPpjmwSM4F+5sCCAhi
-         sulw==
+        with ESMTP id S231858AbjF2JuH (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 29 Jun 2023 05:50:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236382682
+        for <linux-sctp@vger.kernel.org>; Thu, 29 Jun 2023 02:49:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688032156;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+plDWhXJtyP1/dor5ycSeAGAv25H1fG419rVN4fUTjE=;
+        b=goOCCLAYBGBVdWplg8owaMLfYiSMok2Pg4vbW8AaATMbdTDSeKcNkeOtqJy30rBcknHzkL
+        9LOquw2b36iI+Rf98e5dRxQldkKsBGsJ2aPjk6v/bndyUIBSwjgzDm6tYUknhRpA4ywhbh
+        xY2AR/BopAsMpv183Xq7/UufZbJrOdI=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-635-9utgwP4cMs2jAhirngALFA-1; Thu, 29 Jun 2023 05:49:14 -0400
+X-MC-Unique: 9utgwP4cMs2jAhirngALFA-1
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-76716078e78so11582085a.1
+        for <linux-sctp@vger.kernel.org>; Thu, 29 Jun 2023 02:49:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687887256; x=1690479256;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BFeHm9bU8RrhQ+qc5bzdZqgetskKJ+S12T31+KyGXkA=;
-        b=Buaiv0FNarFOHnsb0HPrMKnyA2H5iEjZ/rfBQLzkanc0g2RjFVAY3vsGlVXG0dnA0t
-         31DHmKXKozOuvEL5TCvC/E98cAcSGZVg131jZvur1L1+gW2HV858zavaIvz+bTFrhQgE
-         FadkpRguTeYhdE6q/MGJYCrVQn2Ac5gNKa7TBdXyodUudG1eHm/uYr79kA2v4zKCiwdu
-         qE7JPpTHgZ24d85xhPVfuh3cnJoHOwveuWuPzhIU6lRrHu7BQtn481HSTrLr5LfVTFYd
-         AxUFWQFQFEu+0AdmCRKIitr0bE8BErUHh+4Yr7SL+TSZGSbMyk6JWAqWPrc0kLlTn0O0
-         ODdw==
-X-Gm-Message-State: AC+VfDwGicz9g8BHga2X+qiYxtWlYIoDkSAPj/tkay4oY60Vn8NC91Jd
-        JR+WWBbIsusRYDH5s/JO6Q7/WNeEyKp2/YEt6V4=
-X-Google-Smtp-Source: ACHHUZ5j2tTfJH47u1r+2OnRxLB2L9IIDv4z2m/c9T/LNof5iBvyRAu6YMuH+MsWvt4coYFgM3VSjpOKcas4/ckQJyw=
-X-Received: by 2002:a25:d304:0:b0:bac:f398:3571 with SMTP id
- e4-20020a25d304000000b00bacf3983571mr26556774ybf.23.1687887255983; Tue, 27
- Jun 2023 10:34:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230627120340.19432-1-dg573847474@gmail.com>
-In-Reply-To: <20230627120340.19432-1-dg573847474@gmail.com>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Tue, 27 Jun 2023 13:33:18 -0400
-Message-ID: <CADvbK_faoh-=8AZ7s+ak9QpmGQa_GddikWvyYW_b0Lb8=mNcJA@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1688032154; x=1690624154;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+plDWhXJtyP1/dor5ycSeAGAv25H1fG419rVN4fUTjE=;
+        b=FUhH9hkWAcyA+X3QBzSRZdtlz1vCV9hBmaaHM0JFvALd6rDHOLj/ADympgs5U0C54p
+         419QaijrTedlTiqiSr39QeGQcCY3SPfuggy1BgYwa104EMRNxjy4WQHqJlqn8GDuOCHp
+         2sSlh+siE9SZTALlbldHk3rNgz5lbggcwCT7RToehotde7oCMVrlO7q8RTeIhxXGY9Mb
+         0l5VhgurJ/rGrsLvZVAGrPyRxtEVxH1xk4Kt0qZ3e8NhHC7z7KBkUqjiOnAbb3c75X/y
+         00R46Ay9Maz9MpvWOceyDDOA1bYBXHP9/t0oN+l903LhmkgbWK1i70iGI96yWTfKb/Qc
+         C0PA==
+X-Gm-Message-State: AC+VfDw6/N/J+vAOUnJhC24pw/Tm+FWZDFMCLNihlFvyAKVXlIqCx8XR
+        fv0OkI6Le4Ogprir7029qjbnweHROYP4TbfusgyyIRjQUT7TCSRQxi6abT63ehQG53L6yf/6mnB
+        FGnj0sSAGk05PQQJf3mvD4w==
+X-Received: by 2002:a05:620a:17a7:b0:762:63b:e10b with SMTP id ay39-20020a05620a17a700b00762063be10bmr2482832qkb.1.1688032153899;
+        Thu, 29 Jun 2023 02:49:13 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6MKPncSPkT64a18nfrR8NCaqw0ntVMDGfolGCj0p8kbs2JxhSlGadGp2eLULzHfa6tC9JYQg==
+X-Received: by 2002:a05:620a:17a7:b0:762:63b:e10b with SMTP id ay39-20020a05620a17a700b00762063be10bmr2482821qkb.1.1688032153602;
+        Thu, 29 Jun 2023 02:49:13 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-231-196.dyn.eolo.it. [146.241.231.196])
+        by smtp.gmail.com with ESMTPSA id oo26-20020a05620a531a00b0076715ec99dbsm2323858qkn.133.2023.06.29.02.49.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 02:49:13 -0700 (PDT)
+Message-ID: <17efd9ffd0bd8a36e18de587d0fbdb511457559b.camel@redhat.com>
 Subject: Re: [PATCH] sctp: fix potential deadlock on &net->sctp.addr_wq_lock
-To:     Chengfeng Ye <dg573847474@gmail.com>
-Cc:     marcelo.leitner@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Chengfeng Ye <dg573847474@gmail.com>, marcelo.leitner@gmail.com,
+        lucien.xin@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org
+Cc:     linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
+Date:   Thu, 29 Jun 2023 11:49:09 +0200
+In-Reply-To: <20230627120340.19432-1-dg573847474@gmail.com>
+References: <20230627120340.19432-1-dg573847474@gmail.com>
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37)
+MIME-Version: 1.0
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 8:04=E2=80=AFAM Chengfeng Ye <dg573847474@gmail.com=
-> wrote:
->
+On Tue, 2023-06-27 at 12:03 +0000, Chengfeng Ye wrote:
 > As &net->sctp.addr_wq_lock is also acquired by the timer
 > sctp_addr_wq_timeout_handler() in protocal.c, the same lock acquisition
 > at sctp_auto_asconf_init() seems should disable irq since it is called
 > from sctp_accept() under process context.
->
+>=20
 > Possible deadlock scenario:
 > sctp_accept()
 >     -> sctp_sock_migrate()
@@ -86,40 +97,21 @@ On Tue, Jun 27, 2023 at 8:04=E2=80=AFAM Chengfeng Ye <dg573847474@gmail.com=
 >         <timer interrupt>
 >         -> sctp_addr_wq_timeout_handler()
 >         -> spin_lock_bh(&net->sctp.addr_wq_lock); (deadlock here)
->
+>=20
 > This flaw was found using an experimental static analysis tool we are
 > developing for irq-related deadlock.
->
+>=20
 > The tentative patch fix the potential deadlock by spin_lock_bh().
->
-> Signed-off-by: Chengfeng Ye <dg573847474@gmail.com>
-> ---
->  net/sctp/socket.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-> index cda8c2874691..b2c7d17ff848 100644
-> --- a/net/sctp/socket.c
-> +++ b/net/sctp/socket.c
-> @@ -364,9 +364,9 @@ static void sctp_auto_asconf_init(struct sctp_sock *s=
-p)
->         struct net *net =3D sock_net(&sp->inet.sk);
->
->         if (net->sctp.default_auto_asconf) {
-> -               spin_lock(&net->sctp.addr_wq_lock);
-> +               spin_lock_bh(&net->sctp.addr_wq_lock);
->                 list_add_tail(&sp->auto_asconf_list, &net->sctp.auto_asco=
-nf_splist);
-> -               spin_unlock(&net->sctp.addr_wq_lock);
-> +               spin_unlock_bh(&net->sctp.addr_wq_lock);
->                 sp->do_auto_asconf =3D 1;
->         }
->  }
-> --
-> 2.17.1
->
-Fixes: 34e5b0118685 ("sctp: delay auto_asconf init until binding the
-first addr")
-Acked-by: Xin Long <lucien.xin@gmail.com>
 
-Thanks.
+Patch LGTM.
+
+Please note that the above suggests a possible net-next follow-
+up/cleanup, replacing the spin_lock_bh() in
+sctp_addr_wq_timeout_handler() with a simple/faster spin_lock() - since
+sctp_addr_wq_timeout_handler() runs with BH disabled. Anyhow net-next
+is closed now, it will have to wait a bit ;)
+
+Cheers,
+
+Paolo
+
