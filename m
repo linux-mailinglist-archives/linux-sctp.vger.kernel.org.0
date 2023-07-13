@@ -2,66 +2,56 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E315751615
-	for <lists+linux-sctp@lfdr.de>; Thu, 13 Jul 2023 04:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF3A75168B
+	for <lists+linux-sctp@lfdr.de>; Thu, 13 Jul 2023 04:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232187AbjGMCMm (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 12 Jul 2023 22:12:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41842 "EHLO
+        id S233082AbjGMC53 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 12 Jul 2023 22:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233469AbjGMCMm (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 12 Jul 2023 22:12:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528D81FF0
-        for <linux-sctp@vger.kernel.org>; Wed, 12 Jul 2023 19:11:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689214316;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oXxsxWg+t7sVZM4iHHNTkDMQqCr5a0vdCkiTjkwKBn4=;
-        b=DscGZJnc82RKtYG1xkTFHHBHFybzU1WnEj7bSFYrt2gZN2z8Vf2ySICe/s+6NlH2mCJwDX
-        PC0dpMtZffnlhyGfGAWRr0lJ1HUiK1HsXiI2eoy1ZgxmqZdTyG73SwQhw2UnmHiNNutE8y
-        JOfDVeUq0WFwmScIpcRkGifHoG95LMA=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-492-Lb2RDqcjNAq7SHAPmjRajQ-1; Wed, 12 Jul 2023 22:11:55 -0400
-X-MC-Unique: Lb2RDqcjNAq7SHAPmjRajQ-1
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-635e6c83cf0so1810126d6.3
-        for <linux-sctp@vger.kernel.org>; Wed, 12 Jul 2023 19:11:55 -0700 (PDT)
+        with ESMTP id S232992AbjGMC52 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 12 Jul 2023 22:57:28 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50682106
+        for <linux-sctp@vger.kernel.org>; Wed, 12 Jul 2023 19:57:22 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4fafe87c6fbso401254e87.3
+        for <linux-sctp@vger.kernel.org>; Wed, 12 Jul 2023 19:57:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google; t=1689217041; x=1691809041;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pcUmUBG+buBnUUKxuWUBu0zne1uUM8qt3ZmnplNd4A0=;
+        b=Y9DJJuADk71eDXSadrloLIiCwbXwFq8kNypgpNrRju8dSohFo5Q2QT0ycfwAVeEi6Z
+         EsZpLzUm6hqJ3/+RD3KCEle4WDsUwsdzmXQ95Zpqf7WAf2Fck6khwamv5FB8iOzUdV0+
+         NQoDR0YmxBLKUJD360IuxaXZVju52JtbKkRPA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689214315; x=1691806315;
+        d=1e100.net; s=20221208; t=1689217041; x=1691809041;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=oXxsxWg+t7sVZM4iHHNTkDMQqCr5a0vdCkiTjkwKBn4=;
-        b=SmsV87AGT8hgkZCdhZuykZBwQtzHNas4T+/Ohw7MHmYBu9Jzr0mRoK87kB8VNQLwuP
-         A2uUmQOReToCWxpe9R4r9vOtSNE6+1EV7b9+B0vpsULIaHvBlbkSeYG2c+HDTcZ/ItCm
-         Wb8qCtCmGejWx8tSd/EoBUxGO+b0FkusMyaLfTag1N6IgWXhKR1RvTaWpHiPaHmhuwkW
-         D8ZH13uZjEijarueG6I4x4tELZQwo946OEx6maOh2exY4jNNLJhN5FToGPj+gBPEoy0m
-         ovvhW50idSk4+/rAczEvfFsQrliY73bMhDyacPsJJgGC94PQdvRpmvySUkWAQ2Ly3/SR
-         6NCQ==
-X-Gm-Message-State: ABy/qLbobqV5Zd7EZg1+6iyECC52Nx0nEBzMHlyPE2l19Yb8QJrfMIVc
-        5jn6Yv3su/IxkYrozAwA2Nlbm/1rPrHy/3g+j+2YPQZIpI564nljqrO5U422C4+/jPms3Y1yOL2
-        rpjkrfB8JW1fo170XRMa0tzznS3byyL/WdyUpTA==
-X-Received: by 2002:a0c:cb0c:0:b0:635:e6e0:6814 with SMTP id o12-20020a0ccb0c000000b00635e6e06814mr208276qvk.49.1689214315004;
-        Wed, 12 Jul 2023 19:11:55 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlF3q6TcQipag9khNJOPJfQCl9sA8/TRMLm3HD8OjXdTfPL40sDazEi9s0TrA316CiBZdY0c7zSznbWDoQygjpw=
-X-Received: by 2002:a0c:cb0c:0:b0:635:e6e0:6814 with SMTP id
- o12-20020a0ccb0c000000b00635e6e06814mr208257qvk.49.1689214314752; Wed, 12 Jul
- 2023 19:11:54 -0700 (PDT)
+        bh=pcUmUBG+buBnUUKxuWUBu0zne1uUM8qt3ZmnplNd4A0=;
+        b=ZKUnuMco3Bxf93UmMdE3hmLdymLcL9w9MsA6p15W1/Ihf+oHhBirRi/14ItJrdQnhL
+         DHr/2K0+NHr0u82lfqRnTX9N+7f+kmDh0J9gQGTylOpBTcNPom78tDZ+KwH4RGZ37dBz
+         MGxF47hGkPqdSa0UwcYDHnTxhZzhxhIpD/q+uCF6uRy4Da0uoYlxq2tCJSuu75Ty+1LQ
+         ZdjJz03EIxL8+KcUOYL2Ul7EDkdvhTK/P/Sisjl/a4r0Spyadi6c14fCp2nuDyuGq+LJ
+         BRTrnZrTOW0p+11akvPOgDizFcDtkMEC2xK0r3kkLxEYgzUhQlaJ2rtf3tDz6Qn0TpCl
+         eOFA==
+X-Gm-Message-State: ABy/qLZQu57FIfGfusSSH4xsPYrAN+Ex+Hc4f0f8BVpwNov2WeLFtjaI
+        Gnuw2TvUEMRcTRZyYX4D8G67nSrWFnJAd9Xz2lobLg==
+X-Google-Smtp-Source: APBJJlE+O7SBAT8v1uNDMsel9LXU+DtkEW7eASpe1Wa9Bu9QxDrdmQ7vy+KRfijZhAcIeSitIctrjmWQkiP4MSaT9wE=
+X-Received: by 2002:a05:6512:2315:b0:4f8:5cde:a44f with SMTP id
+ o21-20020a056512231500b004f85cdea44fmr127793lfu.10.1689217040774; Wed, 12 Jul
+ 2023 19:57:20 -0700 (PDT)
 MIME-Version: 1.0
 References: <ZK9ZiNMsJX8+1F3N@debian.debian> <CAF=yD-Lb2k02TLaCQHwFSG=eQrWCnvqHVaWuK2viGqiCdwAxwg@mail.gmail.com>
 In-Reply-To: <CAF=yD-Lb2k02TLaCQHwFSG=eQrWCnvqHVaWuK2viGqiCdwAxwg@mail.gmail.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Thu, 13 Jul 2023 10:11:43 +0800
-Message-ID: <CACGkMEvDmYrxUo5BkAT-HF=UY6RkHVPQpWb-rjpN8aZYAF0zbA@mail.gmail.com>
+From:   Yan Zhai <yan@cloudflare.com>
+Date:   Wed, 12 Jul 2023 21:57:09 -0500
+Message-ID: <CAO3-PboOR43DM=dYQH+12_5QZuNySFwvd3GfKmDz_FN6U7UH_w@mail.gmail.com>
 Subject: Re: [PATCH net] gso: fix GSO_DODGY bit handling for related protocols
 To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc:     Yan Zhai <yan@cloudflare.com>,
-        "open list:NETWORKING [TCP]" <netdev@vger.kernel.org>,
+Cc:     "open list:NETWORKING [TCP]" <netdev@vger.kernel.org>,
         kernel-team@cloudflare.com, Eric Dumazet <edumazet@google.com>,
         "David S. Miller" <davem@davemloft.net>,
         David Ahern <dsahern@kernel.org>,
@@ -71,16 +61,14 @@ Cc:     Yan Zhai <yan@cloudflare.com>,
         Xin Long <lucien.xin@gmail.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         Andrew Melnychenko <andrew@daynix.com>,
+        Jason Wang <jasowang@redhat.com>,
         open list <linux-kernel@vger.kernel.org>,
         "open list:SCTP PROTOCOL" <linux-sctp@vger.kernel.org>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,7 +76,7 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, Jul 13, 2023 at 10:02=E2=80=AFAM Willem de Bruijn
+On Wed, Jul 12, 2023 at 9:02=E2=80=AFPM Willem de Bruijn
 <willemdebruijn.kernel@gmail.com> wrote:
 >
 > On Wed, Jul 12, 2023 at 9:55=E2=80=AFPM Yan Zhai <yan@cloudflare.com> wro=
@@ -121,6 +109,10 @@ t
 >
 > Only the USO fix is strictly needed to fix the reported issue.
 >
+It's my OCD of wanting to avoid a cover letter for two patches...
+Let's address just this UDP issue then this time. The removal of DODGY
+is in fact more suitable as RFC for small improvements.
+
 > > Fixes: 90017accff61 ("sctp: Add GSO support")
 > > Fixes: 3820c3f3e417 ("[TCP]: Reset gso_segs if packet is dodgy")
 > > Fixes: 1fd54773c267 ("udp: allow header check for dodgy GSO_UDP_L4 pack=
@@ -174,6 +166,9 @@ k_buff *skb,
 >
 > Why move the block below this line?
 >
+if we move the dodgy handling into __udp_gso_segment then it does not
+need to move below this line.
+
 > > +
 > > +       if (skb_shinfo(skb)->gso_type & SKB_GSO_UDP_L4) {
 > > +               if (skb_gso_ok(skb, features | NETIF_F_GSO_ROBUST)) {
@@ -200,12 +195,9 @@ tual gso_segs */
 >                 return __udp_gso_segment(skb, features, false);
 >
 > And in that function decide to return NULL after validation.
-
-+1
-
-Thanks
-
 >
+Good call, that's indeed better. Thanks
+
 >
 > >         if (unlikely(skb->len <=3D mss))
 > >                 goto out;
@@ -265,5 +257,9 @@ f *skb,
 > > --
 > > 2.30.2
 > >
->
 
+
+
+--=20
+
+Yan
