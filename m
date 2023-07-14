@@ -2,106 +2,88 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 651A6753090
-	for <lists+linux-sctp@lfdr.de>; Fri, 14 Jul 2023 06:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37929753680
+	for <lists+linux-sctp@lfdr.de>; Fri, 14 Jul 2023 11:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232628AbjGNE2J (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Fri, 14 Jul 2023 00:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
+        id S235821AbjGNJag (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 14 Jul 2023 05:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjGNE2F (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Fri, 14 Jul 2023 00:28:05 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270F62D48
-        for <linux-sctp@vger.kernel.org>; Thu, 13 Jul 2023 21:28:04 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-51fdf291330so1710200a12.2
-        for <linux-sctp@vger.kernel.org>; Thu, 13 Jul 2023 21:28:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google; t=1689308882; x=1691900882;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qHf1bw4VEpalWptJ6sYJzbTQLUqyeRRjE32ptoAxuck=;
-        b=WwQTm81PifCGhzdXHwWxFJ/ZyEy6HDXKNCuPzEZXtpDnW8q5Muu8GTMaM7bPmfc53y
-         mwIjXhH1ncVmbGLd2bgQq2RnH1N/6uTOwawh+Z3XiemFY3Dz4COKat3Yce3aoPrf+qYa
-         tPPdsbfW9BBefcRRqo7XNhiQx0cBf1C2WLU8Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689308882; x=1691900882;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qHf1bw4VEpalWptJ6sYJzbTQLUqyeRRjE32ptoAxuck=;
-        b=UPbJZAAvVfMjQLP7VLzBe1U+m5e52wK/wtBY84JblIA8/rBQaVGIdzQwQQeYVb5zC8
-         vMnC7KzFKxNlfQ2p4TrC0g7oxbFwzkplfFxG0xSexzllawRlHGYnloZ7T5F/b4uWnDCJ
-         oOPnLp6obZRlUV/531e1NR1HEayRFJvYAetz/XgQ3GDyrPAEZlUgjc3amIC2j5TM43yE
-         ym5zpGBOXplRwbh0X4pm0vROBXTMsJLHuBw4WvWejxmRjRxgjsJUtSXxZKihflrIl+9Y
-         /InBx1rGh2j5rQ4M1l3dYDE3QRAGoNDoo0NXR3p7HlRFyACu1HQdqRj2+da6ut9VowoW
-         wd1g==
-X-Gm-Message-State: ABy/qLajAae7fZZDS509gtAVbeAYsDCVc1laHLMp+BqxZm4t1kNA8re/
-        RbM7cb0A9tGjzE6dZ4i6LT5Pu2vJl9Z/gAm+mVFHUA==
-X-Google-Smtp-Source: APBJJlF4bnf1g8fW6x42O1YXhzENyu6ohKCQGrFHpqkr2RllFBk2SW+06TBLxI8i3KzjCP1Xn3yYNiYaY5ZEP+xS7/Y=
-X-Received: by 2002:a05:6402:60a:b0:51d:7fa6:62ca with SMTP id
- n10-20020a056402060a00b0051d7fa662camr3222649edv.14.1689308882567; Thu, 13
- Jul 2023 21:28:02 -0700 (PDT)
+        with ESMTP id S235140AbjGNJae (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 14 Jul 2023 05:30:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9AD359E;
+        Fri, 14 Jul 2023 02:30:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A989661CC7;
+        Fri, 14 Jul 2023 09:30:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0B67AC433C7;
+        Fri, 14 Jul 2023 09:30:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689327021;
+        bh=IIWAe0NQt7hQ52AYeH7Fl8uRHTVIRV1HOhISTeoKp4k=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=JJL43PYwtuw22nfaCtzyQV901socAiuVhOT4jCeHewKIpKvLtasXZ00VnnweXy088
+         JwVV23M1nzjEP3DojBGqNyOiChphOlYH4Orh6ALso35jneLiZgr6aSjeRhRoZ6GcDZ
+         eYpoBNFuJ2Hl9NCKx4b2o9NTzmsjOqvHnWwKMVXvH4MTpIBzpcaJMAjme0F2Bc5weW
+         rTtvIGh3aVRKz4waeygyPaIkVRCoyakXdagqvR7i9gbGKC2RC0DXxdO386GCRIIN3K
+         mUykM0pYhdPMjiPsuuGiB+qYPZcY41+sE/pKWDVw7pjtsxT98I0yctJgMH+1xb2a4u
+         nUF94pLyvYcBw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E45F4E49BBF;
+        Fri, 14 Jul 2023 09:30:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <ZLA0ILTAZsIzxR6c@debian.debian> <CAF=yD-K-fra5nc-pjOV8Ng9sB2WWWeZA=s+-WN=O6+=8aZ-E6w@mail.gmail.com>
-In-Reply-To: <CAF=yD-K-fra5nc-pjOV8Ng9sB2WWWeZA=s+-WN=O6+=8aZ-E6w@mail.gmail.com>
-From:   Yan Zhai <yan@cloudflare.com>
-Date:   Thu, 13 Jul 2023 23:27:51 -0500
-Message-ID: <CAO3-Pbr8kypYNSJchh3b4KCe4e0XH038BU6YQm3i+u+EHt2iDw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Subject: Re: [PATCH v2 net] gso: fix dodgy bit handling for GSO_UDP_L4
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc:     "open list:NETWORKING [TCP]" <netdev@vger.kernel.org>,
-        kernel-team@cloudflare.com, Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Andrew Melnychenko <andrew@daynix.com>,
-        Jason Wang <jasowang@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:SCTP PROTOCOL" <linux-sctp@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168932702093.18845.9473507199122445355.git-patchwork-notify@kernel.org>
+Date:   Fri, 14 Jul 2023 09:30:20 +0000
+References: <ZLA0ILTAZsIzxR6c@debian.debian>
+In-Reply-To: <ZLA0ILTAZsIzxR6c@debian.debian>
+To:     Yan Zhai <yan@cloudflare.com>
+Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        edumazet@google.com, davem@davemloft.net, dsahern@kernel.org,
+        kuba@kernel.org, pabeni@redhat.com, marcelo.leitner@gmail.com,
+        lucien.xin@gmail.com, herbert@gondor.apana.org.au,
+        andrew@daynix.com, jasowang@redhat.com,
+        willemdebruijn.kernel@gmail.com, linux-kernel@vger.kernel.org,
+        linux-sctp@vger.kernel.org
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, Jul 13, 2023 at 12:38=E2=80=AFPM Willem de Bruijn
-<willemdebruijn.kernel@gmail.com> wrote:
->
-> On Thu, Jul 13, 2023 at 1:28=E2=80=AFPM Yan Zhai <yan@cloudflare.com> wro=
-te:
-> >
-> > Commit 1fd54773c267 ("udp: allow header check for dodgy GSO_UDP_L4
-> > packets.") checks DODGY bit for UDP, but for packets that can be fed
-> > directly to the device after gso_segs reset, it actually falls through
-> > to fragmentation:
-> >
-> > https://lore.kernel.org/all/CAJPywTKDdjtwkLVUW6LRA2FU912qcDmQOQGt2WaDo2=
-8KzYDg+A@mail.gmail.com/
-> >
-> > This change restores the expected behavior of GSO_UDP_L4 packets.
-> >
-> > Fixes: 1fd54773c267 ("udp: allow header check for dodgy GSO_UDP_L4 pack=
-ets.")
-> > Suggested-by: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-> > Signed-off-by: Yan Zhai <yan@cloudflare.com>
->
-> Reviewed-by: Willem de Bruijn <willemb@google.com>
->
-> for next time: places hyperlinks in the block of tags at the bottom of
-> the commit as "Link: ${URL}"
+Hello:
 
-Good to learn, thanks!
---
-Yan
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu, 13 Jul 2023 10:28:00 -0700 you wrote:
+> Commit 1fd54773c267 ("udp: allow header check for dodgy GSO_UDP_L4
+> packets.") checks DODGY bit for UDP, but for packets that can be fed
+> directly to the device after gso_segs reset, it actually falls through
+> to fragmentation:
+> 
+> https://lore.kernel.org/all/CAJPywTKDdjtwkLVUW6LRA2FU912qcDmQOQGt2WaDo28KzYDg+A@mail.gmail.com/
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2,net] gso: fix dodgy bit handling for GSO_UDP_L4
+    https://git.kernel.org/netdev/net/c/9840036786d9
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
