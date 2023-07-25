@@ -2,70 +2,153 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9AD75EF2E
-	for <lists+linux-sctp@lfdr.de>; Mon, 24 Jul 2023 11:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B93A47613D1
+	for <lists+linux-sctp@lfdr.de>; Tue, 25 Jul 2023 13:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231631AbjGXJdx (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 24 Jul 2023 05:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42730 "EHLO
+        id S234112AbjGYLOP (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 25 Jul 2023 07:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231716AbjGXJdw (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 24 Jul 2023 05:33:52 -0400
-X-Greylist: delayed 851 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Jul 2023 02:33:51 PDT
-Received: from fluorez-com.cfd (fluorez-com.cfd [107.174.244.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEDB1A7
-        for <linux-sctp@vger.kernel.org>; Mon, 24 Jul 2023 02:33:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=re1; d=fluorez-com.cfd;
- h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:
- Content-Transfer-Encoding; i=info@fluorez-com.cfd;
- bh=LqAKS0rQcqRhfS2AomqosmxOtHjI8TSd2DPxtKmN8Fo=;
- b=WyLXzzteVWBtYjPwt0tyJO/bDvLizOV4qzawfN9Ki7gQZCUtkiMy6zY+U5jUcpS8OE+zYf1ROlPt
-   8/vG/0VN8WujUwNetbb4nVbHPjECmdXUBELGN5VKWGgz+m52UECy+B2kdC5EOLBXdg21HxIuBRA3
-   Yk7n0d2f1sf1WeMd7PeNmJzGcjR8GvguujuzXkwtFlaYKRPyHw2EUq2Of8kztZ+XowDnQERHTYpt
-   miTezLASsF5dCWiYVir9nRFNcGODzQ/jS0FLy3aK7Qtak0ZuvkpwcDwNwRL7p8JfbdqAU2wwopi5
-   CAIvnQAJGKfXDnxDKeYkpyvI0ns+fUUOlY7/xg==
-Reply-To: info@coinloansupport.online
-From:   Coinloan Support Center <info@fluorez-com.cfd>
-To:     linux-sctp@vger.kernel.org
-Subject: Low Interest loan opportunity
-Date:   24 Jul 2023 10:47:17 +0200
-Message-ID: <20230724104717.B6B52AB28DAE6BEE@fluorez-com.cfd>
+        with ESMTP id S234150AbjGYLOB (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 25 Jul 2023 07:14:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4562694;
+        Tue, 25 Jul 2023 04:13:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC410615BA;
+        Tue, 25 Jul 2023 11:13:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5559C433C7;
+        Tue, 25 Jul 2023 11:13:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1690283584;
+        bh=hgi2A9ePVSSsRAzb3jutf8PgyVni+KLCT55bRm6PvHc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=wtgvYoh62Ar5Uztv4cZkogFn0zobcVJ3T3bPwyJsdY4jkNwqGz1K62nPJgoGYxChw
+         JWf3/1IlDneks7kcxaBUovcbKcZSfHrR6s6Pu/aa2BSs/Dwz718q/bpMoJFeBpI7iM
+         ZRluQ04xOa4S3erErN0wFlMlSmhQyy1NYwUNuTK0=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, Daniel Borkmann <daniel@iogearbox.net>,
+        Christian Brauner <brauner@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>, linux-sctp@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 049/509] sctp: add bpf_bypass_getsockopt proto callback
+Date:   Tue, 25 Jul 2023 12:39:48 +0200
+Message-ID: <20230725104555.922099240@linuxfoundation.org>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230725104553.588743331@linuxfoundation.org>
+References: <20230725104553.588743331@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_80,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM28,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_PSBL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  2.7 RCVD_IN_PSBL RBL: Received via a relay in PSBL
-        *      [107.174.244.118 listed in psbl.surriel.com]
-        *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
-        *      bl.spamcop.net
-        *      [Blocked - see <https://www.spamcop.net/bl.shtml?107.174.244.118>]
-        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
-        *      [score: 0.8299]
-        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.8 FROM_FMBLA_NEWDOM28 From domain was registered in last 14-28
-        *      days
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: ******
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Are you looking for a loan to either increase your activity or to=20
-carry out a project.=20
-We offer Crypto Loans at 2-7% interest rate with or without a=20
-credit check.
-Please get back to us if you are interested in more details.
+From: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+
+[ Upstream commit 2598619e012cee5273a2821441b9a051ad931249 ]
+
+Implement ->bpf_bypass_getsockopt proto callback and filter out
+SCTP_SOCKOPT_PEELOFF, SCTP_SOCKOPT_PEELOFF_FLAGS and SCTP_SOCKOPT_CONNECTX3
+socket options from running eBPF hook on them.
+
+SCTP_SOCKOPT_PEELOFF and SCTP_SOCKOPT_PEELOFF_FLAGS options do fd_install(),
+and if BPF_CGROUP_RUN_PROG_GETSOCKOPT hook returns an error after success of
+the original handler sctp_getsockopt(...), userspace will receive an error
+from getsockopt syscall and will be not aware that fd was successfully
+installed into a fdtable.
+
+As pointed by Marcelo Ricardo Leitner it seems reasonable to skip
+bpf getsockopt hook for SCTP_SOCKOPT_CONNECTX3 sockopt too.
+Because internaly, it triggers connect() and if error is masked
+then userspace will be confused.
+
+This patch was born as a result of discussion around a new SCM_PIDFD interface:
+https://lore.kernel.org/all/20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com/
+
+Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hooks")
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Stanislav Fomichev <sdf@google.com>
+Cc: Neil Horman <nhorman@tuxdriver.com>
+Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc: Xin Long <lucien.xin@gmail.com>
+Cc: linux-sctp@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Suggested-by: Stanislav Fomichev <sdf@google.com>
+Acked-by: Stanislav Fomichev <sdf@google.com>
+Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Acked-by: Xin Long <lucien.xin@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ net/sctp/socket.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+index 35d3eee26ea56..4a7f811abae4e 100644
+--- a/net/sctp/socket.c
++++ b/net/sctp/socket.c
+@@ -8039,6 +8039,22 @@ static int sctp_getsockopt(struct sock *sk, int level, int optname,
+ 	return retval;
+ }
+ 
++static bool sctp_bpf_bypass_getsockopt(int level, int optname)
++{
++	if (level == SOL_SCTP) {
++		switch (optname) {
++		case SCTP_SOCKOPT_PEELOFF:
++		case SCTP_SOCKOPT_PEELOFF_FLAGS:
++		case SCTP_SOCKOPT_CONNECTX3:
++			return true;
++		default:
++			return false;
++		}
++	}
++
++	return false;
++}
++
+ static int sctp_hash(struct sock *sk)
+ {
+ 	/* STUB */
+@@ -9407,6 +9423,7 @@ struct proto sctp_prot = {
+ 	.shutdown    =	sctp_shutdown,
+ 	.setsockopt  =	sctp_setsockopt,
+ 	.getsockopt  =	sctp_getsockopt,
++	.bpf_bypass_getsockopt	= sctp_bpf_bypass_getsockopt,
+ 	.sendmsg     =	sctp_sendmsg,
+ 	.recvmsg     =	sctp_recvmsg,
+ 	.bind        =	sctp_bind,
+@@ -9459,6 +9476,7 @@ struct proto sctpv6_prot = {
+ 	.shutdown	= sctp_shutdown,
+ 	.setsockopt	= sctp_setsockopt,
+ 	.getsockopt	= sctp_getsockopt,
++	.bpf_bypass_getsockopt	= sctp_bpf_bypass_getsockopt,
+ 	.sendmsg	= sctp_sendmsg,
+ 	.recvmsg	= sctp_recvmsg,
+ 	.bind		= sctp_bind,
+-- 
+2.39.2
+
+
+
