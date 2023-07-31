@@ -2,32 +2,32 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C87776A236
-	for <lists+linux-sctp@lfdr.de>; Mon, 31 Jul 2023 22:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA5876A306
+	for <lists+linux-sctp@lfdr.de>; Mon, 31 Jul 2023 23:37:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbjGaUvQ (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 31 Jul 2023 16:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59890 "EHLO
+        id S230440AbjGaVhb (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Mon, 31 Jul 2023 17:37:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbjGaUvO (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 31 Jul 2023 16:51:14 -0400
+        with ESMTP id S230320AbjGaVh3 (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Mon, 31 Jul 2023 17:37:29 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7AC1996;
-        Mon, 31 Jul 2023 13:51:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CDF1BEC;
+        Mon, 31 Jul 2023 14:37:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0rQhfOHno9kOrBF8fBhXP/I9K++I3qDiyVLQoCDK1W4=; b=M5P5CTtU8QVHseBu0j23jZKJQ5
-        zdmFeCi+q8wFnS2+KLHSjnJHSd5pnzFickjfzr8jPwi/vCHqAcZ9WCA0mR/QI+0Kjh6XoL08hbzME
-        VBoQ7z2I6Dq5QBWWD3rWbO5iIaX+lC0AM/wvJ+GiOSWfF9SPutpolOgNZ/ukNLIzK/aedDEcVPyTh
-        B6h6pyyaLRZgV2Xnjk90uOZf4W9KyZ4Eh/0yo+2JjiRxVLIfvbTk5JuH66kGyMozCxgEvJ5Em1xlL
-        kXWtKSBK2wPTpBoShax3yAK0g9H7optbF9G7QT4V+AJEEI2MXcMbpAcaMH4qxLMKm3Dc+XsCAUXi2
-        4McdhxWA==;
+        bh=LddVCcT5Tl/w5tkU77QzXl+CGDu6387cGpG48tppgHc=; b=0Ynn7Y/7W6+gDCwSOAZ/hzNhAf
+        ncsnWc6Ebm0glt4s2jy+6ENEVw8CCnDcddcPxAeqCO1Vm6rOWP40UtXpk7WqdG3Sbb1q/3CucAmPZ
+        qDhNbMsdf3BrUSfNJ1r9+31fDwhdC1gU4CacjWVr4B82FZjG4LdFg30afj+w9oiGhUs73HGFs/v/L
+        xvY5hvk58sAfA5z4McMTW8BtxkIZN9OihahGe+3Vyzuv0tK0LxQraesPWqUx6J4ahrTelf12g654L
+        J2r7IbQOEmrqGnynl/sNARXbjYdGVcA+NX/WO2gi/nP8HJYhRloIot6akbGmFUUqoN7p6p9WZ0onF
+        W4rm/+EQ==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qQZqi-00HKH5-1O;
-        Mon, 31 Jul 2023 20:50:40 +0000
-Date:   Mon, 31 Jul 2023 13:50:40 -0700
+        id 1qQaZO-00HOoz-18;
+        Mon, 31 Jul 2023 21:36:50 +0000
+Date:   Mon, 31 Jul 2023 14:36:50 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Joel Granados <joel.granados@gmail.com>
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
@@ -77,7 +77,7 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Joel Granados <j.granados@samsung.com>
 Subject: Re: [PATCH v2 00/14] sysctl: Add a size argument to register
  functions in sysctl
-Message-ID: <ZMgeoDT0t3NeALM0@bombadil.infradead.org>
+Message-ID: <ZMgpck0rjqHR74sl@bombadil.infradead.org>
 References: <20230731071728.3493794-1-j.granados@samsung.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -94,30 +94,28 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Mon, Jul 31, 2023 at 09:17:14AM +0200, Joel Granados wrote:
-> Why?
+> Joel Granados (14):
+>   sysctl: Prefer ctl_table_header in proc_sysctl
+>   sysctl: Use ctl_table_header in list_for_each_table_entry
+>   sysctl: Add ctl_table_size to ctl_table_header
+>   sysctl: Add size argument to init_header
+>   sysctl: Add a size arg to __register_sysctl_table
+>   sysctl: Add size to register_sysctl
+>   sysctl: Add size arg to __register_sysctl_init
 
-It would be easier to read if the what went before the why.
+This is looking great thanks, I've taken the first 7 patches above
+to sysctl-next to get more exposure / testing and since we're already
+on rc4.
 
-> This is a preparation patch set that will make it easier for us to apply
-> subsequent patches that will remove the sentinel element (last empty element)
-> in the ctl_table arrays.
-> 
-> In itself, it does not remove any sentinels but it is needed to bring all the
-> advantages of the removal to fruition which is to help reduce the overall build
-> time size of the kernel and run time memory bloat by about ~64 bytes per
-> sentinel.
+Since the below patches involve more networking I'll wait to get
+more feedback from networking folks before merging them.
 
-s/sentinel/declared ctl array
-
-Because the you're suggesting we want to remove the sentinel but we
-want to help the patch reviewer know that a sentil is required per
-declared ctl array.
-
-You can also mention here briefly that this helps ensure that future moves of
-sysctl arrays out from kernel/sysctl.c to their own subsystem won't
-penalize in enlarging the kernel build size or run time memory consumption.
-
-Thanks for spinning this up again!
+>   sysctl: Add size to register_net_sysctl function
+>   ax.25: Update to register_net_sysctl_sz
+>   netfilter: Update to register_net_sysctl_sz
+>   networking: Update to register_net_sysctl_sz
+>   vrf: Update to register_net_sysctl_sz
+>   sysctl: SIZE_MAX->ARRAY_SIZE in register_net_sysctl
+>   sysctl: Use ctl_table_size as stopping criteria for list macro
 
   Luis
