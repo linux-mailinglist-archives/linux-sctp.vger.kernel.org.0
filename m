@@ -2,35 +2,40 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA5876A306
-	for <lists+linux-sctp@lfdr.de>; Mon, 31 Jul 2023 23:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFD0676A8BD
+	for <lists+linux-sctp@lfdr.de>; Tue,  1 Aug 2023 08:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230440AbjGaVhb (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Mon, 31 Jul 2023 17:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51484 "EHLO
+        id S231383AbjHAGMM (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 1 Aug 2023 02:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbjGaVh3 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Mon, 31 Jul 2023 17:37:29 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CDF1BEC;
-        Mon, 31 Jul 2023 14:37:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=LddVCcT5Tl/w5tkU77QzXl+CGDu6387cGpG48tppgHc=; b=0Ynn7Y/7W6+gDCwSOAZ/hzNhAf
-        ncsnWc6Ebm0glt4s2jy+6ENEVw8CCnDcddcPxAeqCO1Vm6rOWP40UtXpk7WqdG3Sbb1q/3CucAmPZ
-        qDhNbMsdf3BrUSfNJ1r9+31fDwhdC1gU4CacjWVr4B82FZjG4LdFg30afj+w9oiGhUs73HGFs/v/L
-        xvY5hvk58sAfA5z4McMTW8BtxkIZN9OihahGe+3Vyzuv0tK0LxQraesPWqUx6J4ahrTelf12g654L
-        J2r7IbQOEmrqGnynl/sNARXbjYdGVcA+NX/WO2gi/nP8HJYhRloIot6akbGmFUUqoN7p6p9WZ0onF
-        W4rm/+EQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qQaZO-00HOoz-18;
-        Mon, 31 Jul 2023 21:36:50 +0000
-Date:   Mon, 31 Jul 2023 14:36:50 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
+        with ESMTP id S231359AbjHAGML (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 1 Aug 2023 02:12:11 -0400
+Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7E61BCF;
+        Mon, 31 Jul 2023 23:12:07 -0700 (PDT)
+Received: from mg.bb.i.ssi.bg (localhost [127.0.0.1])
+        by mg.bb.i.ssi.bg (Proxmox) with ESMTP id 053B317D48;
+        Tue,  1 Aug 2023 09:12:06 +0300 (EEST)
+Received: from ink.ssi.bg (ink.ssi.bg [193.238.174.40])
+        by mg.bb.i.ssi.bg (Proxmox) with ESMTPS id DF87917D40;
+        Tue,  1 Aug 2023 09:12:05 +0300 (EEST)
+Received: from ja.ssi.bg (unknown [213.16.62.126])
+        by ink.ssi.bg (Postfix) with ESMTPSA id D57A13C043A;
+        Tue,  1 Aug 2023 09:11:40 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ssi.bg; s=ink;
+        t=1690870305; bh=K3ToJDSb0mjMB1NLV0BUwfRmPEJudUn9AtuMI5luR6U=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References;
+        b=g8VQ+wTIFGtpegn5u/tW44R2fuNOJ5mdhEOWERlo2uGAwt4jdYY1YoeeDuqFVo4U0
+         aNfo6ZYRdJcjGbVx6zImrYA50NgX00UwUU7zEkwQHrQkNmmicTuRpjV7FrGXxh9JhJ
+         dK2ADIy7PUVpdMu+utC6V/dK7/xavRUlvurILIL0=
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.17.1/8.17.1) with ESMTP id 3716BQUG027447;
+        Tue, 1 Aug 2023 09:11:27 +0300
+Date:   Tue, 1 Aug 2023 09:11:26 +0300 (EEST)
+From:   Julian Anastasov <ja@ssi.bg>
 To:     Joel Granados <joel.granados@gmail.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+cc:     mcgrof@kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
         Iurii Zaikin <yzaikin@google.com>,
         Jozsef Kadlecsik <kadlec@netfilter.org>,
         Sven Schnelle <svens@linux.ibm.com>,
@@ -48,7 +53,7 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Matthieu Baerts <matthieu.baerts@tessares.net>,
         bridge@lists.linux-foundation.org,
         linux-arm-kernel@lists.infradead.org,
-        Joerg Reuter <jreuter@yaina.de>, Julian Anastasov <ja@ssi.bg>,
+        Joerg Reuter <jreuter@yaina.de>,
         David Ahern <dsahern@kernel.org>,
         netfilter-devel@vger.kernel.org, Wen Gu <guwen@linux.alibaba.com>,
         linux-kernel@vger.kernel.org,
@@ -75,47 +80,161 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Nikolay Aleksandrov <razor@blackwall.org>,
         netdev@vger.kernel.org, rds-devel@oss.oracle.com,
         Joel Granados <j.granados@samsung.com>
-Subject: Re: [PATCH v2 00/14] sysctl: Add a size argument to register
- functions in sysctl
-Message-ID: <ZMgpck0rjqHR74sl@bombadil.infradead.org>
-References: <20230731071728.3493794-1-j.granados@samsung.com>
+Subject: Re: [PATCH v2 10/14] netfilter: Update to register_net_sysctl_sz
+In-Reply-To: <20230731071728.3493794-11-j.granados@samsung.com>
+Message-ID: <b8564ac4-ab65-6212-2241-0843413e05de@ssi.bg>
+References: <20230731071728.3493794-1-j.granados@samsung.com> <20230731071728.3493794-11-j.granados@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230731071728.3493794-1-j.granados@samsung.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-> Joel Granados (14):
->   sysctl: Prefer ctl_table_header in proc_sysctl
->   sysctl: Use ctl_table_header in list_for_each_table_entry
->   sysctl: Add ctl_table_size to ctl_table_header
->   sysctl: Add size argument to init_header
->   sysctl: Add a size arg to __register_sysctl_table
->   sysctl: Add size to register_sysctl
->   sysctl: Add size arg to __register_sysctl_init
 
-This is looking great thanks, I've taken the first 7 patches above
-to sysctl-next to get more exposure / testing and since we're already
-on rc4.
+	Hello,
 
-Since the below patches involve more networking I'll wait to get
-more feedback from networking folks before merging them.
+On Mon, 31 Jul 2023, Joel Granados wrote:
 
->   sysctl: Add size to register_net_sysctl function
->   ax.25: Update to register_net_sysctl_sz
->   netfilter: Update to register_net_sysctl_sz
->   networking: Update to register_net_sysctl_sz
->   vrf: Update to register_net_sysctl_sz
->   sysctl: SIZE_MAX->ARRAY_SIZE in register_net_sysctl
->   sysctl: Use ctl_table_size as stopping criteria for list macro
+> Move from register_net_sysctl to register_net_sysctl_sz for all the
+> netfilter related files. Do this while making sure to mirror the NULL
+> assignments with a table_size of zero for the unprivileged users.
+> 
+> We need to move to the new function in preparation for when we change
+> SIZE_MAX to ARRAY_SIZE() in the register_net_sysctl macro. Failing to do
+> so would erroneously allow ARRAY_SIZE() to be called on a pointer. We
+> hold off the SIZE_MAX to ARRAY_SIZE change until we have migrated all
+> the relevant net sysctl registering functions to register_net_sysctl_sz
+> in subsequent commits.
+> 
+> Signed-off-by: Joel Granados <j.granados@samsung.com>
 
-  Luis
+	The IPVS part in net/netfilter/ipvs/ looks good to me, thanks!
+
+Acked-by: Julian Anastasov <ja@ssi.bg>
+
+> ---
+>  net/bridge/br_netfilter_hooks.c         |  3 ++-
+>  net/ipv6/netfilter/nf_conntrack_reasm.c |  3 ++-
+>  net/netfilter/ipvs/ip_vs_ctl.c          |  8 ++++++--
+>  net/netfilter/ipvs/ip_vs_lblc.c         | 10 +++++++---
+>  net/netfilter/ipvs/ip_vs_lblcr.c        | 10 +++++++---
+>  net/netfilter/nf_conntrack_standalone.c |  4 +++-
+>  net/netfilter/nf_log.c                  |  7 ++++---
+>  7 files changed, 31 insertions(+), 14 deletions(-)
+> 
+
+...
+
+> --- a/net/netfilter/ipvs/ip_vs_ctl.c
+> +++ b/net/netfilter/ipvs/ip_vs_ctl.c
+> @@ -4266,6 +4266,7 @@ static int __net_init ip_vs_control_net_init_sysctl(struct netns_ipvs *ipvs)
+>  	struct net *net = ipvs->net;
+>  	struct ctl_table *tbl;
+>  	int idx, ret;
+> +	size_t ctl_table_size = ARRAY_SIZE(vs_vars);
+>  
+>  	atomic_set(&ipvs->dropentry, 0);
+>  	spin_lock_init(&ipvs->dropentry_lock);
+> @@ -4282,8 +4283,10 @@ static int __net_init ip_vs_control_net_init_sysctl(struct netns_ipvs *ipvs)
+>  			return -ENOMEM;
+>  
+>  		/* Don't export sysctls to unprivileged users */
+> -		if (net->user_ns != &init_user_ns)
+> +		if (net->user_ns != &init_user_ns) {
+>  			tbl[0].procname = NULL;
+> +			ctl_table_size = 0;
+> +		}
+>  	} else
+>  		tbl = vs_vars;
+>  	/* Initialize sysctl defaults */
+> @@ -4353,7 +4356,8 @@ static int __net_init ip_vs_control_net_init_sysctl(struct netns_ipvs *ipvs)
+>  #endif
+>  
+>  	ret = -ENOMEM;
+> -	ipvs->sysctl_hdr = register_net_sysctl(net, "net/ipv4/vs", tbl);
+> +	ipvs->sysctl_hdr = register_net_sysctl_sz(net, "net/ipv4/vs", tbl,
+> +						  ctl_table_size);
+>  	if (!ipvs->sysctl_hdr)
+>  		goto err;
+>  	ipvs->sysctl_tbl = tbl;
+> diff --git a/net/netfilter/ipvs/ip_vs_lblc.c b/net/netfilter/ipvs/ip_vs_lblc.c
+> index 1b87214d385e..cf78ba4ce5ff 100644
+> --- a/net/netfilter/ipvs/ip_vs_lblc.c
+> +++ b/net/netfilter/ipvs/ip_vs_lblc.c
+> @@ -550,6 +550,7 @@ static struct ip_vs_scheduler ip_vs_lblc_scheduler = {
+>  static int __net_init __ip_vs_lblc_init(struct net *net)
+>  {
+>  	struct netns_ipvs *ipvs = net_ipvs(net);
+> +	size_t vars_table_size = ARRAY_SIZE(vs_vars_table);
+>  
+>  	if (!ipvs)
+>  		return -ENOENT;
+> @@ -562,16 +563,19 @@ static int __net_init __ip_vs_lblc_init(struct net *net)
+>  			return -ENOMEM;
+>  
+>  		/* Don't export sysctls to unprivileged users */
+> -		if (net->user_ns != &init_user_ns)
+> +		if (net->user_ns != &init_user_ns) {
+>  			ipvs->lblc_ctl_table[0].procname = NULL;
+> +			vars_table_size = 0;
+> +		}
+>  
+>  	} else
+>  		ipvs->lblc_ctl_table = vs_vars_table;
+>  	ipvs->sysctl_lblc_expiration = DEFAULT_EXPIRATION;
+>  	ipvs->lblc_ctl_table[0].data = &ipvs->sysctl_lblc_expiration;
+>  
+> -	ipvs->lblc_ctl_header =
+> -		register_net_sysctl(net, "net/ipv4/vs", ipvs->lblc_ctl_table);
+> +	ipvs->lblc_ctl_header = register_net_sysctl_sz(net, "net/ipv4/vs",
+> +						       ipvs->lblc_ctl_table,
+> +						       vars_table_size);
+>  	if (!ipvs->lblc_ctl_header) {
+>  		if (!net_eq(net, &init_net))
+>  			kfree(ipvs->lblc_ctl_table);
+> diff --git a/net/netfilter/ipvs/ip_vs_lblcr.c b/net/netfilter/ipvs/ip_vs_lblcr.c
+> index ad8f5fea6d3a..9eddf118b40e 100644
+> --- a/net/netfilter/ipvs/ip_vs_lblcr.c
+> +++ b/net/netfilter/ipvs/ip_vs_lblcr.c
+> @@ -736,6 +736,7 @@ static struct ip_vs_scheduler ip_vs_lblcr_scheduler =
+>  static int __net_init __ip_vs_lblcr_init(struct net *net)
+>  {
+>  	struct netns_ipvs *ipvs = net_ipvs(net);
+> +	size_t vars_table_size = ARRAY_SIZE(vs_vars_table);
+>  
+>  	if (!ipvs)
+>  		return -ENOENT;
+> @@ -748,15 +749,18 @@ static int __net_init __ip_vs_lblcr_init(struct net *net)
+>  			return -ENOMEM;
+>  
+>  		/* Don't export sysctls to unprivileged users */
+> -		if (net->user_ns != &init_user_ns)
+> +		if (net->user_ns != &init_user_ns) {
+>  			ipvs->lblcr_ctl_table[0].procname = NULL;
+> +			vars_table_size = 0;
+> +		}
+>  	} else
+>  		ipvs->lblcr_ctl_table = vs_vars_table;
+>  	ipvs->sysctl_lblcr_expiration = DEFAULT_EXPIRATION;
+>  	ipvs->lblcr_ctl_table[0].data = &ipvs->sysctl_lblcr_expiration;
+>  
+> -	ipvs->lblcr_ctl_header =
+> -		register_net_sysctl(net, "net/ipv4/vs", ipvs->lblcr_ctl_table);
+> +	ipvs->lblcr_ctl_header = register_net_sysctl_sz(net, "net/ipv4/vs",
+> +							ipvs->lblcr_ctl_table,
+> +							vars_table_size);
+>  	if (!ipvs->lblcr_ctl_header) {
+>  		if (!net_eq(net, &init_net))
+>  			kfree(ipvs->lblcr_ctl_table);
+
+Regards
+
+--
+Julian Anastasov <ja@ssi.bg>
+
