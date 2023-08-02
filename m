@@ -2,124 +2,163 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40BF576CF11
-	for <lists+linux-sctp@lfdr.de>; Wed,  2 Aug 2023 15:44:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4216076D4C4
+	for <lists+linux-sctp@lfdr.de>; Wed,  2 Aug 2023 19:09:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233935AbjHBNos (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 2 Aug 2023 09:44:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
+        id S232714AbjHBRJy (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 2 Aug 2023 13:09:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234021AbjHBNor (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 2 Aug 2023 09:44:47 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B631810B;
-        Wed,  2 Aug 2023 06:44:45 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-d3522283441so2592516276.0;
-        Wed, 02 Aug 2023 06:44:45 -0700 (PDT)
+        with ESMTP id S232724AbjHBRJq (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 2 Aug 2023 13:09:46 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF5B30DB
+        for <linux-sctp@vger.kernel.org>; Wed,  2 Aug 2023 10:09:35 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3fe24dd8898so797735e9.2
+        for <linux-sctp@vger.kernel.org>; Wed, 02 Aug 2023 10:09:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690983885; x=1691588685;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b6fDSJ7bVl9DJhnNbJNn9yYS6U2XnMIL4S+YB5SBQAk=;
-        b=hDOx5C7VN0mq/HjTs9oW1B4yqomTKLOaqdZD6bHdepCmuTCB6L14J/XkUp3RIzIkg+
-         q1HviFSXJsEcOgCFm9sEqbLR+w0PEV2KhQPpLTbETV8jm8SD9AVCSVuhSP6Kc3vizO3f
-         IU+THNU4MVUI8aTYm4ieOZknBVn0naiCULw71TiB/CcJmf9DuGQfxP+m1FLNuU3VpmjE
-         K+skhtLoCbpPc07fJsjFCFG5ni9UPOUcjUUyY6C7TeqNwrbO31tJyxQ3udfKTV3LlnLT
-         mCYltnyJPxTdEHovcLda3eAbuWYqBJZPXzeqeKoo67A6GqVxR9Amk+S7xCe/ScqCGF1T
-         AUWw==
+        d=chromium.org; s=google; t=1690996173; x=1691600973;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BnnEIIbrY5FsJeRKunlnyzI9oBmYX1hBh5P9hRMui1I=;
+        b=Yz8ivhBcbzYRSMLpZKsz1IqPAOf6WuhIdSL/zLG8hM22k5Jxj+maiKpECHgpI5m8yB
+         Li681THl05E/qavu2AtvDb6iNPMTAQSPZ6TMlbmRaoTWCpe+2OpVvgIoipCBfZvqUtdn
+         wphHenQ5DbbYRDnBspieCR0rvsIxWprbh290E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690983885; x=1691588685;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b6fDSJ7bVl9DJhnNbJNn9yYS6U2XnMIL4S+YB5SBQAk=;
-        b=ePtASu9zZOT2vIevLoe5kWeTNeLd0eX+H+LqhGMrjfM4eedBUfdhhGjqC+zLpAYk3x
-         O7LGQSHyP4F0IDpdRSnV+FNVhL8GJ4NDO1lXY5EtVp5ODYVnFPg19JLkzV8Sk2fGj2xd
-         I4tXPzlm/sI5SZQWISRZ6/Sv/sj3K82uMRcU+jDqAx4ZgYTm2qjBAtCGNWxlySqrVaS3
-         E4TV9fob0e3eEaJVSL0v884dQr5BJYjVEKu+LfVFXpc5XYbTqQ/sB76huV8uk6xHHWze
-         8xlnW+vp2oFESmjWRfobqJOxHsYq0v60n/HsbV42tAib06DNs/gsyUMuTbb7p7Ig7q1j
-         8pOQ==
-X-Gm-Message-State: ABy/qLaqFWgFm6tpgI8+gqZFCs7jch2wM8nwaX1C6nV842FMMBG03unx
-        2rd8qNwBuXZuDc4m/huQfamLKsExt6GCvLZs6fY=
-X-Google-Smtp-Source: APBJJlFnonWM+2t9C2r/SQ7DUhWsetbyvDkyYgz7tolRX/91Vht7ivli9q3ipM5ixFqVNTWlT49SJavv8BsSZfi2kWE=
-X-Received: by 2002:a25:ae12:0:b0:cb6:f035:391 with SMTP id
- a18-20020a25ae12000000b00cb6f0350391mr12644017ybj.24.1690983884735; Wed, 02
- Aug 2023 06:44:44 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1690996173; x=1691600973;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BnnEIIbrY5FsJeRKunlnyzI9oBmYX1hBh5P9hRMui1I=;
+        b=SR61UUXkImp0r8ZyMiT4bR9tKZ/8hFlcZHE95zO2MWHjYfJQAlFJw7f0s0tiW5ER06
+         lQySCP28kLt5/Cwo1C97WV1ZC1KNKlgLMGvoF8iHHCT4+O2e5MZion8xRodY4fpt/Xmm
+         VyzNnKKPPbxkmOz4uUXsG0cUiUW09XC1dAvfy++CwKiX1pWzYhKMD49aypN1aJhx3pQw
+         TQ7NDTC/RbDlcuO1ne2vnsUEGpHRab1/JZkHFhMBPkuYTitl38xYVLyWOv771ByPuXom
+         jBcqN22AuNH/bKMXmeUu9u/IaxzwE6A/lPGOPSCsjUKPaWz+vlt/4rQH0N1uFXKmf5n2
+         tKgg==
+X-Gm-Message-State: ABy/qLbzFXnhlieiL+HBISIckdXPwXLnIGuKKzod1MqDbRmh8xkxQotr
+        raPAaV9Bxxj0lFkH8zq0AXZJWBXqusm8mGJA284=
+X-Google-Smtp-Source: APBJJlHci9uBvsEo4MEGhHBA+RJT88066Y+QYNCdSobEy02rNfkd2ZeOviM16csEZTGqQRaC3t/DTg==
+X-Received: by 2002:a05:600c:2907:b0:3fb:a62d:1992 with SMTP id i7-20020a05600c290700b003fba62d1992mr5392990wmd.0.1690996172976;
+        Wed, 02 Aug 2023 10:09:32 -0700 (PDT)
+Received: from revest.zrh.corp.google.com ([2a00:79e0:9d:6:4fa6:1e54:d09:5ba3])
+        by smtp.gmail.com with ESMTPSA id s1-20020a5d4ec1000000b003063db8f45bsm19508396wrv.23.2023.08.02.10.09.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Aug 2023 10:09:32 -0700 (PDT)
+From:   Florent Revest <revest@chromium.org>
+To:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-sctp@vger.kernel.org
+Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        hillf.zj@alibaba-inc.com, marcelo.leitner@gmail.com,
+        lucien.xin@gmail.com, Florent Revest <revest@chromium.org>
+Subject: [RFC 0/1] crypto: Avoid a sleepable operation when freeing a SCTP socket
+Date:   Wed,  2 Aug 2023 19:09:22 +0200
+Message-ID: <20230802170923.1151605-1-revest@chromium.org>
+X-Mailer: git-send-email 2.41.0.585.gd2178a4bd4-goog
 MIME-Version: 1.0
-References: <20230731141030.32772-1-yuehaibing@huawei.com>
-In-Reply-To: <20230731141030.32772-1-yuehaibing@huawei.com>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Wed, 2 Aug 2023 09:44:17 -0400
-Message-ID: <CADvbK_e0n7Y28T6M=tX7htqp4HNdAnT_9FRBux_m46sgPXv9uQ@mail.gmail.com>
-Subject: Re: [PATCH net-next] sctp: Remove unused function declarations
-To:     Yue Haibing <yuehaibing@huawei.com>
-Cc:     marcelo.leitner@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Mon, Jul 31, 2023 at 10:10=E2=80=AFAM Yue Haibing <yuehaibing@huawei.com=
-> wrote:
->
-> These declarations are never implemented since beginning of git history.
->
-> Signed-off-by: Yue Haibing <yuehaibing@huawei.com>
-> ---
->  include/net/sctp/sm.h      | 3 ---
->  include/net/sctp/structs.h | 2 --
->  2 files changed, 5 deletions(-)
->
-> diff --git a/include/net/sctp/sm.h b/include/net/sctp/sm.h
-> index f37c7a558d6d..64c42bd56bb2 100644
-> --- a/include/net/sctp/sm.h
-> +++ b/include/net/sctp/sm.h
-> @@ -156,7 +156,6 @@ sctp_state_fn_t sctp_sf_do_6_2_sack;
->  sctp_state_fn_t sctp_sf_autoclose_timer_expire;
->
->  /* Prototypes for utility support functions.  */
-> -__u8 sctp_get_chunk_type(struct sctp_chunk *chunk);
->  const struct sctp_sm_table_entry *sctp_sm_lookup_event(
->                                         struct net *net,
->                                         enum sctp_event_type event_type,
-> @@ -166,8 +165,6 @@ int sctp_chunk_iif(const struct sctp_chunk *);
->  struct sctp_association *sctp_make_temp_asoc(const struct sctp_endpoint =
-*,
->                                              struct sctp_chunk *,
->                                              gfp_t gfp);
-> -__u32 sctp_generate_verification_tag(void);
-> -void sctp_populate_tie_tags(__u8 *cookie, __u32 curTag, __u32 hisTag);
->
->  /* Prototypes for chunk-building functions.  */
->  struct sctp_chunk *sctp_make_init(const struct sctp_association *asoc,
-> diff --git a/include/net/sctp/structs.h b/include/net/sctp/structs.h
-> index 5c72d1864dd6..5a24d6d8522a 100644
-> --- a/include/net/sctp/structs.h
-> +++ b/include/net/sctp/structs.h
-> @@ -1122,8 +1122,6 @@ void sctp_outq_free(struct sctp_outq*);
->  void sctp_outq_tail(struct sctp_outq *, struct sctp_chunk *chunk, gfp_t)=
-;
->  int sctp_outq_sack(struct sctp_outq *, struct sctp_chunk *);
->  int sctp_outq_is_empty(const struct sctp_outq *);
-> -void sctp_outq_restart(struct sctp_outq *);
-> -
->  void sctp_retransmit(struct sctp_outq *q, struct sctp_transport *transpo=
-rt,
->                      enum sctp_retransmit_reason reason);
->  void sctp_retransmit_mark(struct sctp_outq *, struct sctp_transport *, _=
-_u8);
-> --
-> 2.34.1
->
-Acked-by: Xin Long <lucien.xin@gmail.com>
+Hi!
+
+I found that the following program reliably reproduces a "BUG: sleeping function
+called from invalid context" backtrace in crypto code:
+
+#include <sys/socket.h>
+#include <linux/in.h>
+#include <linux/if_alg.h>
+
+int main(void)
+{
+	int fd1 = socket(AF_INET6, SOCK_STREAM, IPPROTO_SCTP);
+	if (fd1 == -1)
+		return 1;
+	listen(fd1, 1);
+
+	int fd2 = socket(AF_ALG, SOCK_SEQPACKET, 0);
+	if (fd2 == -1)
+		return 2;
+	struct sockaddr_alg addr = {
+		.salg_family = AF_ALG,
+		.salg_type = "hash",
+		.salg_name = "cryptd(md5-generic)",
+	};
+	bind(fd2, &addr, sizeof(addr));
+
+	return 0;
+}
+
+The backtraces look like:
+
+...
+ __might_sleep+0x8f/0xe0 kernel/sched/core.c:7260
+ down_write+0x78/0x180 kernel/locking/rwsem.c:1556
+ crypto_drop_spawn+0x50/0x220 crypto/algapi.c:709
+ shash_free_singlespawn_instance+0x19/0x30 crypto/shash.c:621
+ crypto_shash_free_instance+0x35/0x40 crypto/shash.c:458
+ crypto_free_instance crypto/algapi.c:68 [inline]
+ crypto_destroy_instance+0x7d/0xb0 crypto/algapi.c:76
+ crypto_alg_put crypto/internal.h:108 [inline]
+ crypto_mod_put crypto/api.c:45 [inline]
+ crypto_destroy_tfm+0x1f7/0x250 crypto/api.c:573
+ crypto_free_shash include/crypto/hash.h:734 [inline]
+ sctp_destruct_common net/sctp/socket.c:5003 [inline]
+ sctp_v6_destruct_sock+0x40/0x50 net/sctp/socket.c:9436
+ __sk_destruct+0x56/0x780 net/core/sock.c:1784
+ sk_destruct net/core/sock.c:1829 [inline]
+ __sk_free+0x36c/0x470 net/core/sock.c:1840
+ sk_free+0x51/0x90 net/core/sock.c:1851
+ sock_put include/net/sock.h:1815 [inline]
+ sctp_endpoint_destroy_rcu+0xa6/0xf0 net/sctp/endpointola.c:193
+ rcu_do_batch kernel/rcu/tree.c:2492 [inline]
+ rcu_core+0x7cc/0x1260 kernel/rcu/tree.c:2733
+ rcu_core_si+0x9/0x10 kernel/rcu/tree.c:2746
+ __do_softirq+0x3dc/0x93b kernel/softirq.c:298
+...
+
+My analysis is that, when the process dies, the socket freeing is done in a RCU
+callback, therefore under softirq context, therefore sleeping is disabled. As
+part of freeing a SCTP socket, we free a cryptographical transform that frees a
+"spawn" and this grabs a semaphore which triggers this BUG under
+CONFIG_DEBUG_ATOMIC_SLEEP=y.
+
+I believe that we could solve this problem by defering any part of this
+backtrace into a worker function. Unfortunately, I have no clue about anything
+SCTP nor anything crypto/ so I took a stab at defering... something. :) I marked
+this as RFC to make it clear I don't hold strong opinions about what should be
+defered exactly and expect this will probably change as a result of code review.
+
+I believe that the same bug has been reported by syzbot twice in the past,
+without reproducers and once with a slight twist:
+- Once, upon freeing a sctp socket (the backtraces are very similar)
+  https://lore.kernel.org/all/00000000000060f19905a74b6825@google.com/T/
+  but as far as I can tell the conversation focused on the safety of kfree()
+  rather than the semaphore protecting the spawns list (maybe I'm missing
+  something here ?)
+- Once, upon freeing a tipc socket:
+  https://lore.kernel.org/all/000000000000c9257305c61c742c@google.com/T/
+  Hillf proposed a fix but, as far as I can tell, it didn't get much attention
+  and focused solely on addressing the bug for tipc sockets.
+  My fix is inspired by this but further down the backtrace to make the fix work
+  for both tipc and sctp (and potentially more ?) sockets freeing.
+
+This patch should apply cleanly on v6.5-rc3.
+
+Florent Revest (1):
+  crypto: Defer transforms destruction to a worker function
+
+ crypto/api.c           | 26 ++++++++++++++++++--------
+ include/linux/crypto.h |  3 +++
+ 2 files changed, 21 insertions(+), 8 deletions(-)
+
+-- 
+2.41.0.585.gd2178a4bd4-goog
+
