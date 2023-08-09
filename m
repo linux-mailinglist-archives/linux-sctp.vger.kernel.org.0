@@ -2,70 +2,100 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0095A776257
-	for <lists+linux-sctp@lfdr.de>; Wed,  9 Aug 2023 16:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AABC7764FF
+	for <lists+linux-sctp@lfdr.de>; Wed,  9 Aug 2023 18:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232640AbjHIOX2 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 9 Aug 2023 10:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
+        id S229650AbjHIQ1Y (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 9 Aug 2023 12:27:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232110AbjHIOX1 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 9 Aug 2023 10:23:27 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED291FF5;
-        Wed,  9 Aug 2023 07:23:26 -0700 (PDT)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RLXLs0qP2z15NRg;
-        Wed,  9 Aug 2023 22:22:13 +0800 (CST)
-Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
- (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 9 Aug
- 2023 22:23:24 +0800
-From:   Yue Haibing <yuehaibing@huawei.com>
-To:     <marcelo.leitner@gmail.com>, <lucien.xin@gmail.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>
-CC:     <linux-sctp@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <yuehaibing@huawei.com>
-Subject: [PATCH net-next] sctp: Remove unused declaration sctp_backlog_migrate()
-Date:   Wed, 9 Aug 2023 22:23:23 +0800
-Message-ID: <20230809142323.9428-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        with ESMTP id S229601AbjHIQ1X (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 9 Aug 2023 12:27:23 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB8910F3
+        for <linux-sctp@vger.kernel.org>; Wed,  9 Aug 2023 09:27:22 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-cfcebc33d04so7044873276.2
+        for <linux-sctp@vger.kernel.org>; Wed, 09 Aug 2023 09:27:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691598442; x=1692203242;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kTVvzoAaoN693V+JbHtjsIjjx0XhgMzWetRQHqKPGn4=;
+        b=ZDgzYyK5PLSsPxZK2W/Gma/cjMwfuwCXMExbUxSf1D/uhXFLQDyjLYNqgRH54zDmYn
+         4EH4Onp1YOHm7NiHuKr6N6yv3BNQXQWmr80DcoeLU4H29e/A9cvKZTfTYn9r1sChV7Zk
+         eisKWJc3DWCcjNgeMhh/aLqY/Csu0wvxvTtfG/uVvEVauVYlddRSknKqu+CC3Wse2DpO
+         qxTRidw6E2xRsUH6mw+jrxau8XZ91OmgV+qIHDGHrM5BIUPzXd0yuzosdeaeFaLipDCy
+         nTg39CirNspH03gG6CMjQgTaE3FqC/RzlbWZX9eqhci7aQsQ6lGjMl9Xc7qMwiPZLYrJ
+         XvtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691598442; x=1692203242;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kTVvzoAaoN693V+JbHtjsIjjx0XhgMzWetRQHqKPGn4=;
+        b=Ni5+UlJYytUSjmhJ6g9pYH7ijeCHKKZJaupuAeJff3J8CuY+I3vEYuql8+BQzr4xWR
+         WCZTY1dIAidvPWIGO0QOZRcQ6j5+q/Oai6Y18C8JRRf06NXPLgnFhFvQkKsnPSwPQugi
+         1meFPoNZ+ivnkGNOgV2zcBZxVRfPlfh6Bx4+MN1Ctn2+r+8jdFEFFwq7QoeXxXgVgQ1U
+         JlzFXvPVYkBxE7WRe/SVbtk6Q+vGiRCAU1Us7sy4yifzTcT9ylD3x/8L/1D/UpjlPYGz
+         irX5LJ+GsOIxmdP+IMnyd+wWYCY2kmfunmRogF7rCODVoC+ybAALwlnV6wiKp54FilAY
+         a95Q==
+X-Gm-Message-State: AOJu0Yym/51Fm7XS6fjz7ZnM19x2TAmP3YDNiA4mCWsL1H54/GOpKwgt
+        tQi1aqj/MMScCuhEddx3RlY4DCd4GjkVdh5fWEcVG0AKx4A=
+X-Google-Smtp-Source: AGHT+IEJDuoGq6JDAAyi8JwpgHa0XHXS/RKUIdF72ecyPvyCFwVjpKNKiHxGHGMMVMyWHZxhDuUp3vfprX/YrTtvlys=
+X-Received: by 2002:a25:ef51:0:b0:d48:3868:2d43 with SMTP id
+ w17-20020a25ef51000000b00d4838682d43mr3025662ybm.13.1691598441892; Wed, 09
+ Aug 2023 09:27:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500007.china.huawei.com (7.192.104.62)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <72339335-4072-429C-9494-ACCDC5572F54@gmail.com>
+In-Reply-To: <72339335-4072-429C-9494-ACCDC5572F54@gmail.com>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Wed, 9 Aug 2023 12:26:50 -0400
+Message-ID: <CADvbK_edcx5A3ij_LbehqwoyNEft-NB+4bgbYbsOh_yJ-hqgRQ@mail.gmail.com>
+Subject: Re: Racy addr->valid in sctp_inet6addr_event() and sctp_copy_laddrs()
+To:     Sishuai Gong <sishuai.system@gmail.com>
+Cc:     marcelo.leitner@gmail.com, linux-sctp@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-Commit 61c9fed41638 ("[SCTP]: A better solution to fix the race between sctp_peeloff()
-and sctp_rcv().") removed the implementation but left declaration in place. Remove it.
+On Tue, Aug 8, 2023 at 3:07=E2=80=AFPM Sishuai Gong <sishuai.system@gmail.c=
+om> wrote:
+>
+> Hello,
+>
+> We observed a data race over addr->valid between sctp_inet6addr_event() a=
+nd
+> sctp_copy_laddrs(). Under the following execution order, sctp_copy_laddrs=
+()
+> might copy the addr that is no longer valid.
+>
+> sctp_copy_laddrs()              sctp_inet6addr_event()
+> if (!addr->valid)
+>         continue;
+>                                                 addr->valid =3D 0;
+> memcpy(&temp, &addr->a, sizeof(temp));
+>
+Yes, there's no lock protecting valid's read and write. But it doesn't
+seem to matter.
 
-Signed-off-by: Yue Haibing <yuehaibing@huawei.com>
----
- include/net/sctp/sctp.h | 2 --
- 1 file changed, 2 deletions(-)
+Even if we put a lock there, after calling sctp_copy_laddrs() or
+sctp_copy_local_addr_list() this addr can still be deleted in
+NETDEV_DOWN event, which could happen anytime.
 
-diff --git a/include/net/sctp/sctp.h b/include/net/sctp/sctp.h
-index 2a67100b2a17..a2310fa995f6 100644
---- a/include/net/sctp/sctp.h
-+++ b/include/net/sctp/sctp.h
-@@ -148,8 +148,6 @@ void sctp_icmp_redirect(struct sock *, struct sctp_transport *,
- void sctp_icmp_proto_unreachable(struct sock *sk,
- 				 struct sctp_association *asoc,
- 				 struct sctp_transport *t);
--void sctp_backlog_migrate(struct sctp_association *assoc,
--			  struct sock *oldsk, struct sock *newsk);
- int sctp_transport_hashtable_init(void);
- void sctp_transport_hashtable_destroy(void);
- int sctp_hash_transport(struct sctp_transport *t);
--- 
-2.34.1
+Checking addr->valid can only ensure the addr is available at that moment,
+which doesn't look really helpful IMHO, considering an address can be
+deleted, or the same address as the one already deleted can be added
+anytime.
 
+addr->valid and addr>rcu were introduced to fix an use-after-free. But it
+seems to me that addr->rcu is enough for this purpose, we can actually
+deleted addr->valid.
