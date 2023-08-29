@@ -2,36 +2,36 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C66378C5A0
-	for <lists+linux-sctp@lfdr.de>; Tue, 29 Aug 2023 15:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE0D78C5A6
+	for <lists+linux-sctp@lfdr.de>; Tue, 29 Aug 2023 15:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236198AbjH2Ndy (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        id S236204AbjH2Ndy (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
         Tue, 29 Aug 2023 09:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59806 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236236AbjH2Ndh (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 29 Aug 2023 09:33:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871691BD;
-        Tue, 29 Aug 2023 06:33:28 -0700 (PDT)
+        with ESMTP id S236256AbjH2Ndj (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 29 Aug 2023 09:33:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEC1CCA;
+        Tue, 29 Aug 2023 06:33:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C229E65784;
-        Tue, 29 Aug 2023 13:33:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD03FC433C7;
-        Tue, 29 Aug 2023 13:32:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FB6165795;
+        Tue, 29 Aug 2023 13:33:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ECCCC433C9;
+        Tue, 29 Aug 2023 13:33:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693315981;
+        s=k20201202; t=1693316005;
         bh=m6FTBYog0Gmj5JacnOAKiMQ+PEuW1lN6b8HgEA82+QM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=os67/4kRLryo2NRJ7BzYkoGMIv/JSE6tDbZcr04cF4+Af0KjbXAEO9LJ63sG8y6vB
-         COR3Gmvdjpzj2pdtvy6XwpVisZbt516PQKgaNQ1PIGFOihn+PpTBddOvu9dhWa4yb/
-         gxdRAaD+AM1zS2txten0Wdi+IuWCvagtppMygnKlhFTrqsJp9Ww8XZnjfOhW7WymGA
-         RAPEL+sYeMnNtAWuasCSVEf/sk6CPEFh5ro1/BdpLjaGXlth8o+Wsp37zUFs6zKGOC
-         Wimk7ErSu/nmLjCtId+IBtq5VZLS8rvBAvp9CWJXOZTvqttwYwXBjvj75twGhBjQ3Z
-         KuaZ9MEaCVOEg==
+        b=AGoH63vvPUzWf+W9m0gJAnhJ7DmVvP8GDN65QEij2xbAwBTbJIxE7hwnJtT5otYuD
+         nkStXEMbUwjfXzRtMMqSXhp9g2QUUELsQleKYDkmiT+u5JJAyCCKJf/sHIRFvPiwBv
+         wXtFyGR/4FZVy+oPje/V6mV8JFjc1nteLwg4PcIp17fvsQRO2e7JMCrM1X/rLkM+Zh
+         8a9QFrMGbFaEPjaycWthViz6m+vTgA7Y9T/fBk5PnZs5x/dxWvDXzyJTsE0kZYMFjl
+         GCz+NG1ysAXzbd4xUktmBhzwht9XgnRF8cpwBn3BPRmdPERpBY6QCWYe+RyoGBH6l2
+         4pfIND59Ls9Wg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
@@ -40,19 +40,19 @@ Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
         nhorman@tuxdriver.com, marcelo.leitner@gmail.com,
         edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
         linux-sctp@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 08/15] sctp: handle invalid error codes without calling BUG()
-Date:   Tue, 29 Aug 2023 09:32:38 -0400
-Message-Id: <20230829133245.520176-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 4/9] sctp: handle invalid error codes without calling BUG()
+Date:   Tue, 29 Aug 2023 09:33:11 -0400
+Message-Id: <20230829133316.520410-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230829133245.520176-1-sashal@kernel.org>
-References: <20230829133245.520176-1-sashal@kernel.org>
+In-Reply-To: <20230829133316.520410-1-sashal@kernel.org>
+References: <20230829133316.520410-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.49
+X-stable-base: Linux 5.15.128
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
