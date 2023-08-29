@@ -2,70 +2,88 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF27C78CD8B
-	for <lists+linux-sctp@lfdr.de>; Tue, 29 Aug 2023 22:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFA8778CDC5
+	for <lists+linux-sctp@lfdr.de>; Tue, 29 Aug 2023 22:46:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239317AbjH2U2h (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 29 Aug 2023 16:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59366 "EHLO
+        id S240541AbjH2Up3 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 29 Aug 2023 16:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232406AbjH2U2M (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 29 Aug 2023 16:28:12 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC56FC;
-        Tue, 29 Aug 2023 13:28:09 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-d7830c5b20aso268363276.0;
-        Tue, 29 Aug 2023 13:28:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693340889; x=1693945689; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZPW+cOvYjdKPx86Qz2gFq/jADvb6OQZRgDTzS7TqGTE=;
-        b=GRcM7Pgi7fDBwz6pP22iDKve7e14XPbj9rquPI22umZzjsWcsiTA+CW0eLlBTjonnb
-         VXMJ/0hbprZJBEmP4azLMPYN+1DhTjwx9tnZZSRCSVTklLkAVJ815AK6k5OewLCKgmC1
-         jynpcvadXdLkFRoUhYPMl9ewwoxjiFVmJKO4EYSOLXCEXt3EsJFpABdNY5w1FNh0TbWo
-         bIkhsZUKAX6nfh63fJn5gCBo83CmJaEtXdDscwLEaX6xC8V1zrWij8g5bpxD8zqLc+vz
-         golGeUWXw6dZ/95D3hksX1JfHkU4kM1X5Uj1BSXFGG69PfEEEBJIHqucZLct8eKmy401
-         /P1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693340889; x=1693945689;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZPW+cOvYjdKPx86Qz2gFq/jADvb6OQZRgDTzS7TqGTE=;
-        b=FtA0n8hQpyFfNQ7YHgqVqPq6RLHfe+weSvVreZWnxEW6iewsH5QkJ2eUpPoWxNhRjJ
-         shzUix5FbwTPcTbbh8a4P8ogWrC7iRmt/2rCymGd+hf9UE/ph+gZNWTm/yBYzSCADH9k
-         p6DuWi4vPZg6OkV039Tkrh5g3qdych6pDsvmxeRDfy5LBvLyhju9BosXD85MxGe2GDN8
-         NOHVtCk/mCGZubrxGtwfMi9exo2S9twPfuwqx2Y4vQcMWhpMUngKo+pYHWIj4oWL4nc1
-         ZWRVCG8jKrp+GhYtW26BfXP7C43tWOE7vyIuHPdQ1dRYJz7F9dRhjeghHwyvgzEtfRy4
-         A5AQ==
-X-Gm-Message-State: AOJu0YxfJEgPhfUszFO1ZJWtq2AqhiPJ20TvkRN9v3GVtR2VDk41RpML
-        +HHb/ZOCHzZYpERYx8vCPLd3HE4CfOP/lrgI++U=
-X-Google-Smtp-Source: AGHT+IFN9KsI/KIYW36rLN6ro7UvPWLJe/AkYqpEHQtIP3KTxPCc24Pk5crT24CtYNL6vyVfaJdFxgjNXA+jrFJ0AIQ=
-X-Received: by 2002:a25:b003:0:b0:d72:652f:4054 with SMTP id
- q3-20020a25b003000000b00d72652f4054mr3781771ybf.16.1693340888850; Tue, 29 Aug
- 2023 13:28:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230829071334.58083-1-n.zhandarovich@fintech.ru>
-In-Reply-To: <20230829071334.58083-1-n.zhandarovich@fintech.ru>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Tue, 29 Aug 2023 16:27:48 -0400
-Message-ID: <CADvbK_eQaqSJmNDGwz5A9tAmb0y2rZwZXxdC52B4hjjWRGZtUA@mail.gmail.com>
-Subject: Re: [PATCH net] sctp: fix uninit-value in sctp_inq_pop()
-To:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        with ESMTP id S240188AbjH2UpM (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 29 Aug 2023 16:45:12 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5FD21BB;
+        Tue, 29 Aug 2023 13:45:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=qqpCUFR3P/c8X+gNxuXmGaV/FqFgRToVQytMVMpzzZU=; b=Dve5+6o8hMnkJ5nWqXTD/1k5Ig
+        c+eL+0Tiv6N9rCEFJgeCjKJ4omPyPHn9fnqB3Jf8MqMaOyZqL+1UBHqlsS5YXH7+VQoXGOrthij6U
+        wXE8kb0bhwdeKsa8zyMuKPbVXAZmTXwfMMt3f1XiBd7bIzJsMtP+il1X36DMva9FrwpSsxX2Bbm+7
+        EuvcibeFMzWbVd3TNrqT4ZRzkQJ0Q9NQiatktpBmVWsXjDxGZFkVQEKbevr1IsN647m6SvvMo+viz
+        Yvy04a63uv+YPdHNtPwsUdAKlVbW2MWxd4cief6pa6kf+sxylyo5091Al/BfKdZkegt5uFBdYqewR
+        nJDOB6Og==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1qb5a3-00CF5F-1u;
+        Tue, 29 Aug 2023 20:44:55 +0000
+Date:   Tue, 29 Aug 2023 13:44:55 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Joel Granados <joel.granados@gmail.com>,
+        linux-fsdevel@vger.kernel.org, rds-devel@oss.oracle.com,
         "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
+        Florian Westphal <fw@strlen.de>, willy@infradead.org,
+        Jan Karcher <jaka@linux.ibm.com>,
+        Wen Gu <guwen@linux.alibaba.com>,
+        Simon Horman <horms@verge.net.au>,
+        Tony Lu <tonylu@linux.alibaba.com>, linux-wpan@vger.kernel.org,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        mptcp@lists.linux.dev, Heiko Carstens <hca@linux.ibm.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Will Deacon <will@kernel.org>, Julian Anastasov <ja@ssi.bg>,
+        netfilter-devel@vger.kernel.org, Joerg Reuter <jreuter@yaina.de>,
+        linux-kernel@vger.kernel.org,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-sctp@vger.kernel.org, Xin Long <lucien.xin@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-hams@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        coreteam@netfilter.org, Ralf Baechle <ralf@linux-mips.org>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        keescook@chromium.org, Roopa Prabhu <roopa@nvidia.com>,
+        David Ahern <dsahern@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Wenjia Zhang <wenjia@linux.ibm.com>, josh@joshtriplett.org,
+        Alexander Aring <alex.aring@gmail.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        netdev@vger.kernel.org,
+        Santosh Shilimkar <santosh.shilimkar@oracle.com>,
+        linux-s390@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>,
+        "D. Wythe" <alibuda@linux.alibaba.com>,
+        Eric Dumazet <edumazet@google.com>, lvs-devel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        bridge@lists.linux-foundation.org,
+        Karsten Graul <kgraul@linux.ibm.com>,
+        Mat Martineau <martineau@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+70a42f45e76bede082be@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Joel Granados <j.granados@samsung.com>, mcgrof@kernel.org
+Subject: [GIT PULL] sysctl changes for v6.6-rc1
+Message-ID: <ZO5Yx5JFogGi/cBo@bombadil.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,89 +91,114 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Aug 29, 2023 at 3:14=E2=80=AFAM Nikita Zhandarovich
-<n.zhandarovich@fintech.ru> wrote:
->
-> Syzbot identified a case [1] of uninitialized memory usage in
-> sctp_inq_pop(), specifically in 'ch->length'.
->
-> Fix the issue by ensuring that 'ch->length' reflects the size of
-> 'sctp_chunkhdr *ch' before accessing it.
->
-> [1]
-> BUG: KMSAN: uninit-value in sctp_inq_pop+0x1597/0x1910 net/sctp/inqueue.c=
-:205
->  sctp_inq_pop+0x1597/0x1910 net/sctp/inqueue.c:205
->  sctp_assoc_bh_rcv+0x1a7/0xc50 net/sctp/associola.c:997
->  sctp_inq_push+0x23e/0x2b0 net/sctp/inqueue.c:80
->  sctp_backlog_rcv+0x394/0xd80 net/sctp/input.c:331
->  sk_backlog_rcv include/net/sock.h:1115 [inline]
->  __release_sock+0x207/0x570 net/core/sock.c:2911
->  release_sock+0x6b/0x1e0 net/core/sock.c:3478
->  sctp_wait_for_connect+0x486/0x810 net/sctp/socket.c:9325
->  sctp_sendmsg_to_asoc+0x1ea7/0x1ee0 net/sctp/socket.c:1884
->  ...
->
-> Uninit was stored to memory at:
->  sctp_inq_pop+0x151a/0x1910 net/sctp/inqueue.c:201
->  sctp_assoc_bh_rcv+0x1a7/0xc50 net/sctp/associola.c:997
->  sctp_inq_push+0x23e/0x2b0 net/sctp/inqueue.c:80
->  sctp_backlog_rcv+0x394/0xd80 net/sctp/input.c:331
->  sk_backlog_rcv include/net/sock.h:1115 [inline]
->  __release_sock+0x207/0x570 net/core/sock.c:2911
->  release_sock+0x6b/0x1e0 net/core/sock.c:3478
->  sctp_wait_for_connect+0x486/0x810 net/sctp/socket.c:9325
->  sctp_sendmsg_to_asoc+0x1ea7/0x1ee0 net/sctp/socket.c:1884
->  ...
->
-> Uninit was created at:
->  slab_post_alloc_hook+0x12d/0xb60 mm/slab.h:716
->  slab_alloc_node mm/slub.c:3451 [inline]
->  __kmem_cache_alloc_node+0x4ff/0x8b0 mm/slub.c:3490
->  __do_kmalloc_node mm/slab_common.c:965 [inline]
->  __kmalloc_node_track_caller+0x118/0x3c0 mm/slab_common.c:986
->  kmalloc_reserve+0x248/0x470 net/core/skbuff.c:585
->  __alloc_skb+0x318/0x740 net/core/skbuff.c:654
->  alloc_skb include/linux/skbuff.h:1288 [inline]
->  sctp_packet_pack net/sctp/output.c:472 [inline]
->  sctp_packet_transmit+0x1729/0x4150 net/sctp/output.c:621
->  sctp_outq_flush_transports net/sctp/outqueue.c:1173 [inline]
->  ...
->
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Reported-and-tested-by: syzbot+70a42f45e76bede082be@syzkaller.appspotmail=
-.com
-> Closes: https://syzkaller.appspot.com/bug?extid=3D70a42f45e76bede082be
-> Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-> ---
->  net/sctp/inqueue.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/net/sctp/inqueue.c b/net/sctp/inqueue.c
-> index 7182c5a450fb..98ce9524c87c 100644
-> --- a/net/sctp/inqueue.c
-> +++ b/net/sctp/inqueue.c
-> @@ -197,6 +197,7 @@ struct sctp_chunk *sctp_inq_pop(struct sctp_inq *queu=
-e)
->                 }
->         }
->
-> +       ch->length =3D htons(sizeof(*ch));
->         chunk->chunk_hdr =3D ch;
->         chunk->chunk_end =3D ((__u8 *)ch) + SCTP_PAD4(ntohs(ch->length));
->         skb_pull(chunk->skb, sizeof(*ch));
-> --
-> 2.25.1
->
-Hi, Nikita
+The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 
-You can't just overwrite "ch->length", "ch" is the header of the received c=
-hunk.
-if it says ch->length is Uninit, it means either the chunk parsing in
-the receiver
-is overflow or the format of the chunk created in the sender is incorrect.
+  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
 
-If you can reproduce it stably, I suggest you start from sctp_inq_pop() and
-print out the skb info and data in there, and see if it's a normal chunk.
+are available in the Git repository at:
 
-Thanks.
+  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/sysctl-6.6-rc1
+
+for you to fetch changes up to 53f3811dfd5e39507ee3aaea1be09aabce8f9c98:
+
+  sysctl: Use ctl_table_size as stopping criteria for list macro (2023-08-15 15:26:18 -0700)
+
+----------------------------------------------------------------
+sysctl-6.6-rc1
+
+Long ago we set out to remove the kitchen sink on kernel/sysctl.c arrays and
+placings sysctls to their own sybsystem or file to help avoid merge conflicts.
+Matthew Wilcox pointed out though that if we're going to do that we might as
+well also *save* space while at it and try to remove the extra last sysctl
+entry added at the end of each array, a sentintel, instead of bloating the
+kernel by adding a new sentinel with each array moved.
+
+Doing that was not so trivial, and has required slowing down the moves of
+kernel/sysctl.c arrays and measuring the impact on size by each new move.
+
+The complex part of the effort to help reduce the size of each sysctl is being
+done by the patient work of el señor Don Joel Granados. A lot of this is truly
+painful code refactoring and testing and then trying to measure the savings of
+each move and removing the sentinels. Although Joel already has code which does
+most of this work, experience with sysctl moves in the past shows is we need to
+be careful due to the slew of odd build failures that are possible due to the
+amount of random Kconfig options sysctls use.
+
+To that end Joel's work is split by first addressing the major housekeeping
+needed to remove the sentinels, which is part of this merge request. The rest
+of the work to actually remove the sentinels will be done later in future
+kernel releases.
+
+At first I was only going to send his first 7 patches of his patch series,
+posted 1 month ago, but in retrospect due to the testing the changes have
+received in linux-next and the minor changes they make this goes with the
+entire set of patches Joel had planned: just sysctl house keeping. There are
+networking changes but these are part of the house keeping too.
+
+The preliminary math is showing this will all help reduce the overall build
+time size of the kernel and run time memory consumed by the kernel by about
+~64 bytes per array where we are able to remove each sentinel in the future.
+That also means there is no more bloating the kernel with the extra ~64 bytes
+per array moved as no new sentinels are created.
+
+Most of this has been in linux-next for about a month, the last 7 patches took
+a minor refresh 2 week ago based on feedback.
+
+----------------------------------------------------------------
+Joel Granados (14):
+      sysctl: Prefer ctl_table_header in proc_sysctl
+      sysctl: Use ctl_table_header in list_for_each_table_entry
+      sysctl: Add ctl_table_size to ctl_table_header
+      sysctl: Add size argument to init_header
+      sysctl: Add a size arg to __register_sysctl_table
+      sysctl: Add size to register_sysctl
+      sysctl: Add size arg to __register_sysctl_init
+      sysctl: Add size to register_net_sysctl function
+      ax.25: Update to register_net_sysctl_sz
+      netfilter: Update to register_net_sysctl_sz
+      networking: Update to register_net_sysctl_sz
+      vrf: Update to register_net_sysctl_sz
+      sysctl: SIZE_MAX->ARRAY_SIZE in register_net_sysctl
+      sysctl: Use ctl_table_size as stopping criteria for list macro
+
+ arch/arm64/kernel/armv8_deprecated.c    |  2 +-
+ arch/s390/appldata/appldata_base.c      |  2 +-
+ drivers/net/vrf.c                       |  3 +-
+ fs/proc/proc_sysctl.c                   | 90 +++++++++++++++++----------------
+ include/linux/sysctl.h                  | 31 +++++++++---
+ include/net/ipv6.h                      |  2 +
+ include/net/net_namespace.h             | 10 ++--
+ ipc/ipc_sysctl.c                        |  4 +-
+ ipc/mq_sysctl.c                         |  4 +-
+ kernel/ucount.c                         |  5 +-
+ net/ax25/sysctl_net_ax25.c              |  3 +-
+ net/bridge/br_netfilter_hooks.c         |  3 +-
+ net/core/neighbour.c                    |  8 ++-
+ net/core/sysctl_net_core.c              |  3 +-
+ net/ieee802154/6lowpan/reassembly.c     |  8 ++-
+ net/ipv4/devinet.c                      |  3 +-
+ net/ipv4/ip_fragment.c                  |  3 +-
+ net/ipv4/route.c                        |  8 ++-
+ net/ipv4/sysctl_net_ipv4.c              |  3 +-
+ net/ipv4/xfrm4_policy.c                 |  3 +-
+ net/ipv6/addrconf.c                     |  3 +-
+ net/ipv6/icmp.c                         |  5 ++
+ net/ipv6/netfilter/nf_conntrack_reasm.c |  3 +-
+ net/ipv6/reassembly.c                   |  3 +-
+ net/ipv6/route.c                        |  9 ++++
+ net/ipv6/sysctl_net_ipv6.c              | 16 ++++--
+ net/ipv6/xfrm6_policy.c                 |  3 +-
+ net/mpls/af_mpls.c                      |  6 ++-
+ net/mptcp/ctrl.c                        |  3 +-
+ net/netfilter/ipvs/ip_vs_ctl.c          |  8 ++-
+ net/netfilter/ipvs/ip_vs_lblc.c         | 10 ++--
+ net/netfilter/ipvs/ip_vs_lblcr.c        | 10 ++--
+ net/netfilter/nf_conntrack_standalone.c |  4 +-
+ net/netfilter/nf_log.c                  |  7 +--
+ net/rds/tcp.c                           |  3 +-
+ net/sctp/sysctl.c                       |  4 +-
+ net/smc/smc_sysctl.c                    |  3 +-
+ net/sysctl_net.c                        | 26 +++++++---
+ net/unix/sysctl_net_unix.c              |  3 +-
+ net/xfrm/xfrm_sysctl.c                  |  8 ++-
+ 40 files changed, 222 insertions(+), 113 deletions(-)
