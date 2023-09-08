@@ -2,361 +2,217 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9E6793CB7
-	for <lists+linux-sctp@lfdr.de>; Wed,  6 Sep 2023 14:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF12E798159
+	for <lists+linux-sctp@lfdr.de>; Fri,  8 Sep 2023 06:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238915AbjIFMff (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Wed, 6 Sep 2023 08:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50172 "EHLO
+        id S234168AbjIHEtM (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Fri, 8 Sep 2023 00:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234499AbjIFMfd (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Wed, 6 Sep 2023 08:35:33 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68341713;
-        Wed,  6 Sep 2023 05:35:28 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230906123525euoutp01aef263d18f43afc5e0f456b68b34412b~CT2m_4MNh1721017210euoutp01T;
-        Wed,  6 Sep 2023 12:35:25 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230906123525euoutp01aef263d18f43afc5e0f456b68b34412b~CT2m_4MNh1721017210euoutp01T
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1694003725;
-        bh=kSfDM2PxptQrTVQMPAG5rz9E3Gh0CgYjQq2vX1wh1u8=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=m+6wDQ82ef/d8/4nlWMYTE9kfnIAoWlhMhdqHBBfihfqWuP8iM3eVNlzJjRaHltMU
-         2l4lDxXybgq/aUTbfAyOFFW1c/WG3S6g0Slu0hR8E1wgIfPIBWUX5aRY9fX8h2g49x
-         0RiNloUw+2A+/56qP9XBwg7AqfowYcMjmZDUd1vg=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230906123525eucas1p15d5663db311f0d147c190276abfe8f84~CT2mw_TAz2306723067eucas1p1U;
-        Wed,  6 Sep 2023 12:35:25 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 5D.86.37758.C0278F46; Wed,  6
-        Sep 2023 13:35:25 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230906123524eucas1p22d0bf30fe10ce0ee7ca45eca03ef3235~CT2mJczO42726327263eucas1p29;
-        Wed,  6 Sep 2023 12:35:24 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230906123524eusmtrp28aa6f6cde31078bfe52b8c173cbb675a~CT2mG2adp0571505715eusmtrp2L;
-        Wed,  6 Sep 2023 12:35:24 +0000 (GMT)
-X-AuditID: cbfec7f5-815ff7000002937e-38-64f8720cdaa5
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 02.16.14344.C0278F46; Wed,  6
-        Sep 2023 13:35:24 +0100 (BST)
-Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230906123524eusmtip2c81fad208fd37b2f2d78a8b26ceda34c~CT2ltQB-30461004610eusmtip2c;
-        Wed,  6 Sep 2023 12:35:24 +0000 (GMT)
-Received: from localhost (106.210.248.249) by CAMSVWEXC02.scsc.local
-        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Wed, 6 Sep 2023 13:35:23 +0100
-Date:   Wed, 6 Sep 2023 14:35:21 +0200
-From:   Joel Granados <j.granados@samsung.com>
-To:     Alexey Gladkov <legion@kernel.org>
-CC:     Luis Chamberlain <mcgrof@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joel Granados <joel.granados@gmail.com>,
-        <linux-fsdevel@vger.kernel.org>, <rds-devel@oss.oracle.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Westphal <fw@strlen.de>, <willy@infradead.org>,
-        Jan Karcher <jaka@linux.ibm.com>,
-        Wen Gu <guwen@linux.alibaba.com>,
-        Simon Horman <horms@verge.net.au>,
-        Tony Lu <tonylu@linux.alibaba.com>,
-        <linux-wpan@vger.kernel.org>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        <mptcp@lists.linux.dev>, Heiko Carstens <hca@linux.ibm.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Will Deacon <will@kernel.org>, Julian Anastasov <ja@ssi.bg>,
-        <netfilter-devel@vger.kernel.org>, Joerg Reuter <jreuter@yaina.de>,
-        <linux-kernel@vger.kernel.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        <linux-sctp@vger.kernel.org>, Xin Long <lucien.xin@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        <linux-hams@vger.kernel.org>, Vasily Gorbik <gor@linux.ibm.com>,
-        <coreteam@netfilter.org>, Ralf Baechle <ralf@linux-mips.org>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        <keescook@chromium.org>, Roopa Prabhu <roopa@nvidia.com>,
-        David Ahern <dsahern@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Wenjia Zhang <wenjia@linux.ibm.com>, <josh@joshtriplett.org>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        <netdev@vger.kernel.org>,
-        Santosh Shilimkar <santosh.shilimkar@oracle.com>,
-        <linux-s390@vger.kernel.org>, Sven Schnelle <svens@linux.ibm.com>,
-        "D. Wythe" <alibuda@linux.alibaba.com>,
-        Eric Dumazet <edumazet@google.com>,
-        <lvs-devel@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Iurii Zaikin <yzaikin@google.com>,
+        with ESMTP id S231169AbjIHEtL (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Fri, 8 Sep 2023 00:49:11 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3761990;
+        Thu,  7 Sep 2023 21:49:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694148546; x=1725684546;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   mime-version;
+  bh=bXvdR5B4NKDnac6t0Bs1PqH4w3JI00qhEFcUHT0maFg=;
+  b=TxuGN+a4CXpoLrAA+xOrwSmVLtQmJ0dSixnHP7+hlzhOYzl5OIiT2/VB
+   6leXkdV6zlLEc3Bbuj+7CJyTQTPn4qEjcmezXgt8T0ERuOT4XcscsiCps
+   zuOrzk7FI2WmfSsnfUD1amslGChBWJlndiYHeSq6Va/+trPLYBxkcA6cr
+   ATr7Vasbqx1oI1kzv+RqBSnZWBqW5QoOQz7SJIMqhIar0r4ygPTT+XgVu
+   rJzcIYPG+7bPF696FdNP+nXzWfgcZUz5fAo0tFb/yzZKJUDxvyPQPOZaB
+   jZ62KZLFi+m0uFcjLYQtW8Tdu9RI8zOFc1UeLydsuo1YsvlnxZ7ZnBryO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="374941118"
+X-IronPort-AV: E=Sophos;i="6.02,236,1688454000"; 
+   d="scan'208";a="374941118"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2023 21:49:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="745470950"
+X-IronPort-AV: E=Sophos;i="6.02,236,1688454000"; 
+   d="scan'208";a="745470950"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga007.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 07 Sep 2023 21:49:05 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Thu, 7 Sep 2023 21:49:05 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Thu, 7 Sep 2023 21:49:05 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.40) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.32; Thu, 7 Sep 2023 21:49:04 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AvH4+LIX86SHme2tjSWY5aSbUoCMRZv8f7/dGQOUV/knpEY0MCbCCH+hmSaiOP/LHjT2zloVfB2AbckjielUxDzFbNmjfeJ1iFjse9YCoAEkZSujqYzx2G9BdKN8exFoDoRK38y3VRdB5GU8UQHYsavCqlU697c/p42r/9HRF1+/vT15MUtJQD6dHAvOyvCQK1DTUqmBXmscu7xSmrP/stj9Leko1mwFZzLjLvELdt+FuTOdMxDBo0bIlyRpQDdbgA2vZRNoyIwOFZM3ITElmWmKL39x9UBcQMdA155MPBLiJaKhKfTXInuZfwLnIVEiWgx2QPBdnfn2XCyq3J6eeg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sfXTt2cxpLJMFH4gCwh/qhjmC1zi639O3iToNrmtbC8=;
+ b=gGz54JsF+MrIs2HaIFcJNPMUhMHmLjI6bMCEWBdZVy/iua0DlbJHOzIADZZ9YtaY4S7gKWI2IolKWx6IGXtwRw+Kyr+GgEAFaqgMxPTUOkujumcSkHu6vrGyanuTdBXqaoB5oufm8AywjxJwGasiZHw593iW6SUtaLwGqhp6LAzPVAJnbIBVB7eHkBQqLTgU+hQXVAEXOVUnAfI8Zg2pZh4u1Ka4KVjY5ENgH0YQmCzWG/FbQZ9CI5Iqusrwf0WB7H5ZASm3Kbo7qDpWp8iVulw9xWCMxtagHLic+X/DRCC7QzzNmE4yJoKM6r1Y9etUYIwPTjh4XioB+wrB41VqaQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB6779.namprd11.prod.outlook.com (2603:10b6:510:1ca::17)
+ by CO1PR11MB4785.namprd11.prod.outlook.com (2603:10b6:303:6f::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.30; Fri, 8 Sep
+ 2023 04:49:02 +0000
+Received: from PH8PR11MB6779.namprd11.prod.outlook.com
+ ([fe80::73c6:1231:e700:924]) by PH8PR11MB6779.namprd11.prod.outlook.com
+ ([fe80::73c6:1231:e700:924%4]) with mapi id 15.20.6768.029; Fri, 8 Sep 2023
+ 04:49:02 +0000
+Date:   Fri, 8 Sep 2023 12:48:49 +0800
+From:   kernel test robot <oliver.sang@intel.com>
+To:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+CC:     <oe-lkp@lists.linux.dev>, <lkp@intel.com>,
+        <linux-sctp@vger.kernel.org>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        <bridge@lists.linux-foundation.org>,
-        Karsten Graul <kgraul@linux.ibm.com>,
-        Mat Martineau <martineau@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [GIT PULL] sysctl changes for v6.6-rc1
-Message-ID: <20230906123521.xrqcmr3ilpvp2ze6@localhost>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="l5htxkzwtgg23zjg"
+        Xin Long <lucien.xin@gmail.com>,
+        Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <syzbot+70a42f45e76bede082be@syzkaller.appspotmail.com>,
+        <oliver.sang@intel.com>
+Subject: Re: [PATCH net] sctp: fix uninit-value in sctp_inq_pop()
+Message-ID: <202309081012.be01cf11-oliver.sang@intel.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <ZPhpedWW6RwTd9Hf@example.org>
-X-Originating-IP: [106.210.248.249]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA2WTe0xTZxjG851zelrQmkNh+gWMbhWJA1YBcb5TcJq4eWbMLon+ITNznZwg
-        GRRtxcvYMqR4AUWr6JDikKorhRYYiFUqm1CUe7h4CzjUlYu6FgEHVcAAKxzYTPbf733f58n3
-        PH98IlIyJvQWRSt2c0qFPEZKu1Pm6pHm98TK4cig5E4ExQ1/0WBNXAG28lQBdI1Zaag1/SGE
-        fv0xBGNlh0k415xMQaHlIAE91Z1CMKcZEbRoXwrg6tNXNDiy8xEctc8H9RUngu4TnQK4qx+g
-        4VSSGCZy4mDk+CzITFUT0Hg0Fvp/yiKgxXzc9ZDuEyjpui+A8t/qKLh/9SEBdyznaHhiTaNA
-        o1OT0JPjEEBHup6CzqJ+AtTn/yZh1FAjgKa0CRIMjU8IaNP0IKg6/LsAGouShFCdMxc0hfUU
-        vGzoRZDRe4+E2+W+UD80QUDT5UEBDJ5bAjZNMwXphlICrqcMC0FfVCCErldPaeg8/lwIBxrN
-        QkjuWA6vh11h9GWfrgljTdkmxPY11SE225TAZiW2UuzoiD9bmtdOsGXah0LWXLGYzSmJZy8b
-        /NkHjnC2JD+FZmvPvqbYW3kFLo3tA1ZzoQJ9vjDCPSySi4newymXrv7afUeLJoPceSh834GL
-        Q2QiehWYitxEmAnF15+MEanIXSRhDAjrqh7T/DCE8FDFzGUQ4YkJu2DGoh1tJSdZwuQifK8r
-        4F+R0Xqb4odShG2JxWhSRTG+uPZ29pSDZgJxc2/HFHsxfviaWjf1Hsmc8cCOvoEpgyezDDtt
-        FmKSxcwKXFCpI3n2wHWZ3dQkk8w+fEF7yRVJ5GIfnDsumly7MQE4t+AgzSddhKvTOiief8D1
-        pQ+m6mCmcDY+1n8L8Yd1uNpaOy3yxPaaUiHP8/FE2flpQzrCN8YHhPxgRFh/wEnwqlU4+W73
-        tGMtvljsmEqEmTm47bkHH3QOPmXOIPm1GB85JOHVftj4qJfSoEXaN6pp36im/a8av5bhtjOn
-        6f+tA7Be5yB5DseFhf1UDhLmo3lcvCo2ilMtU3B7ZSp5rCpeESXbHhdbgly/smG8xnkNGewv
-        ZFZEiJAV+brMnb8aW5A3pYhTcFIvcd/Cl5EScaR8/3ecMm6bMj6GU1mRj4iSzhMHhNdtlzBR
-        8t3ctxy3k1POXAmRm3cicWQT2ZrllfvxrK/ujZjMlpE567asvBz0y7Etf561+Szotvs3V/px
-        ydmDs9XG8tnPdFLLl+Vh+z+KH2WCKnIUzo3GD+/c+GIkO3iBbeBsn8Ueu3d5iF/gBumjx+9U
-        7nohS4pI+l42/+TW02t/zKxNGP2ssc/0VtahBTdfyMGwPjBgx/pvAol6OuyZ4bW6inHfuXpT
-        8PJrlUdT1g6U7tofMuv9n0NjnIsS9jh8S6o898Rm2psyotZcqQ4VrZIMb8hTc/VP41OWPgse
-        KqIXH34Usp2au3TzCVtD+Fi76ZJHiiX67ZWbQ51lTunWAaujR2bJ3xiavqR9W413WkKGm0/X
-        Te1FFFH+LpZSqh3yYH9SqZL/Ax5eSy0QBQAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA2WTe1BUZRjG+845e3ZRseWSnCEamY1SgRZYbu8mUFNDHZoGo+lCpUObnECB
-        XWYXMKxmkEXJ5RJeSlkJdjWXOySwrBCl4bCAIDdh0VyYuOyaQBIid5EW1yZn+u/3Pe/zPt/7
-        fTMvB7fPZztz9omTGKlYFM8jNxAdD1uHX9okXYz2Pqeygwsdd0hoTguEkSYFC8ZWm0loq7jF
-        hmlNNoLVhkwcCrozCKhqPIyBST/KhvqccgQ9ynkW6G4vkDBZWIYga8IF5No5BOPfjrKgX/M3
-        CcfTbWFNJYGl3I2Qr5Bj0JmVANPfn8Ggpz7XcpE6DGrGDCxo+qWdAINuCIPrjQUkmJtzCMhT
-        y3EwqSZZYDyhIWC0ehoDedE9HJZLWlnQlbOGQ0mnGYMbeSYEVzJ/ZUFndTob9KotkFd1lYD5
-        jikEp6YGcOhrcoOr99cw6KqdZcFswXYYyesm4ERJHQY/H11kg6a6kg1jC7dJGM39iw2HOuvZ
-        kGH0h5VFyzCahvBXg+iKwgpE3+1qR3RhxZf0mbRegl5ecqfrSm9idINyiE3XX36BVtUk07Ul
-        7vTvk8F0TdlRkm47vULQLaWVFs+IkM47exm9s/VjfpBUkpzEuMZKZEnBvE98QMD3EQJf4Cfk
-        +/gG7nlZ4M/zCgmKZuL3pTBSr5BP+bF9Vb0oMSP4C8UpLZaG5jwVyIZDcf0o5XIvrkAbOPbc
-        84hauXGSsBZcqAv3B1hWdqAeGBSk1TSDKMW5Nsx6qEPU8K0ifN1FcN2otr7CR0xyPanuKeMj
-        duS+SF2Uq8l1xrnf2VGDhanr7MD1peZGGrF1tuUGUpW/qR+PUYYo/eketrVgR7XnjxPW5hRK
-        P2y2mDgWfpYqfshZl224HlRx5WHSOunzlD7H+PgFX1Ozq2aUhxyUTyQpn0hS/pdklT2pBq2R
-        /J/sQWnUk7iVg6mqqmlChdhlyJFJliXEJMgEfJkoQZYsjuHvlSTUIMte1OuX6i6i0okZfjPC
-        OKgZuVk6R38q70HOhFgiZniOtne3zkfb20aLUg8yUkmUNDmekTUjf8svHsOdn9krsSyZOCnK
-        J8Db38cvQOjtLwzw5TnZhiV+I7LnxoiSmDiGSWSk//ZhHBvnNEw3Mag1eJmIoTT+/voIbceo
-        3EDUptrsuOfE27gYodoWrg4TX/9sl3fR8ked+tTAOu2PuwpCU1C264htnF7CuSTYXp4dlxWy
-        c6Bf0X/tUpYp5uSOA+Sfd/K3tHgLpJHHh4vVrV/5blp4/axGnhkujB7xHN49qBGmV8QYQx+4
-        Dhue08VsZjb/sPa0yRwRa3hlv/nwW64BODqk2+PM//x9oX48NE4vPJg8E9BgVh6QyCvZbWJc
-        IFY5XOkwvhfZEjldVpNZex5LfK194e0j4rgx08xiGjPbeUTUTqLoeB33g+53d/4R2FLU/+bN
-        p8ort9nHhr3ROx7uEnVN6KRbbjv24W4PHiGLFfm441KZ6B9l6Qk3rAQAAA==
-X-CMS-MailID: 20230906123524eucas1p22d0bf30fe10ce0ee7ca45eca03ef3235
-X-Msg-Generator: CA
-X-RootMTR: 20230906115909eucas1p2fcf08f26861b318571224dad6bf5e864
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230906115909eucas1p2fcf08f26861b318571224dad6bf5e864
-References: <ZO5Yx5JFogGi/cBo@bombadil.infradead.org>
-        <CGME20230906115909eucas1p2fcf08f26861b318571224dad6bf5e864@eucas1p2.samsung.com>
-        <ZPhpedWW6RwTd9Hf@example.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230829071334.58083-1-n.zhandarovich@fintech.ru>
+X-ClientProxiedBy: SI2PR01CA0037.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:193::9) To PH8PR11MB6779.namprd11.prod.outlook.com
+ (2603:10b6:510:1ca::17)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB6779:EE_|CO1PR11MB4785:EE_
+X-MS-Office365-Filtering-Correlation-Id: a4fec114-27ac-445b-15bb-08dbb026eb53
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: H8l9fqKPegHBsCywiiwHWm2V1biDWj3Z+4lYRtDg2vat+OgBJPYuMttI8knW/Kym+KYB8FLIsIgbM3ORXPyU1FyrscqfnNMNkz5BHR+L4CLbDj3cbYJvV5SEUWmSNHko75iljM0jUHlnb+jkle8/cpcvMtSmhWvxoM+1KhgN1GloPa+eEdpLJ/oKj8oBhxH1eb0cjJSC1faaq7QaA33WTaUHGcdgHLGV2/OTMrMq4Iqlu0iwnuyfun7QrbuYQm8CdMiOVJS64Yzbf1actcMj9hzgYgxqA6I1zWTczkjo42pJDbvTCVvfXQns2lzc0Jnf2qR+zqy/WUuZT4skBT7uYgOShmNYu3SRxv94aejVXpxnKZzwyGeEhTN2c/qQ1Q21ydU6YKJ/xKX0es+rZ3cxwWq/G+maRyusx5h7mI3+M38TDEuo+WwlZdo3vSR8jYNAhow0FcHYloi5YyAlsqljtxU+70hHhgdWQo+qwPE9ayO8Lepl4ByzGlcPjkkBIv5w4Et08E10Xb0WsNQLf1HYmPFSUhHu/VivN7yHDQGmn0+93fmPUNo0lNU//FQMEc2J3NosjZhb3GQX0wxJnEamsg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB6779.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(366004)(396003)(376002)(39860400002)(136003)(451199024)(186009)(1800799009)(478600001)(5660300002)(66476007)(66946007)(66556008)(54906003)(966005)(6916009)(83380400001)(316002)(8676002)(2906002)(4326008)(8936002)(6666004)(41300700001)(7416002)(6486002)(6506007)(6512007)(107886003)(2616005)(1076003)(26005)(36756003)(82960400001)(86362001)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wWniYioiCDpOge6LjANNKfSPECMfKpqtgoq8QPEXkgL6sBovpryU6CO48jAt?=
+ =?us-ascii?Q?tYZi337jwWpto4ZWhlIHWtjycYbRKwSyZlOwRAAMU01LJNlT3TLFI5nMCCny?=
+ =?us-ascii?Q?zPRCqOt9M1/ikY4fwIF3mKFprPskdA+AHkPVD4v+cr457ICpYR3u/CJiesEO?=
+ =?us-ascii?Q?6KamYCXMBLztz/oBW2+vKTGXBBgRij4h453DvYWx8qvG15UnmBwAToz5j+98?=
+ =?us-ascii?Q?DGeF+HcUMYs35YtjqYvVe0SlBexB2r6d/nHDe5Bg/NSwRXLX5JKhKp+e9AAh?=
+ =?us-ascii?Q?baAH+xoT0yPjjxye3pyyglREWJaBIyQVv2SkA+kVwfbIGu4EKyKIXaIyBa56?=
+ =?us-ascii?Q?zLFI5UpxbOVIlJpIZRmdLkO8cir5fX68hPI177R2+u5+Bo5/m49wDUpEYb0V?=
+ =?us-ascii?Q?cktf5MOs7vbJ2RXcblEAlPSA5gfekT473+i92xj0mpcyv0RaiUA54nYl+pl9?=
+ =?us-ascii?Q?6hwedGMmx5Ih88DRzt5eMXwJZVjdt9bK+d/7XHf5YIT9gVegvq1C6O0QoUds?=
+ =?us-ascii?Q?MACtpWMlLINQ4Pz4sQDDTWVn9kkbnyJqfkLC+U04Db10aO/THipuCQvmgVgx?=
+ =?us-ascii?Q?6qeDQyESgkD0FrN+m335EoOwIFV3WSDKWh6mP4yDqdwhVwVZ3EwicJocsxY5?=
+ =?us-ascii?Q?fZDCf8xz7Rg9lsyrEU0vp8ITrpmmh7PD3quFxdS/ZYFgYA2Rlt63Z8XBC3JA?=
+ =?us-ascii?Q?ZGUszj0FQz/dax0488jIpByJGZUdppumJwcgiTMir/JRAMVYhZXKBqQ3rve1?=
+ =?us-ascii?Q?rMLrRACjFtjsOIA7N0UtVsx8HyK8+C6ep9TaG7kbrV0U1XIqK9yHCp48/4VQ?=
+ =?us-ascii?Q?MwjuCMso91tZFSwO48bvkZVxgHgfGxDXFE6Zn08rb00iOXIY5Xdm0iHDzfZS?=
+ =?us-ascii?Q?fXTdVbBhIgm+01ViUpb7cEPVA8eDYrQlwYnTGwCWPZAhMRWz+iXijx1ap1Gi?=
+ =?us-ascii?Q?WIsysvON9BJFwnrcqSVxFNYU/siaNUAVlkk4Q4hq9CXNIRTWR3Q5Kst4t5wY?=
+ =?us-ascii?Q?X284fd/qYzYQn/+RWimUgMjCT5v5V0Uo+WaYl4vls7HMCeiGMBQtH1fW2zR1?=
+ =?us-ascii?Q?umYX6/atzNck7THABVMl/U2Ydo/rVCGl5+VaXoRKtkSeYZx+Iz+W6Sl4H2HP?=
+ =?us-ascii?Q?phrnQlUsLETQADXicRJToroBmlWIiQmhCzuOu45HA7aQpozR1bb87TNIHQ8I?=
+ =?us-ascii?Q?Q/CmLS5d5DwqfYRSOtjnGLWzcYv0+n0yw0OZBvcm88Y2zfeSIB2gzcht1sWX?=
+ =?us-ascii?Q?dJTLDzxnJ92lV3bRUR33juymNNnT/kUeQUfhXjEJBQs4h0tPTZVXNvjSGOfD?=
+ =?us-ascii?Q?xkArtCbVXukE7fQ84V3H4SgYhUcJCbRaars/UpXgSZZDQUTAA+tEi7H7Um7D?=
+ =?us-ascii?Q?B3qz/lEvYx5AhvAJ7Xd5jxZ/u8IkKCFgbzM95gLA1thqs1bj0P5kC7Ev+U4r?=
+ =?us-ascii?Q?Uo7a7ZnBt2ndZUcPC90XjwP9w+dyMM6C7zNwUvoSX4idWwaEe80kRRUIrs7+?=
+ =?us-ascii?Q?mzNIQP8nW5/FpB/iMGNVSukc9VLimTCWJS4qoOuhIyVGrf1twAZ+fqBe7BHp?=
+ =?us-ascii?Q?cBxn8mog5rAXk69zyuqPNv47s8PuJv48fVTK2+GF8/k4GNkwNUroHGWwW4/c?=
+ =?us-ascii?Q?kg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: a4fec114-27ac-445b-15bb-08dbb026eb53
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB6779.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2023 04:49:02.5502
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sBACLqaHckPZM3Y4UdIvlE+saZARzEjBmMQ9CPTMyZEyhBmwczERvXMK6khlG99stO7aVuyXpl7vPtCDvJLcCQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4785
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
---l5htxkzwtgg23zjg
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 06, 2023 at 01:58:49PM +0200, Alexey Gladkov wrote:
-> On Tue, Aug 29, 2023 at 01:44:55PM -0700, Luis Chamberlain wrote:
-> > The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fb=
-aaa5:
-> >=20
-> >   Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
-> >=20
-> > are available in the Git repository at:
-> >=20
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/=
-sysctl-6.6-rc1
-> >=20
-> > for you to fetch changes up to 53f3811dfd5e39507ee3aaea1be09aabce8f9c98:
-> >=20
-> >   sysctl: Use ctl_table_size as stopping criteria for list macro (2023-=
-08-15 15:26:18 -0700)
-> >=20
-> > ----------------------------------------------------------------
-> > sysctl-6.6-rc1
-> >=20
-> > Long ago we set out to remove the kitchen sink on kernel/sysctl.c array=
-s and
-> > placings sysctls to their own sybsystem or file to help avoid merge con=
-flicts.
-> > Matthew Wilcox pointed out though that if we're going to do that we mig=
-ht as
-> > well also *save* space while at it and try to remove the extra last sys=
-ctl
-> > entry added at the end of each array, a sentintel, instead of bloating =
-the
-> > kernel by adding a new sentinel with each array moved.
-> >=20
-> > Doing that was not so trivial, and has required slowing down the moves =
-of
-> > kernel/sysctl.c arrays and measuring the impact on size by each new mov=
-e.
-> >=20
-> > The complex part of the effort to help reduce the size of each sysctl i=
-s being
-> > done by the patient work of el se=F1or Don Joel Granados. A lot of this=
- is truly
-> > painful code refactoring and testing and then trying to measure the sav=
-ings of
-> > each move and removing the sentinels. Although Joel already has code wh=
-ich does
-> > most of this work, experience with sysctl moves in the past shows is we=
- need to
-> > be careful due to the slew of odd build failures that are possible due =
-to the
-> > amount of random Kconfig options sysctls use.
-> >=20
-> > To that end Joel's work is split by first addressing the major housekee=
-ping
-> > needed to remove the sentinels, which is part of this merge request. Th=
-e rest
-> > of the work to actually remove the sentinels will be done later in futu=
-re
-> > kernel releases.
->=20
-> This is very interesting for me. I'm also refactoring sysctl based on
-> discussion with Linus a while ago.
->=20
-> Could you please add me to the Cc in the next patches?
-I just sent the next batch for this set for review. You can see it here
-https://lore.kernel.org/all/20230906-jag-sysctl_remove_empty_elem_arch-v1-0=
--3935d4854248@samsung.com/
-Will add you for the next ones.
 
-Best
+Hello,
 
->=20
-> > At first I was only going to send his first 7 patches of his patch seri=
-es,
-> > posted 1 month ago, but in retrospect due to the testing the changes ha=
-ve
-> > received in linux-next and the minor changes they make this goes with t=
-he
-> > entire set of patches Joel had planned: just sysctl house keeping. Ther=
-e are
-> > networking changes but these are part of the house keeping too.
-> >=20
-> > The preliminary math is showing this will all help reduce the overall b=
-uild
-> > time size of the kernel and run time memory consumed by the kernel by a=
-bout
-> > ~64 bytes per array where we are able to remove each sentinel in the fu=
-ture.
-> > That also means there is no more bloating the kernel with the extra ~64=
- bytes
-> > per array moved as no new sentinels are created.
-> >=20
-> > Most of this has been in linux-next for about a month, the last 7 patch=
-es took
-> > a minor refresh 2 week ago based on feedback.
-> >=20
-> > ----------------------------------------------------------------
-> > Joel Granados (14):
-> >       sysctl: Prefer ctl_table_header in proc_sysctl
-> >       sysctl: Use ctl_table_header in list_for_each_table_entry
-> >       sysctl: Add ctl_table_size to ctl_table_header
-> >       sysctl: Add size argument to init_header
-> >       sysctl: Add a size arg to __register_sysctl_table
-> >       sysctl: Add size to register_sysctl
-> >       sysctl: Add size arg to __register_sysctl_init
-> >       sysctl: Add size to register_net_sysctl function
-> >       ax.25: Update to register_net_sysctl_sz
-> >       netfilter: Update to register_net_sysctl_sz
-> >       networking: Update to register_net_sysctl_sz
-> >       vrf: Update to register_net_sysctl_sz
-> >       sysctl: SIZE_MAX->ARRAY_SIZE in register_net_sysctl
-> >       sysctl: Use ctl_table_size as stopping criteria for list macro
-> >=20
-> >  arch/arm64/kernel/armv8_deprecated.c    |  2 +-
-> >  arch/s390/appldata/appldata_base.c      |  2 +-
-> >  drivers/net/vrf.c                       |  3 +-
-> >  fs/proc/proc_sysctl.c                   | 90 +++++++++++++++++--------=
---------
-> >  include/linux/sysctl.h                  | 31 +++++++++---
-> >  include/net/ipv6.h                      |  2 +
-> >  include/net/net_namespace.h             | 10 ++--
-> >  ipc/ipc_sysctl.c                        |  4 +-
-> >  ipc/mq_sysctl.c                         |  4 +-
-> >  kernel/ucount.c                         |  5 +-
-> >  net/ax25/sysctl_net_ax25.c              |  3 +-
-> >  net/bridge/br_netfilter_hooks.c         |  3 +-
-> >  net/core/neighbour.c                    |  8 ++-
-> >  net/core/sysctl_net_core.c              |  3 +-
-> >  net/ieee802154/6lowpan/reassembly.c     |  8 ++-
-> >  net/ipv4/devinet.c                      |  3 +-
-> >  net/ipv4/ip_fragment.c                  |  3 +-
-> >  net/ipv4/route.c                        |  8 ++-
-> >  net/ipv4/sysctl_net_ipv4.c              |  3 +-
-> >  net/ipv4/xfrm4_policy.c                 |  3 +-
-> >  net/ipv6/addrconf.c                     |  3 +-
-> >  net/ipv6/icmp.c                         |  5 ++
-> >  net/ipv6/netfilter/nf_conntrack_reasm.c |  3 +-
-> >  net/ipv6/reassembly.c                   |  3 +-
-> >  net/ipv6/route.c                        |  9 ++++
-> >  net/ipv6/sysctl_net_ipv6.c              | 16 ++++--
-> >  net/ipv6/xfrm6_policy.c                 |  3 +-
-> >  net/mpls/af_mpls.c                      |  6 ++-
-> >  net/mptcp/ctrl.c                        |  3 +-
-> >  net/netfilter/ipvs/ip_vs_ctl.c          |  8 ++-
-> >  net/netfilter/ipvs/ip_vs_lblc.c         | 10 ++--
-> >  net/netfilter/ipvs/ip_vs_lblcr.c        | 10 ++--
-> >  net/netfilter/nf_conntrack_standalone.c |  4 +-
-> >  net/netfilter/nf_log.c                  |  7 +--
-> >  net/rds/tcp.c                           |  3 +-
-> >  net/sctp/sysctl.c                       |  4 +-
-> >  net/smc/smc_sysctl.c                    |  3 +-
-> >  net/sysctl_net.c                        | 26 +++++++---
-> >  net/unix/sysctl_net_unix.c              |  3 +-
-> >  net/xfrm/xfrm_sysctl.c                  |  8 ++-
-> >  40 files changed, 222 insertions(+), 113 deletions(-)
->=20
-> --=20
-> Rgrds, legion
->=20
+kernel test robot noticed "stress-ng.sctp.fail" on:
 
---=20
+commit: 8c7dea932ab60ed7519996ade2d1e21db2c76cd4 ("[PATCH net] sctp: fix uninit-value in sctp_inq_pop()")
+url: https://github.com/intel-lab-lkp/linux/commits/Nikita-Zhandarovich/sctp-fix-uninit-value-in-sctp_inq_pop/20230829-151540
+base: https://git.kernel.org/cgit/linux/kernel/git/davem/net.git 90ca51e8c654699b672ba61aeaa418dfb3252e5e
+patch link: https://lore.kernel.org/all/20230829071334.58083-1-n.zhandarovich@fintech.ru/
+patch subject: [PATCH net] sctp: fix uninit-value in sctp_inq_pop()
 
-Joel Granados
+in testcase: stress-ng
+version: stress-ng-x86_64-0.15.04-1_20230812
+with following parameters:
 
---l5htxkzwtgg23zjg
-Content-Type: application/pgp-signature; name="signature.asc"
+	nr_threads: 100%
+	testtime: 60s
+	class: network
+	test: sctp
+	cpufreq_governor: performance
 
------BEGIN PGP SIGNATURE-----
 
-iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmT4cgkACgkQupfNUreW
-QU9+Cwv+PGlN6idIMQ5c8C0f+ZfC5w4Z+JE4kmlQCz1bP2MeE/pPTaPtyWYqpG8L
-fCfed2PJj3OndPFVZ8htgmNw43rVuzq+FLpoXoS6A+GQTwt+oFYhkmEHImix1EHY
-LgHQwS53MI/8uswyrLCgFK1wB3oWOl2iSsNmafe2N9DNQnjtNMHWA45X9zejzEu3
-yIroWgdeLsDjCje7bCASIxWYMQ0mLCcHYnHhLi9t3oLmtCxrfqz/YvUoAtuUGJId
-EsmlWY0oVOSbUnAv7/CUX6Vh0zXFxtT91spcvDNl8S1araoo1HlooVdK96Odh/Ly
-hiP9KFjySgIdD5HpsT1tSMbEgdx/r1Iv8z4HWJDcpoz4vXeBJRTrdu+H4XJcvXlB
-r9R97zixnSmMaNnAIsNh37llJAYe2pmy9I9/lXAB12U/Z/WQ47aMUZCzIHcuyX8F
-RTLOFn64GT9n7pWmFNOllKMnkTWbxeCJhzmDbbndW5RhtVt5XbxCBYL8RZ9ne9PD
-fMmoGngO
-=CaN7
------END PGP SIGNATURE-----
 
---l5htxkzwtgg23zjg--
+compiler: gcc-12
+test machine: 64 threads 2 sockets Intel(R) Xeon(R) Gold 6346 CPU @ 3.10GHz (Ice Lake) with 256G memory
+
+(please refer to attached dmesg/kmsg for entire log/backtrace)
+
+
+
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <oliver.sang@intel.com>
+| Closes: https://lore.kernel.org/oe-lkp/202309081012.be01cf11-oliver.sang@intel.com
+
+2023-09-07 16:33:40 stress-ng --timeout 60 --times --verify --metrics-brief --sctp 64
+stress-ng: info:  [4148] setting to a 60 second run per stressor
+stress-ng: info:  [4148] dispatching hogs: 64 sctp
+stress-ng: info:  [4148] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s
+stress-ng: info:  [4148]                           (secs)    (secs)    (secs)   (real time) (usr+sys time)
+stress-ng: info:  [4148] sctp                  0     60.00      0.03      0.01         0.00           0.00
+stress-ng: warn:  [4148] metrics-check: all bogo-op counters are zero, data may be incorrect
+stress-ng: info:  [4148] for a 60.01s run time:
+stress-ng: info:  [4148]    3840.71s available CPU time
+stress-ng: info:  [4148]       0.04s user time   (  0.00%)
+stress-ng: info:  [4148]       0.01s system time (  0.00%)
+stress-ng: info:  [4148]       0.05s total time  (  0.00%)
+stress-ng: info:  [4148] load average: 0.63 0.32 0.12
+stress-ng: info:  [4148] successful run completed in 60.01s (1 min, 0.01 secs)
+
+
+
+The kernel config and materials to reproduce are available at:
+https://download.01.org/0day-ci/archive/20230908/202309081012.be01cf11-oliver.sang@intel.com
+
+
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
+
