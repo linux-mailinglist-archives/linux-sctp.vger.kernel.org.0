@@ -2,76 +2,90 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D228A7A08FE
-	for <lists+linux-sctp@lfdr.de>; Thu, 14 Sep 2023 17:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2317A090C
+	for <lists+linux-sctp@lfdr.de>; Thu, 14 Sep 2023 17:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240810AbjINPXL (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 14 Sep 2023 11:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44550 "EHLO
+        id S240880AbjINPZz (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Thu, 14 Sep 2023 11:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239524AbjINPXL (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 14 Sep 2023 11:23:11 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1759FC1
-        for <linux-sctp@vger.kernel.org>; Thu, 14 Sep 2023 08:23:07 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id 46e09a7af769-6c0b8f42409so582548a34.0
-        for <linux-sctp@vger.kernel.org>; Thu, 14 Sep 2023 08:23:07 -0700 (PDT)
+        with ESMTP id S240877AbjINPZz (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Thu, 14 Sep 2023 11:25:55 -0400
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6F41FD4;
+        Thu, 14 Sep 2023 08:25:51 -0700 (PDT)
+Received: by mail-oo1-xc30.google.com with SMTP id 006d021491bc7-573ac2fa37aso595766eaf.3;
+        Thu, 14 Sep 2023 08:25:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694704986; x=1695309786; darn=vger.kernel.org;
+        d=gmail.com; s=20221208; t=1694705150; x=1695309950; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Oxl0ug/yVLPKUYQd73DTJjFkG9FbbND2hdWAozglsc8=;
-        b=DW4GDWCFlLGjO2khKs6YCOZ0VbYZMx/bsIAIFpIJRM74gPy1e5jic/5A7ZUEXBqyYx
-         uO/RQatJvjdb9v7HbD2POGyRwk9z32E5NaGQYmquWDQXg7m8MOCUdxE7PwOQp+HpxwAe
-         0UTEw5a0DbpGNtUbNPKblGIKsJsAb85d0AUoW3MwpsrDYAW8DO1NLvui0oJz7HJN0wZK
-         A5LV05WPef9Ac9tpAPYmABtsdmTjkL0FdXlaLVESmJ7qpaf0fBCFYi/Nv/JxqDEaBrmm
-         NVDUhP8H5faTTQy0TYiKenANeKErbXfmeFy76tGc9sJfEcjkD+mzmpoF6AvolUkU3XWM
-         fUpg==
+        bh=VVJRtk5Aaf2CEUODsgUAPBMiRGZen6YdQG505lEua6A=;
+        b=W6/qVRjhfBHmc2Nx6B2nYMA+WNq1ROIP+SEyt6KUdALMW61RwmkDTxot5w/GIdctDO
+         oSGUF1aXBi7nKTZkbEzIgBmeLJchQRfIHOLawtxf7kfvrtjsvfa+7RkSYapBj1an860z
+         /ri/OU3+Bq2GQzH0ELT6fENjt406cU+6+jaFeLF/bp/jyuH0OB1w9njqUG0dQtmcPyzt
+         CL+LOOLGWKCHxfaOwKv1297tNM5ZvBKWDHjh0DRXSX9QdM1pmM4bPODcJy1UACd1LeJe
+         iLyG4Q34W+E7RKn2iA63zlitk0x3XGPhpQz+FFO90YurLhp7B9gCNRXpkJ52oA8pUzcC
+         8zbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694704986; x=1695309786;
+        d=1e100.net; s=20230601; t=1694705150; x=1695309950;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Oxl0ug/yVLPKUYQd73DTJjFkG9FbbND2hdWAozglsc8=;
-        b=upCyWmAgWV51ua0fKZ0sqUtrjqhkdI3LO3YFf3EM8uMrPke6Vc4Bw+dwti0mQLJJIv
-         TN+UxL2BWKsCVJ3wCT08JqB97N8KdpO9e1Cb4dQIx4jFrhWELGvlb8hLC6rdMOd70PbQ
-         ynCidr2vh7x8t51jmQ1l2QXpgFZVg1niuT0kuABqZkXuqkhmw6WJSxe3sg5eOTdvfUH0
-         vxTEydobe6GWfvO6zr3tuxrFEHvtTSx2edVUSjbeJVZqJkmAQgsVJjM7+cioZDrLejQP
-         JHKc7OaDUCAzUeH2tqgeO7Ffy/GCWU5ugRkKHb8aexK7vLQVnUPMcWoJ/wXeqAAjqMAB
-         AgBg==
-X-Gm-Message-State: AOJu0Yx2/3bDIhe8VcJ2vyPe57xuj8SnYvO/EmP5FQ1IMgDkrmhbzNK+
-        WXA9cNIUUe4LI1BIWlbH23fXq6G9b0I=
-X-Google-Smtp-Source: AGHT+IGZEix+2vRPhuDl5Ntj0E5pb1ygvyyuujNjgQZLD+tr3Rm9ZJ/DGS6rPVzhrHePEJ1Ftob23Q==
-X-Received: by 2002:a9d:4d91:0:b0:6bf:29d4:1886 with SMTP id u17-20020a9d4d91000000b006bf29d41886mr6794464otk.34.1694704986319;
-        Thu, 14 Sep 2023 08:23:06 -0700 (PDT)
-Received: from t14s.localdomain ([2001:1284:f508:19cd:3b6:25cc:fc94:8372])
-        by smtp.gmail.com with ESMTPSA id b45-20020a4a98f0000000b00565d41ba4d0sm732887ooj.35.2023.09.14.08.23.05
+        bh=VVJRtk5Aaf2CEUODsgUAPBMiRGZen6YdQG505lEua6A=;
+        b=TrNzSVG2lPZlmli5epKyIhATmCqw6UCat0ahQ4cyc8tjY8tHYHKKd++m/jUtfkBVUo
+         hVrQkTFZfwfZOe1XbaLTMmcSCP9pi6eZ8s2TtMjTXTl5veQ//nJiAHcKPIHSrUHqs0k0
+         pwdgxXwjj7SEZ1/BLM5COZk4TSwPLnuXD/3qseO7QC2Y6x4QK5pxG6ix2YMrHGIBdUcA
+         kSYbnTmuHKCnSNlFZxME/HdSnr/F/8ArXisFVpbwxe6cnoClpaZu7bpvPRbj6yIxaIMP
+         fycbZTyfcNR5isPmLEjRDO/dr2BaanEYSI+ZExu+4USZbSj45g5/8B4ejQ3FNKa97Gxd
+         jvQg==
+X-Gm-Message-State: AOJu0YxsWR+ebXkOxE6XQqZS/tUnNHe5yB6lEynr2ouj6kc4bpacDfVM
+        OrhtVC5UtGwrxzhC+WKmstg=
+X-Google-Smtp-Source: AGHT+IH4U3HZ9ZIHa4b1ZVPtSgqlC3O5NGvedloge9a3e5bdCQsZhDxhiBNBDGnQ2EcwpZdJ+nW6tQ==
+X-Received: by 2002:a4a:350c:0:b0:571:1a1d:f230 with SMTP id l12-20020a4a350c000000b005711a1df230mr6587755ooa.9.1694705150278;
+        Thu, 14 Sep 2023 08:25:50 -0700 (PDT)
+Received: from t14s.localdomain ([177.92.49.166])
+        by smtp.gmail.com with ESMTPSA id a20-20020a9d74d4000000b006b74bea76c0sm767215otl.47.2023.09.14.08.25.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Sep 2023 08:23:05 -0700 (PDT)
+        Thu, 14 Sep 2023 08:25:48 -0700 (PDT)
 Received: by t14s.localdomain (Postfix, from userid 1000)
-        id 15FF376E46F; Thu, 14 Sep 2023 12:23:04 -0300 (-03)
-Date:   Thu, 14 Sep 2023 12:23:04 -0300
+        id 037BD76E474; Thu, 14 Sep 2023 12:25:45 -0300 (-03)
+Date:   Thu, 14 Sep 2023 12:25:45 -0300
 From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Shubh <shubhisroking@gmail.com>
-Cc:     linux-sctp@vger.kernel.org, Xin Long <lucien.xin@gmail.com>
-Subject: Re: [PATCH] sctp: Fix spelling mistake "tranport" -> "transport"
-Message-ID: <dvxtuqgpghk7ubomxjkpnkerla473ghrc23xc2bxzosqiwsxsk@ydr23iuescvl>
-References: <20230902093457.70049-1-shubhisroking@gmail.com>
+To:     syzbot <syzbot+00f1a932d27258b183e7@syzkaller.appspotmail.com>
+Cc:     bp@alien8.de, brauner@kernel.org, dave.hansen@linux.intel.com,
+        hpa@zytor.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
+        lucien.xin@gmail.com, mingo@redhat.com, netdev@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de, x86@kernel.org
+Subject: Re: [syzbot] [sctp?] [reiserfs?] KMSAN: uninit-value in __schedule
+ (4)
+Message-ID: <cbakbuszcnwtfkdavtif3lwfncelm2ugn6eyd5pd5dmdocxqh5@3op6br7uaxd7>
+References: <0000000000007285dd0604a053db@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230902093457.70049-1-shubhisroking@gmail.com>
+In-Reply-To: <0000000000007285dd0604a053db@google.com>
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Sat, Sep 02, 2023 at 03:04:57PM +0530, Shubh wrote:
-> Signed-off-by: Shubh <shubhisroking@gmail.com>
+On Tue, Sep 05, 2023 at 10:55:01AM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    a47fc304d2b6 Add linux-next specific files for 20230831
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=131da298680000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=6ecd2a74f20953b9
+> dashboard link: https://syzkaller.appspot.com/bug?extid=00f1a932d27258b183e7
+> compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=116e5fcba80000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=118e912fa80000
 
-Hi Shubh,
+Not sure why sctp got tagged here. I could not find anything network
+related on this reproducer or console output.
 
-Thanks for your patch but you need to post it to
-netdev@vger.kernel.org. There, it can be picked up for inclusion.
-
-Cheers,
-Marcelo.
+  Marcelo
