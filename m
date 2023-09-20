@@ -2,128 +2,92 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 542417A0A4F
-	for <lists+linux-sctp@lfdr.de>; Thu, 14 Sep 2023 18:06:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A987A7477
+	for <lists+linux-sctp@lfdr.de>; Wed, 20 Sep 2023 09:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241570AbjINQGv (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Thu, 14 Sep 2023 12:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57914 "EHLO
+        id S233828AbjITHmu (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Wed, 20 Sep 2023 03:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241578AbjINQGq (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Thu, 14 Sep 2023 12:06:46 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E9F1FC0
-        for <linux-sctp@vger.kernel.org>; Thu, 14 Sep 2023 09:06:42 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id ca18e2360f4ac-7926b7f8636so30439739f.1
-        for <linux-sctp@vger.kernel.org>; Thu, 14 Sep 2023 09:06:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694707602; x=1695312402; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WsLMEgy42yaBiT7+peH789YpkE1cZSDVdqIV9tFkDJs=;
-        b=ZwiKhsSkmTCyf5TvYHer9x9UIqGqff+gaCcfpMlKqeyNEPkf5i4dYn1j452qOWD8eL
-         Ll64+SLu7OMuBztJhHhkwr5KFxloQk28bGcnSoQx15Dk7xyiHmVQmd1Gv+HqtnPTKUAd
-         ztB+9tFxZl8mmsJYKvWBgsU0yKcJuEOKON1kAtrYtWDBvHkwxCHzggoTgr1KP8nsMqNN
-         F94gYqRCBj8KGHcY4q+e9YyRPafQOASTidXDlott5g6saGhp7TNrIWT48XDZJchwjyNT
-         0qfJ0T3i1pQRbxvE6XiGTPiRBXeJizURbdID82jf9JgUK80XEf3QX6V9pR58ii49Rd0A
-         OS+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694707602; x=1695312402;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WsLMEgy42yaBiT7+peH789YpkE1cZSDVdqIV9tFkDJs=;
-        b=OMVl0+/Er58GST6OAEXrWg4qAwx0bpzz7SqEgXJv/7hQXIEYZEpv3IYDH44xuiCzJx
-         GxSVmL3C0Hks750xBGZF+RMuRhWvz3gC2mDZjiCzXvMN/XPyoty5SaDzH5+6vRLfNRav
-         AmuoX/FQTlMpC8xq9KMOgATWw3niRaUweV0wBwhGhJeBA9Q6v/521uziC38vwJm23QIw
-         uX2E3UppuhPD1wjJcz54E4mYx/AlW+AdFXQlhsEvRStmTdsPwOVagxoSo9jEfJ9KUzDz
-         MlK7aLZuFazZhkDW8AcOc9322j2XIh315EXo3VfcyMt2t2s6Scppo9NUYCOq9nm2HtXp
-         X93w==
-X-Gm-Message-State: AOJu0Yw3wMvQ5bw1QyuoWMGHnGUI88yQQlgEtaDjnmeLc4JMxhwCpJMu
-        wzlKMy1PUr3cWPI50SmFs2Zx25ToGHunXVN/6Rkuzg==
-X-Google-Smtp-Source: AGHT+IG5uiQN1/JqfzfqQfLLWnTjs7aRdbIZbEZdBy/k86sXDjNlmcQiA459x+Nf/3/c0H14MFVFDk8eX4l2uRqCEMk=
-X-Received: by 2002:a05:6602:1b09:b0:790:b44f:b9ee with SMTP id
- dk9-20020a0566021b0900b00790b44fb9eemr2328524iob.10.1694707601790; Thu, 14
- Sep 2023 09:06:41 -0700 (PDT)
+        with ESMTP id S233807AbjITHmu (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Wed, 20 Sep 2023 03:42:50 -0400
+X-Greylist: delayed 378 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 20 Sep 2023 00:42:44 PDT
+Received: from mail.venturelinkage.com (mail.venturelinkage.com [80.211.143.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E9DCE
+        for <linux-sctp@vger.kernel.org>; Wed, 20 Sep 2023 00:42:43 -0700 (PDT)
+Received: by mail.venturelinkage.com (Postfix, from userid 1002)
+        id 1D07B826F0; Wed, 20 Sep 2023 09:36:15 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=venturelinkage.com;
+        s=mail; t=1695195384;
+        bh=7iowqdzve/IIiUUjcEwx8j3uMrVqqiE7R9zbOCKRV9Q=;
+        h=Date:From:To:Subject:From;
+        b=QExR6L38SHSKAunkDVq45sToGdob08dVs8TkmyL8R+rLNqOik28WosPDR33eZK2gB
+         k1nby6VZmxxwTYo0UGHgFaH792N+tXHksvQktM5KkU/1fxsXgNk/LfA23QPt7sDMT/
+         57kVYM9i9Cw3Qwn4z98S/tEO2k/Sy3/ZMEzXntMR/IL+rWBIAXbUSwhsxCcQiMRYqO
+         n3ZKTFN4CvKttuGIkzoSPPgIuweRSePhUPNBOMDH72eQuPCedB6KRbqLeUKqak5A8J
+         ZsmZw/bNZytTyCAxLXclS+jHLTxIm8buo8A2/7wVxcnTN9IjCF9rX3k8uyHNnAvvlC
+         9k46PsGonmkeg==
+Received: by mail.venturelinkage.com for <linux-sctp@vger.kernel.org>; Wed, 20 Sep 2023 07:36:09 GMT
+Message-ID: <20230920084500-0.1.l.11ik.0.6n8lql2erc@venturelinkage.com>
+Date:   Wed, 20 Sep 2023 07:36:09 GMT
+From:   "Lukas Varga" <lukas.varga@venturelinkage.com>
+To:     <linux-sctp@vger.kernel.org>
+Subject: =?UTF-8?Q?Popt=C3=A1vka?=
+X-Mailer: mail.venturelinkage.com
 MIME-Version: 1.0
-References: <0000000000007285dd0604a053db@google.com> <cbakbuszcnwtfkdavtif3lwfncelm2ugn6eyd5pd5dmdocxqh5@3op6br7uaxd7>
-In-Reply-To: <cbakbuszcnwtfkdavtif3lwfncelm2ugn6eyd5pd5dmdocxqh5@3op6br7uaxd7>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Thu, 14 Sep 2023 18:06:01 +0200
-Message-ID: <CAG_fn=Umt5Gm1aFa2Tr8LCXboDZvBx9WBw_AvvkN3_7eyXSsRg@mail.gmail.com>
-Subject: Re: [syzbot] [sctp?] [reiserfs?] KMSAN: uninit-value in __schedule (4)
-To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     syzbot <syzbot+00f1a932d27258b183e7@syzkaller.appspotmail.com>,
-        bp@alien8.de, brauner@kernel.org, dave.hansen@linux.intel.com,
-        hpa@zytor.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
-        lucien.xin@gmail.com, mingo@redhat.com, netdev@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de, x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM28,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
+        *      blocklist
+        *      [URIs: venturelinkage.com]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [80.211.143.151 listed in zen.spamhaus.org]
+        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
+        *      blocklist
+        *      [URIs: venturelinkage.com]
+        *  0.0 RCVD_IN_DNSWL_BLOCKED RBL: ADMINISTRATOR NOTICE: The query to
+        *      DNSWL was blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [80.211.143.151 listed in list.dnswl.org]
+        * -0.0 BAYES_20 BODY: Bayes spam probability is 5 to 20%
+        *      [score: 0.0709]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.8 FROM_FMBLA_NEWDOM28 From domain was registered in last 14-28
+        *      days
+X-Spam-Level: ******
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Thu, Sep 14, 2023 at 5:25=E2=80=AFPM Marcelo Ricardo Leitner
-<marcelo.leitner@gmail.com> wrote:
->
-> On Tue, Sep 05, 2023 at 10:55:01AM -0700, syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    a47fc304d2b6 Add linux-next specific files for 20230831
-> > git tree:       linux-next
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D131da298680=
-000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D6ecd2a74f20=
-953b9
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3D00f1a932d2725=
-8b183e7
-> > compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for=
- Debian) 2.40
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D116e5fcba=
-80000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D118e912fa80=
-000
->
-> Not sure why sctp got tagged here. I could not find anything network
-> related on this reproducer or console output.
+Dobr=C3=A9 r=C3=A1no,
 
-I am afraid this is the effect of reports from different tools being
-clustered together: https://github.com/google/syzkaller/issues/4168
-The relevant KMSAN report can be viewed on the dashboard:
-https://syzkaller.appspot.com/text?tag=3DCrashReport&x=3D144ba287a80000 -
-that's where sctp was deduced from.
+Dovolil jsem si V=C3=A1s kontaktovat, proto=C5=BEe m=C3=A1m z=C3=A1jem ov=
+=C4=9B=C5=99it mo=C5=BEnost nav=C3=A1z=C3=A1n=C3=AD spolupr=C3=A1ce.
 
-I suspect there's still nothing specific to sctp though: looks like
-schedule_debug() somehow accidentally reads past the end of the task
-stack.
+Podporujeme firmy p=C5=99i z=C3=ADsk=C3=A1v=C3=A1n=C3=AD nov=C3=BDch obch=
+odn=C3=ADch z=C3=A1kazn=C3=ADk=C5=AF.
 
->   Marcelo
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/syzkaller-bugs/cbakbuszcnwtfkdavtif3lwfncelm2ugn6eyd5pd5dmdocxqh5%403op6b=
-r7uaxd7.
+M=C5=AF=C5=BEeme si promluvit a poskytnout podrobnosti?
+
+V p=C5=99=C3=ADpad=C4=9B z=C3=A1jmu V=C3=A1s bude kontaktovat n=C3=A1=C5=A1=
+ anglicky mluv=C3=ADc=C3=AD z=C3=A1stupce.
 
 
-
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+Pozdravy
+Lukas Varga
