@@ -2,74 +2,72 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E797B6BD5
-	for <lists+linux-sctp@lfdr.de>; Tue,  3 Oct 2023 16:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73FA97B6F69
+	for <lists+linux-sctp@lfdr.de>; Tue,  3 Oct 2023 19:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240161AbjJCOhU (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Tue, 3 Oct 2023 10:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60532 "EHLO
+        id S231392AbjJCRSA (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 3 Oct 2023 13:18:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240154AbjJCOhS (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Tue, 3 Oct 2023 10:37:18 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DA3AB;
-        Tue,  3 Oct 2023 07:37:14 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-d90da64499cso1056806276.0;
-        Tue, 03 Oct 2023 07:37:14 -0700 (PDT)
+        with ESMTP id S230119AbjJCRSA (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 3 Oct 2023 13:18:00 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DD595;
+        Tue,  3 Oct 2023 10:17:57 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-77432add7caso81359885a.2;
+        Tue, 03 Oct 2023 10:17:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696343833; x=1696948633; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kDSrbor6d5vrsa4WUXcUYUUsBIxTGmw3LfKQuRqMfxg=;
-        b=AUE67MRPiRoTLOgVdDB+5QdYtsEM47K9N4jCJCbZoAbSPGLI0B2/fNu9JhyWGqqwaj
-         1dyiLmgFQrOok+OHF2RkLNyS7NhUXV+9QPt8pfouhHv2GRvW028G7u2L3Y4NX5UDvgE/
-         6iTOS1d0fs4mK9Aik456o/UckMqVKQTfn3KoU0xXFdJGjACAh61UxP22Y3DsB3eRjh63
-         8KIC3KRsvP21+eOFx3G4FC1Epnh2G8on/0HIzscXvvHg6OKeM1LjNnKquaffOkZWJ/Nd
-         M8OvH5dR/emUOtqTIx64VkCGd9g14ZTLavhPWaoEKwhMio9HmGvdCd3nNMDtpWvmHefv
-         m+SQ==
+        d=gmail.com; s=20230601; t=1696353476; x=1696958276; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rilJqYgfCUDdfqLBW4lWYkPrV16f8nh/2/f/h5185tc=;
+        b=myfVcrmHxLWsdebfUqoSkpKjNfMB6cswg9iDnPbKlk7YsZA/UeohttjXKxtXfEphjK
+         8NpK8yYqfuntjwmG4bjIUl/VWU2sp+uN4WP9OiK7u9AeFwnNhShaiPUALgd9j+8ANUAu
+         cdd6aJqSt7a9mfkkMei4dT4efnuCF++p/hgmkbOGnNGoL5B0xAVY9Def0WROUrvBfjcp
+         pMpxkfvO4Q8pH3o1Moyd3ztwCD4S+myGN5h+gSIQ2icpA6e9aTMV6FstR9yyKarbRfb7
+         bsmdj+P4+WrCp1T9X7RvD6UvDvxRJdyQiVxMvBcmHki8LDUxD1UkVgXFwcPPVxtcB4oN
+         2BpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696343833; x=1696948633;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kDSrbor6d5vrsa4WUXcUYUUsBIxTGmw3LfKQuRqMfxg=;
-        b=MgCwcXwc9ysGgJn+Lbpqtqcs7ckA/VGp2WlARJSjm2zlc+g+hbE4eH+0bryYgUZe3L
-         HbVmBTZ7ud2lXRbXwN8iEhCe1kRW9+hfcU9epFYi05QYU4OK8QTgueO0Mqq1x4VxquA+
-         tq+PQnJhdWCf0RzdLydCZjAdrfBj/qpbxwwuJkMKu3w0+xhO7rAvXm+3izJegAyqJu76
-         +kA2j/CuE4p3pYtb4v8g1CtISNTG0xCzhp0XLOHwdMTgjUMnp2fr9jMuND7JqvKJqYms
-         VHkgpA9fUivG9xCDk3Zfyy8B9QfA+EipKom/R6AKjCPlhw48ZcAqza8KU/StBKVL3D22
-         7b/g==
-X-Gm-Message-State: AOJu0YytEkS/RMr4xF+/sHdPIecN+2S+kA8jrvHcprstFUFcFhAAunpm
-        Io4g1ochpDLu9EcVDxuhl5dwF0c3Ucj9MR6I/ys7Ywxk
-X-Google-Smtp-Source: AGHT+IFZxGTJOgKxVQG5wsIyVvQRptQFng65OIT7UDDJjnn2dGSTzmZIsyhQJdinmjW/Mf9HMf+iU2VXM9tLzzv5t7c=
-X-Received: by 2002:a25:df91:0:b0:d86:2156:c314 with SMTP id
- w139-20020a25df91000000b00d862156c314mr14930517ybg.28.1696343833061; Tue, 03
- Oct 2023 07:37:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <6ee630f777cada3259b29e732e7ea9321a99197b.1696172868.git.lucien.xin@gmail.com>
- <ZRwOVyKQR8MBjpBh@kernel.org> <CADvbK_fK03UO3R=70J+VoGVm_LJuzZbh+_=0doceS8DCPJYBVA@mail.gmail.com>
- <20231003142343.GA8405@breakpoint.cc>
-In-Reply-To: <20231003142343.GA8405@breakpoint.cc>
+        d=1e100.net; s=20230601; t=1696353476; x=1696958276;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rilJqYgfCUDdfqLBW4lWYkPrV16f8nh/2/f/h5185tc=;
+        b=B3wQ0bGMncDXj2WXdRWYrEc1QTM0yR6y/Io53OJdtDRvSpqQVoWruSDl+/FQck/L0I
+         cwz6n0Ib9GDUs0gZetav9qgOXT+dep+Vtam594MMD++lc4qP/HB4DOmizB1ucRnPt+It
+         ikDRF6luhmJ0khbssuiMChZfyAYh49bfnl4tFWage97EDPFZSuUOzeJI2U7zrILPkKvt
+         Z16LNAGzaqLQP12ryDJQJGhstORY8yuv1UQQCLFaR07+K46+N9xIIAFbbrxdPEBQg9Hs
+         fN8UhJb6+n/x3NmZDpoTErVWRouYn8JqLOWlC1+xwcYHa2zwq7ySYsg9vjbF3JCo5z7S
+         ibUg==
+X-Gm-Message-State: AOJu0Yx/1oumNmbLOXmKS5aHRoxZvZgPDuq8q6HE3aeiej9mh6n4iypf
+        N6jR4zmN3ktOwj7vqYBQsQKq+8eeT8FZkQ==
+X-Google-Smtp-Source: AGHT+IEJ2dzvfICdpLPVbmE1BbOJ8vrtDvucR+t6HSgAAbpruzbKuw7YdejsIFZCcf9idnCUNfv7fg==
+X-Received: by 2002:a0c:eb07:0:b0:64f:3795:c10 with SMTP id j7-20020a0ceb07000000b0064f37950c10mr14195qvp.10.1696353476418;
+        Tue, 03 Oct 2023 10:17:56 -0700 (PDT)
+Received: from wsfd-netdev15.ntdv.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id h1-20020a0cf401000000b0065d0dcc28e3sm633041qvl.73.2023.10.03.10.17.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Oct 2023 10:17:55 -0700 (PDT)
 From:   Xin Long <lucien.xin@gmail.com>
-Date:   Tue, 3 Oct 2023 10:37:01 -0400
-Message-ID: <CADvbK_cHfsGaLG5NyWo6rXBpuPvqS4yWUCEhK3TcC65gixkPTQ@mail.gmail.com>
-Subject: Re: [PATCH nf] netfilter: handle the connecting collision properly in nf_conntrack_proto_sctp
-To:     Florian Westphal <fw@strlen.de>
-Cc:     Simon Horman <horms@kernel.org>,
-        network dev <netdev@vger.kernel.org>,
-        netfilter-devel@vger.kernel.org, linux-sctp@vger.kernel.org,
-        davem@davemloft.net, kuba@kernel.org,
+To:     network dev <netdev@vger.kernel.org>,
+        netfilter-devel@vger.kernel.org, linux-sctp@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org,
         Eric Dumazet <edumazet@google.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Pablo Neira Ayuso <pablo@netfilter.org>,
         Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Florian Westphal <fw@strlen.de>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Simon Horman <horms@kernel.org>
+Subject: [PATCHv2 nf 0/2] netfilter: handle the sctp collision properly and add selftest
+Date:   Tue,  3 Oct 2023 13:17:52 -0400
+Message-Id: <cover.1696353375.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,26 +75,24 @@ Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Oct 3, 2023 at 10:23=E2=80=AFAM Florian Westphal <fw@strlen.de> wro=
-te:
->
-> Xin Long <lucien.xin@gmail.com> wrote:
-> > > The type of vtag is u32. But the type of ct->proto.sctp.vtag[!dir] an=
-d init_tag
-> > > is __be32. This doesn't seem right (and makes Sparse unhappy).
-> > You're right, I will fix it and re-post with tag:
-> >
-> > Fixes: 9fb9cbb1082d ("[NETFILTER]: Add nf_conntrack subsystem.")
->
-> I'm fine with this, the bug is likely inherited from
-> ipt_conntrack_sctp.c, but that doesn't exist anymore.
-ah, I see.
+Patch 1/2 is to fix the insufficient processing for sctp collision in netfilter
+nf_conntrack, and Patch 2/2 is to add a selftest for it, as Florian suggested.
 
->
-> Would you also fix up the __be32/u32 confusion?
->
-> Better to not add more sparse warnings...
->
-yes, I will fix the __be32 one too.
+Xin Long (2):
+  netfilter: handle the connecting collision properly in
+    nf_conntrack_proto_sctp
+  selftests: netfilter: test for sctp collision processing in
+    nf_conntrack
 
-Thanks.
+ include/linux/netfilter/nf_conntrack_sctp.h   |  1 +
+ net/netfilter/nf_conntrack_proto_sctp.c       | 43 ++++++--
+ tools/testing/selftests/netfilter/Makefile    |  5 +-
+ .../netfilter/conntrack_sctp_collision.sh     | 89 +++++++++++++++++
+ .../selftests/netfilter/sctp_collision.c      | 99 +++++++++++++++++++
+ 5 files changed, 225 insertions(+), 12 deletions(-)
+ create mode 100755 tools/testing/selftests/netfilter/conntrack_sctp_collision.sh
+ create mode 100644 tools/testing/selftests/netfilter/sctp_collision.c
+
+-- 
+2.39.1
+
