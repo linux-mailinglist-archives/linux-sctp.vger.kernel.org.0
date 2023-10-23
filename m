@@ -2,71 +2,79 @@ Return-Path: <linux-sctp-owner@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 202317BC86A
-	for <lists+linux-sctp@lfdr.de>; Sat,  7 Oct 2023 16:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 163357D4828
+	for <lists+linux-sctp@lfdr.de>; Tue, 24 Oct 2023 09:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233988AbjJGOr1 (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
-        Sat, 7 Oct 2023 10:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58178 "EHLO
+        id S232420AbjJXHOb (ORCPT <rfc822;lists+linux-sctp@lfdr.de>);
+        Tue, 24 Oct 2023 03:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbjJGOr0 (ORCPT
-        <rfc822;linux-sctp@vger.kernel.org>); Sat, 7 Oct 2023 10:47:26 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A994DBD;
-        Sat,  7 Oct 2023 07:47:25 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2F05C433C7;
-        Sat,  7 Oct 2023 14:47:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696690045;
-        bh=toBbiQLzqioyx3ESZzgeMUmDaIvxlXr2inUPTTVY7VM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=npVi0yxa2LNPlvtS1ysPrOCYdtE8fIhgoJ1yeYf9EZqv87t95Uk6c7uVO0YCLLM4B
-         NNceouB6JIkkKaVmqZIWZ5bdgO+zJTc4TMX5IYVZUMhY8xrq/oDsqFad6NUe5LKm1V
-         Ft8uERIUV5vLe6PH9QdUsaroLDYzgBlVw0nUcxGdyVnMUZpdAcX0nbqq9bA8UAaiUc
-         7zVBvT56NAd2dWgjdq7dCxlVJpMb09dP5S2gUIutPOg1PVVEE9q35AX2m2kLyYSMnN
-         xP62TxCInwwMqnhWqgQqmDjBFtX+HBCmQt/EG5PBJDiQGl7iJTHD6vDiT0tXTiTxJo
-         hIxJAfTM9/a0g==
-Date:   Sat, 7 Oct 2023 16:47:20 +0200
-From:   Simon Horman <horms@kernel.org>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     network dev <netdev@vger.kernel.org>,
-        netfilter-devel@vger.kernel.org, linux-sctp@vger.kernel.org,
-        davem@davemloft.net, kuba@kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Subject: Re: [PATCHv2 nf 0/2] netfilter: handle the sctp collision properly
- and add selftest
-Message-ID: <20231007144720.GA831234@kernel.org>
-References: <cover.1696353375.git.lucien.xin@gmail.com>
+        with ESMTP id S232398AbjJXHOb (ORCPT
+        <rfc822;linux-sctp@vger.kernel.org>); Tue, 24 Oct 2023 03:14:31 -0400
+Received: from mail.tehinnovacii.ru (mail.tehinnovacii.ru [185.221.212.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8AB8110
+        for <linux-sctp@vger.kernel.org>; Tue, 24 Oct 2023 00:14:29 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.tehinnovacii.ru (Postfix) with ESMTP id 00CB784875ED4;
+        Mon, 23 Oct 2023 23:45:23 +0300 (MSK)
+Received: from mail.tehinnovacii.ru ([127.0.0.1])
+        by localhost (mail.tehinnovacii.ru [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id sasBIK26Tatm; Mon, 23 Oct 2023 23:45:23 +0300 (MSK)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.tehinnovacii.ru (Postfix) with ESMTP id F02498454F80D;
+        Mon, 23 Oct 2023 23:45:17 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.tehinnovacii.ru F02498454F80D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tehinnovacii.ru;
+        s=mail; t=1698093918;
+        bh=Ws5TcS6EV4V7aiUY6u9eol5cuGGKUQT0mSrLKF+Le3s=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=KfAERvr+SIjmchCtgWnS3wCGb1qMP8tRj2+5blSQz7Ygt5oOBsocqqHOKZWn0UZr8
+         AzGhac8RhlqeCtZWa39AuxtBrtfGXnb9mqWmkGIF6/IFmh2zc4z1nDuxklG9XdCobA
+         cuBOTN4qrS1yYTaV/vPjg15TL+eBLVr3IxMb6dydAHBH0+i7wF7VIBUxVqTlYFv4AO
+         0QMvtJ+AtsEhkcwQMOqhpzIA5TANIvs6KkGZjtAH0Bamg/VqczPs0UBQmLrQkNc46r
+         LT9K1Fonhj8eYtSOEtFJMoLuiXsusE6laCCPEJ6dfpW8BN+4kTTj2cD4wsBz6QetG2
+         6nLDtXpI9ZHvA==
+Received: from mail.tehinnovacii.ru ([127.0.0.1])
+        by localhost (mail.tehinnovacii.ru [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 3Ufcqf1Gfx8T; Mon, 23 Oct 2023 23:45:17 +0300 (MSK)
+Received: from DESKTOP-0AG4O9B.lan (unknown [41.157.248.166])
+        by mail.tehinnovacii.ru (Postfix) with ESMTPSA id 48AE1841345AA;
+        Mon, 23 Oct 2023 23:45:09 +0300 (MSK)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1696353375.git.lucien.xin@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Brauchen Sie einen Kredit?
+To:     Recipients <zp@tehinnovacii.ru>
+From:   Georg Johannes Proksch <zp@tehinnovacii.ru>
+Date:   Mon, 23 Oct 2023 13:44:08 -0700
+Reply-To: kreditschufadeutsch0@gmail.com
+Message-Id: <20231023204510.48AE1841345AA@mail.tehinnovacii.ru>
+X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_BL_SPAMCOP_NET,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-sctp.vger.kernel.org>
 X-Mailing-List: linux-sctp@vger.kernel.org
 
-On Tue, Oct 03, 2023 at 01:17:52PM -0400, Xin Long wrote:
-> Patch 1/2 is to fix the insufficient processing for sctp collision in netfilter
-> nf_conntrack, and Patch 2/2 is to add a selftest for it, as Florian suggested.
-> 
-> Xin Long (2):
->   netfilter: handle the connecting collision properly in
->     nf_conntrack_proto_sctp
->   selftests: netfilter: test for sctp collision processing in
->     nf_conntrack
+Brauchen Sie einen Kredit?
+Tr=E4umen Sie davon, ein Unternehmen zu gr=FCnden?
+Sie ben=F6tigen Geld f=FCr Ihre Gesch=E4ftsidee, ben=F6tigen aber eine gro=
+=DFe Finanzierung?
+Besitzen Sie ein Unternehmen und m=F6chten expandieren?
 
-For series,
+Wir bieten Gesch=E4ftskredite, Privatkredite, Projektkredite und Autokredit=
+e mit einem Zinssatz von 2 % an.
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+Vollst=E4ndiger Name:
+Kreditbetrag:
+Kreditlaufzeit:
+Land:
+Telefonnummer:
 
+Herr Georg Johannes Proksch
+Kreditberater/Berater
