@@ -1,170 +1,127 @@
-Return-Path: <linux-sctp+bounces-22-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-23-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98AD28505C9
-	for <lists+linux-sctp@lfdr.de>; Sat, 10 Feb 2024 18:49:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F36FB8505DD
+	for <lists+linux-sctp@lfdr.de>; Sat, 10 Feb 2024 19:03:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 11AE81F24D6F
-	for <lists+linux-sctp@lfdr.de>; Sat, 10 Feb 2024 17:49:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFD59286005
+	for <lists+linux-sctp@lfdr.de>; Sat, 10 Feb 2024 18:03:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D1295D468;
-	Sat, 10 Feb 2024 17:48:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b="OM1jPip0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 393A45D477;
+	Sat, 10 Feb 2024 18:03:02 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDBE35CDDA
-	for <linux-sctp@vger.kernel.org>; Sat, 10 Feb 2024 17:48:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1440C5D46F
+	for <linux-sctp@vger.kernel.org>; Sat, 10 Feb 2024 18:02:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.86.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707587337; cv=none; b=RkId4/QlMSVG+uqUK5qOqowkDo8pv087pbbvtYplifOKQVWxaGDGlNaG5CzoPbal81fqOWV/BMaiTjm59nWEFkK0Mig92ox/OWFqrtPhRm+bGw0jkCafA0gXtR0i7t4yUWJXnnxdVWIv47boSd40opoj7P1z8iOgeuKorEaI+3g=
+	t=1707588182; cv=none; b=bsUny1Wq7H0UI8LtdxSBbggbVMa/8qPLV4QaGF7eP6XzX3x8uoSOmTLo5S0JHAaGVW4MU6YpOvzu+nx6Rf3XUiPFZiphyJ2rbPFWuLvH4tiIOkUrlxKW5GQKD4qOt+z1zpYHReYQ8APoD0lskfqW8tr8vn/QPoEFmMyy/T0HHD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707587337; c=relaxed/simple;
-	bh=qDJt6rRrBpsgOnLZHa07+WW4fWj80m4HNHrXW75475o=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=DZeXGD8gTy2l9F/XbNmIY1vZGC8/0mhr9VZc5lD28wVi0uODjLffnmIPapDGJF3eoZ2yxqskSM1JumxOrCis8Zo5UP08uVp5rL/8J+Jt9Azu95uCA2ipBpcp/HImCrZqIn92wqhH3M3MeJSK/xJlqeLFnq2Y/S4A3Mf1KyNsBWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de; spf=pass smtp.mailfrom=posteo.de; dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b=OM1jPip0; arc=none smtp.client-ip=185.67.36.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.de
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout01.posteo.de (Postfix) with ESMTPS id 1EA47240028
-	for <linux-sctp@vger.kernel.org>; Sat, 10 Feb 2024 18:48:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-	t=1707587326; bh=qDJt6rRrBpsgOnLZHa07+WW4fWj80m4HNHrXW75475o=;
-	h=Message-ID:Subject:From:To:Cc:Date:Autocrypt:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version:From;
-	b=OM1jPip0VU2IN0+X1zdDELKVbzaj214iGGPL/ArEHkk5ZX/5W8KFcJ3sj8wb6W5WG
-	 BEnVD4yJwcVKfeTS8ptr1v/BppObYavyGu4+YbqZb5K1B1ShCMo9M5d34md2n1/78w
-	 pV6vdkhckM5LgBvQz23EHGA+3cz3FcA7alTfxHI6cvepAFJQCLP7dQMB/VBLKGfDV7
-	 gbACH5MBGTSiVZgoFu/I27a3NCEpl1/c3ruZUtm6mtXY7r3EAVFj1mKcjvm5COf1sL
-	 qHq44Ylmm2vwsJMTpXTS0D81VDerJbvIO5LilOVftgaa5c+zpaaVWyX28iRUewfwkt
-	 WMs1ZlsOX5zEg==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4TXJ9n1Qznz6tvp;
-	Sat, 10 Feb 2024 18:48:45 +0100 (CET)
-Message-ID: <04c483f34daaebb95d8de56e8e6a49a473c04fe4.camel@posteo.de>
-Subject: Re: Linux SCTP multihoming question
-From: Philipp Stanner <stanner@posteo.de>
-To: David Laight <David.Laight@ACULAB.COM>, "'o.evistel@free.fr'"
-	 <o.evistel@free.fr>, Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc: linux-sctp <linux-sctp@vger.kernel.org>, 'Andreas Fink'
-	 <afink@list.fink.org>
-Date: Sat, 10 Feb 2024 17:48:44 +0000
-In-Reply-To: <557a01dfcfd440e6b1b1b1762839d033@AcuMS.aculab.com>
-References: 
-	<6f6f11b5c30bce3d6e77d719ef75112dee75250d.profile@marceloleitner.u.sourceforge.net>
+	s=arc-20240116; t=1707588182; c=relaxed/simple;
+	bh=+hdhWUGd72DmZCOzYDxZjz+KmsZCDHtIlUSXSTPKq10=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 MIME-Version:Content-Type; b=MK7MFBLYzS8PXMxJhyC1YoBVzBxuL53cEykkf2GP2qK/Xm3nx8WDb6qdy+QxHHl3tMpaPfInnY9QgdotA53RY+vTqZNbdYsfTlsRINOB83+rc+TFXdXYAYgyzLU5bt6HW61YKumz4OvnOWjwwpVuLE7bOq9+W2K7mltR+//eZM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.86.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-85-0tKoHfM4NoiaDBvJu1gHfQ-1; Sat, 10 Feb 2024 18:02:56 +0000
+X-MC-Unique: 0tKoHfM4NoiaDBvJu1gHfQ-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sat, 10 Feb
+ 2024 18:02:35 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Sat, 10 Feb 2024 18:02:35 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Philipp Stanner' <stanner@posteo.de>, "'o.evistel@free.fr'"
+	<o.evistel@free.fr>, Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+CC: linux-sctp <linux-sctp@vger.kernel.org>, 'Andreas Fink'
+	<afink@list.fink.org>
+Subject: RE: Linux SCTP multihoming question
+Thread-Topic: Linux SCTP multihoming question
+Thread-Index: AdpcQw7o42LnVkYaSYSLKU43k+X0CAAAM4EAAAChmdAAAMAoAAAAF91Q
+Date: Sat, 10 Feb 2024 18:02:35 +0000
+Message-ID: <ddc189ebea24410c9387bff2de543f34@AcuMS.aculab.com>
+References: <6f6f11b5c30bce3d6e77d719ef75112dee75250d.profile@marceloleitner.u.sourceforge.net>
 	 <YsbiDrG1PQ2Gng5T@t14s.localdomain>
 	 <1937458162.418765580.1657717120765.JavaMail.zimbra@free.fr>
 	 <1024792113.114715673.1707473146836.JavaMail.zimbra@free.fr>
 	 <6455bdeb746c4236a1ecc430ba05e707@AcuMS.aculab.com>
 	 <365e312e60de89031d2c816e502f18b4d74b98c7.camel@posteo.de>
 	 <557a01dfcfd440e6b1b1b1762839d033@AcuMS.aculab.com>
-Autocrypt: addr=stanner@posteo.de; prefer-encrypt=mutual;
- keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ <04c483f34daaebb95d8de56e8e6a49a473c04fe4.camel@posteo.de>
+In-Reply-To: <04c483f34daaebb95d8de56e8e6a49a473c04fe4.camel@posteo.de>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 
-Am Samstag, dem 10.02.2024 um 17:34 +0000 schrieb David Laight:
-> From: Philipp Stanner
-> > Sent: 10 February 2024 17:09
-> >=20
-> > Am Samstag, dem 10.02.2024 um 17:03 +0000 schrieb David Laight:
-> > > From: o.evistel@free.fr
-> > > > Sent: 09 February 2024 10:06
-> > > >=20
-> > > > I am using linux-sctp as transport for SIGTRAN M3UA on RHEL 8.4
-> > > > with
-> > > > multihoming (sctp_bindx(), sctp_connectx() API functions).
-> > > > I would like to know, after association setup, if it is
-> > > > possible to
-> > > > instruct SCTP to use a specific local address from the list of
-> > > > bound
-> > > > addresses to reach the peer.
-> > >=20
-> > > Unlikely in the extreme.
-> > >=20
-> > > If there are 'n' bound local addresses and 'm' remote addresses
-> > > (IIRC from the INIT_ACK - but they come from the far end) then
-> > > Linux only verifies a route to each local address and picks an
-> > > appropriate local address for each one.
-> > > So it only sends heartbeats to 'm' addresses, not on 'n * m'
-> > > address pairs.
-> > >=20
-> > > So if anything of this nature did exist it would limit the
-> > > remote addresses used, not the local ones.
-> >=20
-> > I've been told once that using the socket option SO_BINDTODEVICE
-> > should
-> > serve the trick, i.e., it should provoke Linux into choosing the
-> > picked
-> > device's IP addr as the source IP addr.
-> >=20
-> > I've never tested / verified that, though.
-> > I'm also not sure if it would have other negative consequences,
-> > such as
-> > limiting the reachability through non-bound devices.
->=20
-> But won't that defeat the entire point of SCTP multihoming?
-
-I guess it defeats the philosophy of the OS with its routing table
-being solely responsible for choosing a source address.
-I don't see how SCTP would be affected by that, though. SCTP doesn't
-demand a certain number of interfaces being available, nor does it make
-statements about how the networks behind the interfaces might or might
-not be interconnected.
-
-> You need two interfaces in different subnets that use entirely
-> separate IP networks to connect to the two addresses the remote
-> system gives you.
-> (There are really only ever two addresses for each system.)
-
-I assume you're coming from the perspective of a user where SCTP is
-utilized with completely redundant and separated networks for
-redundancy.
-I, however, have only used the protocol in the normal boring Internet =E2=
-=80=93
-and there it's definitely possible to reach N endpoints from just 1
-outgoing interface. All the endpoints are connected to the Internet,
-after all, so the routers will ultimately direct your packages to the
-target addr.
-
->=20
-> I don't know what the standards people were smoking, but the
-> default 'send all my IP addresses to the far end' is so broken.
-
-How else could you implement it?
-Only alternative I can think of would be to have some sort of multi-
-homing DNS that provides you with several addresses.
-
-P.
-
-> Requiring the application to know which addresses are 'local'
-> (typically 192.178.x.x and 10.x.x.x) and pretty much must never
-> be sent to a remote system (where they can easily mean something
-> else) is just wrong, it ought to be a property of the protocol stack.
->=20
-> Never mind that the fact that API calls like bindx() were originally
-> implemented using socket options being embedded in the standard.
->=20
-> 	David
->=20
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes,
-> MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+RnJvbTogUGhpbGlwcCBTdGFubmVyDQo+IFNlbnQ6IDEwIEZlYnJ1YXJ5IDIwMjQgMTc6NDkNCi4u
+Lg0KPiA+IEJ1dCB3b24ndCB0aGF0IGRlZmVhdCB0aGUgZW50aXJlIHBvaW50IG9mIFNDVFAgbXVs
+dGlob21pbmc/DQo+IA0KPiBJIGd1ZXNzIGl0IGRlZmVhdHMgdGhlIHBoaWxvc29waHkgb2YgdGhl
+IE9TIHdpdGggaXRzIHJvdXRpbmcgdGFibGUNCj4gYmVpbmcgc29sZWx5IHJlc3BvbnNpYmxlIGZv
+ciBjaG9vc2luZyBhIHNvdXJjZSBhZGRyZXNzLg0KPiBJIGRvbid0IHNlZSBob3cgU0NUUCB3b3Vs
+ZCBiZSBhZmZlY3RlZCBieSB0aGF0LCB0aG91Z2guIFNDVFAgZG9lc24ndA0KPiBkZW1hbmQgYSBj
+ZXJ0YWluIG51bWJlciBvZiBpbnRlcmZhY2VzIGJlaW5nIGF2YWlsYWJsZSwgbm9yIGRvZXMgaXQg
+bWFrZQ0KPiBzdGF0ZW1lbnRzIGFib3V0IGhvdyB0aGUgbmV0d29ya3MgYmVoaW5kIHRoZSBpbnRl
+cmZhY2VzIG1pZ2h0IG9yIG1pZ2h0DQo+IG5vdCBiZSBpbnRlcmNvbm5lY3RlZC4NCg0KWW91IG5l
+ZWQgdG8gbG9vayBhdCB3aHkgaXQgZXhpc3RzLCBhbmQgd2hhdCBpdCB3YXMgdHJ5aW5nIHRvIHJl
+cGxpY2F0ZS4NClNDVFAgaXMgYWxsIGFib3V0IGNhcnJ5aW5nIHRlbGVwaG9ueSBzaWduYWxsaW5n
+IG92ZXIgdGhlIElQIG5ldHdvcmsuDQpTbyBpdCBpcyB0cnlpbmcgKGFuZCBmYWlsaW5nIGZvciBh
+bGwgc29ydHMgb2YgcmVhc29ucykgdG8gZ2l2ZQ0KdGhlIHNhbWUgc29ydCBvZiBlcnJvciBkZXRl
+Y3Rpb24gYW5kIHJlZHVuZGFuY3kgYXMgU1M3IE1UUDIgYW5kIE1UUDMuDQoNClRoZSBub3JtYWwg
+bGV2ZWwgb2YgcmVkdW5kYW5jeSBpcyB0byBoYXZlIHR3byBzZXBhcmF0ZSBNVFAyIGxpbmtzDQoo
+YSBsaW5rc2V0KSB0byBlYWNoIG9mIHR3byBkaWZmZXJlbnQgcmVtb3RlIE1UUDMgc3lzdGVtcy4N
+CklmIHlvdSBhcmUgZG9pbmcgaXQgcmlnaHQgZWFjaCBNVFAyIGxpbmsgaXMgb24gYSBzZXBhcmF0
+ZSBwaHlzaWNhbCBjYWJsZS4NClRoZSBTQ1RQIGNvbm5lY3Rpb24gaXMgdHJ5aW5nIHRvIHJlcGxp
+Y2F0ZSB0aGUgbGlua3NldCB0byBhIHJlbW90ZQ0Kc3lzdGVtIC0gc28geW91IG5lZWQgdHdvIGxv
+Y2FsIGludGVyZmFjZXMgY29ubmVjdGVkIHRvIHR3byByZW1vdGUgb25lcy4NCllvdSBjYW4gaGF2
+ZSBtb3JlLCBidXQgaXQgaXMgYmFzaWNhbGx5IHBvaW50bGVzcy4NCg0KPiA+IFlvdSBuZWVkIHR3
+byBpbnRlcmZhY2VzIGluIGRpZmZlcmVudCBzdWJuZXRzIHRoYXQgdXNlIGVudGlyZWx5DQo+ID4g
+c2VwYXJhdGUgSVAgbmV0d29ya3MgdG8gY29ubmVjdCB0byB0aGUgdHdvIGFkZHJlc3NlcyB0aGUg
+cmVtb3RlDQo+ID4gc3lzdGVtIGdpdmVzIHlvdS4NCj4gPiAoVGhlcmUgYXJlIHJlYWxseSBvbmx5
+IGV2ZXIgdHdvIGFkZHJlc3NlcyBmb3IgZWFjaCBzeXN0ZW0uKQ0KPiANCj4gSSBhc3N1bWUgeW91
+J3JlIGNvbWluZyBmcm9tIHRoZSBwZXJzcGVjdGl2ZSBvZiBhIHVzZXIgd2hlcmUgU0NUUCBpcw0K
+PiB1dGlsaXplZCB3aXRoIGNvbXBsZXRlbHkgcmVkdW5kYW50IGFuZCBzZXBhcmF0ZWQgbmV0d29y
+a3MgZm9yDQo+IHJlZHVuZGFuY3kuDQoNClRoYXQgaXMgd2hhdCBpdCBpcyBkZXNpZ25lZCBmb3Iu
+DQoNCj4gSSwgaG93ZXZlciwgaGF2ZSBvbmx5IHVzZWQgdGhlIHByb3RvY29sIGluIHRoZSBub3Jt
+YWwgYm9yaW5nIEludGVybmV0IOKAkw0KPiBhbmQgdGhlcmUgaXQncyBkZWZpbml0ZWx5IHBvc3Np
+YmxlIHRvIHJlYWNoIE4gZW5kcG9pbnRzIGZyb20ganVzdCAxDQo+IG91dGdvaW5nIGludGVyZmFj
+ZS4gQWxsIHRoZSBlbmRwb2ludHMgYXJlIGNvbm5lY3RlZCB0byB0aGUgSW50ZXJuZXQsDQo+IGFm
+dGVyIGFsbCwgc28gdGhlIHJvdXRlcnMgd2lsbCB1bHRpbWF0ZWx5IGRpcmVjdCB5b3VyIHBhY2th
+Z2VzIHRvIHRoZQ0KPiB0YXJnZXQgYWRkci4NCg0KSSBob3BlIHlvdSBhcmVuJ3QgcnVubmluZyBh
+bnkgb2YgdGhlIFNJR1RSQU0gcHJvdG9jb2xzLi4uDQoNCj4gPiBJIGRvbid0IGtub3cgd2hhdCB0
+aGUgc3RhbmRhcmRzIHBlb3BsZSB3ZXJlIHNtb2tpbmcsIGJ1dCB0aGUNCj4gPiBkZWZhdWx0ICdz
+ZW5kIGFsbCBteSBJUCBhZGRyZXNzZXMgdG8gdGhlIGZhciBlbmQnIGlzIHNvIGJyb2tlbi4NCj4g
+DQo+IEhvdyBlbHNlIGNvdWxkIHlvdSBpbXBsZW1lbnQgaXQ/DQo+IE9ubHkgYWx0ZXJuYXRpdmUg
+SSBjYW4gdGhpbmsgb2Ygd291bGQgYmUgdG8gaGF2ZSBzb21lIHNvcnQgb2YgbXVsdGktDQo+IGhv
+bWluZyBETlMgdGhhdCBwcm92aWRlcyB5b3Ugd2l0aCBzZXZlcmFsIGFkZHJlc3Nlcy4NCg0KR2l2
+ZW4gdGhlIHNlY3VyaXR5IGluIGFsbCB0aGUgU0lHVFJBTiBwcm90b2NvbHMgeW91IGFsd2F5cyB1
+c2VkDQpmaXhlZCBJUCBhZGRyZXNzZXMgYW5kIChpbiByZWFsaXR5KSBiZXR0ZXIgYmUgdXNpbmcg
+VlBOIHR1bm5lbHMNCmlmIHlvdSBnbyBhbnl3aGVyZSBuZWFyIHRoZSBwdWJsaWMgSVAgbmV0d29y
+ay4NCg0KWW91IG5lZWQgc29tZSBwcm9wZXJ0eSB0aGF0IGNhbiBiZSBhc3NpZ25lZCB0byB0aGUg
+bG9jYWwgSVAgLyBpbnRlcmZhY2UNCnRvIGluZGljYXRlIHdoaWNoIG9uZXMgY2FuIGJlIGdyb3Vw
+ZWQgdG9nZXRoZXIuDQpUaGlzIGlzIGFscmVhZHkgZG9uZSB0byBleGNsdWRlIGxvY2FsaG9zdC4N
+Cg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2Fk
+LCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5v
+OiAxMzk3Mzg2IChXYWxlcykNCg==
 
 
