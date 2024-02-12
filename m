@@ -1,178 +1,134 @@
-Return-Path: <linux-sctp+bounces-24-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-25-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E04AC8505FC
-	for <lists+linux-sctp@lfdr.de>; Sat, 10 Feb 2024 19:37:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32455850EDE
+	for <lists+linux-sctp@lfdr.de>; Mon, 12 Feb 2024 09:28:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 02B571C21D05
-	for <lists+linux-sctp@lfdr.de>; Sat, 10 Feb 2024 18:37:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C422D1F25352
+	for <lists+linux-sctp@lfdr.de>; Mon, 12 Feb 2024 08:28:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C6AD5CDF4;
-	Sat, 10 Feb 2024 18:37:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16B8BD516;
+	Mon, 12 Feb 2024 08:27:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b="oUVh7tD1"
+	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="Ird1MYxG"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+Received: from forward205b.mail.yandex.net (forward205b.mail.yandex.net [178.154.239.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A175C8F3
-	for <linux-sctp@vger.kernel.org>; Sat, 10 Feb 2024 18:37:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC40FBF2;
+	Mon, 12 Feb 2024 08:27:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707590249; cv=none; b=tYR7Qj9HTK5wlNQbaL7DJ7FsqcJC+6zs7diOx5znHorzJ8UsOgECdtR2qFgE+say/cPtn4vkOLBmBvL8EgXFq81eSlmKoETAJkxXE+tNCU5phicXX0GYClZm502F/PBoO2pGjV2KIDHA3LFnjsG/FyH4P08rG6Qpmn8GAfrHXGc=
+	t=1707726476; cv=none; b=u0o+rg1nP9UwAm9QBY7NB+S+pmZnBaUzy2fKuWhp5+bp3d6/FH5pXsT+PC71w76ZwJJ0uHiX9sAeDsbJmfDEHT8ienMn7D6SKAFW85/BueJCGufbJLu39+4fwK8QQn/X9/VOx8jQtLWu3X5JbRxJXYXqzZWClWYQ6k5edZqbXHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707590249; c=relaxed/simple;
-	bh=PrQAkGlfHVXwd91QUTYymDSWCqOSdFgjjZfJ7u9rDRU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RBIadQoTgysy1jhUKhCO9CO13om+oSfV60xK5HxexyngJYozF5uihSjZYexwz+nmmtBdd3wdfNedhnyLx6q65o32iQzahwWmpdv0RdjwXZmRada3yr0nCaXE/Np5Fh4Kb27lp0yRaRBv0gr6No1b9kCrJN39+KWoKf/OR/s16N0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de; spf=pass smtp.mailfrom=posteo.de; dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b=oUVh7tD1; arc=none smtp.client-ip=185.67.36.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.de
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout02.posteo.de (Postfix) with ESMTPS id 411AA240103
-	for <linux-sctp@vger.kernel.org>; Sat, 10 Feb 2024 19:37:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-	t=1707590244; bh=PrQAkGlfHVXwd91QUTYymDSWCqOSdFgjjZfJ7u9rDRU=;
-	h=Message-ID:Subject:From:To:Cc:Date:Autocrypt:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version:From;
-	b=oUVh7tD1nRlH+QP5CfMg2AYHlWnlHSh+gs+bUTW9s2OJeFYPFccz5cN4YZ4gTnORM
-	 NwJibqtOhqq+XChWoOgJ7nU3HGOV0uaYYQP4yyCbFzz1scT/iJWN4VOOaNzeh2JDdZ
-	 wUKLJkd0zOvslmgzdh9bNoNJ5d3jcEpg6F44DidukAJjGgIlC4imlkXDIkptajN3F6
-	 03Y09NXKrTeDxbx7UbFMpFVnuoVz4+woVKWDtIotSn3WqjXCMKNNZU2B9JQBBViaVN
-	 XE2j4DKPoWjlTvJaSQOo4BJVylhWv+PCHbvylZZoq1RGYco1B5wwBgDnVsRszXGWTW
-	 KqgwzslH7MB+A==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4TXKFv2vhVz9rxB;
-	Sat, 10 Feb 2024 19:37:23 +0100 (CET)
-Message-ID: <deee97b3aeb2637434d27ea36ff70e5b1f35655f.camel@posteo.de>
-Subject: Re: Linux SCTP multihoming question
-From: Philipp Stanner <stanner@posteo.de>
-To: David Laight <David.Laight@ACULAB.COM>, "'o.evistel@free.fr'"
-	 <o.evistel@free.fr>, Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc: linux-sctp <linux-sctp@vger.kernel.org>, 'Andreas Fink'
-	 <afink@list.fink.org>
-Date: Sat, 10 Feb 2024 18:37:23 +0000
-In-Reply-To: <ddc189ebea24410c9387bff2de543f34@AcuMS.aculab.com>
-References: 
-	<6f6f11b5c30bce3d6e77d719ef75112dee75250d.profile@marceloleitner.u.sourceforge.net>
-	 <YsbiDrG1PQ2Gng5T@t14s.localdomain>
-	 <1937458162.418765580.1657717120765.JavaMail.zimbra@free.fr>
-	 <1024792113.114715673.1707473146836.JavaMail.zimbra@free.fr>
-	 <6455bdeb746c4236a1ecc430ba05e707@AcuMS.aculab.com>
-	 <365e312e60de89031d2c816e502f18b4d74b98c7.camel@posteo.de>
-	 <557a01dfcfd440e6b1b1b1762839d033@AcuMS.aculab.com>
-	 <04c483f34daaebb95d8de56e8e6a49a473c04fe4.camel@posteo.de>
-	 <ddc189ebea24410c9387bff2de543f34@AcuMS.aculab.com>
-Autocrypt: addr=stanner@posteo.de; prefer-encrypt=mutual;
- keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1707726476; c=relaxed/simple;
+	bh=k4703wUin1PPttsgsQ2jG9uAV9eE4pMC0XCyK22LGbE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=SifQB7W4nNpDjb0oMZSHg+DfNuGZ+UzuPtPEE709sID74V8Gtp/zDC9+CM/X4OliTIR8gsOWNEEozLwkNtIlD6fCT82fLJKMInAlSazhXaZ6ZnhxCTvZOxv27xFXzry6byybLe8BZO4gvwh08Qnn21huuFQ4AEdKEZfVyV8PVZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru; spf=pass smtp.mailfrom=yandex.ru; dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b=Ird1MYxG; arc=none smtp.client-ip=178.154.239.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yandex.ru
+Received: from forward102b.mail.yandex.net (forward102b.mail.yandex.net [IPv6:2a02:6b8:c02:900:1:45:d181:d102])
+	by forward205b.mail.yandex.net (Yandex) with ESMTPS id C99566372C;
+	Mon, 12 Feb 2024 11:22:26 +0300 (MSK)
+Received: from mail-nwsmtp-smtp-production-main-78.myt.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-78.myt.yp-c.yandex.net [IPv6:2a02:6b8:c12:5202:0:640:875:0])
+	by forward102b.mail.yandex.net (Yandex) with ESMTPS id 7116C6090D;
+	Mon, 12 Feb 2024 11:22:18 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-78.myt.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id HMhq53ISpSw0-NHMO7lGI;
+	Mon, 12 Feb 2024 11:22:17 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
+	t=1707726137; bh=0gCklyACyZxJmfC/AYBkjy6kkNqvIen51RuMEruSzXU=;
+	h=Message-ID:Date:In-Reply-To:Cc:Subject:References:To:From;
+	b=Ird1MYxGFVeIeRvSO9cp2jqm1oN0zgRikwzlKBkBkpoJsGOkx69EiPTito+e44HjN
+	 SNbfwcUC5xHyJxO0ClEbHFW1qV46bgEmmH1EeadiZ5ExOfA0pDlJYSEg/A5Yt9FvOf
+	 1bzq84veTcb4wTeEF97i2+OmY9zrhbyJdsew6Lj8=
+Authentication-Results: mail-nwsmtp-smtp-production-main-78.myt.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+From: Dmitry Antipov <dmantipov@yandex.ru>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Xin Long <lucien.xin@gmail.com>,
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+	linux-sctp@vger.kernel.org,
+	netdev@vger.kernel.org,
+	lvc-project@linuxtesting.org,
+	Dmitry Antipov <dmantipov@yandex.ru>,
+	syzbot+8bb053b5d63595ab47db@syzkaller.appspotmail.com
+Subject: [PATCH] [v2] net: sctp: fix skb leak in sctp_inq_free()
+Date: Mon, 12 Feb 2024 11:22:02 +0300
+Message-ID: <20240212082202.17927-1-dmantipov@yandex.ru>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240209134703.63a9167b@kernel.org>
+References: <20240209134703.63a9167b@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Am Samstag, dem 10.02.2024 um 18:02 +0000 schrieb David Laight:
-> From: Philipp Stanner
-> > Sent: 10 February 2024 17:49
-> ...
-> > > But won't that defeat the entire point of SCTP multihoming?
-> >=20
-> > I guess it defeats the philosophy of the OS with its routing table
-> > being solely responsible for choosing a source address.
-> > I don't see how SCTP would be affected by that, though. SCTP
-> > doesn't
-> > demand a certain number of interfaces being available, nor does it
-> > make
-> > statements about how the networks behind the interfaces might or
-> > might
-> > not be interconnected.
->=20
-> You need to look at why it exists, and what it was trying to
-> replicate.
-> SCTP is all about carrying telephony signalling over the IP network.
-> So it is trying (and failing for all sorts of reasons) to give
-> the same sort of error detection and redundancy as SS7 MTP2 and MTP3.
->=20
-> The normal level of redundancy is to have two separate MTP2 links
-> (a linkset) to each of two different remote MTP3 systems.
-> If you are doing it right each MTP2 link is on a separate physical
-> cable.
-> The SCTP connection is trying to replicate the linkset to a remote
-> system - so you need two local interfaces connected to two remote
-> ones.
-> You can have more, but it is basically pointless.
->=20
-> > > You need two interfaces in different subnets that use entirely
-> > > separate IP networks to connect to the two addresses the remote
-> > > system gives you.
-> > > (There are really only ever two addresses for each system.)
-> >=20
-> > I assume you're coming from the perspective of a user where SCTP is
-> > utilized with completely redundant and separated networks for
-> > redundancy.
->=20
-> That is what it is designed for.
+In case of GSO, 'chunk->skb' pointer may point to an entry from
+fraglist created in 'sctp_packet_gso_append()'. To avoid freeing
+random fraglist entry (and so undefined behavior and/or memory
+leak), introduce 'sctp_chunk_release()' helper to ensure that
+'chunk->skb' is set to 'chunk->head_skb' (i.e. fraglist head)
+before calling 'sctp_chunk_free()', and use the aforementioned
+helper in 'sctp_inq_pop()' as well.
 
-All that may be true regarding the original _motivation_ behind the
-protocol, but the relevant documents, the RFCs, make no such
-statements.
-And rightfully so, because a transport protocol should never be tied to
-a specific narrow usecase, although people seem to have a hard time
-learning that lesson (looking at you, QUIC).
-You can even use SCTP as a mere TCP replacement, plainly writing to it
-with write(). It's completely up to you. Just as the number of
-interfaces you use is.
+Reported-by: syzbot+8bb053b5d63595ab47db@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?id=0d8351bbe54fd04a492c2daab0164138db008042
+Fixes: 90017accff61 ("sctp: Add GSO support")
+Suggested-by: Xin Long <lucien.xin@gmail.com>
+Signed-off-by: Dmitry Antipov <dmantipov@yandex.ru>
+---
+v2: factor the fix out to helper function (Jakub Kicinski)
+---
+ net/sctp/inqueue.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-The protocol even specifies the upper layer protocol number field,
-specifically designed to multiplex all sorts of payload protocols (SSH,
-HTTP...) over it.
-
-
-P.
-
->=20
-> > I, however, have only used the protocol in the normal boring
-> > Internet =E2=80=93
-> > and there it's definitely possible to reach N endpoints from just 1
-> > outgoing interface. All the endpoints are connected to the
-> > Internet,
-> > after all, so the routers will ultimately direct your packages to
-> > the
-> > target addr.
->=20
-> I hope you aren't running any of the SIGTRAM protocols...
->=20
-> > > I don't know what the standards people were smoking, but the
-> > > default 'send all my IP addresses to the far end' is so broken.
-> >=20
-> > How else could you implement it?
-> > Only alternative I can think of would be to have some sort of
-> > multi-
-> > homing DNS that provides you with several addresses.
->=20
-> Given the security in all the SIGTRAN protocols you always used
-> fixed IP addresses and (in reality) better be using VPN tunnels
-> if you go anywhere near the public IP network.
->=20
-> You need some property that can be assigned to the local IP /
-> interface
-> to indicate which ones can be grouped together.
-> This is already done to exclude localhost.
->=20
-> 	David
->=20
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes,
-> MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+diff --git a/net/sctp/inqueue.c b/net/sctp/inqueue.c
+index 7182c5a450fb..9ec172405ff4 100644
+--- a/net/sctp/inqueue.c
++++ b/net/sctp/inqueue.c
+@@ -38,6 +38,14 @@ void sctp_inq_init(struct sctp_inq *queue)
+ 	INIT_WORK(&queue->immediate, NULL);
+ }
+ 
++/* Properly release the chunk which is being worked on. */
++static inline void sctp_chunk_release(struct sctp_chunk *chunk)
++{
++	if (chunk->head_skb)
++		chunk->skb = chunk->head_skb;
++	sctp_chunk_free(chunk);
++}
++
+ /* Release the memory associated with an SCTP inqueue.  */
+ void sctp_inq_free(struct sctp_inq *queue)
+ {
+@@ -53,7 +61,7 @@ void sctp_inq_free(struct sctp_inq *queue)
+ 	 * free it as well.
+ 	 */
+ 	if (queue->in_progress) {
+-		sctp_chunk_free(queue->in_progress);
++		sctp_chunk_release(queue->in_progress);
+ 		queue->in_progress = NULL;
+ 	}
+ }
+@@ -130,9 +138,7 @@ struct sctp_chunk *sctp_inq_pop(struct sctp_inq *queue)
+ 				goto new_skb;
+ 			}
+ 
+-			if (chunk->head_skb)
+-				chunk->skb = chunk->head_skb;
+-			sctp_chunk_free(chunk);
++			sctp_chunk_release(chunk);
+ 			chunk = queue->in_progress = NULL;
+ 		} else {
+ 			/* Nothing to do. Next chunk in the packet, please. */
+-- 
+2.43.0
 
 
