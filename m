@@ -1,53 +1,53 @@
-Return-Path: <linux-sctp+bounces-35-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-36-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E02287C387
-	for <lists+linux-sctp@lfdr.de>; Thu, 14 Mar 2024 20:21:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65A5687C39A
+	for <lists+linux-sctp@lfdr.de>; Thu, 14 Mar 2024 20:21:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C01381C2150D
-	for <lists+linux-sctp@lfdr.de>; Thu, 14 Mar 2024 19:21:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B7E22830B3
+	for <lists+linux-sctp@lfdr.de>; Thu, 14 Mar 2024 19:21:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C09CC762E5;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEF4A763EA;
 	Thu, 14 Mar 2024 19:20:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AawEUCeJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZRlRGpey"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5428E7580F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8747C7602C;
 	Thu, 14 Mar 2024 19:20:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710444059; cv=none; b=IdOxNjVESB96QnFB8iyGJ7dP7/57btcgK1V5HwaVS9OIrD4ajOv4rhkX2UGQThpmTJVfZ1ooM131n/EQk3j8yCEtReFnJ1UpfaKoi9QzgEbUy4YTaTuMC+08iagEAcvSEm5BsBzlF2E9+/jIn6krJH8tUYNTbIAi6FCuDAYV/vc=
+	t=1710444059; cv=none; b=Yt1HvvLPEWuV+easdbPgpI04fPUCQv5uPueSHpNEfigqnFsMb2L/QI+q7slhqa+yPZmn+ybF23O2mh0RKANyTXGE0C/QvLMY6/CfDFOo9UwKED9wOY0y/5qu8Z9IonRRDIbU9zDftt4XHdZOqTq25iOOuirE8oZJIrff4JIYB/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1710444059; c=relaxed/simple;
-	bh=jrbuO52ZBSIAk7BVgz4HVemMnghQxGKVn3QHhdB/BIY=;
+	bh=gH3b/5A7IYQsiYNt2bdQmHSGeO/sQMIwqfeaWs5xuNg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=mHij0hB9QESXpeQSruZ+w4ZufuPwqaHEiiq/C21BOuCBDrMdyzNhdnRxs1/Cxf75WATXluEt8MsjzxsG73umsQW55TYDllcqDaaMQs1Zlr8YtEZJCoNifoi3mqEz9qieCzNfAWjw/2UnDpXU4Q/TjZmzovotWCxbNrTKMkq1B5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AawEUCeJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E36CCC43399;
-	Thu, 14 Mar 2024 19:20:58 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=X6S9F+oxmVrhdmAkzXB+IIABgLRrTxF1wM9nIf6lCVle5QPgC3GeWGIKem5u2qZ34WHeGNXUEC8Kb8fBeOtnBzMSuXPLbQU5Aulo/umescAgyraYx64MqvLbW/pJ62/giA9VPGAke68gYdwsFJxC6bDyVNmKkG0cb1fDrOnxzl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZRlRGpey; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 00EA5C4166A;
+	Thu, 14 Mar 2024 19:20:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710444058;
-	bh=jrbuO52ZBSIAk7BVgz4HVemMnghQxGKVn3QHhdB/BIY=;
+	s=k20201202; t=1710444059;
+	bh=gH3b/5A7IYQsiYNt2bdQmHSGeO/sQMIwqfeaWs5xuNg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=AawEUCeJ92CVdpB5UNZlsotqi5btJGD2n/40jnPr2eMkFm1FBPJ2b3iytGe89gubn
-	 86f1e5qrXYMjGq40gsrxhpPkoziZxyiRbjisOO++OpJHbg4lO0u9M+GpfEcIZrdU23
-	 gCkVQQcJjbbrhMT/+PiWv+QgInUWN4ta+EoZfBhQEPlxcm4JQ0Tjz51ypy58i02SS3
-	 jwEr1XtNEQy6tW7N97I06vMLKw5OhzW2Ov7Buoz179VHK4ljrVYK0HqDodxpOhn3Vi
-	 5ySTxQi+/4SCOQbDVsQGVZSJ0twXtzvQBYw6YjT6OM37bOlzpMSbwiIdJxIwdu8Y0q
-	 I5v/UiDs4FaPg==
+	b=ZRlRGpey5qcW288aIwBTzKDt6XrvAwsgxLYc0oFUsG//OqwKLEQAQFi7Eb6tQaEoM
+	 Wu0JPg+hiyy45jwe3FjQ85gNZ/sQT+cgY2WfhvGGWpBqxuHob0HTlJ5zKJFT3OhSSm
+	 gWxLXua4j1BK4HMUj8jXkcbVPDZut3cziYQc4a2hlCqmdJ5iD20Q9LrXhwVOlTj5GM
+	 Lh11DERA9KI3k8qkhKnyJBhIhJPxZ3sMNKs5E/T+w/g0sd/wxivDA4fElSQ6bSWp+X
+	 5V9cRmc7HpHbeen6d9ByvK0xRMcNMvqfw8nDIE5tTQ/oJapjdpiNs4ceQDh11pZVOa
+	 dLomDp1xJDlyQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2415C54E6E;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E373EC54E60;
 	Thu, 14 Mar 2024 19:20:58 +0000 (UTC)
 From: Joel Granados via B4 Relay <devnull+j.granados.samsung.com@kernel.org>
-Date: Thu, 14 Mar 2024 20:20:43 +0100
-Subject: [PATCH 3/4] appletalk: Remove the now superfluous sentinel
- elements from ctl_table array
+Date: Thu, 14 Mar 2024 20:20:44 +0100
+Subject: [PATCH 4/4] ax.25: Remove the now superfluous sentinel elements
+ from ctl_table array
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240314-jag-sysctl_remset_net-v1-3-aa26b44d29d9@samsung.com>
+Message-Id: <20240314-jag-sysctl_remset_net-v1-4-aa26b44d29d9@samsung.com>
 References: <20240314-jag-sysctl_remset_net-v1-0-aa26b44d29d9@samsung.com>
 In-Reply-To: <20240314-jag-sysctl_remset_net-v1-0-aa26b44d29d9@samsung.com>
 To: "David S. Miller" <davem@davemloft.net>, 
@@ -97,17 +97,18 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  coreteam@netfilter.org, bridge@lists.linux.dev, lvs-devel@vger.kernel.org, 
  Joel Granados <j.granados@samsung.com>
 X-Mailer: b4 0.13-dev-2d940
-X-Developer-Signature: v=1; a=openpgp-sha256; l=954; i=j.granados@samsung.com;
- h=from:subject:message-id; bh=XDIcCkZ78Jc0dTs1FMG4vIEa4qRq4WIrQqvTanRSSyI=;
- b=owEB7QES/pANAwAKAbqXzVK3lkFPAcsmYgBl804YVY9Xw0++owa6LWglh5nII93WQz6ecjWxh
- SYP9NB91rKJAbMEAAEKAB0WIQSuRwlXJeYxJc7LJ5C6l81St5ZBTwUCZfNOGAAKCRC6l81St5ZB
- TwAQC/0eqOCO1aPDMvrYgZcVtIBZQCNypI3Swj50+jfK2k7oWETTpG5ZOYvRAmucIsDOCDxPZso
- 2JI1/CJerPS2MbD/gMYYgsmpGOfoRKo4jjsw8f+nlf/Zdgal6rjIXC1AXFYPJnX5JLYzWnVvZTt
- Oe1zmPOpSnrVZJevKI1L9do1c/SyKOpzAF5BEJXhFfjMyZsDQbqsj5rzLz2X814cru40+oRHbZb
- HdHsKqZM40d9vt587+0Fubzwl0EksSraSmhQRrqslPKFbl9YIW3gYPVMt9LpQDKINVWlNmJ1HwW
- oc1LpAy/gHYMcPzeS8UUcr2qGtmGrgpYT9L0q3Q6Fd0c6nPUgffV8d5AFqOWLgv3zFuAuyNGfTD
- 6f7E+M6jTRzVOJdFR1WTVSr0iLmOjjkHaPtwjB5dw++OQV20WbgV4+mL0gOfa9CCkOac8QZCZK7
- tQLPVV9Bm/YDEyRxuqB0nf3GQ13SZpAmd11JqndFWYe3B6vPj7oGDB7PjkMTsGytXQFDs=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1667;
+ i=j.granados@samsung.com; h=from:subject:message-id;
+ bh=ejJiyRhNOC9Xg5jx2v5IBc5vVgg4IABN6nfDRl2m3bQ=;
+ b=owEB7QES/pANAwAKAbqXzVK3lkFPAcsmYgBl804YOT/y4oh7cSp7OlPw2zS5Tl/S3d+XSL1dZ
+ qcQXL+fOt2JAbMEAAEKAB0WIQSuRwlXJeYxJc7LJ5C6l81St5ZBTwUCZfNOGAAKCRC6l81St5ZB
+ T7kQC/wK2/wTeTZeTM0MnPlpRdOOBc8cyUMgjDVKpxvMyRI8yAICvkYuT5X3I/JIAiSTlnoPRNs
+ T8czt4a9El8kn3rzJrUnWqslVgijCjQNu75mhVIl5h2Hx0DeyF7xXzvxP9a7qpRBsrxGFsJOzlr
+ xIV+BECnckb1ymuqG9Nx5TcTYFUef2eHx6R1NahoOJ2eaJkT8NbMr+4d+IxeEVNv1KCngJcTLhn
+ j2ODJJt9OJ/W5k8gAyqvJZWLCnlIAPZIYzhOEGBu3D7BYhmVa/L2Ea74K76U054rZeBIbg4Xt5R
+ IKEbNBeLmErLYVin2F8ZzAgSWEbtolh545+BB7/t6fTEkwctvzvj3d5+JqxdaTvb2lKfRReRxEJ
+ h7dTo0Ikttkj4V+cjftwKAmFSNVE4NYWhCGfwn1M+onp2ZzZzdn79m3lY7nJW4z4KsIXo+z5ghP
+ LzdpG1ie5IRBI09mzaVoxDs4mkjlmc8NlDUaMqjjP1vM1VYLgMKXI9Jn1NE4Y1Ws1QRok=
 X-Developer-Key: i=j.granados@samsung.com; a=openpgp;
  fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
 X-Endpoint-Received:
@@ -123,25 +124,41 @@ reduce the overall build time size of the kernel and run time memory
 bloat by ~64 bytes per sentinel (further information Link :
 https://lore.kernel.org/all/ZO5Yx5JFogGi%2FcBo@bombadil.infradead.org/)
 
-Remove sentinel from atalk_table ctl_table array.
+When we remove the sentinel from ax25_param_table a buffer overflow
+shows its ugly head. The sentinel's data element used to be changed when
+CONFIG_AX25_DAMA_SLAVE was not defined. This did not have any adverse
+effects as we still stopped on the sentinel because of its null
+procname. But now that we do not have the sentinel element, we are
+careful to check ax25_param_table's size.
 
 Signed-off-by: Joel Granados <j.granados@samsung.com>
 ---
- net/appletalk/sysctl_net_atalk.c | 1 -
- 1 file changed, 1 deletion(-)
+ net/ax25/sysctl_net_ax25.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/net/appletalk/sysctl_net_atalk.c b/net/appletalk/sysctl_net_atalk.c
-index d945b7c0176d..7aebfe903242 100644
---- a/net/appletalk/sysctl_net_atalk.c
-+++ b/net/appletalk/sysctl_net_atalk.c
-@@ -40,7 +40,6 @@ static struct ctl_table atalk_table[] = {
- 		.mode		= 0644,
- 		.proc_handler	= proc_dointvec_jiffies,
+diff --git a/net/ax25/sysctl_net_ax25.c b/net/ax25/sysctl_net_ax25.c
+index db66e11e7fe8..2ee375a6a69c 100644
+--- a/net/ax25/sysctl_net_ax25.c
++++ b/net/ax25/sysctl_net_ax25.c
+@@ -141,8 +141,7 @@ static const struct ctl_table ax25_param_table[] = {
+ 		.extra2		= &max_ds_timeout
  	},
--	{ },
+ #endif
+-
+-	{ }	/* that's all, folks! */
++/* that's all, folks! */
  };
  
- static struct ctl_table_header *atalk_table_header;
+ int ax25_register_dev_sysctl(ax25_dev *ax25_dev)
+@@ -155,7 +154,7 @@ int ax25_register_dev_sysctl(ax25_dev *ax25_dev)
+ 	if (!table)
+ 		return -ENOMEM;
+ 
+-	for (k = 0; k < AX25_MAX_VALUES; k++)
++	for (k = 0; k < AX25_MAX_VALUES && k < ARRAY_SIZE(ax25_param_table); k++)
+ 		table[k].data = &ax25_dev->values[k];
+ 
+ 	snprintf(path, sizeof(path), "net/ax25/%s", ax25_dev->dev->name);
 
 -- 
 2.43.0
