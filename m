@@ -1,47 +1,47 @@
-Return-Path: <linux-sctp+bounces-83-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-84-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B90108ADF25
-	for <lists+linux-sctp@lfdr.de>; Tue, 23 Apr 2024 10:03:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C03378ADF33
+	for <lists+linux-sctp@lfdr.de>; Tue, 23 Apr 2024 10:04:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 748FF286912
-	for <lists+linux-sctp@lfdr.de>; Tue, 23 Apr 2024 08:03:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7AE04286CCC
+	for <lists+linux-sctp@lfdr.de>; Tue, 23 Apr 2024 08:04:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39A5A5474D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABECB54F8A;
 	Tue, 23 Apr 2024 08:03:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="qrpXb4E7"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="HfImcajL"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D06F04AEE5;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D06B84AED7;
 	Tue, 23 Apr 2024 08:03:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713859391; cv=none; b=F6e0NVcB6qJfzuP2CdugL0KSEycYzhJVS4HEs8NCFSH6Z7spEtmpY52tE79ueYdCA8qufVpAj3u/UH8aP7rIkJF8E8T+qwNlT9cT5K6vVIIqIvEMB0KCDnBbamiR2O/gUICi7p5jVo5rT5Od8etXanTqWv2GTgxZRY7X6ORwAyc=
+	t=1713859391; cv=none; b=kPWxNxdetgudYRIpH3kT6J9if8bnsCPYlFAvkOLj6A7yX4GA/PwJiRQKyZ0A568g6NxvMbIBJXprtpQlHWC1QKZcA5g3oe1zwRnWntKPEgc7pPVTIam6Yn16FHtmrmGR5gbxRQ6fgeP/v8UD9CbjHE8+pPvz66YO+mAyKm1iVf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1713859391; c=relaxed/simple;
-	bh=1pR6m5Wi5iIO9mWeE7uFEYPdE/xPU01dcPav6FtcGgk=;
+	bh=opGR4gpnAvbs+lyNBq6fdLjOrQBbmIYYx1eB7UGZHV4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Cca0u2AmH4ujtyEII/oDASdmm8aguXi6O+lOoom0ZXq206Wh2bYbqU78OMoNHTwZd1C+IiBIpQAD0jL6nzulEYWD9TCRu+B6ztkWTv9qHBKnulXEu6T+TQZhfl3cAtl4J0m6EG+g4YzslVu0Ta+ZW0i5vK+MpymWj3ywLF+Ao7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=qrpXb4E7; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=K95lrzsJwguTIQet5imKocqAVxUeeEAvzGBvL2KH1ax4LHZ0VioqpOkfYPCiAkc+cgh0edOGY2Y2vZ6GM65TMSFwbs5LR5klBekIuKf4x/52WEXHz1O4IaTrl7HfJKFEMBFkX6TJ5kcEK0/xYt4Xg8xDc4xxQD8/vnO892dSsx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=HfImcajL; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1713858962;
-	bh=1pR6m5Wi5iIO9mWeE7uFEYPdE/xPU01dcPav6FtcGgk=;
+	bh=opGR4gpnAvbs+lyNBq6fdLjOrQBbmIYYx1eB7UGZHV4=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=qrpXb4E7M7hSiZ8Cf2INubIQwovOxf8rtiST2nTdYG56P/i02vaGe83f+9bvQprvq
-	 VgpcOsvaoWCndC7LXwkbN21msJ81t9jqvLggR4K6+dWl6vt6tbFaQ5B1IFnTi+I3Mw
-	 H0IMGkDPx1RTLLHkm4qk51fTBM34bIyN02uPPn08=
+	b=HfImcajLyH9fRAHB6Ui+Edknzu1unFNUQsyZkN6W9dmfU+gHpYzWRB8z1jdPEJfrY
+	 Pr+tQUXouYF6Fr8ZB0dJgU5uJKyqI4ZpirRA8P4QYR64pl5zSDWYNSCG1oUxNDMuR7
+	 AXYmALCXm31TMp71SE8rzh6qU7YGEq6bCde/2XZw=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Tue, 23 Apr 2024 09:54:37 +0200
-Subject: [PATCH v3 02/11] cgroup: bpf: constify ctl_table arguments and
- fields
+Date: Tue, 23 Apr 2024 09:54:39 +0200
+Subject: [PATCH v3 04/11] utsname: constify ctl_table arguments of utility
+ function
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240423-sysctl-const-handler-v3-2-e0beccb836e2@weissschuh.net>
+Message-Id: <20240423-sysctl-const-handler-v3-4-e0beccb836e2@weissschuh.net>
 References: <20240423-sysctl-const-handler-v3-0-e0beccb836e2@weissschuh.net>
 In-Reply-To: <20240423-sysctl-const-handler-v3-0-e0beccb836e2@weissschuh.net>
 To: Luis Chamberlain <mcgrof@kernel.org>, 
@@ -70,36 +70,36 @@ Cc: Eric Dumazet <edumazet@google.com>, Dave Chinner <david@fromorbit.com>,
  linux-nfs@vger.kernel.org, apparmor@lists.ubuntu.com, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1713858961; l=686;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1713858961; l=696;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=1pR6m5Wi5iIO9mWeE7uFEYPdE/xPU01dcPav6FtcGgk=;
- b=pcm/jJjouDKJ7dKkXuplkCwgN4lakaTVY5yViah+TEyJb0kgB/5JxKSM28vhTdxT/a0KzPrgc
- T5MafpuEka/DMwunsovOVuekoxGTF4FJjqwg/mb6qFtEZR2YOr2vquk
+ bh=opGR4gpnAvbs+lyNBq6fdLjOrQBbmIYYx1eB7UGZHV4=;
+ b=ed5W9yz6Y3PYc8dy+kq6hSu45FqtfkT99vg42nbOB1Ni65LnrRYJQZmla0Oue7XwR99Gbnjaj
+ bId0PbgErm0AeGk6gclOc5pv5Xfx6JPwBqf+J7ohAIHsKXAVAE3Ars1
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-In a future commit the sysctl core will only use
-"const struct ctl_table". As a preparation for that adapt the cgroup-bpf
-code.
+In a future commit the proc_handlers themselves will change to
+"const struct ctl_table". As a preparation for that adapt the internal
+helper.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- include/linux/filter.h | 2 +-
+ kernel/utsname_sysctl.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 7a27f19bf44d..4eada55a2df8 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1404,7 +1404,7 @@ struct bpf_sock_ops_kern {
+diff --git a/kernel/utsname_sysctl.c b/kernel/utsname_sysctl.c
+index 76a772072557..04e4513f2985 100644
+--- a/kernel/utsname_sysctl.c
++++ b/kernel/utsname_sysctl.c
+@@ -15,7 +15,7 @@
  
- struct bpf_sysctl_kern {
- 	struct ctl_table_header *head;
--	struct ctl_table *table;
-+	const struct ctl_table *table;
- 	void *cur_val;
- 	size_t cur_len;
- 	void *new_val;
+ #ifdef CONFIG_PROC_SYSCTL
+ 
+-static void *get_uts(struct ctl_table *table)
++static void *get_uts(const struct ctl_table *table)
+ {
+ 	char *which = table->data;
+ 	struct uts_namespace *uts_ns;
 
 -- 
 2.44.0
