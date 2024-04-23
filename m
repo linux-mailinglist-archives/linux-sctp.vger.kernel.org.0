@@ -1,47 +1,47 @@
-Return-Path: <linux-sctp+bounces-84-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-76-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C03378ADF33
-	for <lists+linux-sctp@lfdr.de>; Tue, 23 Apr 2024 10:04:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05AE78ADEB0
+	for <lists+linux-sctp@lfdr.de>; Tue, 23 Apr 2024 09:56:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7AE04286CCC
-	for <lists+linux-sctp@lfdr.de>; Tue, 23 Apr 2024 08:04:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 86ABAB2289E
+	for <lists+linux-sctp@lfdr.de>; Tue, 23 Apr 2024 07:56:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABECB54F8A;
-	Tue, 23 Apr 2024 08:03:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3D6E5103D;
+	Tue, 23 Apr 2024 07:56:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="HfImcajL"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="dtp2KrFT"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D06B84AED7;
-	Tue, 23 Apr 2024 08:03:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2198C481D1;
+	Tue, 23 Apr 2024 07:56:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713859391; cv=none; b=kPWxNxdetgudYRIpH3kT6J9if8bnsCPYlFAvkOLj6A7yX4GA/PwJiRQKyZ0A568g6NxvMbIBJXprtpQlHWC1QKZcA5g3oe1zwRnWntKPEgc7pPVTIam6Yn16FHtmrmGR5gbxRQ6fgeP/v8UD9CbjHE8+pPvz66YO+mAyKm1iVf0=
+	t=1713858976; cv=none; b=LqRoNWjFfV0+v7jIzgT/YDOzGpzC38G+T/WiHkjcKFAOApaGDtLVucjzsJJ5aIAIGQ7gE/xogrNmgH06kjY0Jbto708RzEA1ELPjA3pVQbOJbEbOEAdPEY8FLrolIviSDXryHXZs8NebagKTh8x/ilaItw37Owl/xuaBZL5Sm5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713859391; c=relaxed/simple;
-	bh=opGR4gpnAvbs+lyNBq6fdLjOrQBbmIYYx1eB7UGZHV4=;
+	s=arc-20240116; t=1713858976; c=relaxed/simple;
+	bh=C10U8w+9znaxkvj5EdGV6iNeFy+LKwoCMige5+WbmRk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=K95lrzsJwguTIQet5imKocqAVxUeeEAvzGBvL2KH1ax4LHZ0VioqpOkfYPCiAkc+cgh0edOGY2Y2vZ6GM65TMSFwbs5LR5klBekIuKf4x/52WEXHz1O4IaTrl7HfJKFEMBFkX6TJ5kcEK0/xYt4Xg8xDc4xxQD8/vnO892dSsx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=HfImcajL; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=bD9ZBWbR3V/5EtyCQMG2+iC2V6SOZi/v8HBmspcWwGGYIKbjSu/uuR/8lrBBM2pESbdgQtfy17cvpI/H1R7BAUPKUzpGp/QsetVpR6TWsqI4tialNxHBMqTGMgJp0uVjbt5SxkUyCt2CENdr/dcOX0xWWnaoS/iTzREF+gM4axA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=dtp2KrFT; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1713858962;
-	bh=opGR4gpnAvbs+lyNBq6fdLjOrQBbmIYYx1eB7UGZHV4=;
+	bh=C10U8w+9znaxkvj5EdGV6iNeFy+LKwoCMige5+WbmRk=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=HfImcajLyH9fRAHB6Ui+Edknzu1unFNUQsyZkN6W9dmfU+gHpYzWRB8z1jdPEJfrY
-	 Pr+tQUXouYF6Fr8ZB0dJgU5uJKyqI4ZpirRA8P4QYR64pl5zSDWYNSCG1oUxNDMuR7
-	 AXYmALCXm31TMp71SE8rzh6qU7YGEq6bCde/2XZw=
+	b=dtp2KrFTs1ZPOV423X3Lj+ohYH+w1R0E/8kBpk9DMXXZtdIcFmbTu30wN5OkBGmMP
+	 FLzPXuqgfXj6gzjMKHmGAW69Xpdffu14WLEeO5qDjUe0ZwtkRmnV3IoKoevaneipoy
+	 3sjOVDTg0D0OU3K0YuEo6+K2obOUKB6HIC+G61H4=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Tue, 23 Apr 2024 09:54:39 +0200
-Subject: [PATCH v3 04/11] utsname: constify ctl_table arguments of utility
- function
+Date: Tue, 23 Apr 2024 09:54:40 +0200
+Subject: [PATCH v3 05/11] neighbour: constify ctl_table arguments of
+ utility function
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240423-sysctl-const-handler-v3-4-e0beccb836e2@weissschuh.net>
+Message-Id: <20240423-sysctl-const-handler-v3-5-e0beccb836e2@weissschuh.net>
 References: <20240423-sysctl-const-handler-v3-0-e0beccb836e2@weissschuh.net>
 In-Reply-To: <20240423-sysctl-const-handler-v3-0-e0beccb836e2@weissschuh.net>
 To: Luis Chamberlain <mcgrof@kernel.org>, 
@@ -70,11 +70,11 @@ Cc: Eric Dumazet <edumazet@google.com>, Dave Chinner <david@fromorbit.com>,
  linux-nfs@vger.kernel.org, apparmor@lists.ubuntu.com, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1713858961; l=696;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1713858961; l=808;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=opGR4gpnAvbs+lyNBq6fdLjOrQBbmIYYx1eB7UGZHV4=;
- b=ed5W9yz6Y3PYc8dy+kq6hSu45FqtfkT99vg42nbOB1Ni65LnrRYJQZmla0Oue7XwR99Gbnjaj
- bId0PbgErm0AeGk6gclOc5pv5Xfx6JPwBqf+J7ohAIHsKXAVAE3Ars1
+ bh=C10U8w+9znaxkvj5EdGV6iNeFy+LKwoCMige5+WbmRk=;
+ b=EAoTey3kmtnh/z6T2K9kHOuOiGQPDvnlrHzdVg4MNSMG74MpVnrzaAzOlr8qG7tTA+0aGApZ5
+ EfQ5uq8SVYaAWFetEV8qu3UzVUp6J12UzjZsoq4ZupsTosh3ACnOL89
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
@@ -84,22 +84,22 @@ helper.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- kernel/utsname_sysctl.c | 2 +-
+ net/core/neighbour.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/utsname_sysctl.c b/kernel/utsname_sysctl.c
-index 76a772072557..04e4513f2985 100644
---- a/kernel/utsname_sysctl.c
-+++ b/kernel/utsname_sysctl.c
-@@ -15,7 +15,7 @@
+diff --git a/net/core/neighbour.c b/net/core/neighbour.c
+index 0805c00c63d4..92a01664a723 100644
+--- a/net/core/neighbour.c
++++ b/net/core/neighbour.c
+@@ -3578,7 +3578,7 @@ static void neigh_copy_dflt_parms(struct net *net, struct neigh_parms *p,
+ 	rcu_read_unlock();
+ }
  
- #ifdef CONFIG_PROC_SYSCTL
- 
--static void *get_uts(struct ctl_table *table)
-+static void *get_uts(const struct ctl_table *table)
+-static void neigh_proc_update(struct ctl_table *ctl, int write)
++static void neigh_proc_update(const struct ctl_table *ctl, int write)
  {
- 	char *which = table->data;
- 	struct uts_namespace *uts_ns;
+ 	struct net_device *dev = ctl->extra1;
+ 	struct neigh_parms *p = ctl->extra2;
 
 -- 
 2.44.0
