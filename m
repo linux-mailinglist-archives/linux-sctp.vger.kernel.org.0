@@ -1,52 +1,52 @@
-Return-Path: <linux-sctp+bounces-99-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-97-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3D6B8B2122
-	for <lists+linux-sctp@lfdr.de>; Thu, 25 Apr 2024 14:04:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9C3A8B2116
+	for <lists+linux-sctp@lfdr.de>; Thu, 25 Apr 2024 14:04:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7BB3D2836A4
-	for <lists+linux-sctp@lfdr.de>; Thu, 25 Apr 2024 12:04:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA9891C21E77
+	for <lists+linux-sctp@lfdr.de>; Thu, 25 Apr 2024 12:04:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E27A12E1F5;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EB9812D767;
 	Thu, 25 Apr 2024 12:03:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZYkxqNIA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UhiTEkhs"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8847212C491;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 774C212C47E;
 	Thu, 25 Apr 2024 12:03:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714046620; cv=none; b=IXpXZ7alzitGkvZmMLc933pfjov5yYfHNuBSnHt6KsYSShN8D8bwwqk91rHP1GU18GAZLqIkYsXEdlNnwgfC7xvCmv3Xm0QlhlwhIiQ0oeEYtn9AiKlLggjrhoeIniIVe2Ytx//MGpdWGpUAHYPjEcEMRUg5OOnrwEHCA+Swd9k=
+	t=1714046620; cv=none; b=HfrZgtPwCELf4k6MxBr4pOnXSUs4entpCDbQDQtBnEOrMZcsj+4J/VynvZeoEzvl4nJS0WBOBJFZlndGdCnd9Z/MPn73RIfNzytfH24JbZ9aByebJoX1YLQuGFre96unvr5iCcfeXdZp2XQM43seJagfPyhYPJo4eEm+nG9qoB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1714046620; c=relaxed/simple;
-	bh=uXOWxke90nQNYr0WBMLQq1S/VTP5GVY/K8ko9jpt5Sk=;
+	bh=v0M3YCkk3i8pT+R0MAJlk6prIN46v5xrc2mwK2DMRnk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=WykCUTXYNpycl+dvLZxp1a4iLXo8tl6vHLgG03zcOE+4jjRMa8uPknjqb0CXwpqZAGG/G2EpiujvYj9DcZOoA6wbSNwsQjXR5f6+5GywJkN4Ze57P+xDYVxFtvaf8U1Q/R6vog00pTVVl/X7d6uHm4NxFmkjDOU7fL4Ff4+RBzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZYkxqNIA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1A89AC4DDE4;
+	 In-Reply-To:To:Cc; b=DwI8uNU6QqHGx9ZxIdyp5tiUOYpshxDAIniPcwTot3dW7dnlmFAhaQ0NekncmfB1wz0MShKvitbmUqXJ8I0PyQ2SZI09ww8ODlSVL/1TwAHqqibQzWTN4TJkxkGE+53qvobDe7R8vEMic8K5/lEvc8ZFcPNirIP7rgI4A2GFAss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UhiTEkhs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3B35EC2BD11;
 	Thu, 25 Apr 2024 12:03:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1714046620;
-	bh=uXOWxke90nQNYr0WBMLQq1S/VTP5GVY/K8ko9jpt5Sk=;
+	bh=v0M3YCkk3i8pT+R0MAJlk6prIN46v5xrc2mwK2DMRnk=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=ZYkxqNIAc3llJ3R6AcLpxG9noAnbzw6aU0QtrIdt45NbN2/SzwcYgEa8DRWDnNqou
-	 dI7XbIMDO02SuUZ0ntC1trr/Q/WU1/noW+4IfZUSxX22V2Opuz6zUKte4TU2AZGqVX
-	 AqpgLfzbeOQhg4byPkYKcmr5kDMuot9Sn1qybbmpSM67DBEdF5IWFgrlcg+k5bPwQJ
-	 4aIJX0vz17PBWS8nkKjvG9gIYvoxXj2VwhbJy/ObI8wgRSWjAGTzlWDN5TnyXGtdg5
-	 z+9QhZTUiXzR530MJFJ0h+v7GC020Wo76MFK52Q9GFPbCOvsSb2Z0jPAh7vHPvclwU
-	 NNzVNovondDUA==
+	b=UhiTEkhsF8jpRxmXjLBTZf1bT06N4BPRzYpavrUsNBe7T7v6UeruhRtRxhjKes88A
+	 HLj2y2A/zIHWbq9X1vXJ5iNRU40+ICYvCB1kd4d2ud+QxacXjEeB8/aWRghyKbRWh4
+	 akF+hnC7EPearVGVVPXNll+EVZAJwZaMrntNeMMoAAlyvkulI9ZqmvkMmRV9ea/wZ+
+	 xuZ/4LQTroPmpU6Kyz8f37jw80jFzoZW0Tvn2nUPM9PPm4HAKlq34Lj29XyKZbQhoF
+	 rxgZ6WMBwuokzSpjbOlKoCGnHWMKYJ8cxdXjEfAykZ7RuBBCzDFF9+Jf5mLkyS7eqJ
+	 GYclr263Cy2Tg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DD95C10F15;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E274C4345F;
 	Thu, 25 Apr 2024 12:03:40 +0000 (UTC)
 From: Joel Granados via B4 Relay <devnull+j.granados.samsung.com@kernel.org>
-Date: Thu, 25 Apr 2024 14:03:04 +0200
-Subject: [PATCH v4 6/8] netfilter: Remove the now superfluous sentinel
+Date: Thu, 25 Apr 2024 14:03:05 +0200
+Subject: [PATCH v4 7/8] appletalk: Remove the now superfluous sentinel
  elements from ctl_table array
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240425-jag-sysctl_remset_net-v4-6-9e82f985777d@samsung.com>
+Message-Id: <20240425-jag-sysctl_remset_net-v4-7-9e82f985777d@samsung.com>
 References: <20240425-jag-sysctl_remset_net-v4-0-9e82f985777d@samsung.com>
 In-Reply-To: <20240425-jag-sysctl_remset_net-v4-0-9e82f985777d@samsung.com>
 To: "David S. Miller" <davem@davemloft.net>, 
@@ -97,19 +97,19 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  coreteam@netfilter.org, bridge@lists.linux.dev, lvs-devel@vger.kernel.org, 
  Joel Granados <j.granados@samsung.com>
 X-Mailer: b4 0.13-dev-2d940
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6266;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1016;
  i=j.granados@samsung.com; h=from:subject:message-id;
- bh=8f/Dg8d3/rC6e0dRD7zz4wfwGN+n8oo3AOmfFngwe40=;
- b=owJ4nAHtARL+kA0DAAoBupfNUreWQU8ByyZiAGYqRpeEVDH7Y4gf9VIG4OqM4UXe7efGrsNvo
- OS7ly22ljn//4kBswQAAQoAHRYhBK5HCVcl5jElzssnkLqXzVK3lkFPBQJmKkaXAAoJELqXzVK3
- lkFPs/wL/jpHxao1jpzbmpAJNwf97MqA7/3b8DaFm81ZOaUgl+xiQJ7aeGoNBn2D2FZuEOyU1ff
- MCD7toeXW67/TNlMF/xvUyZIZgl4hY9KQDbgOiZwujabrrTjDCci4jmmloV9IhLhZvH2B/3ZQh0
- Xy05JPawBk2a4zcjMAtsLPCnBcZk0tpkowPoldMijracootK+n2GTAHl/nHo/0lXrjM+xMe+LJ7
- hDKEVbszGzPo0Tcf7LWhtDKOKlo1b54QCnZDC+rPX/QLNm8kCiVIoHO7pSdu/0hjq8yRFOB8tL2
- WjzWo9OD0DSZEPZQU4XUd9gMTp3OkTDliv7Z35kepaQZ+YenUvDi8ySNpSqYyprH4OgrkzBUG5e
- oqGZozcz4k1M7ezNf/Q76RD7fydE+CPiI2kU2K6tHnCCYeahko8Alhz1xQQ6XYlio9ey1V6gz2f
- MyrQbCtxHBvOYLdb2TZ0XL8PeIpBB7GOeqaML9Wils2nLsx1Hl9Cn6Ca19qGCQIYP7yqgB8evN/
- Mw=
+ bh=7ZWigRPsHTDXgTA/blt/ZK1/GcOosAKMfp6DXoN0Jik=;
+ b=owJ4nAHtARL+kA0DAAoBupfNUreWQU8ByyZiAGYqRpjxNMSiylxeozPo2ILChPZiYuHbTTem0
+ Pf3j3wo9SIQq4kBswQAAQoAHRYhBK5HCVcl5jElzssnkLqXzVK3lkFPBQJmKkaYAAoJELqXzVK3
+ lkFP32gL/jrkIX3LyuyYLpN96u6J7hYYFblxhEn2mRcexE52YvjNQARoirMF+7NS1zAWRF16q7H
+ qNIQftrBBui12iCNWsd0BDEeryOgfqclMy3xiF/1r4xbSDY622PYqLZ7Cx3d0DBYHyn7HXjeWeS
+ d2SZCdxPB5Nebc+JK7z3Vf1hMZwq/I27EMk2cPmJdfKFXLSs6zvOqQkA2gD72xoEYJnNTMkdrgq
+ W37gxhtIY16xp8JGkf/qJJeiszNtTFWKak3eiyMhnv+lZHr8pzSajbx8PFDFKerTJbWgSoGv/m6
+ 7X8IoEE3ms/TG6212cMz+j2x8qV4R5mZa7CNDcLDR1kBvFhOErqB4xXj/N6FpWBhQFHzpGsoy16
+ 6jCq+OG4+OjaKhf9pjDN3GTLN8vR6GhS3n3sbK+GWd4M4KekkceHZLTrPJxLsQmaEfVrD8gTbjO
+ dSKH7h+6ZRDIAKrnfrJLBlRhU4DIFLYtBQzLFV++v506LOVXcXdCwSNEIW5KpqqmKxoDSIet9+8
+ Uw=
 X-Developer-Key: i=j.granados@samsung.com; a=openpgp;
  fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
 X-Endpoint-Received: by B4 Relay for j.granados@samsung.com/default with
@@ -125,177 +125,26 @@ reduce the overall build time size of the kernel and run time memory
 bloat by ~64 bytes per sentinel (further information Link :
 https://lore.kernel.org/all/ZO5Yx5JFogGi%2FcBo@bombadil.infradead.org/)
 
-* Remove sentinel elements from ctl_table structs
-* Remove instances where an array element is zeroed out to make it look
-  like a sentinel. This is not longer needed and is safe after commit
-  c899710fe7f9 ("networking: Update to register_net_sysctl_sz") added
-  the array size to the ctl_table registration
-* Remove the need for having __NF_SYSCTL_CT_LAST_SYSCTL as the
-  sysctl array size is now in NF_SYSCTL_CT_LAST_SYSCTL
-* Remove extra element in ctl_table arrays declarations
+Remove sentinel from atalk_table ctl_table array.
 
 Acked-by: Kees Cook <keescook@chromium.org> # loadpin & yama
 Signed-off-by: Joel Granados <j.granados@samsung.com>
 ---
- net/bridge/br_netfilter_hooks.c         | 1 -
- net/ipv6/netfilter/nf_conntrack_reasm.c | 1 -
- net/netfilter/ipvs/ip_vs_ctl.c          | 5 +----
- net/netfilter/ipvs/ip_vs_lblc.c         | 5 +----
- net/netfilter/ipvs/ip_vs_lblcr.c        | 5 +----
- net/netfilter/nf_conntrack_standalone.c | 6 +-----
- net/netfilter/nf_log.c                  | 3 +--
- 7 files changed, 5 insertions(+), 21 deletions(-)
+ net/appletalk/sysctl_net_atalk.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/net/bridge/br_netfilter_hooks.c b/net/bridge/br_netfilter_hooks.c
-index 35e10c5a766d..d31f57ffe985 100644
---- a/net/bridge/br_netfilter_hooks.c
-+++ b/net/bridge/br_netfilter_hooks.c
-@@ -1219,7 +1219,6 @@ static struct ctl_table brnf_table[] = {
- 		.mode		= 0644,
- 		.proc_handler	= brnf_sysctl_call_tables,
- 	},
--	{ }
- };
- 
- static inline void br_netfilter_sysctl_default(struct brnf_net *brnf)
-diff --git a/net/ipv6/netfilter/nf_conntrack_reasm.c b/net/ipv6/netfilter/nf_conntrack_reasm.c
-index 1a51a44571c3..8531750ec081 100644
---- a/net/ipv6/netfilter/nf_conntrack_reasm.c
-+++ b/net/ipv6/netfilter/nf_conntrack_reasm.c
-@@ -62,7 +62,6 @@ static struct ctl_table nf_ct_frag6_sysctl_table[] = {
- 		.mode		= 0644,
- 		.proc_handler	= proc_doulongvec_minmax,
- 	},
--	{ }
- };
- 
- static int nf_ct_frag6_sysctl_register(struct net *net)
-diff --git a/net/netfilter/ipvs/ip_vs_ctl.c b/net/netfilter/ipvs/ip_vs_ctl.c
-index 143a341bbc0a..50b5dbe40eb8 100644
---- a/net/netfilter/ipvs/ip_vs_ctl.c
-+++ b/net/netfilter/ipvs/ip_vs_ctl.c
-@@ -2263,7 +2263,6 @@ static struct ctl_table vs_vars[] = {
- 		.proc_handler	= proc_dointvec,
- 	},
- #endif
--	{ }
- };
- 
- #endif
-@@ -4286,10 +4285,8 @@ static int __net_init ip_vs_control_net_init_sysctl(struct netns_ipvs *ipvs)
- 			return -ENOMEM;
- 
- 		/* Don't export sysctls to unprivileged users */
--		if (net->user_ns != &init_user_ns) {
--			tbl[0].procname = NULL;
-+		if (net->user_ns != &init_user_ns)
- 			ctl_table_size = 0;
--		}
- 	} else
- 		tbl = vs_vars;
- 	/* Initialize sysctl defaults */
-diff --git a/net/netfilter/ipvs/ip_vs_lblc.c b/net/netfilter/ipvs/ip_vs_lblc.c
-index 8ceec7a2fa8f..2423513d701d 100644
---- a/net/netfilter/ipvs/ip_vs_lblc.c
-+++ b/net/netfilter/ipvs/ip_vs_lblc.c
-@@ -123,7 +123,6 @@ static struct ctl_table vs_vars_table[] = {
+diff --git a/net/appletalk/sysctl_net_atalk.c b/net/appletalk/sysctl_net_atalk.c
+index d945b7c0176d..7aebfe903242 100644
+--- a/net/appletalk/sysctl_net_atalk.c
++++ b/net/appletalk/sysctl_net_atalk.c
+@@ -40,7 +40,6 @@ static struct ctl_table atalk_table[] = {
  		.mode		= 0644,
  		.proc_handler	= proc_dointvec_jiffies,
  	},
--	{ }
- };
- #endif
- 
-@@ -563,10 +562,8 @@ static int __net_init __ip_vs_lblc_init(struct net *net)
- 			return -ENOMEM;
- 
- 		/* Don't export sysctls to unprivileged users */
--		if (net->user_ns != &init_user_ns) {
--			ipvs->lblc_ctl_table[0].procname = NULL;
-+		if (net->user_ns != &init_user_ns)
- 			vars_table_size = 0;
--		}
- 
- 	} else
- 		ipvs->lblc_ctl_table = vs_vars_table;
-diff --git a/net/netfilter/ipvs/ip_vs_lblcr.c b/net/netfilter/ipvs/ip_vs_lblcr.c
-index 0fb64707213f..cdb1d4bf6761 100644
---- a/net/netfilter/ipvs/ip_vs_lblcr.c
-+++ b/net/netfilter/ipvs/ip_vs_lblcr.c
-@@ -294,7 +294,6 @@ static struct ctl_table vs_vars_table[] = {
- 		.mode		= 0644,
- 		.proc_handler	= proc_dointvec_jiffies,
- 	},
--	{ }
- };
- #endif
- 
-@@ -749,10 +748,8 @@ static int __net_init __ip_vs_lblcr_init(struct net *net)
- 			return -ENOMEM;
- 
- 		/* Don't export sysctls to unprivileged users */
--		if (net->user_ns != &init_user_ns) {
--			ipvs->lblcr_ctl_table[0].procname = NULL;
-+		if (net->user_ns != &init_user_ns)
- 			vars_table_size = 0;
--		}
- 	} else
- 		ipvs->lblcr_ctl_table = vs_vars_table;
- 	ipvs->sysctl_lblcr_expiration = DEFAULT_EXPIRATION;
-diff --git a/net/netfilter/nf_conntrack_standalone.c b/net/netfilter/nf_conntrack_standalone.c
-index 0ee98ce5b816..2f226cfb32d0 100644
---- a/net/netfilter/nf_conntrack_standalone.c
-+++ b/net/netfilter/nf_conntrack_standalone.c
-@@ -616,11 +616,9 @@ enum nf_ct_sysctl_index {
- 	NF_SYSCTL_CT_LWTUNNEL,
- #endif
- 
--	__NF_SYSCTL_CT_LAST_SYSCTL,
-+	NF_SYSCTL_CT_LAST_SYSCTL,
+-	{ },
  };
  
--#define NF_SYSCTL_CT_LAST_SYSCTL (__NF_SYSCTL_CT_LAST_SYSCTL + 1)
--
- static struct ctl_table nf_ct_sysctl_table[] = {
- 	[NF_SYSCTL_CT_MAX] = {
- 		.procname	= "nf_conntrack_max",
-@@ -957,7 +955,6 @@ static struct ctl_table nf_ct_sysctl_table[] = {
- 		.proc_handler	= nf_hooks_lwtunnel_sysctl_handler,
- 	},
- #endif
--	{}
- };
- 
- static struct ctl_table nf_ct_netfilter_table[] = {
-@@ -968,7 +965,6 @@ static struct ctl_table nf_ct_netfilter_table[] = {
- 		.mode		= 0644,
- 		.proc_handler	= proc_dointvec,
- 	},
--	{ }
- };
- 
- static void nf_conntrack_standalone_init_tcp_sysctl(struct net *net,
-diff --git a/net/netfilter/nf_log.c b/net/netfilter/nf_log.c
-index 370f8231385c..d42ba733496b 100644
---- a/net/netfilter/nf_log.c
-+++ b/net/netfilter/nf_log.c
-@@ -395,7 +395,7 @@ static const struct seq_operations nflog_seq_ops = {
- 
- #ifdef CONFIG_SYSCTL
- static char nf_log_sysctl_fnames[NFPROTO_NUMPROTO-NFPROTO_UNSPEC][3];
--static struct ctl_table nf_log_sysctl_table[NFPROTO_NUMPROTO+1];
-+static struct ctl_table nf_log_sysctl_table[NFPROTO_NUMPROTO];
- static struct ctl_table_header *nf_log_sysctl_fhdr;
- 
- static struct ctl_table nf_log_sysctl_ftable[] = {
-@@ -406,7 +406,6 @@ static struct ctl_table nf_log_sysctl_ftable[] = {
- 		.mode		= 0644,
- 		.proc_handler	= proc_dointvec,
- 	},
--	{ }
- };
- 
- static int nf_log_proc_dostring(struct ctl_table *table, int write,
+ static struct ctl_table_header *atalk_table_header;
 
 -- 
 2.43.0
