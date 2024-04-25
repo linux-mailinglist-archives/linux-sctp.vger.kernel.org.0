@@ -1,229 +1,417 @@
-Return-Path: <linux-sctp+bounces-91-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-94-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F115A8B1FD5
-	for <lists+linux-sctp@lfdr.de>; Thu, 25 Apr 2024 13:04:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 344BC8B20F3
+	for <lists+linux-sctp@lfdr.de>; Thu, 25 Apr 2024 14:03:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 29857B2516C
-	for <lists+linux-sctp@lfdr.de>; Thu, 25 Apr 2024 11:04:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 584361C21C04
+	for <lists+linux-sctp@lfdr.de>; Thu, 25 Apr 2024 12:03:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04B0028680;
-	Thu, 25 Apr 2024 11:04:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 593C112BF38;
+	Thu, 25 Apr 2024 12:03:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="K7Z+HkQv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jv5/3gzC"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 563742263A;
-	Thu, 25 Apr 2024 11:04:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F39D012AAF8;
+	Thu, 25 Apr 2024 12:03:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714043066; cv=none; b=F3kOXL7bN5kcrX1rNUae2/y+4BKC3o9LK1R00Y+62SwZ076XDzpjrMoY2PbdwLKR1IrQfBW37xKi4WKkpTXlD/BWfiPaa9qfyKUaMq5f9ndgDcK2DGUULCPerI/iSM2JpE7JrO84/FwdHInZKEy1oJu84HXDAeWBietgtuJpnvk=
+	t=1714046620; cv=none; b=fOvyxq0h32+Lxl/s5aciJfeUQY8CuZDBSmBvr/S3vgt/p2LqLpPaYvqlc4SPHRnjm/ZMAJB3dvJNlQJIKvt7ST+2Ls/+Aw4/jfJMMx+ZJixSYQyzJEKA4ag/Q79DfIMfXCSiq3De/Dh/bTS85JW+yokF8XiR79wckNf1WosvsFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714043066; c=relaxed/simple;
-	bh=qUU2lUGW3Jw2ERh97QVSnIfGyRZcJGPJNkeSkF4EtUE=;
-	h=Date:From:To:CC:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To:References; b=LFm5s7uR1ehwPIshHoN4X5M0dNGhLU3zKGgW2t5StKcqtAZDU8xGRMRT/HCvs9f53mkrX+KHkPJLUSMkbkr2d+XgG2jMLHdE4KdIwzpyfXfvg4R0ReY61MeTPvVMyo/2SUblLQcnwU5vaDHBzz2qthe1dIl8qEBjsxmjE8RT5GM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=K7Z+HkQv; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20240425110419euoutp025ea9a2841083d4c23a7df7e27a21bb82~JgRTDaocl0424104241euoutp029;
-	Thu, 25 Apr 2024 11:04:19 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20240425110419euoutp025ea9a2841083d4c23a7df7e27a21bb82~JgRTDaocl0424104241euoutp029
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1714043059;
-	bh=rJ3fxdBvszImOr8fc5O60xKwxenFrsdLX83dTzHbe8Q=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=K7Z+HkQvdxwe9WFNQxmAMJDclz/KZS4YxtJGasrhxAeQ70lSettVglHGn0yJGPz3K
-	 p1fq/JR2M/xPa5rbmMGJBMP63C58KwhDkVG5b5ocDC1SbJNeF2gSqVgeu65dAKtHzB
-	 OZfWdxyyfwSYhVTdlAp7p+La5gY9TN8PKRN42bME=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-	20240425110419eucas1p10f68e079a0837554528c5f55ffd1f236~JgRS0lHPt1477414774eucas1p1p;
-	Thu, 25 Apr 2024 11:04:19 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-	eusmges1new.samsung.com (EUCPMTA) with SMTP id 60.70.09624.2B83A266; Thu, 25
-	Apr 2024 12:04:18 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20240425110418eucas1p1ef427715fe08d9cc9eedd6e2a8798a7c~JgRSPTcDR1975319753eucas1p1n;
-	Thu, 25 Apr 2024 11:04:18 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20240425110418eusmtrp2ee95972f1c88644dd0c5b54b1b42412d~JgRSM0DUY2814728147eusmtrp2m;
-	Thu, 25 Apr 2024 11:04:18 +0000 (GMT)
-X-AuditID: cbfec7f2-c11ff70000002598-66-662a38b20906
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-	eusmgms1.samsung.com (EUCPMTA) with SMTP id 23.5E.08810.2B83A266; Thu, 25
-	Apr 2024 12:04:18 +0100 (BST)
-Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20240425110418eusmtip11b7f7e68f5cef9ee392ee4064342b8af~JgRR8FNcJ0822208222eusmtip1J;
-	Thu, 25 Apr 2024 11:04:18 +0000 (GMT)
-Received: from localhost (106.210.248.68) by CAMSVWEXC02.scsc.local
-	(2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-	Thu, 25 Apr 2024 12:04:17 +0100
-Date: Thu, 25 Apr 2024 13:04:12 +0200
-From: Joel Granados <j.granados@samsung.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, Luis
-	Chamberlain <mcgrof@kernel.org>, Kees Cook <keescook@chromium.org>, Eric
-	Dumazet <edumazet@google.com>, Dave Chinner <david@fromorbit.com>,
-	<linux-fsdevel@vger.kernel.org>, <netdev@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-s390@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-	<linux-mm@kvack.org>, <linux-security-module@vger.kernel.org>,
-	<bpf@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-	<linux-xfs@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
-	<linux-perf-users@vger.kernel.org>, <netfilter-devel@vger.kernel.org>,
-	<coreteam@netfilter.org>, <kexec@lists.infradead.org>,
-	<linux-hardening@vger.kernel.org>, <bridge@lists.linux.dev>,
-	<lvs-devel@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-	<rds-devel@oss.oracle.com>, <linux-sctp@vger.kernel.org>,
-	<linux-nfs@vger.kernel.org>, <apparmor@lists.ubuntu.com>
-Subject: Re: [PATCH v3 00/11] sysctl: treewide: constify ctl_table argument
- of sysctl handlers
-Message-ID: <20240425110412.2n5d27smecfncsfa@joelS2.panther.com>
+	s=arc-20240116; t=1714046620; c=relaxed/simple;
+	bh=z4KRjIbbsJSqGmAGg8o8k7Lsw48MCLoNj1a/WNPurWw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=FKpX6mZ0I42s/04mj+iP6oAaPC7xZWQ1XiUGLtEPb5wOwM5GrdnOVSLrCe/y/Hy2zX1Z4jRqt40g6J12uJ6OTxu2I+wMO1QsCqAbFnuVJ3iEluufZqkWA1uyG+QgLpSBgiFBzLh3bZkNpULMOlRvcSQLdtd8btVk3stB0LFB7vY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jv5/3gzC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8A4F5C2BD10;
+	Thu, 25 Apr 2024 12:03:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714046619;
+	bh=z4KRjIbbsJSqGmAGg8o8k7Lsw48MCLoNj1a/WNPurWw=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=Jv5/3gzCJrXVfTeDKWAV5E8N61AXvgSkBc9xdReFhrqWBomRKaL3nPrwajQcSC43Z
+	 V19Gu1UHHzp8Xs4Uq5PqOgYMX7O5F6ONnMhIHttAia+X9ru0MAqZBOxjygfRcktKKD
+	 3AA+Uc6qvsBOgrNJDrbPczfwfOIUmWDRkcfGpstW5Ji4/uhphPW0PR6RCjRyqWjD3i
+	 zBfYIlMftFXh85p9UHZRb0SKJWXKXcMEIQohxj55c1EV4AcPiZWd/URDPR+FwtO0p7
+	 FfZYtpDRyVNq0lu034yqGpw661+4u20+Pd5RbVsEWB0ROpgLuq4s9+NF5tBVE9BiL9
+	 3bvgldOI0Ly5A==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60656C4345F;
+	Thu, 25 Apr 2024 12:03:39 +0000 (UTC)
+From: Joel Granados via B4 Relay <devnull+j.granados.samsung.com@kernel.org>
+Subject: [PATCH v4 0/8] sysctl: Remove sentinel elements from networking
+Date: Thu, 25 Apr 2024 14:02:58 +0200
+Message-Id: <20240425-jag-sysctl_remset_net-v4-0-9e82f985777d@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg="pgp-sha512";
-	protocol="application/pgp-signature"; boundary="q23ui2gu4xgkiues"
-Content-Disposition: inline
-In-Reply-To: <20240424201234.3cc2b509@kernel.org>
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-	CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA2WSbUyTVxTHvc9bC0nNQ0G4gkiGwKabMJJ9uA4EZ1zy8GGMJWwu+gErPLxs
-	0JpWJtvChIAoLawdzEGrSBFExktrSqkIU0hHioBraUBXGWOOgZG3Dak4oYCjPLiZ7Nvv/M//
-	3HP+yeXjwgnKn58hPslKxaLMYMqTMFmWrHsNaE/qm0XKKJRv0ZLI2dNLIVOtAkOrN87iyGgZ
-	A2jSMs5DdxRZqHNgEUODpq9JZPjjHol+uNlHoEv6JYCGOi5SaKz5OYkGuwdINNymI9BDcymB
-	TM5CCqlqCnA0qZ0h0XzJOIV69D8RqGOlnYdczx5iyPX3GokKqhdw5FBNAmTR+iKVrp9A1lYn
-	eWAncyHPTjD9lyGjNWQzhsZiijEslPGY1rrTzKNWNWBslTWAuef4jWDmXLcxZrB+lmKchp2M
-	UmHhJQiOeEansJkZn7HSiJhjnukXHDPYiQ7/HFXbIyIPXPOVAw8+pN+C57sLgRx48oV0A4Bn
-	jXaCK54AOPXrA5wrnAA2WW3Ei5F85xDGNa4CePcbI/WvS72Sh7ldQtoI4LwduZmgQ2FDi5Jy
-	M0W/AW2zo7ibfegQWNiq3tiH03YefLJqJ90Nb/oYNF4pB24W0AfgnfYfCY69YJ96YoNxOgdW
-	LPWv+/nrHACvrvHdsgcdCTvaR0nu0mBYWlmFcZwL+40jmzzvCVsu7eD4EGyou8jj2BtO9xo3
-	eQd8fqN6IyWkywHsWpvncUUTgPX5i5svRcHC4YnNiXegTW/bOAjSW6Fjzou7cyssM1XgnCyA
-	54qEnDsMNo3NEiqwS/NSMs1LyTT/JePkcOg4/y31P/l1WF8zg3O8H+p0fxFawGsEfmy2LCuN
-	lUWK2VPhMlGWLFucFp4syTKA9c8/sNa70A6qph+HmwHGB2YQsj48fq1pEPgTYomYDfYR3H/8
-	WqpQkCL6/AtWKkmSZmeyMjMI4BPBfoLQlCBWSKeJTrKfsuwJVvqii/E9/POw6OXup7x8mzSw
-	sLOmWe4hTzhNLu73KFbsdoWxu4K6vOKPZoj1S9tnW7AtatWhnM645k/yj+cmz2VGx277ZVFz
-	vILeEpfceBdP3Jdb02WmYxqWyo72qLrjRyISg4bOte2+fep3v5jpTL/S93M+fDf2/ojxgbUp
-	paItSlPpFy9VDseO67dFWAtmq1vWPgh5zzsjkHrFd/vN69TTg8rwZ2m3imoRvyfBuLd+uHFK
-	Xnc9sTwy3lCkPrxSOpqUlP7n97Yzip6I6KpJ7eRHhsC4rDnJ8lfmWz9/7BKeefXt76pKYiSu
-	oGVDSJ/2ssi0Klb5VOmmavcd5B2RA2mqoqQ4NCzgS2UwIUsXRe7BpTLRPzckkEB3BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA2WSf1DTdRjH++z7Y4Pa3beN6afFed6Cs2ROhgw/65Dzus6+7TrjzuyushtL
-	v4LGNtrAUzsNbiDEJGb6ByzSEWgTY9Y2aQzLWjaEKcwTCAOxo0Ye6AlsCLuN1cbq8q7/Xvd+
-	nvf7ee65h4PxqkghZ5+mnNFpVKUiMhX3xXrvbLCj9Xuzh4Z5qMprIVDwai+JutqMLLTcXYsh
-	p3cCoIB3ko2uG9Wox7fAQv6uTwhk/32EQJe/68PR6YthgG65W0g08dVfBPL/4CPQ0CUbjqY8
-	DTjqClaTyNRqwFDAMkOg2eOTJLp68QaO3FEXG0WWplgoshgjkOHMPIZGTQGAvJZVyGTrx9GA
-	I0hsXUN/VnkTp/u/gLTFXkHbOz4mafv8p2za0f4Rfc/RDOjBplZAj4zexekHkWss2n/uPkkH
-	7WvoRqOXXch9W5Kv01aUM2tLtPryLaJ3pChHIpUjSU6uXCLdtPndF3Nkoo0F+XuY0n0HGN3G
-	giJJyYJtgF3mEh6cDg2ASmBbVQ9SOJDKhVXBW6x6kMrhUWcBtD60sJOFdPhNaJhIMh9GR+rJ
-	BPOoOQDdM1lJgxPAwfMTK004lQmtnY0rTSQlhoP3x7EEp1EZsNrRjCcMGHWTDaM1npUJfKoI
-	Os+eBAnmUlvhdddPeDK1F8D6tpNEsvA07Gv+A08wRh2AodGeOHPi/Cz8MsZJyCmUFLpd4/9s
-	KoINTZ+zknwEBpengAnwzY8lmR9LMv+XlJTFsPvSOPk/OQuea53BkrwF2mwPcQtgd4A0pkKv
-	LlbrpRK9Sq2v0BRLdmvVdhD/vy5v2OECp6fnJB7A4gAPyIg7J7++4AdCXKPVMKI07u255/fy
-	uHtUhw4zOq1SV1HK6D1AFj/jCUwo2K2NP7OmXCnNy5ZJc/Pk2TJ53ibRau6rZXUqHlWsKmfe
-	Z5gyRvevj8VJEVayWqqf9A07ozWvHY99H/ArcAFbIrsb1owpDQv4dIbbn/ZewNlYE67acKPB
-	+mOH+QNNZMjzRHR2zPHhUlT9VlHglGRiyBXZWXfUeyd2RVbJEfTlGRU/7z/2yG9QjqtbjIfN
-	XF4qVvjnmOCaboLvlm+ff5l3sFb8ZnTttvP9hpewLOv8zsyhQFtqRzro2SxQiS4UrAs9xxIr
-	fqtd111YufqInTxlFR/dtcP8iwkpiF9PfLvIezDrLTb6d9UZOqvbD11Rhk3Zz2xz8DpvLw4+
-	ivIdxL3LO5a4bwhCTem+5WNt20PAkUllk/vVyvb8KqPiBXQmT/7UqC2n7ZXRMHxdhOtLVNL1
-	mE6v+hu4sk0VFAQAAA==
-X-CMS-MailID: 20240425110418eucas1p1ef427715fe08d9cc9eedd6e2a8798a7c
-X-Msg-Generator: CA
-X-RootMTR: 20240425031241eucas1p1fb0790e0d03ccbe4fca2b5f6da83d6db
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20240425031241eucas1p1fb0790e0d03ccbe4fca2b5f6da83d6db
-References: <20240423-sysctl-const-handler-v3-0-e0beccb836e2@weissschuh.net>
-	<CGME20240425031241eucas1p1fb0790e0d03ccbe4fca2b5f6da83d6db@eucas1p1.samsung.com>
-	<20240424201234.3cc2b509@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHJGKmYC/3XO0QrCMAwF0F+RPltZ0qqrT/6HyOjabqu4Tpo5F
+ Nm/2wmiInu8CfckD0Yuekdst3iw6AZPvgspyOWCmUaH2nFvU2aYocwEAD/pmtOdTH8uomvJ9UV
+ wPbdpqUErYTclS91LdJW/vdzDMeXGU9/F++vMANP0LcoZcQCeca1xU0ppUVm1J93SNdQr07VsM
+ gf8cjCfczA5azSq0lalF6t/R3wcCTjniOQAQL61IAwC/DrjOD4BxsuYO0wBAAA=
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Alexander Aring <alex.aring@gmail.com>, 
+ Stefan Schmidt <stefan@datenfreihafen.org>, 
+ Miquel Raynal <miquel.raynal@bootlin.com>, David Ahern <dsahern@kernel.org>, 
+ Steffen Klassert <steffen.klassert@secunet.com>, 
+ Herbert Xu <herbert@gondor.apana.org.au>, 
+ Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, 
+ Geliang Tang <geliang@kernel.org>, Ralf Baechle <ralf@linux-mips.org>, 
+ Remi Denis-Courmont <courmisch@gmail.com>, 
+ Allison Henderson <allison.henderson@oracle.com>, 
+ David Howells <dhowells@redhat.com>, Marc Dionne <marc.dionne@auristor.com>, 
+ Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, 
+ Xin Long <lucien.xin@gmail.com>, Wenjia Zhang <wenjia@linux.ibm.com>, 
+ Jan Karcher <jaka@linux.ibm.com>, "D. Wythe" <alibuda@linux.alibaba.com>, 
+ Tony Lu <tonylu@linux.alibaba.com>, Wen Gu <guwen@linux.alibaba.com>, 
+ Trond Myklebust <trond.myklebust@hammerspace.com>, 
+ Anna Schumaker <anna@kernel.org>, Chuck Lever <chuck.lever@oracle.com>, 
+ Jeff Layton <jlayton@kernel.org>, Neil Brown <neilb@suse.de>, 
+ Olga Kornievskaia <kolga@netapp.com>, Dai Ngo <Dai.Ngo@oracle.com>, 
+ Tom Talpey <tom@talpey.com>, Jon Maloy <jmaloy@redhat.com>, 
+ Ying Xue <ying.xue@windriver.com>, Martin Schiller <ms@dev.tdt.de>, 
+ Pablo Neira Ayuso <pablo@netfilter.org>, 
+ Jozsef Kadlecsik <kadlec@netfilter.org>, Florian Westphal <fw@strlen.de>, 
+ Roopa Prabhu <roopa@nvidia.com>, Nikolay Aleksandrov <razor@blackwall.org>, 
+ Simon Horman <horms@verge.net.au>, Julian Anastasov <ja@ssi.bg>, 
+ Joerg Reuter <jreuter@yaina.de>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Kees Cook <keescook@chromium.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ dccp@vger.kernel.org, linux-wpan@vger.kernel.org, mptcp@lists.linux.dev, 
+ linux-hams@vger.kernel.org, linux-rdma@vger.kernel.org, 
+ rds-devel@oss.oracle.com, linux-afs@lists.infradead.org, 
+ linux-sctp@vger.kernel.org, linux-s390@vger.kernel.org, 
+ linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net, 
+ linux-x25@vger.kernel.org, netfilter-devel@vger.kernel.org, 
+ coreteam@netfilter.org, bridge@lists.linux.dev, lvs-devel@vger.kernel.org, 
+ Joel Granados <j.granados@samsung.com>
+X-Mailer: b4 0.13-dev-2d940
+X-Developer-Signature: v=1; a=openpgp-sha256; l=15110;
+ i=j.granados@samsung.com; h=from:subject:message-id;
+ bh=zBmytE4RXeXsfs2R37Cc3NmnPMXNcZF6hCbgLnPrpWg=;
+ b=owJ4nAHtARL+kA0DAAoBupfNUreWQU8ByyZiAGYqRpSAjk77t9X/LxyFMa4bCs8zj3S6nmBRI
+ LlM/lF/0WkIfYkBswQAAQoAHRYhBK5HCVcl5jElzssnkLqXzVK3lkFPBQJmKkaUAAoJELqXzVK3
+ lkFPkn8L/ji9z/RcTAJaHdhrakLG3z/EQK6Q9BElYrCtmU6QzLtcbIcXBxPKJOLV3S5qeRt9u1C
+ wuB8xOT/u0pWHLdexg+hqI05qIhD38TL6Tp0Q34uMERiJifzMZQDNc0Pp2JowTYLZSnVNYIee0T
+ IuMBZGoYbt82u6Na7Tfq4p74YWdtyInXE2Ahcm4cO/8exIO39N8VzQAB2V/GGnW3R7twOSzzlXt
+ JV9RTahw7Ur9hmAucmPuSJQAo8Xo3YPuEkWWDyuj7R/e1VF20ZKSRvjkZC+0sijpfS/1KKG+VAu
+ NrEoofmqbFFC4SyNQnbBpUL7VUAxAamGlLpHYmx0Oep23XuklThW6eIboE81c9aRe9ME8MC/cQK
+ VLmpvZPoP5xtPsy9Tag9M36oDkdcduVHrbW+EhfP0rNYlnZdxBrhswLT72mBaikgrCTPwD4wcp3
+ Jok24YjqSneVDmFAd7lh929IQexalQ2+kILqcQkMDNNOvjOWyglROtxzMFm8AojZpLFd5eVmnJ5
+ rw=
+X-Developer-Key: i=j.granados@samsung.com; a=openpgp;
+ fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
+X-Endpoint-Received: by B4 Relay for j.granados@samsung.com/default with
+ auth_id=70
+X-Original-From: Joel Granados <j.granados@samsung.com>
+Reply-To: j.granados@samsung.com
 
---q23ui2gu4xgkiues
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+From: Joel Granados <j.granados@samsung.com>
 
-On Wed, Apr 24, 2024 at 08:12:34PM -0700, Jakub Kicinski wrote:
-> On Tue, 23 Apr 2024 09:54:35 +0200 Thomas Wei=DFschuh wrote:
-> > The series was split from my larger series sysctl-const series [0].
-> > It only focusses on the proc_handlers but is an important step to be
-> > able to move all static definitions of ctl_table into .rodata.
->=20
-> Split this per subsystem, please.
-It is tricky to do that because it changes the first argument (ctl*) to
-const in the proc_handler function type defined in sysclt.h:
-"
--typedef int proc_handler(struct ctl_table *ctl, int write, void *buffer,
-+typedef int proc_handler(const struct ctl_table *ctl, int write, void *buf=
-fer,
-                size_t *lenp, loff_t *ppos);
-"
-This means that all the proc_handlers need to change at the same time.
+What?
+These commits remove the sentinel element (last empty element) from the
+sysctl arrays of all the files under the "net/" directory that register
+a sysctl array. The merging of the preparation patches [4] to mainline
+allows us to just remove sentinel elements without changing behavior.
+This is safe because the sysctl registration code (register_sysctl() and
+friends) use the array size in addition to checking for a sentinel [1].
 
-However, there is an alternative way to do this that allows chunking. We
-first define the proc_handler as a void pointer (casting it where it is
-being used) [1]. Then we could do the constification by subsystem (like
-Jakub proposes). Finally we can "revert the void pointer change so we
-don't have one size fit all pointer as our proc_handler [2].
+Why?
+By removing the sysctl sentinel elements we avoid kernel bloat as
+ctl_table arrays get moved out of kernel/sysctl.c into their own
+respective subsystems. This move was started long ago to avoid merge
+conflicts; the sentinel removal bit came after Mathew Wilcox suggested
+it to avoid bloating the kernel by one element as arrays moved out. This
+patchset will reduce the overall build time size of the kernel and run
+time memory bloat by about ~64 bytes per declared ctl_table array (more
+info here [5]).
 
-Here are some comments about the alternative:
-1. We would need to make the first argument const in all the derived
-   proc_handlers [3]=20
-2. There would be no undefined behavior for two reasons:
-   2.1. There is no case where we change the first argument. We know
-        this because there are no compile errors after we make it const.
-   2.2. We would always go from non-const to const. This is the case
-        because all the stuff that is unchanged in non-const.
-3. If the idea sticks, it should go into mainline as one patchset. I
-   would not like to have a void* proc_handler in a kernel release.
-4. I think this is a "win/win" solution were the constification goes
-   through and it is divided in such a way that it is reviewable.
+When are we done?
+There are 4 patchest (25 commits [2]) that are still outstanding to
+completely remove the sentinels: files under "net/" (this patchset),
+files under "kernel/" dir, misc dirs (files under mm/ security/ and
+others) and the final set that removes the unneeded check for ->procname
+== NULL.
 
-I would really like to hear what ppl think about this "heretic"
-alternative. @Thomas, @Luis, @Kees @Jakub?
+Testing:
+* Ran sysctl selftests (./tools/testing/selftests/sysctl/sysctl.sh)
+* Ran this through 0-day with no errors or warnings
+
+Savings in vmlinux:
+  A total of 64 bytes per sentinel is saved after removal; I measured in
+  x86_64 to give an idea of the aggregated savings. The actual savings
+  will depend on individual kernel configuration.
+    * bloat-o-meter
+        - The "yesall" config saves 3976 bytes (bloat-o-meter output [6])
+        - A reduced config [3] saves 1263 bytes (bloat-o-meter output [7])
+
+Savings in allocated memory:
+  None in this set but will occur when the superfluous allocations are
+  removed from proc_sysctl.c. I include it here for context. The
+  estimated savings during boot for config [3] are 6272 bytes. See [8]
+  for how to measure it.
+
+Comments/feedback greatly appreciated
+
+Changes in v4:
+- Keep reverse xmas tree order when introducing new variables
+- Use a table_size variable to keep the value of ARRAY_SIZE
+- Separated the original "networking: Remove the now superfluous
+  sentinel elements from ctl_table arra" into smaller commits to ease
+  review
+- Merged x.25 and ax.25 commits together.
+- Removed any SOB from the commits that were changed
+- Link to v3: https://lore.kernel.org/r/20240412-jag-sysctl_remset_net-v3-0-11187d13c211@samsung.com
+
+Changes in v3:
+- Reworkded ax.25
+  - Added a BUILD_BUG_ON for the ax.25 commit
+  - Added a CONFIG_AX25_DAMA_SLAVE guard where needed
+- Link to v2: https://lore.kernel.org/r/20240328-jag-sysctl_remset_net-v2-0-52c9fad9a1af@samsung.com
+
+Changes in v2:
+- Rebased to v6.9-rc1
+- Removed unneeded comment from sysctl_net_ax25.c
+- Link to v1: https://lore.kernel.org/r/20240314-jag-sysctl_remset_net-v1-0-aa26b44d29d9@samsung.com
 
 Best
+Joel
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/joel.granados/linux.git=
-/commit/?h=3Djag/constfy_treewide_alternative&id=3D4a383503b1ea650d4e12c1f5=
-838974e879f5aa6f
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/joel.granados/linux.git=
-/commit/?h=3Djag/constfy_treewide_alternative&id=3Da3be65973d27ec2933b9e81e=
-1bec60be3a9b460d
-[3] proc_dostring, proc_dobool, proc_dointvec....
+[1] https://lore.kernel.org/all/20230809105006.1198165-1-j.granados@samsung.com/
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/joel.granados/linux.git/tag/?h=sysctl_remove_empty_elem_v5
+[3] https://gist.github.com/Joelgranados/feaca7af5537156ca9b73aeaec093171
+[4] https://lore.kernel.org/all/ZO5Yx5JFogGi%2FcBo@bombadil.infradead.org/
+
+[5]
+Links Related to the ctl_table sentinel removal:
+* Good summaries from Luis:
+  https://lore.kernel.org/all/ZO5Yx5JFogGi%2FcBo@bombadil.infradead.org/
+  https://lore.kernel.org/all/ZMFizKFkVxUFtSqa@bombadil.infradead.org/
+* Patches adjusting sysctl register calls:
+  https://lore.kernel.org/all/20230302204612.782387-1-mcgrof@kernel.org/
+  https://lore.kernel.org/all/20230302202826.776286-1-mcgrof@kernel.org/
+* Discussions about expectations and approach
+  https://lore.kernel.org/all/20230321130908.6972-1-frank.li@vivo.com
+  https://lore.kernel.org/all/20220220060626.15885-1-tangmeng@uniontech.com
+
+[6]
+add/remove: 0/1 grow/shrink: 2/67 up/down: 76/-4052 (-3976)
+Function                                     old     new   delta
+llc_sysctl_init                              306     377     +71
+nf_log_net_init                              866     871      +5
+sysctl_core_net_init                         375     366      -9
+lowpan_frags_init_net                        618     598     -20
+ip_vs_control_net_init_sysctl               2446    2422     -24
+sysctl_route_net_init                        521     493     -28
+__addrconf_sysctl_register                   678     650     -28
+xfrm_sysctl_init                             405     374     -31
+mpls_net_init                                367     334     -33
+sctp_sysctl_net_register                     386     346     -40
+__ip_vs_lblcr_init                           546     501     -45
+__ip_vs_lblc_init                            546     501     -45
+neigh_sysctl_register                       1011     958     -53
+mpls_dev_sysctl_register                     475     419     -56
+ipv6_route_sysctl_init                       450     394     -56
+xs_tunables_table                            448     384     -64
+xr_tunables_table                            448     384     -64
+xfrm_table                                   320     256     -64
+xfrm6_policy_table                           128      64     -64
+xfrm4_policy_table                           128      64     -64
+x25_table                                    448     384     -64
+vs_vars                                     1984    1920     -64
+unix_table                                   128      64     -64
+tipc_table                                   448     384     -64
+svcrdma_parm_table                           832     768     -64
+smc_table                                    512     448     -64
+sctp_table                                   256     192     -64
+sctp_net_table                              2304    2240     -64
+rxrpc_sysctl_table                           704     640     -64
+rose_table                                   704     640     -64
+rds_tcp_sysctl_table                         192     128     -64
+rds_sysctl_rds_table                         384     320     -64
+rds_ib_sysctl_table                          384     320     -64
+phonet_table                                 128      64     -64
+nr_table                                     832     768     -64
+nf_log_sysctl_table                          768     704     -64
+nf_log_sysctl_ftable                         128      64     -64
+nf_ct_sysctl_table                          3200    3136     -64
+nf_ct_netfilter_table                        128      64     -64
+nf_ct_frag6_sysctl_table                     256     192     -64
+netns_core_table                             320     256     -64
+net_core_table                              2176    2112     -64
+neigh_sysctl_template                       1416    1352     -64
+mptcp_sysctl_table                           576     512     -64
+mpls_dev_table                               128      64     -64
+lowpan_frags_ns_ctl_table                    256     192     -64
+lowpan_frags_ctl_table                       128      64     -64
+llc_station_table                             64       -     -64
+llc2_timeout_table                           320     256     -64
+ipv6_table_template                         1344    1280     -64
+ipv6_route_table_template                    768     704     -64
+ipv6_rotable                                 320     256     -64
+ipv6_icmp_table_template                     448     384     -64
+ipv4_table                                  1024     960     -64
+ipv4_route_table                             832     768     -64
+ipv4_route_netns_table                       320     256     -64
+ipv4_net_table                              7552    7488     -64
+ip6_frags_ns_ctl_table                       256     192     -64
+ip6_frags_ctl_table                          128      64     -64
+ip4_frags_ns_ctl_table                       320     256     -64
+ip4_frags_ctl_table                          128      64     -64
+devinet_sysctl                              2184    2120     -64
+debug_table                                  384     320     -64
+dccp_default_table                           576     512     -64
+ctl_forward_entry                            128      64     -64
+brnf_table                                   448     384     -64
+ax25_param_table                             960     896     -64
+atalk_table                                  320     256     -64
+addrconf_sysctl                             3904    3840     -64
+vs_vars_table                                256     128    -128
+Total: Before=440631035, After=440627059, chg -0.00%
+
+[7]
+add/remove: 0/0 grow/shrink: 1/22 up/down: 8/-1263 (-1255)
+Function                                     old     new   delta
+sysctl_route_net_init                        189     197      +8
+__addrconf_sysctl_register                   306     294     -12
+ipv6_route_sysctl_init                       201     185     -16
+neigh_sysctl_register                        385     366     -19
+unix_table                                   128      64     -64
+netns_core_table                             256     192     -64
+net_core_table                              1664    1600     -64
+neigh_sysctl_template                       1416    1352     -64
+ipv6_table_template                         1344    1280     -64
+ipv6_route_table_template                    768     704     -64
+ipv6_rotable                                 192     128     -64
+ipv6_icmp_table_template                     448     384     -64
+ipv4_table                                   768     704     -64
+ipv4_route_table                             832     768     -64
+ipv4_route_netns_table                       320     256     -64
+ipv4_net_table                              7040    6976     -64
+ip6_frags_ns_ctl_table                       256     192     -64
+ip6_frags_ctl_table                          128      64     -64
+ip4_frags_ns_ctl_table                       320     256     -64
+ip4_frags_ctl_table                          128      64     -64
+devinet_sysctl                              2184    2120     -64
+ctl_forward_entry                            128      64     -64
+addrconf_sysctl                             3392    3328     -64
+Total: Before=8523801, After=8522546, chg -0.01%
+
+[8]
+To measure the in memory savings apply this on top of this patchset.
+
+"
+diff --git i/fs/proc/proc_sysctl.c w/fs/proc/proc_sysctl.c
+index 37cde0efee57..896c498600e8 100644
+--- i/fs/proc/proc_sysctl.c
++++ w/fs/proc/proc_sysctl.c
+@@ -966,6 +966,7 @@ static struct ctl_dir *new_dir(struct ctl_table_set *set,
+        table[0].procname = new_name;
+        table[0].mode = S_IFDIR|S_IRUGO|S_IXUGO;
+        init_header(&new->header, set->dir.header.root, set, node, table, 1);
++       printk("%ld sysctl saved mem kzalloc\n", sizeof(struct ctl_table));
+
+        return new;
+ }
+@@ -1189,6 +1190,7 @@ static struct ctl_table_header *new_links(struct ctl_dir *dir, s>
+                link_name += len;
+                link++;
+        }
++       printk("%ld sysctl saved mem kzalloc\n", sizeof(struct ctl_table));
+        init_header(links, dir->header.root, dir->header.set, node, link_table,
+                    head->ctl_table_size);
+        links->nreg = nr_entries;
+"
+and then run the following bash script in the kernel:
+
+accum=0
+for n in $(dmesg | grep kzalloc | awk '{print $3}') ; do
+    accum=$(calc "$accum + $n")
+done
+echo $accum
+
+Signed-off-by: Joel Granados <j.granados@samsung.com>
 
 --
 
-Joel Granados
+---
+---
+Joel Granados (8):
+      net: Remove the now superfluous sentinel elements from ctl_table array
+      net: ipv{6,4}: Remove the now superfluous sentinel elements from ctl_table array
+      net: rds: Remove the now superfluous sentinel elements from ctl_table array
+      net: sunrpc: Remove the now superfluous sentinel elements from ctl_table array
+      net: Remove ctl_table sentinel elements from several networking subsystems
+      netfilter: Remove the now superfluous sentinel elements from ctl_table array
+      appletalk: Remove the now superfluous sentinel elements from ctl_table array
+      ax.25: x.25: Remove the now superfluous sentinel elements from ctl_table array
 
---q23ui2gu4xgkiues
-Content-Type: application/pgp-signature; name="signature.asc"
+ include/net/ax25.h                      |  2 ++
+ net/appletalk/sysctl_net_atalk.c        |  1 -
+ net/ax25/ax25_dev.c                     |  3 +++
+ net/ax25/ax25_ds_timer.c                |  4 ++++
+ net/ax25/sysctl_net_ax25.c              |  3 +--
+ net/bridge/br_netfilter_hooks.c         |  1 -
+ net/core/neighbour.c                    |  5 +----
+ net/core/sysctl_net_core.c              | 12 +++++-------
+ net/dccp/sysctl.c                       |  2 --
+ net/ieee802154/6lowpan/reassembly.c     |  6 +-----
+ net/ipv4/devinet.c                      |  5 ++---
+ net/ipv4/ip_fragment.c                  |  2 --
+ net/ipv4/route.c                        |  8 ++------
+ net/ipv4/sysctl_net_ipv4.c              |  7 +++----
+ net/ipv4/xfrm4_policy.c                 |  1 -
+ net/ipv6/addrconf.c                     |  8 +++-----
+ net/ipv6/icmp.c                         |  1 -
+ net/ipv6/netfilter/nf_conntrack_reasm.c |  1 -
+ net/ipv6/reassembly.c                   |  2 --
+ net/ipv6/route.c                        |  5 -----
+ net/ipv6/sysctl_net_ipv6.c              |  8 +++-----
+ net/ipv6/xfrm6_policy.c                 |  1 -
+ net/llc/sysctl_net_llc.c                |  8 ++------
+ net/mpls/af_mpls.c                      | 12 ++++++------
+ net/mptcp/ctrl.c                        |  1 -
+ net/netfilter/ipvs/ip_vs_ctl.c          |  5 +----
+ net/netfilter/ipvs/ip_vs_lblc.c         |  5 +----
+ net/netfilter/ipvs/ip_vs_lblcr.c        |  5 +----
+ net/netfilter/nf_conntrack_standalone.c |  6 +-----
+ net/netfilter/nf_log.c                  |  3 +--
+ net/netrom/sysctl_net_netrom.c          |  1 -
+ net/phonet/sysctl.c                     |  1 -
+ net/rds/ib_sysctl.c                     |  1 -
+ net/rds/sysctl.c                        |  1 -
+ net/rds/tcp.c                           |  1 -
+ net/rose/sysctl_net_rose.c              |  1 -
+ net/rxrpc/sysctl.c                      |  1 -
+ net/sctp/sysctl.c                       | 10 +++-------
+ net/smc/smc_sysctl.c                    |  1 -
+ net/sunrpc/sysctl.c                     |  1 -
+ net/sunrpc/xprtrdma/svc_rdma.c          |  1 -
+ net/sunrpc/xprtrdma/transport.c         |  1 -
+ net/sunrpc/xprtsock.c                   |  1 -
+ net/tipc/sysctl.c                       |  1 -
+ net/unix/sysctl_net_unix.c              |  1 -
+ net/x25/sysctl_net_x25.c                |  1 -
+ net/xfrm/xfrm_sysctl.c                  |  5 +----
+ 47 files changed, 47 insertions(+), 116 deletions(-)
+---
+base-commit: 4cece764965020c22cff7665b18a012006359095
+change-id: 20240311-jag-sysctl_remset_net-d403a1a93d6b
 
------BEGIN PGP SIGNATURE-----
+Best regards,
+-- 
+Joel Granados <j.granados@samsung.com>
 
-iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmYqOKsACgkQupfNUreW
-QU/lvAv/UMzbQzEuf2B53UY+EsWY1fAFwgTvC3thgwkdPKHKmQPe29eut0B+tDCl
-ap0WjtDKSGfPOt/B1vZsxRAwLbtqQSX37nUsrtDtalsL3pFou2puYoIjP4gz2EHw
-gIOwPG9y1kNEVips8pa+3xCLw7PkyFGjLWe1JDKZK68IRfE71kbNPOBY5UW52VMm
-BEpao/WdI70J5QU0HgrmPJiT60I/kd64RWlbdnsT9LM/F1jGYQoyPelwD5LExTJJ
-jvIK1/D3CxVCymEpga7rOczo7KyCpllfAEPDI79B5rQpdC2Z4Rk4QG1I9C21mEEt
-cCQQEPqYdbCMjhg3/bnobMujv5m+HWZRan9lJJdu32JDVlNqLXMfdDc7IEdU0SrI
-zMHYaLGQ2CxS8WP6jOWib26TuJSWVJp+FbjeMnBisKScXti/6UuH5NH8GBNYHlP+
-YGS6/xkrsDyU7LJRmF26m8xqNX0KaYdKZYh5oxmZMPDraKi/W7xEgmu3h0/EMF7q
-1i0OThmt
-=dvhR
------END PGP SIGNATURE-----
 
---q23ui2gu4xgkiues--
 
