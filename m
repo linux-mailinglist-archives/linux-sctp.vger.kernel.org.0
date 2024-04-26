@@ -1,52 +1,52 @@
-Return-Path: <linux-sctp+bounces-107-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-108-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB7E68B35B4
-	for <lists+linux-sctp@lfdr.de>; Fri, 26 Apr 2024 12:47:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3300E8B35BC
+	for <lists+linux-sctp@lfdr.de>; Fri, 26 Apr 2024 12:48:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 579B51F224E2
-	for <lists+linux-sctp@lfdr.de>; Fri, 26 Apr 2024 10:47:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE2802851AB
+	for <lists+linux-sctp@lfdr.de>; Fri, 26 Apr 2024 10:48:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C11E3145B21;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5EF0145FFC;
 	Fri, 26 Apr 2024 10:47:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L81ooAJc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z7SE+UKu"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68BB3144D26;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 691A1144D2C;
 	Fri, 26 Apr 2024 10:47:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714128431; cv=none; b=qlze/LuArT209EuyEsDafyiUGl3mG915TtyJIH5k27EALR1b/p6Y2wfcpldZv4qtsXSCY1gYHsjBpWiCW3l3JM740xGx6vyljjkMHhtf4tTlnXFDTiQik24D+KtDPmGkiIhpr+sUCcU9OLZa4l9fWYil+2fBqgiOnuXYUhug+d8=
+	t=1714128431; cv=none; b=GIg5Rv8STdlUFtfel6uUbPegesGpiHrK8zqI2djZLhSPJ7iyi66P5JAFYNPzWS9O5IOjAeGC9i02IePobmRoq3Ex2lx+dzYYD58sbAeNvCrRv7fgizjHffHidxalgzErKDX3hn705jJHK2x873bOp/CY6/IPw9ehsJ6ZjWmYZt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1714128431; c=relaxed/simple;
-	bh=OaWenH2ecs+TvT40FvZfeCOsMkIprLb3i+uRB7TGjxw=;
+	bh=wI15hI2kAJDu/Q8ruVpgWztbx7Cn9f+WAAD5UfCnh8M=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ozx9oLacVRhFfqgJU2wLnwTGdIOxuha3tUtRstRDlZ4V2HnK/MNQlU82+DhsANF248gSduMAnP3tNaRqI+7uWaOED++HUzxXsemtdXlRTDK0cF26e3svYzhaQCxtdX3r8Rvm3Z3TIG3Axcfc33B/iTAIChDhOJb2QtjX7sP8eS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L81ooAJc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E519EC4AF13;
-	Fri, 26 Apr 2024 10:47:10 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=uVyol3iamVlHnWBUlu99JXX383lwjtiJI9pQejYudZGSg955EvCR4u8Ql9+xfxzha5vrdbBHz8kKqEQXdA+TVHl1tX0qEskZqBEKW8hf5yIMUB0+zKZdfPYnQqn6MCLttzhI8cAGLehxH5DytLdd6jKV54xk++oH5AMS7lDqcEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z7SE+UKu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0E2F8C4AF4D;
+	Fri, 26 Apr 2024 10:47:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714128430;
-	bh=OaWenH2ecs+TvT40FvZfeCOsMkIprLb3i+uRB7TGjxw=;
+	s=k20201202; t=1714128431;
+	bh=wI15hI2kAJDu/Q8ruVpgWztbx7Cn9f+WAAD5UfCnh8M=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=L81ooAJczZ6l+I9P1nO9tRSraH/Xl/LHT8jqPr1kG8Ntk4NV3vuKefx6pZVi8hpxa
-	 pGDUyEo94r5a/iSiuHrNt1fwPX37y9BKPjDx9l4Q62s36axvKzzS6kH2WEuaNt38Sm
-	 DbILGltKVRBdNaMtPYhif6Bbfj4u0mlrWmAptnyF2c8WnMKBSKseBEIpXCRB49RiuZ
-	 yuipi7ezjjPh5ITfMYNVRvH++qoVsHiwSg1hX1m1TWNN8788OBPL9ZoJ5mBGtnoKlV
-	 wBLOtI3E0kTXhisG012vUs7MXhKplbpxwZJC6yS59Pebl+9R/MMkDJCxnWRVVYyJNr
-	 7kgFZm27u2Mdg==
+	b=Z7SE+UKuBvBVKigT7/ethtVRiJF9xh2fd4LoITV+vidTViQXSYZHzuCL8mjT43cGt
+	 825ooTiKSDy0aUaqOnrQut095KkuswCIveIExe3LyjGcNSThqY+Nwmdo0IHLI40CQM
+	 rZ78/DvXw5nad+VJ3OV1NbiMBe09wretrkux1FJ4wxID5QuwQctZPESwoWyW038iFt
+	 AhboVrfyR5o093+UFBqxC62wUNKq2KqIiX3bqBQs+6M7vAo6xESOIOhHYBUz/OPWIo
+	 xX2tPRuisn6DF+A+uQU9rYXpNwI0otcf2BKwuVFpvP16QgjQtE7NzYHe1ERVQzT6Ub
+	 PO41ZXi25JgsQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2365C04FFE;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0A19C4345F;
 	Fri, 26 Apr 2024 10:47:10 +0000 (UTC)
 From: Joel Granados via B4 Relay <devnull+j.granados.samsung.com@kernel.org>
-Date: Fri, 26 Apr 2024 12:46:55 +0200
-Subject: [PATCH v5 3/8] net: rds: Remove the now superfluous sentinel
+Date: Fri, 26 Apr 2024 12:46:56 +0200
+Subject: [PATCH v5 4/8] net: sunrpc: Remove the now superfluous sentinel
  elements from ctl_table array
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240426-jag-sysctl_remset_net-v5-3-e3b12f6111a6@samsung.com>
+Message-Id: <20240426-jag-sysctl_remset_net-v5-4-e3b12f6111a6@samsung.com>
 References: <20240426-jag-sysctl_remset_net-v5-0-e3b12f6111a6@samsung.com>
 In-Reply-To: <20240426-jag-sysctl_remset_net-v5-0-e3b12f6111a6@samsung.com>
 To: "David S. Miller" <davem@davemloft.net>, 
@@ -97,19 +97,19 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  coreteam@netfilter.org, bridge@lists.linux.dev, lvs-devel@vger.kernel.org, 
  Joel Granados <j.granados@samsung.com>
 X-Mailer: b4 0.13-dev-2d940
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1604;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2011;
  i=j.granados@samsung.com; h=from:subject:message-id;
- bh=Yhw5Yxzxk2wGoyQtTfioNjf4XA/aQJR8HoqakSkFmW8=;
- b=owJ4nAHtARL+kA0DAAoBupfNUreWQU8ByyZiAGYrhilhsDLKMciOakZ2hp+OF9Gcz8PYw79X5
- 2enJ+JxfEEqeIkBswQAAQoAHRYhBK5HCVcl5jElzssnkLqXzVK3lkFPBQJmK4YpAAoJELqXzVK3
- lkFPkfwL/Ai+Yo+GmKvgTo+Umr4alxLieJctsBpAOAdVaHgF75wTSgdW3xdYq69M3kxafgvUUmH
- FwnSiNd/Aro4onzDt8NlrzX3kpInHsv3kXiDRDDNDrC4Vc+aS2Ne8vTuKy4U5o/CX9j+LAff7qH
- H3yeRFXZikV04jEmRG8i6fo9p0gKrBEhpANzcb2DjtzXzZ3XH58k9fEYXmnBYtTFv5CLOF4QQV5
- VMD3WmZU5ydWNVnLZmAfsfqs+gAUvJBwoTjgn9qoeP64T1FSMYOIyk93QUWIFwc79qiNNMot677
- MANECcoUwPtZqVGLDom62wBNi+i98/TYbxKJD4mvEYzXKZ3ResSvNPoRwOp3DVB6lacwExbz/xe
- iCj6kwdmEG04UFyW7P+J1rcJgHZ1Y0GdWJtoIZLtcnd2LIrFl781UKZaGUiQfTlfk1Q44S/iikk
- tlYuokWms1BEMwASp/t4FBi8LJ5b/Gnq5xlD6gn5lsGjW/cRNHQm5DFU5x9jxRl48wkyqVS/WJ5
- 4M=
+ bh=+biVqN1iqVbz7GiRtsWHsBFe0+suBXyB5W6axoxTyHM=;
+ b=owJ4nAHtARL+kA0DAAoBupfNUreWQU8ByyZiAGYrhirRMJ3CpA96PxSH/s+88A5K1qjt01MiI
+ OdVzv3F59SIhokBswQAAQoAHRYhBK5HCVcl5jElzssnkLqXzVK3lkFPBQJmK4YqAAoJELqXzVK3
+ lkFPeBML/R1KAtXk0L7PJ+GM7bKprya/ElnHKKTyPDEWLIGgc8++pjbuN3QvnNIWMLFoNqI54cj
+ +0ywDpiAdqlLoswTj97wi7irvzwwl1XP+dYMWprB1/yWOOjktGi3Mym1OIHbi0rd5f1cAQWWhAA
+ p6i84g658xcvt1YsL5lx0HowrgreKrM8zxwYZexCnz9H+ql/YlGbjLcdwI0xG5ex/EzCpSsiFG0
+ KWyYaIM2JNqkQGwnhouFdgC9BVT6y9qnCymEq39NOZ9HWw/gcPi54D782W04l4agToMa7xWfgfQ
+ zgYImVRMwI4s2onUMK/skx2N2KymvrPyPcnaV05fAfTkG9bU/uScsKlxrot5pq1XPvL9YkH2amd
+ xoNDXazHt/6w/HpmLFquSGOIJhRNZhh6ujG297cdAI4ohYRmRJtFzdAwDbvy3DCH7mM9na+JwSc
+ Vf1aTrIsBxnGs5+AHrs7poKpMKu00sjzfCgVFAUGUdDfaH9P7ugQrhM/kqofI8FnTYXo7hcmhO8
+ IU=
 X-Developer-Key: i=j.granados@samsung.com; a=openpgp;
  fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
 X-Endpoint-Received: by B4 Relay for j.granados@samsung.com/default with
@@ -129,47 +129,60 @@ https://lore.kernel.org/all/ZO5Yx5JFogGi%2FcBo@bombadil.infradead.org/)
 
 Signed-off-by: Joel Granados <j.granados@samsung.com>
 ---
- net/rds/ib_sysctl.c | 1 -
- net/rds/sysctl.c    | 1 -
- net/rds/tcp.c       | 1 -
- 3 files changed, 3 deletions(-)
+ net/sunrpc/sysctl.c             | 1 -
+ net/sunrpc/xprtrdma/svc_rdma.c  | 1 -
+ net/sunrpc/xprtrdma/transport.c | 1 -
+ net/sunrpc/xprtsock.c           | 1 -
+ 4 files changed, 4 deletions(-)
 
-diff --git a/net/rds/ib_sysctl.c b/net/rds/ib_sysctl.c
-index e4e41b3afce7..2af678e71e3c 100644
---- a/net/rds/ib_sysctl.c
-+++ b/net/rds/ib_sysctl.c
-@@ -103,7 +103,6 @@ static struct ctl_table rds_ib_sysctl_table[] = {
+diff --git a/net/sunrpc/sysctl.c b/net/sunrpc/sysctl.c
+index 93941ab12549..5f3170a1c9bb 100644
+--- a/net/sunrpc/sysctl.c
++++ b/net/sunrpc/sysctl.c
+@@ -160,7 +160,6 @@ static struct ctl_table debug_table[] = {
+ 		.mode		= 0444,
+ 		.proc_handler	= proc_do_xprt,
+ 	},
+-	{ }
+ };
+ 
+ void
+diff --git a/net/sunrpc/xprtrdma/svc_rdma.c b/net/sunrpc/xprtrdma/svc_rdma.c
+index f86970733eb0..474f7a98fe9e 100644
+--- a/net/sunrpc/xprtrdma/svc_rdma.c
++++ b/net/sunrpc/xprtrdma/svc_rdma.c
+@@ -209,7 +209,6 @@ static struct ctl_table svcrdma_parm_table[] = {
+ 		.extra1		= &zero,
+ 		.extra2		= &zero,
+ 	},
+-	{ },
+ };
+ 
+ static void svc_rdma_proc_cleanup(void)
+diff --git a/net/sunrpc/xprtrdma/transport.c b/net/sunrpc/xprtrdma/transport.c
+index 29b0562d62e7..9a8ce5df83ca 100644
+--- a/net/sunrpc/xprtrdma/transport.c
++++ b/net/sunrpc/xprtrdma/transport.c
+@@ -137,7 +137,6 @@ static struct ctl_table xr_tunables_table[] = {
  		.mode		= 0644,
  		.proc_handler	= proc_dointvec,
  	},
--	{ }
+-	{ },
  };
  
- void rds_ib_sysctl_exit(void)
-diff --git a/net/rds/sysctl.c b/net/rds/sysctl.c
-index e381bbcd9cc1..025f518a4349 100644
---- a/net/rds/sysctl.c
-+++ b/net/rds/sysctl.c
-@@ -89,7 +89,6 @@ static struct ctl_table rds_sysctl_rds_table[] = {
- 		.mode           = 0644,
- 		.proc_handler   = proc_dointvec,
+ #endif
+diff --git a/net/sunrpc/xprtsock.c b/net/sunrpc/xprtsock.c
+index bb9b747d58a1..f62f7b65455b 100644
+--- a/net/sunrpc/xprtsock.c
++++ b/net/sunrpc/xprtsock.c
+@@ -160,7 +160,6 @@ static struct ctl_table xs_tunables_table[] = {
+ 		.mode		= 0644,
+ 		.proc_handler	= proc_dointvec_jiffies,
  	},
--	{ }
+-	{ },
  };
  
- void rds_sysctl_exit(void)
-diff --git a/net/rds/tcp.c b/net/rds/tcp.c
-index 2dba7505b414..d8111ac83bb6 100644
---- a/net/rds/tcp.c
-+++ b/net/rds/tcp.c
-@@ -86,7 +86,6 @@ static struct ctl_table rds_tcp_sysctl_table[] = {
- 		.proc_handler   = rds_tcp_skbuf_handler,
- 		.extra1		= &rds_tcp_min_rcvbuf,
- 	},
--	{ }
- };
- 
- u32 rds_tcp_write_seq(struct rds_tcp_connection *tc)
+ /*
 
 -- 
 2.43.0
