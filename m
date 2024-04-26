@@ -1,52 +1,52 @@
-Return-Path: <linux-sctp+bounces-109-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-110-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51BE68B35C4
-	for <lists+linux-sctp@lfdr.de>; Fri, 26 Apr 2024 12:48:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BDE738B35CB
+	for <lists+linux-sctp@lfdr.de>; Fri, 26 Apr 2024 12:48:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8229E1C21B7F
-	for <lists+linux-sctp@lfdr.de>; Fri, 26 Apr 2024 10:48:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4ABC81F21D11
+	for <lists+linux-sctp@lfdr.de>; Fri, 26 Apr 2024 10:48:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13A2B146A6B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32D5B146A95;
 	Fri, 26 Apr 2024 10:47:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XKzriNgD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kiW0Z0cQ"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E2B14533C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A84E714535D;
 	Fri, 26 Apr 2024 10:47:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714128431; cv=none; b=ZLkf2blX9U586sNJjDri+GW4+MjToUZbwLAUDKTjc1AcK+p75IYNWO70zTAiKuJ50+8vh0lWBd5/ncgAN7Yrtb5rFvb60MksE8K47Nxw+rtdQ6QqzEdyiPStYeC139bWPu9+/LruyHvVISvyzmcxgJ2rNyevI9+MUtqRnlrW4TY=
+	t=1714128431; cv=none; b=o0MkXFj2BIz9qBNB0iVrgOqRRABpBUo539MNig7tk3oB5eZoC3W/J4XAZrrqgDbxWtFHzEvF30oggOhrqyZ4tB0yo4bn3jesRwu1bkwIN4VrsCftdolVcuQ4cpV1HEmbF4ZkrWQ+RIeIYlWI710pnqkZyahR9jm/vcHpGZvDgaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1714128431; c=relaxed/simple;
-	bh=v0M3YCkk3i8pT+R0MAJlk6prIN46v5xrc2mwK2DMRnk=;
+	bh=GH2bezeza5fhtu1z47o7+tK1nF0tM45eNw6jY53xEPE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eXtkhfDu+BYYYzTvDAcDl2J7bEHSNl2i7CktKtekdjiLyVPlgv3PuvjVKRq1w4b8JhoR0D2CpsBAojWRXy9EWHkj5OGko5+X7kUIwLvW6CBHiaBvqT77yXryuDAWwa/g/4rwZBnfFvjUCcQexxpt8YiRL5Xps9y5KJN3x2zSj98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XKzriNgD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6D19DC4DDE5;
+	 In-Reply-To:To:Cc; b=SiLYBwxYeIlfLNFJYabrANjp7c1AlzgiUFRRBl8MboaUw6K+ZU/rzDLL7teUvJnTz0Kq0jYi75RLHbtIowNQWDxxAl3u/yI0935gNaPq4Glh9fvybYGkTuLZcmlbTrDbF+1KsBPKoQagIh5xdrckoG5Epx4SHTEAHOPqvFVYlMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kiW0Z0cQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 880CEC4DDFD;
 	Fri, 26 Apr 2024 10:47:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1714128431;
-	bh=v0M3YCkk3i8pT+R0MAJlk6prIN46v5xrc2mwK2DMRnk=;
+	bh=GH2bezeza5fhtu1z47o7+tK1nF0tM45eNw6jY53xEPE=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=XKzriNgDah+GvSXLZ7ejvapLo/J+mh4ItVg0qB8AR2ZahHOUlwiXk5LDby7LAQ8ms
-	 QUr6P8hHTfHdmJ17x/k2ulo9LMu37pSFAuhnWzJRCR8qWmq8WDYeY8zsWB04/miUPu
-	 bJJfhIBxBgX045za42Ny9D5SMzM5ezRdT+JkW/j69mui94KyWoV9JqNIiLI+sv9mQs
-	 2XDcQ4rrJg0nc5RLNYvJfsWadVo6kkWFe/E0qNRZjGZbBcWIx5jA/hqkke8MSVnKUI
-	 JkFS0VzV8Oy4uq5T/vz2hFAZgJWBqE/lsGe7U7a95i6kg9x8fdo1gwEAUe1dIQfbkZ
-	 tuVN4FnufaGQw==
+	b=kiW0Z0cQ7WgJZiEdkBZIJwyIs9FJJWesmJJEaKqH3PUZD+r+8eiASo2bq5QA60sYs
+	 fOjDLnkCC3ZMzNkfJvLJyCm7HafCnMGiswi/CvHmRHm1q6DSUzEinXnX+8vZl3Xbjx
+	 g68VikuKB0cl5riAY1SxrxfQSRaXpLWiBNrHsIFQz6AhWLKGHy6dJUfObhqZc1pMta
+	 hCSFc2e9f/PA+KGf79fXLB91SsVLHQrHfApiFpfGnho67Uv0Kl5cIs+xGWg0wnkD4x
+	 h/qb3LpKmoPC8USlaGIJbDPkK9Lc+4PMBnBfJHzudCYhY3uvm3YlM17h9ocXvWXIFf
+	 l7Xh7nkjHQx2Q==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B93BC04FFE;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76A85C4345F;
 	Fri, 26 Apr 2024 10:47:11 +0000 (UTC)
 From: Joel Granados via B4 Relay <devnull+j.granados.samsung.com@kernel.org>
-Date: Fri, 26 Apr 2024 12:46:59 +0200
-Subject: [PATCH v5 7/8] appletalk: Remove the now superfluous sentinel
+Date: Fri, 26 Apr 2024 12:47:00 +0200
+Subject: [PATCH v5 8/8] ax.25: x.25: Remove the now superfluous sentinel
  elements from ctl_table array
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240426-jag-sysctl_remset_net-v5-7-e3b12f6111a6@samsung.com>
+Message-Id: <20240426-jag-sysctl_remset_net-v5-8-e3b12f6111a6@samsung.com>
 References: <20240426-jag-sysctl_remset_net-v5-0-e3b12f6111a6@samsung.com>
 In-Reply-To: <20240426-jag-sysctl_remset_net-v5-0-e3b12f6111a6@samsung.com>
 To: "David S. Miller" <davem@davemloft.net>, 
@@ -97,19 +97,19 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  coreteam@netfilter.org, bridge@lists.linux.dev, lvs-devel@vger.kernel.org, 
  Joel Granados <j.granados@samsung.com>
 X-Mailer: b4 0.13-dev-2d940
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1016;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3995;
  i=j.granados@samsung.com; h=from:subject:message-id;
- bh=7ZWigRPsHTDXgTA/blt/ZK1/GcOosAKMfp6DXoN0Jik=;
- b=owJ4nAHtARL+kA0DAAoBupfNUreWQU8ByyZiAGYrhis/GfBl/QAzY0/b2l0ldoM4PPD7O0pRy
- HGmmijvFqiLOokBswQAAQoAHRYhBK5HCVcl5jElzssnkLqXzVK3lkFPBQJmK4YrAAoJELqXzVK3
- lkFPHocL/3iD0apTCZzmC0CbwdFHCbRP25d8gZFTHdGMM/KL9f6DjLospfYYiLAlpKhy6YHCPAJ
- lJZl7q3uCKPpfm+2MIdko8Gj93sXJMD5wa15zHrvVYjAevZ0t2bIG3XH3tyMfIjGy4W7HIofdr4
- Y7CsEsjFa70WEOybNatos0RR1gLi8eOdBuxoscF/rIQBzKOYNhVUiJJ3UsY3uA03K8/4+u009UZ
- sYRI3kCOMxtczqGQhxLx9PIN9YnjFFvUO++GfRar3QaDKuHYWhpSazmUuG4pyufCG+68QEFVZj4
- xvfS26uNpIYtePdiG/LwlSVQarX13rR7Bmv497FHksSosQKqV8aB/1Z33T4JvJ/TV6/uPGuepT1
- OnYqQe0W5vn7rfnOGjYsPnH8b1ytJzRkNKov5Ikad8FGQklpiFMqg3mOP9VuTQBAr45AVETwSgR
- /DiW+B8AKRMYQ5Dl7aDyp8Yz8q+PUPh1+48TDYUrupv05j1wxueAi79UIrbOMK3f2SlutfbVi95
- 20=
+ bh=NZnJW6XWgopf75vh1g8TgFTlOj8qaKFukPEjDf1p53c=;
+ b=owJ4nAHtARL+kA0DAAoBupfNUreWQU8ByyZiAGYrhixeiGtr0+3cn50MVCpNJqH3pUbctq+W8
+ IALAHu076ZyXYkBswQAAQoAHRYhBK5HCVcl5jElzssnkLqXzVK3lkFPBQJmK4YsAAoJELqXzVK3
+ lkFP14IL/RB8B5qMj08F0htyG3GLjxNGZowNF7f8ASmAGyCEJBAo1dwvrVPbWphTkoN0F4w8+69
+ kGbOBFemyxiSB9/sU6hGmwbqBzLWGWVlGYoBQaFXmaXTshdupdmxkKyJAdWuvAvfxfoY/dy0yjJ
+ swhEKwIONZVtmBlqZwBj7b7EILpjwK6jH3O/rEjU67bWlKPlu9GHoWb2N20nuaiReoU8StYBPot
+ S6MsfjOAcaVqBGdtGdzGjeDbOrib3lAqRV8+iiXNPTG93cN67pyf5t+Np+t4HzhBHah9u3lF5Bw
+ Qz9HZLtHnUuiU5ISlS2GpfSxRefL1afrN40+uIOGY8EjEZxZcYROoQ9u9ikf71rd4IXLXW8bTHN
+ QeAj9nLYPFNQHiOSK4R6agj9tuJv+oTmvbBGndR9eq+KmjnatqxsdG7+30uFoHbQO+MVnuWW8bl
+ 3pHTcsCdAFrNme6Mqym7SNGMPypA7b2bPTtnlyRxD2i+c7wV2M/IW2O6hZZLs5XxEyFzDq26WE6
+ Tw=
 X-Developer-Key: i=j.granados@samsung.com; a=openpgp;
  fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
 X-Endpoint-Received: by B4 Relay for j.granados@samsung.com/default with
@@ -125,26 +125,110 @@ reduce the overall build time size of the kernel and run time memory
 bloat by ~64 bytes per sentinel (further information Link :
 https://lore.kernel.org/all/ZO5Yx5JFogGi%2FcBo@bombadil.infradead.org/)
 
-Remove sentinel from atalk_table ctl_table array.
+Avoid a buffer overflow when traversing the ctl_table by ensuring that
+AX25_MAX_VALUES is the same as the size of ax25_param_table. This is
+done with a BUILD_BUG_ON where ax25_param_table is defined and a
+CONFIG_AX25_DAMA_SLAVE guard in the unnamed enum definition as well as
+in the ax25_dev_device_up and ax25_ds_set_timer functions.
 
-Acked-by: Kees Cook <keescook@chromium.org> # loadpin & yama
+The overflow happened when the sentinel was removed from
+ax25_param_table. The sentinel's data element was changed when
+CONFIG_AX25_DAMA_SLAVE was undefined. This had no adverse effects as it
+still stopped on the sentinel's null procname but needed to be addressed
+once the sentinel was removed.
+
 Signed-off-by: Joel Granados <j.granados@samsung.com>
 ---
- net/appletalk/sysctl_net_atalk.c | 1 -
- 1 file changed, 1 deletion(-)
+ include/net/ax25.h         | 2 ++
+ net/ax25/ax25_dev.c        | 3 +++
+ net/ax25/ax25_ds_timer.c   | 4 ++++
+ net/ax25/sysctl_net_ax25.c | 3 +--
+ net/x25/sysctl_net_x25.c   | 1 -
+ 5 files changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/net/appletalk/sysctl_net_atalk.c b/net/appletalk/sysctl_net_atalk.c
-index d945b7c0176d..7aebfe903242 100644
---- a/net/appletalk/sysctl_net_atalk.c
-+++ b/net/appletalk/sysctl_net_atalk.c
-@@ -40,7 +40,6 @@ static struct ctl_table atalk_table[] = {
- 		.mode		= 0644,
- 		.proc_handler	= proc_dointvec_jiffies,
+diff --git a/include/net/ax25.h b/include/net/ax25.h
+index 0d939e5aee4e..eb9cee8252c8 100644
+--- a/include/net/ax25.h
++++ b/include/net/ax25.h
+@@ -139,7 +139,9 @@ enum {
+ 	AX25_VALUES_N2,		/* Default N2 value */
+ 	AX25_VALUES_PACLEN,	/* AX.25 MTU */
+ 	AX25_VALUES_PROTOCOL,	/* Std AX.25, DAMA Slave, DAMA Master */
++#ifdef CONFIG_AX25_DAMA_SLAVE
+ 	AX25_VALUES_DS_TIMEOUT,	/* DAMA Slave timeout */
++#endif
+ 	AX25_MAX_VALUES		/* THIS MUST REMAIN THE LAST ENTRY OF THIS LIST */
+ };
+ 
+diff --git a/net/ax25/ax25_dev.c b/net/ax25/ax25_dev.c
+index c5462486dbca..af547e185a94 100644
+--- a/net/ax25/ax25_dev.c
++++ b/net/ax25/ax25_dev.c
+@@ -78,7 +78,10 @@ void ax25_dev_device_up(struct net_device *dev)
+ 	ax25_dev->values[AX25_VALUES_N2]        = AX25_DEF_N2;
+ 	ax25_dev->values[AX25_VALUES_PACLEN]	= AX25_DEF_PACLEN;
+ 	ax25_dev->values[AX25_VALUES_PROTOCOL]  = AX25_DEF_PROTOCOL;
++
++#ifdef CONFIG_AX25_DAMA_SLAVE
+ 	ax25_dev->values[AX25_VALUES_DS_TIMEOUT]= AX25_DEF_DS_TIMEOUT;
++#endif
+ 
+ #if defined(CONFIG_AX25_DAMA_SLAVE) || defined(CONFIG_AX25_DAMA_MASTER)
+ 	ax25_ds_setup_timer(ax25_dev);
+diff --git a/net/ax25/ax25_ds_timer.c b/net/ax25/ax25_ds_timer.c
+index c4f8adbf8144..8f385d2a7628 100644
+--- a/net/ax25/ax25_ds_timer.c
++++ b/net/ax25/ax25_ds_timer.c
+@@ -49,12 +49,16 @@ void ax25_ds_del_timer(ax25_dev *ax25_dev)
+ 
+ void ax25_ds_set_timer(ax25_dev *ax25_dev)
+ {
++#ifdef CONFIG_AX25_DAMA_SLAVE
+ 	if (ax25_dev == NULL)		/* paranoia */
+ 		return;
+ 
+ 	ax25_dev->dama.slave_timeout =
+ 		msecs_to_jiffies(ax25_dev->values[AX25_VALUES_DS_TIMEOUT]) / 10;
+ 	mod_timer(&ax25_dev->dama.slave_timer, jiffies + HZ);
++#else
++	return;
++#endif
+ }
+ 
+ /*
+diff --git a/net/ax25/sysctl_net_ax25.c b/net/ax25/sysctl_net_ax25.c
+index db66e11e7fe8..4e593d36d311 100644
+--- a/net/ax25/sysctl_net_ax25.c
++++ b/net/ax25/sysctl_net_ax25.c
+@@ -141,8 +141,6 @@ static const struct ctl_table ax25_param_table[] = {
+ 		.extra2		= &max_ds_timeout
+ 	},
+ #endif
+-
+-	{ }	/* that's all, folks! */
+ };
+ 
+ int ax25_register_dev_sysctl(ax25_dev *ax25_dev)
+@@ -155,6 +153,7 @@ int ax25_register_dev_sysctl(ax25_dev *ax25_dev)
+ 	if (!table)
+ 		return -ENOMEM;
+ 
++	BUILD_BUG_ON(ARRAY_SIZE(ax25_param_table) != AX25_MAX_VALUES);
+ 	for (k = 0; k < AX25_MAX_VALUES; k++)
+ 		table[k].data = &ax25_dev->values[k];
+ 
+diff --git a/net/x25/sysctl_net_x25.c b/net/x25/sysctl_net_x25.c
+index e9802afa43d0..643f50874dfe 100644
+--- a/net/x25/sysctl_net_x25.c
++++ b/net/x25/sysctl_net_x25.c
+@@ -71,7 +71,6 @@ static struct ctl_table x25_table[] = {
+ 		.mode = 	0644,
+ 		.proc_handler = proc_dointvec,
  	},
 -	{ },
  };
  
- static struct ctl_table_header *atalk_table_header;
+ int __init x25_register_sysctl(void)
 
 -- 
 2.43.0
