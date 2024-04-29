@@ -1,163 +1,282 @@
-Return-Path: <linux-sctp+bounces-125-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-126-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9ACC68B5480
-	for <lists+linux-sctp@lfdr.de>; Mon, 29 Apr 2024 11:48:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 662AA8B54F9
+	for <lists+linux-sctp@lfdr.de>; Mon, 29 Apr 2024 12:20:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE86E1C218B4
-	for <lists+linux-sctp@lfdr.de>; Mon, 29 Apr 2024 09:48:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5E0F1F223E7
+	for <lists+linux-sctp@lfdr.de>; Mon, 29 Apr 2024 10:20:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3525A2837E;
-	Mon, 29 Apr 2024 09:48:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C34A36AF3;
+	Mon, 29 Apr 2024 10:19:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Kg9UUvOf"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="dBl3C2bA"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1B7CEAC2;
-	Mon, 29 Apr 2024 09:48:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427D72C85F;
+	Mon, 29 Apr 2024 10:19:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714384117; cv=none; b=et4LcncpJLClI7XZP4GAY+YrXhU0IHVny5ZndivIfXoSyUhm6Hkt/CUAfqnqm0Z6znZoV8X6zMD14tvTY8JTmiGBBFsHkd9UjrdvOjfynNrR/HOa5UV2IsdowUSPQ5dVQBGBU7Hq1wCfSa7hgDrvtKJA7Dza6oJ+7e0xCUPEQic=
+	t=1714385996; cv=none; b=YtxuI29P7OBEyOQp7Tqg5P2qStsM9d5nE5HH6Md+5eupuu8+/Olm5ULAJs94zgCi4ga9EqVYUb8JNlm6mkwNZGbyJLHRLRjYzP8ItqpZ87mHjGi7pi2sx4Av4jKWTBObteQQyq4ErgE/W6liKcaCoSB1/D54zUzR+4JB5J6/KYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714384117; c=relaxed/simple;
-	bh=eOQoFD2Q1RfOcsu5iO/K4iGBJCStR6G+ZsM+imLU3t4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IHlOSVCRZv8lmIgFhso1S12E/Dr61l2VU/aTPZf4gjg2fg+HXs0HnJQf/w1h9/a4dnOXS3tpyNZdknwiuh9Ggl2X/4VYA8IOnvWPl808vjn6iEsau1aV0ouD5tDMq/vTMpV5BZ9+HbJFmaUJl4ISFay+mBBHXH4aUdTwTQF6/Fk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Kg9UUvOf; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 43T9WcRr023175;
-	Mon, 29 Apr 2024 09:47:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=pp1;
- bh=Kn2/uMMJ4m7IZDO8WlgsPqO7vUsAlVouDdMvBgTuG6Q=;
- b=Kg9UUvOfIY+q0ndE7ZECmZZUdA61ZCkJRFtD9wLCjYzo6fe8LGiqgmj/OaQd5I/iEeGT
- h1W12UFRvhBs0Ojrxq2EVahg4SwzhBVbMh+nl7Xnt0KphpPc+1K4uJnLB1ltR+O9/J8Y
- xH2aBPNbeoLf7rIVjTmAK85pN4JRaPC9PScCooRYa7ChiJY29YfixJaL//aFd9303wQR
- GZQxdsEVeB2nF62y0IT3RUjuxSeOIjIAGLlEpPQHiihzSala+ltUzs1I4eJF+yCxcsu9
- xwGFkZf6AwHS79UZe7yymFDc9jL+Zte2Za8lJWgzOlYfHYZrwUSEHHijG4bCs204Im4A kw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xt90jg0v6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 29 Apr 2024 09:47:55 +0000
-Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 43T9ltmx016519;
-	Mon, 29 Apr 2024 09:47:55 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xt90jg0v5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 29 Apr 2024 09:47:54 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 43T7DaXf001450;
-	Mon, 29 Apr 2024 09:47:53 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3xsbptppem-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 29 Apr 2024 09:47:53 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 43T9loYx26542522
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 29 Apr 2024 09:47:52 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0556520040;
-	Mon, 29 Apr 2024 09:47:50 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B4E6220043;
-	Mon, 29 Apr 2024 09:47:48 +0000 (GMT)
-Received: from osiris (unknown [9.171.12.101])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Mon, 29 Apr 2024 09:47:48 +0000 (GMT)
-Date: Mon, 29 Apr 2024 11:47:47 +0200
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Luis Chamberlain <mcgrof@kernel.org>,
-        Joel Granados <j.granados@samsung.com>,
-        Kees Cook <keescook@chromium.org>, Eric Dumazet <edumazet@google.com>,
-        Dave Chinner <david@fromorbit.com>, linux-fsdevel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-xfs@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        kexec@lists.infradead.org, linux-hardening@vger.kernel.org,
-        bridge@lists.linux.dev, lvs-devel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, rds-devel@oss.oracle.com,
-        linux-sctp@vger.kernel.org, linux-nfs@vger.kernel.org,
-        apparmor@lists.ubuntu.com
-Subject: Re: [PATCH v3 11/11] sysctl: treewide: constify the ctl_table
- argument of handlers
-Message-ID: <20240429094747.29046-G-hca@linux.ibm.com>
-References: <20240423-sysctl-const-handler-v3-0-e0beccb836e2@weissschuh.net>
- <20240423-sysctl-const-handler-v3-11-e0beccb836e2@weissschuh.net>
+	s=arc-20240116; t=1714385996; c=relaxed/simple;
+	bh=X9ck40ZTSI+kf1mVi+Se7yCLCw9737QuqI9rEevVPUs=;
+	h=Date:From:To:CC:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To:References; b=ljWxrZpI0YNjRMleI4sCoD4Dm+wppOLMFKhdVU/9A7AyAHh7Q9CCfyYWTPzFjXKy5BShKm2dLD3WSrSq91CWCwZUNJn1P0/WiKjiIkhIAbnaYWuPwpwx9BxdR4t7/NdkbTwI6AmL4e1NxaVHzOdBOb4k5NV+PtC9r1Jj2ISyhnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=dBl3C2bA; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20240429101945euoutp02002e682ba16b4b496889457f10b26668~KuPiBnHy13169831698euoutp02m;
+	Mon, 29 Apr 2024 10:19:45 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20240429101945euoutp02002e682ba16b4b496889457f10b26668~KuPiBnHy13169831698euoutp02m
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1714385985;
+	bh=zr0XwXdxmnacF/KSXQrVKckrNkkyaMgJG065ePEyTo8=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=dBl3C2bA1yzE2odXdAtnrQhs0QprYhleJf5sFkJIKcT46akLpMPsCXx3J3h2pmWSp
+	 Wv5IICaieNNTw9R0G34tbqbg1i9XougxrinI1nuRcxA7+245Q7xHLXE5KCrqsz3UrU
+	 x7vIjmPbvG8mhgWjbogK7nHsObHlxSmN942so0hg=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+	20240429101945eucas1p2d3ad865d3c4f1d7017d8b1e85c04518a~KuPhxy66u0372603726eucas1p2r;
+	Mon, 29 Apr 2024 10:19:45 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+	eusmges2new.samsung.com (EUCPMTA) with SMTP id D8.A1.09875.1447F266; Mon, 29
+	Apr 2024 11:19:45 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20240429101944eucas1p14923dce6c3f3a7d34a5c11e0ae0fc2e7~KuPhMXQgS3267532675eucas1p1C;
+	Mon, 29 Apr 2024 10:19:44 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20240429101944eusmtrp283f2f2a30a6030efd8c3bd5c308216cf~KuPhK4gPC3196831968eusmtrp26;
+	Mon, 29 Apr 2024 10:19:44 +0000 (GMT)
+X-AuditID: cbfec7f4-11bff70000002693-ea-662f7441fe4a
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+	eusmgms2.samsung.com (EUCPMTA) with SMTP id F9.F5.09010.0447F266; Mon, 29
+	Apr 2024 11:19:44 +0100 (BST)
+Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
+	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20240429101944eusmtip1eb371740c999409b462afd14fa7f0578~KuPgz8l322330323303eusmtip1e;
+	Mon, 29 Apr 2024 10:19:44 +0000 (GMT)
+Received: from localhost (106.110.32.44) by CAMSVWEXC02.scsc.local
+	(2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+	Mon, 29 Apr 2024 11:19:37 +0100
+Date: Mon, 29 Apr 2024 11:32:43 +0200
+From: Joel Granados <j.granados@samsung.com>
+To: Julian Anastasov <ja@ssi.bg>
+CC: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Alexander Aring <alex.aring@gmail.com>, Stefan Schmidt
+	<stefan@datenfreihafen.org>, Miquel Raynal <miquel.raynal@bootlin.com>,
+	"David Ahern" <dsahern@kernel.org>, Steffen Klassert
+	<steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+	Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>,
+	Geliang Tang <geliang@kernel.org>, Ralf Baechle <ralf@linux-mips.org>, Remi
+	Denis-Courmont <courmisch@gmail.com>, Allison Henderson
+	<allison.henderson@oracle.com>, David Howells <dhowells@redhat.com>, Marc
+	Dionne <marc.dionne@auristor.com>, Marcelo Ricardo Leitner
+	<marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, Wenjia Zhang
+	<wenjia@linux.ibm.com>, Jan Karcher <jaka@linux.ibm.com>, "D. Wythe"
+	<alibuda@linux.alibaba.com>, Tony Lu <tonylu@linux.alibaba.com>, Wen Gu
+	<guwen@linux.alibaba.com>, Trond Myklebust
+	<trond.myklebust@hammerspace.com>, Anna Schumaker <anna@kernel.org>, "Chuck
+ Lever" <chuck.lever@oracle.com>, Jeff Layton <jlayton@kernel.org>, Neil
+	Brown <neilb@suse.de>, Olga Kornievskaia <kolga@netapp.com>, Dai Ngo
+	<Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, Jon Maloy
+	<jmaloy@redhat.com>, Ying Xue <ying.xue@windriver.com>, Martin Schiller
+	<ms@dev.tdt.de>, Pablo Neira Ayuso <pablo@netfilter.org>, Jozsef Kadlecsik
+	<kadlec@netfilter.org>, Florian Westphal <fw@strlen.de>, Roopa Prabhu
+	<roopa@nvidia.com>, Nikolay Aleksandrov <razor@blackwall.org>, Simon Horman
+	<horms@verge.net.au>, Joerg Reuter <jreuter@yaina.de>, Luis Chamberlain
+	<mcgrof@kernel.org>, Kees Cook <keescook@chromium.org>,
+	<netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<dccp@vger.kernel.org>, <linux-wpan@vger.kernel.org>,
+	<mptcp@lists.linux.dev>, <linux-hams@vger.kernel.org>,
+	<linux-rdma@vger.kernel.org>, <rds-devel@oss.oracle.com>,
+	<linux-afs@lists.infradead.org>, <linux-sctp@vger.kernel.org>,
+	<linux-s390@vger.kernel.org>, <linux-nfs@vger.kernel.org>,
+	<tipc-discussion@lists.sourceforge.net>, <linux-x25@vger.kernel.org>,
+	<netfilter-devel@vger.kernel.org>, <coreteam@netfilter.org>,
+	<bridge@lists.linux.dev>, <lvs-devel@vger.kernel.org>
+Subject: Re: [PATCH v5 6/8] netfilter: Remove the now superfluous sentinel
+ elements from ctl_table array
+Message-ID: <20240429093243.3luxenn3qffruyif@joelS2.panther.com>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="ism7n6dg7qigbra6"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240423-sysctl-const-handler-v3-11-e0beccb836e2@weissschuh.net>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: dsJabyKjD5wmo-a4UVf9qexuuOQkOoCK
-X-Proofpoint-GUID: 7SlQVN0HjcUbQBl5eVSaH1VEy2oE_0-m
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-04-29_07,2024-04-26_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 mlxlogscore=999 adultscore=0 malwarescore=0 priorityscore=1501
- impostorscore=0 suspectscore=0 clxscore=1011 mlxscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2404010000 definitions=main-2404290061
+In-Reply-To: <d78c6353-99b9-41f8-0c54-19eb86e1fce3@ssi.bg>
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+	CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
+X-Brightmail-Tracker: H4sIAAAAAAAAA2WTe1BUZRjG5zuXPQdymcPK6DcKI+AFvCTZpL2o2TrT5KmpmWaackozSQ6K
+	3JQFJSxduSobAtKgELHLJUQINFhXARVcBXS5qUgQAeayutwEdFkVCDfhYDnTf8/3PM9v5nn/
+	+FhSlsrOY/2Dw4TQYJ9Ad4k9pasda3p9Y5iX3xsdvXagV74N9y4m0KCMiSMgttxGgS5XRYCt
+	y0zAZHk8CZZ7ZhrUOWUSyGyOoWCyTSWBoagJCkoqYgm4X2tkQJdYhKAoqpOC8+anElD1O0P0
+	OSsCU5KRhjv5IxIYyy9k4K7VSMHYsdcgPSGagAZVEFzoMlFwU3eMhmTDKvj9fBcBLRWZErhZ
+	XU/DA30iBcnZ0STc1wzQ0JmaT0H1JTUC45lhAqLVj0mItvSQMF5QR0NToo2EjJJCEtqT7yO4
+	Gn+ZhoYzUQw8ybpOwiW1koJazRxILjFQ8KR+EMGJwVYSbl9cBIZRGwFNZRYaLJmekFqgJaDy
+	6DMGtM27wTBuIKDnqVkCtvZ34XCDjoGetjZSLuc7jFaSH2q6gfisXw/wPylvUfz42DJee/oP
+	gldd6yf58owuhtdVL+Y1peH83/rfGL608KiErzldTPDl97z55JxqxJflHfrE7Uv79b5CoP8+
+	IdRrw3b7XYVtreSeApeI1JE+UolUOAHZsZh7CzdXpTMJyJ6VcQUIFx9JQ+JjFOEf48ZmEgvC
+	5uE/qZfIOc0kLQanEG6xDhP/tiauXp1ByhDOfZjNTCEUtxj/PHhlGpdwK3DzYCeZgFjWiXPF
+	lsrvpvokN+6Ic1Jr6Sl/NrcbT9zym6pLOTmOUaVQonbEN9JN05rkIvBQdqdkqk5y8/Gp5+yU
+	bcetxaP1eRJxqBu25nbPjP4eG7Qd0zsxd2sWzrWYaDF4D/+gPEyKejbur9MyonbGtnL1DJCK
+	cNXzEUZ8FCGcf9hKiK11OOaOaYbYiNtrtdOLMOeA2x86ikMd8HHdCVK0pfhInExsL8FF3YNU
+	MlqY8cppGa+clvHfaaK9AmsqH//fXo7zswdIUb+DS0qGKQ1iCtFcIVwRtFNQvBks7F+p8AlS
+	hAfvXLkjJKgUvfir9c/rRi+gU/2PVuoRwSI9WvQCNp4tuonmUcEhwYK7k7Q0c7mfTOrr822k
+	EBrydWh4oKDQo/ks5T5Xuth3gSDjdvqECQGCsEcIfZkSrN08JaHdqpI/sy2tOLjmuqbPY710
+	FGVYnsTX8e5eB524LfJfzjmnmM7La8KlZjrOIa2xIKpY4cqH+PWs1hz8qn7bvkn1g/cjif7t
+	E4lLOq95HNAr59yNHdBaZ5Wsk474R/xV7O1yjXM49PEXG407GqPVa7dwnTE9txs895oNWxn3
+	BZrNQ+3evUYPv+09G5QtkR+Zgpy+ceuuunKkude7tTa2b0VNUsC6Vdxexvvyfpea41V7eyNS
+	hLABnafxZItra/bncQEfXvTqa5af7V7o4Z9g3aPfdOFK49rNA26b1nw6mRLPLjjpavL0y1ot
+	Q0EV/o0fpPU9epZo+CxPJvgv3eZ5YjxpgL3tTil2+axaRoYqfP4BGd9KHSYFAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA2WTe0xTZxjGcy49rTjcsVz8wnRCp8GhFopcXpg4xLCcJW5xyRYWzMQGD6CD
+	lrXFTdFYKYrAkBJmxIpclFVoJyAgdwx2gAoEcHLTgUoBG5F4GSCClI7aLTPZf8/7e5/nyZcv
+	eXkEv5TrwtsvUbAyiThWQNmRHYs3hzcHKzyjvE6Wu4JB6Q8jjWkcUCafxOFEnYWE6kvpOFiG
+	TTiY61IImBoxcSD/YiUFud3JJJgH0il4lvSGhNL6EziMtxm5UJ2hx0CfNERCjWmWgvSJ1aC6
+	NoPBWKaRA73aFxTMaXVceDhjJGHu9HI4l6bCoTM9DmqHx0joqT7NAXW7CPprhnG4W59LQU9z
+	BwceGzJIUBeqCBgveMqBoWwtCc1N+RgYy57joMr/iwDV1CgB88U3OdCVYSFAU6ojYFA9jsHv
+	Kdc50FmWxIVXebcIaMpXktBW4Azq0nYSXnVMYnB2so+APxrXQfu0BYeuyikOTOVugOziKhwa
+	Ul9zoar7ALTPt+MwOmuiwDL4KRzvrObC6MAAERzM3DfOEMyzrtsYk/dbInNeeYdk5uc8mKqS
+	eziT3jJBMHWaYS5T3byeKahIYBYMV7lMhS6VYlpLruBM3UgAo77YjDGVRcd2uYULt8qkCQrW
+	NUYqVwQJdovAWygKAKG3T4BQtMX/u0BvX4Hntq372Nj9B1mZ57a9wpicn49T8do1PxXeauEq
+	sVSUhi3jIdoHXSswc9IwOx6f/hVDrx5qcNtiNbo63cexaQe00J9G2UwvMdTfkPPPUImhoa5B
+	wuoi6fXowuQN0qopehPqnhxa4jyeI+2KphqOWP0EPb8StZpLSCt3oA+gN3eirHZ7Ohglp2e9
+	jfLpTBzV1K+18ZXo9rmxt5ygD6LznXWUNUrQH6DLizwrXkYHoumOIsr2Tjc0c+kBadNH0ZT5
+	MabGHDTvNGneadL812TDHmhw8Qn+P7wRaQufEjYdhEpLn5MFGFeHObIJ8rjoOLm3UC6OkydI
+	ooWR0rgKbOlYqtvmqmqxkomXQgOG8zADtm4paSzX92AupEQqYQWO9hW5G6P49vvEhw6zMmmE
+	LCGWlRsw36U/zCJcnCKlS5cnUUSI/Lx8RT5+AV6+AX5bBKvsP48/JebT0WIF+z3LxrOyf3M4
+	b5mLEv9yZ2AEa8qU7TCvcuqcjeQf3SPUhhs/DC8Kyh2tDFmZfVR0qHhPeeSjkO2FL9z6/DxQ
+	/VdhCU9UXW7OfWcSDfVf8Pcqn8y+39rKDxpoXJHYFVgePOi78x4+3/SN6FvRe561oSvCdpc5
+	v9bc/aGs8aMqk7q37OKReMuCe4g+TB+ekTyhjHOKrSia/njCP/KTMw92n1XN5NG+p9ruu4/t
+	Uscf+/OR7tnlWf3IFZ+QsRz3zS5rwSlUvgst99f3rqncIckqlphP+Ry+UbjBfnvFQWFkyiZB
+	WNJZbUxLINnW0xPWJG2q/yVzdvT6cyoiNHdQr+Ml/vjZG7uvyUum1Jf8/AuKYT0ISHmMWORB
+	yOTivwEr8bPfwQQAAA==
+X-CMS-MailID: 20240429101944eucas1p14923dce6c3f3a7d34a5c11e0ae0fc2e7
+X-Msg-Generator: CA
+X-RootMTR: 20240426121030eucas1p111f2e449982e47627d8efd9c9782990d
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20240426121030eucas1p111f2e449982e47627d8efd9c9782990d
+References: <20240426-jag-sysctl_remset_net-v5-0-e3b12f6111a6@samsung.com>
+	<20240426-jag-sysctl_remset_net-v5-6-e3b12f6111a6@samsung.com>
+	<CGME20240426121030eucas1p111f2e449982e47627d8efd9c9782990d@eucas1p1.samsung.com>
+	<d78c6353-99b9-41f8-0c54-19eb86e1fce3@ssi.bg>
 
-On Tue, Apr 23, 2024 at 09:54:46AM +0200, Thomas Weiﬂschuh wrote:
-> Adapt the proc_hander function signature to make it clear that handlers
-> are not supposed to modify their ctl_table argument.
-> 
-> This is a prerequisite to moving the static ctl_table structs into
-> rodata.
-> By migrating all handlers at once a lengthy transition can be avoided.
-> 
-> The patch was mostly generated by coccinelle with the following script:
-> 
->     @@
->     identifier func, ctl, write, buffer, lenp, ppos;
->     @@
-> 
->     int func(
->     - struct ctl_table *ctl,
->     + const struct ctl_table *ctl,
->       int write, void *buffer, size_t *lenp, loff_t *ppos)
->     { ... }
-> 
-> In addition to the scripted changes some other changes are done:
-> 
-> * the typedef proc_handler is adapted
-> 
-> * the prototypes of non-static handler are adapted
-> 
-> * kernel/seccomp.c:{read,write}_actions_logged() and
->   kernel/watchdog.c:proc_watchdog_common() are adapted as they need to
->   adapted together with the handlers for type-consistency reasons
-> 
-> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+--ism7n6dg7qigbra6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-...
+On Fri, Apr 26, 2024 at 03:09:45PM +0300, Julian Anastasov wrote:
+>=20
+> 	Hello,
+>=20
+> On Fri, 26 Apr 2024, Joel Granados via B4 Relay wrote:
+>=20
+> > From: Joel Granados <j.granados@samsung.com>
+> >=20
+> > This commit comes at the tail end of a greater effort to remove the
+> > empty elements at the end of the ctl_table arrays (sentinels) which will
+> > reduce the overall build time size of the kernel and run time memory
+> > bloat by ~64 bytes per sentinel (further information Link :
+> > https://lore.kernel.org/all/ZO5Yx5JFogGi%2FcBo@bombadil.infradead.org/)
+> >=20
+> > * Remove sentinel elements from ctl_table structs
+> > * Remove instances where an array element is zeroed out to make it look
+> >   like a sentinel. This is not longer needed and is safe after commit
+> >   c899710fe7f9 ("networking: Update to register_net_sysctl_sz") added
+> >   the array size to the ctl_table registration
+> > * Remove the need for having __NF_SYSCTL_CT_LAST_SYSCTL as the
+> >   sysctl array size is now in NF_SYSCTL_CT_LAST_SYSCTL
+> > * Remove extra element in ctl_table arrays declarations
+> >=20
+> > Acked-by: Kees Cook <keescook@chromium.org> # loadpin & yama
+> > Signed-off-by: Joel Granados <j.granados@samsung.com>
+> > ---
+> >  net/bridge/br_netfilter_hooks.c         | 1 -
+> >  net/ipv6/netfilter/nf_conntrack_reasm.c | 1 -
+> >  net/netfilter/ipvs/ip_vs_ctl.c          | 5 +----
+> >  net/netfilter/ipvs/ip_vs_lblc.c         | 5 +----
+> >  net/netfilter/ipvs/ip_vs_lblcr.c        | 5 +----
+> >  net/netfilter/nf_conntrack_standalone.c | 6 +-----
+> >  net/netfilter/nf_log.c                  | 3 +--
+> >  7 files changed, 5 insertions(+), 21 deletions(-)
+>=20
+> ...
+>=20
+> > diff --git a/net/netfilter/ipvs/ip_vs_ctl.c b/net/netfilter/ipvs/ip_vs_=
+ctl.c
+> > index 143a341bbc0a..50b5dbe40eb8 100644
+> > --- a/net/netfilter/ipvs/ip_vs_ctl.c
+> > +++ b/net/netfilter/ipvs/ip_vs_ctl.c
+>=20
+> ...
+>=20
+> > @@ -4286,10 +4285,8 @@ static int __net_init ip_vs_control_net_init_sys=
+ctl(struct netns_ipvs *ipvs)
+> >  			return -ENOMEM;
+> > =20
+> >  		/* Don't export sysctls to unprivileged users */
+> > -		if (net->user_ns !=3D &init_user_ns) {
+> > -			tbl[0].procname =3D NULL;
+> > +		if (net->user_ns !=3D &init_user_ns)
+> >  			ctl_table_size =3D 0;
+> > -		}
+> >  	} else
+> >  		tbl =3D vs_vars;
+> >  	/* Initialize sysctl defaults */
+>=20
+> 	We are in process of changing this code (not in trees yet):
+>=20
+> https://marc.info/?t=3D171345219600002&r=3D1&w=3D2
+>=20
+> 	As I'm not sure which patch will win, the end result should
+> be this single if-block/hunk to be removed.
+Thx for the heads up. I have made a note of it in case this set ends up
+being after yours.
 
->  arch/s390/appldata/appldata_base.c        | 10 ++---
->  arch/s390/kernel/debug.c                  |  2 +-
->  arch/s390/kernel/topology.c               |  2 +-
->  arch/s390/mm/cmm.c                        |  6 +--
 
-Acked-by: Heiko Carstens <hca@linux.ibm.com> # s390
+>=20
+> Regards
+>=20
+> --
+> Julian Anastasov <ja@ssi.bg>
+>=20
+
+--=20
+
+Joel Granados
+
+--ism7n6dg7qigbra6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmYvaToACgkQupfNUreW
+QU+SSwv+L+03hxc8J2P/i5B1B0mUQVpmedwuNIg1F6QSEgnsIAQzagQUlBPPFYhC
+9+gNBsEpUMPb2PVXyRXpd3QQm0XPgv43A38qO27lQYg1VPpf+zpzosrvz0lJaoo/
+BesbgCri6d6bPmpgGfq4BuYWksB0jvU/Ci63m7Qz5wKcG5hM0G7jEHggHJkz8BWP
+8i4SO8Fwb0pbbd7Hwqb1hUJd1uk+coHhyknMfIwmVFPPTN9C1COJFgFE9YiCT9zq
+9L1d/uWcu0n9sB7MzW93vrPrMYZ1xeIvWrYwXI05Wr3FnTYXGhSpnZcMUN7rHorj
+EQv06C97YKmL3HiTPcIxtxGxjG1v3U+RZZ49wxo56yiNPT/kECnkTFT+7GxJ+/4d
+HkB8WMPpqP6PRbPNLJdm94ynbyi8N6+4fgscCSLRuAeiyVqNGXmvLsY3NZWJmpGl
+UBeeGwtDSjq9oVM5y9hiKeBbljcUbPpBiHZIuZ0qvm/P02md5XTdbdRJEYjMpxjq
+LcjGNoOh
+=+2c9
+-----END PGP SIGNATURE-----
+
+--ism7n6dg7qigbra6--
 
