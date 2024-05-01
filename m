@@ -1,53 +1,53 @@
-Return-Path: <linux-sctp+bounces-140-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-138-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAEB98B87EC
-	for <lists+linux-sctp@lfdr.de>; Wed,  1 May 2024 11:31:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7B078B87D9
+	for <lists+linux-sctp@lfdr.de>; Wed,  1 May 2024 11:31:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 77E991F229A3
-	for <lists+linux-sctp@lfdr.de>; Wed,  1 May 2024 09:31:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8477628506B
+	for <lists+linux-sctp@lfdr.de>; Wed,  1 May 2024 09:31:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6697A7F49F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 306115E22C;
 	Wed,  1 May 2024 09:30:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZlEcs235"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T+4MN3nf"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9365051C4B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87E7F51C4C;
 	Wed,  1 May 2024 09:30:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714555809; cv=none; b=a10aW2U+cnJQlCkQq3TCpkYZY9dfVs0eNXAajUmlpvdxKNJIhGpQiUAiq4lHcsGAaVZYt6nbGoD37gwX82JLtvyxvv9VovRYqs2XY02yvwDij3wON77/TbH2qkfvHtad2E8Z/mVExaSyxM4Opy33CRVFXzapwrEIzZg3iTs94cw=
+	t=1714555809; cv=none; b=greW1EVT0W5RpzOf8ODZwXvDuBci08jJtFjVmdGELh8dNqA9GR5HD3YgOeX7cErSjcYBPmB09WWOc+Bg4vzqdo6Cepz6lzCABc7xjZLOGJJzqL8fa1t+4W+AgvXhSS4lhNdG+2FqYfxE8foBx8j1Hyhe0zDvaTKPaAieVcctQ3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1714555809; c=relaxed/simple;
-	bh=wI15hI2kAJDu/Q8ruVpgWztbx7Cn9f+WAAD5UfCnh8M=;
+	bh=f271oLpxgw2LB1Tjju2xcv20XzHixe4lHgvI7Fw4ZkY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=IccaLWhSHFei0Cgmec7yP17GpX4wdHDlWww1hFR/TQC/2CPsxsnUFbh7tbYxHU3Bi/Cdzh0oWulpxz581I4Ucy0vJwNfl2yn0i8RVAW5CX7f7YcK9J2q9/zQChbQJHuJW0OmrOez/deLFk6zqTzwQzM+z/a2ZrwKnj+zlZF+rss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZlEcs235; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D205AC4AF51;
+	 In-Reply-To:To:Cc; b=Bkht6a11gEewK/Zz2nEoub/gHtK/BNjbO81f9hwNf+5gqkaqpuzzYbf3KO9/q4BKcRde5wpdxHTapuYScmBn8pUD3Biw//wv1tIQfqLRusTXpYM1cBUEeY739novX+LGZGpXJlzUpFcrGChnNDU6M01sybMxR/mPIGkR1+PTxrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T+4MN3nf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F1455C4AF66;
 	Wed,  1 May 2024 09:30:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714555808;
-	bh=wI15hI2kAJDu/Q8ruVpgWztbx7Cn9f+WAAD5UfCnh8M=;
+	s=k20201202; t=1714555809;
+	bh=f271oLpxgw2LB1Tjju2xcv20XzHixe4lHgvI7Fw4ZkY=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=ZlEcs235uGRTMIdxBL9I+cHNvW1zV8g7dz5+BCOooJytFhisz2HJ1uS6Qx1Figkpd
-	 lW8j1P8CRc5Or8zBq9vIJKTj03QMvvm4BvAZGWiN9xQ3JGUGhC1VGjykevG7SeAQxW
-	 tcqoj1bprOqkarqVO4Q4zSz++nwNUELazBtqefcJEKlt0oD0URTDJvG0AFnJyDmwtP
-	 R6Ujh24SaUTlMXYd0CfjWqYgqp1sNxVwbJtsfcnzGvqN7M1BbxsnYpwXuWeJ8ykUc4
-	 difFoMjPcgkSkdloxLLhpRcPHL4/EPTXnzsXJ6LhxmHW3zWtuT+wj5FFGkfw5/5yWm
-	 abzcMNEf5pEag==
+	b=T+4MN3nfqd+Cr8ClY3oBCeTSrNZ2My1KCE6qfI6RTnGGodly52trZEVIvRFUapCzD
+	 IBA4zJcW6h89Fsg2ztDZCeM2KSoEsfkT3Ph2PNHNk6i4v0vy575Rm0YWdBuoN735mz
+	 CBH0duSWfxcJiMLtzW5n9zYuk5TnROIYL/4wVLHcXfowOA2sFS8Lm3m2tbMTolpmFC
+	 by5FytuWEShB+dRGnwPrm9n2hu8g7VfG9gPTIOMFg2D1wvlgBMVv0PzuvJvQEri/Bn
+	 wl0XAdGnqOyqtMn5WvLTbAp7RJgwnXMLj05VwR679LHArlZAuk/lVtPY6hwSZE5SA3
+	 gJcbOaQzDJEsQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C06EFC4345F;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D16E5C25B75;
 	Wed,  1 May 2024 09:30:08 +0000 (UTC)
 From: Joel Granados via B4 Relay <devnull+j.granados.samsung.com@kernel.org>
-Date: Wed, 01 May 2024 11:29:28 +0200
-Subject: [PATCH net-next v6 4/8] net: sunrpc: Remove the now superfluous
- sentinel elements from ctl_table array
+Date: Wed, 01 May 2024 11:29:29 +0200
+Subject: [PATCH net-next v6 5/8] net: Remove ctl_table sentinel elements
+ from several networking subsystems
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240501-jag-sysctl_remset_net-v6-4-370b702b6b4a@samsung.com>
+Message-Id: <20240501-jag-sysctl_remset_net-v6-5-370b702b6b4a@samsung.com>
 References: <20240501-jag-sysctl_remset_net-v6-0-370b702b6b4a@samsung.com>
 In-Reply-To: <20240501-jag-sysctl_remset_net-v6-0-370b702b6b4a@samsung.com>
 To: "David S. Miller" <davem@davemloft.net>, 
@@ -97,19 +97,19 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  coreteam@netfilter.org, bridge@lists.linux.dev, lvs-devel@vger.kernel.org, 
  Joel Granados <j.granados@samsung.com>
 X-Mailer: b4 0.13-dev-2d940
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2011;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8058;
  i=j.granados@samsung.com; h=from:subject:message-id;
- bh=+biVqN1iqVbz7GiRtsWHsBFe0+suBXyB5W6axoxTyHM=;
- b=owJ4nAHtARL+kA0DAAoBupfNUreWQU8ByyZiAGYyC5yGmmDYRr5sMIjbo3uBUCExLw1KDhLZt
- 7ylu5K3lfYK9okBswQAAQoAHRYhBK5HCVcl5jElzssnkLqXzVK3lkFPBQJmMgucAAoJELqXzVK3
- lkFPDwIMAJLK8iV22sXiMTObsnfViwrXfOA/84JBvWU7BzczJ7iY9vPnRJaPC0rXZZEFnDAQ9Xz
- 0HfPtkpDc9lYxn9Ss24kO6x2oXjtEAjtVs+TxmVP/mtQPao6VBk7aO+9EMYbXnhh/pHd7osYq7v
- k6lXgqunQcpxI16yGuxtjPDG5pTlvNcE0mKXGHhd+DKqxoAVESErG43zRHlgPIkTHTN0063znEU
- zbOLuom94FkPf1YpnU47bP+oAa+pG4eYr6b00cWXu8aSZsUMdTy8qpTWlIOa2A9NwJ3t9YeT5lq
- yslhl3fcvGxmxx9nTBuaQ7RQ2NUhOJtm7j8QVmccRbS7wOCyyKDI0pPd/2rXK927RUVSmDgkT6x
- FwNDrfiBStJt/vioem2OdP0vIUaKCDdaqJCaSk84OM/wkfVy9rD2FfMxL6OqdVu4VRkpL039/EQ
- g8jB2BsX3I0zlGoZ4hRIA1HEOzAieWt5QK1NypFKi0NwbWebl9CRDHohpAmhTr1PqRp4fbxXWo5
- Wo=
+ bh=oHp223AJ3sR+uDxwZALPqZwO1wbPnkxSkFlnHVPSBTI=;
+ b=owJ4nAHtARL+kA0DAAoBupfNUreWQU8ByyZiAGYyC5wKvDl/3P5HkfHLqnJPovBiBBjlYEopz
+ i6wx2Svu0bjvYkBswQAAQoAHRYhBK5HCVcl5jElzssnkLqXzVK3lkFPBQJmMgucAAoJELqXzVK3
+ lkFPQXML/25CwbDRBCs1VIaUJzAVzJr2pcF/r9X/7zqZqWBfOeRk3C/4zGAXTtwXpaf0n56px6Y
+ dHgaI5uwnkMmE8aEJRnfsmm1hX0SDg/31dE1AbUBEvPJUmBVKKEmII1Fyv3lUyqbATUH3/bgmfY
+ 2+ADj7qkXw1sQauQ3lYF2kYprfuf9+zoNTe123d49nW2Ponq2b8zJtZxcE2HK7X1C9G+lwAOGmi
+ 3VGTAmFxpcyhX98UkFjnqer4eU1qYDKYTCbK2iixwPlvK5oiseJhfAjv6CVS0GV4kG4zgPdyL/x
+ 7EdHxFO33trbR4ynX17JZNi3evl71p3aqlovpzgccxZU9TY2DKuv2PyO97UGqIIDSXqYYHC7CBh
+ 5xHn4FW0T6nHtj6XpRu2IX1Ffbx/vTqG6rOcf0T7AhvsAOR5YZsfRG0Rw0XIf83xubbWak6R3Zu
+ e9SIlnukU7cxybqCGBw68kbJT5i+UbW9DQofAn01XQ22QQ81/9ySFbqAbb5pONatXcT3JlqVko9
+ Xg=
 X-Developer-Key: i=j.granados@samsung.com; a=openpgp;
  fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
 X-Endpoint-Received: by B4 Relay for j.granados@samsung.com/default with
@@ -125,64 +125,242 @@ will reduce the overall build time size of the kernel and run time
 memory bloat by ~64 bytes per sentinel (further information Link :
 https://lore.kernel.org/all/ZO5Yx5JFogGi%2FcBo@bombadil.infradead.org/)
 
+To avoid lots of small commits, this commit brings together network
+changes from (as they appear in MAINTAINERS) LLC, MPTCP, NETROM NETWORK
+LAYER, PHONET PROTOCOL, ROSE NETWORK LAYER, RXRPC SOCKETS, SCTP
+PROTOCOL, SHARED MEMORY COMMUNICATIONS (SMC), TIPC NETWORK LAYER and
+NETWORKING [IPSEC]
+
 * Remove sentinel element from ctl_table structs.
+* Replace empty array registration with the register_net_sysctl_sz call
+  in llc_sysctl_init
+* Replace the for loop stop condition that tests for procname == NULL
+  with one that depends on array size in sctp_sysctl_net_register
+* Remove instances where an array element is zeroed out to make it look
+  like a sentinel in xfrm_sysctl_init. This is not longer needed and is
+  safe after commit c899710fe7f9 ("networking: Update to
+  register_net_sysctl_sz") added the array size to the ctl_table
+  registration
+* Use a table_size variable to keep the value of ARRAY_SIZE
 
 Signed-off-by: Joel Granados <j.granados@samsung.com>
 ---
- net/sunrpc/sysctl.c             | 1 -
- net/sunrpc/xprtrdma/svc_rdma.c  | 1 -
- net/sunrpc/xprtrdma/transport.c | 1 -
- net/sunrpc/xprtsock.c           | 1 -
- 4 files changed, 4 deletions(-)
+ net/llc/sysctl_net_llc.c       |  8 ++------
+ net/mptcp/ctrl.c               |  1 -
+ net/netrom/sysctl_net_netrom.c |  1 -
+ net/phonet/sysctl.c            |  1 -
+ net/rose/sysctl_net_rose.c     |  1 -
+ net/rxrpc/sysctl.c             |  1 -
+ net/sctp/sysctl.c              | 10 +++-------
+ net/smc/smc_sysctl.c           |  6 +++---
+ net/tipc/sysctl.c              |  1 -
+ net/xfrm/xfrm_sysctl.c         |  5 +----
+ 10 files changed, 9 insertions(+), 26 deletions(-)
 
-diff --git a/net/sunrpc/sysctl.c b/net/sunrpc/sysctl.c
-index 93941ab12549..5f3170a1c9bb 100644
---- a/net/sunrpc/sysctl.c
-+++ b/net/sunrpc/sysctl.c
-@@ -160,7 +160,6 @@ static struct ctl_table debug_table[] = {
- 		.mode		= 0444,
- 		.proc_handler	= proc_do_xprt,
+diff --git a/net/llc/sysctl_net_llc.c b/net/llc/sysctl_net_llc.c
+index 8443a6d841b0..72e101135f8c 100644
+--- a/net/llc/sysctl_net_llc.c
++++ b/net/llc/sysctl_net_llc.c
+@@ -44,11 +44,6 @@ static struct ctl_table llc2_timeout_table[] = {
+ 		.mode		= 0644,
+ 		.proc_handler   = proc_dointvec_jiffies,
+ 	},
+-	{ },
+-};
+-
+-static struct ctl_table llc_station_table[] = {
+-	{ },
+ };
+ 
+ static struct ctl_table_header *llc2_timeout_header;
+@@ -56,8 +51,9 @@ static struct ctl_table_header *llc_station_header;
+ 
+ int __init llc_sysctl_init(void)
+ {
++	struct ctl_table empty[1] = {};
+ 	llc2_timeout_header = register_net_sysctl(&init_net, "net/llc/llc2/timeout", llc2_timeout_table);
+-	llc_station_header = register_net_sysctl(&init_net, "net/llc/station", llc_station_table);
++	llc_station_header = register_net_sysctl_sz(&init_net, "net/llc/station", empty, 0);
+ 
+ 	if (!llc2_timeout_header || !llc_station_header) {
+ 		llc_sysctl_exit();
+diff --git a/net/mptcp/ctrl.c b/net/mptcp/ctrl.c
+index 8d661156ab8c..f4e7a53acc5a 100644
+--- a/net/mptcp/ctrl.c
++++ b/net/mptcp/ctrl.c
+@@ -156,7 +156,6 @@ static struct ctl_table mptcp_sysctl_table[] = {
+ 		.mode = 0644,
+ 		.proc_handler = proc_dointvec_jiffies,
+ 	},
+-	{}
+ };
+ 
+ static int mptcp_pernet_new_table(struct net *net, struct mptcp_pernet *pernet)
+diff --git a/net/netrom/sysctl_net_netrom.c b/net/netrom/sysctl_net_netrom.c
+index 79fb2d3f477b..7dc0fa628f2e 100644
+--- a/net/netrom/sysctl_net_netrom.c
++++ b/net/netrom/sysctl_net_netrom.c
+@@ -140,7 +140,6 @@ static struct ctl_table nr_table[] = {
+ 		.extra1		= &min_reset,
+ 		.extra2		= &max_reset
  	},
 -	{ }
  };
  
- void
-diff --git a/net/sunrpc/xprtrdma/svc_rdma.c b/net/sunrpc/xprtrdma/svc_rdma.c
-index f86970733eb0..474f7a98fe9e 100644
---- a/net/sunrpc/xprtrdma/svc_rdma.c
-+++ b/net/sunrpc/xprtrdma/svc_rdma.c
-@@ -209,7 +209,6 @@ static struct ctl_table svcrdma_parm_table[] = {
- 		.extra1		= &zero,
- 		.extra2		= &zero,
+ int __init nr_register_sysctl(void)
+diff --git a/net/phonet/sysctl.c b/net/phonet/sysctl.c
+index 0d0bf41381c2..82fc22467a09 100644
+--- a/net/phonet/sysctl.c
++++ b/net/phonet/sysctl.c
+@@ -81,7 +81,6 @@ static struct ctl_table phonet_table[] = {
+ 		.mode		= 0644,
+ 		.proc_handler	= proc_local_port_range,
  	},
--	{ },
+-	{ }
  };
  
- static void svc_rdma_proc_cleanup(void)
-diff --git a/net/sunrpc/xprtrdma/transport.c b/net/sunrpc/xprtrdma/transport.c
-index 29b0562d62e7..9a8ce5df83ca 100644
---- a/net/sunrpc/xprtrdma/transport.c
-+++ b/net/sunrpc/xprtrdma/transport.c
-@@ -137,7 +137,6 @@ static struct ctl_table xr_tunables_table[] = {
+ int __init phonet_sysctl_init(void)
+diff --git a/net/rose/sysctl_net_rose.c b/net/rose/sysctl_net_rose.c
+index d391d7758f52..d801315b7083 100644
+--- a/net/rose/sysctl_net_rose.c
++++ b/net/rose/sysctl_net_rose.c
+@@ -112,7 +112,6 @@ static struct ctl_table rose_table[] = {
+ 		.extra1		= &min_window,
+ 		.extra2		= &max_window
+ 	},
+-	{ }
+ };
+ 
+ void __init rose_register_sysctl(void)
+diff --git a/net/rxrpc/sysctl.c b/net/rxrpc/sysctl.c
+index c9bedd0e2d86..9bf9a1f6e4cb 100644
+--- a/net/rxrpc/sysctl.c
++++ b/net/rxrpc/sysctl.c
+@@ -127,7 +127,6 @@ static struct ctl_table rxrpc_sysctl_table[] = {
+ 		.extra1		= (void *)SYSCTL_ONE,
+ 		.extra2		= (void *)&four,
+ 	},
+-	{ }
+ };
+ 
+ int __init rxrpc_sysctl_init(void)
+diff --git a/net/sctp/sysctl.c b/net/sctp/sysctl.c
+index 25bdf17c7262..61c6f3027e7f 100644
+--- a/net/sctp/sysctl.c
++++ b/net/sctp/sysctl.c
+@@ -80,8 +80,6 @@ static struct ctl_table sctp_table[] = {
  		.mode		= 0644,
  		.proc_handler	= proc_dointvec,
  	},
--	{ },
+-
+-	{ /* sentinel */ }
  };
  
- #endif
-diff --git a/net/sunrpc/xprtsock.c b/net/sunrpc/xprtsock.c
-index bb9b747d58a1..f62f7b65455b 100644
---- a/net/sunrpc/xprtsock.c
-+++ b/net/sunrpc/xprtsock.c
-@@ -160,7 +160,6 @@ static struct ctl_table xs_tunables_table[] = {
- 		.mode		= 0644,
- 		.proc_handler	= proc_dointvec_jiffies,
+ /* The following index defines are used in sctp_sysctl_net_register().
+@@ -384,8 +382,6 @@ static struct ctl_table sctp_net_table[] = {
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= &pf_expose_max,
  	},
--	{ },
+-
+-	{ /* sentinel */ }
  };
  
- /*
+ static int proc_sctp_do_hmac_alg(struct ctl_table *ctl, int write,
+@@ -597,6 +593,7 @@ static int proc_sctp_do_probe_interval(struct ctl_table *ctl, int write,
+ 
+ int sctp_sysctl_net_register(struct net *net)
+ {
++	size_t table_size = ARRAY_SIZE(sctp_net_table);
+ 	struct ctl_table *table;
+ 	int i;
+ 
+@@ -604,7 +601,7 @@ int sctp_sysctl_net_register(struct net *net)
+ 	if (!table)
+ 		return -ENOMEM;
+ 
+-	for (i = 0; table[i].data; i++)
++	for (i = 0; i < table_size; i++)
+ 		table[i].data += (char *)(&net->sctp) - (char *)&init_net.sctp;
+ 
+ 	table[SCTP_RTO_MIN_IDX].extra2 = &net->sctp.rto_max;
+@@ -613,8 +610,7 @@ int sctp_sysctl_net_register(struct net *net)
+ 	table[SCTP_PS_RETRANS_IDX].extra1 = &net->sctp.pf_retrans;
+ 
+ 	net->sctp.sysctl_header = register_net_sysctl_sz(net, "net/sctp",
+-							 table,
+-							 ARRAY_SIZE(sctp_net_table));
++							 table, table_size);
+ 	if (net->sctp.sysctl_header == NULL) {
+ 		kfree(table);
+ 		return -ENOMEM;
+diff --git a/net/smc/smc_sysctl.c b/net/smc/smc_sysctl.c
+index 4e8baa2e7ea4..13f2bc092db1 100644
+--- a/net/smc/smc_sysctl.c
++++ b/net/smc/smc_sysctl.c
+@@ -90,11 +90,11 @@ static struct ctl_table smc_table[] = {
+ 		.extra1		= &conns_per_lgr_min,
+ 		.extra2		= &conns_per_lgr_max,
+ 	},
+-	{  }
+ };
+ 
+ int __net_init smc_sysctl_net_init(struct net *net)
+ {
++	size_t table_size = ARRAY_SIZE(smc_table);
+ 	struct ctl_table *table;
+ 
+ 	table = smc_table;
+@@ -105,12 +105,12 @@ int __net_init smc_sysctl_net_init(struct net *net)
+ 		if (!table)
+ 			goto err_alloc;
+ 
+-		for (i = 0; i < ARRAY_SIZE(smc_table) - 1; i++)
++		for (i = 0; i < table_size; i++)
+ 			table[i].data += (void *)net - (void *)&init_net;
+ 	}
+ 
+ 	net->smc.smc_hdr = register_net_sysctl_sz(net, "net/smc", table,
+-						  ARRAY_SIZE(smc_table));
++						  table_size);
+ 	if (!net->smc.smc_hdr)
+ 		goto err_reg;
+ 
+diff --git a/net/tipc/sysctl.c b/net/tipc/sysctl.c
+index 9fb65c988f7f..30d2e06e3d8c 100644
+--- a/net/tipc/sysctl.c
++++ b/net/tipc/sysctl.c
+@@ -91,7 +91,6 @@ static struct ctl_table tipc_table[] = {
+ 		.mode		= 0644,
+ 		.proc_handler	= proc_doulongvec_minmax,
+ 	},
+-	{}
+ };
+ 
+ int tipc_register_sysctl(void)
+diff --git a/net/xfrm/xfrm_sysctl.c b/net/xfrm/xfrm_sysctl.c
+index e972930c292b..ca003e8a0376 100644
+--- a/net/xfrm/xfrm_sysctl.c
++++ b/net/xfrm/xfrm_sysctl.c
+@@ -38,7 +38,6 @@ static struct ctl_table xfrm_table[] = {
+ 		.mode		= 0644,
+ 		.proc_handler	= proc_dointvec
+ 	},
+-	{}
+ };
+ 
+ int __net_init xfrm_sysctl_init(struct net *net)
+@@ -57,10 +56,8 @@ int __net_init xfrm_sysctl_init(struct net *net)
+ 	table[3].data = &net->xfrm.sysctl_acq_expires;
+ 
+ 	/* Don't export sysctls to unprivileged users */
+-	if (net->user_ns != &init_user_ns) {
+-		table[0].procname = NULL;
++	if (net->user_ns != &init_user_ns)
+ 		table_size = 0;
+-	}
+ 
+ 	net->xfrm.sysctl_hdr = register_net_sysctl_sz(net, "net/core", table,
+ 						      table_size);
 
 -- 
 2.43.0
