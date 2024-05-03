@@ -1,93 +1,113 @@
-Return-Path: <linux-sctp+bounces-151-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-152-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EBDE8BA95D
-	for <lists+linux-sctp@lfdr.de>; Fri,  3 May 2024 11:04:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 284278BAC2A
+	for <lists+linux-sctp@lfdr.de>; Fri,  3 May 2024 14:18:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8266BB21C29
-	for <lists+linux-sctp@lfdr.de>; Fri,  3 May 2024 09:04:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 966B71F2357E
+	for <lists+linux-sctp@lfdr.de>; Fri,  3 May 2024 12:18:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C862814F119;
-	Fri,  3 May 2024 09:03:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86FA6153505;
+	Fri,  3 May 2024 12:18:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="hNizHVdn"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="SnHYkXy9"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF0F214F62;
-	Fri,  3 May 2024 09:03:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A653E15250F;
+	Fri,  3 May 2024 12:18:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714727029; cv=none; b=TDRL4EknNrGXbQ6QjtvmwpCKLyslIu7ZAmooBe+3ewAu4NtSHr2sykMGt9gdhj9zwYRhcfVH0VW5E3hWkfFuU9lP3PpAufU4knwCr451STs+P+h9Uw6FoAzVRUtBhJFEH5JlOB9sGXJqfoUv5Dfn50FH9VfyZILCDIgLKD30yWM=
+	t=1714738703; cv=none; b=gxbRx7jc6cOuyMPVQXA6FyMPZNV8ZhNyPbuJ44d2lg0JAHIS4Ny17bexsPWqEHOXZGjcX8gB2mr2uxkSH4OqIsMJtszHO+ywrAdshUlsY2U9xpE7e5OaLTxf4WkjAxmcyGIl9pSyZmgWEWHstMfAcD0Y1TDd0rSDgFDXPDGQ0AA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714727029; c=relaxed/simple;
-	bh=H4OwBwwEJLoUrKgErNPAJ4aWKXfqp1/GW2h+1cPY6mY=;
+	s=arc-20240116; t=1714738703; c=relaxed/simple;
+	bh=cmfWgaMxH5BtPG4dJB0UOwo/OvdXctu1yPlA65z+kA4=;
 	h=Date:From:To:CC:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To:References; b=LELIdvB94u4VG7Xl+VUb+dOAlJzdIImPOiWg1ONIISGco6uNrDnbtN5vQuS2LAJ/NRfJUIRebhYvF6BE23O6h6qdT/UUemv/kqLLeDooaSN6kwrjugPZgWSH3yX8qfUt6xL4WSNKVgbgrCFU8Y2NquZSNlxFAkDNfVMKlyJMboY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=hNizHVdn; arc=none smtp.client-ip=210.118.77.11
+	 Content-Disposition:In-Reply-To:References; b=Z+ozj8Dc+achOiadzGi1SWVeKJsW8+ieNCwzQFs5Ln6WdkeMimRtHwLGIawFfPnaMrVH7IJvz3JqvvDHsOm3EoeotrRmFHQd3ldjdjOo+9rEKgJ/WGe59yVXPfk8b4lZDinpFpqC0g+OBib+udlJcRKgDrEueNLywmZAELN2Nx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=SnHYkXy9; arc=none smtp.client-ip=210.118.77.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20240503090338euoutp0194b4a66649b9801585df2f01f69d5a50~L7yOBYBSa0516505165euoutp01e;
-	Fri,  3 May 2024 09:03:38 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20240503090338euoutp0194b4a66649b9801585df2f01f69d5a50~L7yOBYBSa0516505165euoutp01e
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20240503121817euoutp010d8f19ada1356105b585983a5f997487~L_cKeLkWV2142121421euoutp013;
+	Fri,  3 May 2024 12:18:17 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20240503121817euoutp010d8f19ada1356105b585983a5f997487~L_cKeLkWV2142121421euoutp013
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1714727018;
-	bh=5DfAXm0BybfL0wB90HdoJ2+ecXzl3T3phLFwP9QlX+o=;
+	s=mail20170921; t=1714738697;
+	bh=A0TItHvFiI4MXmTIwizFYD6SMF5HgKQq2bcMIGrti/E=;
 	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=hNizHVdn9K9XbhBNhn1nDSO/5KZUNj2XoxMSsTacSd3jPs0o0drSRiC4H6bkslwSW
-	 B/QSvO9HwlzhFW4zaHFyGSJ5H6nnh83o7MAyLAhqznaRM1mK98m5CnfxgNvbZnC8qx
-	 hsrB//hR8ZhJR5rlu9tY5Zsijl1EM085ggZXO+JQ=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-	20240503090338eucas1p1622ca105c87c20c6bbe96b62943fe717~L7yNnz7IW1025710257eucas1p1p;
-	Fri,  3 May 2024 09:03:38 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-	eusmges1new.samsung.com (EUCPMTA) with SMTP id 2A.F6.09624.A68A4366; Fri,  3
-	May 2024 10:03:38 +0100 (BST)
+	b=SnHYkXy9QCQLcSKi+H4Er9z6MY+UIedvCXoFfxd1I1l2BN6wVdvq4Ri12qG82w6oY
+	 TTjvJgHLtCkSj2LnPvwlkVmfHLnGz9DV+SLNw0B6ZenUtqRzNOfhKXeU9S1bnrD+0q
+	 vDHuQmAAcd7cfcf5H7JbFNE6iF1o1L8MfE5KKWGM=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+	20240503121817eucas1p2a3694d62da04be733e781d39787620e2~L_cKGE_G63266732667eucas1p2_;
+	Fri,  3 May 2024 12:18:17 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+	eusmges3new.samsung.com (EUCPMTA) with SMTP id 1E.C0.09620.806D4366; Fri,  3
+	May 2024 13:18:16 +0100 (BST)
 Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
 	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20240503090337eucas1p17add844fd822fa0889270ae9e12ca4d0~L7yM6N_nm1858018580eucas1p1z;
-	Fri,  3 May 2024 09:03:37 +0000 (GMT)
+	20240503121816eucas1p17004cad2ee2fb60c0b57a92b31323faa~L_cJhM7Xv2763827638eucas1p1h;
+	Fri,  3 May 2024 12:18:16 +0000 (GMT)
 Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
 	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20240503090337eusmtrp2e33e44757c1c281d7e60e444934cfff9~L7yM4xFdH1141911419eusmtrp2R;
-	Fri,  3 May 2024 09:03:37 +0000 (GMT)
-X-AuditID: cbfec7f2-bfbff70000002598-4f-6634a86abd4b
+	20240503121816eusmtrp2f31ca9bd529296dd75e3afb86dd45aa6~L_cJeAHy32311023110eusmtrp2p;
+	Fri,  3 May 2024 12:18:16 +0000 (GMT)
+X-AuditID: cbfec7f5-d31ff70000002594-93-6634d608b296
 Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-	eusmgms1.samsung.com (EUCPMTA) with SMTP id DB.59.08810.968A4366; Fri,  3
-	May 2024 10:03:37 +0100 (BST)
+	eusmgms1.samsung.com (EUCPMTA) with SMTP id B8.35.08810.806D4366; Fri,  3
+	May 2024 13:18:16 +0100 (BST)
 Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
 	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20240503090337eusmtip245d74ecfb1a665d8dac0f5363231e909~L7yMjDsdX1588515885eusmtip2r;
-	Fri,  3 May 2024 09:03:37 +0000 (GMT)
+	20240503121815eusmtip227e52315081afef166d7d4df1e380a96~L_cJH1Vv50271902719eusmtip2E;
+	Fri,  3 May 2024 12:18:15 +0000 (GMT)
 Received: from localhost (106.210.248.112) by CAMSVWEXC02.scsc.local
 	(2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-	Fri, 3 May 2024 10:03:36 +0100
-Date: Fri, 3 May 2024 11:03:32 +0200
+	Fri, 3 May 2024 13:18:15 +0100
+Date: Fri, 3 May 2024 14:18:11 +0200
 From: Joel Granados <j.granados@samsung.com>
-To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-CC: Luis Chamberlain <mcgrof@kernel.org>, Kees Cook <keescook@chromium.org>,
-	Eric Dumazet <edumazet@google.com>, Dave Chinner <david@fromorbit.com>,
-	<linux-fsdevel@vger.kernel.org>, <netdev@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-s390@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-	<linux-mm@kvack.org>, <linux-security-module@vger.kernel.org>,
-	<bpf@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-	<linux-xfs@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
-	<linux-perf-users@vger.kernel.org>, <netfilter-devel@vger.kernel.org>,
-	<coreteam@netfilter.org>, <kexec@lists.infradead.org>,
-	<linux-hardening@vger.kernel.org>, <bridge@lists.linux.dev>,
-	<lvs-devel@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-	<rds-devel@oss.oracle.com>, <linux-sctp@vger.kernel.org>,
-	<linux-nfs@vger.kernel.org>, <apparmor@lists.ubuntu.com>
-Subject: Re: [PATCH v3 00/11] sysctl: treewide: constify ctl_table argument
- of sysctl handlers
-Message-ID: <20240503090332.irkiwn73dgznjflz@joelS2.panther.com>
+To: Sabrina Dubroca <sd@queasysnail.net>
+CC: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Alexander Aring <alex.aring@gmail.com>, Stefan Schmidt
+	<stefan@datenfreihafen.org>, Miquel Raynal <miquel.raynal@bootlin.com>,
+	David Ahern <dsahern@kernel.org>, Steffen Klassert
+	<steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+	Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>,
+	Geliang Tang <geliang@kernel.org>, Remi Denis-Courmont
+	<courmisch@gmail.com>, Allison Henderson <allison.henderson@oracle.com>,
+	David Howells <dhowells@redhat.com>, Marc Dionne <marc.dionne@auristor.com>,
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long
+	<lucien.xin@gmail.com>, Wenjia Zhang <wenjia@linux.ibm.com>, Jan Karcher
+	<jaka@linux.ibm.com>, "D. Wythe" <alibuda@linux.alibaba.com>, Tony Lu
+	<tonylu@linux.alibaba.com>, Wen Gu <guwen@linux.alibaba.com>, Trond
+	Myklebust <trond.myklebust@hammerspace.com>, Anna Schumaker
+	<anna@kernel.org>, Chuck Lever <chuck.lever@oracle.com>, Jeff Layton
+	<jlayton@kernel.org>, Neil Brown <neilb@suse.de>, Olga Kornievskaia
+	<kolga@netapp.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey
+	<tom@talpey.com>, Jon Maloy <jmaloy@redhat.com>, Ying Xue
+	<ying.xue@windriver.com>, Martin Schiller <ms@dev.tdt.de>, Pablo Neira Ayuso
+	<pablo@netfilter.org>, Jozsef Kadlecsik <kadlec@netfilter.org>, Florian
+	Westphal <fw@strlen.de>, Roopa Prabhu <roopa@nvidia.com>, Nikolay
+	Aleksandrov <razor@blackwall.org>, Simon Horman <horms@verge.net.au>, Julian
+	Anastasov <ja@ssi.bg>, Joerg Reuter <jreuter@yaina.de>, Luis Chamberlain
+	<mcgrof@kernel.org>, Kees Cook <keescook@chromium.org>,
+	<netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<dccp@vger.kernel.org>, <linux-wpan@vger.kernel.org>,
+	<mptcp@lists.linux.dev>, <linux-hams@vger.kernel.org>,
+	<linux-rdma@vger.kernel.org>, <rds-devel@oss.oracle.com>,
+	<linux-afs@lists.infradead.org>, <linux-sctp@vger.kernel.org>,
+	<linux-s390@vger.kernel.org>, <linux-nfs@vger.kernel.org>,
+	<tipc-discussion@lists.sourceforge.net>, <linux-x25@vger.kernel.org>,
+	<netfilter-devel@vger.kernel.org>, <coreteam@netfilter.org>,
+	<bridge@lists.linux.dev>, <lvs-devel@vger.kernel.org>
+Subject: Re: [PATCH net-next v6 8/8] ax.25: x.25: Remove the now superfluous
+ sentinel elements from ctl_table array
+Message-ID: <20240503121811.fsmriwsgugzm2o7i@joelS2.panther.com>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -95,311 +115,129 @@ List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg="pgp-sha512";
-	protocol="application/pgp-signature"; boundary="pu6elde4hy573vso"
+	protocol="application/pgp-signature"; boundary="a6ejzfnlx7y2ity4"
 Content-Disposition: inline
-In-Reply-To: <20240423-sysctl-const-handler-v3-0-e0beccb836e2@weissschuh.net>
+In-Reply-To: <ZjJAikcdWzzaIr1s@hog>
 X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
 	CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA2VSfUxTVxzNfe/1vVe24mvp5AZkZIiayIcQWbzZKrC4Px4hM5PMLPLHRjOe
-	4KBFW2DqdOJEFHBbBVEpX2UiMnDFFKhURLFjRcABG8SgwzI+SkBwQIsCq8Isj80l++/8fuec
-	e8+5uTQueUh60fuUqZxKKU/2I90Io2WxK+jzqrC9IUNmD3TcohMgR2sbiYyXcjH0wnQKR/UW
-	K0A2yzCF7uUqUFPnUwwZRu4L0M3mdgKV1i4C1HujmETWq8sC1NPSKUB9DXoCjZm/IZDRkUki
-	TfkJHNl0kwI0c2aYRK21vxDoxvNGCjkXxjDknF8SoBNldhz1a2wAWXRrkUbfQaCuOocg0oct
-	yviVYDu+h6zOkMYaqrNJ1mDPo9i6imPseF0hYLsvlgP2fv8gwT5x3sXYnsopknUY3mS/y7VQ
-	H4pi3WTxXPK+dE61JTzOLdFp+53cX/Txwe7BnRmgKzIHCGnIhME7lmtkDnCjJUwVgCPTdwA/
-	zAE4N/ktcKkkjAPAWze/ygH0iuPHOU9ecwXAyXsj+L+a8Uev80Q9gDWjfwhcBMH4w7qJbMyF
-	SSYQdk8NrBikjAz+8MxBuTDOFFCw6HqcC3swcbD+cv7KxSImElr1TQSPxbC9cJRwhcCZg3Bo
-	IZaH3vDKEu1SCJkPYFbFNMEXWw9br5dQPD4KO+ofYq5okJlxg+bZUcAT78MzDXwcyHjAx231
-	q4Z1cNlUtmrIB/D20gzFDzUAVh5/ivGqd2Fm3+iq4z1o7X4A+Bdyh/1PxHwvd5hnvIDzaxE8
-	nSXh1RthjXWK0ID12v80075qpn3VTLtyTiDUNdnJ/60DYGX5JM7j7VCvnyZ0gKoGnlyaWpHA
-	qUOV3BfBarlCnaZMCP4sRWEAL79851KbvRGUPJ4NNgOMBmbg/9I8fK2mB3gRyhQl5ycVBeRv
-	3SsRxcsPHeZUKZ+q0pI5tRl404Sfp2hDvC8nYRLkqVwSx+3nVP+wGC30ysDSCwPswc2nK7SJ
-	u46EjoZI18i6djc81wszz+8oGTq/uaSpb+sBQ4nBMeAYxCxHt/w82WOq0J9rEAu/jL1Iz8dE
-	ptnz9kTQittJBedyNeiyqSV5g8mnWi3rLDwy5/A1/8aG9RbtpDZVuTuXo7F37k6cahf31Ebs
-	ic4wmiOTZLNXLxXj0nZpcdCScxf3SX/42fbyRXHjuvE3os5ub342sM2my/bxpeThu/Heqbe8
-	s5ix0sAHZTXzh4YOX1g4kBdi++kYFYSZQv862TlRUNsijSqNDjhpWBO+rFnruWnbeNzbSoX7
-	xhfuMfiOMLEs97WCr4MiokI+umV8FAPT/0xs809K9SPUifLQzbhKLf8bTKfE620EAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrJKsWRmVeSWpSXmKPExsVy+t/xe7qZK0zSDH7sl7VoPLaA1eLzkeNs
-	FtsWdzNZ/N3Zzmyx5dg9Rounxx6xW5zpzrXYffork8Wmx9dYLfbsPcliMW/9T0aLy7vmsFnc
-	W/Of1eLCgdOsFle2rmOxeHaol8Vi2+cWNosJC5uZLZ4ueM1q8aHnEZvFkfVnWSx2/dnBbvH7
-	xzMmi9/f/7FaNM//xGxxY8JTRotjC8QsJqw7xWJxbvNnVgdZj9kNF1k8Ti2S8FiwqdRj06pO
-	No9Nnyaxe2xeUu/xYvNMRo/zMxYyely7cZ/F4+3vE0weF5a9YfP4vEnOo7/7GHsAb5SeTVF+
-	aUmqQkZ+cYmtUrShhZGeoaWFnpGJpZ6hsXmslZGpkr6dTUpqTmZZapG+XYJexpz+v0wFM8Mr
-	Ph6+xNrAeMahi5GDQ0LARGLtF/EuRi4OIYGljBI3+n6ydDFyAsVlJDZ+ucoKYQtL/LnWxQZR
-	9JFR4tebn8wQzhZGietnD4F1sAioSGx+2ckEYrMJ6Eicf3OHGcQWEbCRWPntMzuIzSwwlV1i
-	9vYEEFtYIEFiy9LJjCA2r4CDxL11u1kghi5glJjevhYqIShxcuYTFpBTmQXKJN7fNoYwpSWW
-	/+MAqeAU8JVoW/Ie6mhliSPb57JD2LUSn/8+Y5zAKDwLyaBZCINmIQyaBXablsSNfy+ZMIS1
-	JZYtfM0MYdtKrFv3nmUBI/sqRpHU0uLc9NxiQ73ixNzi0rx0veT83E2MwHS37djPzTsY5736
-	qHeIkYmD8RCjClDnow2rLzBKseTl56UqifBqTzZOE+JNSaysSi3Kjy8qzUktPsRoCgzDicxS
-	osn5wEScVxJvaGZgamhiZmlgamlmrCTO61nQkSgkkJ5YkpqdmlqQWgTTx8TBKdXANH3uY4E0
-	2xYBo9Mirv0ldwM2JeXqPak55K24q+zrxBohrh2WGfamDnIvAq2vLWOefW1xx/xL/75ENCX9
-	vqot8bXk/BKxn6F9nTImM+a53WtI2Xgg3tez4H/e1kWOlx5e8/WsP/e1yuuIcl/Z/wLbadY8
-	KiufaMxeF5jCvf62Uu03kYK5wRGfjrzc92dKt2DT2pBb3qeD5d7cEz/wpqLi2sLZNb+7lkZM
-	n+Ie5awmssqS9+w9mbNLU2RnBT5VsBSSrBRo3iWV/Wb3rR8mMzi+2SzRU5f6N7MyzCXp4P/d
-	yaIWaeGfHbVicn6JfVP4Uf55nj6jjUNn7tegOU2nuZ60PNqZxc/sn/6VMT1xt32vEktxRqKh
-	FnNRcSIAsZFFMwwEAAA=
-X-CMS-MailID: 20240503090337eucas1p17add844fd822fa0889270ae9e12ca4d0
+X-Brightmail-Tracker: H4sIAAAAAAAAA2VTa0xTZxj2O+e0PTBLTgvTTzBDUBeGijBNeBfdZMuMR4OZi8uSOYNDOYCT
+	e2Xq5jaUm5aAnU0gVrDVbRWp1gG1WEBEJCjlptyKCBgLDIYIarkPZJaDm8n+Pd9zy/P++GhS
+	qqRd6f1RB7m4qOAIT6EjZayabFhDt64P9dVe8YOKBH94XCoXQEJSCgHJplkKjL+mETDb2UfA
+	jCmVBNvjPgGoLxQKIbshiYIZS5oQho7/TYG+OJmA3iqrCIzpOgS64x0UFPWNCyFtYCkkXhtF
+	0HPKKoBm7TMhTGrzRPBo1ErBZMZbcEaeSEBtWiRc7+yh4J4xQwAKsx+0FnUS0FScLYR75TUC
+	+LMinQLF+UQSejVPBNCh1FJQfkONwHp1mIBE9QsSEm3dJEzl3hFAffosCSp9Hgltil4Et1PL
+	BFB79bgIxs7dJeGGOoGCKs0iUOjNFIzVDCLIGmwhwTwyS0B9oU0AtmwvaLOLylwDASUnJ0Rg
+	aPgWzFNmArrH+4Qw27YJjtUaRdBtsZABAWy7dZRkh+qrEXvu8g/s2YT7FDs16c0aLj0g2LTK
+	AZI1qTpFrLF8JaspiGenK/JFbEHeSSFrevwBq7hQjtjC335m+wvPoB0euxw3hnAR+7/j4tZ+
+	9I1jeE3DUxST8fbh7EeFKAF1SeTIgcbMemxq1AvlyJGWMrkIJ2tsArsgZUYQHs6S8IIN4bET
+	g+TrRKalhOSFiwhn6n6n/nVll1oQ/zAgPN2kEMkRTVPMClw14mJPC5nVuGGwY67JhfHCPanG
+	uSaSeSbBE41ZQrvgzMTji09S50xiJgDX1Q4IeCzB1Wd6KDsmmcM4ZVwz108ybvjiS9pOOzDL
+	cWvZoIhfuhxXFuXM4x+x2dBO8LhuIVbY9vL4U3zlWBfFY2c8cMcw71+KZ01qwr4NM0qEb758
+	JuIfOoS1x0bnmzbgpOae+cTHuK7jMrIPwowTbnsq4Xc64dPGLJKnxfhEipR3v4t1XYOUAi1X
+	vXGZ6o3LVP9dxtOrsabkhfB/9CqsPf+E5PGHWK8fpjRIlIcWc/GyyDBOti6KO+QjC46UxUeF
+	+eyLjixAr/5qzcs7o9dR7sBznwpE0KgCrXgVtv6hu4dcqajoKM7TRbxKuS5UKg4JPvI9Fxe9
+	Jy4+gpNVIDea8lwsXhnizkmZsOCD3AGOi+HiXqsE7eCaQBw1uFn2S/O+3N00kxuJN3uFTxuX
+	+fd75Bc+Gvurmsj4etEi3+rIq+Ol3e5r5ZlU+mhHpW64R6xacnSkeWdgnfNX0t6nsf2bPbbs
+	xptil3q27opR7PE9uGCDZOeS+1k5pwO6HgaxgSPXHH/ZWGLZ5zvk0L3tdrKn+pZX7Rpp6IBy
+	U5m1aWjv4Xz1rfO5Qcuit86kKKFSG/2JB3nIqSUkSON2tqHS/ye5qrmx84H0RcrCsbwdETcl
+	uq3vHR3pr+kyF5cX1DxnLpW5HtCLnaeDJmhH35n2jVve2Rkb84VTi/uSrYkTpqneyfdLkz7b
+	vtLfOyew9Iih3f3zBQ+Zbfjusu31zuHr5Z6ULDzYz5uMkwX/A+Apb7kmBQAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA2VTe0xTdxTe797bBzqSWireoFlmccYhq5SXB1Tkjy1ekxlx/rO5BzZ6FQe0
+	rA+cOrS2agWGq2AkIJMq8pCy8mhXrK+wzhQpFbqo0Bk6ofLYgIE8FAGho9ZlJvvvO993vu+c
+	nOSwcW49K4R9QCynpWJRGp+5iGidb/7jA3ZH9L6Ivhk2WJXroedmDgOUJ05hcNLiJcBclouB
+	1z2AwZxFg8NEzwADSi8bmVDSfoKAuc5cJoyoZgkwXD+JQZ/NwwJznh6BXtVFQOPAFBNyB1eA
+	+udnCHp/8DDgQcVTJkxXVLPg8TMPAdNnFkNRjhoDR246XHP3EuA0n2GA1i6EjkY3BvevlzDB
+	2dTKgH5rHgHaS2oc+nRDDOgqqCCg6VYpAk/tKAbq0nEc1BNPcJipamZAW54Xh2JDNQ4ubR+C
+	XzW3GeCoVbHg+cW7ONwqVRJg0wWD1mAn4HnrMILC4Yc42Ce9GLQZJxgwUbIGXD6xoMqEwY3s
+	FywwtX8N9hk7Bk+mBpjgdW2G4w4zC550duKJidQjzzOcGmlrQdTFmiPUBeVvBDUzHUaZrv6O
+	Ubl3BnHKUuxmUeam9yhdg4J6aa1nUQ3V2UzK0hNHaS83Icp45Rj1p7EIJa3cJdgolSjk9Lsp
+	Epl8E/9zIUQKhHEgiIyOEwij1n8ZHxnDX5ewcS+ddiCTlq5L2C1IqXdUMzK+X/rtkOEBoURd
+	S3JQAJvkRJPnO2/gOWgRm8spR2S+tZDhF1aQ9ZMPX+Mg8mVHDtPfNIbIlnIPw1+YEGlWaRfs
+	bDbBWUXaJnk+A5MTTrYPd+E+zOOsIXs15lcTcM7TJeTfBb2YTwjiKMjKIc2rpkBOInnPMfg6
+	9AUi3c4zTL+whGwp6iV8GOdkklVNKuQbhnOWk5XzbB8dwAklO24Ps/ybhpJ3Gn98jbPIibl+
+	pEVBxW8kFb+RVPxfkp8OI13zf2H/o9eSFZeGcD/eRBoMo4QOsaoRj1bI0veny4QCmShdphDv
+	F+yRpDeghX8x26aN19DFwTGBFWFsZEWrFpyeOr0ThRBiiZjm8wLXFkTt4wbuFR06TEslyVJF
+	Gi2zopiFK57FQ5bukSw8n1ieLIyNiBFGx8ZFxMTFRvGXBW7NOC3icvaL5HQqTWfQ0n99GDsg
+	RIkdPPrdrXMJ+tj13fmLHnS1lAvbZw/Ik8pUY47HqL87a6VMw2si6IHPtkRGZdaowrPPb+fr
+	An6qMWfezH7u5XbPms+Kjcuzdh+ZHx2v/Ei/LXRD4Tn9y/Z481XLV82J+JXJ1rtlB7PtcssW
+	19wMLyEvWZrT//Qb6bgp3Fx+NPiRKHjXztptm9dc2BqBDx5P+uL9yNTNq5OPP4zlfVzYcPjD
+	X44Gn7qz5fyy2tBDU9d77hWlusfP1dlWr9SNSTQpx0wJ92XUZa5nx+IR9c4NtqHTO0YNB038
+	PufkMZfq07rmPaTnnZB4tuOTWeehjPy31G/biO32+FWdlEYjHMe7lWW9PS4dn5CliIRhuFQm
+	+geeXN9SxAQAAA==
+X-CMS-MailID: 20240503121816eucas1p17004cad2ee2fb60c0b57a92b31323faa
 X-Msg-Generator: CA
-X-RootMTR: 20240423075608eucas1p265e7c90f3efd6995cb240b3d2688b803
+X-RootMTR: 20240501131616eucas1p28a33eeb55f6c084a0751e5b7b7d91d78
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20240423075608eucas1p265e7c90f3efd6995cb240b3d2688b803
-References: <CGME20240423075608eucas1p265e7c90f3efd6995cb240b3d2688b803@eucas1p2.samsung.com>
-	<20240423-sysctl-const-handler-v3-0-e0beccb836e2@weissschuh.net>
+X-CMS-RootMailID: 20240501131616eucas1p28a33eeb55f6c084a0751e5b7b7d91d78
+References: <20240501-jag-sysctl_remset_net-v6-0-370b702b6b4a@samsung.com>
+	<20240501-jag-sysctl_remset_net-v6-8-370b702b6b4a@samsung.com>
+	<CGME20240501131616eucas1p28a33eeb55f6c084a0751e5b7b7d91d78@eucas1p2.samsung.com>
+	<ZjJAikcdWzzaIr1s@hog>
 
---pu6elde4hy573vso
+--a6ejzfnlx7y2ity4
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hey Thomas
-
-Here is my feedback for your outstanding constification patches [1] and [2].
-
-# You need to split the patch
-The answer that you got from Jakub in the network subsystem is very clear a=
-nd
-baring a change of heart from the network folks, this will go in as but as a
-split patchset. Please split it considering the following:
-1. Create a different patchset for drivers/,  fs/, kernel/, net, and a
-   miscellaneous that includes whatever does not fit into the others.
-2. Consider that this might take several releases.
-3. Consider the following sufix for the interim function name "_const". Lik=
-e in
-   kfree_const. Please not "_new".
-4. Please publish the final result somewhere. This is important so someone =
-can
-   take over in case you need to stop.
-5. Consistently mention the motivation in your cover letters. I specify more
-   further down in "#Motivation".
-6. Also mention that this is part of a bigger effort (like you did in your
-   original cover letters). I would include [3,4,5,6]
-7. Include a way to show what made it into .rodata. I specify more further =
-down
-   in "#Show the move".
-
-# Motivation
-As I read it, the motivation for these constification efforts are:
-1. It provides increased safety: Having things in .rodata section reduces t=
-he
-   attack surface. This is especially relevant for structures that have fun=
-ction
-   pointers (like ctl_table); having these in .rodata means that these poin=
-ters
-   always point to the "intended" function and cannot be changed.
-2. Compiler optimizations: This was just a comment in the patchsets that I =
-have
-   mentioned ([3,4,5]). Do you know what optimizations specifically? Does it
-   have to do with enhancing locality for the data in .rodata? Do you have =
-other
-   specific optimizations in mind?
-3. Readability: because it is easier to know up-front that data is not supp=
-osed
-   to change or its obvious that a function is re-entrant. Actually a lot o=
-f the
-   readability reasons is about knowing things "up-front".
-As we move forward with the constification in sysctl, please include a more
-detailed motivation in all your cover letters. This helps maintainers (that
-don't have the context) understand what you are trying to do. It does not n=
-eed
-to be my three points, but it should be more than just "put things into
-=2Erodata". Please tell me if I have missed anything in the motivation.
-
-# Show the move
-I created [8] because there is no easy way to validate which objects made it
-into .rodata. I ran [8] for your Dec 2nd patcheset [7] and there are less in
-=2Erodata than I expected (the results are in [9]) Why is that? Is it somet=
-hing
-that has not been posted to the lists yet?=20
+On Wed, May 01, 2024 at 03:15:54PM +0200, Sabrina Dubroca wrote:
+> 2024-05-01, 11:29:32 +0200, Joel Granados via B4 Relay wrote:
+> > From: Joel Granados <j.granados@samsung.com>
+> >=20
+> > This commit comes at the tail end of a greater effort to remove the
+> > empty elements at the end of the ctl_table arrays (sentinels) which will
+> > reduce the overall build time size of the kernel and run time memory
+> > bloat by ~64 bytes per sentinel (further information Link :
+> > https://lore.kernel.org/all/ZO5Yx5JFogGi%2FcBo@bombadil.infradead.org/)
+> >=20
+> > Avoid a buffer overflow when traversing the ctl_table by ensuring that
+> > AX25_MAX_VALUES is the same as the size of ax25_param_table. This is
+> > done with a BUILD_BUG_ON where ax25_param_table is defined and a
+> > CONFIG_AX25_DAMA_SLAVE guard in the unnamed enum definition as well as
+> > in the ax25_dev_device_up and ax25_ds_set_timer functions.
+>                                 ^^
+> nit:                            not anymore ;)
+> (but not worth a repost IMO)
+>=20
+>=20
+> > diff --git a/net/ax25/ax25_ds_timer.c b/net/ax25/ax25_ds_timer.c
+> > index c4f8adbf8144..c50a58d9e368 100644
+> > --- a/net/ax25/ax25_ds_timer.c
+> > +++ b/net/ax25/ax25_ds_timer.c
+> > @@ -55,6 +55,7 @@ void ax25_ds_set_timer(ax25_dev *ax25_dev)
+> >  	ax25_dev->dama.slave_timeout =3D
+> >  		msecs_to_jiffies(ax25_dev->values[AX25_VALUES_DS_TIMEOUT]) / 10;
+> >  	mod_timer(&ax25_dev->dama.slave_timer, jiffies + HZ);
+> > +	return;
+>=20
+> nit: return not needed here since we're already at the bottom of the
+> function, but probably not worth a repost of the series.
+>=20
+Thx. I will not repost, but I have changed them locally so they are
+there in case a V7 is required.
 
 Best
-
-[1] https://lore.kernel.org/all/20240423-sysctl-const-handler-v3-0-e0beccb8=
-36e2@weissschuh.net/
-[2] https://lore.kernel.org/all/20240418-sysctl-const-table-arg-v2-1-4012ab=
-c31311@weissschuh.net
-[3] [PATCH v2 00/14] ASoC: Constify local snd_sof_dsp_ops
-    https://lore.kernel.org/all/20240426-n-const-ops-var-v2-0-e553fe67ae82@=
-kernel.org
-[4] [PATCH v2 00/19] backlight: Constify lcd_ops
-    https://lore.kernel.org/all/20240424-video-backlight-lcd-ops-v2-0-1aaa8=
-2b07bc6@kernel.org
-[5] [PATCH 1/4] iommu: constify pointer to bus_type
-    https://lore.kernel.org/all/20240216144027.185959-1-krzysztof.kozlowski=
-@linaro.org
-[6] [PATCH 00/29] const xattr tables
-    https://lore.kernel.org/all/20230930050033.41174-1-wedsonaf@gmail.com
-[7] https://lore.kernel.org/all/20231204-const-sysctl-v2-0-7a5060b11447@wei=
-ssschuh.net/
-
-[8]
-    #!/usr/bin/python3
-
-    import subprocess
-    import re
-
-    def exec_cmd( cmd ):
-        try:
-            result =3D subprocess.run(cmd, shell=3DTrue, text=3DTrue, check=
-=3DTrue, capture_output=3DTrue)
-            output_lines =3D result.stdout.splitlines()
-            return output_lines
-        except Exception as e:
-            print(f"An error occurred: {e}")
-            return []
-
-    def remove_tokens_re(lines, regex_patterns, uniq =3D True):
-        filtered_lines =3D []
-        seen_lines =3D set()
-        regexes =3D [re.compile(pattern) for pattern in regex_patterns]
-
-        for line in lines:
-            for regex in regexes:
-                line =3D regex.sub('', line)  # Replace matches with empty =
-string
-
-            if uniq:
-                if line not in seen_lines:
-                    seen_lines.add(line)
-                    filtered_lines.append(line)
-            else:
-                    filtered_lines.append(line)
-
-        return filtered_lines
-
-    def filter_in_lines(lines, regex_patterns):
-        filtered_lines =3D []
-        regexes =3D [re.compile(pattern) for pattern in regex_patterns]
-
-        for line in lines:
-            if any(regex.search(line) for regex in regexes):
-                filtered_lines.append(line)
-
-        return filtered_lines
-
-    cmd =3D "git grep 'static \(const \)\?struct ctl_table '"
-    regex_patterns =3D ['[\}]*;$', ' =3D \{', '\[.*\]', '.*\.(c|h):[ \t]*st=
-atic (const )?struct ctl_table ']
-    ctl_table_structs =3D remove_tokens_re(exec_cmd( cmd ), regex_patterns)
-
-    cmd =3D "readelf -X -Ws build/vmlinux"
-    regex_patterns =3D ['.*OBJECT.*']
-    output_lines =3D filter_in_lines(exec_cmd( cmd ), regex_patterns);
-
-    regex_patterns =3D ['^.*OBJECT', '[ \t]+[A-Z]+[ \t]+[A-Z]+.*\(.*\)[ \t]=
-+']
-    obj_elems =3D remove_tokens_re( output_lines, regex_patterns, uniq=3DFa=
-lse)
-
-    regex_patterns =3D ['^.*\(', '\)[ ]+.*$']
-    sec_names =3D remove_tokens_re( output_lines, regex_patterns, uniq=3DFa=
-lse)
-
-    for i in range(len(sec_names)):
-        obj_name =3D obj_elems[i]
-        if obj_name in ctl_table_structs:
-            print ("section: {}\t\tobj_name : {}". format(sec_names[i], obj=
-_name))
-
-[9]
-    section: .rodata                obj_name : kern_table
-    section: .rodata                obj_name : sysctl_mount_point
-    section: .rodata                obj_name : addrconf_sysctl
-    section: .rodata                obj_name : ax25_param_table
-    section: .rodata                obj_name : mpls_table
-    section: .rodata                obj_name : mpls_dev_table
-    section: .data          obj_name : sld_sysctls
-    section: .data          obj_name : kern_panic_table
-    section: .data          obj_name : kern_exit_table
-    section: .data          obj_name : vm_table
-    section: .data          obj_name : signal_debug_table
-    section: .data          obj_name : usermodehelper_table
-    section: .data          obj_name : kern_reboot_table
-    section: .data          obj_name : user_table
-    section: .bss           obj_name : sched_core_sysctls
-    section: .data          obj_name : sched_fair_sysctls
-    section: .data          obj_name : sched_rt_sysctls
-    section: .data          obj_name : sched_dl_sysctls
-    section: .data          obj_name : printk_sysctls
-    section: .data          obj_name : pid_ns_ctl_table_vm
-    section: .data          obj_name : seccomp_sysctl_table
-    section: .data          obj_name : uts_kern_table
-    section: .data          obj_name : vm_oom_kill_table
-    section: .data          obj_name : vm_page_writeback_sysctls
-    section: .data          obj_name : page_alloc_sysctl_table
-    section: .data          obj_name : hugetlb_table
-    section: .data          obj_name : fs_stat_sysctls
-    section: .data          obj_name : fs_exec_sysctls
-    section: .data          obj_name : fs_pipe_sysctls
-    section: .data          obj_name : namei_sysctls
-    section: .data          obj_name : fs_dcache_sysctls
-    section: .data          obj_name : inodes_sysctls
-    section: .data          obj_name : fs_namespace_sysctls
-    section: .data          obj_name : dnotify_sysctls
-    section: .data          obj_name : inotify_table
-    section: .data          obj_name : epoll_table
-    section: .data          obj_name : aio_sysctls
-    section: .data          obj_name : locks_sysctls
-    section: .data          obj_name : coredump_sysctls
-    section: .data          obj_name : fs_shared_sysctls
-    section: .data          obj_name : fs_dqstats_table
-    section: .data          obj_name : root_table
-    section: .data          obj_name : pty_table
-    section: .data          obj_name : xfs_table
-    section: .data          obj_name : ipc_sysctls
-    section: .data          obj_name : key_sysctls
-    section: .data          obj_name : kernel_io_uring_disabled_table
-    section: .data          obj_name : tty_table
-    section: .data          obj_name : random_table
-    section: .data          obj_name : scsi_table
-    section: .data          obj_name : iwcm_ctl_table
-    section: .data          obj_name : net_core_table
-    section: .data          obj_name : netns_core_table
-    section: .bss           obj_name : nf_log_sysctl_table
-    section: .data          obj_name : nf_log_sysctl_ftable
-    section: .data          obj_name : vs_vars
-    section: .data          obj_name : vs_vars_table
-    section: .data          obj_name : ipv4_route_netns_table
-    section: .data          obj_name : ipv4_route_table
-    section: .data          obj_name : ip4_frags_ns_ctl_table
-    section: .data          obj_name : ip4_frags_ctl_table
-    section: .data          obj_name : ctl_forward_entry
-    section: .data          obj_name : ipv4_table
-    section: .data          obj_name : ipv4_net_table
-    section: .data          obj_name : unix_table
-    section: .data          obj_name : ipv6_route_table_template
-    section: .data          obj_name : ipv6_icmp_table_template
-    section: .data          obj_name : ip6_frags_ns_ctl_table
-    section: .data          obj_name : ip6_frags_ctl_table
-    section: .data          obj_name : ipv6_table_template
-    section: .data          obj_name : ipv6_rotable
-    section: .data          obj_name : sctp_net_table
-    section: .data          obj_name : sctp_table
-    section: .data          obj_name : smc_table
-    section: .data          obj_name : lowpan_frags_ns_ctl_table
-    section: .data          obj_name : lowpan_frags_ctl_table
-
---
+--=20
 
 Joel Granados
 
---pu6elde4hy573vso
+--a6ejzfnlx7y2ity4
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmY0qGMACgkQupfNUreW
-QU9meQwAhSiWxhtL9djecqOkREsAyj1iIrA1uEV4NTghMsTyhC1r83HyDUEWGOJo
-fTZ8jrYwxeDy9qnd5vC+hEYgx/tBWXv+79vssjd28m2Mn4DogQlWABKsPJlPw/8R
-IB9dau7hME9YLSiZQaKoL8DuqnQ4jvdN/zvWcuYHl2s/jF+qzsI3DT4Dy98S1Sr8
-63rSYg/sulLme7ov/3gAQ3ceSPYlLRUfYdWLlGkUYT2iIjcBIybKotaKGkERq8xL
-Z2PcPpWj15gYh6Ewd0GL7AMq2M/dSGYYxPIbv0Mnjpe5AV5HzGZ06MUg4Tt11p1z
-5Fchr0Hg24b2UYcx4mjbsDCy/OyF2oA8cjjj79ODXcgpsVxWX8GZdcFh/gNmsPw5
-dKZyo4v1ZSvDmu8uDCcaV92GLelxc2YfGHYEfbE+hhJR0YaAukrL8mfqPJIanYv+
-zzIuChlVlLB5xoY0CT3XgLo8NJrc/ERnY8JibAauNNLQvTjHV/tbd0UknFQQC4XL
-gDaMqz5j
-=1R4C
+iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmY01gIACgkQupfNUreW
+QU9//gwAjwm2crD0MhJ7OyswQb0Bxm/HhmEwnomCQHNxXo2qKrIBpMOS3dpgmCeX
+hOvysHMzkUBRGf7mQm0veqdHNb4ZdZfRelo1i3GHxmlWlIx8J2hcZTDG8TUz6hJv
+poTVkndbEa6q2rBVNPhoLnxjqLcE3yOOGvZeJv75CklJ3V/rrrBSBpSQvgisz2Rc
+2lH29Ih2Lh2n1V8beefQHxMV9dbvkeiyhEpZJOCLbapjSFF8YiWjHrTDsVj74zxw
+f981wsUNdFhVv0tdfKDReFydDtXT0cUw5VpHeHTbpoK08KCDc4QFw0Gxr8ycxXXt
+XUYdpIioVBoSGc3I1PWDUUDfZEBawE+LVoZryY+7kEz7PJuCaryhFfkXSaXC8l0y
+ODfJAEMDUeKM+xGgXgaT0kK6kb2jltciYS9/JBw38uqw7d9jHR7AYD3QTKaa1atx
+hguSiJrXappxRJZDX1VvmgV9lC1Y4cAgQQJJhXnI2/Ok88cvgDfPCECVwQiTxxrp
+D7SGN60B
+=MN3V
 -----END PGP SIGNATURE-----
 
---pu6elde4hy573vso--
+--a6ejzfnlx7y2ity4--
 
