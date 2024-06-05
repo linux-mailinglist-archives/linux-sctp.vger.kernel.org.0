@@ -1,96 +1,98 @@
-Return-Path: <linux-sctp+bounces-168-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-169-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C1CF8D8640
-	for <lists+linux-sctp@lfdr.de>; Mon,  3 Jun 2024 17:41:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DDA08FC2DF
+	for <lists+linux-sctp@lfdr.de>; Wed,  5 Jun 2024 07:03:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D56F1F23247
-	for <lists+linux-sctp@lfdr.de>; Mon,  3 Jun 2024 15:41:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D26628526B
+	for <lists+linux-sctp@lfdr.de>; Wed,  5 Jun 2024 05:03:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79A21132110;
-	Mon,  3 Jun 2024 15:41:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6235761FCC;
+	Wed,  5 Jun 2024 05:03:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VGnYuhlx"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com [209.85.222.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 758BD132105
-	for <linux-sctp@vger.kernel.org>; Mon,  3 Jun 2024 15:41:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCF7F139D1A
+	for <linux-sctp@vger.kernel.org>; Wed,  5 Jun 2024 05:03:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717429284; cv=none; b=o8wU5IS39nlrQCY4DosE9sX9fYOTMHtc9al8qOHCYbeiBZUh3gWmcylhcSng8KqTnirXC3z6rSBYea51cyE6uYh51cA/ML1kLOOIQngvcb1MB5yeZ3+fC0TWmD93H8SqC4nmRLoVgaf7k7/IfmZ36/c8/5HMCRCLtfDJmi0GXhA=
+	t=1717563787; cv=none; b=L3BvISrsx3g2rYCR3VcaGx2u+IMOeOppQxLRaHblqRAtAO7xEJ/nc/jUHXUgLgUeYoX0Jt2GcpWIQdRiJk4839Qyoq2JZZR1FJan/AKxb1APlKePttmGRsiWa2xXyavLubeqROlkFXhUxzPqwoImj3ZgDh9BqOz8TMTN6dtEe+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717429284; c=relaxed/simple;
-	bh=3VudYg20/y/EaXfg1mqXl0DAjnCh9ZSW1omJW3es4Sc=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XG4y4G4wLPqe3BGuYbDQg9oqslRZXRwepeOjlRjQG5CGlf44eRfhPa6aDKROV+y4T2T5/nzVc24jNEJ7cmvm6xhzfCOCzTq2JZRCSqiJMflgqIrhmpcUzz7yswkAE8WXNJRg4kBfb23zsEQkkdOge6lzfr6U+oZH49A6Cr0lyKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-147-GAt3ON1kPJqDSfIJeMpDEA-1; Mon, 03 Jun 2024 16:40:03 +0100
-X-MC-Unique: GAt3ON1kPJqDSfIJeMpDEA-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 3 Jun
- 2024 16:39:22 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Mon, 3 Jun 2024 16:39:22 +0100
-From: David Laight <David.Laight@ACULAB.COM>
-To: linux-sctp <linux-sctp@vger.kernel.org>
-CC: "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: SCTP doesn't seem to let you 'cancel' a blocking accept()
-Thread-Topic: SCTP doesn't seem to let you 'cancel' a blocking accept()
-Thread-Index: Adq1ybjOUyi6xNR1Tiu+WEi2iGmOKw==
-Date: Mon, 3 Jun 2024 15:39:22 +0000
-Message-ID: <4faeb583e1d44d82b4e16374b0ad583c@AcuMS.aculab.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
+	s=arc-20240116; t=1717563787; c=relaxed/simple;
+	bh=PUGUmIGpnOH3NVb2L6MdhOLJh3gKxu6+Vnpemvv6vks=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=TZDRXSCQwHUdKF3s0tAyCJoxDOl3D4lU5Tro/dF5Jqq/pT8VaFvHua+BPyGseCpMx0civqoLS9sZCotOPXz81pRc88Rp6RS4VR+y77J5L3liLC1sTIVdbquRmQt9qhZu0+l2cXawI4UeuqpkSroXdBBRfDj0FFk/l5O7E32JmRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VGnYuhlx; arc=none smtp.client-ip=209.85.222.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f50.google.com with SMTP id a1e0cc1a2514c-80aae72df40so1413594241.0
+        for <linux-sctp@vger.kernel.org>; Tue, 04 Jun 2024 22:03:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717563784; x=1718168584; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=PUGUmIGpnOH3NVb2L6MdhOLJh3gKxu6+Vnpemvv6vks=;
+        b=VGnYuhlxnM94bsQDYRlBRrcimntQza6XS0/DjzKIhTkSBTeiBpubYUpqpMMRwLJLQh
+         eIj47H7iDYdZ7GbnsMixaoQk9++ssdRloYNmuGx0PGXfAAlQ9/HcGtyPz+SwzCTJPGYD
+         ic5ANrjQwFbTEJ8ITTaRSzGWWvbkZzoiJjzhe48jjFsQ9e4VRP6VFKXgwNMKAYDGnVmz
+         tKyrw/fquNC9EgpyYID35CYJCC4yYVeCGMCzopMRXpSTeTcYq0O8b+1EhE1c6lzfunQ3
+         zkQnGl1ZrQAVDAx5oEw74hkE6P1bZ5n5TE9LYkjJRnsmZo4bFAY4GcnTQnt8NhL84zBf
+         /rcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717563784; x=1718168584;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PUGUmIGpnOH3NVb2L6MdhOLJh3gKxu6+Vnpemvv6vks=;
+        b=W9Y+rHtiHv1p1vwKo6r3M88mKG6UrunlXi0RxgFEKrw49ZI53wIsi7cRwTqBbADNKk
+         /2PunZqpN8N0BU1WYz3SWGF7yjDp56AwN7g8Y+A1qjqrvJINMKSfRh+X2a+Y2qKu/DvM
+         QXQDWY2isMyTkLljIAU7TE8yrFktTiH0KHJBQqDGED2rV1TFI48cVAzg0BuzwxdV9c4s
+         NK+O5zniZ9ifhp3nTOUuYar2DTNuavyxM58rXre0apZZ/OuKhJ3/UOllk9+oLid5q14k
+         cQ67izDF1Dypt+77WGHMRYTE9M/0koZ9V0oFm+hqKKCcYVfbnmEm4fTMjaAdSiqmgmRl
+         qbIA==
+X-Gm-Message-State: AOJu0YwQvfTSyJbuirprSXx61cnQ2fmdoS0TgvwBUoIcnWBB4ctzjuo9
+	qAGbGspO4s1g9iMMpJFhMmbCLPCQG2rXgaWVvY1zt8m5leVEheO2172t2MTCOg0/xIP4f/mD+7O
+	B0E6cjVGvEFY2HEypo/Di7EAVRD8JnQIQ
+X-Google-Smtp-Source: AGHT+IEFP8z2wCKxiY67MnJ1xpZwWPrZn/DiWwR4HrPY5/9Lbb+S62iwcye2qotT6f0aCl6XQNxA0FDx8n/g50j5Xj8=
+X-Received: by 2002:a67:f70a:0:b0:48a:3355:bd32 with SMTP id
+ ada2fe7eead31-48c048bd266mr1585323137.16.1717563784613; Tue, 04 Jun 2024
+ 22:03:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+From: Igor Spiridonov <igor.sp.ser@gmail.com>
+Date: Wed, 5 Jun 2024 08:02:54 +0300
+Message-ID: <CAHqUhqxNvxEQRuHs57QmVZwBw2tsH1qgOoxPqJMb0wNW6PxNAg@mail.gmail.com>
+Subject: sctp_recvmsg returns duplicate messages.
+To: linux-sctp@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-In a multithreaded program it is reasonable to have a thread blocked in acc=
-ept().
-With TCP a subsequent shutdown(listen_fd, SHUT_RDWR) causes the accept to f=
-ail.
-But nothing happens for SCTP.
+Hi,
+I have a sctp client and an echo server that use one to many mode.
+The client sends some amount of messages with different stream ids.
+After that it reads them back from the server with sctp_recvmsg.
+The server reads one message at a time and sends it back with the same
+stream id.
+When I test this on a local host then everything works perfectly - all
+messages are sent, read and the assoc id is the same every time.
 
-I think the 'magic' happens when tcp_disconnect() calls inet_csk_listen_sto=
-p(sk)
-but sctp_disconnect() is an empty function and nothing happens.
+If I have the client and the server on different hosts then there are
+the following problems.
+sctp_recvmsg sometimes returns the same message twice - these messages
+have the same assoc id, stream i, ssn. Looks like it can happen only
+with the first received message. MSG_EOR is true every time.
+Tcpdump doesn't show any duplicates.
+The second problem is that assoc id changes very often if i send
+messages with just a couple seconds delay. I think the same hosts
+should have the same assoc id more or less.
+Both hosts have linux kernel 6.5.0-35.
 
-I can't see any calls to inet_csk_listen_stop() in the sctp code - so I sus=
-pect
-it isn't possible at all.
-
-This all relates to a very old (pre git) comment in inet_shutdown() that
-shutdown needs to act on listening and connecting sockets until the VFS
-layer is 'fixed' (presumably to let close() through - not going to happen.)
-
-I also suspect that a blocking connect() can't be cancelled either?
-
-Clearly the application can avoid the issue by using poll() and an
-extra eventfd() for the wakeup - but it is all a faff for code that
-otherwise straight forward.
-
-=09=09David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
-PT, UK
-Registration No: 1397386 (Wales)
-
+Igor.
 
