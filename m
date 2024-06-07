@@ -1,171 +1,130 @@
-Return-Path: <linux-sctp+bounces-170-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-171-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8B9C8FF5B8
-	for <lists+linux-sctp@lfdr.de>; Thu,  6 Jun 2024 22:15:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF2188FFE22
+	for <lists+linux-sctp@lfdr.de>; Fri,  7 Jun 2024 10:37:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 074DD1C25E82
-	for <lists+linux-sctp@lfdr.de>; Thu,  6 Jun 2024 20:15:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 800A92823AE
+	for <lists+linux-sctp@lfdr.de>; Fri,  7 Jun 2024 08:37:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FDE040BF2;
-	Thu,  6 Jun 2024 20:15:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R5Z1wIPj"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 810E215443A;
+	Fri,  7 Jun 2024 08:37:09 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ABE219D89B;
-	Thu,  6 Jun 2024 20:15:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67ADE15B0FD
+	for <linux-sctp@vger.kernel.org>; Fri,  7 Jun 2024 08:37:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717704942; cv=none; b=n2TAmWRypFeDoJf+UGvbK7ZQSF9QM62D4hSIlbgJWi2+7fAvKl5DVcTyWAjkGIFHhQkS4grvH28vIEhrmNPWjE6DxtSw9RYueK7LRNnk7IVxipBIKn95VQuufwpYoAtLLuDleWY1F/aDn1cqFZMqbwSze5PR/P2kaAUhWwovPig=
+	t=1717749429; cv=none; b=Hc6U3A52ABpiGNEK+htvGt7j1Jit1nxlYax+iA4lTWyT3SiVp8EsJSKla25t01mzPD8CuvqoeWC5cBOqlR07NDcRJkh2ULjK1G8wig+3vQJbwCB+bqY1ckUBgSzs10t1/rA/PpBVaDSiscKs9iXVwJAY66d9qYBqYYhjE8Bo1NA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717704942; c=relaxed/simple;
-	bh=AQ7GF4q/1Yb7iHnQ7ukC+hvO3kvAMdYOrcqxegTRy7w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YlWL5rQm/AUvo6DKqk+UUMdHeCN3jjtpjeGYm6MW8rCGmN6sCyIhnxepsIaLJiBRpzeyCoZTR8Pgw/s04RBRbG7a5Gv1ErlMrouFMYoyI7FcgfVz/+iPAmXhVaRClC1WjC/TbI0hXWKrhSHDpJ49/dylsFqT26VGnY1sZWyd/5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R5Z1wIPj; arc=none smtp.client-ip=209.85.166.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-374a82e20deso8120365ab.1;
-        Thu, 06 Jun 2024 13:15:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717704939; x=1718309739; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3pYG/DVDnxzBFRqp9E2ijRMkZnIWCZqG6UTAVccwf7s=;
-        b=R5Z1wIPjJn+9rBUz1qdShNnhXdoNOQ/SiUZxLYfoHuZ+5nkgX1DvdkbZbMvPZnnM/n
-         YCJN4M4T9JGu0locgmpkkxDYcX4TmRQKoFrKPst4GC+nNsvDB1xH42RQ3ZGAVOj2kUEJ
-         D54KMfHEV1eyjMFHfJydgkFrPu8UAWczzqtJHLpx1xo34WSNcZ84HljBzaLO8HLofN0p
-         +QE/CEwBY0Q8+pEXmxoiVbtNI7ijFExhuBERAELez3Vjkx5Fh22HerbdaOOHIMUsi4rh
-         94PDecL3bxLQ2Z0+bRG6KgS6oGx+DSNDPVMQNusw8aDlaVP6iuKcojt8rKUIq4Qvwb++
-         zKUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717704939; x=1718309739;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3pYG/DVDnxzBFRqp9E2ijRMkZnIWCZqG6UTAVccwf7s=;
-        b=hd8lcy70not5vpy+NgcsHP2QSkjvEKekv+FvKCAvXm2rgg6Zw3vRH6VpK2n43OVCxb
-         Q6ZOixU52/lUwJtn3iRxsya6zXOA1PoEurDt2xXSLy1ec7pPUNCF++Dsoqypu4WEEIzj
-         G5luzwb+O5hlhpiyDI2tS8D78Mz3qbe/iV2x7ZCfUQlw2MoHY/Ir2YeQHEHh590cSpmD
-         O7NAgmmWNx3rkKGxbakeVY4a9OQXJirykmb5+GkwVIzoDyVBRbQzAXeGsm8rnj/K5qC/
-         SwmIQzBlP7HdNjuye1Dr+93CXXG0KNQunC6ERmdyw36KMBpC0kF9MVT0venLs3PBIz57
-         hF6A==
-X-Forwarded-Encrypted: i=1; AJvYcCXrP0YQw5GFbxouaWAtvzV1f4rYZJKrqGuAC5nEkyOSbIr2v83iGCYEWHsC+YsPV6UzBQYPvdy6HkGgVtDiZO8jlvy9y2va
-X-Gm-Message-State: AOJu0Yz1ZceWhYCCeRNqeJBDRin07IlatRAIF86CYMygxxnt0GovT3Ar
-	eSeFViNOKATO8MtZQf8d9UGhi9N7Pc5KeAzHzVIySSd8LfozfbZvgvCXoNJR6osl55Oh+eq6qR6
-	fnbbwGH0ewcyHZWFtYaZOSF97MaY=
-X-Google-Smtp-Source: AGHT+IEzhvRylgL4Lg5B9lACn7wqepAmw9N6nweq123PmCKJlorN11ofcRaDFsLRWTidec4KVIEwsLoM3DMq2B6kN0o=
-X-Received: by 2002:a05:6e02:1fe1:b0:374:9277:bfab with SMTP id
- e9e14a558f8ab-375803c3b43mr4066355ab.16.1717704939480; Thu, 06 Jun 2024
- 13:15:39 -0700 (PDT)
+	s=arc-20240116; t=1717749429; c=relaxed/simple;
+	bh=CkKHSB/kpNeMmANPZeGUmTTs9lDJ7BraXRPWV0SFfng=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 MIME-Version:Content-Type; b=BO9AQhr9HRUH0yJzjUxX5kgte6j88R6BCC0DyzsTrymcAgz2MsGlmFtV5Dvrw1Ir5bHGHAzVGRxLO92IX6HR7oMLJOXSaQ1BIwpaVWAp3v3Ygqm+oz9zuXO39XMljI0HT4ZVM5GM0TXuRDenaq0WXe9D9Eund3/0CbhWSCwJjHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-102-aAGw2SK1NwG3-1KqFJvVKg-1; Fri, 07 Jun 2024 09:36:56 +0100
+X-MC-Unique: aAGw2SK1NwG3-1KqFJvVKg-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 7 Jun
+ 2024 09:36:24 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Fri, 7 Jun 2024 09:36:24 +0100
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Xin Long' <lucien.xin@gmail.com>
+CC: linux-sctp <linux-sctp@vger.kernel.org>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>
+Subject: RE: SCTP doesn't seem to let you 'cancel' a blocking accept()
+Thread-Topic: SCTP doesn't seem to let you 'cancel' a blocking accept()
+Thread-Index: Adq1ybjOUyi6xNR1Tiu+WEi2iGmOKwCfCtIAABryTuA=
+Date: Fri, 7 Jun 2024 08:36:23 +0000
+Message-ID: <0b42b8f085b84a7e8ffd5a9b71ed2932@AcuMS.aculab.com>
+References: <4faeb583e1d44d82b4e16374b0ad583c@AcuMS.aculab.com>
+ <CADvbK_emOEPZJ8GWtYpUDKAGLW2z84S81ZcW9qQCc=rYCiUbAA@mail.gmail.com>
+In-Reply-To: <CADvbK_emOEPZJ8GWtYpUDKAGLW2z84S81ZcW9qQCc=rYCiUbAA@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <4faeb583e1d44d82b4e16374b0ad583c@AcuMS.aculab.com>
-In-Reply-To: <4faeb583e1d44d82b4e16374b0ad583c@AcuMS.aculab.com>
-From: Xin Long <lucien.xin@gmail.com>
-Date: Thu, 6 Jun 2024 16:15:28 -0400
-Message-ID: <CADvbK_emOEPZJ8GWtYpUDKAGLW2z84S81ZcW9qQCc=rYCiUbAA@mail.gmail.com>
-Subject: Re: SCTP doesn't seem to let you 'cancel' a blocking accept()
-To: David Laight <David.Laight@aculab.com>
-Cc: linux-sctp <linux-sctp@vger.kernel.org>, 
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 
-On Mon, Jun 3, 2024 at 11:42=E2=80=AFAM David Laight <David.Laight@aculab.c=
-om> wrote:
->
-> In a multithreaded program it is reasonable to have a thread blocked in a=
-ccept().
-> With TCP a subsequent shutdown(listen_fd, SHUT_RDWR) causes the accept to=
- fail.
-> But nothing happens for SCTP.
->
-> I think the 'magic' happens when tcp_disconnect() calls inet_csk_listen_s=
-top(sk)
-> but sctp_disconnect() is an empty function and nothing happens.
->
-> I can't see any calls to inet_csk_listen_stop() in the sctp code - so I s=
-uspect
-> it isn't possible at all.
-I guess SCTP doesn't take action due to the description
-in rfc6458#section-4.1.7:
+RnJvbTogWGluIExvbmcNCj4gU2VudDogMDYgSnVuZSAyMDI0IDIxOjE1DQo+IA0KPiBPbiBNb24s
+IEp1biAzLCAyMDI0IGF0IDExOjQy4oCvQU0gRGF2aWQgTGFpZ2h0IDxEYXZpZC5MYWlnaHRAYWN1
+bGFiLmNvbT4gd3JvdGU6DQo+ID4NCj4gPiBJbiBhIG11bHRpdGhyZWFkZWQgcHJvZ3JhbSBpdCBp
+cyByZWFzb25hYmxlIHRvIGhhdmUgYSB0aHJlYWQgYmxvY2tlZCBpbiBhY2NlcHQoKS4NCj4gPiBX
+aXRoIFRDUCBhIHN1YnNlcXVlbnQgc2h1dGRvd24obGlzdGVuX2ZkLCBTSFVUX1JEV1IpIGNhdXNl
+cyB0aGUgYWNjZXB0IHRvIGZhaWwuDQo+ID4gQnV0IG5vdGhpbmcgaGFwcGVucyBmb3IgU0NUUC4N
+Cj4gPg0KPiA+IEkgdGhpbmsgdGhlICdtYWdpYycgaGFwcGVucyB3aGVuIHRjcF9kaXNjb25uZWN0
+KCkgY2FsbHMgaW5ldF9jc2tfbGlzdGVuX3N0b3Aoc2spDQo+ID4gYnV0IHNjdHBfZGlzY29ubmVj
+dCgpIGlzIGFuIGVtcHR5IGZ1bmN0aW9uIGFuZCBub3RoaW5nIGhhcHBlbnMuDQo+ID4NCj4gPiBJ
+IGNhbid0IHNlZSBhbnkgY2FsbHMgdG8gaW5ldF9jc2tfbGlzdGVuX3N0b3AoKSBpbiB0aGUgc2N0
+cCBjb2RlIC0gc28gSSBzdXNwZWN0DQo+ID4gaXQgaXNuJ3QgcG9zc2libGUgYXQgYWxsLg0KLi4u
+DQo+ID4NCj4gPiBJIGFsc28gc3VzcGVjdCB0aGF0IGEgYmxvY2tpbmcgY29ubmVjdCgpIGNhbid0
+IGJlIGNhbmNlbGxlZCBlaXRoZXI/DQo+DQo+IEZvciBjb25uZWN0aW5nIHNvY2tldCwgaXQgY2Fs
+bHMgc2N0cF9zaHV0ZG93bigpIHdoZXJlIFNIVVRfV1IgY2F1c2VzDQo+IHRoZSBhc29jIHRvIGVu
+dGVyIFNIVVRET1dOX1NFTlQgYW5kIGNhbmNlbCB0aGUgYmxvY2tpbmcgY29ubmVjdCgpLg0KDQpJ
+J2xsIHRlc3QgdGhhdCBsYXRlciAtIHRoZSB0ZXN0IEkgd2FzIHJ1bm5pbmcgYWx3YXlzIGNvbm5l
+Y3RzLg0KSSdtIHBvcnRpbmcgc29tZSBrZXJuZWwgY29kZSB0aGF0IHVzZWQgc2lnbmFscyB0byB1
+bmJsb2NrIHN5bmNocm9ub3VzDQpjYWxscyB0byB1c2Vyc3BhY2Ugd2hlcmUgeW91IGNhbid0IHNp
+Z25hbCBhIHRocmVhZC4NClRoZSBvbmx5IHByb2JsZW0gd2l0aCB0aGUga2VybmVsIHZlcnNpb24g
+aXMgc2VjdXJlIGJvb3QgYW5kIGRyaXZlcg0Kc2lnbmluZyAoZXNwZWNpYWxseSBmb3IgdGhlIHdp
+bmRvd3MgYnVpbGQhKS4NCg0KPiA+IENsZWFybHkgdGhlIGFwcGxpY2F0aW9uIGNhbiBhdm9pZCB0
+aGUgaXNzdWUgYnkgdXNpbmcgcG9sbCgpIGFuZCBhbg0KPiA+IGV4dHJhIGV2ZW50ZmQoKSBmb3Ig
+dGhlIHdha2V1cCAtIGJ1dCBpdCBpcyBhbGwgYSBmYWZmIGZvciBjb2RlIHRoYXQNCj4gPiBvdGhl
+cndpc2Ugc3RyYWlnaHQgZm9yd2FyZC4NCj4NCj4gSSB3aWxsIHRyeSB0byBwcmVwYXJlIGEgcGF0
+Y2ggdG8gc29sdmUgdGhpcyBmb3Igc2N0cCBhY2NlcHQoKSBsaWtlOg0KDQpJJ2xsIHRlc3QgaXQg
+Zm9yIHlvdS4NCg0KPiBkaWZmIC0tZ2l0IGEvbmV0L3NjdHAvc29ja2V0LmMgYi9uZXQvc2N0cC9z
+b2NrZXQuYw0KPiBpbmRleCBjNjc2NzlhNDEwNDQuLmYyNzBhMGE0YzY1ZCAxMDA2NDQNCj4gLS0t
+IGEvbmV0L3NjdHAvc29ja2V0LmMNCj4gKysrIGIvbmV0L3NjdHAvc29ja2V0LmMNCj4gQEAgLTQ4
+MzQsMTAgKzQ4MzQsMTMgQEAgaW50IHNjdHBfaW5ldF9jb25uZWN0KHN0cnVjdCBzb2NrZXQgKnNv
+Y2ssDQo+IHN0cnVjdCBzb2NrYWRkciAqdWFkZHIsDQo+ICAgICAgICAgcmV0dXJuIHNjdHBfY29u
+bmVjdChzb2NrLT5zaywgdWFkZHIsIGFkZHJfbGVuLCBmbGFncyk7DQo+ICB9DQo+IA0KPiAtLyog
+RklYTUU6IFdyaXRlIGNvbW1lbnRzLiAqLw0KPiAgc3RhdGljIGludCBzY3RwX2Rpc2Nvbm5lY3Qo
+c3RydWN0IHNvY2sgKnNrLCBpbnQgZmxhZ3MpDQo+ICB7DQo+IC0gICAgICAgcmV0dXJuIC1FT1BO
+T1RTVVBQOyAvKiBTVFVCICovDQo+ICsgICAgICAgaWYgKCFzY3RwX3N0eWxlKHNrLCBUQ1ApKQ0K
+PiArICAgICAgICAgICAgICAgcmV0dXJuIC1FT1BOT1RTVVBQOw0KPiArDQo+ICsgICAgICAgc2st
+PnNrX3NodXRkb3duIHw9IFJDVl9TSFVURE9XTjsNCj4gKyAgICAgICByZXR1cm4gMDsNCg0KSSB0
+aGluayB5b3UgbmVlZCB0byBjYWxsIHNvbWV0aGluZyB0byB1bmJsb2NrIHRoZSB0aHJlYWQgYXMg
+d2VsbA0KYXMgY2hhbmdpbmcgdGhlIHN0YXRlLg0KDQouLi4NCj4gLSAgICAgICBpZiAoIXNjdHBf
+c3N0YXRlKHNrLCBMSVNURU5JTkcpKSB7DQoNCkFueSBjaGFuY2Ugb2YgbWFraW5nIGl0IG11Y2gg
+Y2xlYXJlciB0aGF0IHRoaXMgaXMgdGVzdGluZw0KCQlpZiAoc2stPnNrX3N0YXRlID09IFRDUF9M
+SVNURU4pDQoNClRoZSB0b2tlbi1wYXN0aW5nIHRob3VnaA0KCVNDVFBfU1NfQ0xPU0VEICAgICAg
+ICAgPSBUQ1BfQ0xPU0UsDQoJU0NUUF9TU19MSVNURU5JTkcgICAgICA9IFRDUF9MSVNURU4sDQoJ
+U0NUUF9TU19FU1RBQkxJU0hJTkcgICA9IFRDUF9TWU5fU0VOVCwNCglTQ1RQX1NTX0VTVEFCTElT
+SEVEICAgID0gVENQX0VTVEFCTElTSEVELA0KCVNDVFBfU1NfQ0xPU0lORyAgICAgICAgPSBUQ1Bf
+Q0xPU0VfV0FJVCwNCm1ha2VzIGdyZXBwaW5nIGZvciBjaGFuZ2VzIHRvIHNrX3N0YXRlIHByZXR0
+eSBpbXBvc3NpYmxlLg0KDQpZb3UgbWlnaHQgYXJndWUgdGhhdCB0aGUgc2tfc3RhdGUgdmFsdWVz
+IHNob3VsZCBiZSBwcm90b2NvbCBuZXV0cmFsLA0KYW5kIHRoYXQgdGhlIHdyYXBwZXIgZ2l2ZXMg
+c3Ryb25nIHR5cGluZyAtIGJ1dCB0b2dldGhlciB0aGV5IG1ha2UNCnRoZSBjb2RlIGhhcmQgdG8g
+c2Nhbi4NCg0KVGhlIHN0cm9uZyB0eXBpbmcgY291bGQgYmUgbWFpbnRhaW5lZCBieSBjaGFuZ2lu
+ZyB0aGUgY29uc3RhbnRzIHRvDQoJU0NUUF9TU19UQ1BfQ0xPU0UgPSBUQ1BfQ0xPU0UNCihldGMp
+IHNvIHRoYXQgZ3JlcHBpbmcgZm9yIHRoZSBjb25zdGFudHMgc3RpbGwgd29ya3MuDQoNCkkga2Vl
+cCB0aGlua2luZyBvZiB3YXlzIHRvIGRvIHN0cm9uZ2x5IHR5cGVkIGVudW0gaW4gQy4NClRoZSBt
+YWluIG9wdGlvbnMgc2VlbSB0byBiZSBlbWJlZGRpbmcgdGhlIHZhbHVlIGluIGEgc3RydWN0DQpv
+ciB1c2luZyBhIHBvaW50ZXIgdG8gYSBzdHJ1Y3QuDQpOZWl0aGVyIGlzIGlkZWFsLg0KDQpPVE9I
+IHRoZSBjb21waWxlciBjYW4ndCBkZWZhdWx0IHRvIHN0cm9uZ2x5IHR5cGVkIGVudW0uDQpBbHRo
+b3VnaCBwZXJoYXBzIHRoYXQgY291bGQgYmUgYSBwZXItZW51bSBhdHRyaWJ1dGUuDQoNCglEYXZp
+ZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQg
+RmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4
+NiAoV2FsZXMpDQo=
 
-      SHUT_RD:  Disables further receive operations.  No SCTP protocol
-         action is taken.
-
->
-> This all relates to a very old (pre git) comment in inet_shutdown() that
-> shutdown needs to act on listening and connecting sockets until the VFS
-> layer is 'fixed' (presumably to let close() through - not going to happen=
-.)
-didn't know that, it's better to have it on some standard doc.
-
->
-> I also suspect that a blocking connect() can't be cancelled either?
-For connecting socket, it calls sctp_shutdown() where SHUT_WR causes
-the asoc to enter SHUTDOWN_SENT and cancel the blocking connect().
-
->
-> Clearly the application can avoid the issue by using poll() and an
-> extra eventfd() for the wakeup - but it is all a faff for code that
-> otherwise straight forward.
-I will try to prepare a patch to solve this for sctp accept() like:
-
-diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-index c67679a41044..f270a0a4c65d 100644
---- a/net/sctp/socket.c
-+++ b/net/sctp/socket.c
-@@ -4834,10 +4834,13 @@ int sctp_inet_connect(struct socket *sock,
-struct sockaddr *uaddr,
-        return sctp_connect(sock->sk, uaddr, addr_len, flags);
- }
-
--/* FIXME: Write comments. */
- static int sctp_disconnect(struct sock *sk, int flags)
- {
--       return -EOPNOTSUPP; /* STUB */
-+       if (!sctp_style(sk, TCP))
-+               return -EOPNOTSUPP;
-+
-+       sk->sk_shutdown |=3D RCV_SHUTDOWN;
-+       return 0;
- }
-
- /* 4.1.4 accept() - TCP Style Syntax
-@@ -4866,7 +4869,7 @@ static struct sock *sctp_accept(struct sock *sk,
-int flags, int *err, bool kern)
-                goto out;
-        }
-
--       if (!sctp_sstate(sk, LISTENING)) {
-+       if (!sctp_sstate(sk, LISTENING) || (sk->sk_shutdown & RCV_SHUTDOWN)=
-) {
-                error =3D -EINVAL;
-                goto out;
-        }
-@@ -9392,7 +9395,7 @@ static int sctp_wait_for_accept(struct sock *sk,
-long timeo)
-                }
-
-                err =3D -EINVAL;
--               if (!sctp_sstate(sk, LISTENING))
-+               if (!sctp_sstate(sk, LISTENING) || (sk->sk_shutdown &
-RCV_SHUTDOWN))
-                        break;
-
-                err =3D 0;
-
-Thanks.
 
