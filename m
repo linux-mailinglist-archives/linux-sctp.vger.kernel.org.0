@@ -1,49 +1,49 @@
-Return-Path: <linux-sctp+bounces-182-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-183-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B863293FB74
-	for <lists+linux-sctp@lfdr.de>; Mon, 29 Jul 2024 18:40:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2743493FBA2
+	for <lists+linux-sctp@lfdr.de>; Mon, 29 Jul 2024 18:45:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 37183B23082
-	for <lists+linux-sctp@lfdr.de>; Mon, 29 Jul 2024 16:40:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D169C1F212B4
+	for <lists+linux-sctp@lfdr.de>; Mon, 29 Jul 2024 16:45:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B10C618309C;
-	Mon, 29 Jul 2024 16:39:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 002FF17C7C1;
+	Mon, 29 Jul 2024 16:42:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MxGffYre"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FQESavfQ"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 376C31534EC;
-	Mon, 29 Jul 2024 16:39:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BC0180C0C;
+	Mon, 29 Jul 2024 16:42:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722271180; cv=none; b=WjsjJNi31QGI277pVjUFlFVzWQ+jiHBNt1M6Rmlip0DWXdcAP4FLfZl/gaKJiGiS3EhtHuIxFXiGPVZb+Hc0evaHRK+soOxk1gFh8wgSSe6reHji64dm+3pQ2Y2k4MPTvjg/qehf9VthXUKyHwdiTOzqErda1pAROSy5TUaeq5Y=
+	t=1722271357; cv=none; b=mM8Or9hXNTt1Rh3KJt3GaGc5mz1w8PCGwljGHI0MXNMDcNX4QnMuPbvV4l2zUsCmP9ysEtvOCxFxekm5qrbbPr0CbaqKKmwTR9J0Cec/GOIo1tjRUHaZY8hxNifdRF61o6/kHqbuWlAeaiGkv2eufrKbWuMewWR+I9nlKz5aPAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722271180; c=relaxed/simple;
-	bh=ACOFD4CnvNQvgxH3c3fJIkYLBWpRIGrdoWdi94w0LGY=;
+	s=arc-20240116; t=1722271357; c=relaxed/simple;
+	bh=mA3Plo9rccbKR8tQpMvqb5/37K14bOyxIOzFzkCyo2w=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=O9d+GNMMWs0eMqVpSe76P8lJ9WIHzvyAYEsVKRN4BTb3I2Tu90iQBbmcf+hCqGbx7BdwTkGwS2ZJADReQfE26HcRphM9LNyCDaOMHso+e+XbZ93CCtzbZFy2elwIe8GrHbChS7FJzSvP6vvcGDY/fX0R/kAUiLOAdvi1OuduckA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MxGffYre; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D5937C4AF0C;
-	Mon, 29 Jul 2024 16:39:39 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=n2zBVYRb9rJXungcv0a5DZWpPzN7Gas+AuKrPp28DZYTupwNCShTaNkpqBJSVDo4aZsyw66Zi2vC9HqFCKBim2WwlEtncfwSdJsVLGkex9h18khp7Pd3DwjMIUObyh7tDEvEeAO1j00okG5v7Uq3Kceh5i6gRWDh3MxeZJx0Fgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FQESavfQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 219B9C4AF09;
+	Mon, 29 Jul 2024 16:42:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722271179;
-	bh=ACOFD4CnvNQvgxH3c3fJIkYLBWpRIGrdoWdi94w0LGY=;
+	s=k20201202; t=1722271357;
+	bh=mA3Plo9rccbKR8tQpMvqb5/37K14bOyxIOzFzkCyo2w=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=MxGffYremrlYV7IoL+PFdzTVghbhUmYE24NoiOXwot130hJR092fMDPljyjOFHVdc
-	 BwOk8pSOjwwKbEdqNqxYUxpql4UoUKiFJ2lsCDqaei8fiv2nLmq0phzDybvS4Ruc8d
-	 z/XfJg+CKgAclYeW7CbbQLEE7gLL/hM0xFPcU/zrpTnoN8mAo4/WHGmlPe/dDySyr4
-	 +P5sQueNRxv+PdBs1m2FMKXNsYAKLBJPpcrqn+AXFKcM9NOrWmX7bCZDnXiuc8wZZk
-	 cgjYyQYbzjQhie1m/6w7FgPL23bO3WKyoer9qNey5Cb3pqkqUfzFfvK9OYAA6SDF3G
-	 K/Q0xuxSAzaPQ==
+	b=FQESavfQWIyHKftqPvTmy4wVhUA6HIJqwcdczB7gzKs7W9HP4VgXBcAvnS2OY1QPQ
+	 6v8azN0AnBdvEUaiuvvYn24UYpSAPhOt9Kc8PnA5pAQgRzOyjZDqBpRpAggC47L+YO
+	 3pDtCbTERg/BZjIP98WKxyLB+Jl8i0jRFbFjiovwHjjJOglSPdvIoPPigoU6llsN7p
+	 NnUKMTJeRMcEWdczEcxBDiNNs1O1d1p7FYZtvzItkwiDmtNqDhaPHf3wXrrW8U4yYI
+	 kgmuh8yjEhzjRpHcoAw7LVo1omVPzA9Do3we2wqTVe6+zyxFoijU6kc6a1Jy9HiSUh
+	 MFjtM1ssSTzFQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BBA0BC43613;
-	Mon, 29 Jul 2024 16:39:39 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0CA11C43445;
+	Mon, 29 Jul 2024 16:42:37 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
@@ -55,8 +55,8 @@ Content-Transfer-Encoding: 8bit
 Subject: Re: [GIT PULL] sysctl constification changes for v6.11-rc1
 From: patchwork-bot+linux-riscv@kernel.org
 Message-Id: 
- <172227117976.3603.14526183264046270376.git-patchwork-notify@kernel.org>
-Date: Mon, 29 Jul 2024 16:39:39 +0000
+ <172227135704.3603.7348565051958076479.git-patchwork-notify@kernel.org>
+Date: Mon, 29 Jul 2024 16:42:37 +0000
 References: <20240724210014.mc6nima6cekgiukx@joelS2.panther.com>
 In-Reply-To: <20240724210014.mc6nima6cekgiukx@joelS2.panther.com>
 To: Joel Granados <j.granados@samsung.com>
@@ -76,7 +76,7 @@ Cc: linux-riscv@lists.infradead.org, torvalds@linux-foundation.org,
 
 Hello:
 
-This pull request was applied to riscv/linux.git (fixes)
+This pull request was applied to riscv/linux.git (for-next)
 by Linus Torvalds <torvalds@linux-foundation.org>:
 
 On Wed, 24 Jul 2024 23:00:14 +0200 you wrote:
@@ -95,7 +95,7 @@ On Wed, 24 Jul 2024 23:00:14 +0200 you wrote:
 
 Here is the summary with links:
   - [GIT,PULL] sysctl constification changes for v6.11-rc1
-    https://git.kernel.org/riscv/c/f8a8b94d0698
+    https://git.kernel.org/riscv/c/b485625078ca
 
 You are awesome, thank you!
 -- 
