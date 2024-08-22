@@ -1,49 +1,49 @@
-Return-Path: <linux-sctp+bounces-203-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-204-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B614495B5B3
-	for <lists+linux-sctp@lfdr.de>; Thu, 22 Aug 2024 14:59:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8776195B5BB
+	for <lists+linux-sctp@lfdr.de>; Thu, 22 Aug 2024 14:59:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E65B286026
-	for <lists+linux-sctp@lfdr.de>; Thu, 22 Aug 2024 12:59:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7359B240B9
+	for <lists+linux-sctp@lfdr.de>; Thu, 22 Aug 2024 12:59:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BCC01C9EAF;
-	Thu, 22 Aug 2024 12:58:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB37E1C9EC2;
+	Thu, 22 Aug 2024 12:58:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WAUoSl74"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sWXn8p7I"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CA8A1C9EB0;
-	Thu, 22 Aug 2024 12:58:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BAB41C9DED;
+	Thu, 22 Aug 2024 12:58:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724331503; cv=none; b=tRqhtVkWBwLaLikffC0cwJLqV6RGlbr878015azXxo8ryORPxUdHyaEwR7TnF6Yz6+4poaxHQ3udWqdqKhNY7UWqWE4hsqBerdgeM7sChgLnSIp9k/o5OTmjgBwd4hcSLZXIGI/evZFvTFuvVul6cxMsTx3dZzwt6fa8d5XTqOs=
+	t=1724331507; cv=none; b=vAO9MSzrFhGgtOy9U7Zp05GxhDLZxH2UuBQhYvPX+q6EFXTnybR/AmIcdVZkNQIa82XgoO+3ofGyDsuVZ9W3Kadc09EzYyUksdWu1rNPhZDfD+di2LbW6lSxnSypxYzLYrvck9LANFSp2c/rPpdf+lIPmhBCnRkFZt+f/Wr1Vf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724331503; c=relaxed/simple;
-	bh=kF0i1MzJsWLy9CcYYmy/E6kuWuGGi+D7KzvUyYUw16E=;
+	s=arc-20240116; t=1724331507; c=relaxed/simple;
+	bh=kZ/PsmLBGx4oLQb2HsOSwDrGbJh1eBk6BO9es46bP8c=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NSxrzdlCy0MDqw5MxK7omILLAUjQctT7yt6enKVD/7KTkWyfGMgBvr2C3CAtWsbf4cjPJ6NtKcdC52+IEiUMD044lKechpdpI9jkuBgUSn74S7S4xWbuELjWO9nI0qm+vZ7jOnh/5MwjoLVca77oTKL0dVPwSf2DvbA7MN8NOK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WAUoSl74; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69DE1C4AF0B;
-	Thu, 22 Aug 2024 12:58:18 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=qIdQwGh26pdLnDkYxBJynMM6OAZD4w4fPh5ulIYa6+2CbaKvy2rtKQEiNYiLuYqweK+s9QFbD1OMAGBkcb0nF2S8GODuWdk7+CzF/TuJPxaBJepin4uWv+17ev+i+tCAR6+Avf6l/vk3NreSquz0QTKhPfUmsehnvMWSdx/YfMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sWXn8p7I; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 188B9C4AF0C;
+	Thu, 22 Aug 2024 12:58:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724331502;
-	bh=kF0i1MzJsWLy9CcYYmy/E6kuWuGGi+D7KzvUyYUw16E=;
+	s=k20201202; t=1724331507;
+	bh=kZ/PsmLBGx4oLQb2HsOSwDrGbJh1eBk6BO9es46bP8c=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=WAUoSl74zSKjlj2L1lDabL9bhIHhUs4r7GzQi6cFn0UDKjjG2oITFIqfPyhTRQFNi
-	 lrQwEanNo5gFHoqOmuReFrDBKIxZSyqNypWmL43YdPCSCKQek8ENnXvNuJczw6DBVq
-	 DkliPUDGTOGBe+K47yC/CZy/vIzlIkPnks9g3facJ3WIGPu3TMbVl2zBbQmDBPALzQ
-	 hdrZTVy9WcV4NtjDW/zcZEvA9rSh6nzU9y7Xf5lU3D1Xt1DCCnqIIVHJmpqlCWELae
-	 z2zgPjQ5UkvRWfrtUtNnG4QstGK8uDheXrH/ACrOahPv6Lgl3T3BeCB1Sn4nF1MmWX
-	 GcUejg0P3ABcw==
+	b=sWXn8p7I6D62t20NpFeuvQ+MWdGjCKNIxWUYfQWuEfKQ7bPauBgRNNmdsyYQSimyf
+	 VSjmMyPig/FE1Et/uw1cCOZ6YUBYv1181/4bfzr38xQaSV5+m1sNFrg/qXKC49KJsg
+	 8tANB7V4+yeSYY64xwhK86jk0YD3tvJV2EQD4w3tJIJUiap1CDMqZw+rkyBXu/iNjy
+	 69jR8Obok49edwEy7RHoIcjTaOniGeWElrAHi/qoVN4+9f6FgM4Tn48hTjgCIYFv5f
+	 ykqPcXWzhYdHCC4PPkFM6Yzefw5J8ue3JwwjipNo3Lov+ZYUNte10aSJMSBjlK+hHj
+	 eg+wvNSdUWC7w==
 From: Simon Horman <horms@kernel.org>
-Date: Thu, 22 Aug 2024 13:57:30 +0100
-Subject: [PATCH net-next 09/13] net: sched: Correct spelling in headers
+Date: Thu, 22 Aug 2024 13:57:31 +0100
+Subject: [PATCH net-next 10/13] sctp: Correct spelling in headers
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240822-net-spell-v1-9-3a98971ce2d2@kernel.org>
+Message-Id: <20240822-net-spell-v1-10-3a98971ce2d2@kernel.org>
 References: <20240822-net-spell-v1-0-3a98971ce2d2@kernel.org>
 In-Reply-To: <20240822-net-spell-v1-0-3a98971ce2d2@kernel.org>
 To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
@@ -73,69 +73,123 @@ Cc: netdev@vger.kernel.org, linux-s390@vger.kernel.org,
  linux-x25@vger.kernel.org
 X-Mailer: b4 0.14.0
 
-Correct spelling in pkt_cls.h and red.h.
+Correct spelling in sctp.h and structs.h.
 As reported by codespell.
 
-Cc: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc: Xin Long <lucien.xin@gmail.com>
+Cc: linux-sctp@vger.kernel.org
 Signed-off-by: Simon Horman <horms@kernel.org>
 ---
- include/net/pkt_cls.h | 2 +-
- include/net/red.h     | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ include/net/sctp/sctp.h    |  2 +-
+ include/net/sctp/structs.h | 20 ++++++++++----------
+ 2 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/include/net/pkt_cls.h b/include/net/pkt_cls.h
-index 41297bd38dff..4880b3a7aced 100644
---- a/include/net/pkt_cls.h
-+++ b/include/net/pkt_cls.h
-@@ -491,7 +491,7 @@ int __tcf_em_tree_match(struct sk_buff *, struct tcf_ematch_tree *,
- 			struct tcf_pkt_info *);
+diff --git a/include/net/sctp/sctp.h b/include/net/sctp/sctp.h
+index a2310fa995f6..84e6b9fd5610 100644
+--- a/include/net/sctp/sctp.h
++++ b/include/net/sctp/sctp.h
+@@ -28,7 +28,7 @@
+ #define __net_sctp_h__
  
- /**
-- * tcf_em_tree_match - evaulate an ematch tree
-+ * tcf_em_tree_match - evaluate an ematch tree
-  *
-  * @skb: socket buffer of the packet in question
-  * @tree: ematch tree to be used for evaluation
-diff --git a/include/net/red.h b/include/net/red.h
-index 802287d52c9e..159a09359fc0 100644
---- a/include/net/red.h
-+++ b/include/net/red.h
-@@ -40,7 +40,7 @@
- 	max_P should be small (not 1), usually 0.01..0.02 is good value.
+ /* Header Strategy.
+- *    Start getting some control over the header file depencies:
++ *    Start getting some control over the header file dependencies:
+  *       includes
+  *       constants
+  *       structs
+diff --git a/include/net/sctp/structs.h b/include/net/sctp/structs.h
+index f24a1bbcb3ef..31248cfdfb23 100644
+--- a/include/net/sctp/structs.h
++++ b/include/net/sctp/structs.h
+@@ -521,7 +521,7 @@ struct sctp_datamsg {
+ 	refcount_t refcnt;
+ 	/* When is this message no longer interesting to the peer? */
+ 	unsigned long expires_at;
+-	/* Did the messenge fail to send? */
++	/* Did the message fail to send? */
+ 	int send_error;
+ 	u8 send_failed:1,
+ 	   can_delay:1,	/* should this message be Nagle delayed */
+@@ -792,7 +792,7 @@ struct sctp_transport {
+ 		 */
+ 		hb_sent:1,
  
- 	max_P is chosen as a number, so that max_P/(th_max-th_min)
--	is a negative power of two in order arithmetics to contain
-+	is a negative power of two in order arithmetic to contain
- 	only shifts.
+-		/* Is the Path MTU update pending on this tranport */
++		/* Is the Path MTU update pending on this transport */
+ 		pmtu_pending:1,
  
+ 		dst_pending_confirm:1,	/* need to confirm neighbour */
+@@ -1223,7 +1223,7 @@ enum sctp_endpoint_type {
+ };
  
-@@ -159,7 +159,7 @@ static inline u32 red_maxp(u8 Plog)
- static inline void red_set_vars(struct red_vars *v)
+ /*
+- * A common base class to bridge the implmentation view of a
++ * A common base class to bridge the implementation view of a
+  * socket (usually listening) endpoint versus an association's
+  * local endpoint.
+  * This common structure is useful for several purposes:
+@@ -1353,7 +1353,7 @@ struct sctp_endpoint {
+ 	struct rcu_head rcu;
+ };
+ 
+-/* Recover the outter endpoint structure. */
++/* Recover the outer endpoint structure. */
+ static inline struct sctp_endpoint *sctp_ep(struct sctp_ep_common *base)
  {
- 	/* Reset average queue length, the value is strictly bound
--	 * to the parameters below, reseting hurts a bit but leaving
-+	 * to the parameters below, resetting hurts a bit but leaving
- 	 * it might result in an unreasonable qavg for a while. --TGR
+ 	struct sctp_endpoint *ep;
+@@ -1906,7 +1906,7 @@ struct sctp_association {
+ 	__u32 rwnd_over;
+ 
+ 	/* Keeps treack of rwnd pressure.  This happens when we have
+-	 * a window, but not recevie buffer (i.e small packets).  This one
++	 * a window, but not receive buffer (i.e small packets).  This one
+ 	 * is releases slowly (1 PMTU at a time ).
  	 */
- 	v->qavg		= 0;
-@@ -340,7 +340,7 @@ static inline unsigned long red_calc_qavg_no_idle_time(const struct red_parms *p
- {
- 	/*
- 	 * NOTE: v->qavg is fixed point number with point at Wlog.
--	 * The formula below is equvalent to floating point
-+	 * The formula below is equivalent to floating point
- 	 * version:
- 	 *
- 	 * 	qavg = qavg*(1-W) + backlog*W;
-@@ -375,7 +375,7 @@ static inline int red_mark_probability(const struct red_parms *p,
- 	   OK. qR is random number in the interval
- 		(0..1/max_P)*(qth_max-qth_min)
- 	   i.e. 0..(2^Plog). If we used floating point
--	   arithmetics, it would be: (2^Plog)*rnd_num,
-+	   arithmetic, it would be: (2^Plog)*rnd_num,
- 	   where rnd_num is less 1.
+ 	__u32 rwnd_press;
+@@ -1994,7 +1994,7 @@ struct sctp_association {
  
- 	   Taking into account, that qavg have fixed
+ 	/* ADDIP Section 5.2 Upon reception of an ASCONF Chunk.
+ 	 *
+-	 * This is needed to implement itmes E1 - E4 of the updated
++	 * This is needed to implement items E1 - E4 of the updated
+ 	 * spec.  Here is the justification:
+ 	 *
+ 	 * Since the peer may bundle multiple ASCONF chunks toward us,
+@@ -2005,7 +2005,7 @@ struct sctp_association {
+ 
+ 	/* These ASCONF chunks are waiting to be sent.
+ 	 *
+-	 * These chunaks can't be pushed to outqueue until receiving
++	 * These chunks can't be pushed to outqueue until receiving
+ 	 * ASCONF_ACK for the previous ASCONF indicated by
+ 	 * addip_last_asconf, so as to guarantee that only one ASCONF
+ 	 * is in flight at any time.
+@@ -2059,13 +2059,13 @@ struct sctp_association {
+ 	struct sctp_transport *new_transport;
+ 
+ 	/* SCTP AUTH: list of the endpoint shared keys.  These
+-	 * keys are provided out of band by the user applicaton
++	 * keys are provided out of band by the user application
+ 	 * and can't change during the lifetime of the association
+ 	 */
+ 	struct list_head endpoint_shared_keys;
+ 
+ 	/* SCTP AUTH:
+-	 * The current generated assocaition shared key (secret)
++	 * The current generated association shared key (secret)
+ 	 */
+ 	struct sctp_auth_bytes *asoc_shared_key;
+ 	struct sctp_shared_key *shkey;
+@@ -2121,7 +2121,7 @@ enum {
+ 	SCTP_ASSOC_EYECATCHER = 0xa550c123,
+ };
+ 
+-/* Recover the outter association structure. */
++/* Recover the outer association structure. */
+ static inline struct sctp_association *sctp_assoc(struct sctp_ep_common *base)
+ {
+ 	struct sctp_association *asoc;
 
 -- 
 2.43.0
