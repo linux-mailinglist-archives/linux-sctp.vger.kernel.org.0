@@ -1,49 +1,50 @@
-Return-Path: <linux-sctp+bounces-199-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-200-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DC5295B59E
-	for <lists+linux-sctp@lfdr.de>; Thu, 22 Aug 2024 14:58:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 234BD95B5A3
+	for <lists+linux-sctp@lfdr.de>; Thu, 22 Aug 2024 14:58:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 568A4284CBA
-	for <lists+linux-sctp@lfdr.de>; Thu, 22 Aug 2024 12:58:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 53DA11C234BC
+	for <lists+linux-sctp@lfdr.de>; Thu, 22 Aug 2024 12:58:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DFD31C9DFD;
-	Thu, 22 Aug 2024 12:58:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A0771C9EC4;
+	Thu, 22 Aug 2024 12:58:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eslZwG4K"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nGnrM9QY"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EDC91C9DFF;
-	Thu, 22 Aug 2024 12:58:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE4F91C9DF6;
+	Thu, 22 Aug 2024 12:58:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724331484; cv=none; b=SpU1imSWZ64vZxhbOaP4SZ4idRSPElOXNiifQgXL/tNDxCc2q35H3fxX3xkqiK2RqlT6lp2LRNgihNzuMhsqpD+XTFo7Vb93U08fHJUpgbaA4XD2PQCTlOzwOPDcaqWTN1qKgxKFB9cNmQXg2dmlMYJxWSIttw5z9bCpQ3pCvLE=
+	t=1724331488; cv=none; b=oq/hcOekZq/lHYSg4hic5HBj5c/+WZJYoqJ4SSlm+UNjS0rxSSHhhzQcUA1LuOXe4DXCMhqq25AR7JMt9b+2LojYnvqFBxLcWKYmmyuzNNu4B1WG9L9KiNLQv0mm4Qo2obLhHRu40e5ELZG2mysMBKK663rBNx110jOsjMsIqF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724331484; c=relaxed/simple;
-	bh=mOChusB6cjD3IP4W23e2AcjRdNTClAGuLDf5cynThUU=;
+	s=arc-20240116; t=1724331488; c=relaxed/simple;
+	bh=994WLKmvIF8xySmU7VNKz8/rwajRzqjreyZvyk6dhmI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=gQduZnwLqHsNEzVEb5dFmFk9F/zDiIOA+7fCKpzgMBbwNxkb/cPi4cH2kfLh9DuqMiGKMavMzpA7QImRjDWAbusiK0fjjZ870lXqR1YGCfOR6B0A3dselqwSYtagSrjezDw5vxIVXOd2rn0SWzPlzV2kecT38Kr8I/33z3bMaUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eslZwG4K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDDCFC4AF0B;
-	Thu, 22 Aug 2024 12:57:59 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=aYMvW4G3+0rzQdhutirG+FRxPb2yBbzlFlqEpg5xQ+7Cw6yyf6ANoDWcdwFL/2BisIgIXeJmS74TAmLDIkBygldN3bzZWUUd/PXyDelbRTjZ6UftLrgHSshXaVxkOrHaFUtsxny6t1J9R6ZvsrmyZZxkouHBKtCCFRnmghr3SlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nGnrM9QY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7675DC32782;
+	Thu, 22 Aug 2024 12:58:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724331484;
-	bh=mOChusB6cjD3IP4W23e2AcjRdNTClAGuLDf5cynThUU=;
+	s=k20201202; t=1724331488;
+	bh=994WLKmvIF8xySmU7VNKz8/rwajRzqjreyZvyk6dhmI=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=eslZwG4KBeAY16U1Kd0k4cQ2OoynMg6zc8sw2ramG6P6+nZgEpWAdutUHzc8nnLk5
-	 gSJR2Fe31hn/MEG4uCjIs0QWidYOU+f88RjsE7osolwK+BEpeMXxtZCx2P7/mzVZgp
-	 /P8jO10q33nLMEezB2KjxuKR01Fx+LZhDI3S6Fs9Zm6AaTmctadyKd+CvnolZw/zIx
-	 EKvuLdvI9d5nqNiSDFuVEU7P9Ojy6MZpPFFmxR6KJz+8ABrbtconHBaM56vZ+FxJb3
-	 pmGIGzCsTv6EEOdxSQMlNuycWKe4G6m0+jjdH8ipxcDdLeHzAJ0wPXzy20dvzbATe1
-	 4fVK5NMWUevwQ==
+	b=nGnrM9QY2bde9uSx08ThyByjUoYOAUeZZ+7zP2x08+66ZhLXGzg1wduKUxf3gtq5s
+	 kZscS/jAlAhafMFaBU6FNb8y4hIJG249cgQXOgApECR3oNXifon2XcJuaEiTgsEJah
+	 MDQq3dWLFYrrxc/ecmktUcKxc1Xlvt8EAdgUN60NQfgwd3phQ823vRBWKymkyEcusy
+	 FIumvtI7PYTOj50NTb6AKcillut+IvVghz18LmFXetaQ7dQUZQCjMysZajXQEtFu0B
+	 JY0WxXAJQ3IS0XTGfmi+M6vM1lI308EgRxqERx6Ls09ZIc6waU88OaK5UqGKT2f1C1
+	 qu2L5To2rgs5A==
 From: Simon Horman <horms@kernel.org>
-Date: Thu, 22 Aug 2024 13:57:26 +0100
-Subject: [PATCH net-next 05/13] bonding: Correct spelling in headers
+Date: Thu, 22 Aug 2024 13:57:27 +0100
+Subject: [PATCH net-next 06/13] net: qualcomm: rmnet: Correct spelling in
+ if_rmnet.h
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -52,7 +53,7 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240822-net-spell-v1-5-3a98971ce2d2@kernel.org>
+Message-Id: <20240822-net-spell-v1-6-3a98971ce2d2@kernel.org>
 References: <20240822-net-spell-v1-0-3a98971ce2d2@kernel.org>
 In-Reply-To: <20240822-net-spell-v1-0-3a98971ce2d2@kernel.org>
 To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
@@ -73,46 +74,29 @@ Cc: netdev@vger.kernel.org, linux-s390@vger.kernel.org,
  linux-x25@vger.kernel.org
 X-Mailer: b4 0.14.0
 
-Correct spelling in bond_3ad.h and bond_alb.h.
+Correct spelling in if_rmnet.h
 As reported by codespell.
 
-Cc: Jay Vosburgh <jv@jvosburgh.net>
-Cc: Andy Gospodarek <andy@greyhouse.net>
+Cc: Subash Abhinov Kasiviswanathan <quic_subashab@quicinc.com>
+Cc: Sean Tranchetti <quic_stranche@quicinc.com>
 Signed-off-by: Simon Horman <horms@kernel.org>
 ---
- include/net/bond_3ad.h | 5 ++++-
- include/net/bond_alb.h | 2 +-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ include/linux/if_rmnet.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/net/bond_3ad.h b/include/net/bond_3ad.h
-index 9ce5ac2bfbad..2053cd8e788a 100644
---- a/include/net/bond_3ad.h
-+++ b/include/net/bond_3ad.h
-@@ -231,7 +231,10 @@ typedef struct port {
- 	mux_states_t sm_mux_state;	/* state machine mux state */
- 	u16 sm_mux_timer_counter;	/* state machine mux timer counter */
- 	tx_states_t sm_tx_state;	/* state machine tx state */
--	u16 sm_tx_timer_counter;	/* state machine tx timer counter(allways on - enter to transmit state 3 time per second) */
-+	u16 sm_tx_timer_counter;	/* state machine tx timer counter
-+					 * (always on - enter to transmit
-+					 *  state 3 time per second)
-+					 */
- 	u16 sm_churn_actor_timer_counter;
- 	u16 sm_churn_partner_timer_counter;
- 	u32 churn_actor_count;
-diff --git a/include/net/bond_alb.h b/include/net/bond_alb.h
-index 9dc082b2d543..e5945427f38d 100644
---- a/include/net/bond_alb.h
-+++ b/include/net/bond_alb.h
-@@ -53,7 +53,7 @@ struct slave;
+diff --git a/include/linux/if_rmnet.h b/include/linux/if_rmnet.h
+index 839d1e48b85e..c44bf6e80ecb 100644
+--- a/include/linux/if_rmnet.h
++++ b/include/linux/if_rmnet.h
+@@ -42,7 +42,7 @@ struct rmnet_map_ul_csum_header {
  
- 
- struct tlb_client_info {
--	struct slave *tx_slave;	/* A pointer to slave used for transmiting
-+	struct slave *tx_slave;	/* A pointer to slave used for transmitting
- 				 * packets to a Client that the Hash function
- 				 * gave this entry index.
- 				 */
+ /* csum_info field:
+  *  OFFSET:	where (offset in bytes) to insert computed checksum
+- *  UDP:	1 = UDP checksum (zero checkum means no checksum)
++ *  UDP:	1 = UDP checksum (zero checksum means no checksum)
+  *  ENABLED:	1 = checksum computation requested
+  */
+ #define MAP_CSUM_UL_OFFSET_MASK		GENMASK(13, 0)
 
 -- 
 2.43.0
