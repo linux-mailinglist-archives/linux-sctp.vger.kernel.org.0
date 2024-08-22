@@ -1,49 +1,49 @@
-Return-Path: <linux-sctp+bounces-197-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-198-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 957EF95B596
-	for <lists+linux-sctp@lfdr.de>; Thu, 22 Aug 2024 14:58:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F67395B59B
+	for <lists+linux-sctp@lfdr.de>; Thu, 22 Aug 2024 14:58:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C57FF1C23518
-	for <lists+linux-sctp@lfdr.de>; Thu, 22 Aug 2024 12:58:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 02AA61F23EC3
+	for <lists+linux-sctp@lfdr.de>; Thu, 22 Aug 2024 12:58:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CA881C9EA9;
-	Thu, 22 Aug 2024 12:57:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BAE51C9EBD;
+	Thu, 22 Aug 2024 12:58:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aFFIqqIz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XPuzq8iz"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 343841C9DE6;
-	Thu, 22 Aug 2024 12:57:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB8D318452D;
+	Thu, 22 Aug 2024 12:57:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724331475; cv=none; b=RP9KkyuC1ni28bF2v7X3Mq0nmrhiYMPvTG3UzoKJO3fKxoImnO0GexHEXAZXK1m69l60OH3GmFR50/6gJ+5I2PUpDRWFVVSD37Q749uOj5ADH2ysgXhZnv/zieGWw+FUusd+rwYK0tI0s1SLYx7XQsgelwNAEDdsjVoa4O1ll44=
+	t=1724331479; cv=none; b=skR8m4raVHMJvMM60UIbvUYfzVAXZl0Ljs2OvdugXBPKxvRzOazqeJZfnecso3pweyq7zoyOBeXRdHJ1FXMeGbtUYQLrJ733kTQsuWPd1267B7bfggs5x5oigbXSJMis1Wk2Y4F9r81xhq18EIUgNsXwLCMu9UPSMeaPxN01QkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724331475; c=relaxed/simple;
-	bh=aoDmRguQsPBl3mfUQ7HyZo4oxrUzK2ttranhJ6ZLxN0=;
+	s=arc-20240116; t=1724331479; c=relaxed/simple;
+	bh=8i+z42JB2yg0vXt5In+j5y887Xpzvf3HKmKMTvgBK0Q=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=iPKIMVwzHbRXHXvwBbya2fbZdri3K5gDeivenZE2u85liB8UlxcdefxsGUqdgNdPzEVfesDVbnX535tI+ckSOKLzoRFSF1Mr25opUy5dJxvYKCqMOWHEe1cE9BE0LjQeauao2wKovA/AB+crgZt31oIsojOqCxTRF/MGLtF0ogw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aFFIqqIz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83BCBC4AF09;
-	Thu, 22 Aug 2024 12:57:50 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=IP9AURRcQg+1PJ74ZrT9Q0Q0VJEj0JWZL7RYRy+u687dqj6UOj7bkQ+49udNM+ZwMLlhjenGSFeKYf91Dp+EAZnidILmen2eF9nMTakYp2Qkz5wESVcwPv8f+Avzp7Trg1U37wJH28++fCPB0rc9MQorseqKqL1t0S/keXfOcWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XPuzq8iz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3150EC32782;
+	Thu, 22 Aug 2024 12:57:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724331474;
-	bh=aoDmRguQsPBl3mfUQ7HyZo4oxrUzK2ttranhJ6ZLxN0=;
+	s=k20201202; t=1724331479;
+	bh=8i+z42JB2yg0vXt5In+j5y887Xpzvf3HKmKMTvgBK0Q=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=aFFIqqIzWjVF5OBcXMtTxl/Ig7NLPEuUvBWz0VIYkZZSJVaz4ma6sPEYWt+101UJ2
-	 mkbIQZXe+EsQipq/TpBcZJ47zI5W1pkGfX0L5BCCvmJelju2QH+FUFdpjGOvjvshtA
-	 uNnitf2p0JN9zp6QJ8VPsFxzElmVXakEFATGwNE2R+d3dAHli/n2Xy7X/2osxmFb4S
-	 uIytClNKvJiX/FxiRHF78EYdoxmW/Ua/s4sEaOAqDbucB5QGKXdq2lBazGDnw1nC7c
-	 m81iN+2bEZrnefRvy9aV5/nlXvmiWgSHsX6UpHnBgdHM6FZG4s9NDlyjGAIGrarWtq
-	 5DTJBUWhZjiYg==
+	b=XPuzq8izDGuDD73+S4V8YF84CDmyoR+GS0hIrx0GM3DxbobxYQwKGr+Lncgj0z0Fb
+	 PyestM1qM9U48pzmUgqH12IvM0vm0wTRiF0UKx82waxMoDmOTvJ8SZMXfjHqbU7cc2
+	 NofMgoxXk6zYa2AsNI+F3kucM/63sfdaTCgEQJfGuhxLc35y7ssOcAyXk1mY6MZoLw
+	 O+XSZ3+0lXMde0frjyFcUp9YWCxinM2MG+8EhgGI7+d8phfCmp0P8ZOwsljx5UZvw4
+	 4ciqZ369pbzmAyb1EuLZAE8AW0qJziJ/r6lKm7a0I/3RvrVWFOyYUTKVhtuinQhyd/
+	 gYvQcEQPpPuBw==
 From: Simon Horman <horms@kernel.org>
-Date: Thu, 22 Aug 2024 13:57:24 +0100
-Subject: [PATCH net-next 03/13] ip_tunnel: Correct spelling in ip_tunnels.h
+Date: Thu, 22 Aug 2024 13:57:25 +0100
+Subject: [PATCH net-next 04/13] ipv6: Correct spelling in ipv6.h
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240822-net-spell-v1-3-3a98971ce2d2@kernel.org>
+Message-Id: <20240822-net-spell-v1-4-3a98971ce2d2@kernel.org>
 References: <20240822-net-spell-v1-0-3a98971ce2d2@kernel.org>
 In-Reply-To: <20240822-net-spell-v1-0-3a98971ce2d2@kernel.org>
 To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
@@ -79,22 +79,31 @@ As reported by codespell.
 Cc: David Ahern <dsahern@kernel.org>
 Signed-off-by: Simon Horman <horms@kernel.org>
 ---
- include/net/ip_tunnels.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/net/ipv6.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/net/ip_tunnels.h b/include/net/ip_tunnels.h
-index 1db2417b8ff5..6194fbb564c6 100644
---- a/include/net/ip_tunnels.h
-+++ b/include/net/ip_tunnels.h
-@@ -573,7 +573,7 @@ static inline u8 ip_tunnel_get_ttl(const struct iphdr *iph,
- 		return 0;
- }
+diff --git a/include/net/ipv6.h b/include/net/ipv6.h
+index e7113855a10f..248bfb26e2af 100644
+--- a/include/net/ipv6.h
++++ b/include/net/ipv6.h
+@@ -851,7 +851,7 @@ static inline int __ipv6_addr_diff32(const void *token1, const void *token2, int
+ 	 *	we should *never* get to this point since that
+ 	 *	would mean the addrs are equal
+ 	 *
+-	 *	However, we do get to it 8) And exacly, when
++	 *	However, we do get to it 8) And exactly, when
+ 	 *	addresses are equal 8)
+ 	 *
+ 	 *	ip route add 1111::/128 via ...
+@@ -973,7 +973,7 @@ static inline __be32 ip6_make_flowlabel(struct net *net, struct sk_buff *skb,
+ 	hash = skb_get_hash_flowi6(skb, fl6);
  
--/* Propogate ECN bits out */
-+/* Propagate ECN bits out */
- static inline u8 ip_tunnel_ecn_encap(u8 tos, const struct iphdr *iph,
- 				     const struct sk_buff *skb)
- {
+ 	/* Since this is being sent on the wire obfuscate hash a bit
+-	 * to minimize possbility that any useful information to an
++	 * to minimize possibility that any useful information to an
+ 	 * attacker is leaked. Only lower 20 bits are relevant.
+ 	 */
+ 	hash = rol32(hash, 16);
 
 -- 
 2.43.0
