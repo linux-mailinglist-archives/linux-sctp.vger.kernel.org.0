@@ -1,204 +1,157 @@
-Return-Path: <linux-sctp+bounces-213-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-214-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B91C95E0BE
-	for <lists+linux-sctp@lfdr.de>; Sun, 25 Aug 2024 04:43:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2A4495E28C
+	for <lists+linux-sctp@lfdr.de>; Sun, 25 Aug 2024 09:59:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9EA9A1C20A54
-	for <lists+linux-sctp@lfdr.de>; Sun, 25 Aug 2024 02:43:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 56A682825C2
+	for <lists+linux-sctp@lfdr.de>; Sun, 25 Aug 2024 07:59:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 583888F77;
-	Sun, 25 Aug 2024 02:43:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 808A15FBBA;
+	Sun, 25 Aug 2024 07:59:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ucr.edu header.i=@ucr.edu header.b="DLtHrhGO";
-	dkim=pass (1024-bit key) header.d=ucr.edu header.i=@ucr.edu header.b="urXw0AhU"
+	dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b="VZ+kPanN"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mx-lax3-2.ucr.edu (mx-lax3-2.ucr.edu [169.235.156.37])
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 531C88C07
-	for <linux-sctp@vger.kernel.org>; Sun, 25 Aug 2024 02:43:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=169.235.156.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A054A2BB1C
+	for <linux-sctp@vger.kernel.org>; Sun, 25 Aug 2024 07:59:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724553826; cv=none; b=uTJn/0jzGzOfmRpFa8RHC3OB5icE7y/plcMgP7Hg+hzWHsSsGLPSkNhY+oXNW8UOwPMsLvha8KF7pOaxeZeWE71pE7cDGTZxY4mmBx2iry/YDMrRu8JTjNNtSvYU4/aN6VLFPa+TTIrNga4V8U8PPe2mA8ZUq37EfCQOUV0ueDQ=
+	t=1724572762; cv=none; b=h98YQoLR3gJzwmfTsOs4FAkfySYXhcH3inKzJ4f4nKDIkTwL6R3/jP4FNB4ITVALOLi2FJeQBA8aR1DE6qzKbEPzrVV+sG0Ms1IyeRuBQII1/IRxjZJPohEZW3Zc4mXwoaLwhe1KJw207paScxYoUk1OWDFIIXfJwyd1a5YCj6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724553826; c=relaxed/simple;
-	bh=xYwht60nwukBIB8VvdyNWQ1W6v8FzgDLlaemLk8iqvs=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=PjfpP0KRAVmuSOeVtREGmuUFl8EiD5ZIL6MgNwffrRPwiB6HzgpqrPzAn9G8HBowiZMnNtmtW2e3x+CEe9o5aCglLSCRwFWvEcQ2Bxm3snherKr63Q0YJD953LBMpBzldv+nPSobCQqsxETku5ABU/tGMdyP3S0j3zvoYqd0kWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=email.ucr.edu; spf=pass smtp.mailfrom=ucr.edu; dkim=pass (2048-bit key) header.d=ucr.edu header.i=@ucr.edu header.b=DLtHrhGO; dkim=pass (1024-bit key) header.d=ucr.edu header.i=@ucr.edu header.b=urXw0AhU; arc=none smtp.client-ip=169.235.156.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=email.ucr.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ucr.edu
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=ucr.edu; i=@ucr.edu; q=dns/txt; s=selector3;
-  t=1724553824; x=1756089824;
-  h=dkim-signature:x-google-dkim-signature:
-   x-forwarded-encrypted:x-gm-message-state:
-   x-google-smtp-source:mime-version:from:date:message-id:
-   subject:to:content-type:x-cse-connectionguid:
-   x-cse-msgguid;
-  bh=xYwht60nwukBIB8VvdyNWQ1W6v8FzgDLlaemLk8iqvs=;
-  b=DLtHrhGOCOSKsZzr5yzCTnPbGDG5JWP09TM6AjBAxMmcAPEMWTj3G74J
-   qgAbeKLh5yki8XLnxocePD5aaulwg3OqFxiMx3KPIQ/Deyn/+qiiTR6mz
-   fAez2cQRRIIFQAKiScSIto48HrmR5aBZnCuTAR+3JzmPHO3Gd/3GDbnuT
-   ZsBUTWCf/3E9R9eqgOv/Bjmim8CYU+S50H/smcDbZv4CxTcsjIhKVCaIA
-   rMCVGWkO5VizqkgRlMpPbaPhRQbx1ejNowCiulFJQVCekeZMpnG+vkk7z
-   SzkQwQINMIfI17113gZzPM1wrsxVhIpHCC2ei+5bNkuFGyhNzG69US6Yz
-   A==;
-X-CSE-ConnectionGUID: THuEF+DETey15HkxwBY3WA==
-X-CSE-MsgGUID: M7RsrnaaQbueP8SgxWUsiA==
-Received: from mail-il1-f197.google.com ([209.85.166.197])
-  by smtp-lax3-2.ucr.edu with ESMTP/TLS/TLS_AES_256_GCM_SHA384; 24 Aug 2024 19:43:43 -0700
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-39d293e492aso37074495ab.1
-        for <linux-sctp@vger.kernel.org>; Sat, 24 Aug 2024 19:43:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ucr.edu; s=rmail; t=1724553822; x=1725158622; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=4MNH+fMGdP9JHLT+281L3G2ZahxWv0gRwwGG3Pw9Mrw=;
-        b=urXw0AhUEaSFCqW1NBeuVHtsyQkk111oNXqnAJgSF4uLSvz036Z4wLvkyMtq+MCbts
-         G49V3/MYYUmGGDniPqlpB/QjSwm+jIK8w6UlhDAXX1a1BQcR0N7yDIzIlZW7kjNAOT9n
-         DnKe1cCwCTSSvtKMaga4/YoqtFYhhwhkme+/M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724553822; x=1725158622;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4MNH+fMGdP9JHLT+281L3G2ZahxWv0gRwwGG3Pw9Mrw=;
-        b=mwdiNkwOhlVIR8a3PaAL7Z6C02Be7PqMv8Uk+3IrXD7etdaLFwhCc4DOXTGvo20IpI
-         nPqxDdx3StZ5vA+ypWeTJFnR4K6UTLVF9VmiNe9LAmAfqVNjCGhcNCJIRSbn8a0KnHze
-         EtzLYg5t8mRZ9ekUBiKfMmuFaJDi/0AekfJg1oJm4ZJ6834yBREZgFl0OFjljeoWZf4n
-         Aj+kRdamKDGoOqx/hqoDpwBzcRh/8YThYMdfNTLBzkJ99jJ2p7uBHW2UGG52Ql5JI75N
-         /FarJgc+suXfX4xZPxRYuV1LJq7ihzQ0iuMNTTtcpX+pXjdLR8tROEAo9DLJ4FzzP8fg
-         IBWA==
-X-Forwarded-Encrypted: i=1; AJvYcCUmT7c+x+6RUi7b98GQl2dYuY2mLFZWGFJCIB4RY3YUeqv4RcN1mfNXHT+dDQSrGXI7AuYwWsd3KnLw@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGrJvgxxSzvrewOI/oEKYUyfDxsWYkU5tFvzMB3/GS9OpIBnRy
-	BfT8BlIKXuSiD1pan0MYaDMHiHEPOTEkSQnna4m21n55t9Dv6yTv0bT1JbtIEZBhk8zUH5mPXXT
-	wA8FaEht8p3m8V9Eai1zN5lfbZeoYGjVnUeE8QX8ix2L8ZnElUv2crs19r3NTkQpxKfShRBTgIm
-	LtXOQvPqq6dsatJvHoDeBjMb8oz45ZO7fsysU=
-X-Received: by 2002:a05:6e02:188a:b0:396:f026:b0ac with SMTP id e9e14a558f8ab-39e3c989ecfmr81369895ab.14.1724553822544;
-        Sat, 24 Aug 2024 19:43:42 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHr8z+YHMldSfKdzax7ksxhfCeggpAybAldZfkpvfBau9UN11Sq+ooUijQjlihTL6LPNcWCm6zdS6A/CIPsSIU=
-X-Received: by 2002:a05:6e02:188a:b0:396:f026:b0ac with SMTP id
- e9e14a558f8ab-39e3c989ecfmr81369785ab.14.1724553822239; Sat, 24 Aug 2024
- 19:43:42 -0700 (PDT)
+	s=arc-20240116; t=1724572762; c=relaxed/simple;
+	bh=b5jvJK0AMaVKVjEU/QSxJuyWABdVPFGVB1lHl/yigV0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ejcvI3bkLvA1cLQERvc+NfRUorQP8MAiww2uumbe4vT7gjnqnnmfy+ybIwk3zMU75HPgY7ymTpSPZrpQW6r7noT3eKUY0WBazpN02CSgcp/4HcmDL6Q7ph9XH225vYeToqpWodlbw15mG8K8bwXawIrmmhUQovAsredIPSGjh88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de; spf=pass smtp.mailfrom=posteo.de; dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b=VZ+kPanN; arc=none smtp.client-ip=185.67.36.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.de
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout01.posteo.de (Postfix) with ESMTPS id 90217240027
+	for <linux-sctp@vger.kernel.org>; Sun, 25 Aug 2024 09:52:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+	t=1724572369; bh=b5jvJK0AMaVKVjEU/QSxJuyWABdVPFGVB1lHl/yigV0=;
+	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version:From;
+	b=VZ+kPanN7i1IVpKTmSytJjgcWyh6zlBoxmSPhNZGBe87ghKuoFcmioVJTISfPamsY
+	 uRxowBbAlhYHLPdfU3MvbzBvtRq/4bM8EUGoyg86jj8LwXlkkDiY9AlqwUMug44Sr0
+	 urSKW6aKToSStWJiDcybgWruD6cRfenfq+Y1aH1srCfTZmhKXjkYAeo3mtHi1GOIZD
+	 nNRN5ckkNvyW0+3yGXMq7Brh25gzAsrvZc2gMgjizB3jOnfmR+Bzot/EdXw8eVROF6
+	 E/zZ8DIuf12y8wMArEqZ+RVAVg9uqBBhBwN9HWNkGcxirL8NU1EbVdN9DRuLS1GmWa
+	 yeOrpOx3C2U4Q==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4Ws5dB1bS3z6txy;
+	Sun, 25 Aug 2024 09:52:46 +0200 (CEST)
+Message-ID: <d15e45f17dcb9c98664590711ac874302a7e6689.camel@posteo.de>
+Subject: Re: [PATCH net-next 00/13] net: header and core spelling corrections
+From: Philipp Stanner <stanner@posteo.de>
+To: Simon Horman <horms@kernel.org>, Willem de Bruijn
+ <willemdebruijn.kernel@gmail.com>, "David S. Miller" <davem@davemloft.net>,
+  Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>,  Alexandra Winter <wintera@linux.ibm.com>,
+ Thorsten Winkler <twinkler@linux.ibm.com>, David Ahern
+ <dsahern@kernel.org>,  Jay Vosburgh <jv@jvosburgh.net>, Andy Gospodarek
+ <andy@greyhouse.net>, Subash Abhinov Kasiviswanathan
+ <quic_subashab@quicinc.com>, Sean Tranchetti <quic_stranche@quicinc.com>, 
+ Paul Moore <paul@paul-moore.com>, Krzysztof Kozlowski <krzk@kernel.org>,
+ Jamal Hadi Salim <jhs@mojatatu.com>, Cong Wang <xiyou.wangcong@gmail.com>,
+ Jiri Pirko <jiri@resnulli.us>, Marcelo Ricardo Leitner
+ <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, Martin
+ Schiller <ms@dev.tdt.de>
+Cc: netdev@vger.kernel.org, linux-s390@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-sctp@vger.kernel.org, 
+	linux-x25@vger.kernel.org
+Date: Sun, 25 Aug 2024 07:52:45 +0000
+In-Reply-To: <20240822-net-spell-v1-0-3a98971ce2d2@kernel.org>
+References: <20240822-net-spell-v1-0-3a98971ce2d2@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Juefei Pu <juefei.pu@email.ucr.edu>
-Date: Sat, 24 Aug 2024 19:43:30 -0700
-Message-ID: <CANikGpfm_DbtXV9+omVrZhGiFA3iVEb=JeE1OQwvB3cXXDPoag@mail.gmail.com>
-Subject: BUG: general protection fault in sctp_inet6addr_event
-To: marcelo.leitner@gmail.com, lucien.xin@gmail.com, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	linux-sctp@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 
-Hello,
-We found the following issue using syzkaller on Linux v6.10.
-In `sctp_inet6addr_event`, a general protection fault error is
-triggered when trying to execute `list_for_each_entry_safe(addr, temp,
-&net->sctp.local_addr_list, list) { ...`
-According to the report, it looks like the register $rax (propagated
-from $r15) is unexpectedly set to null, causing an null-pointer
-dereference issue.
+QW0gRG9ubmVyc3RhZywgZGVtIDIyLjA4LjIwMjQgdW0gMTM6NTcgKzAxMDAgc2NocmllYiBTaW1v
+biBIb3JtYW46Cj4gVGhpcyBwYXRjaHNldCBhZGRyZXNzZXMgYSBudW1iZXIgb2Ygc3BlbGxpbmcg
+ZXJyb3JzIGluIGNvbW1lbnRzIGluCj4gTmV0d29ya2luZyBmaWxlcyB1bmRlciBpbmNsdWRlLywg
+YW5kIGZpbGVzIGluIG5ldC9jb3JlLy4gU3BlbGxpbmcKPiBwcm9ibGVtcyBhcmUgYXMgZmxhZ2dl
+ZCBieSBjb2Rlc3BlbGwuCj4gCj4gSXQgYWltcyB0byBwcm92aWRlIHBhdGNoZXMgdGhhdCBjYW4g
+YmUgYWNjZXB0ZWQgZGlyZWN0bHkgaW50byBuZXQtCj4gbmV4dC4KPiBBbmQgc3BsaXRzIHBhdGNo
+ZXMgdXAgYmFzZWQgb24gbWFpbnRhaW5lciBib3VuZGFyaWVzOiBtYW55IHRoaW5ncwo+IGZlZWQg
+ZGlyZWN0bHkgaW50byBuZXQtbmV4dC4gVGhpcyBpcyBhIGNvbXBsZXggcHJvY2VzcyBhbmQgSQo+
+IGFwb2xvZ2lzZQo+IGZvciBhbnkgZXJyb3JzLgoKQXJlIHlvdSBhd2FyZSB0aGF0IHRoaXMgbGVz
+c2VucyBnaXQgYmxhbWUncyBhYmlsaXR5IHRvIHByb3ZpZGUgdGhlCmxhdGVzdCByZWxldmFudCBj
+aGFuZ2UgYW5kIGFzc29jaWF0ZWQgY29tbWl0IG1lc3NhZ2U/CgpNYW55IHNvZnR3YXJlIHByb2pl
+Y3RzIHN1ZmZlciBmcm9tIHdoaXRlc3BhY2UgYW5kIHNwZWxsaW5nIGZpeGVzCnByZXZlbnRpbmcg
+Z2l0IGJsYW1lIGZyb20gZmlndXJpbmcgb3V0IHllYXJzIGxhdGVyIHdoYXQgb3JpZ2luYWwgY29k
+ZQp3YXMgaW50ZW5kZWQgdG8gZG8uCgpJJ2QgY29uc2lkZXIgdGhhdCBpbXByb3Zpbmcgc3BlbGxp
+bmcgbWlnaHQgbm90IHdpbiB0aGF0IGNvc3QtYmVuZWZpdC0KcmF0aW8uCgoKUmVnYXJkcywKUC4K
+Cgo+IAo+IEkgYWxzbyBwbGFuIHRvIGFkZHJlc3MsIHZpYSBzZXBhcmF0ZSBwYXRjaGVzLCBzcGVs
+bGluZyBlcnJvcnMgaW4KPiBvdGhlcgo+IGZpbGVzIGluIHRoZSBzYW1lIGRpcmVjdG9yaWVzLCBm
+b3IgZmlsZXMgd2hvc2UgY2hhbmdlcyB0eXBpY2FsbHkgZ28KPiB0aHJvdWdoIHRyZWVzIG90aGVy
+IHRoYW4gbmV0LW5leHQgKHdoaWNoIGZlZWQgaW50byBuZXQtbmV4dCkuCj4gCj4gLS0tCj4gU2lt
+b24gSG9ybWFuICgxMyk6Cj4gwqDCoMKgwqDCoCBwYWNrZXQ6IENvcnJlY3Qgc3BlbGxpbmcgaW4g
+aWZfcGFja2V0LmgKPiDCoMKgwqDCoMKgIHMzOTAvaXVjdjogQ29ycmVjdCBzcGVsbGluZyBpbiBp
+dWN2LmgKPiDCoMKgwqDCoMKgIGlwX3R1bm5lbDogQ29ycmVjdCBzcGVsbGluZyBpbiBpcF90dW5u
+ZWxzLmgKPiDCoMKgwqDCoMKgIGlwdjY6IENvcnJlY3Qgc3BlbGxpbmcgaW4gaXB2Ni5oCj4gwqDC
+oMKgwqDCoCBib25kaW5nOiBDb3JyZWN0IHNwZWxsaW5nIGluIGhlYWRlcnMKPiDCoMKgwqDCoMKg
+IG5ldDogcXVhbGNvbW06IHJtbmV0OiBDb3JyZWN0IHNwZWxsaW5nIGluIGlmX3JtbmV0LmgKPiDC
+oMKgwqDCoMKgIG5ldGxhYmVsOiBDb3JyZWN0IHNwZWxsaW5nIGluIG5ldGxhYmVsLmgKPiDCoMKg
+wqDCoMKgIE5GQzogQ29ycmVjdCBzcGVsbGluZyBpbiBoZWFkZXJzCj4gwqDCoMKgwqDCoCBuZXQ6
+IHNjaGVkOiBDb3JyZWN0IHNwZWxsaW5nIGluIGhlYWRlcnMKPiDCoMKgwqDCoMKgIHNjdHA6IENv
+cnJlY3Qgc3BlbGxpbmcgaW4gaGVhZGVycwo+IMKgwqDCoMKgwqAgeDI1OiBDb3JyZWN0IHNwZWxs
+aW5nIGluIHgyNS5oCj4gwqDCoMKgwqDCoCBuZXQ6IENvcnJlY3Qgc3BlbGxpbmcgaW4gaGVhZGVy
+cwo+IMKgwqDCoMKgwqAgbmV0OiBDb3JyZWN0IHNwZWxsaW5nIGluIG5ldC9jb3JlCj4gCj4gwqBp
+bmNsdWRlL2xpbnV4L2V0aGVyZGV2aWNlLmjCoMKgwqAgfMKgIDIgKy0KPiDCoGluY2x1ZGUvbGlu
+dXgvaWZfcm1uZXQuaMKgwqDCoMKgwqDCoCB8wqAgMiArLQo+IMKgaW5jbHVkZS9saW51eC9uZXRk
+ZXZpY2UuaMKgwqDCoMKgwqAgfMKgIDggKysrKy0tLS0KPiDCoGluY2x1ZGUvbmV0L2FkZHJjb25m
+LmjCoMKgwqDCoMKgwqDCoMKgIHzCoCAyICstCj4gwqBpbmNsdWRlL25ldC9ib25kXzNhZC5owqDC
+oMKgwqDCoMKgwqDCoCB8wqAgNSArKysrLQo+IMKgaW5jbHVkZS9uZXQvYm9uZF9hbGIuaMKgwqDC
+oMKgwqDCoMKgwqAgfMKgIDIgKy0KPiDCoGluY2x1ZGUvbmV0L2J1c3lfcG9sbC5owqDCoMKgwqDC
+oMKgwqAgfMKgIDIgKy0KPiDCoGluY2x1ZGUvbmV0L2NhaWYvY2FpZl9sYXllci5owqAgfMKgIDQg
+KystLQo+IMKgaW5jbHVkZS9uZXQvY2FpZi9jZnBrdC5owqDCoMKgwqDCoMKgIHzCoCAyICstCj4g
+wqBpbmNsdWRlL25ldC9kcm9wcmVhc29uLWNvcmUuaMKgIHzCoCA2ICsrKy0tLQo+IMKgaW5jbHVk
+ZS9uZXQvZHN0LmjCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqAgMiArLQo+IMKgaW5jbHVk
+ZS9uZXQvZHN0X2NhY2hlLmjCoMKgwqDCoMKgwqDCoCB8wqAgMiArLQo+IMKgaW5jbHVkZS9uZXQv
+ZXJzcGFuLmjCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqAgNCArKy0tCj4gwqBpbmNsdWRlL25ldC9o
+d2JtLmjCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKgIDQgKystLQo+IMKgaW5jbHVkZS9uZXQv
+aXBfdHVubmVscy5owqDCoMKgwqDCoMKgIHzCoCAyICstCj4gwqBpbmNsdWRlL25ldC9pcHY2LmjC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKgIDQgKystLQo+IMKgaW5jbHVkZS9uZXQvaXVjdi9p
+dWN2LmjCoMKgwqDCoMKgwqDCoCB8wqAgMiArLQo+IMKgaW5jbHVkZS9uZXQvbGxjX3BkdS5owqDC
+oMKgwqDCoMKgwqDCoMKgIHzCoCAyICstCj4gwqBpbmNsdWRlL25ldC9uZXRsYWJlbC5owqDCoMKg
+wqDCoMKgwqDCoCB8wqAgMiArLQo+IMKgaW5jbHVkZS9uZXQvbmV0bGluay5owqDCoMKgwqDCoMKg
+wqDCoMKgIHwgMTYgKysrKysrKystLS0tLS0tLQo+IMKgaW5jbHVkZS9uZXQvbmV0bnMvc2N0cC5o
+wqDCoMKgwqDCoMKgIHzCoCA0ICsrLS0KPiDCoGluY2x1ZGUvbmV0L25mYy9uY2kuaMKgwqDCoMKg
+wqDCoMKgwqDCoCB8wqAgMiArLQo+IMKgaW5jbHVkZS9uZXQvbmZjL25mYy5owqDCoMKgwqDCoMKg
+wqDCoMKgIHzCoCA4ICsrKystLS0tCj4gwqBpbmNsdWRlL25ldC9wa3RfY2xzLmjCoMKgwqDCoMKg
+wqDCoMKgwqAgfMKgIDIgKy0KPiDCoGluY2x1ZGUvbmV0L3JlZC5owqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqAgfMKgIDggKysrKy0tLS0KPiDCoGluY2x1ZGUvbmV0L3JlZ3VsYXRvcnkuaMKgwqDC
+oMKgwqDCoCB8wqAgMiArLQo+IMKgaW5jbHVkZS9uZXQvc2N0cC9zY3RwLmjCoMKgwqDCoMKgwqDC
+oCB8wqAgMiArLQo+IMKgaW5jbHVkZS9uZXQvc2N0cC9zdHJ1Y3RzLmjCoMKgwqDCoCB8IDIwICsr
+KysrKysrKystLS0tLS0tLS0tCj4gwqBpbmNsdWRlL25ldC9zb2NrLmjCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqAgfMKgIDQgKystLQo+IMKgaW5jbHVkZS9uZXQvdWRwLmjCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCB8wqAgMiArLQo+IMKgaW5jbHVkZS9uZXQveDI1LmjCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCB8wqAgMiArLQo+IMKgaW5jbHVkZS91YXBpL2xpbnV4L2lmX3BhY2tldC5oIHzC
+oCA3ICsrKystLS0KPiDCoGluY2x1ZGUvdWFwaS9saW51eC9pbi5owqDCoMKgwqDCoMKgwqAgfMKg
+IDIgKy0KPiDCoGluY2x1ZGUvdWFwaS9saW51eC9pbmV0X2RpYWcuaCB8wqAgMiArLQo+IMKgbmV0
+L2NvcmUvZGV2LmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqAgNiArKystLS0K
+PiDCoG5ldC9jb3JlL2Rldl9hZGRyX2xpc3RzLmPCoMKgwqDCoMKgIHzCoCA2ICsrKy0tLQo+IMKg
+bmV0L2NvcmUvZmliX3J1bGVzLmPCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqAgMiArLQo+IMKgbmV0
+L2NvcmUvZ3JvLmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqAgMiArLQo+IMKg
+bmV0L2NvcmUvbmV0cG9sbC5jwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoCAyICstCj4gwqBu
+ZXQvY29yZS9wa3RnZW4uY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgMTAgKysrKystLS0t
+LQo+IMKgbmV0L2NvcmUvc2tidWZmLmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqAgNCAr
+Ky0tCj4gwqBuZXQvY29yZS9zb2NrLmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKg
+IDYgKysrLS0tCj4gwqBuZXQvY29yZS91dGlscy5jwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oCB8wqAgMiArLQo+IMKgNDMgZmlsZXMgY2hhbmdlZCwgOTMgaW5zZXJ0aW9ucygrKSwgODkgZGVs
+ZXRpb25zKC0pCj4gCj4gYmFzZS1jb21taXQ6IDAwMWI5OGM5ODk3MzUyZTkxNGM3MWQ4ZmZiZmE5
+Yjc5YTZlMTJjM2MKPiAKPiAKCg==
 
-
-Unfortunately, the syzkaller failed to generate a reproducer.
-But at least we have the report:
-
-bond0 (unregistering): (slave bond_slave_0): Releasing backup interface
-bond0 (unregistering): (slave bond_slave_1): Releasing backup interface
-bond0 (unregistering): Released all slaves
-Oops: general protection fault, probably for non-canonical address
-0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN PTI
-KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-CPU: 0 PID: 16764 Comm: kworker/u4:10 Not tainted 6.10.0 #13
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
-Workqueue: netns cleanup_net
-RIP: 0010:sctp_inet6addr_event+0x118/0x6e0
-Code: 44 24 08 48 89 44 24 40 4c 89 e0 48 c1 e8 03 48 89 44 24 38 4c
-89 64 24 28 4c 89 74 24 30 4c 89 f8 48 c1 e8 03 48 89 44 24 48 <42> 80
-3c 28 00 74 08 4c 89 ff e8 89 25 b3 f7 49 8b 07 48 89 44 24
-RSP: 0018:ffffc9000a037340 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffff888024170000
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 000000000000000a
-RBP: ffff88802e8ed520 R08: ffffffff8a413727 R09: fffff52001406e58
-R10: dffffc0000000000 R11: fffff52001406e58 R12: ffff88801856d000
-R13: dffffc0000000000 R14: ffff88802cd22b88 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff888063a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f10a8812088 CR3: 0000000028e84000 CR4: 0000000000350ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- notifier_call_chain kernel/notifier.c:93 [inline]
- atomic_notifier_call_chain+0x195/0x2d0 kernel/notifier.c:231
- addrconf_ifdown+0xedb/0x1b50 net/ipv6/addrconf.c:3980
- addrconf_notify+0x3c4/0x1000
- notifier_call_chain kernel/notifier.c:93 [inline]
- raw_notifier_call_chain+0xe0/0x180 kernel/notifier.c:461
- call_netdevice_notifiers_extack net/core/dev.c:2030 [inline]
- call_netdevice_notifiers net/core/dev.c:2044 [inline]
- dev_close_many+0x352/0x4e0 net/core/dev.c:1585
- dev_close+0x1bb/0x2c0 net/core/dev.c:1607
- cfg80211_shutdown_all_interfaces+0xbc/0x1d0 net/wireless/core.c:280
- ieee80211_remove_interfaces+0x111/0x690 net/mac80211/iface.c:2278
- ieee80211_unregister_hw+0x59/0x2d0 net/mac80211/main.c:1659
- mac80211_hwsim_del_radio+0x2ba/0x4b0
-drivers/net/wireless/virtual/mac80211_hwsim.c:5576
- hwsim_exit_net+0x5bd/0x660 drivers/net/wireless/virtual/mac80211_hwsim.c:6453
- ops_exit_list net/core/net_namespace.c:173 [inline]
- cleanup_net+0x810/0xcd0 net/core/net_namespace.c:640
- process_one_work kernel/workqueue.c:3248 [inline]
- process_scheduled_works+0x977/0x1410 kernel/workqueue.c:3329
- worker_thread+0xaa0/0x1020 kernel/workqueue.c:3409
- kthread+0x2eb/0x380 kernel/kthread.c:389
- ret_from_fork+0x49/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:244
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:sctp_inet6addr_event+0x118/0x6e0
-Code: 44 24 08 48 89 44 24 40 4c 89 e0 48 c1 e8 03 48 89 44 24 38 4c
-89 64 24 28 4c 89 74 24 30 4c 89 f8 48 c1 e8 03 48 89 44 24 48 <42> 80
-3c 28 00 74 08 4c 89 ff e8 89 25 b3 f7 49 8b 07 48 89 44 24
-RSP: 0018:ffffc9000a037340 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffff888024170000
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 000000000000000a
-RBP: ffff88802e8ed520 R08: ffffffff8a413727 R09: fffff52001406e58
-R10: dffffc0000000000 R11: fffff52001406e58 R12: ffff88801856d000
-R13: dffffc0000000000 R14: ffff88802cd22b88 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff888063a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f10a8812088 CR3: 0000000028e84000 CR4: 0000000000350ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0: 44 24 08             rex.R and $0x8,%al
-   3: 48 89 44 24 40       mov    %rax,0x40(%rsp)
-   8: 4c 89 e0             mov    %r12,%rax
-   b: 48 c1 e8 03           shr    $0x3,%rax
-   f: 48 89 44 24 38       mov    %rax,0x38(%rsp)
-  14: 4c 89 64 24 28       mov    %r12,0x28(%rsp)
-  19: 4c 89 74 24 30       mov    %r14,0x30(%rsp)
-  1e: 4c 89 f8             mov    %r15,%rax
-  21: 48 c1 e8 03           shr    $0x3,%rax
-  25: 48 89 44 24 48       mov    %rax,0x48(%rsp)
-* 2a: 42 80 3c 28 00       cmpb   $0x0,(%rax,%r13,1) <-- trapping instruction
-  2f: 74 08                 je     0x39
-  31: 4c 89 ff             mov    %r15,%rdi
-  34: e8 89 25 b3 f7       call   0xf7b325c2
-  39: 49 8b 07             mov    (%r15),%rax
-  3c: 48                   rex.W
-  3d: 89                   .byte 0x89
-  3e: 44                   rex.R
-  3f: 24                   .byte 0x24
 
