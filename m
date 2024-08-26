@@ -1,181 +1,149 @@
-Return-Path: <linux-sctp+bounces-219-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-220-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E09A295F615
-	for <lists+linux-sctp@lfdr.de>; Mon, 26 Aug 2024 18:09:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A15795F67B
+	for <lists+linux-sctp@lfdr.de>; Mon, 26 Aug 2024 18:25:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8DD0C282876
-	for <lists+linux-sctp@lfdr.de>; Mon, 26 Aug 2024 16:09:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 402A91F25459
+	for <lists+linux-sctp@lfdr.de>; Mon, 26 Aug 2024 16:25:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A94C719342E;
-	Mon, 26 Aug 2024 16:09:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93AFE1957FC;
+	Mon, 26 Aug 2024 16:24:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LA/XpniJ"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14C1A4C96
-	for <linux-sctp@vger.kernel.org>; Mon, 26 Aug 2024 16:09:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 093701957E2;
+	Mon, 26 Aug 2024 16:24:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724688567; cv=none; b=dc3zR8SKyOiUd9RRYi7VdlnuUUuDB/N1I1+G0y5w2vt/nX6pp4QKJH1gjqgWizCEuNStoVqI8755fQI4NJjNrFkul/w7knJzQKntzEXadfg/Wqjq61zrhFd07YoFkDzKavI2AD6GbFy+qeHisaYTtjCp2H0Pk5ksSLNiNrKtC5c=
+	t=1724689490; cv=none; b=HaxuOwrP+rBq5vb2WGPCyTGq3rpwDWswGmdU5bz13IiN7nId7mKt4n/6N49jPNn5IgNLIC1DLrKoG0FXspbgpw2drT56m1HF+AC71GV0mG0xSDTraXy1stVtLwMMnu0tLkj8cv6KB6CwojDc70d7AVuBgDQBcMA56kz/C4lDYmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724688567; c=relaxed/simple;
-	bh=xRFXY7a1NS7rsT5IPKt+2U4xXWn38dio2H9Pw0Geql8=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=YIyegkPWwXcW8Aq7p5PAN4AuBiwUfBPYYqJazYUYsMFMIiCVqaZMym3cmZ+cHK6mPT0cjb+bPsfA3q+wGVzL22sMqjlZiy94IOvISN+PJV/4o8+mS5T6iTbP4bfy5ytXAkccliW3ZHbrw+c0H5HWvcOUkZhFfAQ4mCfYmxjqV04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-39d27488930so46085755ab.3
-        for <linux-sctp@vger.kernel.org>; Mon, 26 Aug 2024 09:09:25 -0700 (PDT)
+	s=arc-20240116; t=1724689490; c=relaxed/simple;
+	bh=QT6Du/3VIcwYOfo4b6uM70akCGjVYihZamh0JczG1mw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OC6kYusBmYxb/IaQPSmby62jnS4lTQ75v5DM1yrG5T9RtrWMXJGZS5jrpEBk5E7msgqDUbl012C31fGxlpCRx9fPyV/nurH1btcuFQJl95mcuT2BQvBqAF8987d1M1N6PYY88cMJd9AQbxVqPLvUU88NiRpkRjJh2dNxSAXA37A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LA/XpniJ; arc=none smtp.client-ip=209.85.166.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-39d311d8091so19035625ab.3;
+        Mon, 26 Aug 2024 09:24:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724689488; x=1725294288; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PG+uOPG9GlWGrQItB6Aw5fIBX1uYB1rriS7aFcacuVs=;
+        b=LA/XpniJwBkEXM5VQGajfTL+68fUphXXGvphp1Qk7tKbrM9HZheyC+CTAPBAuahySk
+         GJ9P82Jips5fgPJ8qm3rek+IGkscHb1orvEgaQYY6WyIZ/P5tF93vEPPr9hNq9orNyTE
+         WsOe7sRDiPYAPX0qVht09RqmgAyLo0v2nAPVUCtx5rFessZkOECd2AlXpUp2aWxQ4Ta6
+         UOO5d6ZlaAunrXz9UeW5rB0nhY8IrZCeE27+h93skCuaZQ5sLQ6vanObI7p8tqEJAlp3
+         0NrMLw6EAcJSut9im6SIDBHZaG792UmYwzQ5aPSP3fQCR2hGs6eM6Oz6vTTkKi++FY7Q
+         TOGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724688565; x=1725293365;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=S0mc0zFjo46BT2fOdbAUWNVmQV1JwvohMKwJbBgfLZI=;
-        b=CsdbFcFSvrRv3DNhXNKD7ahWBbiQ5CZsAGvBwymKLqKDpHhpEe7uok64hOa/mo8BFG
-         eZC1jfAHPji1zh6t8n6XB7Tb/uIGTnri6P2cDnpDGndOukbpvFaeO88T3NKoa5miLgvk
-         eSTA5s1Ph1uoRPi1l6CvPacdbdXajbwPXo9+dkY0GwcPziXU9ujPmovt1eGoFMnZXIH0
-         X96XAPOzXK1DqEuHDZ6HGvXnOacwKmam+V8H7d4DHhH7jWqq7yl5dV6X8D3klxryOrtH
-         AZLGK3LJa3PDXTXyifhASCa0ndGvFa6yfNm4sjG+Y/DiHrxXR+a54D0uoH8Y1LeudJsj
-         6kbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUSK0zu0ShIKIX+uYJtg+qZmWhFfTZ6Rw2Lwrewfr5g9LAByCUVYm76O9p2oQMj4u5Xoi8GS0J9kfdg@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3ttJPE8gL7TppRAdfLfbI/DrudvRFm95OEJkAjG7hPXItkn2O
-	fVeYiNH+cLbfYHoqdTiB1vgMZ3hJ6DltNEVgb5oRGm2W0r31gwD0dXEGjsEwAp8/eOYe6Hl/1yg
-	/NPO3F93eLfJV6kvimeo8dGwJ+eplx66JbR0E9NUrRuEIKufSc91znfo=
-X-Google-Smtp-Source: AGHT+IGoUMvqtqNrZf06zsHOHnmrGyNj+DWyQGAwEMMxlJdkSBcPdRRHX4Wfi6NwwZXbVgIrQadcm5S3xyQWNL6vU9Cw6EenfmJ8
+        d=1e100.net; s=20230601; t=1724689488; x=1725294288;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PG+uOPG9GlWGrQItB6Aw5fIBX1uYB1rriS7aFcacuVs=;
+        b=mvopcRmTsThjRoWKF03V8/f7gY/wRPZODuSRH9nNnz+TSVielIVvJzVF9SMj9MVuRS
+         smMOT+P3VfwWghqikfenj9NAXrjrE8KCv39wpTMxU2Rpa4d49eGGrEiNoLiVtVclicde
+         d0WVQ4i7PGgkTnG+0RQ8H51Lxo3e+iQDdCRBfVy6V3XANw/S33kPvpbkBqWsuiXyUpye
+         MiBKGZEupy4f1+3xF6U/XXDJvDqsZcvA0AiOuCeE6hROYigMnVq3whFQ5OSiq0IWYqh0
+         Spbxu4m+Qr4yuHS2+DdDbkTwuNowKrMLwp4phheHOvJwTAqKVE2vInygjPMv1Y12Pp7t
+         kagw==
+X-Forwarded-Encrypted: i=1; AJvYcCVCu4dOJ/6BR8lVReOtiE5xNi8qJYSf4eqQSzYFR7zIbF5c6nT0mSPHB+gVA7Ci/KbeRk2JmOkvXKCpcYA=@vger.kernel.org, AJvYcCVH8lmPCkrIt5ysOzxc5g1wAfZMi4LWEKUIe4+QAjJUn9ZF3NV8ynvY0qvsXRzk3iRHSxJpu1ng3HV+zg==@vger.kernel.org, AJvYcCXNH9/Hji/q02FxefcHDYVTh8Wo1eu/RCJboqgyJB3GjxRdhGlR6d4/zI8Ci5TQovf8mlZjVM64@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJQtHlylwFJzNkiERzXuYR6FXdHJxcdfjn/sY5UxOyLdoKlQ++
+	2kkQA7k+rBbD2ryDIAU4W59Z+J9l8Ymefj9RrSEKr8I/RJwso6ml092NXZp6k1zM//2vXAGLesi
+	iGz3I4zmyTXO8GfHT9jnq9pOZopQ=
+X-Google-Smtp-Source: AGHT+IFD/I1doeGA/s9YIxhImbIT5SG7qNJzbRRVL6Wz8AlHXbYWrDz1Q3Dc1pto2rgb623eIVc6e/0ycxACqCy2El8=
+X-Received: by 2002:a05:6e02:1808:b0:39b:330b:bb25 with SMTP id
+ e9e14a558f8ab-39e63e807c0mr2717785ab.12.1724689487928; Mon, 26 Aug 2024
+ 09:24:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:20c4:b0:397:ca8e:d377 with SMTP id
- e9e14a558f8ab-39e63acc9b5mr120435ab.0.1724688565033; Mon, 26 Aug 2024
- 09:09:25 -0700 (PDT)
-Date: Mon, 26 Aug 2024 09:09:25 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000044832c06209859bd@google.com>
-Subject: [syzbot] [sctp?] KMSAN: uninit-value in sctp_sf_ootb
-From: syzbot <syzbot+f0cbb34d39392f2746ca@syzkaller.appspotmail.com>
-To: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+References: <00000000000044832c06209859bd@google.com>
+In-Reply-To: <00000000000044832c06209859bd@google.com>
+From: Xin Long <lucien.xin@gmail.com>
+Date: Mon, 26 Aug 2024 12:24:35 -0400
+Message-ID: <CADvbK_fopx-d-3N9B84C58D+Z_eSiAyeedMH+31SMJXqHNJzfg@mail.gmail.com>
+Subject: Re: [syzbot] [sctp?] KMSAN: uninit-value in sctp_sf_ootb
+To: syzbot <syzbot+f0cbb34d39392f2746ca@syzkaller.appspotmail.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
 	linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org, 
-	lucien.xin@gmail.com, marcelo.leitner@gmail.com, netdev@vger.kernel.org, 
-	pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+	marcelo.leitner@gmail.com, netdev@vger.kernel.org, pabeni@redhat.com, 
+	syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+On Mon, Aug 26, 2024 at 12:09=E2=80=AFPM syzbot
+<syzbot+f0cbb34d39392f2746ca@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    d2bafcf224f3 Merge tag 'cgroup-for-6.11-rc4-fixes' of git=
+:..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D15e9b7f598000=
+0
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D62f882de89667=
+5a6
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3Df0cbb34d39392f2=
+746ca
+> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Deb=
+ian) 2.40
+>
+> Unfortunately, I don't have any reproducer for this issue yet.
+>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/17f6ee87834d/dis=
+k-d2bafcf2.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/7783769858d1/vmlinu=
+x-d2bafcf2.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/45248109d188/b=
+zImage-d2bafcf2.xz
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the comm=
+it:
+> Reported-by: syzbot+f0cbb34d39392f2746ca@syzkaller.appspotmail.com
+>
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+> BUG: KMSAN: uninit-value in sctp_sf_ootb+0x7f5/0xce0 net/sctp/sm_statefun=
+s.c:3702
+it seems we need a similar fix in sctp_sf_ootb() as:
 
-syzbot found the following issue on:
+commit 50619dbf8db77e98d821d615af4f634d08e22698
+Author: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Date:   Mon Jun 28 16:13:42 2021 -0300
 
-HEAD commit:    d2bafcf224f3 Merge tag 'cgroup-for-6.11-rc4-fixes' of git:..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=15e9b7f5980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=62f882de896675a6
-dashboard link: https://syzkaller.appspot.com/bug?extid=f0cbb34d39392f2746ca
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/17f6ee87834d/disk-d2bafcf2.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/7783769858d1/vmlinux-d2bafcf2.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/45248109d188/bzImage-d2bafcf2.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f0cbb34d39392f2746ca@syzkaller.appspotmail.com
-
-=====================================================
-BUG: KMSAN: uninit-value in sctp_sf_ootb+0x7f5/0xce0 net/sctp/sm_statefuns.c:3702
- sctp_sf_ootb+0x7f5/0xce0 net/sctp/sm_statefuns.c:3702
- sctp_do_sm+0x181/0x93d0 net/sctp/sm_sideeffect.c:1166
- sctp_endpoint_bh_rcv+0xc38/0xf90 net/sctp/endpointola.c:407
- sctp_inq_push+0x2ef/0x380 net/sctp/inqueue.c:88
- sctp_rcv+0x3831/0x3b20 net/sctp/input.c:243
- sctp4_rcv+0x42/0x50 net/sctp/protocol.c:1158
- ip_protocol_deliver_rcu+0xb51/0x13d0 net/ipv4/ip_input.c:205
- ip_local_deliver_finish+0x336/0x500 net/ipv4/ip_input.c:233
- NF_HOOK include/linux/netfilter.h:314 [inline]
- ip_local_deliver+0x21f/0x490 net/ipv4/ip_input.c:254
- dst_input include/net/dst.h:460 [inline]
- ip_rcv_finish+0x4a2/0x520 net/ipv4/ip_input.c:449
- NF_HOOK include/linux/netfilter.h:314 [inline]
- ip_rcv+0xcd/0x380 net/ipv4/ip_input.c:569
- __netif_receive_skb_one_core net/core/dev.c:5661 [inline]
- __netif_receive_skb+0x319/0xa00 net/core/dev.c:5775
- netif_receive_skb_internal net/core/dev.c:5861 [inline]
- netif_receive_skb+0x58/0x660 net/core/dev.c:5921
- tun_rx_batched+0x3ee/0x980 drivers/net/tun.c:1549
- tun_get_user+0x5677/0x6b50 drivers/net/tun.c:2006
- tun_chr_write_iter+0x3af/0x5d0 drivers/net/tun.c:2052
- new_sync_write fs/read_write.c:497 [inline]
- vfs_write+0xb2f/0x1550 fs/read_write.c:590
- ksys_write+0x20f/0x4c0 fs/read_write.c:643
- __do_sys_write fs/read_write.c:655 [inline]
- __se_sys_write fs/read_write.c:652 [inline]
- __x64_sys_write+0x93/0xe0 fs/read_write.c:652
- x64_sys_call+0x306a/0x3ba0 arch/x86/include/generated/asm/syscalls_64.h:2
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xcd/0x1e0 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-Uninit was created at:
- slab_post_alloc_hook mm/slub.c:3994 [inline]
- slab_alloc_node mm/slub.c:4037 [inline]
- kmem_cache_alloc_node_noprof+0x6bf/0xb80 mm/slub.c:4080
- kmalloc_reserve+0x13d/0x4a0 net/core/skbuff.c:583
- pskb_expand_head+0x222/0x19c0 net/core/skbuff.c:2259
- __skb_cow include/linux/skbuff.h:3646 [inline]
- skb_cow include/linux/skbuff.h:3665 [inline]
- ip_rcv_options net/ipv4/ip_input.c:272 [inline]
- ip_rcv_finish_core+0xf3d/0x1fe0 net/ipv4/ip_input.c:387
- ip_rcv_finish+0x2cc/0x520 net/ipv4/ip_input.c:447
- NF_HOOK include/linux/netfilter.h:314 [inline]
- ip_rcv+0xcd/0x380 net/ipv4/ip_input.c:569
- __netif_receive_skb_one_core net/core/dev.c:5661 [inline]
- __netif_receive_skb+0x319/0xa00 net/core/dev.c:5775
- netif_receive_skb_internal net/core/dev.c:5861 [inline]
- netif_receive_skb+0x58/0x660 net/core/dev.c:5921
- tun_rx_batched+0x3ee/0x980 drivers/net/tun.c:1549
- tun_get_user+0x5677/0x6b50 drivers/net/tun.c:2006
- tun_chr_write_iter+0x3af/0x5d0 drivers/net/tun.c:2052
- new_sync_write fs/read_write.c:497 [inline]
- vfs_write+0xb2f/0x1550 fs/read_write.c:590
- ksys_write+0x20f/0x4c0 fs/read_write.c:643
- __do_sys_write fs/read_write.c:655 [inline]
- __se_sys_write fs/read_write.c:652 [inline]
- __x64_sys_write+0x93/0xe0 fs/read_write.c:652
- x64_sys_call+0x306a/0x3ba0 arch/x86/include/generated/asm/syscalls_64.h:2
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xcd/0x1e0 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-CPU: 1 UID: 0 PID: 13990 Comm: syz.3.1326 Not tainted 6.11.0-rc4-syzkaller-00255-gd2bafcf224f3 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/06/2024
-=====================================================
+    sctp: add size validation when walking chunks
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
+index 5adf0c0a6c1a..71b9feaf36bc 100644
+--- a/net/sctp/sm_statefuns.c
++++ b/net/sctp/sm_statefuns.c
+@@ -3741,7 +3741,7 @@ enum sctp_disposition sctp_sf_ootb(struct net *net,
+                }
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+                ch =3D (struct sctp_chunkhdr *)ch_end;
+-       } while (ch_end < skb_tail_pointer(skb));
++       } while (ch_end + sizeof(*ch) < skb_tail_pointer(skb));
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+        if (ootb_shut_ack)
+                return sctp_sf_shut_8_4_5(net, ep, asoc, type, arg, command=
+s);
 
