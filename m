@@ -1,134 +1,181 @@
-Return-Path: <linux-sctp+bounces-218-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-219-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4788D95F50B
-	for <lists+linux-sctp@lfdr.de>; Mon, 26 Aug 2024 17:29:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E09A295F615
+	for <lists+linux-sctp@lfdr.de>; Mon, 26 Aug 2024 18:09:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B8141C20D49
-	for <lists+linux-sctp@lfdr.de>; Mon, 26 Aug 2024 15:29:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8DD0C282876
+	for <lists+linux-sctp@lfdr.de>; Mon, 26 Aug 2024 16:09:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E40118FC85;
-	Mon, 26 Aug 2024 15:29:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gS51vG/W"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A94C719342E;
+	Mon, 26 Aug 2024 16:09:27 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CF6017B51C;
-	Mon, 26 Aug 2024 15:29:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14C1A4C96
+	for <linux-sctp@vger.kernel.org>; Mon, 26 Aug 2024 16:09:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724686142; cv=none; b=FAgic3eSUKD73RLtkfuG9Vh63ePRGpBtFx75yIRkXWzuWHmZe6UXawS3REGZ+x0fuCd7NwE5imXTS8qmdhwN0YwY7safvxldaiGOK0xMTt7PBYPpMNvU+UW2BTr7dmfhuTN2ti5zpzef4zdRZR95bG12V35h6/zZH7DuyxPaDFE=
+	t=1724688567; cv=none; b=dc3zR8SKyOiUd9RRYi7VdlnuUUuDB/N1I1+G0y5w2vt/nX6pp4QKJH1gjqgWizCEuNStoVqI8755fQI4NJjNrFkul/w7knJzQKntzEXadfg/Wqjq61zrhFd07YoFkDzKavI2AD6GbFy+qeHisaYTtjCp2H0Pk5ksSLNiNrKtC5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724686142; c=relaxed/simple;
-	bh=Db9M8pHcif2iZSyJS5LWO4EnKkBJ13mQE6dsAebprkA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PB//IpoP4PWnLHhl0sFb51HnEixv5w8oRUVhpPiNC1548rwx/SbTVo+vMlOq3mDwgizlnGtWzCadwxxo098vv1iLDODoYPRGqcw5y+puhfRlC2hVtHnifv+8xJv9bzqWZNYWUpY4chR/e/LrG7inLNUBiJ9NWFDCd3+CBFbEy0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gS51vG/W; arc=none smtp.client-ip=209.85.166.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-824ee14f7bfso170050539f.1;
-        Mon, 26 Aug 2024 08:29:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724686139; x=1725290939; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oHip6bX20yVmNEISfUGqBe8fWDCd+Plq/nxFo7CBhWA=;
-        b=gS51vG/W/qchSJy4VJ2jW3KaeZyJyn4tPhXHLKMR3MNooY+mfzuEwAMME8XVpHqdHr
-         kJXkL8c4TGHPrR1V0fc0a6GxbSLP9F6wLrhT32qtgXbjem9cW4tjKtRkZRyz/cAw7eVi
-         Rr4/GGjsp8YKgWajtuaEq3A+k8vqU7e99qGJdqzUyY1NMXCYksy64nuHti6XdG/nJSAV
-         ZAM+wTY8LylVEJKyKbNs/LftpHB7lCn4quLYWHM5SZ4yWdsud8Eo93GHWdzMTKO0Hbab
-         FpOuNIYZNnZEzIT38/nnsQUSz1vqNW7S2NoEUYC7MdsUjHTCmE75ZXeZQI5Ql9nxcQNJ
-         lxIg==
+	s=arc-20240116; t=1724688567; c=relaxed/simple;
+	bh=xRFXY7a1NS7rsT5IPKt+2U4xXWn38dio2H9Pw0Geql8=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=YIyegkPWwXcW8Aq7p5PAN4AuBiwUfBPYYqJazYUYsMFMIiCVqaZMym3cmZ+cHK6mPT0cjb+bPsfA3q+wGVzL22sMqjlZiy94IOvISN+PJV/4o8+mS5T6iTbP4bfy5ytXAkccliW3ZHbrw+c0H5HWvcOUkZhFfAQ4mCfYmxjqV04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-39d27488930so46085755ab.3
+        for <linux-sctp@vger.kernel.org>; Mon, 26 Aug 2024 09:09:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724686139; x=1725290939;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oHip6bX20yVmNEISfUGqBe8fWDCd+Plq/nxFo7CBhWA=;
-        b=MGTzGgpsctgF25TLwqBJI36lIgsBIAyTZQG2Ww1MNoNuQpOInvJHZr9WwmyFadcWE/
-         9nVaZVx/eakVRRqDpLrgmLJlGa0HTayu/PfW/sX2BjruefnEi1lWJvPH0ZJsgCZNoeXv
-         WQr5AuYgoA7fmAlmik6UCmwtbamMYFOm3G/6UBhtIkjyv4tbL4iSjwccLYj3UohvbSFE
-         jFkBqBQaCyJvrMTzAAeWJSdt4ECoIzsaYzvNXK/vO4VAIazDneerciLNfJzH/aVGxQY9
-         OQL8vFDNJYDVgW8SxREC4uUkfFGr418Qk03B6uOAJfHWZKmi/xlNiuNmG0bUhKZc0h1D
-         Skug==
-X-Forwarded-Encrypted: i=1; AJvYcCUiou9Zs8SOag285RQChkjg6e/X3/JBMavWXMdkluF2qvdf9Le6KkTBJ3NF5ojoU46AP5pNpYMiSaw70Q==@vger.kernel.org, AJvYcCUmRXdSHk5glKwcqGWzYxql/Uir3eNSIqSBic+VuPNxWjCgglKc3TZvkpBBcv5+SGaJ35z1n5p6uA==@vger.kernel.org, AJvYcCVKTNB8XuFt96BvzMT6Z3ntrwpqb7C1aMn86t4bwxhK2MwuC+9pVDwz01qHGEUPehI23G2HeMZ4xr6POER8kF4majX6NDpa@vger.kernel.org, AJvYcCVLUN9oNNnr5785T0NqQhvSIXsBqDfQ78dbzsRL4kRKjXktPxvdsspGmEn3W+LzTK+WhuLqEUNrfaoUpiY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZmpjEXwUf26R8mIld+1cv6AapstnWZjBJ5xUhkjExDTBZ1/XU
-	3msUnDW62FjYKNPdeJY/WBINT1M8mbOaEAQyEg/gJBx+9nCtVvEpIYNR5RgCXNCjNAG8WA+02vs
-	21uuZU8pg9cOnI1y6BIo7eDKEQ6U=
-X-Google-Smtp-Source: AGHT+IGwKg+o6Rqr71Zd/HjBAsN+oF21sPFhuAJJlbur0FwudipAWhG6CUWz9M6Jo9DnXhoVvqlu7T8AVHRhkwwNpfQ=
-X-Received: by 2002:a05:6e02:1fc6:b0:375:ab6a:f701 with SMTP id
- e9e14a558f8ab-39e3c9757eamr126619065ab.5.1724686139465; Mon, 26 Aug 2024
- 08:28:59 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1724688565; x=1725293365;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S0mc0zFjo46BT2fOdbAUWNVmQV1JwvohMKwJbBgfLZI=;
+        b=CsdbFcFSvrRv3DNhXNKD7ahWBbiQ5CZsAGvBwymKLqKDpHhpEe7uok64hOa/mo8BFG
+         eZC1jfAHPji1zh6t8n6XB7Tb/uIGTnri6P2cDnpDGndOukbpvFaeO88T3NKoa5miLgvk
+         eSTA5s1Ph1uoRPi1l6CvPacdbdXajbwPXo9+dkY0GwcPziXU9ujPmovt1eGoFMnZXIH0
+         X96XAPOzXK1DqEuHDZ6HGvXnOacwKmam+V8H7d4DHhH7jWqq7yl5dV6X8D3klxryOrtH
+         AZLGK3LJa3PDXTXyifhASCa0ndGvFa6yfNm4sjG+Y/DiHrxXR+a54D0uoH8Y1LeudJsj
+         6kbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUSK0zu0ShIKIX+uYJtg+qZmWhFfTZ6Rw2Lwrewfr5g9LAByCUVYm76O9p2oQMj4u5Xoi8GS0J9kfdg@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3ttJPE8gL7TppRAdfLfbI/DrudvRFm95OEJkAjG7hPXItkn2O
+	fVeYiNH+cLbfYHoqdTiB1vgMZ3hJ6DltNEVgb5oRGm2W0r31gwD0dXEGjsEwAp8/eOYe6Hl/1yg
+	/NPO3F93eLfJV6kvimeo8dGwJ+eplx66JbR0E9NUrRuEIKufSc91znfo=
+X-Google-Smtp-Source: AGHT+IGoUMvqtqNrZf06zsHOHnmrGyNj+DWyQGAwEMMxlJdkSBcPdRRHX4Wfi6NwwZXbVgIrQadcm5S3xyQWNL6vU9Cw6EenfmJ8
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240826130711.141271-1-omosnace@redhat.com>
-In-Reply-To: <20240826130711.141271-1-omosnace@redhat.com>
-From: Xin Long <lucien.xin@gmail.com>
-Date: Mon, 26 Aug 2024 11:28:48 -0400
-Message-ID: <CADvbK_enZcjb8KWZQZYScGLsnYHs6a-9ez2YAb2guta3Tnuk=w@mail.gmail.com>
-Subject: Re: [PATCH net] sctp: fix association labeling in the duplicate
- COOKIE-ECHO case
-To: Ondrej Mosnacek <omosnace@redhat.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org, 
-	Vlad Yasevich <vyasevich@gmail.com>, Neil Horman <nhorman@tuxdriver.com>, 
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Paul Moore <paul@paul-moore.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, linux-sctp@vger.kernel.org, 
-	selinux@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+X-Received: by 2002:a05:6e02:20c4:b0:397:ca8e:d377 with SMTP id
+ e9e14a558f8ab-39e63acc9b5mr120435ab.0.1724688565033; Mon, 26 Aug 2024
+ 09:09:25 -0700 (PDT)
+Date: Mon, 26 Aug 2024 09:09:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000044832c06209859bd@google.com>
+Subject: [syzbot] [sctp?] KMSAN: uninit-value in sctp_sf_ootb
+From: syzbot <syzbot+f0cbb34d39392f2746ca@syzkaller.appspotmail.com>
+To: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org, 
+	lucien.xin@gmail.com, marcelo.leitner@gmail.com, netdev@vger.kernel.org, 
+	pabeni@redhat.com, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 26, 2024 at 9:07=E2=80=AFAM Ondrej Mosnacek <omosnace@redhat.co=
-m> wrote:
->
-> sctp_sf_do_5_2_4_dupcook() currently calls security_sctp_assoc_request()
-> on new_asoc, but as it turns out, this association is always discarded
-> and the LSM labels never get into the final association (asoc).
->
-> This can be reproduced by having two SCTP endpoints try to initiate an
-> association with each other at approximately the same time and then peel
-> off the association into a new socket, which exposes the unitialized
-> labels and triggers SELinux denials.
->
-> Fix it by calling security_sctp_assoc_request() on asoc instead of
-> new_asoc. Xin Long also suggested limit calling the hook only to cases
-> A, B, and D, since in cases C and E the COOKIE ECHO chunk is discarded
-> and the association doesn't enter the ESTABLISHED state, so rectify that
-> as well.
->
-> One related caveat with SELinux and peer labeling: When an SCTP
-> connection is set up simultaneously in this way, we will end up with an
-> association that is initialized with security_sctp_assoc_request() on
-> both sides, so the MLS component of the security context of the
-> association will get swapped between the peers, instead of just one side
-> setting it to the other's MLS component. However, at that point
-> security_sctp_assoc_request() had already been called on both sides in
-> sctp_sf_do_unexpected_init() (on a temporary association) and thus if
-> the exchange didn't fail before due to MLS, it won't fail now either
-> (most likely both endpoints have the same MLS range).
->
-> Tested by:
->  - reproducer from https://src.fedoraproject.org/tests/selinux/pull-reque=
-st/530
->  - selinux-testsuite (https://github.com/SELinuxProject/selinux-testsuite=
-/)
->  - sctp-tests (https://github.com/sctp/sctp-tests) - no tests failed
->    that wouldn't fail also without the patch applied
->
-> Fixes: c081d53f97a1 ("security: pass asoc to sctp_assoc_request and sctp_=
-sk_clone")
-> Suggested-by: Xin Long <lucien.xin@gmail.com>
-> Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
+Hello,
 
-Acked-by: Xin Long <lucien.xin@gmail.com>
+syzbot found the following issue on:
+
+HEAD commit:    d2bafcf224f3 Merge tag 'cgroup-for-6.11-rc4-fixes' of git:..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15e9b7f5980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=62f882de896675a6
+dashboard link: https://syzkaller.appspot.com/bug?extid=f0cbb34d39392f2746ca
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/17f6ee87834d/disk-d2bafcf2.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7783769858d1/vmlinux-d2bafcf2.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/45248109d188/bzImage-d2bafcf2.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f0cbb34d39392f2746ca@syzkaller.appspotmail.com
+
+=====================================================
+BUG: KMSAN: uninit-value in sctp_sf_ootb+0x7f5/0xce0 net/sctp/sm_statefuns.c:3702
+ sctp_sf_ootb+0x7f5/0xce0 net/sctp/sm_statefuns.c:3702
+ sctp_do_sm+0x181/0x93d0 net/sctp/sm_sideeffect.c:1166
+ sctp_endpoint_bh_rcv+0xc38/0xf90 net/sctp/endpointola.c:407
+ sctp_inq_push+0x2ef/0x380 net/sctp/inqueue.c:88
+ sctp_rcv+0x3831/0x3b20 net/sctp/input.c:243
+ sctp4_rcv+0x42/0x50 net/sctp/protocol.c:1158
+ ip_protocol_deliver_rcu+0xb51/0x13d0 net/ipv4/ip_input.c:205
+ ip_local_deliver_finish+0x336/0x500 net/ipv4/ip_input.c:233
+ NF_HOOK include/linux/netfilter.h:314 [inline]
+ ip_local_deliver+0x21f/0x490 net/ipv4/ip_input.c:254
+ dst_input include/net/dst.h:460 [inline]
+ ip_rcv_finish+0x4a2/0x520 net/ipv4/ip_input.c:449
+ NF_HOOK include/linux/netfilter.h:314 [inline]
+ ip_rcv+0xcd/0x380 net/ipv4/ip_input.c:569
+ __netif_receive_skb_one_core net/core/dev.c:5661 [inline]
+ __netif_receive_skb+0x319/0xa00 net/core/dev.c:5775
+ netif_receive_skb_internal net/core/dev.c:5861 [inline]
+ netif_receive_skb+0x58/0x660 net/core/dev.c:5921
+ tun_rx_batched+0x3ee/0x980 drivers/net/tun.c:1549
+ tun_get_user+0x5677/0x6b50 drivers/net/tun.c:2006
+ tun_chr_write_iter+0x3af/0x5d0 drivers/net/tun.c:2052
+ new_sync_write fs/read_write.c:497 [inline]
+ vfs_write+0xb2f/0x1550 fs/read_write.c:590
+ ksys_write+0x20f/0x4c0 fs/read_write.c:643
+ __do_sys_write fs/read_write.c:655 [inline]
+ __se_sys_write fs/read_write.c:652 [inline]
+ __x64_sys_write+0x93/0xe0 fs/read_write.c:652
+ x64_sys_call+0x306a/0x3ba0 arch/x86/include/generated/asm/syscalls_64.h:2
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+Uninit was created at:
+ slab_post_alloc_hook mm/slub.c:3994 [inline]
+ slab_alloc_node mm/slub.c:4037 [inline]
+ kmem_cache_alloc_node_noprof+0x6bf/0xb80 mm/slub.c:4080
+ kmalloc_reserve+0x13d/0x4a0 net/core/skbuff.c:583
+ pskb_expand_head+0x222/0x19c0 net/core/skbuff.c:2259
+ __skb_cow include/linux/skbuff.h:3646 [inline]
+ skb_cow include/linux/skbuff.h:3665 [inline]
+ ip_rcv_options net/ipv4/ip_input.c:272 [inline]
+ ip_rcv_finish_core+0xf3d/0x1fe0 net/ipv4/ip_input.c:387
+ ip_rcv_finish+0x2cc/0x520 net/ipv4/ip_input.c:447
+ NF_HOOK include/linux/netfilter.h:314 [inline]
+ ip_rcv+0xcd/0x380 net/ipv4/ip_input.c:569
+ __netif_receive_skb_one_core net/core/dev.c:5661 [inline]
+ __netif_receive_skb+0x319/0xa00 net/core/dev.c:5775
+ netif_receive_skb_internal net/core/dev.c:5861 [inline]
+ netif_receive_skb+0x58/0x660 net/core/dev.c:5921
+ tun_rx_batched+0x3ee/0x980 drivers/net/tun.c:1549
+ tun_get_user+0x5677/0x6b50 drivers/net/tun.c:2006
+ tun_chr_write_iter+0x3af/0x5d0 drivers/net/tun.c:2052
+ new_sync_write fs/read_write.c:497 [inline]
+ vfs_write+0xb2f/0x1550 fs/read_write.c:590
+ ksys_write+0x20f/0x4c0 fs/read_write.c:643
+ __do_sys_write fs/read_write.c:655 [inline]
+ __se_sys_write fs/read_write.c:652 [inline]
+ __x64_sys_write+0x93/0xe0 fs/read_write.c:652
+ x64_sys_call+0x306a/0x3ba0 arch/x86/include/generated/asm/syscalls_64.h:2
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+CPU: 1 UID: 0 PID: 13990 Comm: syz.3.1326 Not tainted 6.11.0-rc4-syzkaller-00255-gd2bafcf224f3 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/06/2024
+=====================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
