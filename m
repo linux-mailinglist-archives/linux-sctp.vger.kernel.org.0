@@ -1,124 +1,134 @@
-Return-Path: <linux-sctp+bounces-222-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-223-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F5F795F722
-	for <lists+linux-sctp@lfdr.de>; Mon, 26 Aug 2024 18:50:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE43F95FCC7
+	for <lists+linux-sctp@lfdr.de>; Tue, 27 Aug 2024 00:29:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D9071C2138E
-	for <lists+linux-sctp@lfdr.de>; Mon, 26 Aug 2024 16:50:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B1B3284F6B
+	for <lists+linux-sctp@lfdr.de>; Mon, 26 Aug 2024 22:29:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 022B019754D;
-	Mon, 26 Aug 2024 16:50:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A057919D8A4;
+	Mon, 26 Aug 2024 22:29:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q45WC5lK"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="WJZ3qFsE"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDA2E1946BB;
-	Mon, 26 Aug 2024 16:50:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F68535D4
+	for <linux-sctp@vger.kernel.org>; Mon, 26 Aug 2024 22:29:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724691028; cv=none; b=KaeFelZOoaD3Rh0ehgBozAXpxG7jgTko/gYpA1pi2mXz/tJmMyTdg8jBOjN/tCV7hMg1dYAwa2xLA6eV+E7low3oC9+lFmSjWB0AUPHX25wQlyj/CWa05jvhvVDRmjllMPiUN4iiZHqJPIdgX5UtSnta8x6uf8rDrexfZRfypYo=
+	t=1724711359; cv=none; b=hE7rIlRUI8kYsKG5vu2W4LHxYY1HzIOL4ha/i5fN4QWWXmwrdWc5VpXxPohKTgsj08xWp0mqTvViO//VSAJ1ahe/3drZuAl/sjD10BeLZS2kGxN31vdQqoWRus9RnO7nfu2p0IjmJajjiJ3X02t7EeKV3F/XZbj4t/Ho1cos86U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724691028; c=relaxed/simple;
-	bh=Z+nM13pnLmDsTBNfVDKA+YqeuZzbs5Ifw349S3oky7Y=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=h8rhIWOvvSZcZ5xXYK85NAkzeX76TsWS9GdkQH0N6KWZtj93ZMHgLpbr1kjS3aGjQtC5EIcIx8GzSI+vsHLAZaa2Lx8hEqDKmgKFd74SoOWVaKEVAjs9dm/NDujFsA0B+vp+GqnzHs1IGmwA3+mduJwsd+6qLf5K3fFcyQp2TW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q45WC5lK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 397DAC52FC5;
-	Mon, 26 Aug 2024 16:50:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724691028;
-	bh=Z+nM13pnLmDsTBNfVDKA+YqeuZzbs5Ifw349S3oky7Y=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Q45WC5lKg/LkyteFnRbpI1iVwrc9eTD/Da68nGGe2YlnxLncY/jJgOsVR9s3Titvd
-	 dBgkZNU1Rqw4anGmADeZa5HXJuVBAfr6oMEf6Xt5OhVrePmo3B8G4k53Sk2NiRloQB
-	 ISL+3I8b6r3AGuf2gw+HmJnL4NgRx4YOmnrQ4ywPT+JczgW+zKi53lxtvc0ysLApRZ
-	 upSfKB+5eyy9Wnxntr1Ryfs4oCeUgPQ5+BjVVBpb9cbnBU2kFiULsTV5g+aKNM0RR7
-	 PYQ0zCLA1X0W9EQOIn5lgEOi/Lg9lDUfBldl120A973U/vmbbqnWAYmKVA63ccJr9J
-	 KQg6V3VRGYL7w==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 710CA3822D6D;
-	Mon, 26 Aug 2024 16:50:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1724711359; c=relaxed/simple;
+	bh=NSc4Okt+VC5KhhcI4GjwMNyiCG8ff6DKOAXyZDKWKwg=;
+	h=Date:Message-ID:MIME-Version:Content-Type:Content-Disposition:
+	 From:To:Cc:Subject:References:In-Reply-To; b=hfxxX2RtGzmIH+7IIWFQlEJyl6nQzMeVMP2eieyDTRnAWSvNkcAdoyaLLUo6VHTMlaDThWBmsTnDSwQCcQ7hcjic75e6sIKXVH6VMpf+yGA03kAQJ8djD5jzkAunuZ03jrsqyFA+YQkUtKUgYHv+fF3mi3ZP6eRKL0HPte7jOvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=WJZ3qFsE; arc=none smtp.client-ip=209.85.222.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7a66b813847so297260785a.2
+        for <linux-sctp@vger.kernel.org>; Mon, 26 Aug 2024 15:29:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1724711356; x=1725316156; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-disposition:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=3N09dlUeLDWnGTOZ4n6d5/3QJlaJZT1Youw+FJ2C4po=;
+        b=WJZ3qFsEJlCOjjVv70lDYOGCojujLiMZFHAc55qUEIpvOwN6zAUz/oyCLv6nTn2gva
+         v9I8lO2w20KUj6tsgMpBIWCggmiswdcrYqhr0RNXSoVFhvtiWmf0IjZk1JMAjhVBVShK
+         4E4FUzp1y9VGo6ylEKDpsUIQEntHQuD8OBsKgg5fCDnlr2nm4YZH8TK19Pk7owAwU3GY
+         6prh89062RpF4CDYIyQ1T92O15fGO1y0A8/mf5aDeGHYyV81+FHGrdRHHrRg+9gNa6Km
+         gFZc/+NKvrIqRf2wOewBb6uIDACZnnDD7O3bKHBEhqJMQgAFWRUFxqEvBGl+a5PrSlRa
+         JaJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724711356; x=1725316156;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-disposition:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3N09dlUeLDWnGTOZ4n6d5/3QJlaJZT1Youw+FJ2C4po=;
+        b=KAu5G0kAURgrs0R/DzKWQKrUBGKmdVdFCdxzCXOG6q1bme4rHQhYpsrV8T/tt57uE8
+         TXPkCCFUjSPF3+Km/P+2t4lZMct3r/P4u4f4hoY4Eu0Syst4prrJQA+REq1V2+xNlbJ4
+         WYIDw1w5BjyBS3cSLL7wMhkCV4VB0dz8e+JHWbsSGCcTIXRqiXb2HfzFgZXMTAStiNmn
+         zfXeWfGt7zExDcyreA0MKE9wfByHXoLOAHETCFZvZZhKLK//zRNQ6nnK5Nek5hIYNWZ4
+         EablnALRBKKuvMYtsaHqTyPLng0JRidUVzv8hGdM2c5btOSQl7dr9CxETg2KYODD9K1i
+         rEfA==
+X-Forwarded-Encrypted: i=1; AJvYcCUXXdIxXpVoy+/cer2wvfE8lYrXEoOGwfB0gWh5/4HxWHwHVzbiUFVyjOj4gnqlx2yIgLMTngSQFyl0@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjGNIjUvvKKLC7ZqwYCW2479aYfQyx9vtCeZJxeVKtRBrY6PYj
+	A7OnwhiHPQWDCOe7ueA8T1d2DBq03YFqcywgsPhRbLsIf2hlyZvrOkyna+S/Wg==
+X-Google-Smtp-Source: AGHT+IFQn+z4i4PvF96htJxu0pzdb+NNPCs7QRfIEw0WlBnCJXtMyEadU8DR0+0TjKzAkjXI62fJtA==
+X-Received: by 2002:a05:6214:3c98:b0:6bf:95a7:e230 with SMTP id 6a1803df08f44-6c32b8094b0mr11868556d6.36.1724711355689;
+        Mon, 26 Aug 2024 15:29:15 -0700 (PDT)
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c162d1d27bsm50635416d6.7.2024.08.26.15.29.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Aug 2024 15:29:15 -0700 (PDT)
+Date: Mon, 26 Aug 2024 18:29:14 -0400
+Message-ID: <a769ce9fc949c03f91a4ee1d1cc6ebf6@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=utf-8 
+Content-Disposition: inline 
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 00/13] net: header and core spelling corrections
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <172469102801.67399.18155018116632832948.git-patchwork-notify@kernel.org>
-Date: Mon, 26 Aug 2024 16:50:28 +0000
-References: <20240822-net-spell-v1-0-3a98971ce2d2@kernel.org>
-In-Reply-To: <20240822-net-spell-v1-0-3a98971ce2d2@kernel.org>
-To: Simon Horman <horms@kernel.org>
-Cc: willemdebruijn.kernel@gmail.com, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, wintera@linux.ibm.com,
- twinkler@linux.ibm.com, dsahern@kernel.org, jv@jvosburgh.net,
- andy@greyhouse.net, quic_subashab@quicinc.com, quic_stranche@quicinc.com,
- paul@paul-moore.com, krzk@kernel.org, jhs@mojatatu.com,
- xiyou.wangcong@gmail.com, jiri@resnulli.us, marcelo.leitner@gmail.com,
- lucien.xin@gmail.com, ms@dev.tdt.de, netdev@vger.kernel.org,
- linux-s390@vger.kernel.org, linux-security-module@vger.kernel.org,
- linux-sctp@vger.kernel.org, linux-x25@vger.kernel.org
+From: Paul Moore <paul@paul-moore.com>
+To: Ondrej Mosnacek <omosnace@redhat.com>, netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org
+Cc: Xin Long <lucien.xin@gmail.com>, Vlad Yasevich <vyasevich@gmail.com>, Neil Horman <nhorman@tuxdriver.com>, Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, linux-sctp@vger.kernel.org, selinux@vger.kernel.org, linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sctp: fix association labeling in the duplicate  COOKIE-ECHO case
+References: <20240826130711.141271-1-omosnace@redhat.com>
+In-Reply-To: <20240826130711.141271-1-omosnace@redhat.com>
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Thu, 22 Aug 2024 13:57:21 +0100 you wrote:
-> This patchset addresses a number of spelling errors in comments in
-> Networking files under include/, and files in net/core/. Spelling
-> problems are as flagged by codespell.
+On Aug 26, 2024 Ondrej Mosnacek <omosnace@redhat.com> wrote:
 > 
-> It aims to provide patches that can be accepted directly into net-next.
-> And splits patches up based on maintainer boundaries: many things
-> feed directly into net-next. This is a complex process and I apologise
-> for any errors.
+> sctp_sf_do_5_2_4_dupcook() currently calls security_sctp_assoc_request()
+> on new_asoc, but as it turns out, this association is always discarded
+> and the LSM labels never get into the final association (asoc).
 > 
-> [...]
+> This can be reproduced by having two SCTP endpoints try to initiate an
+> association with each other at approximately the same time and then peel
+> off the association into a new socket, which exposes the unitialized
+> labels and triggers SELinux denials.
+> 
+> Fix it by calling security_sctp_assoc_request() on asoc instead of
+> new_asoc. Xin Long also suggested limit calling the hook only to cases
+> A, B, and D, since in cases C and E the COOKIE ECHO chunk is discarded
+> and the association doesn't enter the ESTABLISHED state, so rectify that
+> as well.
+> 
+> One related caveat with SELinux and peer labeling: When an SCTP
+> connection is set up simultaneously in this way, we will end up with an
+> association that is initialized with security_sctp_assoc_request() on
+> both sides, so the MLS component of the security context of the
+> association will get swapped between the peers, instead of just one side
+> setting it to the other's MLS component. However, at that point
+> security_sctp_assoc_request() had already been called on both sides in
+> sctp_sf_do_unexpected_init() (on a temporary association) and thus if
+> the exchange didn't fail before due to MLS, it won't fail now either
+> (most likely both endpoints have the same MLS range).
+> 
+> Tested by:
+>  - reproducer from https://src.fedoraproject.org/tests/selinux/pull-request/530
+>  - selinux-testsuite (https://github.com/SELinuxProject/selinux-testsuite/)
+>  - sctp-tests (https://github.com/sctp/sctp-tests) - no tests failed
+>    that wouldn't fail also without the patch applied
+> 
+> Fixes: c081d53f97a1 ("security: pass asoc to sctp_assoc_request and sctp_sk_clone")
+> Suggested-by: Xin Long <lucien.xin@gmail.com>
+> Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
+> Acked-by: Xin Long <lucien.xin@gmail.com>
+> ---
+>  net/sctp/sm_statefuns.c | 22 ++++++++++++++++------
+>  1 file changed, 16 insertions(+), 6 deletions(-)
 
-Here is the summary with links:
-  - [net-next,01/13] packet: Correct spelling in if_packet.h
-    https://git.kernel.org/netdev/net-next/c/d24dac8eb811
-  - [net-next,02/13] s390/iucv: Correct spelling in iucv.h
-    https://git.kernel.org/netdev/net-next/c/c34944603248
-  - [net-next,03/13] ip_tunnel: Correct spelling in ip_tunnels.h
-    https://git.kernel.org/netdev/net-next/c/d0193b167f27
-  - [net-next,04/13] ipv6: Correct spelling in ipv6.h
-    https://git.kernel.org/netdev/net-next/c/507285b7f9b2
-  - [net-next,05/13] bonding: Correct spelling in headers
-    https://git.kernel.org/netdev/net-next/c/e8ac2dba93ea
-  - [net-next,06/13] net: qualcomm: rmnet: Correct spelling in if_rmnet.h
-    https://git.kernel.org/netdev/net-next/c/19f1f11c9a8e
-  - [net-next,07/13] netlabel: Correct spelling in netlabel.h
-    https://git.kernel.org/netdev/net-next/c/6899c2549cf7
-  - [net-next,08/13] NFC: Correct spelling in headers
-    https://git.kernel.org/netdev/net-next/c/10d0749a38c3
-  - [net-next,09/13] net: sched: Correct spelling in headers
-    https://git.kernel.org/netdev/net-next/c/a7a45f02a093
-  - [net-next,10/13] sctp: Correct spelling in headers
-    https://git.kernel.org/netdev/net-next/c/7f47fcea8c6b
-  - [net-next,11/13] x25: Correct spelling in x25.h
-    https://git.kernel.org/netdev/net-next/c/01d86846a5a5
-  - [net-next,12/13] net: Correct spelling in headers
-    https://git.kernel.org/netdev/net-next/c/70d0bb45fae8
-  - [net-next,13/13] net: Correct spelling in net/core
-    https://git.kernel.org/netdev/net-next/c/a8c924e98738
+Acked-by: Paul Moore <paul@paul-moore.com> (LSM/SELinux)
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+--
+paul-moore.com
 
