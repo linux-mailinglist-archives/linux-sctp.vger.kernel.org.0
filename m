@@ -1,101 +1,124 @@
-Return-Path: <linux-sctp+bounces-254-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-255-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4475A96F72D
-	for <lists+linux-sctp@lfdr.de>; Fri,  6 Sep 2024 16:44:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF57C96F9C4
+	for <lists+linux-sctp@lfdr.de>; Fri,  6 Sep 2024 19:13:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D64471F2166C
-	for <lists+linux-sctp@lfdr.de>; Fri,  6 Sep 2024 14:44:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7CC811F2454B
+	for <lists+linux-sctp@lfdr.de>; Fri,  6 Sep 2024 17:13:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B12841D1731;
-	Fri,  6 Sep 2024 14:43:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CE441D4618;
+	Fri,  6 Sep 2024 17:13:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cMmSrbEt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HFog4E+D"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 489A61CB31D;
-	Fri,  6 Sep 2024 14:43:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D0C11CFEC9;
+	Fri,  6 Sep 2024 17:13:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725633836; cv=none; b=Yo8e1LTY1BYE02xnRupVXka/AZK9iLklMkXgsvvSLF024T5xK/t6JDi99vpDbdqh1TsmOnSCg2LcF0ZLg2yADvY15zJADZfJBXj++9LqUW6+L8NiyN3VqlZ8B9aByjtFQUnyFt0MnYm+yt4smvrbXKq9yN5g3VorHiwMZ2j2HrY=
+	t=1725642809; cv=none; b=SMl6CXUH8QB/F0dAMA8U9BSpqhoJi5YDkz1jOtHuyI9zknLglRPznU9UPKErOn7CNbKJx0kgZ8mGH5ge7Iji4qmDx69zgX1z3tvhbeJFDppgEynwxhrPjlpu3DPEh10DpOSZNDE6lUu+AALkb/a6IfEy7xMXPB348+t7vmO6z8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725633836; c=relaxed/simple;
-	bh=NhdQH1a5W6hapzmK4P0XA2IAR44oZC3J7Z1ztW+orLg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZuBXgNw2tbQFp/9oGNmvBWiACLCajQXxecFx5TzSVT+Q70D9RN52SQk0NilcXenC+/LdBj55vr2X61r+Oil8AoN3qWjIlPmEKv9O66HhLrDgEQqEuiJPgEQDsV8gYMGBT2YBkMEK5nSXm8YBI3Oz6yz0U7HB/Wn+NRIZfWgtins=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cMmSrbEt; arc=none smtp.client-ip=209.85.166.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-3a043869e42so8815615ab.0;
-        Fri, 06 Sep 2024 07:43:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725633834; x=1726238634; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NhdQH1a5W6hapzmK4P0XA2IAR44oZC3J7Z1ztW+orLg=;
-        b=cMmSrbEt6siHY3Mss6nHeOA6YLKEIooXyI86EwV1VZpqgfrz5DA8JZgn3GO0X7+27P
-         uF5Nk2oShb189dwaNC5hKhz6SKL0xxYu6eGm7kYXfxqEF4Tynb+aRbsscVIIWsHbrivb
-         MdAsKZ3L2oNBbEx1oKcnxSwKL3yY3XUBcUJxYtTK6ZAOYgHmWSX6UMLTY5Id4j06qsCb
-         KEGa1qsaX8jU2oYqFEFOwMAB2mUxzZVD9oYZaz98Ux9vtQH9QxKqovc7ihcNscqSRB7Y
-         BwL1cZrMiZ+kRAUWMXoQatakd63LHNCzZbe8e3Im09gV78NBeXCVXiBbLr/nfG9b2pZJ
-         p//g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725633834; x=1726238634;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NhdQH1a5W6hapzmK4P0XA2IAR44oZC3J7Z1ztW+orLg=;
-        b=N/O2UKvZfKu25WIlsatSnG4K2Iiqu4hfewWNr8aN4mr5tepR2ENilpDgpj9icPQOkt
-         i+DN7w1ooYp2HdVrImsN0QU9s3KNxwjkEZScvtIOs6QK5oCKTKbwmiU/PMW6ndgVRTGa
-         t6LfqLamNW8l1d4j/IRa7u552RDbLtFuNs1WD+vWDfp9JAlPI/kzcMivsRlshEjd9oRv
-         n4sAZngmAd4TC2utj+i1ybHotf6YqNNxgSmRFHHWV5ka0J0uZBKDRCrx1hrJUJ/AaZRi
-         8T6VTrcCR67V4Q+JmuA0GF+/vlGHaXRMnOHPL4LaE0o2oEB8a8bg5a6TgEcbV9lkq2+S
-         v7vw==
-X-Forwarded-Encrypted: i=1; AJvYcCWFVq5gmPzW6BLwd8WZP9REfI5ffHAbsah8G+bxSa75XcCiJATgexy4bwfnJcD3NzSmaMM=@vger.kernel.org, AJvYcCX+ggIiTYFMZuIq+0kUJjKOSwXb+vb6qDU50jflBqT5A+AJPGbyEv3/rXjWlxz9TG25nCE2sOKcDl03iKoX1q4J@vger.kernel.org, AJvYcCXgwSeyPUOpvI2fhSnKPFyN4iJCLdUvuuGPXHN9bA5h9kE9wDw4XySsj17AZh/5n5Ir02A7m/JQKQBCRQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhQqLjpWmvEfOTMyPiDdFqyX1NQg462HzKZblz8whRd7u5+/Zl
-	veYQ4Kktgn4vUjly1dhXTHF49M9nylCLThM7kFhRume3TyTZLsxi6vjxTxlukLI/LCWf005eTT6
-	W4WoJo0+D0DYixNamwaKI5eYgPgCh91gW
-X-Google-Smtp-Source: AGHT+IHlLthbmKYIA0lXdf8bkLngRRLYn9z6GK5ZajQE9FHf65MIofrSVVfFZVVYi7C6mTQ8GGJ2XTekFieonTp2n2M=
-X-Received: by 2002:a05:6e02:1b03:b0:39f:60b3:ca2e with SMTP id
- e9e14a558f8ab-3a04eb5f1f7mr24501095ab.2.1725633834252; Fri, 06 Sep 2024
- 07:43:54 -0700 (PDT)
+	s=arc-20240116; t=1725642809; c=relaxed/simple;
+	bh=za9hRWAJFue3qA2/8qfDjGdwgXq/W1BfL0Az38VY1kM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=c6+eUSVwAsi9gmEkY8Dk/8OcqAeaQNlVaSeDtwEi943CrWTZt8hIzrYj2m+NtmoStOvXVUzkSztDBqeN/mM/+zOjdzEQpQzJGMra2Mk8IK0rOJmaGwHcfFRSK2nGqyNfeB8MfNLrYndPySaXsQXGDJJ4DHFGE5hbvJpBKW0/jl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HFog4E+D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3692C4CEC4;
+	Fri,  6 Sep 2024 17:13:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725642808;
+	bh=za9hRWAJFue3qA2/8qfDjGdwgXq/W1BfL0Az38VY1kM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=HFog4E+Ddyk1X/+lDS2YOD8HoYsrbiaXVWJMHDKK76Fj4BaEP3kzl/ig0ojYByIER
+	 NcQPadazN3d/t+eluRpnLIuWo/yHIXahwADGaZMRskL8z+GZKWDrGOmIfFr7+iv0EK
+	 rUaNZeOIXK5PT3mo25G0fNtbFmDY1v8bceg+7lz6S3bstEAyN9EYQ7NYsi920Bv0nn
+	 do67l2juJ/MulHR7CU9F9SvFAWj9kBc7csqzjWok+b8fsPIGrIk/iRguGUXpX6j8Jt
+	 4RkRTBPpCQsUzCjMcoBo5c/D+7B9ZffYeuI542pWftpxrmNHkI0CgUuB9sNkULkBWt
+	 bve0Tf9j1juNw==
+Message-ID: <a82d846d-ec87-4cb4-ab5f-86fee52e3124@kernel.org>
+Date: Fri, 6 Sep 2024 11:13:27 -0600
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240905165140.3105140-1-idosch@nvidia.com> <20240905165140.3105140-13-idosch@nvidia.com>
-In-Reply-To: <20240905165140.3105140-13-idosch@nvidia.com>
-From: Xin Long <lucien.xin@gmail.com>
-Date: Fri, 6 Sep 2024 10:43:42 -0400
-Message-ID: <CADvbK_dn6vs05tbwd+uOL0raj_X6HFWAGqPqNxKNpaqSmw5yug@mail.gmail.com>
-Subject: Re: [PATCH net-next 12/12] sctp: Unmask upper DSCP bits in sctp_v4_get_dst()
-To: Ido Schimmel <idosch@nvidia.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org, 
-	pabeni@redhat.com, edumazet@google.com, dsahern@kernel.org, gnault@redhat.com, 
-	razor@blackwall.org, pablo@netfilter.org, kadlec@netfilter.org, 
-	marcelo.leitner@gmail.com, bridge@lists.linux.dev, 
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
-	linux-sctp@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 00/12] Unmask upper DSCP bits - part 4 (last)
+Content-Language: en-US
+To: Ido Schimmel <idosch@nvidia.com>, netdev@vger.kernel.org
+Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+ edumazet@google.com, gnault@redhat.com, razor@blackwall.org,
+ pablo@netfilter.org, kadlec@netfilter.org, marcelo.leitner@gmail.com,
+ lucien.xin@gmail.com, bridge@lists.linux.dev,
+ netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+ linux-sctp@vger.kernel.org, bpf@vger.kernel.org
+References: <20240905165140.3105140-1-idosch@nvidia.com>
+From: David Ahern <dsahern@kernel.org>
+In-Reply-To: <20240905165140.3105140-1-idosch@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Sep 5, 2024 at 12:54=E2=80=AFPM Ido Schimmel <idosch@nvidia.com> wr=
-ote:
->
-> Unmask the upper DSCP bits when calling ip_route_output_key() so that in
-> the future it could perform the FIB lookup according to the full DSCP
-> value.
->
-> Note that the 'tos' variable holds the full DS field.
->
-> Signed-off-by: Ido Schimmel <idosch@nvidia.com>
-Reviewed-by: Xin Long <lucien.xin@gmail.com>
+On 9/5/24 10:51 AM, Ido Schimmel wrote:
+> tl;dr - This patchset finishes to unmask the upper DSCP bits in the IPv4
+> flow key in preparation for allowing IPv4 FIB rules to match on DSCP. No
+> functional changes are expected.
+> 
+> The TOS field in the IPv4 flow key ('flowi4_tos') is used during FIB
+> lookup to match against the TOS selector in FIB rules and routes.
+> 
+> It is currently impossible for user space to configure FIB rules that
+> match on the DSCP value as the upper DSCP bits are either masked in the
+> various call sites that initialize the IPv4 flow key or along the path
+> to the FIB core.
+> 
+> In preparation for adding a DSCP selector to IPv4 and IPv6 FIB rules, we
+> need to make sure the entire DSCP value is present in the IPv4 flow key.
+> This patchset finishes to unmask the upper DSCP bits by adjusting all
+> the callers of ip_route_output_key() to properly initialize the full
+> DSCP value in the IPv4 flow key.
+> 
+> No functional changes are expected as commit 1fa3314c14c6 ("ipv4:
+> Centralize TOS matching") moved the masking of the upper DSCP bits to
+> the core where 'flowi4_tos' is matched against the TOS selector.
+> 
+> Ido Schimmel (12):
+>   netfilter: br_netfilter: Unmask upper DSCP bits in
+>     br_nf_pre_routing_finish()
+>   ipv4: ip_gre: Unmask upper DSCP bits in ipgre_open()
+>   bpf: lwtunnel: Unmask upper DSCP bits in bpf_lwt_xmit_reroute()
+>   ipv4: icmp: Unmask upper DSCP bits in icmp_reply()
+>   ipv4: ip_tunnel: Unmask upper DSCP bits in ip_tunnel_bind_dev()
+>   ipv4: ip_tunnel: Unmask upper DSCP bits in ip_md_tunnel_xmit()
+>   ipv4: ip_tunnel: Unmask upper DSCP bits in ip_tunnel_xmit()
+>   ipv4: netfilter: Unmask upper DSCP bits in ip_route_me_harder()
+>   netfilter: nft_flow_offload: Unmask upper DSCP bits in
+>     nft_flow_route()
+>   netfilter: nf_dup4: Unmask upper DSCP bits in nf_dup_ipv4_route()
+>   ipv4: udp_tunnel: Unmask upper DSCP bits in udp_tunnel_dst_lookup()
+>   sctp: Unmask upper DSCP bits in sctp_v4_get_dst()
+> 
+>  net/bridge/br_netfilter_hooks.c  |  3 ++-
+>  net/core/lwt_bpf.c               |  3 ++-
+>  net/ipv4/icmp.c                  |  2 +-
+>  net/ipv4/ip_gre.c                |  3 ++-
+>  net/ipv4/ip_tunnel.c             | 11 ++++++-----
+>  net/ipv4/netfilter.c             |  3 ++-
+>  net/ipv4/netfilter/nf_dup_ipv4.c |  3 ++-
+>  net/ipv4/udp_tunnel_core.c       |  3 ++-
+>  net/netfilter/nft_flow_offload.c |  3 ++-
+>  net/sctp/protocol.c              |  3 ++-
+>  10 files changed, 23 insertions(+), 14 deletions(-)
+> 
+
+For the set:
+Reviewed-by: David Ahern <dsahern@kernel.org>
+
+
 
