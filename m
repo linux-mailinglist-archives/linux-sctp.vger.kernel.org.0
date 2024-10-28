@@ -1,213 +1,158 @@
-Return-Path: <linux-sctp+bounces-270-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-271-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 122149B30E8
-	for <lists+linux-sctp@lfdr.de>; Mon, 28 Oct 2024 13:49:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F8FC9B3EBF
+	for <lists+linux-sctp@lfdr.de>; Tue, 29 Oct 2024 00:57:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 955F91F20F36
-	for <lists+linux-sctp@lfdr.de>; Mon, 28 Oct 2024 12:49:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C25551F230C0
+	for <lists+linux-sctp@lfdr.de>; Mon, 28 Oct 2024 23:57:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73E621CCECE;
-	Mon, 28 Oct 2024 12:49:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=drivenets.onmicrosoft.com header.i=@drivenets.onmicrosoft.com header.b="UlnESSEN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DB711F754F;
+	Mon, 28 Oct 2024 23:57:24 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from dispatch1-eu1.ppe-hosted.com (dispatch1-eu1.ppe-hosted.com [185.132.181.7])
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 290CF188010;
-	Mon, 28 Oct 2024 12:49:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=185.132.181.7
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730119763; cv=fail; b=g8iVZj67Ik/ME5GkL0mjNaAhC8YFm4WkOqWB50/Ga0gKs4sA2yzmIUOPgrYdIf0i2oQSx40dPpt9TPqwQao+MyxsPuCFwm1FI5et0qtdqsdXHHxOg3/WnVUke1JzNv8C0iURTwSBH/wY5loGifNjkRdbBkhrjEfO2EMqI9rrzew=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730119763; c=relaxed/simple;
-	bh=8q/jlIpaa95LTp0epZJOjCFCw2+Pp4QKaIsawnYXXu0=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=S6q7P84GyRhMSNMhJZ2e955NhQvCn1Cdho/q8DYorDhAqv2HAcN0d7aL6J1F+ZMApaSgRv02ol+UYXjpyJSSBIjiN3z7R9iQi9KfxQf+WLTcxwRTlRp6EhxdxaTWIXKEDW2XoCkFJtESjAl9WCV32m4riNlnHi/MnmUz9ibpsA0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=drivenets.com; spf=pass smtp.mailfrom=drivenets.com; dkim=pass (1024-bit key) header.d=drivenets.onmicrosoft.com header.i=@drivenets.onmicrosoft.com header.b=UlnESSEN; arc=fail smtp.client-ip=185.132.181.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=drivenets.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=drivenets.com
-X-Virus-Scanned: Proofpoint Essentials engine
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05lp2177.outbound.protection.outlook.com [104.47.17.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mx1-eu1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTPS id 524ED6C006C;
-	Mon, 28 Oct 2024 12:49:16 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lLvRxCR+5F84NsW+W4Bb0ON3P4AoY7uq17LknmAzu6cA7nXKcTVatLdEdfR/vC7nw5NTkvejTbdyhqAfPdo1iIWZjIFMByDNhdleFjr/u/Q0uk+k6QG/zQms5vGLhP9b37GvG927xoS4Dk1RrxHxHEsWyaK7pMUA1PCVI5qGyE9fm65Fdf11IPGmukoTWKB6J1izD/aCWoT3syvhR2WQNrDvx2ybIaw/EIaIpYnJo+NlAdjjLZHTHUCMjXGMaEb0yCv/5W0dRO4o5e2ZmhBs4/YA2RFwLCWs1OkoaNtzFrY0iPKpj3FXcNKqRdrz9zeceELrWmHAsI18AsXeZ/5H1g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=liznEMtDFRnxxSsdPXaA0wGRDNrEisTRT/g7aQMLiw0=;
- b=IpOS93cySGp6mSuu0lptNdJ2gsCwNNjO2qWXM62H44XEapA6b6bbdgOOr8HKzJtqjJlIT210d4zzevhmkPj/8BgCbmg6TEJzrhGA56IpJls49tnxSfySrpLfEShoDEcbWuvjRjqu/+bKSx3jWSsF6Lm1O3X0zr+qxA9C8PRGeIdhZckwuHBR+Kb7iEjXwyyiR9lwTPgW5/OIfrV1LFmqX2rzsh/sqRXaIPcItzz6WhrjwAcrEUWl0kHUBz+VIYBFRsqn7HLTcr7UVrwYeIHw82iGEY9YA+VDkIHoGkXqIgZx7DbkBx4+Y7JmXrnrqKGtPfcVUf9dr7MnDEtjv83w1g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=drivenets.com; dmarc=pass action=none
- header.from=drivenets.com; dkim=pass header.d=drivenets.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=drivenets.onmicrosoft.com; s=selector2-drivenets-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=liznEMtDFRnxxSsdPXaA0wGRDNrEisTRT/g7aQMLiw0=;
- b=UlnESSEN1BpBkSZKCoTdjNSOybP3RbmHDnUqc4epMh4pjUFpYNQuqaUvkFGaDkTPXCV0MXBCoZ9OL5VF9bMcyaYeWkPqkuvGmvUyOEZQ7hEEFJsjbU4ZQMu7UCxxuImH/Nn4Pxdf5adQtR1VvqErqmPxBwtu7oe9s9irpaEHYSg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=drivenets.com;
-Received: from DB8PR08MB5388.eurprd08.prod.outlook.com (2603:10a6:10:11c::7)
- by DU0PR08MB8812.eurprd08.prod.outlook.com (2603:10a6:10:47b::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.25; Mon, 28 Oct
- 2024 12:49:14 +0000
-Received: from DB8PR08MB5388.eurprd08.prod.outlook.com
- ([fe80::29dd:6773:4977:dc4e]) by DB8PR08MB5388.eurprd08.prod.outlook.com
- ([fe80::29dd:6773:4977:dc4e%5]) with mapi id 15.20.8093.024; Mon, 28 Oct 2024
- 12:49:14 +0000
-From: Gilad Naaman <gnaaman@drivenets.com>
-To: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	Xin Long <lucien.xin@gmail.com>,
-	linux-sctp@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: Gilad Naaman <gnaaman@drivenets.com>
-Subject: Solving address deletion bottleneck in SCTP
-Date: Mon, 28 Oct 2024 12:48:43 +0000
-Message-ID: <20241028124845.3866469-1-gnaaman@drivenets.com>
-X-Mailer: git-send-email 2.46.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: LO2P265CA0010.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:62::22) To DB8PR08MB5388.eurprd08.prod.outlook.com
- (2603:10a6:10:11c::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1067F1F8EE8
+	for <linux-sctp@vger.kernel.org>; Mon, 28 Oct 2024 23:57:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730159844; cv=none; b=AiPlbwh8QabuiVuc0QqAhAkPwht7n3xdqaymhN6VmPkBE1L1Z4N63ZriE0ev6cI+P0lT0ETabsEVV/JKm0l6WL6njSw6iul4vG+k0nyPTm+5MrabA96suyuXiKbvrOxozwYsJVuMPlDR1Jz27rkWjeOt83kKpDnOjpcU5GgEha0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730159844; c=relaxed/simple;
+	bh=JSAgChZeD4Eb9IozTJE80b3eyOBu7xOBALYknD+8rkQ=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=c0TW+OzsqT9vjEsHL57o/lwxyL8IvfCKvi9gVdWAFtd9RmFokGd5uE8dMDR6/eFbpCjnTObCuKIaWZo3QoAWKlnv1HfrNpQc7YdmgN9/Rk3q6TMHsun6plGMIee5A7WNpK3KgckuKPAT4O6TtoJCptPj6FmhPV9cI7pcofNCy5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-3a3c90919a2so47302155ab.0
+        for <linux-sctp@vger.kernel.org>; Mon, 28 Oct 2024 16:57:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730159841; x=1730764641;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xnvBNJ94FOi5B5HFHo9/CsJQbRxCRr0sZ6M9tNoPcrI=;
+        b=MZLS9M5SH08WeKr0Akh+P3bKpqu6n5AP+s63WG3FbmjVxUtqw/VbYQNJRJt5vWr9EE
+         D1IL0iRiv7gRCYyFx5XY6GZ+JLfQ2kMeUFKW1Fzf//8oue55nGNpOrQzZw4fB9KMbFN5
+         PpES1qslUXn/YkCBEICpPbFCj5UEwjVEbuoBhlfVG8wGc685R9cXlySE01DnQbECTmar
+         Ftg9K5uXUmDuMrpEpJ2VRIcWjtmKYuacgiXrWpRz3lqSFbLyO+iQkSxuBzQ7zDRy8Gnb
+         O7lJiJKZnPlMtwgItNESUTWid9eA8A8K/nqV1+7ZSh1O/hegMEfi6WlTv7j0hip5j8vp
+         UQAw==
+X-Forwarded-Encrypted: i=1; AJvYcCXN4sGQq4hxHlktXVei3LC/8+O5IXDh0jqu9t4QoCaZBvcl0v/1VkzDKC4rJNy9x1rIOzqjWUw4/d6X@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3gIn4EfnfgMRRX4YiIrnvd6OZKB/YqG+q256kEfkpFiBRlVMg
+	xfTH4btRjXAR52v6z2HXcuUK0TtOGanQwC4LMdBcDkHZ+8wzojhfpyl43YSKNPMAI+uWQMYs9MT
+	jQse1nw5RKtcU9sqmoPDSADC9FlJ41Tr4+6mM9USPAj0+fsNv5Gy4fJk=
+X-Google-Smtp-Source: AGHT+IHmbQm1FfjPhMFLh6Itg5JiirSNsMI9Ut/PpvACE/Gl5hXO1q/6lII1qUk3DDqmozVtfdIrtSYETil57NqA6wgVi++H3FyL
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB8PR08MB5388:EE_|DU0PR08MB8812:EE_
-X-MS-Office365-Filtering-Correlation-Id: 148b361d-3531-4fc8-041c-08dcf74eed33
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|52116014|376014|1800799024|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?dXl8+Bx1egetzdNmOXISi9ZCE53s4LGWLCvPXfSTBpxbr9fn7czNqBFddTn7?=
- =?us-ascii?Q?UtaJrhMy485YuOeu/jIp8ywSIp802+EzJxDoDlodbguHeV7uISURr3ZbS2OO?=
- =?us-ascii?Q?F8LaGS1xZtfFIyd17cm+Ci8SGQJNA7Q249vlS5JrxzK0g8kY9fJ6MKuu/6YC?=
- =?us-ascii?Q?JOthzYzJXbb7rQusKEoly8P75DZDRWxniOED84TSzFRBrurb1uZ9voKBydbn?=
- =?us-ascii?Q?bx8jMlvHDUAW/EeW6CCTleWs1+gYb/80EsEkKlOB0WHab3d0aca7TcKB6EP0?=
- =?us-ascii?Q?1+G8BdbHece2m1C7BPdiYB6O+hH5bDC0Z/39xCTb4VRlIpbqaI4AeSa3OtK2?=
- =?us-ascii?Q?70AvXwRL+7VLvraVelK3+9oOmFBRDmw3Qe2bNlIYXgxYM3fUC9PHyizBXFim?=
- =?us-ascii?Q?lQD7OweuxX5WHLT7Fu+yWZGKLYUn7cjfAtr/RS42VVe1fvlGEibUXVXnVW6G?=
- =?us-ascii?Q?8EdiIiPSLHlwCn9q96gUUWtn6zeChKh5U6QYJMfVHrhQbcn56ipp9wYLUs9t?=
- =?us-ascii?Q?/TbeeFMDC6CEBMdp1dgCN9BfVHu3xgPQgxYy0toRDXRQBRi+xr6e5FW7Jd4s?=
- =?us-ascii?Q?h7trNYY9duQ3VMRMJ8J/wA+x2CzVXLXEz14YOlTO/HTAauYjj7B77KMXOR/q?=
- =?us-ascii?Q?6bD2wOOjrQuBKIYMg0afwBRfbiI2DS7IN8xR+dallfhriIj5W6z0FbX5CWVX?=
- =?us-ascii?Q?N508WcWygDpFUZICTtRDs6gxoIlV19g9JvZnwSZPIJaGFPDRU6unhRxRSqT+?=
- =?us-ascii?Q?VtYCjYfx6ApQjcr46ypS7P6ZrGuLipmQw11O+jgj+q/Ce96Q/9Q38m11hmDA?=
- =?us-ascii?Q?ahT00bgHn/DmMi7Mb+b/HjC6imcuvfDq51R0+HolUbrHsx6fxQ8Fn7PxGa74?=
- =?us-ascii?Q?LTJ87RvI3Lq3ZZunIr/kAbOGvSu6wuabWPossG0xjqDK7Mps0S1uuHxwOk+M?=
- =?us-ascii?Q?yc+ZizffG5Povxr8Rhot+eOKTR8S2o52PmDtGQO1OLh4eT6vlzSH87tq0n2D?=
- =?us-ascii?Q?9wF6spcEFA+MU1DLrQcHgQYlvQyy9wsNCulCu+jqBazVAaB4jqK6+Ye/0VIc?=
- =?us-ascii?Q?gTBPoYV+CBhj8bykrj5MiOH4Dd3CnGjq7H/d1B8QwIpOKyTptIYCvw1i6sWp?=
- =?us-ascii?Q?XbyJxFmSU/CrRLEaQEdpTLAknv3zs2Y/ArIZ6+2S5r+JedD40offDsjG+IxY?=
- =?us-ascii?Q?K6kc+geCM+Erf0MkZ7/BDv+Ya4c2yENslzTlsmsekE/AKd0bXUYxkQmF0fMd?=
- =?us-ascii?Q?2UG6kNEsuLWYmSPBCE+8p0b3UWReVZXV0Vae36+YXPTGFPBY265/JEJRS+MM?=
- =?us-ascii?Q?TaPPAGqxOzkAsxCBZHdrq6Ypfsxm4lXuiXbez9D2y+AU4zV6PJwuhpcBnUWs?=
- =?us-ascii?Q?O6dk/Rs=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR08MB5388.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(52116014)(376014)(1800799024)(38350700014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?JCOSVR2nLBykunBx0Lb0lwBAuOF5AiXUqD3beX/suiPHYdVtBJyXX7P+qZaT?=
- =?us-ascii?Q?YD+G42mSMJ0IwrKi3Z3CFoGlGBD48VhKd/ZP+JMISySMD/GBtUW0DjTG7F2H?=
- =?us-ascii?Q?BKZxRd+5zxGmy2Fsf/jqAnQokXHTl154c0xZBdHwwF9iI547yszNTSpukdQc?=
- =?us-ascii?Q?T7TDOx80AmmF7EiJ1fzzZwoSXoAMxpBJRkDnqtTf62eb6cIYwV/MsR5rW1Ha?=
- =?us-ascii?Q?Hntz2izQ13KW+Yha52tlSzllAE4X5N8XPCCapZEg8Gu2OzCYSvnSDvbv3C3h?=
- =?us-ascii?Q?gmzy7sKfd94DkgPEUR0rRuGdz9QLgQr6adla4xU4pAugqJJCvgHchMcVLP6o?=
- =?us-ascii?Q?iHtljUcoPU7nzxC9upMy3Tta+YDkKlEz+eimT8g8WMAJFmFscCIGXIrWqA3a?=
- =?us-ascii?Q?D3VJXEl+mJMS+4q/1y6/YY72FBIwqIbPa0kmahFB2BVJ6TGef+jlE8rYfq8V?=
- =?us-ascii?Q?q93aFS7p25H2wd0t+yXGmk2nAdqUACLRi48FpgK5621lFdLXKX3fCRhkX3mQ?=
- =?us-ascii?Q?siX5bse5Fti2b6kQjISd/h2mYwwJDV4rE7cqQIP/WqQJjMklaX0Cdr9VZVQB?=
- =?us-ascii?Q?ib9xK/m+GcD37LZXaBv3sWW7sG8MOQM/yF2Lk7Iodce9oFat9ZNnw3JTh6BW?=
- =?us-ascii?Q?cpvG9piKzMxJQdjVqelJt2RXRW6VMF2liheaCeTN7PmK10bBSIT8LXHIt2lx?=
- =?us-ascii?Q?ejUvLgA8jLGAGdt4/DExTk8AkrRyruD7+qZAA8Sq0/9emvss/xd8F0h7YzTD?=
- =?us-ascii?Q?DetHOjohX3qB4dtKy67L8sA3aFAOH1E6IhaW16bLVHmwz0IuQ9erLrkwWJiJ?=
- =?us-ascii?Q?G07hW2xGR630m0wZVt4sCWgH+ZQezpNtR0X0I+STwwQ7z4z9gxA1PMHSNPv5?=
- =?us-ascii?Q?9s5JoD6TVhFlAfCQftliPLnyeOS9hs9WAhu4RVi1BamhoZ9ME/NZ+iiilJnw?=
- =?us-ascii?Q?tYB/eF/Ni87i1ZzRrlIFLVxfWwX2KOBNl4bMauEpqwWvdBY0eMBmjahuhrYE?=
- =?us-ascii?Q?2t188PKl2LBdziP55S7OEUvxnQqZuQudZMH2uq1/V0DTuUP+4YuKdHakvtX3?=
- =?us-ascii?Q?0rRc49HrgWT0LpByj7aI61SyvuaFNV9UAXvLjiGEwoPJnYaFfVowIvxxGuna?=
- =?us-ascii?Q?+ZRa0olEd6FKddYOGg1caNFJlS3pTX45RleLWWw1bbefnranjDn7NUWUDtpt?=
- =?us-ascii?Q?uNfghOuE63K3UvxM+eJs063JDF6jsRXlaKk3y4hnc7dbYk980Q3JmrxCt3NQ?=
- =?us-ascii?Q?h/bixFHqA5opVzVgkg2yR95uOfyLO9G0kZQQGNtiSIY5fitVK97uvigR2A1k?=
- =?us-ascii?Q?Txq396fNsV6Hm0c4yVhEBc3ZC1VR+eJMBfGnLZBMlpH+Luf9yxgbk1AYLIF1?=
- =?us-ascii?Q?VAtpYYIk4MDYeZkSu5HkwLntgd2NPfuSqrcFIIEpu9IJogfULMFalyTOJMzO?=
- =?us-ascii?Q?BPrq5PZYnra/Q474dTiktgWI+LqkF5IRU3SP0707ZMDUkMnSRRJuugh99T8u?=
- =?us-ascii?Q?6SFvqcGzgQ9Kv1ZGWQOmjITav6l9s2dcWGA0T/bEDuRLjXYRnRcfB28JUUlh?=
- =?us-ascii?Q?DGyAQtGF/nHik8sFPM+2JFXO6D1cDLJRNxJOxrI+?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	+YJbsrhfqR3jC2ubJ7E3UpUiVyZyWQohRrYfEc7W1Kv+FWsy5jRjb8XoCW+3zakwAtXvtZKYlWSvols+8DkXJ8C3luwI0ciznoZNsQRW6SaDo0v5KnEJwIrz6HS4PNGyHggggJfaq+5A6H/uF5EY/c2Kxe2hR/0qksrgyvtTS8n5KKPObhq+29mKN7OHXU45UAsBd3fuWXFTaiceG1KZoV+Dxk+ADwzi5QAYWRxynBnxpmDyJuZ6vGVV6SpWGiV9IXTirOZhLkyMbP/UeFwwiOcK0JftzLdqQcYxX0FQ+TVFDXCa94BSF+xKHoBT6nbPS2XNegZ1H1m23EurKXyMyGH3S3DyW6lx+8xamsz1l1DgHON4eWTIyag9A3hZv4TXBqo+JuW8vK4rU7gqJxRNP86PwUM6h/UMjZpNq5TIkkzf3pM7DY88hacOF0HLZUrzh4qVOZMyBwm1viof2G6EzssQI61a7kwFZpyM5yJHUF3YuGTGgoAl/EqQPDmJCUeMd99vKiAg597hWMDkHOpj7js8+CTNArIXbvl547UM2lnAfrh8yTSMSL1ajCw8lpM0TFsAf3hIUihMyX1yubgPqsjZClV53k4CrRQuf7JwhyKNZbnFkahUHFdj2HtN03L4
-X-OriginatorOrg: drivenets.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 148b361d-3531-4fc8-041c-08dcf74eed33
-X-MS-Exchange-CrossTenant-AuthSource: DB8PR08MB5388.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2024 12:49:14.0342
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 662f82da-cf45-4bdf-b295-33b083f5d229
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7IDpoldOLSJ7o6xhlJH70mkIA4VwKWEF+SHZd5AuqydjSw1f/bI0SVfGzg/+w/t3V5QAqoGsM6FGGLlrNe8BSQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB8812
-X-MDID: 1730119757-lzXIS2pw1Mf9
-X-MDID-O:
- eu1;fra;1730119757;lzXIS2pw1Mf9;<gnaaman@drivenets.com>;0fb508fd2d7d252a5b49e2d561d41b8b
-X-PPE-TRUSTED: V=1;DIR=OUT;
+X-Received: by 2002:a05:6e02:1528:b0:3a2:7651:9846 with SMTP id
+ e9e14a558f8ab-3a4ed295a05mr89773055ab.13.1730159841172; Mon, 28 Oct 2024
+ 16:57:21 -0700 (PDT)
+Date: Mon, 28 Oct 2024 16:57:21 -0700
+In-Reply-To: <00000000000044832c06209859bd@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <672024e1.050a0220.11b624.04b7.GAE@google.com>
+Subject: Re: [syzbot] [sctp?] KMSAN: uninit-value in sctp_sf_ootb
+From: syzbot <syzbot+f0cbb34d39392f2746ca@syzkaller.appspotmail.com>
+To: davem@davemloft.net, edumazet@google.com, horms@kernel.org, 
+	kuba@kernel.org, linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org, 
+	lucien.xin@gmail.com, marcelo.leitner@gmail.com, netdev@vger.kernel.org, 
+	pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hello,
+syzbot has found a reproducer for the following issue on:
 
-We've noticed that when a namespace has a large amount of IP addresses,
-the list `net->sctp.local_addr_list` gets obscenely long.
+HEAD commit:    819837584309 Linux 6.12-rc5
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1211e940580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4d4311df74eee96f
+dashboard link: https://syzkaller.appspot.com/bug?extid=f0cbb34d39392f2746ca
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11eb3230580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11f36ca7980000
 
-This list contains both IPv4 and IPv6 addresses, of all scopes, and it is
-a single long list, instead of a hashtable.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/dfa054090a8f/disk-81983758.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/54edfdbd151e/vmlinux-81983758.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d63a317b80f9/bzImage-81983758.xz
 
-In our case we had 12K interfaces, each with an IPv4 and 2 IPv6 addresses
-(GUA+LLA), which made deletion of a single address pretty expensive, since
-it requires a linear search through 36K addresses.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f0cbb34d39392f2746ca@syzkaller.appspotmail.com
 
-Internally we solved it pretty naively by turning the list into hashmap, which
-helped us avoid this bottleneck:
+syz-executor341 uses obsolete (PF_INET,SOCK_PACKET)
+=====================================================
+BUG: KMSAN: uninit-value in sctp_sf_ootb+0x7f5/0xce0 net/sctp/sm_statefuns.c:3712
+ sctp_sf_ootb+0x7f5/0xce0 net/sctp/sm_statefuns.c:3712
+ sctp_do_sm+0x181/0x93d0 net/sctp/sm_sideeffect.c:1166
+ sctp_endpoint_bh_rcv+0xc38/0xf90 net/sctp/endpointola.c:407
+ sctp_inq_push+0x2ef/0x380 net/sctp/inqueue.c:88
+ sctp_rcv+0x3831/0x3b20 net/sctp/input.c:243
+ sctp4_rcv+0x42/0x50 net/sctp/protocol.c:1159
+ ip_protocol_deliver_rcu+0xb51/0x13d0 net/ipv4/ip_input.c:205
+ ip_local_deliver_finish+0x336/0x500 net/ipv4/ip_input.c:233
+ NF_HOOK include/linux/netfilter.h:314 [inline]
+ ip_local_deliver+0x21f/0x490 net/ipv4/ip_input.c:254
+ dst_input include/net/dst.h:460 [inline]
+ ip_rcv_finish+0x4a2/0x520 net/ipv4/ip_input.c:449
+ NF_HOOK include/linux/netfilter.h:314 [inline]
+ ip_rcv+0xcd/0x380 net/ipv4/ip_input.c:569
+ __netif_receive_skb_one_core net/core/dev.c:5666 [inline]
+ __netif_receive_skb+0x319/0xa00 net/core/dev.c:5779
+ netif_receive_skb_internal net/core/dev.c:5865 [inline]
+ netif_receive_skb+0x58/0x660 net/core/dev.c:5924
+ tun_rx_batched+0x3ee/0x980 drivers/net/tun.c:1550
+ tun_get_user+0x5783/0x6c60 drivers/net/tun.c:2007
+ tun_chr_write_iter+0x3ac/0x5d0 drivers/net/tun.c:2053
+ new_sync_write fs/read_write.c:590 [inline]
+ vfs_write+0xb2b/0x1540 fs/read_write.c:683
+ ksys_write+0x24f/0x4c0 fs/read_write.c:736
+ __do_sys_write fs/read_write.c:748 [inline]
+ __se_sys_write fs/read_write.c:745 [inline]
+ __x64_sys_write+0x93/0xe0 fs/read_write.c:745
+ x64_sys_call+0x306a/0x3ba0 arch/x86/include/generated/asm/syscalls_64.h:2
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
 
-    + #define SCTP_ADDR_HSIZE_SHIFT	8
-    + #define SCTP_ADDR_HSIZE		(1 << SCTP_ADDR_HSIZE_SHIFT)
+Uninit was created at:
+ slab_post_alloc_hook mm/slub.c:4091 [inline]
+ slab_alloc_node mm/slub.c:4134 [inline]
+ kmem_cache_alloc_node_noprof+0x6bf/0xb80 mm/slub.c:4186
+ kmalloc_reserve+0x13d/0x4a0 net/core/skbuff.c:587
+ __alloc_skb+0x363/0x7b0 net/core/skbuff.c:678
+ alloc_skb include/linux/skbuff.h:1322 [inline]
+ alloc_skb_with_frags+0xc8/0xd00 net/core/skbuff.c:6612
+ sock_alloc_send_pskb+0xa81/0xbf0 net/core/sock.c:2883
+ tun_alloc_skb drivers/net/tun.c:1526 [inline]
+ tun_get_user+0x20f4/0x6c60 drivers/net/tun.c:1851
+ tun_chr_write_iter+0x3ac/0x5d0 drivers/net/tun.c:2053
+ new_sync_write fs/read_write.c:590 [inline]
+ vfs_write+0xb2b/0x1540 fs/read_write.c:683
+ ksys_write+0x24f/0x4c0 fs/read_write.c:736
+ __do_sys_write fs/read_write.c:748 [inline]
+ __se_sys_write fs/read_write.c:745 [inline]
+ __x64_sys_write+0x93/0xe0 fs/read_write.c:745
+ x64_sys_call+0x306a/0x3ba0 arch/x86/include/generated/asm/syscalls_64.h:2
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
 
-    - 	struct list_head local_addr_list;
-    + 	struct list_head local_addr_list[SCTP_ADDR_HSIZE];
+CPU: 0 UID: 0 PID: 5818 Comm: syz-executor341 Not tainted 6.12.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
+=====================================================
 
 
-I've used the same factor used by the IPv6 & IPv4 address tables.
-
-I am not entirely sure this patch solves a big enough problem for the greater
-general kernel community to warrant the increased memory usage (~2KiB-p-netns),
-so I'll avoid sending it.
-
-Recently, though, both IPv4 and IPv6 tables were namespacified, which makes
-me think that maybe local_addr_list is no longer necessary, enabling us to
-them directly instead of maintaining a separate list.
-
-As far as I could tell, the only field of `struct sctp_sockaddr_entry` that
-are used for items of this list, aside from the address itself, is the `valid`
-bit, which can probably be folded into `struct in_ifaddr` and `struct inet6_ifaddr`.
-
-What I'm suggesting, in short is:
- - Represent `valid` inside the original address structs.
- - Replace iteration of `local_addr_list` with iteration of ns addr tables
- - Eliminate `local_addr_list`
-
-Is this a reasonable proposal?
-
-Thank you for your time,
-Gilad
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
