@@ -1,163 +1,142 @@
-Return-Path: <linux-sctp+bounces-272-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-273-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7C429B4CF9
-	for <lists+linux-sctp@lfdr.de>; Tue, 29 Oct 2024 16:06:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D73D99B4ECB
+	for <lists+linux-sctp@lfdr.de>; Tue, 29 Oct 2024 17:03:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85AF5281E7C
-	for <lists+linux-sctp@lfdr.de>; Tue, 29 Oct 2024 15:06:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C279289AE3
+	for <lists+linux-sctp@lfdr.de>; Tue, 29 Oct 2024 16:02:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7A5518DF60;
-	Tue, 29 Oct 2024 15:06:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F35F8196455;
+	Tue, 29 Oct 2024 16:02:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FvXhbC4z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GM3xyMVF"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5A6A19306F;
-	Tue, 29 Oct 2024 15:06:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DEFC19309C;
+	Tue, 29 Oct 2024 16:02:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730214376; cv=none; b=k5EHopTA2CYFewf5I8I0HrVrccDq/SSSpyhyigPe1Q7DzR3jqG6M7IMB52aqA+uDHEW2+q7cDfi/l4x+hHw8mMFFBMuis9YXUPbkhu6CX4wOedBrNE4Hbt5X6CaKBrc66SsM7YphXDw7X23i5Lp3HGQ2qgeLMaGVRgiT2J4RCZ8=
+	t=1730217774; cv=none; b=ERLp308Ll11WNRX4t15JHtCp/A1Z9eSo2Ep5Vqex/t3a8K69CvKqF7T2OBineu9CjzsyR3fhCqXu6LSjYgQ8EDZqczcBFdMs1V9J5U4yMcmRL3ouSuSd85V8RD6EOnZTyOLoJfKQ0Rlo6vFMmm6/ndlMkQV+GuejK9YBYpUC96E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730214376; c=relaxed/simple;
-	bh=OtqMbGEK7ANuRQtRM2dsZgPAopTCBrySCzVv68vLxQI=;
+	s=arc-20240116; t=1730217774; c=relaxed/simple;
+	bh=FtJx6Wo3p29eSAg1dW0tcFKWvNDY8B/086fCEFwO9Tw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fnGE9fNQJImvus2VQGSVez2xqpTp/yEssZPS81m9yT09hRRxSYuyTLkONvEHo7pNT/THXqW1K2zr3VMQ0zw10VMqZlC3pLA7C7SDGnreX3AdJXsOYtjFEfKY4ILvj+spEAPsWPHIEVoTTukXnF3jAQwWSo2JmS8bNMG516Cpdu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FvXhbC4z; arc=none smtp.client-ip=209.85.166.181
+	 To:Cc:Content-Type; b=ADZJUK5WJlaFkCZtXmM9F5eAZxACX2rz5IfcAV5nPozAeufx2715JbKcjY/x5u8tdh3IEZFYI4wJJ7baA9ZkjPytK6H4Nq/a/28JQ1QByedUKJgnHvEnCwsPU2TDUjZf7szqs0LKRnQik9UXi8kqcCx9Yuxddo02y2cFT8z6iAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GM3xyMVF; arc=none smtp.client-ip=209.85.166.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-il1-f181.google.com with SMTP id e9e14a558f8ab-3a3b7d95a11so18749505ab.2;
-        Tue, 29 Oct 2024 08:06:13 -0700 (PDT)
+Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-3a3a5cd2a3bso23192025ab.3;
+        Tue, 29 Oct 2024 09:02:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730214373; x=1730819173; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730217772; x=1730822572; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oFKhKFT9IwpEW5k50b87P0zH8/cUwcz2zc0dijus744=;
-        b=FvXhbC4zvVizxPMP5DIzyuvZ9WXQ5WGZqzdMxfp2sTIh4N1stbq+WQHGdb2eLuwucw
-         4ObjWZtBXwBsy7HmHWBqqSovr9dO/XK1PvwvPq82IM4/o5fKpAcUAW8nDCXsHn1X3SC/
-         dN5kl8W/LwJXtoKAAmwQnNGM+nb6cYBs+Azo9YEtqORc2ONCuiS/OJm1xfcFeVzNTA8d
-         sdMPdLlzsoSnddlp3duDJ+gV5+rIQFuhHk+LlKfsC7rCiXQczwPoxjzzghVZtqYX0hFQ
-         SqS4xROdK90I9gadrB51owvHxgJdD8WUpc6v8kkL7LRXdncpZ0dEMcQ2vxhEvbZF/Qq6
-         MwnA==
+        bh=2cK2Y4uadfwipRkCs55AvdNK28aDW94wpHDMth7dhIo=;
+        b=GM3xyMVF7bNQsCDQAbo/FpFwHSi8O+phwdgEumhVCEnIfwc0YvJ5YEMFCDmseoflic
+         bdG5CSlqfuwuA9GAndJfOyLYSNJSYFe0peTqhMMiYxwFWhnRLHAm/Clia+zvgR1irlLD
+         3Ee6Z5UGrUx4TF4hM8YN2Vqv6CqyXmKipMloBtHaT34bT6Q8533bX9x2FiolQMPPlI/S
+         Rs/1B+wklC1JQ4X3m28PTZ6F2zYwa6Ko5DbcdM0cj1/drvmNVM5WLJ0Tubhfqq97PxEU
+         zL96WlbAZp/R+DjluAL1mWiCZdAgqMUwhGrJ/42QYUno8z7LNPcn/Km3lXjbPvzY078U
+         qVEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730214373; x=1730819173;
+        d=1e100.net; s=20230601; t=1730217772; x=1730822572;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=oFKhKFT9IwpEW5k50b87P0zH8/cUwcz2zc0dijus744=;
-        b=tIXYUZwJ2muIv59YsFhpVXAS3bKGILX7tWMeZcHgt+h9I7kOYhzbmlyPPFKYRhXX3T
-         /Xn+Kx+m2Cg2bwc63DDXQau8FLp8vfe7W6tWARqTzRkxzKlKq1MxBnXu9ojZxS0qc70e
-         D2ppL/7uuCkORfGZdbVcb5XMfQFAHfEFoezMADIps/IR3+SWwii6AgJ60tuzZ2oXFJ37
-         1kcI+ygWwDuxzjoEFq+OYpGwPZNzlrNkWcUHBoYbmPvJSg6UcWJbM+sFK4WXfxUXcIA3
-         SYhYjFjaDED0XYsdMQRNX3MQb8V7pvN/HEZlSN0XhVB8rMYuThbibf4/Oi7heyUWuSH7
-         blRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUNWBr1J2yPPvQ9LtqkKhZnzTh1YsuJGPrmS8UhQh0ENn7ZJV748lDCaeqHhZVQuqbbgEM8oTk0qj/a@vger.kernel.org, AJvYcCX+3vkKkt3p7lJC59VFs7J81ZtdRzYST2bLVW5UF8sKP0JOKpjFyHj/VJaqDl2tWc/GW+YEfGq2@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWdnne9Ls5XH5vQPqZeu5KirxFc8wGYThpaWNz6yWOQ9DMqleo
-	v6YfLcY741f1iVD/AZ3mX6+E35a5k+s65XI3YwPrxdCjRo9qRa8Is8xpZAHRwcPWacmsnKFy0Gn
-	XuZR4X+amFx0mc+f0sdlTElw56ijGJILT
-X-Google-Smtp-Source: AGHT+IEtId3Xh1qbzSGoLnduAkX75TeiPCnwGNjI4NvMq/8AWkTjxBY8ZrNKLjXdnNfJebWMgA5p3bsI/GlSN+wT2ws=
-X-Received: by 2002:a05:6e02:188c:b0:39b:330b:bb25 with SMTP id
- e9e14a558f8ab-3a4ed2944dbmr114901065ab.12.1730214372590; Tue, 29 Oct 2024
- 08:06:12 -0700 (PDT)
+        bh=2cK2Y4uadfwipRkCs55AvdNK28aDW94wpHDMth7dhIo=;
+        b=Xvl5OCODHmWgodTTa/0HH79O3aREhpb+Mg4wnOdVWGH5ocdKmdOO7/M30n8a5Im0VH
+         yVBr7OhKnWSRwQ+i68OT1eqMS95GEXXLt/UFmzAD4LqhKVVEsideoXMo/0YpKSRrKwwB
+         2RrOLdhKiqwpWFOosY2/B5hdCAsgyEgixJB2mjOpMJLtlUsdWlpzDL9PjhYIQWHwL9Ir
+         ke1Js5P8OeKmY3Yr0iiJf8TtewSVrT32aaHwNsA0/zCmNpB80TIc75wbJzDGLjnx/3p9
+         ZepO3gzx/xZQezrghQuie7aqbgkB7U32KU22epSyQsBTtgAEPPRini62sItupuXJLDTo
+         hNEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUOX7VxO7tewvYhY3JGhKxUDCfdGjHvOFKy0Oj6sYSaz+yfShJ4PEa/+NZ1lL9zkBbPMhjxaMQPieq6@vger.kernel.org, AJvYcCWK89mHWY5KVnWyh9UhySWCB0+JzY/wn7y4kJHQI5ku+3Pr/RIsghzQdXxceWdSAaUR8sKMcg8d@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkrXeZc3z3i5BVLkNfCqBvl34amZRjFiAH+4wt3Y4uDSFz6YBg
+	5b/tMKQ9mrN0/v3sbLZrGwsE4dW0UJg82scEzYZWgk8nOUgtA9q1NgzDHT2IUV80RXYYlB+emW7
+	9CN/TWCvgBPJWyUrqwt7NEZK4cRQ=
+X-Google-Smtp-Source: AGHT+IE8+IDSVzYWZx3SeO1fGCa699XovvCjq1E5XqcC9jNNsMruqeiLZQcEtqql7nFkN5+UBKFz1L14iAzoDADYsB4=
+X-Received: by 2002:a92:ca08:0:b0:3a4:e823:1ce3 with SMTP id
+ e9e14a558f8ab-3a4ed2668c1mr99791115ab.3.1730217772063; Tue, 29 Oct 2024
+ 09:02:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241028124845.3866469-1-gnaaman@drivenets.com>
-In-Reply-To: <20241028124845.3866469-1-gnaaman@drivenets.com>
+References: <20241028081012.3565885-1-gnaaman@drivenets.com>
+In-Reply-To: <20241028081012.3565885-1-gnaaman@drivenets.com>
 From: Xin Long <lucien.xin@gmail.com>
-Date: Tue, 29 Oct 2024 11:06:00 -0400
-Message-ID: <CADvbK_c5jNywSZOwSb-qcfxoNwauG1vkQFg6a8h4QOq50Q9uSQ@mail.gmail.com>
-Subject: Re: Solving address deletion bottleneck in SCTP
+Date: Tue, 29 Oct 2024 12:02:41 -0400
+Message-ID: <CADvbK_eUK9QLzJ2HYtqQ1woAF=pcgTbvckeqCk1Es50HkxdZTg@mail.gmail.com>
+Subject: Re: [PATCH net-next] sctp: Avoid enqueuing addr events redundantly
 To: Gilad Naaman <gnaaman@drivenets.com>
-Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, linux-sctp@vger.kernel.org, 
-	netdev@vger.kernel.org
+Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, linux-sctp@vger.kernel.org, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 28, 2024 at 8:49=E2=80=AFAM Gilad Naaman <gnaaman@drivenets.com=
+On Mon, Oct 28, 2024 at 4:10=E2=80=AFAM Gilad Naaman <gnaaman@drivenets.com=
 > wrote:
 >
-> Hello,
+> Avoid modifying or enqueuing new events if it's possible to tell that no
+> one will consume them.
 >
-> We've noticed that when a namespace has a large amount of IP addresses,
-> the list `net->sctp.local_addr_list` gets obscenely long.
+> Since enqueueing requires searching the current queue for opposite
+> events for the same address, adding addresses en-masse turns this
+> inetaddr_event into a bottle-neck, as it will get slower and slower
+> with each address added.
 >
-> This list contains both IPv4 and IPv6 addresses, of all scopes, and it is
-> a single long list, instead of a hashtable.
+> Signed-off-by: Gilad Naaman <gnaaman@drivenets.com>
+> ---
+>  net/sctp/protocol.c | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
 >
-> In our case we had 12K interfaces, each with an IPv4 and 2 IPv6 addresses
-> (GUA+LLA), which made deletion of a single address pretty expensive, sinc=
-e
-> it requires a linear search through 36K addresses.
+> diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
+> index 39ca5403d4d7..2e548961b740 100644
+> --- a/net/sctp/protocol.c
+> +++ b/net/sctp/protocol.c
+> @@ -738,6 +738,20 @@ void sctp_addr_wq_mgmt(struct net *net, struct sctp_=
+sockaddr_entry *addr, int cm
+>          */
 >
-> Internally we solved it pretty naively by turning the list into hashmap, =
-which
-> helped us avoid this bottleneck:
->
->     + #define SCTP_ADDR_HSIZE_SHIFT     8
->     + #define SCTP_ADDR_HSIZE           (1 << SCTP_ADDR_HSIZE_SHIFT)
->
->     -   struct list_head local_addr_list;
->     +   struct list_head local_addr_list[SCTP_ADDR_HSIZE];
->
->
-> I've used the same factor used by the IPv6 & IPv4 address tables.
->
-> I am not entirely sure this patch solves a big enough problem for the gre=
-ater
-> general kernel community to warrant the increased memory usage (~2KiB-p-n=
-etns),
-> so I'll avoid sending it.
->
-> Recently, though, both IPv4 and IPv6 tables were namespacified, which mak=
-es
-> me think that maybe local_addr_list is no longer necessary, enabling us t=
-o
-> them directly instead of maintaining a separate list.
->
-> As far as I could tell, the only field of `struct sctp_sockaddr_entry` th=
-at
-> are used for items of this list, aside from the address itself, is the `v=
-alid`
-> bit, which can probably be folded into `struct in_ifaddr` and `struct ine=
-t6_ifaddr`.
->
-> What I'm suggesting, in short is:
->  - Represent `valid` inside the original address structs.
->  - Replace iteration of `local_addr_list` with iteration of ns addr table=
-s
->  - Eliminate `local_addr_list`
->
-> Is this a reasonable proposal?
-This would simplify sctp_inet6addr_event() and sctp_inetaddr_event(),
-but complicate sctp_copy_laddrs() and sctp_copy_local_addr_list().
+>         spin_lock_bh(&net->sctp.addr_wq_lock);
+> +
+> +       /* Avoid searching the queue or modifying it if there are no cons=
+umers,
+> +        * as it can lead to performance degradation if addresses are mod=
+ified
+> +        * en-masse.
+> +        *
+> +        * If the queue already contains some events, update it anyway to=
+ avoid
+> +        * ugly races between new sessions and new address events.
+> +        */
+> +       if (list_empty(&net->sctp.auto_asconf_splist) &&
+> +           list_empty(&net->sctp.addr_waitq)) {
+> +               spin_unlock_bh(&net->sctp.addr_wq_lock);
+> +               return;
 
-Would you like to create a patch for this and let's see how it looks?
-
-Note I don't think that that 'valid' bit is useful:
-
-               if (addr->a.sa.sa_family =3D=3D AF_INET &&
-                               addr->a.v4.sin_addr.s_addr =3D=3D
-                               ifa->ifa_local) {
-                       sctp_addr_wq_mgmt(net, addr, SCTP_ADDR_DEL);
-                       found =3D 1;
-                                      <-------- [1]
-                       addr->valid =3D 0;
-                       list_del_rcu(&addr->list);
-                       break;
-               }
-
-'addr' can be copied before "addr->valid =3D 0;" with addr->valid =3D1 in
-another thread anyway. I think you can ignore this 'valid' bit.
+What if after this but before the addr is deleted from local_addr_list in
+sctp_inetaddr_event(), a new SCTP association is created with these addrs
+in local_addr_list, will it miss this asconf addr_del?
 
 Thanks.
+
+> +       }
+> +
+>         /* Offsets existing events in addr_wq */
+>         addrw =3D sctp_addr_wq_lookup(net, addr);
+>         if (addrw) {
+> --
+> 2.46.0
+>
 
