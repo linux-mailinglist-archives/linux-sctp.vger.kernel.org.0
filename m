@@ -1,87 +1,85 @@
-Return-Path: <linux-sctp+bounces-278-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-279-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D0609BAE3B
-	for <lists+linux-sctp@lfdr.de>; Mon,  4 Nov 2024 09:36:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24B889BC88C
+	for <lists+linux-sctp@lfdr.de>; Tue,  5 Nov 2024 10:02:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 655D7B221F9
-	for <lists+linux-sctp@lfdr.de>; Mon,  4 Nov 2024 08:36:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9137283989
+	for <lists+linux-sctp@lfdr.de>; Tue,  5 Nov 2024 09:02:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6C8E18A947;
-	Mon,  4 Nov 2024 08:36:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 958F71C3025;
+	Tue,  5 Nov 2024 09:02:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=drivenets.onmicrosoft.com header.i=@drivenets.onmicrosoft.com header.b="TnwkGqGq"
+	dkim=pass (1024-bit key) header.d=drivenets.onmicrosoft.com header.i=@drivenets.onmicrosoft.com header.b="fwbIPGgX"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from dispatch1-eu1.ppe-hosted.com (dispatch1-eu1.ppe-hosted.com [185.183.29.34])
+Received: from dispatch1-eu1.ppe-hosted.com (dispatch1-eu1.ppe-hosted.com [185.183.29.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB29B18BB8F;
-	Mon,  4 Nov 2024 08:36:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=185.183.29.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED694317C;
+	Tue,  5 Nov 2024 09:02:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=185.183.29.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730709376; cv=fail; b=WvRiktL5NG7rZbk6GhfEGYdKMvYjFFB4jTsRnP2iX/w3aGiAWVl1fTijlieL2PyFIsRLowXqN570OQI8SKPO9qR6wb7zQ2E5OEEBNmMwJHyB/FsF+Yz4C2vPpMoLiMWMpUMhc39jApjDZmEoyMTTiDUtHMpc1+qdeNBJYgNUwKk=
+	t=1730797363; cv=fail; b=NuVSn0T2J8VRFUCM0E4YIq9eAM6jjY+9E4LdZ3SLhFO8YpmLNWdbNV/4GG2yL+aTMXbaJwjrs361lwl+HSIiSC/Tg64WvVkLrmLpzh+pY+QCTowsUUJa5TgdXPeC914PSOH0vh5I8lkOTGzCM8XNC3mnURWBaTSUsWjYUQS1Ca8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730709376; c=relaxed/simple;
-	bh=e8ckLH0qbsVA6Uc2j5a+J039QSgse2h/wNmPFYPzwAo=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=YxJ0HwZ5f9EOhk6vsgewCcpXiHp79Q0P0VNyBnhwdB60mxhCLqSh3JzCNSKB8N3F21OaL/zVbAh72pjnbekBoYpshsKkjhF0CEZI5Fad2Z+mf/N0w5Hoqok9eXPbfUxwNFGyRllSBX60BSr758P/vkll49ncRDku3gIAJGXwMBc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=drivenets.com; spf=pass smtp.mailfrom=drivenets.com; dkim=pass (1024-bit key) header.d=drivenets.onmicrosoft.com header.i=@drivenets.onmicrosoft.com header.b=TnwkGqGq; arc=fail smtp.client-ip=185.183.29.34
+	s=arc-20240116; t=1730797363; c=relaxed/simple;
+	bh=mps/tRyxdsvvKPB6WhO5CfmhrY+dtlwuC1tvyLikIuo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=mNjr8LBiekV7xZe1fcwCyTiBvEXIEYKDHM/JHQJZjV/Bt7FCNa47OHKxBzI2fkoo2eJl60xn74K7ldVHeAWkmp34R1XQ1ZhO5O03gYyvaNpY+i2ZtM6QwLLMIKIa3zh7p2Lr+cOxZSny16K56sIAAuVWgKy0gLT2kH9zrhY8mcA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=drivenets.com; spf=pass smtp.mailfrom=drivenets.com; dkim=pass (1024-bit key) header.d=drivenets.onmicrosoft.com header.i=@drivenets.onmicrosoft.com header.b=fwbIPGgX; arc=fail smtp.client-ip=185.183.29.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=drivenets.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=drivenets.com
 X-Virus-Scanned: Proofpoint Essentials engine
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05lp2168.outbound.protection.outlook.com [104.47.17.168])
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02lp2238.outbound.protection.outlook.com [104.47.11.238])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx1-eu1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTPS id 9CA8048005D;
-	Mon,  4 Nov 2024 08:36:11 +0000 (UTC)
+	by mx1-eu1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTPS id 1EADD200069;
+	Tue,  5 Nov 2024 09:02:33 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=iPjHxsep8/KXI5lj7c46VLJ1LZGOnN57ecM02EC6ZfsKumc1CJHf1KRNogKrI5wpvuch5AxF04F9RaK0+FQ9wwet3ZNrzQe/Xzl6Wp6hvQzrCU/lZNj0prg1W69fWMwMT73UFHRzwpqIH1ejMAzvvmxZRspWCnqzy1Yf8jDQ368yctOcFtKVIlqC5VR7eig3+319fbTlAL6fR7kqcOqBmZEwXJHyp9Mla7QrUZQcbj5LHUkolwVak7P1kRo+ehtOoXysv+mj9Ze3Mr+cvoQ4WUJYvtLj253wDhjbTwSiKuuesmscwF7Py35OFEGPMImz4ck6omcOGn5VWR50o1ztLw==
+ b=hACjiym4eRZRUZFDQ6oAJUTSDs2lSJxoCmEusPZ4Akf16g5td7pXz64g8AI1jzb/UtZivIdDrQ5jKGIjZtCgNzFCh2ShmpybEXay6ocrTqprTPBJw+EI0Frwl8vW3jVGK3+cNtXZB0ZGoZvqYIdC27PjJnSAhGMKVZNjWubVsshQtEHtFEj3DHGn2h+ilYn1ohfJfEepmEnMZTEDJ6y4IBbpXpMV4DMT0QoYAwwgF6kkD9ORQ2ECaJ0Fc0w0MiloSfzCQGdZSoNb9qc77Vgsgvs7EHHmgtyuiY+5jnRfe/oHqRsdwH3aGQEMkKRNu4IFIrS0/YSLcPDR51AMOSHfow==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yblEAxLcdYxN/o41OYtXTNQro+jhX1wIeWn7GbxZDzg=;
- b=aahXlZrN3+FM5JK4i2JtEuku4WfGod+XF7EwolvogY3SaQokAoos6Mu+8gFO8yiu5RJPhND+cWcUkwiOl779Yo3ZytauXIQw9g3ugL0Snf5XtQJgd8DNjPhRyGUrUgcLHW7nKzbNp1cKDgm6V/TACsIj+2WXvegPMzzrGGbJET4A7hGFqa+Xu5d5fixVQd9e2I4FopahR8BhHw58VHW8OftIGt2ioqCu2bGdUfqf90AgT14vndvWj/Y+ed2dS+MH3gy4eiIVIaW0Rjv4A/iW5Fan5TCiLsdliCPrDvt4CGrd5/P189ZtDw+ZMNP/ShPudk0iInd+Vnhd/rOWPKm5lA==
+ bh=hd+5MwXgyaZaWhCrfoBypdQZfO0c4YblAMhpA6u+Fx4=;
+ b=LFAH5pBb9K6nPN2hjorRj1EU5WaPftIsUd8PyzEuGUzBr1d8844DPY7tuJbr6O2Vi6BjWRrkp1K5+05tqTwIU3EpfZKJth3474MtuanTutSsn7vUudKYZPCrgFxzxPdjMAkB6euLQNd43kJ2UYlDfy6wawkc3R4D8fDlG5dAva21GuE5xRzDmoRBIUfh6pArPR0qUZ1G4TTrojAjbjHmQZc1d22oexeVkO4FIwcrdnxHXvr2b7n02t5GEqf4EKlyChNFjP9NWg66TIx8uI5ywXzgbYwLkjybh1hPwOYroNIAUFBjhWBNcaxeT+/IyfVLnL6L7LcbkfmP0ZZRNeiCNQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=drivenets.com; dmarc=pass action=none
  header.from=drivenets.com; dkim=pass header.d=drivenets.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=drivenets.onmicrosoft.com; s=selector2-drivenets-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yblEAxLcdYxN/o41OYtXTNQro+jhX1wIeWn7GbxZDzg=;
- b=TnwkGqGqhJNJTYNwqgV3nASZcDSUhjaYhQTjuFWfLJBLesWnzmOdT97/kWikPUR3uLfldLqaS3Jdg3HBml6VvFYTWTCJGtFR61zGOI0g0fLuJp86ebVE58NbpO3cM/fWjSdKiQ2a9E/izPBCMTEeoMQhMV6oth40Fxiz+jROD8k=
+ bh=hd+5MwXgyaZaWhCrfoBypdQZfO0c4YblAMhpA6u+Fx4=;
+ b=fwbIPGgX2SsgYNnr+h+vjUQuZx4V7/DOUOvCjbd9Q2JYcQOMDAVjBvvCf4/Dz3sL48tkagUnlLXJAjq5NDz6cIDwt8mrpb/BFfh0jxKoPWzh+Q4idozf98Ca8AIrbUysbvamMffHoZFnPVSTrMJCYNJjy0dGGGtro69weKk85js=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=drivenets.com;
 Received: from DB8PR08MB5388.eurprd08.prod.outlook.com (2603:10a6:10:11c::7)
- by GV1PR08MB10671.eurprd08.prod.outlook.com (2603:10a6:150:16e::18) with
+ by PA4PR08MB7569.eurprd08.prod.outlook.com (2603:10a6:102:26e::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.28; Mon, 4 Nov
- 2024 08:36:06 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.30; Tue, 5 Nov
+ 2024 09:02:29 +0000
 Received: from DB8PR08MB5388.eurprd08.prod.outlook.com
  ([fe80::29dd:6773:4977:dc4e]) by DB8PR08MB5388.eurprd08.prod.outlook.com
- ([fe80::29dd:6773:4977:dc4e%6]) with mapi id 15.20.8114.028; Mon, 4 Nov 2024
- 08:36:06 +0000
+ ([fe80::29dd:6773:4977:dc4e%6]) with mapi id 15.20.8114.028; Tue, 5 Nov 2024
+ 09:02:29 +0000
 From: Gilad Naaman <gnaaman@drivenets.com>
-To: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	Xin Long <lucien.xin@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
+To: lucien.xin@gmail.com
+Cc: gnaaman@drivenets.com,
 	linux-sctp@vger.kernel.org,
+	marcelo.leitner@gmail.com,
 	netdev@vger.kernel.org
-Cc: Gilad Naaman <gnaaman@drivenets.com>
-Subject: [PATCH net-next v2] sctp: Avoid enqueuing addr events redundantly
-Date: Mon,  4 Nov 2024 08:35:44 +0000
-Message-ID: <20241104083545.114-1-gnaaman@drivenets.com>
+Subject: Re: Solving address deletion bottleneck in SCTP
+Date: Tue,  5 Nov 2024 09:02:17 +0000
+Message-ID: <20241105090218.19-1-gnaaman@drivenets.com>
 X-Mailer: git-send-email 2.47.0
+In-Reply-To: <CADvbK_c5jNywSZOwSb-qcfxoNwauG1vkQFg6a8h4QOq50Q9uSQ@mail.gmail.com>
+References: <CADvbK_c5jNywSZOwSb-qcfxoNwauG1vkQFg6a8h4QOq50Q9uSQ@mail.gmail.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: LO4P265CA0226.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:315::7) To DB8PR08MB5388.eurprd08.prod.outlook.com
+X-ClientProxiedBy: LO2P265CA0323.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:a4::23) To DB8PR08MB5388.eurprd08.prod.outlook.com
  (2603:10a6:10:11c::7)
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
@@ -90,160 +88,201 @@ List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB8PR08MB5388:EE_|GV1PR08MB10671:EE_
-X-MS-Office365-Filtering-Correlation-Id: a7b9c4bf-9da4-4f21-f0fc-08dcfcabb970
+X-MS-TrafficTypeDiagnostic: DB8PR08MB5388:EE_|PA4PR08MB7569:EE_
+X-MS-Office365-Filtering-Correlation-Id: 61ac5911-f197-4d11-97a1-08dcfd789397
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|52116014|376014|38350700014;
+	BCL:0;ARA:13230040|366016|376014|52116014|1800799024|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?mgdZF/Khp7dmWAzjPe2NiwIu1NbxWpb47P8r5a8CkR9mmAykgnDSv26X8mvA?=
- =?us-ascii?Q?bkD4k6fWaKi2hTBXVKO8KUGiuJwEtDtFP3/KU76f3b673RktJS6REpDfOOoj?=
- =?us-ascii?Q?xPjrt+IXc7VG6edIhkpvg1khrh7cVmnCeKCFwG/gmqYcItGEliu9HVMut2xO?=
- =?us-ascii?Q?xCfLBizn6qJsGRd/qrIAZhxtnbyWXGWC/JBRg2oujEQ628KezDjcrBFofjYn?=
- =?us-ascii?Q?ilPbHCNN7ic89y3lMu6sM6Pvzd19aWY54N521CdVNEjb15Jeoil3YiN0FvwG?=
- =?us-ascii?Q?iZqpzHxrWfUPu29ZZuk27wttKsYOxYk3W5RosntnIEVrn0f7BawawXB7/AP3?=
- =?us-ascii?Q?gQa5cjotcs/uz1YuIydla6XPIg0k+q4h+yQbxJ+zhhRx/GnWefAXHsmiRYpj?=
- =?us-ascii?Q?kX/H9PH0U+La//sgePo5EeqtT4dVIxrxWKlsqOjoqjWRX4r8wRA+H7HMB6d0?=
- =?us-ascii?Q?oNQSNo1hgDjqnm0dkixElbEvlCv7VfHXGzJZTKOKkzo68oyqd5Jz7d2fzYbu?=
- =?us-ascii?Q?70NhLxllu0oAed4nZYungBQTcT2NpDhilmqHglOQmFkF52jzDIwGR1mHllSM?=
- =?us-ascii?Q?NtJgjx1F7UqFdSAPHjES7uKaSMBurOGix376tYt8GlOziLWJypV8f+jo4YSA?=
- =?us-ascii?Q?IyG8jjb342qGAEphuf/gNzarlp1jaNOJiMtJEBGzbY+tK6RbEcWwvp7aSL2t?=
- =?us-ascii?Q?dknPIdWgmTFSI/qRyUq7AIX2q0vErpPP1NZBDfnjAkzsEFqXt55w8f0/Dx/i?=
- =?us-ascii?Q?HtLKLvcv3HgnfQozeNSq/frPNBaXcgt5uxS7ELQj+JqsotFNwqebg5U//Wol?=
- =?us-ascii?Q?Px0jOBa+p6XoLIPHgRWBCNY4TR6OE0f9K6k8NvYF2eOYmwWFslgt2m/ep7iX?=
- =?us-ascii?Q?vKJzx2pqC8uy9J4LDBd/d0n7p9hxmWLnzZDQes73h4ly2blGS0ZOyXrYsLlS?=
- =?us-ascii?Q?U6TdgIaurzmc1UoJM+Fb64UxMaMnsDAYh9UFzBDpTUOwTw+SKjaHwGbEu2QN?=
- =?us-ascii?Q?9TcAg4rH5ykYigN0bkAAIhf0WiYjZnGFd0BWZuFGiqtAmiyh4p0hfKBjKlzE?=
- =?us-ascii?Q?X2FRYdLImIoIzuzOUGQCS0N0J3cyOlHtdrSZmcgvjjBLdptXZ7L8/Yjq9DGx?=
- =?us-ascii?Q?f8stW4HsnMaIcY0RUby0uAoxg2pCaxRy+T9Tu6fvxcs4apdtglxx8Nw8rVOo?=
- =?us-ascii?Q?EGVr+pxYJ6/LHCQg4MeScQf6zrH1NtoIP/oNwLlXEHWP32z7z/zq1r/lwQ0t?=
- =?us-ascii?Q?u9P3jJZuBpha0ACEW81th3WgyeFN+/TYYdHDBn+ghzmTItx08X+TtSNWXGXS?=
- =?us-ascii?Q?ha44+aIIs+oUtTv1Xt5lWLbXi629S5APb7bklOVt2Hcd52PFwZE8YsAzVisG?=
- =?us-ascii?Q?Gk6azGI=3D?=
+	=?us-ascii?Q?VKhTVsdESgVSuEX9WcNcAXxj/68PVgrKUOmOH3vYQXilg7/e4S76jTX7NjF+?=
+ =?us-ascii?Q?f8trQbOT5FxclQl643xTb3NHKHVY5onPCpehnnqr3llYLEOZukeio9qkJHz9?=
+ =?us-ascii?Q?r4WyF1pdfQKyvmXQgioQkq9YVYYPdbKteXr7WWPlXsQbAqjfIRrM7JkG3nWa?=
+ =?us-ascii?Q?EbSLb4LD9u3zmQLLG+BzgGYJjLE/gYAkIertZt77pc/Ep2LP1f1OD6TeuC/d?=
+ =?us-ascii?Q?HNJyPBhaaEwoIbkmgJswK464I9m2naZqQyEhBIDWbOy/kYkuymoW2Zf3PgHO?=
+ =?us-ascii?Q?7PcNY1ZmNczYxpYT7Hs+TNS0BIjtYVk/pdHKLwQ0DBLMqbRgnoUmXzjpL0oA?=
+ =?us-ascii?Q?noux3qKIHmedC6ChPhwhT+tLb3RTvNI+eo0mPLtJaPFaUE1vWg3XKS7LyJ0q?=
+ =?us-ascii?Q?GBLDY0855hGkjyJAykT7zVMBy+v04+mxDtU7RQeE6l2xKQJLtpMtuBIB1Xxs?=
+ =?us-ascii?Q?DyEJKuxCoctpr9GL3lcLR3Op2LuLiyrTLgSAqkhmrnvt0Dt/IO2yv2+rnU6p?=
+ =?us-ascii?Q?KWri4f/irwU5Q7AD5IRqSUoIL9oV9fJLDrlwe9PlLmopc7vFQb0zQJbyVcip?=
+ =?us-ascii?Q?HAvUOR83PbZ2wL5A0w1+zp4yIciaD43lTCaEKE+FUpBzrtOQeOC5WH9RshcY?=
+ =?us-ascii?Q?cnPQK2jR0BN6nNf1PLWAqhVDENt84dqaWnz/pjEhW1Hn3nr+YhW/on4gz+v5?=
+ =?us-ascii?Q?8Ib0jtGOjywgpm6hEdgPeH/wo9Nuty8fP+RQbxLUXmOqEZMtyGMGE7MDQEFl?=
+ =?us-ascii?Q?y+sbaORiz+S5wb0Dkza6ujF+8iwpd2bZq+8AOVJA7u0nWICH8kd/RzvI8Q0Q?=
+ =?us-ascii?Q?2S4U62rmjjBNnc/NBwKyX7940dvWRIRqxkl3Xry6NB1lPnyeicO/Y19gSJGs?=
+ =?us-ascii?Q?7nXtA1HB5UWCyyBAUh31K6or7kg28IrusNOnwJUNI7bd6frX9YMWCAa07xSF?=
+ =?us-ascii?Q?Vp0p+QwhgL0rUEQ8cdYeimiDfYIJAGakSqZyq8LxqaikIxREjAi5CkdYTG+u?=
+ =?us-ascii?Q?7PeA6H42stIhM6T0ileH0jCRzOModrWLsKgDCWMGY+2lazvZ9gkPQ5lWQ555?=
+ =?us-ascii?Q?FV20iU17NQyatEr8lF7/g078ISkrLEAWjAAEMZ+u3OX2FS8qZ2beNBGAMDC/?=
+ =?us-ascii?Q?0X1sS6yGfnRy8wE1kqD6YpvsKzdhFpsiPWhXaElKT3n3T81n9/Ht0msyHC/4?=
+ =?us-ascii?Q?q8nBxdiUka+ZfpI/m63xTI74E9ozMXC0Lg+kgNUTmDimvB2609WgNSrUOw22?=
+ =?us-ascii?Q?W/a6ie/nIX28zfe1sannUPYccxitmZ/RNNHPItEEd58EC8ZqT9w2G6NUzcCn?=
+ =?us-ascii?Q?KESYB0IdaPEOPsPHUg0kfKodYxFU2c+qRwe/zlIEpdn1jShx44soxkO/dEZg?=
+ =?us-ascii?Q?t4MDYL0=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR08MB5388.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(376014)(38350700014);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR08MB5388.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(52116014)(1800799024)(38350700014);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?iGD0LbvcZZ4cNX00HAoIC1i0ua0JaTeo7iQLIrZSeUYh+yaouq6VPWrR5B8K?=
- =?us-ascii?Q?mMtsKMNWbRYg21Ev4B+h97mr9oFYxTEniMfrbaaelP8S/0smHtBf2bZDwIvD?=
- =?us-ascii?Q?HZVDI64HxlnoiSoSD5gCqQtXb7ETD5RiBX2WWBjqujeygcvtk1mWF4/xWxLn?=
- =?us-ascii?Q?OMCmr/3UZXwYb3h6vkEi6zxmL6xjE+1mWrE2Zk9WaRbn7G4m+6WlQLuONJXY?=
- =?us-ascii?Q?3lzNo4OqBiPkPLUCC5+cwhdC7nnQL/4ApCWeUx3Tn0XSdr365z35zT6Hw7ig?=
- =?us-ascii?Q?GowRzea9bO+gIrYnEW8K97UaqAzNAQHTFVCBdfNisGXRLBQ6bQhlYIu6JVwE?=
- =?us-ascii?Q?WQphpVIljP4q5XlE5SsJzL6DcT1y8o+C7YD4UQGQ3f2lEL/rL9kaXvF148VM?=
- =?us-ascii?Q?7kdcFOj6q2OkM5zio1HyuX0b4ZJgcj4LwSTXbL662gSd4HAU1t2rqXCjH7wb?=
- =?us-ascii?Q?5pkG1skLaxEbXVCJoUDKV0s8X6hRjpGJAAnyeLEPJY7+Z2/gnUOj4VfZoHWZ?=
- =?us-ascii?Q?eSAB7buKjAFYp9WVUsUs8JSXkXnjueEn3NzQDeGNfpNe/bLrYaV6rNxp7q4T?=
- =?us-ascii?Q?auapRG8yespvhkMjH1QwlR4SHkw+4ri+0Jg0jOmsO78br+gbUuTxIkN4TUAe?=
- =?us-ascii?Q?2b/mIl06fmcUdPoMGIB/CE91Md1gh96a1riCAqoVboiQ6e3ZsjkLuymJZvVY?=
- =?us-ascii?Q?0NwtKKvfSc0j3v5rObxtE9gWzyBsqHJVYPmCZ4SAraROv95+3FA3Lv4R9cRJ?=
- =?us-ascii?Q?PJ1z27zsSCwvhvQq3ReKISsYJM0Ev9dc/ic/b4zZsdYfJz7e2eR0708l//R2?=
- =?us-ascii?Q?+BoGpC56exbSU3Sa3HqgbkrQcojR+El+tRQrgcRyBr33wtVhqwm2eqdtj7TN?=
- =?us-ascii?Q?YKsSNCMWBhIFZaI+Lia+N8LMVArS7v1WTlVPIPTcR7d0V0ATXUl/PZDWBGEE?=
- =?us-ascii?Q?3iUa3Si8ynwPqD6IaXwuT15PDSPymaA8SXv0i1GRFVB4pkyaD8ekPenV9cY6?=
- =?us-ascii?Q?QFNH7avaF6igOXIirtQEOlzTK9JIfSgFuyBnr1867BIB7obh8TKLuttAa6Gz?=
- =?us-ascii?Q?hKpVjfD0NBunYorUB1TKgOcQlL/EfhNpDnhnWAaYM2jNYNiAIJDo1Mn7f4u5?=
- =?us-ascii?Q?xGuFGHKhfe2DkHD4JZ4sWPfdFlvKKG9jcTXyrQI/7ejIyjnYnfmYxwslZPbC?=
- =?us-ascii?Q?6m1mIJlE5rnT2a1kmskU2DPiaY+LI5XLcsKKqF2JmHMjFt3QTDyI+c0UbVIK?=
- =?us-ascii?Q?EKbgwu1gbMwKgtv4on4cN1Nr5O4FUalD+PVXXPrxKjPTopmQqc/u2/ItQfcc?=
- =?us-ascii?Q?Xo89oi4dLdgIVM2FyJzFsE+ioTzAkvX54n34cTBHgfQ/PstTFhAx2tSevS+j?=
- =?us-ascii?Q?vcusQ3or84I/r55PREHjd+omMW8WH6C60r0oOGg1Va+8XmF4WD0iXwlCSrYM?=
- =?us-ascii?Q?R2uUoZj6pC26JNCcq9pFMCmWrSTGeiNBVj5xZ+REwZjn/cJcDQd44NjMzzam?=
- =?us-ascii?Q?GUXNAtYnIsDsVEi8e4HbWT1u6MTzxT9unVK5ErEqrHpZ/g5vR5diGhyuRmdD?=
- =?us-ascii?Q?49irSTAmLfaKLdbZ7+rnnzwMKsZamI+C1TPvfAW39TL8Y3QJHOcbP3K5zw73?=
- =?us-ascii?Q?xg=3D=3D?=
+	=?us-ascii?Q?E2bjlzOSguW0AFF8+td4ayrsguJeEDry5tKGeU+3w9fbF4TcnfuymuwMLW7l?=
+ =?us-ascii?Q?IG31PevbfXJHNB1bmAIlCWZFbUa57lovbUMDCyY4ibJ0TiEMovCYV6L2jzmj?=
+ =?us-ascii?Q?ZFFxMwT/V41Tfh8z6C3Ep/8neqLF19C2VPFMR6N1OEFTKw+vs7L4v2rnZ7jc?=
+ =?us-ascii?Q?Cq/kcT0F/OaojfRqiVp9NZzvucJmEWrnVFEipoJRLGlkBQsKvhMQ6bJ1t3Us?=
+ =?us-ascii?Q?DbtOmIIYkII6c9FU+zISIzThqzVaHJYAkokOUqKfh+8+OTxa+AmOCmGAyUDE?=
+ =?us-ascii?Q?Y0iRDH+Aon9HVkMRTY34iBJBpQaIYMQXzjhKrDn8ccBrFPZm8r2Mm3v0XGHw?=
+ =?us-ascii?Q?XZwDSDP4281glCjbW8zGXBB12xjz2q/aXNZQmdINwPSMeVkwaXR8q8qXZxtf?=
+ =?us-ascii?Q?T/2RSDjYgt/JhBjvnRdV0rOy5KcbaBD4x0bU1QUkJhzmivL6lfuDDlweUlTr?=
+ =?us-ascii?Q?t0fVCkh5DIAru8+ZGwOvHor/Va3K4BKCKbBoENkWR9X5o1gGBHoRsC8lS+Jn?=
+ =?us-ascii?Q?Fnxl3D4ePfj1Y7LuJqAlpPxi6aww1qrBn62oJYIx33MBELjPt0rMKAI9ZtjG?=
+ =?us-ascii?Q?lh+myxCRgJ24ws3T3Tz4LPRI3wQ0Xi6rdu8hNRXPcxaqgKFYAttGI4sBt4Oa?=
+ =?us-ascii?Q?eY5DvzVwm/30weICP4ebETzXbl7nV/GyTah/P2VqPo3aRKEI8m1gUn7AH5mj?=
+ =?us-ascii?Q?yn+TJoqVCMqEcoFxZh011m2F04M6P0L4UhuB4ABu8vpk2Kk2Q7TVsRDIzzxz?=
+ =?us-ascii?Q?xDr7kZ//Jg8DoslEd6En/HJ8YHsgWJDKpLUmNEprSB7o+9zgtfNX80oBnfSZ?=
+ =?us-ascii?Q?bEKQMZpvfBxH04d6BLvbSDwpty8SiztAOyFeF/vIfKbZw2c/oicDcXjXrklY?=
+ =?us-ascii?Q?4Abgi0SrsEjxt3HOVIe/4o2GSwl9mNOQmgEv4fN44kLvyuFkO1tOZsY5aLzi?=
+ =?us-ascii?Q?Wc/unOP+MemAOL2T1meFfCzEPiDrl0xjNAx1bgK00NTKhlBiHcxIbPIdde93?=
+ =?us-ascii?Q?b5j2ld5WhcYPvsnHLMehCZk1nZh9sIJwzhFBOaTxifplz4gdNwohUgCqiHun?=
+ =?us-ascii?Q?mWIgBtuTh4kfMpAaVXFjWp8fSCl03aMn6lgjbDvoJX1ZeULqAX8/A9sFfLU7?=
+ =?us-ascii?Q?vgQiHp1WlIzaytP34JuLVWLE26nuKZc8e7HVWmxGag4mEMI7JhFldFjk36cx?=
+ =?us-ascii?Q?pwKWbqdnWkUI/R5+cDvWgHnlkE9Hj0UttdqOQy0tYdZDdEMIt7lh6+KOn+Wc?=
+ =?us-ascii?Q?nucSKI/NwZm9gMCpPjnLS+DtzfFgn+3V21jMnzAZcVJMmlhnbGd9i3kwid9T?=
+ =?us-ascii?Q?a2rM37IZ9JCOM2jyzGoflVwOZuJB86RxfNahLuYi+M1W9xToQX69sfBFQHHC?=
+ =?us-ascii?Q?iL9dlH6SsNmd6onmwAU7fwHe8frfsglVnztRwKc6IVGSCUnLJppNwWAEZrza?=
+ =?us-ascii?Q?FKNICUrIrjRNWFURiMAj3JYryc8S03pu1/rt4YpWZHgZ54j58dnLQT25fsQw?=
+ =?us-ascii?Q?tm7LreMI8uoxWx1gKb6rxl8Y7SBZ5QqRxna0eqFbxdpy2LN2UI7JMR5+Xy6h?=
+ =?us-ascii?Q?MBGfftB8NSz1FhkuyxhLFlK2AfUkg6JrYnUr28FJ?=
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	z7cLkslhZjl5WkVxNY1J7TTqptK5/3gnBcp31rnr1m80LrsfpGns3kqp+m1Hjp94kgQnms4OeQ9V/h+X4Bujog7uI1yxaUP6CVDdLvWDvWCcbc8V7w3fCn4MDHV+HOB9NBq37doRJ8CcaIWMMTV1VaRL6aJGBJQjox0YsV3fLRKUV3arF+BqfMaHYjkV/fTMQmvKfsLF3SJCnFMaOIaqPDkaDVg822cHaRWw0PwIFb1Z9VMr8YQIrc7a9C45TQF8qfVZlHVYqbewewvTkte3+Jw57AzId2+8TLnKbrgaoR6c8rBQDNIokCtKBA8inuhE7zoar5AoeFDjZckBG98qsb+IaEdBjEZ/EakC/Bdb6YXlF8ayZC9FhoStPN71Q3nCWIT85fiKdTOwEfKAIiwF8WIU8O3Oyuscvz3bT+FQ19S5Q4RGaTwQz+eeVsxpUax/T6uEbywdqtWIMJPL40gEq1wL7m7AVmuMJoYDGUKZtnhLHV402XLJ2W1TO8qOWGAvjlH0NlA00KoPHV7RqGmswwb8ItXeRdHTWLBglNBrwM+rmAXL/+G7wPQK43GtX/ZQXLjVdePjMrIACqG+0cdxrIUakScq+Quv0bxnFtLs+uONc3ujxUvtcmcES9WNXl6q
+	sAbsjG4Dczso4FosUZTZqA7PTx9fVokvOKbFm7rLPim2O4g+5BEj9s3XoPMG9o74pok+s5ok7dS7A90N8V/IoAH3RyZsi37VmTfxhqroDAeXpdwgVV6MQEEL8WQQ301+w0YjatFTg+ZDOZ3RMs59qiqBxUvKyVJhKKJz6cW+OrGJW28MucqIoBijJHE3u0+haijtqV0GKB156/vPK/uBZZfwOT8inbx/QezaHqnWBYZvhGc/L4UEqP1+z4bk3hf81fgaj6bHSTuKK8kdG5V5NcuG4XxNtU0P9q/zv7DwWup9Tkdw/eAJpeYbvPLCbtxtW1PMkrZDQCAH6RrUFFSHKDiTfO3kg+m0S+WhE64riLc9sQNqcB+HEpXj6GDk4GNcahYLwYQT4GjVFySRlGYs6wfcW7X4hktw45wbWwaVxm9jInWDn2xFlLfe4rQ0gNjbbzSVPL5J4HavG9blvNKNfbSmXbNpobJNLn1AgjROCCIfiglfmjBz9/Ko/WW6sVeQp0DQ8M0vhUEU8Ps65XLewe1+tTc3VqQUXwSk+RPrTFnwItVnHbWE30HyRcuHY5moYX9aiCHtSIHfCDRfS8tIyMdPQzHxCwWPQrtjrsgSbV3ciwrtX0w/0yP3VEQGSVmV
 X-OriginatorOrg: drivenets.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a7b9c4bf-9da4-4f21-f0fc-08dcfcabb970
+X-MS-Exchange-CrossTenant-Network-Message-Id: 61ac5911-f197-4d11-97a1-08dcfd789397
 X-MS-Exchange-CrossTenant-AuthSource: DB8PR08MB5388.eurprd08.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2024 08:36:06.1908
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2024 09:02:29.6187
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 662f82da-cf45-4bdf-b295-33b083f5d229
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DwGpDz2ZTDjY1kYarokn5du8VnPhd3vxSst9PLkZTl7Xr33L2/6XCqwUog4VmsabEfsLTh7qFLA3uD08JbIV4Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR08MB10671
-X-MDID: 1730709372-D4C8o4iEmd-S
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2Ze62n+dUUmy2bAcIR2HBXsCYbaqN3kijf6a0eud1Jgnfo3A7PfKcqBwmoYMMv8q2LYDPnNuvFAkHvcNMtY90g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR08MB7569
+X-MDID: 1730797353-GpjuoxE3SDj8
 X-MDID-O:
- eu1;ams;1730709372;D4C8o4iEmd-S;<gnaaman@drivenets.com>;7bea9940ffb8aa46f58eafa9edde571c
+ eu1;ams;1730797353;GpjuoxE3SDj8;<gnaaman@drivenets.com>;0fb508fd2d7d252a5b49e2d561d41b8b
 X-PPE-TRUSTED: V=1;DIR=OUT;
 
+> On Mon, Oct 28, 2024 at 8:49 AM Gilad Naaman <gnaaman@drivenets.com> wrote:
+> >
+> > Hello,
+> >
+> > We've noticed that when a namespace has a large amount of IP addresses,
+> > the list `net->sctp.local_addr_list` gets obscenely long.
+> >
+> > This list contains both IPv4 and IPv6 addresses, of all scopes, and it is
+> > a single long list, instead of a hashtable.
+> >
+> > In our case we had 12K interfaces, each with an IPv4 and 2 IPv6 addresses
+> > (GUA+LLA), which made deletion of a single address pretty expensive, since
+> > it requires a linear search through 36K addresses.
+> >
+> > Internally we solved it pretty naively by turning the list into hashmap, which
+> > helped us avoid this bottleneck:
+> >
+> >     + #define SCTP_ADDR_HSIZE_SHIFT     8
+> >     + #define SCTP_ADDR_HSIZE           (1 << SCTP_ADDR_HSIZE_SHIFT)
+> >
+> >     -   struct list_head local_addr_list;
+> >     +   struct list_head local_addr_list[SCTP_ADDR_HSIZE];
+> >
+> >
+> > I've used the same factor used by the IPv6 & IPv4 address tables.
+> >
+> > I am not entirely sure this patch solves a big enough problem for the greater
+> > general kernel community to warrant the increased memory usage (~2KiB-p-netns),
+> > so I'll avoid sending it.
+> >
+> > Recently, though, both IPv4 and IPv6 tables were namespacified, which makes
+> > me think that maybe local_addr_list is no longer necessary, enabling us to
+> > them directly instead of maintaining a separate list.
+> >
+> > As far as I could tell, the only field of `struct sctp_sockaddr_entry` that
+> > are used for items of this list, aside from the address itself, is the `valid`
+> > bit, which can probably be folded into `struct in_ifaddr` and `struct inet6_ifaddr`.
+> >
+> > What I'm suggesting, in short is:
+> >  - Represent `valid` inside the original address structs.
+> >  - Replace iteration of `local_addr_list` with iteration of ns addr tables
+> >  - Eliminate `local_addr_list`
+> >
+> > Is this a reasonable proposal?
+> This would simplify sctp_inet6addr_event() and sctp_inetaddr_event(),
+> but complicate sctp_copy_laddrs() and sctp_copy_local_addr_list().
+> 
+> Would you like to create a patch for this and let's see how it looks?
 
-Avoid modifying or enqueuing new events if it's possible to tell that no
-one will consume them.
+I've implemented it, and to be honest, the result is neither here nor there.
 
-Since enqueueing requires searching the current queue for opposite
-events for the same address, adding addresses en-masse turns this
-inetaddr_event into a bottle-neck, as it will get slower and slower
-with each address added.
+Tried first with:
 
-Signed-off-by: Gilad Naaman <gnaaman@drivenets.com>
----
-Changes in v2:
- - Reorder list removal to avoid race with new sessions
----
- net/sctp/ipv6.c     |  2 +-
- net/sctp/protocol.c | 16 +++++++++++++++-
- 2 files changed, 16 insertions(+), 2 deletions(-)
+	for (idx = 0; idx < IN4_ADDR_HSIZE; idx++) 
+	hlist_for_each_entry_rcu(ifa, &net->ipv4.inet_addr_lst[idx], addr_lst)
 
-diff --git a/net/sctp/ipv6.c b/net/sctp/ipv6.c
-index f7b809c0d142..b96c849545ae 100644
---- a/net/sctp/ipv6.c
-+++ b/net/sctp/ipv6.c
-@@ -103,10 +103,10 @@ static int sctp_inet6addr_event(struct notifier_block *this, unsigned long ev,
- 			    ipv6_addr_equal(&addr->a.v6.sin6_addr,
- 					    &ifa->addr) &&
- 			    addr->a.v6.sin6_scope_id == ifa->idev->dev->ifindex) {
--				sctp_addr_wq_mgmt(net, addr, SCTP_ADDR_DEL);
- 				found = 1;
- 				addr->valid = 0;
- 				list_del_rcu(&addr->list);
-+				sctp_addr_wq_mgmt(net, addr, SCTP_ADDR_DEL);
- 				break;
- 			}
- 		}
-diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
-index 39ca5403d4d7..8b9a1b96695e 100644
---- a/net/sctp/protocol.c
-+++ b/net/sctp/protocol.c
-@@ -738,6 +738,20 @@ void sctp_addr_wq_mgmt(struct net *net, struct sctp_sockaddr_entry *addr, int cm
- 	 */
- 
- 	spin_lock_bh(&net->sctp.addr_wq_lock);
-+
-+	/* Avoid searching the queue or modifying it if there are no consumers,
-+	 * as it can lead to performance degradation if addresses are modified
-+	 * en-masse.
-+	 *
-+	 * If the queue already contains some events, update it anyway to avoid
-+	 * ugly races between new sessions and new address events.
-+	 */
-+	if (list_empty(&net->sctp.auto_asconf_splist) &&
-+	    list_empty(&net->sctp.addr_waitq)) {
-+		spin_unlock_bh(&net->sctp.addr_wq_lock);
-+		return;
-+	}
-+
- 	/* Offsets existing events in addr_wq */
- 	addrw = sctp_addr_wq_lookup(net, addr);
- 	if (addrw) {
-@@ -808,10 +822,10 @@ static int sctp_inetaddr_event(struct notifier_block *this, unsigned long ev,
- 			if (addr->a.sa.sa_family == AF_INET &&
- 					addr->a.v4.sin_addr.s_addr ==
- 					ifa->ifa_local) {
--				sctp_addr_wq_mgmt(net, addr, SCTP_ADDR_DEL);
- 				found = 1;
- 				addr->valid = 0;
- 				list_del_rcu(&addr->list);
-+				sctp_addr_wq_mgmt(net, addr, SCTP_ADDR_DEL);
- 				break;
- 			}
- 		}
--- 
-2.34.1
+But after repeating it 4 times realized it should probably be extracted into
+a macro, which didn't turn out that well:
+
+	#define _ifaddr_entry(node) hlist_entry_safe(rcu_dereference_raw(node), struct in_ifaddr, addr_lst)
+	#define for_each_inet_addr_rcu(idx, ifa, net) for (							\
+		idx = 0,											\
+		ifa = _ifaddr_entry(hlist_first_rcu(&(net)->ipv4.inet_addr_lst[idx]));				\
+														\
+		idx < IN4_ADDR_HSIZE;										\
+														\
+		ifa = (ifa && ifa->addr_list.next)								\
+				? _ifaddr_entry(hlist_next_rcu(&(ifa)->addr_lst))				\
+				: (++idx < IN4_ADDR_HSIZE 							\
+					? _ifaddr_entry(hlist_first_rcu(&(net)->ipv4.inet_addr_lst[idx]))	\
+					: NULL) 								\
+	) if (ifa)
+
+sctp_copy_laddrs() and sctp_copy_local_addr_list() do contain a bit of
+duplication now, but I admit I like that we can avoid iterating addresses
+when they are not relevant:
+
+	if ((copy_flags & SCTP_ADDR4_ALLOWED) &&
+	    (copy_flags & SCTP_ADDR4_PEERSUPP)) {
+		error = sctp_copy_local_ipv4_addrs(net, bp, scope);
+		if (error)
+			goto unlock;
+	}
+
+	#if IS_ENABLED(CONFIG_IPV6)
+	if ((copy_flags & SCTP_ADDR6_ALLOWED) &&
+	    (copy_flags & SCTP_ADDR6_PEERSUPP)) {
+		error = sctp_copy_local_ipv6_addrs(net, bp, scope);
+		if (error)
+			goto unlock;
+	}
+	#endif
+
+I'll send a patch if I can figure out how to make the for_each macro not
+look like a train-wreck.
+
+Thank you!
+
+> Note I don't think that that 'valid' bit is useful:
+> 
+>                if (addr->a.sa.sa_family == AF_INET &&
+>                                addr->a.v4.sin_addr.s_addr ==
+>                                ifa->ifa_local) {
+>                        sctp_addr_wq_mgmt(net, addr, SCTP_ADDR_DEL);
+>                        found = 1;
+>                                       <-------- [1]
+>                        addr->valid = 0;
+>                        list_del_rcu(&addr->list);
+>                        break;
+>                }
+> 
+> 'addr' can be copied before "addr->valid = 0;" with addr->valid =1 in
+> another thread anyway. I think you can ignore this 'valid' bit.
+> 
+> Thanks.
 
 
