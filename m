@@ -1,78 +1,112 @@
-Return-Path: <linux-sctp+bounces-287-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-288-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 623489D0210
-	for <lists+linux-sctp@lfdr.de>; Sun, 17 Nov 2024 06:07:07 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A923B9E4499
+	for <lists+linux-sctp@lfdr.de>; Wed,  4 Dec 2024 20:30:10 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C813AB24F8C
-	for <lists+linux-sctp@lfdr.de>; Sun, 17 Nov 2024 05:07:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7E0B8167266
+	for <lists+linux-sctp@lfdr.de>; Wed,  4 Dec 2024 19:30:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF8D81D52B;
-	Sun, 17 Nov 2024 05:06:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66D4E1A8F70;
+	Wed,  4 Dec 2024 19:30:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T1ZcUvPT"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="BkCq5gqR"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [83.166.143.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1A5212E7E;
-	Sun, 17 Nov 2024 05:06:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB3A01C3BF4
+	for <linux-sctp@vger.kernel.org>; Wed,  4 Dec 2024 19:30:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731820017; cv=none; b=LR4RwlMHOD+L5dJjC/8m+4FvHq/9RqYY3TaLdMabjbDMPY092Zc+n6kkXVwlQNBTaXietzYJn2NPvCfbQiXmaoxYlNE6522fXOvh6DTf34P8f1ObNRDEoPAuHnqSIkR/M1bmcWG7d1BpFaTqK2WynoRBD4YYrwAkS7Gjmzb4RBE=
+	t=1733340607; cv=none; b=XM/mFUe/xiROHzWMEA1F+SwCLPXRyD5I7I3Gu2vw+3eN7ryCZJb8yG7EIF54KyqTbeKOcB5DOVuuSbsO1xOlgAOpQPy4wk5ZP/rPN6SgqSiKD/3nc1LD0aZPeQpbCZfErySisvQTRPv2gIvRE6Endid+owWWQnFU8laAa1Yt/Oo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731820017; c=relaxed/simple;
-	bh=MWaMj4Aa81MFVm90cBlXRJ3UfjlxbjR3hPsPA1EyjX0=;
+	s=arc-20240116; t=1733340607; c=relaxed/simple;
+	bh=LcDk5KO2Oc82UySI5qieVXpafwd2XawQaaqaN2L3wkw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Di/+94TLKoZTvLDI4N7/yQHQQS9VG8ZjG5SCwi1KQ0BPPWtHchfscWlmvayyCCc9/gU0qhmynBl/+FIWXh0zo5bQ40Ntvy1bPcHFfV0Rr+yMQqHXOXcr6QjAHoYgNElofsYOMWi5zfOcB22FWZu0F/47ZXh1r5q6m0ldcq5HE7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T1ZcUvPT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8000EC4CECD;
-	Sun, 17 Nov 2024 05:06:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731820017;
-	bh=MWaMj4Aa81MFVm90cBlXRJ3UfjlxbjR3hPsPA1EyjX0=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=NMRJs8K4+z4sGrQ9ezz60D9bhov+TllrARvGhgeNGYek28xw222CpcooCAo9mJ2aBkeIS22eu5+ZqH4iKZO7zHVuVkh95yDoy1m2OWUa1OHKZ4urcRe8sWen5hGALulutNyAo3BiezgyZfmx/r42QvzHKcF/1Oe+Ex0ijhqVtHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=BkCq5gqR; arc=none smtp.client-ip=83.166.143.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Y3SK44jjMzbQB;
+	Wed,  4 Dec 2024 20:30:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1733340600;
+	bh=0GUHqg8GRL6pMGjl2BkgeJR/txAYeha7tu4vGhGYsAg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=T1ZcUvPT98aV7d9I+guCefBaLcZBY7ST23hokFc1FWtp/myvgg5zukQR6kxzklGdc
-	 FvaRf4US71CEEXwhBEL1y1sIe9nsI12wX36ZV+5udyyOQMyuM09f7+FtnzwfPklvlM
-	 C62zORMKpTUiHSzKaYAsi0d9WJU+3j0oKhG9cm/wjakrTqAeDBQu5EHJ6ey1q2nz9x
-	 4oaXcRM+z6RRYFqNyZNwuAcu7ADSk7QoAIeWaWBebOdhobaJ+j5KMOz5joaQapaj4v
-	 9tk81dmYI2bgHF+v4ncl5wt22pSUm/DMyRhz3YEworPhNt7b/WYyyWBD3ua0p2HGja
-	 DQzfLV3izVvMg==
-Date: Sat, 16 Nov 2024 21:06:54 -0800
-From: Kees Cook <kees@kernel.org>
-To: Thorsten Blum <thorsten.blum@linux.dev>
-Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	Xin Long <lucien.xin@gmail.com>, linux-hardening@vger.kernel.org,
-	linux-sctp@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sctp: Replace zero-length array with flexible array
- member
-Message-ID: <202411162106.83A44BB6@keescook>
-References: <20241116162825.33164-1-thorsten.blum@linux.dev>
+	b=BkCq5gqRTNaKQozPGyXhmNdzDIHJm9EMl92rYK8iEe2pl2/PWN0s5U7S8uiufIW8r
+	 Tzzyc9tyY2elm36ow9kIi98YiFTpNTlA/tStDIDLOGefPOcpkS3AcrVSK++3EteSUs
+	 ryYOYPU64cwkad6bauYVseIx22hrz9YyvnnUMu/U=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Y3SK417hgz1Rv;
+	Wed,  4 Dec 2024 20:30:00 +0100 (CET)
+Date: Wed, 4 Dec 2024 20:29:59 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: David Laight <David.Laight@aculab.com>
+Cc: 'Mikhail Ivanov' <ivanov.mikhail1@huawei-partners.com>, 
+	Matthieu Baerts <matttbe@kernel.org>, "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>, 
+	"gnoack@google.com" <gnoack@google.com>, 
+	"willemdebruijn.kernel@gmail.com" <willemdebruijn.kernel@gmail.com>, "matthieu@buffet.re" <matthieu@buffet.re>, 
+	"linux-security-module@vger.kernel.org" <linux-security-module@vger.kernel.org>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>, 
+	"netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>, "yusongping@huawei.com" <yusongping@huawei.com>, 
+	"artem.kuzin@huawei.com" <artem.kuzin@huawei.com>, 
+	"konstantin.meskhidze@huawei.com" <konstantin.meskhidze@huawei.com>, MPTCP Linux <mptcp@lists.linux.dev>
+Subject: Re: [RFC PATCH v2 1/8] landlock: Fix non-TCP sockets restriction
+Message-ID: <20241204.ipheevic6eeB@digikod.net>
+References: <20241017110454.265818-1-ivanov.mikhail1@huawei-partners.com>
+ <20241017110454.265818-2-ivanov.mikhail1@huawei-partners.com>
+ <49bc2227-d8e1-4233-8bc4-4c2f0a191b7c@kernel.org>
+ <20241018.Kahdeik0aaCh@digikod.net>
+ <62336067-18c2-3493-d0ec-6dd6a6d3a1b5@huawei-partners.com>
+ <ed94e1e51c4545a7b4be6a756dcdc44d@AcuMS.aculab.com>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241116162825.33164-1-thorsten.blum@linux.dev>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ed94e1e51c4545a7b4be6a756dcdc44d@AcuMS.aculab.com>
+X-Infomaniak-Routing: alpha
 
-On Sat, Nov 16, 2024 at 05:28:24PM +0100, Thorsten Blum wrote:
-> Replace the deprecated zero-length array with a modern flexible array
-> member in the struct sctp_idatahdr.
+On Fri, Nov 08, 2024 at 05:16:50PM +0000, David Laight wrote:
+> From: Mikhail Ivanov
+> > Sent: 31 October 2024 16:22
+> > 
+> > On 10/18/2024 9:08 PM, Mickaël Salaün wrote:
+> > > On Thu, Oct 17, 2024 at 02:59:48PM +0200, Matthieu Baerts wrote:
+> > >> Hi Mikhail and Landlock maintainers,
+> > >>
+> > >> +cc MPTCP list.
+> > >
+> > > Thanks, we should include this list in the next series.
+> > >
+> > >>
+> > >> On 17/10/2024 13:04, Mikhail Ivanov wrote:
+> > >>> Do not check TCP access right if socket protocol is not IPPROTO_TCP.
+> > >>> LANDLOCK_ACCESS_NET_BIND_TCP and LANDLOCK_ACCESS_NET_CONNECT_TCP
+> > >>> should not restrict bind(2) and connect(2) for non-TCP protocols
+> > >>> (SCTP, MPTCP, SMC).
 > 
-> Link: https://github.com/KSPP/linux/issues/78
-> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+> I suspect you should check all IP protocols.
+> After all if TCP is banned why should SCTP be allowed?
+> Maybe you should have a different (probably more severe) restriction on SCTP.
+> You'd also need to look at the socket options used to add additional
+> local and remote IP addresses to a connect attempt.
 
-Nothing actually uses "payload" so it could probably just be entirely
-removed, but yes, this looks like a no-op change.
+Indeed, setsockopt()'s SCTP_SOCKOPT_BINDX_ADD and SCTP_SOCKOPT_CONNECTX
+don't go through the socket_bind() nor socket_connect() LSM hooks bu the
+security_sctp_bind_connect() hook instead.  This SCTP-specific hook is
+not implemented for Landlock and the current implementation only
+partially control such operations for SCTP.  This also make it clear
+that we really need to stick to TCP-only for the TCP access rights.
 
-Reviewed-by: Kees Cook <kees@kernel.org>
-
--- 
-Kees Cook
+It would be nice to add support for SCTP but we'll need to implement
+security_sctp_bind_connect() and new tests with the setsockopt()
+commands.
 
