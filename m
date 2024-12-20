@@ -1,65 +1,56 @@
-Return-Path: <linux-sctp+bounces-295-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-296-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01C109F7F90
-	for <lists+linux-sctp@lfdr.de>; Thu, 19 Dec 2024 17:25:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB8239F9A78
+	for <lists+linux-sctp@lfdr.de>; Fri, 20 Dec 2024 20:28:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD553188F672
-	for <lists+linux-sctp@lfdr.de>; Thu, 19 Dec 2024 16:24:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3EDB61897BFB
+	for <lists+linux-sctp@lfdr.de>; Fri, 20 Dec 2024 19:26:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8B3022A7F8;
-	Thu, 19 Dec 2024 16:22:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3667E21A431;
+	Fri, 20 Dec 2024 19:26:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yandex-team.ru header.i=@yandex-team.ru header.b="CpNR1OJT"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eCsfJAtu"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from forwardcorp1b.mail.yandex.net (forwardcorp1b.mail.yandex.net [178.154.239.136])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF49D2288E5;
-	Thu, 19 Dec 2024 16:22:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C9F5208AD
+	for <linux-sctp@vger.kernel.org>; Fri, 20 Dec 2024 19:26:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734625327; cv=none; b=O33U6f9YWBqRtDMacwSkWm8EMhSi0y9Q2X7t2pplCA/1HewTmbyd6kviUbZjvpVjyLq2b7SQh26LhkYoGESoVnRqTaiJdIlJhH79hgekfFiDsIIUxY25QOqzprhH53ODxz5IAeNukoykHNVWZOveUtmbsk3Kf0kIHvJRsB9/9gw=
+	t=1734722772; cv=none; b=txkzPD56q+1TqmiTdG+yJBew7HE+S1qvzWwBYC6dYiZtbXDMwxZCBR5AqpIngSxlwfhbZEzLQZXNCPjAa8nzDTxcx7PjqqQneMJfK1/xoLP45RAOTg5t+6VjG0EFqMiPd1E4NC8nVqqjqtj0iE/LZ6HcyiDUEM0H4VIGzy+hbLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734625327; c=relaxed/simple;
-	bh=eoT3hYSWOt04Fah9DMV+xiBDwTAmeZ3TdRd1eAC5COQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JcWGMcQaeHCi54afKE3LpChvX1iRyhZfKInpUhL29viPuiqlxKYq4A77mXmgtszoC702WkqJseX7qN0nG+oIe/xhm/vaguqlE/c04YiHwW1W1doP/sh/iXL8QQRDviFYFheuGiXyHplTazP3+RpM9fljkP+L7DVNvowanhLsS4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex-team.ru; spf=pass smtp.mailfrom=yandex-team.ru; dkim=pass (1024-bit key) header.d=yandex-team.ru header.i=@yandex-team.ru header.b=CpNR1OJT; arc=none smtp.client-ip=178.154.239.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex-team.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yandex-team.ru
-Received: from mail-nwsmtp-smtp-corp-main-66.iva.yp-c.yandex.net (mail-nwsmtp-smtp-corp-main-66.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:a1f:0:640:ba2e:0])
-	by forwardcorp1b.mail.yandex.net (Yandex) with ESMTPS id 1817E60E94;
-	Thu, 19 Dec 2024 19:21:58 +0300 (MSK)
-Received: from kniv-nix.yandex-team.ru (unknown [2a02:6b8:b081:8104::1:2c])
-	by mail-nwsmtp-smtp-corp-main-66.iva.yp-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id jLV8H32IkKo0-spD1uvcw;
-	Thu, 19 Dec 2024 19:21:57 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru;
-	s=default; t=1734625317;
-	bh=86uF8z9q8RfEa7z7ymSGoeaNjFcJEcHXRQPm5ok7o+w=;
-	h=Message-Id:Date:Cc:Subject:To:From;
-	b=CpNR1OJT7377vXm4IW+ayYb70xlilV+FrV+o8ehvWulRTYfkupFhuEPWG4TbVJTQI
-	 otXtMEK0unW3f37i0cGVXO9aypwDTqdHJhPaVbCB29ZS9emWWGFc/0ZtzzUZiHna2B
-	 oNCmvfz635IeOWkarwUKX9l6jsRx/sWwmeVVsbho=
-Authentication-Results: mail-nwsmtp-smtp-corp-main-66.iva.yp-c.yandex.net; dkim=pass header.i=@yandex-team.ru
-From: Nikolay Kuratov <kniv@yandex-team.ru>
-To: linux-kernel@vger.kernel.org
-Cc: netdev@vger.kernel.org,
+	s=arc-20240116; t=1734722772; c=relaxed/simple;
+	bh=GctQo7H8HkmP6GW9U3X0MKlIXcENPnDLXaQ5lhGQv4U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fhNnCYfmDmAZZ6ZDUTqeoNyPT42q19wzjSeRBXq5k1/5mW8+jW2DsFILUOGQfyGtP5xDnAmH8dCx6HfcRZYqBRbhuWbRf8zLe9WVYcsmZhLdE00KWkQKLSoct4+DsMzOl52zKkrkiBCqr1wZo5F/KhKzMutF93lDKvEbxnKbvE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eCsfJAtu; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1734722768;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=kmvn+FRsH75b3AFcBnzEsuAkCfsGQozChkxL0TaYJnk=;
+	b=eCsfJAtugHhfRYvNa24Gzb5XvdrOEgpAkM2rEjmE7CCsMwLZv24ELdhrweTr4NOSJ80hc1
+	3R406NQMjddazE06afo03ojDHCrINTzU2BlL9ETbDg5aSrl54F3VFTZyfLN7ci8fpC90IB
+	9AVF9neMQ9XBohWMLnTZkyBqgmRcNi4=
+From: Thorsten Blum <thorsten.blum@linux.dev>
+To: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+	Xin Long <lucien.xin@gmail.com>
+Cc: linux-hardening@vger.kernel.org,
+	Thorsten Blum <thorsten.blum@linux.dev>,
+	Kees Cook <kees@kernel.org>,
 	linux-sctp@vger.kernel.org,
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	Xin Long <lucien.xin@gmail.com>,
-	Xi Wang <xi.wang@gmail.com>,
-	Neil Horman <nhorman@tuxdriver.com>,
-	Vlad Yasevich <vyasevich@gmail.com>,
-	Nikolay Kuratov <kniv@yandex-team.ru>,
-	stable@vger.kernel.org
-Subject: [PATCH] net/sctp: Prevent autoclose integer overflow in sctp_association_init()
-Date: Thu, 19 Dec 2024 19:21:14 +0300
-Message-Id: <20241219162114.2863827-1-kniv@yandex-team.ru>
-X-Mailer: git-send-email 2.34.1
+	linux-kernel@vger.kernel.org
+Subject: [RESEND PATCH] sctp: Replace zero-length array with flexible array member
+Date: Fri, 20 Dec 2024 20:25:43 +0100
+Message-ID: <20241220192543.2048-2-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -67,33 +58,32 @@ List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-While by default max_autoclose equals to INT_MAX / HZ, one may set
-net.sctp.max_autoclose to UINT_MAX. There is code in
-sctp_association_init() that can consequently trigger overflow.
+Replace the deprecated zero-length array with a modern flexible array
+member in the struct sctp_idatahdr.
 
-Cc: stable@vger.kernel.org
-Fixes: 9f70f46bd4c7 ("sctp: properly latch and use autoclose value from sock to association")
-Signed-off-by: Nikolay Kuratov <kniv@yandex-team.ru>
+Link: https://github.com/KSPP/linux/issues/78
+Reviewed-by: Kees Cook <kees@kernel.org>
+Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
 ---
- net/sctp/associola.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ include/linux/sctp.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/sctp/associola.c b/net/sctp/associola.c
-index c45c192b7878..0b0794f164cf 100644
---- a/net/sctp/associola.c
-+++ b/net/sctp/associola.c
-@@ -137,7 +137,8 @@ static struct sctp_association *sctp_association_init(
- 		= 5 * asoc->rto_max;
+diff --git a/include/linux/sctp.h b/include/linux/sctp.h
+index 836a7e200f39..19eaaf3948ed 100644
+--- a/include/linux/sctp.h
++++ b/include/linux/sctp.h
+@@ -239,7 +239,7 @@ struct sctp_idatahdr {
+ 		__u32 ppid;
+ 		__be32 fsn;
+ 	};
+-	__u8 payload[0];
++	__u8 payload[];
+ };
  
- 	asoc->timeouts[SCTP_EVENT_TIMEOUT_SACK] = asoc->sackdelay;
--	asoc->timeouts[SCTP_EVENT_TIMEOUT_AUTOCLOSE] = sp->autoclose * HZ;
-+	asoc->timeouts[SCTP_EVENT_TIMEOUT_AUTOCLOSE] =
-+		(unsigned long)sp->autoclose * HZ;
- 
- 	/* Initializes the timers */
- 	for (i = SCTP_EVENT_TIMEOUT_NONE; i < SCTP_NUM_TIMEOUT_TYPES; ++i)
+ struct sctp_idata_chunk {
 -- 
-2.34.1
+2.47.1
 
 
