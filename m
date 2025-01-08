@@ -1,49 +1,49 @@
-Return-Path: <linux-sctp+bounces-314-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-315-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3FDFA06051
-	for <lists+linux-sctp@lfdr.de>; Wed,  8 Jan 2025 16:38:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8DF7A06056
+	for <lists+linux-sctp@lfdr.de>; Wed,  8 Jan 2025 16:38:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6195D1888F2C
-	for <lists+linux-sctp@lfdr.de>; Wed,  8 Jan 2025 15:38:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4986118886F3
+	for <lists+linux-sctp@lfdr.de>; Wed,  8 Jan 2025 15:38:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81E9820102C;
-	Wed,  8 Jan 2025 15:35:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 223491FE45C;
+	Wed,  8 Jan 2025 15:35:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ft2rBaGm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TCFD0GKG"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D4F8192D66;
-	Wed,  8 Jan 2025 15:35:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5AA11FE454;
+	Wed,  8 Jan 2025 15:35:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736350550; cv=none; b=pQ9vEWHiSvFrJ8yPyQhBeeHOAaDQp1AxOUGZ2c8tdfEF/30nAbsIzNjE70Qz9MPyM00pjN1u7cfHaFGsNSgRy16+0sxdlh5xYrMiPTX42nwGzEoFwF4hxYzBXVj7gfzOVWs78e7YkisncNtxVPUrhV8B++ebCT5xaZXCN9sH+Kk=
+	t=1736350556; cv=none; b=gPxvllgRzzjRkcqWjIXjsHRU1Z3Rj5g1W+1RA/8BZk55k+baoXwitsbgFuqIjVGm2UkdVPQGCxcwmKm2Ph1uqS2b1hYBgvm1RAc9rVi3GM25neLDvcYLE1feftMyvUNeyZcZekc7lsIkqwsgnH8om3h3Ez10/ThPGyyoIO8cq1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736350550; c=relaxed/simple;
-	bh=mlZQdwHebIpNYItwXgOB6fIb3H+q/rwlaNvaWmrUCp0=;
+	s=arc-20240116; t=1736350556; c=relaxed/simple;
+	bh=6UzWyJD5k/BZPXrLXm62UJznPkVz16sX1azoNHjlPRY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Nc6KIi3ni20Y2h895semvhjOrQffVyuR9H8H7uOswVVTgRxnSnI2RR899K1imfZKb0JjBWfZpVP7Q0smzWJNg5/eYjTgHsEY2DvxT5ihQI+YDh02ttt74/8M0P9JctQXHoT0nfJgDGuK/X4f4VPDq7uXZ+fF6nhJShtgJAPPwJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ft2rBaGm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFA87C4CEDD;
-	Wed,  8 Jan 2025 15:35:44 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=i2CvX1/HLf1lmDrLl9hwAtK9xP0esP7zkTzw2vQ0gJZn2eNB1AMCy3CPZfeHSWZPIGMZtWMPC7tFOHCWeXoR+GqVQEfUe++zg/P1NPoNc2B08PyNo3a04ZvdlvFiSGjUyJ0Bc/jffZeukWbWIgnDx+5yA/Dd6AGzshqX8j1cjdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TCFD0GKG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52193C4CEE0;
+	Wed,  8 Jan 2025 15:35:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736350549;
-	bh=mlZQdwHebIpNYItwXgOB6fIb3H+q/rwlaNvaWmrUCp0=;
+	s=k20201202; t=1736350555;
+	bh=6UzWyJD5k/BZPXrLXm62UJznPkVz16sX1azoNHjlPRY=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ft2rBaGmWGwjHOuawnbWCzVbrc6HEv5s7wTbPshkn5ymzI2TjOP5c3WjPAKJXGVuS
-	 dWkTY3EqsoYhgI1RqmJYmxuu61Q893gkYflc8UonbetimwUWZcO7cUMUmNja9aLSPb
-	 2b16I7amCi9x0vZu8Sc4dlcAGl6Cf02RyLFFCj2MBJuHEzUshQKTh6vGZio60Qo/PE
-	 6IygesGE5K487f7RFS++E9bQITiygQ0B0k4SaSMUXgxIt/dmU4zs89vKsYzhVcgj3l
-	 ppZxAZqlmGo53O3Gl8bPdNSUebG5UH0LxbHUOuV/pW701IeHr0tKQmsOYOfwnHAQ+O
-	 vOZCAJf662FQw==
+	b=TCFD0GKGpQBqKBoeYZA6miC+mu2aq73PDaKOCZjJth0ZikHkjSJDZvpFewT5H9c5S
+	 8qT7BAgjGA2IaDy5pxygjx3wYZWmqeK38Uv+l+mvbRiXsTQ9AbTdvifLdJZnNtqDSJ
+	 +jdnJ8gA6q+MtBv4VJnFIMcjkP89E7AtMQzCOaKCsgMX9kKfoEECVhgPIL1S2DhttN
+	 5nMacj0+39+FWpiOoWXMFupRK7PT2Zr3EuvuF15XnOwO3qFjc3Nl1iA0rEFaWGY/YB
+	 KB2xOpixtbQOhsTdrP8YhDs2wyfK7Mg69rBJxmnJxhKALksB13bbVEvGmxlbaw1fHU
+	 7RKBbFBmUZMRg==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Wed, 08 Jan 2025 16:34:36 +0100
-Subject: [PATCH net 8/9] sctp: sysctl: plpmtud_probe_interval: avoid using
+Date: Wed, 08 Jan 2025 16:34:37 +0100
+Subject: [PATCH net 9/9] rds: sysctl: rds_tcp_{rcv,snd}buf: avoid using
  current->nsproxy
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250108-net-sysctl-current-nsproxy-v1-8-5df34b2083e8@kernel.org>
+Message-Id: <20250108-net-sysctl-current-nsproxy-v1-9-5df34b2083e8@kernel.org>
 References: <20250108-net-sysctl-current-nsproxy-v1-0-5df34b2083e8@kernel.org>
 In-Reply-To: <20250108-net-sysctl-current-nsproxy-v1-0-5df34b2083e8@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -73,20 +73,20 @@ Cc: Joel Granados <joel.granados@kernel.org>, netdev@vger.kernel.org,
  linux-rdma@vger.kernel.org, rds-devel@oss.oracle.com, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1744; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=mlZQdwHebIpNYItwXgOB6fIb3H+q/rwlaNvaWmrUCp0=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBnfpsjJ4HDkogKorT9L2En4dE4/eoq5wRMAUMX8
- XcyRyZziQuJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ36bIwAKCRD2t4JPQmmg
- c5MxD/0UlJL1Vxt2/RFbALPdO8hQ83HfKXTCikWNSpxu/Q8B7RYAC8Vp28XV4/dqXH9t/wxsgjo
- 54qWRgFINZ/v3CX5weT0TNhoUe3VyVB5Tam9GtX80/5PViZs7+l/UMYN5hzrGliITiup2ScRPW4
- QOqTRAujq1/E4rIsw8w2wfSkHo+xpVNgs1qWIXIVB6+7fN0v7jMGsoj4XZHkvT/AWyIiOW/e9VY
- gwQDgEC0V4S3wBjJodyol5J58HWPbc3RWfOfwy8ILVJsW++47g5Mxm1LUrjpjXjXfn9BYpDu92/
- KfS2HDiSJbjlMJS6gPIKdcqmNzMFwYrRbk7Ws0um8HE9nyD4AaWEij7e1tyJAfEfsStzQCT5TDh
- QagYdQSa5nwM3gyYua3dYmyQ+FeXTUPMqYhz1aSdQLrziyqszXmgsfhvzlxzIT0WnF3r3AKzmTk
- YE26nMUouupRs+Hm7IZjBEga/3GYB131QMqi+n7CuJF6yzviBWqTC7FT/C92jZq7eXX2wqwZvkJ
- M2bVWAlqOGXdLuOGK9nninX97e5wBU0eCBuYADm04VbOfVdGUzTgVh1dCCjX+ZqiX2otFVaPFAn
- r4IqW/2cRNUR5CKbRXtSp2Nz2T6KHWhHJkiofFUgocGsE8B5ten9kPgG3qJvvzFDuWlsYBppxKT
- spVRKA7ZQVqdDMg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3972; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=6UzWyJD5k/BZPXrLXm62UJznPkVz16sX1azoNHjlPRY=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBnfpsjsigDTWjvabNfWuiC8vV+Sr7cw/S773XtG
+ iutmd/3sLSJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ36bIwAKCRD2t4JPQmmg
+ c9l0EACooxxFewKnetGy8rXlXDUsrRWWtWLgJDUUjg9nUQE/mSJf5BYxjHeesoggO+kYmd9l2WE
+ 3TIIf8+yBwbG+eXhv+cAusbArYMFWgAmaa4vfS+D2YkqlqXZM9DxuqmCX9cGfyUiyZECtmAsFmE
+ 5mLbQv2rCUyfQBf3HAn47Z4QViRUZEBFaFjbdNBQ4bmvB5EjxepiPJe5UuAZURzsety9E8J5wxX
+ ZyqjTypLrHVY8L1HEs6YTC789QwlaQGYpy6TKr8c1ddeIvDUtom9d+7v7tJ2Jo0YxKtLFUoQRHS
+ LjGrFCNl/+UaZcVHrk496VNoyULJ9G9F/mZRjQvgX3765oOMFWZ54LMdsXYbZnSkIxGkhJHxml1
+ pYjEaTewczrL/3v+/XbNFj/pliE1NsZiXYSp3b4ASbqPBaglD/yZGksaw2z2cSajApxgZxPayoD
+ h/NcUQH3PrQLpB+5hcZcP11MQ/FlYeUf1TgILJ/Ae4legY1GCVNo3OWjd7/tzKh5Nq3d0wU3M+A
+ rBKqIEVuU5q26LC4sgdSQNTFDErq3JBO5gsobQDUl84xeYXrtkfIahCRfFuj4t4qW2Sl5sYFRwF
+ 3JcrTUfc5MnGOvX/ncuJ2ZiU2fGeIAg9FcoOn2YV6FBgRenlZdYsp0cjrMcxLadM61VRhf+sLyZ
+ wBv58USMlMmb/fg==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
@@ -100,37 +100,103 @@ structure via 'current' is not recommended for different reasons:
   (null-ptr-deref), e.g. when the current task is exiting, as spotted by
   syzbot [1] using acct(2).
 
-The 'net' structure can be obtained from the table->data using
-container_of().
+The per-netns structure can be obtained from the table->data using
+container_of(), then the 'net' one can be retrieved from the listen
+socket (if available).
 
-Note that table->data could also be used directly, as this is the only
-member needed from the 'net' structure, but that would increase the size
-of this fix, to use '*data' everywhere 'net->sctp.probe_interval' is
-used.
-
-Fixes: d1e462a7a5f3 ("sctp: add probe_interval in sysctl and sock/asoc/transport")
+Fixes: c6a58ffed536 ("RDS: TCP: Add sysctl tunables for sndbuf/rcvbuf on rds-tcp socket")
 Cc: stable@vger.kernel.org
 Link: https://lore.kernel.org/67769ecb.050a0220.3a8527.003f.GAE@google.com [1]
 Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- net/sctp/sysctl.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/rds/tcp.c | 39 ++++++++++++++++++++++++++++++++-------
+ 1 file changed, 32 insertions(+), 7 deletions(-)
 
-diff --git a/net/sctp/sysctl.c b/net/sctp/sysctl.c
-index 18fa4f44e8ec8c86f8415b1251ef8a2979c7f823..8e1e97be4df79f3245e2bbbeb0a75841abc67f58 100644
---- a/net/sctp/sysctl.c
-+++ b/net/sctp/sysctl.c
-@@ -569,7 +569,8 @@ static int proc_sctp_do_udp_port(const struct ctl_table *ctl, int write,
- static int proc_sctp_do_probe_interval(const struct ctl_table *ctl, int write,
- 				       void *buffer, size_t *lenp, loff_t *ppos)
+diff --git a/net/rds/tcp.c b/net/rds/tcp.c
+index 351ac1747224a3a1c8b0e297ba53cdbbcbc55401..0581c53e6517043ad6c2ad4207b26ab169989ed8 100644
+--- a/net/rds/tcp.c
++++ b/net/rds/tcp.c
+@@ -61,8 +61,10 @@ static atomic_t rds_tcp_unloading = ATOMIC_INIT(0);
+ 
+ static struct kmem_cache *rds_tcp_conn_slab;
+ 
+-static int rds_tcp_skbuf_handler(const struct ctl_table *ctl, int write,
+-				 void *buffer, size_t *lenp, loff_t *fpos);
++static int rds_tcp_sndbuf_handler(const struct ctl_table *ctl, int write,
++				  void *buffer, size_t *lenp, loff_t *fpos);
++static int rds_tcp_rcvbuf_handler(const struct ctl_table *ctl, int write,
++				  void *buffer, size_t *lenp, loff_t *fpos);
+ 
+ static int rds_tcp_min_sndbuf = SOCK_MIN_SNDBUF;
+ static int rds_tcp_min_rcvbuf = SOCK_MIN_RCVBUF;
+@@ -74,7 +76,7 @@ static struct ctl_table rds_tcp_sysctl_table[] = {
+ 		/* data is per-net pointer */
+ 		.maxlen         = sizeof(int),
+ 		.mode           = 0644,
+-		.proc_handler   = rds_tcp_skbuf_handler,
++		.proc_handler   = rds_tcp_sndbuf_handler,
+ 		.extra1		= &rds_tcp_min_sndbuf,
+ 	},
+ #define	RDS_TCP_RCVBUF	1
+@@ -83,7 +85,7 @@ static struct ctl_table rds_tcp_sysctl_table[] = {
+ 		/* data is per-net pointer */
+ 		.maxlen         = sizeof(int),
+ 		.mode           = 0644,
+-		.proc_handler   = rds_tcp_skbuf_handler,
++		.proc_handler   = rds_tcp_rcvbuf_handler,
+ 		.extra1		= &rds_tcp_min_rcvbuf,
+ 	},
+ };
+@@ -682,10 +684,10 @@ static void rds_tcp_sysctl_reset(struct net *net)
+ 	spin_unlock_irq(&rds_tcp_conn_lock);
+ }
+ 
+-static int rds_tcp_skbuf_handler(const struct ctl_table *ctl, int write,
++static int rds_tcp_skbuf_handler(struct rds_tcp_net *rtn,
++				 const struct ctl_table *ctl, int write,
+ 				 void *buffer, size_t *lenp, loff_t *fpos)
  {
 -	struct net *net = current->nsproxy->net_ns;
-+	struct net *net = container_of(ctl->data, struct net,
-+				       sctp.probe_interval);
- 	struct ctl_table tbl;
- 	int ret, new_value;
+ 	int err;
  
+ 	err = proc_dointvec_minmax(ctl, write, buffer, lenp, fpos);
+@@ -694,11 +696,34 @@ static int rds_tcp_skbuf_handler(const struct ctl_table *ctl, int write,
+ 			*(int *)(ctl->extra1));
+ 		return err;
+ 	}
+-	if (write)
++
++	if (write && rtn->rds_tcp_listen_sock && rtn->rds_tcp_listen_sock->sk) {
++		struct net *net = sock_net(rtn->rds_tcp_listen_sock->sk);
++
+ 		rds_tcp_sysctl_reset(net);
++	}
++
+ 	return 0;
+ }
+ 
++static int rds_tcp_sndbuf_handler(const struct ctl_table *ctl, int write,
++				  void *buffer, size_t *lenp, loff_t *fpos)
++{
++	struct rds_tcp_net *rtn = container_of(ctl->data, struct rds_tcp_net,
++					       sndbuf_size);
++
++	return rds_tcp_skbuf_handler(rtn, ctl, write, buffer, lenp, fpos);
++}
++
++static int rds_tcp_rcvbuf_handler(const struct ctl_table *ctl, int write,
++				  void *buffer, size_t *lenp, loff_t *fpos)
++{
++	struct rds_tcp_net *rtn = container_of(ctl->data, struct rds_tcp_net,
++					       rcvbuf_size);
++
++	return rds_tcp_skbuf_handler(rtn, ctl, write, buffer, lenp, fpos);
++}
++
+ static void rds_tcp_exit(void)
+ {
+ 	rds_tcp_set_unloading();
 
 -- 
 2.47.1
