@@ -1,49 +1,49 @@
-Return-Path: <linux-sctp+bounces-311-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-312-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCD20A06048
-	for <lists+linux-sctp@lfdr.de>; Wed,  8 Jan 2025 16:37:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B24DA06052
+	for <lists+linux-sctp@lfdr.de>; Wed,  8 Jan 2025 16:38:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD9E87A2CD5
-	for <lists+linux-sctp@lfdr.de>; Wed,  8 Jan 2025 15:37:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A874E3A88DF
+	for <lists+linux-sctp@lfdr.de>; Wed,  8 Jan 2025 15:37:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1A651FFC6F;
-	Wed,  8 Jan 2025 15:35:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C1BC1FECCE;
+	Wed,  8 Jan 2025 15:35:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UUm8bROV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cKoie9YQ"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEEDC1FFC68;
-	Wed,  8 Jan 2025 15:35:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427561FECD0;
+	Wed,  8 Jan 2025 15:35:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736350533; cv=none; b=raqu1TYc0Wuq3c4YRG4DP4HfsDkMFVfr/1W5mgdbeMWYCex1deZFp1JpchDsrKPuBlwYfnDsY8Pixvu8/64PFo7fSvps+06R5Ja9JuzJrddREiOtHsCttSXqknyFZDR+IfZs8UBl/OeXhidIzsHHao6UUKip+vqMtA48MB3667M=
+	t=1736350539; cv=none; b=dr6O7UT9CMGErFAAjyL9Bc54wSlHajyTeC36RGVMMTeraEhmr+woQLmoxMrxDvLmQAYY2iDwUZZakOV3xabVTPPo7cfR+Qsrq0bqFJ/th08A2w9PjEN1rouf62DYG/B/Ko31mhxP1thCE/JLaefH2Xgy5HvMnns7UgwcVQK7Djc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736350533; c=relaxed/simple;
-	bh=ayV3wzrEF51iGpmrpDx//XVLQY2a3A5Dl5YwOxyjoc4=;
+	s=arc-20240116; t=1736350539; c=relaxed/simple;
+	bh=GtD13rz6CUq4cx2jxPDigJz1ycwU6vRnNISdtqEgmsk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=XlBRqfnxsbQwGJtxc2vUOcCTQH3SfCWDZXbHmiumCNHU9tvhg6xTs6lMkTnkJiDs4REjUT2FseGlJjjS+K8PWG6u98gcMBp6TRkxyJkGgpSpIk69cYX9HCqUd/gI+P7VfnBmRJvHKOcc1lXH+OWd6eLY8fB8CiOejOpZJWxOKMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UUm8bROV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BFEEC4CEE3;
-	Wed,  8 Jan 2025 15:35:27 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=X9xrwsPEBL+gCy8uDujTrdx+h9w3Gsyd1z6Fr0wKyQlUqgCzUI7Dj6g7vi24WvpTSZQNwK2tco4Cw+vnT5s0JQKtYlNd/VZowRux5o+nuL1TMUOFDtNIyX76gkoEPwWA58XbTILtXmDT1ff5Dd+3QUM8Sq4N7p2GU3T0crMstYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cKoie9YQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3395C4CED3;
+	Wed,  8 Jan 2025 15:35:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736350533;
-	bh=ayV3wzrEF51iGpmrpDx//XVLQY2a3A5Dl5YwOxyjoc4=;
+	s=k20201202; t=1736350538;
+	bh=GtD13rz6CUq4cx2jxPDigJz1ycwU6vRnNISdtqEgmsk=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=UUm8bROVSesTFjcICdqH95oLdhDDpmuf3VnnM8PRJGauOz1ko2glctmoMKJk3h4rd
-	 3bKFgY0fgwH8EY9ghOnJp2sRDn/dhr0dQmnpPqCu36QvBFEVvaVlGAstzUkw+EJN3N
-	 /nCL0/ppURULhAkBwvp2PTm19nCri6ZriWta4Dzk6HoE0mE+ojdEYHFae2xrYhQovq
-	 cD//tmHu2LVONpeYtMnhvAeIyTcD2oqvZEpr5v9f5/IvRbnPUf2ph16ow9PSvUcgUt
-	 FLjs7bhji0OcD7a1RgBCnn+dzK7wz6pNjm0OIB8Mgu5UJJuRRrycytjY3UcaBqcoQ9
-	 9+SC+joUEZlaA==
+	b=cKoie9YQGfESjtvNWpnYGBrKoIBtcln+htnzvlgnSc/y4stD80RdGpZZonZNsOy6i
+	 Sl3Ma5yOLkB0xgxIr6qsCElkmvJFZjTVYLEz5soK9fl/lwjXe/G1KaGqSC+9TNK7w8
+	 xHcU33q/crWQAnDxD3qEPmjOFJdtY5k8N4bOZWhKtbEkQmPM995/GS3gTwsVYgSz5h
+	 tyrSd39pCM8plyHN6tabi6JhUl02NdhlZMOLr3B9wOD/sd+DALI73MIkLO3doT8p/x
+	 dY3Ghzra76JILAEuTXwb2mylLKIAhaP6pNR/oW8sSzqbLt1yhZOdYWxUWSuA2uf7mo
+	 safongD8y7EmQ==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Wed, 08 Jan 2025 16:34:33 +0100
-Subject: [PATCH net 5/9] sctp: sysctl: rto_min/max: avoid using
+Date: Wed, 08 Jan 2025 16:34:34 +0100
+Subject: [PATCH net 6/9] sctp: sysctl: auth_enable: avoid using
  current->nsproxy
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250108-net-sysctl-current-nsproxy-v1-5-5df34b2083e8@kernel.org>
+Message-Id: <20250108-net-sysctl-current-nsproxy-v1-6-5df34b2083e8@kernel.org>
 References: <20250108-net-sysctl-current-nsproxy-v1-0-5df34b2083e8@kernel.org>
 In-Reply-To: <20250108-net-sysctl-current-nsproxy-v1-0-5df34b2083e8@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -73,20 +73,20 @@ Cc: Joel Granados <joel.granados@kernel.org>, netdev@vger.kernel.org,
  linux-rdma@vger.kernel.org, rds-devel@oss.oracle.com, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2244; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=ayV3wzrEF51iGpmrpDx//XVLQY2a3A5Dl5YwOxyjoc4=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBnfpsjKGaEE29cJY8jZk9VxvV177Cxn7ythD79l
- qQJXxOtVZ+JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ36bIwAKCRD2t4JPQmmg
- c0WIEACibXRVeRZTRpD7TX1zf5fLoc3vz2KC9nbsZmyUDM6hLKBkTg+CwzD/H9XDnTCpwFWAqM8
- d/nLyNtJrVUWGNb65WXelZg+a3kngwzQeXs6sOPyVG8RNaOJe2yzMp/2np5nReRtLqZrPeO5XVZ
- 6akIfby1VCWGdlxLvOyelwNWHRHm3DYgbbUK7foncQiJktnXUYijsy4pEqrFQeOjsjpONoM9E4E
- ehfRwoTaYmkHjSI3w4CsMtSeIrID9Xo8A1vKvKnr+h2eRF8DBu2MP01jjfQM4CjsLc/f421u76e
- 9JDndty81Br5Wh884T8GMQwfFcxVDCcS1Dh1EX/UoT1Bszbon2mQn2uyFzxhO4Q+wvU0UDcizv4
- l93nK6hz2SXthsD1wQQ/XpCyfnqWc0m6xylIPXhPimvhmIOzVSIMJWOO7XnZOa9tUjDwcshXHCE
- 7KuAzYurIP5DTa7r47MaZxOtdo5+8/ueyDssb/oAQ7LBktATwEGPHnQ955Y03Sc8wHEo79V77pu
- yVbcOmCCOymfo+r/BenN0GBsMnbuGM01g9plN1mWDYJ7E61G9RTc/ot/paCEx0tPEWGQkUJd7J8
- UqJoLnmQg9ndoiyW9/QhimjCktjVad0tS6Vsyh0p1L/iBiy458OR/qddNsFvKoh0YXjiDgRRr6u
- 6ByAZleuGoeW9hQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1647; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=GtD13rz6CUq4cx2jxPDigJz1ycwU6vRnNISdtqEgmsk=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBnfpsjb7qb1AcTm3VoJxHCWqJ24AOe8+8WyLgkf
+ UMdW7nFiy2JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ36bIwAKCRD2t4JPQmmg
+ c1h8D/0Q/ESUg8goIbYyWiYTOKiDMMAKoIny5mVEwBGkzXzB/rd4jpLvV9ls8nk42pXOBSBnu/P
+ L2bq7QEDA4uI1C7nkdZMHgcRyHAhcNBz0L+rzAjpFkqGqrnFWDPTXBdgC/rlTh4Ue2JXfhMDwCU
+ /wC6fGxjqIMh3EUCow7WyIwQGD5pboo4YzIlhJpr9B24IfBKVVAwdttZnl44tCEGbCn0ydbdamF
+ d1ZEPSveXA5klTqYfIK8DwGKbNdxcfZBZ7nIukr6GxY4iVghQAD88Gv0ZNqoKeXvNa+VIjiWJNb
+ ZFMjZ68tmsK9pN7E5qgdovWywRFeKruhzRHb2jFoA2Oh0kw0Ra0B20Zx0gxY/6H8SEOkP1q4vbh
+ UOvFsGecDlWR+uIPG2gZfMwRY8ouRMtVV1NbMbOC4SshSKbxnBuZ759oLXHhod246VwVo882V0r
+ Mp1gWQBFJwIDdQglORaBtNGmmTNeO07nGrSxoacbi8BXU4dqDolZtVWOv0La+xz0ANvZy1LmIwS
+ wDcgv5kyIJQyGiMeZv1QfbDpfnJ8IgTgMlOVqTLlUvnV1AA9bPi4Ei6/W74OB4yZo+CU2wjq4xr
+ 2aQdFkwRu8GryNoS+HQLTEW2sdp2/r+aUX6A6qhnfVeotKZp9+yRaUjSBi/5BhJXpo4Q+kLboNV
+ UFhuuiYfMqhzJWw==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
@@ -103,41 +103,32 @@ structure via 'current' is not recommended for different reasons:
 The 'net' structure can be obtained from the table->data using
 container_of().
 
-Note that table->data could also be used directly, as this is the only
-member needed from the 'net' structure, but that would increase the size
-of this fix, to use '*data' everywhere 'net->sctp.rto_min/max' is used.
+Note that table->data could also be used directly, but that would
+increase the size of this fix, while 'sctp.ctl_sock' still needs to be
+retrieved from 'net' structure.
 
-Fixes: 4f3fdf3bc59c ("sctp: add check rto_min and rto_max in sysctl")
+Fixes: b14878ccb7fa ("net: sctp: cache auth_enable per endpoint")
 Cc: stable@vger.kernel.org
 Link: https://lore.kernel.org/67769ecb.050a0220.3a8527.003f.GAE@google.com [1]
 Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- net/sctp/sysctl.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/sctp/sysctl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/net/sctp/sysctl.c b/net/sctp/sysctl.c
-index 9848d19630a4f760238a3a2abd3ec823f012d34a..a5285815264dfa9d88d1d71244f309448e97a506 100644
+index a5285815264dfa9d88d1d71244f309448e97a506..9d29611621feaf0d2e8d7c923601ab374515563b 100644
 --- a/net/sctp/sysctl.c
 +++ b/net/sctp/sysctl.c
-@@ -433,7 +433,7 @@ static int proc_sctp_do_hmac_alg(const struct ctl_table *ctl, int write,
- static int proc_sctp_do_rto_min(const struct ctl_table *ctl, int write,
- 				void *buffer, size_t *lenp, loff_t *ppos)
+@@ -499,7 +499,7 @@ static int proc_sctp_do_alpha_beta(const struct ctl_table *ctl, int write,
+ static int proc_sctp_do_auth(const struct ctl_table *ctl, int write,
+ 			     void *buffer, size_t *lenp, loff_t *ppos)
  {
 -	struct net *net = current->nsproxy->net_ns;
-+	struct net *net = container_of(ctl->data, struct net, sctp.rto_min);
- 	unsigned int min = *(unsigned int *) ctl->extra1;
- 	unsigned int max = *(unsigned int *) ctl->extra2;
++	struct net *net = container_of(ctl->data, struct net, sctp.auth_enable);
  	struct ctl_table tbl;
-@@ -461,7 +461,7 @@ static int proc_sctp_do_rto_min(const struct ctl_table *ctl, int write,
- static int proc_sctp_do_rto_max(const struct ctl_table *ctl, int write,
- 				void *buffer, size_t *lenp, loff_t *ppos)
- {
--	struct net *net = current->nsproxy->net_ns;
-+	struct net *net = container_of(ctl->data, struct net, sctp.rto_max);
- 	unsigned int min = *(unsigned int *) ctl->extra1;
- 	unsigned int max = *(unsigned int *) ctl->extra2;
- 	struct ctl_table tbl;
+ 	int new_value, ret;
+ 
 
 -- 
 2.47.1
