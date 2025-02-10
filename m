@@ -1,142 +1,107 @@
-Return-Path: <linux-sctp+bounces-326-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-327-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A6C8A2ED5A
-	for <lists+linux-sctp@lfdr.de>; Mon, 10 Feb 2025 14:16:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F87BA2EDA5
+	for <lists+linux-sctp@lfdr.de>; Mon, 10 Feb 2025 14:25:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C2C951887A54
-	for <lists+linux-sctp@lfdr.de>; Mon, 10 Feb 2025 13:16:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 190AE1626DD
+	for <lists+linux-sctp@lfdr.de>; Mon, 10 Feb 2025 13:25:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEA0114A629;
-	Mon, 10 Feb 2025 13:16:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44B46225778;
+	Mon, 10 Feb 2025 13:25:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eepKwnjS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c1Zq1wCg"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2461717557;
-	Mon, 10 Feb 2025 13:16:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2ADA225392;
+	Mon, 10 Feb 2025 13:25:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739193397; cv=none; b=O4ss63OQAZG8AihnsOgOZotKQZp/knATEJjWKIqU4uz5MPlOpjJQsHsE63EGxvfOJ4kqDlVyPG6SFS/8e1UPCSxlcL5LaOcyE9PDB6958XWEqXxZVHDJAX9C8ymHGTU3A5DZFX8XY0T+6Vp7suz/2nUFZV+4GAALEIY3xCNgnQk=
+	t=1739193910; cv=none; b=gH2Ugvhc5/Sj7b4DzRdWaPdI274BAbzr3xsgp12wfmaIL5GQnh1fKszGcofJrUKMUlL3AsqtH+hMrgSxUcewcPrcEYTKiKovAiA3ZA5AMdt/5S4pQdRJJMZ3Q+4sdrxfVN/Gm0a2EEN+VrqtI2te0IoDdj5uJzurfQeekL37EhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739193397; c=relaxed/simple;
-	bh=OaISnqh+JHx0ZIGX0rt9+0dmhjZZJJsLuxVxxDf4c9A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lbNa/iFnCpTSiUG0xfBPg6emAiYUAR55c1EHPfi8YJJjGx5D2i5G3ZmKH3Xi2mwuMLhGIS/vqLf+JzeRHDpU62YbjdNNhgPxbL83aWiqt+xoLsKB0N4WQSQ6CGjwR9dAPdaLVeyLZLcMcTsJOWoLHC5NsKtpvb/v9l6mZ5HlTsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eepKwnjS; arc=none smtp.client-ip=209.85.214.180
+	s=arc-20240116; t=1739193910; c=relaxed/simple;
+	bh=ArJXZrKbhHH4iskvI4WEuO34/M4LRlH1tN5VejTwQTU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=POwNwkZX3H+bK3WSZZcoxSG58FV+BmZE1DMX11GB2rVqhGwJAhtVx0OZcA4WV9Dq1ajBpHBQIhoea8Q0v8nXiSt6JyBaa0AKB9zCtLFOXDUgW1MkQnHx2/57IPSgab3YOLnqlnrZ0doTNOc4cHH1swlmTXAZ41pKDSarsVKmbRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c1Zq1wCg; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-219f8263ae0so77076305ad.0;
-        Mon, 10 Feb 2025 05:16:35 -0800 (PST)
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-21f7f03d856so25907285ad.1;
+        Mon, 10 Feb 2025 05:25:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739193395; x=1739798195; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ovnjjAnAITJmHDgPxHcdLbhpXDkdc0FV6FbZoB0ygRA=;
-        b=eepKwnjSI6JJN/6P2/BWLu5zgB4R8WTM5lxZvFTdDQuv1a8fY1Jb6gP6zOxOUHqi2O
-         0LpEhVkZUnMyKh+aIV/iqKSEd1/n23FA6x4tnt963BjkKpUx0J7uRCYkPwjGH+scI//0
-         b9u7zdsbFBxYUIUt2dNtbuZwhvwoSEM/wJaNVsTP/6zrHuDifOAVPbR3w+h2mFJzAQg6
-         ofk/5H0RkXm/E0lXm4iBa/8mZ2Z52z4SgVweRddynZze7t71KdYbR5uaijsfAgxXy8XF
-         MZKP0S0KNxT2pcT5JSBLknpVgxP2pCavAlqqiivRzMpy7Hs+v/M6wXuzdlc4FvBEgk4u
-         F/6A==
+        d=gmail.com; s=20230601; t=1739193908; x=1739798708; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=o8R9Qq9zywQhBZPOypSKlrlY+huMMJJFdgWMKi4bYZE=;
+        b=c1Zq1wCg2EXTke51OKXs7sLT+BCu1eDkLq5tOheHDRAU+20OJfyzbPz7Br+bqTQgkr
+         nRhPdJZzsp0hHOftJmZdkhARngCg01u5BF8xjqNKnN/koVYhkaZaElZxGY4U8/MFQS2E
+         PCEg4EqEQdz4zu0CDj9gALkzVdI8KbzFJvZz9lqvACaGhy9tj5/RNTTh6E4axB3smtJm
+         X7ypCCoTRfgGXwc5xLJucgYrzH4h/QbjElCYlbno2H8NDKk8BFu0gCbWih8VXuBdedfq
+         fkfm9WdWu0Z+VIBxCpHf0worLeJvqTwjhwLSH/6Of2ECPHOfEucVqicKnT/7gFxT5e6C
+         PcHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739193395; x=1739798195;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ovnjjAnAITJmHDgPxHcdLbhpXDkdc0FV6FbZoB0ygRA=;
-        b=Nn1L19o+DBg4FY7Epn2oIPg+6UnEe7p1PEc/42YXF+D6TY7qr59uGO48rVse8CRG3r
-         vgt17RA4pHksZZSbRg0Sz0sW66EXLRuS6jv8c5/VTc2TovEvvQXrHBUcRS4BwaRemN5v
-         sTz8WmbB+syQnMC1wpEz2SGKU+spYkfkEM+5nzRn68ifrdtwP/9VXF1TeZIMwKv5QRPD
-         0h8qpyrJLwcj5azGT+UCFxTBZWJgy+8wa30P0Kr7x2GLtIPmn5unvt1LgDkbfRSG2Yv+
-         568JpxwjqmjyMrWZfHdmyPYhiOZnz/Sxz5ai7MRz65pGbgHebKL1Qyrb2f79ZQur0TVb
-         ubnQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUM4jrZTw1pv31B68awid/SjHVY6H6aH1H9GF/OC7nidvRraC1sLrEyb/KxkQRBHTTyOrvmIiTMEcDelg==@vger.kernel.org, AJvYcCVSli2LKN7abuUnxt2KUeRG5Ea3TmHQC5/mHDzUQ0qdmmnrIifUa70zHDbtQfjO1pdi4FAlG9jduKXB6JE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHttd/g3PNKG3PiMvJjcY3z9gNFewcbvaoNysJGqRjck4SseH9
-	gnBQac+fmijkTruICALoUPfaY91RTyEKxnNkn1qGbUGNAwhVaQJ1
-X-Gm-Gg: ASbGncscNlOpBZUhiTaKu/y/cAC7aPIh1w7bv+GLJ2AhOm+ZUPyV1SGKFa1KKOWStBm
-	Plf5Ycpe6fedCanRGblwYp92A2rhnsTsvMvpvwJG0j91JNRF6Tv0WPpkQ3Kp4uz1VcHh0cLbD23
-	isj0/bShOSMCl9tKhl/SrIL+4Ib6mHBdVN++58LTBUDTuMiiGuLMldDZ4xx35ZbS6++sjq0E61+
-	bL13PzlvYfnkOYAlPnSfgefGTwNiaDZB/+l/rhDmVIGuNfLd2OHkoeA3k6ohYoyi+hIrBTCdKBV
-	PtlwT5tZhDFIR7/pGHvMzAlkieAX/A==
-X-Google-Smtp-Source: AGHT+IEfftBXT6Dxu784CnNuph8zRp+lXr8h+wXS+DDCNuoN71vp2FSiBmWLdnd465JgZmPsFuuvtQ==
-X-Received: by 2002:a05:6a00:399c:b0:730:9424:ea3e with SMTP id d2e1a72fcca58-7309425213dmr4432524b3a.11.1739193393717;
-        Mon, 10 Feb 2025 05:16:33 -0800 (PST)
+        d=1e100.net; s=20230601; t=1739193908; x=1739798708;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o8R9Qq9zywQhBZPOypSKlrlY+huMMJJFdgWMKi4bYZE=;
+        b=nhPihe0pOo5+KhVg6Yg3mtmhtdwrpn5+U/RP50KprScm/BQycSXrGOTj75uR1gcHmi
+         wDL/s0AfXYkAN4I1KwjZXNlx6fbXIuk12DoRpeibgqc0kKWCPjkc9WY1V+AcbeuQ6eg3
+         KcxcYDckHUp2/0VzVJE98FmN/EGWZ1e22A6EMneWGsKI8HqBHDnJtSY8SP1e0cTKGmG5
+         XgohJTLxYN4Fmpvpy0jUL1IabUVoVHlk5XrzVypCRa5qoePefiCPF6iIawzAwRUMTSIs
+         gI12boysszznY337oMZYy787X5sZ0C4IyVJd+jh0dSRfwcrRwS9lbLJd5//4P9S+Okd7
+         PJrQ==
+X-Gm-Message-State: AOJu0Yw+Z5GjvJ6uTkFohSIj3t2Rj2x67C4wglOp6X2wo0Yj8YolL4wv
+	P8H26ZiYwGvvKTuTfRP+r+HZ+J55B1fsxUPyGvNe1+yqNhKM+5ty
+X-Gm-Gg: ASbGncuDr7MBiHrEibjJLydz3U6Kg/lEzLxX11XJxHUn9wDCWtq+4eqCWB+lgvWUto4
+	IH8wyYepBYWylPugFNtRXtIAVXowrtk9rCbm640VMIlkUdj455g1Sjc4hgkiVPTyO+EqaNJ90lh
+	2RWf66iw5DC+hwHiGERWjOxX0NQm47JBpUD6HrRU39iWJgHWkVXTf9FzhVEn/sFhAJwkHQNy4NG
+	TODz7CoSellkaPYGfkkJpT40ySbUAxGHqVxD8iDXRrSN2OP9X1xoFnnExCCHZxvTdbZ71ssgpDV
+	lGQ1/KF1hm1ANrnlr6CR0RCsfXd6tA==
+X-Google-Smtp-Source: AGHT+IEd+6OlWcTlZozqGwiovVIIEK92WaU0LfFrQcY2JnIuKqNRiYwOaDujmfbpkh8jHLhSveFyOQ==
+X-Received: by 2002:a17:902:d2cb:b0:21f:60cd:e8b with SMTP id d9443c01a7336-21f60cd2b67mr185960985ad.14.1739193907935;
+        Mon, 10 Feb 2025 05:25:07 -0800 (PST)
 Received: from t14s.localdomain ([177.37.172.166])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-730889e0c5fsm2453875b3a.119.2025.02.10.05.16.33
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f3687c6d5sm78545925ad.186.2025.02.10.05.25.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 05:16:33 -0800 (PST)
+        Mon, 10 Feb 2025 05:25:07 -0800 (PST)
 Received: by t14s.localdomain (Postfix, from userid 1000)
-	id 00DE0E6F51C; Mon, 10 Feb 2025 10:16:30 -0300 (-03)
-Date: Mon, 10 Feb 2025 10:16:30 -0300
+	id F3CABE6F528; Mon, 10 Feb 2025 10:25:04 -0300 (-03)
 From: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To: Thorsten Blum <thorsten.blum@linux.dev>
-Cc: Xin Long <lucien.xin@gmail.com>, linux-sctp@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH] sctp: Remove commented out code
-Message-ID: <Z6n8LhxIIctmrbo8@t14s.localdomain>
-References: <20250209210024.5413-2-thorsten.blum@linux.dev>
- <Z6n2ZOTs_fKx-w9z@t14s.localdomain>
- <71FF1CAE-ECE2-4E91-AF88-71F868E454CF@linux.dev>
+To: netdev@vger.kernel.org
+Cc: linux-sctp@vger.kernel.org,
+	thorsten.blum@linux.dev,
+	lucien.xin@gmail.com
+Subject: [PATCH net] MAINTAINERS: Add sctp headers to the general netdev entry
+Date: Mon, 10 Feb 2025 10:24:55 -0300
+Message-ID: <b3c2dc3a102eb89bd155abca2503ebd015f50ee0.1739193671.git.marcelo.leitner@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <71FF1CAE-ECE2-4E91-AF88-71F868E454CF@linux.dev>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Feb 10, 2025 at 02:07:18PM +0100, Thorsten Blum wrote:
-> On 10. Feb 2025, at 13:51, Marcelo Ricardo Leitner wrote:
-> > On Sun, Feb 09, 2025 at 10:00:24PM +0100, Thorsten Blum wrote:
-> >> Remove commented out code.
-> >> 
-> >> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
-> > 
-> > SCTP patches are picked up on the generic networking mailing list.
-> > You need to send this patch towards netdev@vger.kernel.org.
-> > Thanks for your patch, but please post it over there.
-> 
-> Hm, the get_maintainer script doesn't mention netdev@vger.kernel.org
-> 
-> $ ./scripts/get_maintainer.pl -f include/linux/sctp.h
-> Marcelo Ricardo Leitner <marcelo.leitner@gmail.com> (maintainer:SCTP PROTOCOL)
-> Xin Long <lucien.xin@gmail.com> (maintainer:SCTP PROTOCOL)
-> linux-sctp@vger.kernel.org (open list:SCTP PROTOCOL)
-> linux-kernel@vger.kernel.org (open list)
-> 
-> Should this be fixed?
+All SCTP patches are picked up by netdev maintainers. Two headers were
+missing to be listed there.
 
-Yes. I'll send a patch for it. I believe the changes below are what is
-needed.
+Reported-by: Thorsten Blum <thorsten.blum@linux.dev>
+Signed-off-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+---
+ MAINTAINERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-$ ./scripts/get_maintainer.pl -f include/linux/sctp.h
-Marcelo Ricardo Leitner <marcelo.leitner@gmail.com> (maintainer:SCTP PROTOCOL)
-Xin Long <lucien.xin@gmail.com> (maintainer:SCTP PROTOCOL)
-"David S. Miller" <davem@davemloft.net> (maintainer:NETWORKING [GENERAL])
-Eric Dumazet <edumazet@google.com> (maintainer:NETWORKING [GENERAL])
-Jakub Kicinski <kuba@kernel.org> (maintainer:NETWORKING [GENERAL])
-Paolo Abeni <pabeni@redhat.com> (maintainer:NETWORKING [GENERAL])
-linux-sctp@vger.kernel.org (open list:SCTP PROTOCOL)
-netdev@vger.kernel.org (open list:NETWORKING [GENERAL])
-linux-kernel@vger.kernel.org (open list)
-
-Thanks,
-Marcelo
-
----8<---
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 560a65b85297..eee8d442a4eb 100644
+index 873aa2cce4d7fd5fd31613edbf3d99faaf7810bd..34ff998079d4c4843336936e47bd74c0e919012b 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -16182,6 +16182,7 @@ F:	include/linux/netdev*
+@@ -16509,6 +16509,7 @@ F:	include/linux/netdev*
  F:	include/linux/netlink.h
  F:	include/linux/netpoll.h
  F:	include/linux/rtnetlink.h
@@ -144,7 +109,7 @@ index 560a65b85297..eee8d442a4eb 100644
  F:	include/linux/seq_file_net.h
  F:	include/linux/skbuff*
  F:	include/net/
-@@ -16197,6 +16198,7 @@ F:	include/uapi/linux/netdev*
+@@ -16525,6 +16526,7 @@ F:	include/uapi/linux/netdev*
  F:	include/uapi/linux/netlink.h
  F:	include/uapi/linux/netlink_diag.h
  F:	include/uapi/linux/rtnetlink.h
@@ -152,4 +117,7 @@ index 560a65b85297..eee8d442a4eb 100644
  F:	lib/net_utils.c
  F:	lib/random32.c
  F:	net/
+-- 
+2.48.1
+
 
