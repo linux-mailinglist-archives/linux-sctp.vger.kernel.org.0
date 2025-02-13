@@ -1,62 +1,59 @@
-Return-Path: <linux-sctp+bounces-336-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-337-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88D4CA3367B
-	for <lists+linux-sctp@lfdr.de>; Thu, 13 Feb 2025 04:57:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68129A3367D
+	for <lists+linux-sctp@lfdr.de>; Thu, 13 Feb 2025 05:00:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE1593A2537
-	for <lists+linux-sctp@lfdr.de>; Thu, 13 Feb 2025 03:57:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B11E188AE43
+	for <lists+linux-sctp@lfdr.de>; Thu, 13 Feb 2025 04:00:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA22E205502;
-	Thu, 13 Feb 2025 03:57:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14FA7157E88;
+	Thu, 13 Feb 2025 04:00:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eaAC0Ylw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GYOsHsIj"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C297158524;
-	Thu, 13 Feb 2025 03:57:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE5798489;
+	Thu, 13 Feb 2025 04:00:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739419069; cv=none; b=ihGAKtA0XcjVdecKFMD2pJJgnXzUaI6X5gKmF4P6uBVK3QIyA+7RpEQXWgnFgJMdk0djD64UPTb8L2J729G/PXPfhzIF1TA/ZW/AAPWJtNcIPwSGS2GAA4oTUe6uNKKJMXhlAXtg91/VNTMC2RSBE1qI0IVbtqFTwjUXjjtV6Jg=
+	t=1739419221; cv=none; b=mAquhzSJASayWLvK7i0Jm9DixORDGtUATOaPl483VBzVInF6dpbyiFlqvpapSn3Lqhd0LucT6XvXn8d0YHb9AOz40UZuY9U4MnPkn/oUtdwkQStRWqtGWQAOEIrhnpEYXqeWGI8vTLmOXKo9TgSd5etCEgsAvVQkMAW5nSa0dmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739419069; c=relaxed/simple;
-	bh=7iOzW3MxlmfTusA257TBzCfaZ6qKqNDstclBN4g2j28=;
+	s=arc-20240116; t=1739419221; c=relaxed/simple;
+	bh=dZNORGBz3NcDtpEB3uUrJg6ZoVJ22Z42t2Fey9GqA4Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Hgm7yF2fTUQ84GpN/w4EhSCkpDnOBifLqnjPXCr9hatDZS0pr+QxlF95hKHMrVVPXh8oZa+ARd/ei77slMyO+zJ3e6+1nTXHyxv8Skbk8JSvQVKgym7KbqYmwZ4apY0BrVfey5x+DPmzk9E/dvlyXU/fLsMQY4HdD0XIvj+XJd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eaAC0Ylw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 001FCC4CED1;
-	Thu, 13 Feb 2025 03:57:47 +0000 (UTC)
+	 MIME-Version:Content-Type; b=kxjUKpIrpngSStwPy+xsv7JPtdFLNQPVfGCd5W0k7TInH8yf036WIntngUYlWFRw+/b91FQ5Otd3BU0bWtxN7q2bxew6WS94kHlvQJakJe1aLOrZ2UyecvwkQCfdDz44sSXfmcTEjaJr9VaCjNJDZdKv/QdrROu1BZ36FQMn7m0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GYOsHsIj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21DB4C4CED1;
+	Thu, 13 Feb 2025 04:00:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739419069;
-	bh=7iOzW3MxlmfTusA257TBzCfaZ6qKqNDstclBN4g2j28=;
+	s=k20201202; t=1739419219;
+	bh=dZNORGBz3NcDtpEB3uUrJg6ZoVJ22Z42t2Fey9GqA4Q=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=eaAC0YlwES1E/erABTXfyy6tfG204Gj2v+xudwD6Ie1LySknURUfq1VmbHxcgM/Xz
-	 YzwemkdI7GM5z7j5jxJYIFFtgWfe2EIpaKc6q0TuObtzHlEHdzjdtsAGpGVRfYr6un
-	 3mQKbbzuHsQMUi0hYNuQF7AT94MXJ7V9sdMe/8aocznyZoaJw1rIf+BKV2FqUR963n
-	 Uyd/1ztWMY2bnVroDVwA/txgIb8aAszmkN+VNmoT2SFjs+Nja4jVaOGmvaiQ1c+ndQ
-	 JfBu4TvN97XXtgL5lT8iCIOJQmRILBH4GvQOLHdRMTgoXyc1OGxuO/0hf3HLdxPGzd
-	 XwtYdQbAPAkCg==
-Date: Wed, 12 Feb 2025 19:57:47 -0800
+	b=GYOsHsIjrXGynCIS2QowD495mj6B/Z9dD3XPNwwyL7QGauWtDceofN35FIkfyAKkM
+	 hTqyDO+le74/yCZIt1RAP3RJ7l78PeE43989ypIez7V2Sd/Xcyni+jElqPz1Df7429
+	 eKzBztCtKPythTeK0Jy8tyFxiC9Nk9/+YMQwkkIEoZSPTBL3mqwTU71di0adZ5Z3EI
+	 FBKVQD3d9m1Kxc6uEqxRUBaWR7DLYtnJP1wE+x6Y9F4PSIBC/KfvDC4Axp/hAb0FHu
+	 SzNzMXrG+tE0oWY2RZIPLybNk88XEDQ01mrMid06tqoVQn5biKg/o6iLi32Z+YlWbz
+	 6NE1uDX/6I0zA==
+Date: Wed, 12 Feb 2025 20:00:18 -0800
 From: Jakub Kicinski <kuba@kernel.org>
-To: Mateusz Polchlopek <mateusz.polchlopek@intel.com>
-Cc: Thorsten Blum <thorsten.blum@linux.dev>, Marcelo Ricardo Leitner
- <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- <linux-sctp@vger.kernel.org>, <netdev@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next] sctp: Remove commented out code
-Message-ID: <20250212195747.198419a3@kernel.org>
-In-Reply-To: <2c8985fa-4378-4aa2-a56d-c3ca04e8c74c@intel.com>
-References: <20250211102057.587182-1-thorsten.blum@linux.dev>
-	<b85e552d-5525-4179-a9c4-6553b711d949@intel.com>
-	<6F08E5F2-761F-4593-9FEB-173ECF18CC71@linux.dev>
-	<2c8985fa-4378-4aa2-a56d-c3ca04e8c74c@intel.com>
+To: Xin Long <lucien.xin@gmail.com>
+Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+ netdev@vger.kernel.org, linux-sctp@vger.kernel.org, thorsten.blum@linux.dev
+Subject: Re: [PATCH net] MAINTAINERS: Add sctp headers to the general netdev
+ entry
+Message-ID: <20250212200018.2fd04f45@kernel.org>
+In-Reply-To: <CADvbK_dFoJ056xR2BW5eZeg_b7ZfHhM9_6iuGM8MbsUJSipm+A@mail.gmail.com>
+References: <b3c2dc3a102eb89bd155abca2503ebd015f50ee0.1739193671.git.marcelo.leitner@gmail.com>
+	<CADvbK_dtrrU1w6DNyy_OxizNwx_Nv=mjs5xESR+mB8U6=LKXdA@mail.gmail.com>
+	<Z6o49-Iv5kCdPwL8@t14s.localdomain>
+	<CADvbK_dFoJ056xR2BW5eZeg_b7ZfHhM9_6iuGM8MbsUJSipm+A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -66,39 +63,18 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue, 11 Feb 2025 12:33:57 +0100 Mateusz Polchlopek wrote:
-> >> I don't think we want to remove that piece of code, please refer
-> >> to the discussion under the link:
-> >>
-> >> https://lore.kernel.org/netdev/cover.1681917361.git.lucien.xin@gmail.com/  
-> > 
-> > Hm, the commit message (dbda0fba7a14) says payload was deleted because
-> > "the member is not even used anywhere," but it was just commented out.
-> > In the cover letter it then explains that "deleted" actually means
-> > "commented out."
-> > 
-> > However, I can't follow the reasoning in the cover letter either:
-> > 
-> > "Note that instead of completely deleting it, we just leave it as a
-> > comment in the struct, signalling to the reader that we do expect
-> > such variable parameters over there, as Marcelo suggested."
-> > 
-> > Where do I find Marcelo's suggestion and the "variable parameters over
-> > there?"
-> >   
+On Mon, 10 Feb 2025 14:18:43 -0500 Xin Long wrote:
+> > You mean, "also" append, right? And not "instead". Because currently
+> > the NET one includes all other files and it doesn't exclude stuff like
+> > net/{mptcp,sctp}.  
+> I'm thinking it should be "instead".
 > 
-> That's good question, I can't find the Marcelo suggestion that author
-> mention. It's hard to find without links to previous series or
-> discussion :/
-> 
-> I guess it should be also commented by maintainers, I see that in the
-> Xin's thread Kuba also commented change with commenting out instead
-> of removing code. Let's wait
+> Yes, all files under include/net/ are included in the NET, but those files
+> (belong to subcomponents/modules) under include/linux/, include/linux/uapi/
+> or even include/trace/ are included in their own sections and not in the
+> NET, such as:
 
-In the linked thread the point was to document what struct will be next
-in memory. Here we'd be leaving an array of u8s which isn't very
-informative. I see there's precedent in this file, but I vote we just
-delete the line.
--- 
-pw-bot: cr
+No strong preference TBH, but I think code and headers should fall
+under the same entries. And net/sctp is not X:'ed out of net right 
+now.
 
