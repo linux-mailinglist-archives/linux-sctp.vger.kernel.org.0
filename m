@@ -1,96 +1,91 @@
-Return-Path: <linux-sctp+bounces-348-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-349-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BD6BA3EA18
-	for <lists+linux-sctp@lfdr.de>; Fri, 21 Feb 2025 02:33:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C048AA411B5
+	for <lists+linux-sctp@lfdr.de>; Sun, 23 Feb 2025 21:46:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 754387A5D7B
-	for <lists+linux-sctp@lfdr.de>; Fri, 21 Feb 2025 01:32:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C7D03B546C
+	for <lists+linux-sctp@lfdr.de>; Sun, 23 Feb 2025 20:46:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88FE72AE84;
-	Fri, 21 Feb 2025 01:33:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F18D8EEB5;
+	Sun, 23 Feb 2025 20:46:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pC49XDJt"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZcqU6b25"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-184.mta1.migadu.com (out-184.mta1.migadu.com [95.215.58.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE8717991;
-	Fri, 21 Feb 2025 01:33:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA98E846F
+	for <linux-sctp@vger.kernel.org>; Sun, 23 Feb 2025 20:46:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740101607; cv=none; b=idCNQT17uio/dyHy/TTAvf5ZGf0x/Zm/CM1BlHVgO/xztjYzOEN93wSe9w3IJ2Q2ihiO+VdIMXxqX3jxWmWug3/WTdx7USP7uV9IHLqfrssduneTmRZfrQeAZ9xo4FhT2puIVF/2GwoeXT4W0RDaDskIBm0YoVVf+7f36obR9VE=
+	t=1740343605; cv=none; b=ZMoYDIFuz0jwF2WxuIX1bH7B+X6Op8qnILMUWmpjgyHxceX1YwME8LUhM4HtXhdGDJDFQCJ+1aMey4m5+vCAGikArqXGHL6tM6z6QJLLaL1pQB/sSkDZu0sDe7JFgKXb7SJHDAWkgL+WmaRBYbBYIbHQJpRmflFl+u7SMQLtQbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740101607; c=relaxed/simple;
-	bh=bQJH/FIssL3KJG4ZfidMolApnK0ieInyDpttYutmRik=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pYHngMS8egsf6pkor7Cn5B02xwDKOzJjzsiaUqVLvhfSzKn5kaiyiivmGDu4CePM12daeHbjREv62+5PwX2038lRtQ3v24C1WEAQ+cuBjMOpkxiUs4GTDDXz8o/n34t9KIrplojjYQcv5k6Fn0IvhScKsEcOf8AsCnWriKANaeA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pC49XDJt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36408C4CED1;
-	Fri, 21 Feb 2025 01:33:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740101606;
-	bh=bQJH/FIssL3KJG4ZfidMolApnK0ieInyDpttYutmRik=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=pC49XDJtGAICDewUYtW9kAXXf8f+pvIorspfAtOEww2XHPEQcrULEgOjtHwHAuuog
-	 bcXMZ8cw5uBMm0svC4Z8W/BmBfD+wIDJ/X8lj9MA5+6eZnqh0f8lUpnIviBl5l7JEh
-	 bEeqwmdVOY1DIpvyQsH7pLsQ0CvQZ4171eCReVG1Ql+dMsw/yrHwiJYp029B1BNxyB
-	 1iEQHYtwRFqL4mz8YF+RL4Fi8sqJNlANTu68xsytAWkNFjWB2mgKjhfxETrUOZMeDv
-	 sSJRJcFolhQRCqsnwd386fVmm8yqzgvxs74jvf39EMmcr6yVr1eUhJVqaZlFOMhidr
-	 uXOdAjLjYksbA==
-Date: Thu, 20 Feb 2025 17:33:25 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Thorsten Blum <thorsten.blum@linux.dev>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
- Xin Long <lucien.xin@gmail.com>, Kees Cook <kees@kernel.org>,
- linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH] sctp: Replace zero-length array with flexible
- array member
-Message-ID: <20250220173325.0349e913@kernel.org>
-In-Reply-To: <20250219112637.4319-1-thorsten.blum@linux.dev>
-References: <20250219112637.4319-1-thorsten.blum@linux.dev>
+	s=arc-20240116; t=1740343605; c=relaxed/simple;
+	bh=yiBlED7Er+79WUdSAwX3nMETMxNgXccfcRJLbl9a+3U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=raqbVskNLSqgTfTpbOndDLtPfSE56q9I4kmEioH94fo/iHnquiTaPsbf4Z/w3xfMbZhiJSz6YDiSsaC7yUb+BN/zKAMt6spiBcyVJXmKbWbkH+ZbCVLBfAbZ305L3YSynlEvUy/t+4XnRVT3zm3lBwRy3gzN42OB3ZsiGpzLWKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZcqU6b25; arc=none smtp.client-ip=95.215.58.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1740343601;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=08QzHP3bP7KO+u09LJ+0D9dSqxkLj1k8AYQJMF6TyWY=;
+	b=ZcqU6b25GdDRR4L8CfFzuPIVYtHztbmotSU/lX9mDicghWIXYEZfd9mipMGjO1gE10uoTW
+	B/b1H3xvPaJ4lt7VWdHDq4QDKB16AAVOs/lhi6nL/6P0kLCXHZX0H/DaTYGVt37NYEsHRu
+	q8ayk9YW2SajD7rhuhOiI4xgTTM9g/Q=
+From: Thorsten Blum <thorsten.blum@linux.dev>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+	Xin Long <lucien.xin@gmail.com>
+Cc: Thorsten Blum <thorsten.blum@linux.dev>,
+	Kees Cook <kees@kernel.org>,
+	linux-sctp@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next] sctp: Remove unused payload from sctp_idatahdr
+Date: Sun, 23 Feb 2025 21:45:07 +0100
+Message-ID: <20250223204505.2499-3-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, 19 Feb 2025 12:26:36 +0100 Thorsten Blum wrote:
-> Replace the deprecated zero-length array with a modern flexible array
-> member in the struct sctp_idatahdr.
-> 
-> Link: https://github.com/KSPP/linux/issues/78
-> Reviewed-by: Kees Cook <kees@kernel.org>
-> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
-> ---
->  include/linux/sctp.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/sctp.h b/include/linux/sctp.h
-> index 836a7e200f39..19eaaf3948ed 100644
-> --- a/include/linux/sctp.h
-> +++ b/include/linux/sctp.h
-> @@ -239,7 +239,7 @@ struct sctp_idatahdr {
->  		__u32 ppid;
->  		__be32 fsn;
->  	};
-> -	__u8 payload[0];
-> +	__u8 payload[];
->  };
->  
->  struct sctp_idata_chunk {
+Remove the unused payload array from the struct sctp_idatahdr.
 
-Builds for me with this field completely delete...
-I think we should prefer deleting when possible.
+Cc: Kees Cook <kees@kernel.org>
+Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+---
+ include/linux/sctp.h | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/include/linux/sctp.h b/include/linux/sctp.h
+index 836a7e200f39..0b0228578153 100644
+--- a/include/linux/sctp.h
++++ b/include/linux/sctp.h
+@@ -239,7 +239,6 @@ struct sctp_idatahdr {
+ 		__u32 ppid;
+ 		__be32 fsn;
+ 	};
+-	__u8 payload[0];
+ };
+ 
+ struct sctp_idata_chunk {
 -- 
-pw-bot: cr
+2.48.1
+
 
