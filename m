@@ -1,46 +1,46 @@
-Return-Path: <linux-sctp+bounces-352-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-353-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E66AAA41D11
-	for <lists+linux-sctp@lfdr.de>; Mon, 24 Feb 2025 12:39:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8738A41D36
+	for <lists+linux-sctp@lfdr.de>; Mon, 24 Feb 2025 12:42:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E0A3E17BC5E
-	for <lists+linux-sctp@lfdr.de>; Mon, 24 Feb 2025 11:34:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7A5116DD0B
+	for <lists+linux-sctp@lfdr.de>; Mon, 24 Feb 2025 11:37:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A424326E15D;
-	Mon, 24 Feb 2025 11:19:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CC49260A48;
+	Mon, 24 Feb 2025 11:20:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eYJtztpp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o/NtZH1Q"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78D9E26E153;
-	Mon, 24 Feb 2025 11:19:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10F6527FE9D;
+	Mon, 24 Feb 2025 11:20:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740395997; cv=none; b=TUQksiBNcv5BPB2WQa+CvskFnd/COppjK6TRIMtcJbGeO3Kbn7OMQdGHO1FsJJ03TeRErdQ1d0vtNcmyuojY65lvtDa7oK2iIsvUaAYZHGiW0HqAgkb53pmD217pccz7+7m2KE3ZKrjvcTCJq7jDTCXqmf/qA2LHyp7fD/+Pd5A=
+	t=1740396029; cv=none; b=boAR5ttnx3IWX47Ybj9+M6NbzHF5IlrAttWrZ++h7thuzHa1+NdEInP62qE5Y5yrEvmmkF6nZnf3JilkfF7ifvMBkJ1bqeUU6naDg26zwwUFutE41GMiDlYAhK0MJhMxZ1r+waBjgmkJ0Y7lBGq/wpoLSodqCNP3cdMDqvnS7QM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740395997; c=relaxed/simple;
-	bh=gNhpMd6xhiiiI7IQjUh5qom9njguHMcExPCIvyTQ+oE=;
+	s=arc-20240116; t=1740396029; c=relaxed/simple;
+	bh=Aw1AhRCRe0h7xFMnZoKTzgHuSv27yUk9wz8rZ4NUg7Y=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=eBMZ1zCHDr1mMou2i1Nzhvn+eG+jbOerRskku71p2n6/ow84evFxFHVWVnVWYAtOWB7mkuaiRhrliWuXfNivNy45mAMlTIvkkNYfOcVxSKcoLDCid+sn3m0DfZ+p6JdHZqCUm/1Rju/r5NvSAFLll8TDI5MfJth0Mp+CEc6bFJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eYJtztpp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18EBFC4CEE6;
-	Mon, 24 Feb 2025 11:19:56 +0000 (UTC)
+	 MIME-Version; b=mEvMK1Akw/qK/balfpMjsqX3eKuA7xNNxSRlmvpfRw1KCtP1VNfdHAKaBAdzI0D77W+CJS8pL1ll5tYZ+YhSxHVq7d+ZHxfftSntlMxTCdXBWu9FFy8rELrkL2V3Bs13llQ68982LYvFSeirsxMOvSobCks27HSE1Bb1YOjZY6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o/NtZH1Q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A666CC4CED6;
+	Mon, 24 Feb 2025 11:20:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740395997;
-	bh=gNhpMd6xhiiiI7IQjUh5qom9njguHMcExPCIvyTQ+oE=;
+	s=k20201202; t=1740396028;
+	bh=Aw1AhRCRe0h7xFMnZoKTzgHuSv27yUk9wz8rZ4NUg7Y=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=eYJtztppVaYV0rSMzKY16Lmu9W8L9YQzYpbrOT00uZG2y509JHc91qIIjfJCZTkNF
-	 qE/ObRvOMwG9fjn8LYVZNR1FcyD3qdoUPP/6AvJlWYQej07NJyHW6reBVpZm//NOQ/
-	 p332jqd+H0+9wWVKGk6R9qJOssvQIA3nDPDbLtJ9M8x4uHijUqG3UdTL/VJDgv7QKO
-	 FUS0fKXtwnc9QH7hNKpLHrg2TpBhoagqFiX7clyNoUW7zGcVPLAITeP8dcYuvilaf0
-	 DNhhxCRAZJpPmDEpodqL2CTIbgLPuOIY9iaupN+7thFasiP+4/Lau1a0H+cA3Ydvmh
-	 ZNX5goPZuB4kQ==
+	b=o/NtZH1QQ2Jg6XtZmmJlXjVVSft7bDwD8q8Ptl2+fANJibANherP0LjYgMalZEO/O
+	 885xykmuJWr0SC6eo4lb2H+/pDNKUn2/fSCNGiUVGXYvQZplfOjaB0nCTD8LIdHaXh
+	 55I5raTZxkPY2eKR4Ji9q+s1ETjHSN/TDMNFsgW/NRG2Io2bWYihPaA3vGYGDq5yHi
+	 ekyFOU5f+k2SYZVa6AmZo2UawwsBXdGuy9AWa48TMlVV3IAN60jXMh50P/gUgWsbkS
+	 8tynSD11y2sp85fU98O96YVQl2VKXUpCC3rgIVTgov8pLlm5eVXq9Zh2Gicjb9mW6x
+	 vl8NskWnEyO3g==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -54,12 +54,12 @@ Cc: Yu-Chun Lin <eleanor15x@gmail.com>,
 	pabeni@redhat.com,
 	linux-sctp@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 18/20] sctp: Fix undefined behavior in left shift operation
-Date: Mon, 24 Feb 2025 06:19:11 -0500
-Message-Id: <20250224111914.2214326-18-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 11/12] sctp: Fix undefined behavior in left shift operation
+Date: Mon, 24 Feb 2025 06:19:59 -0500
+Message-Id: <20250224112002.2214613-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250224111914.2214326-1-sashal@kernel.org>
-References: <20250224111914.2214326-1-sashal@kernel.org>
+In-Reply-To: <20250224112002.2214613-1-sashal@kernel.org>
+References: <20250224112002.2214613-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.79
+X-stable-base: Linux 6.1.129
 Content-Transfer-Encoding: 8bit
 
 From: Yu-Chun Lin <eleanor15x@gmail.com>
@@ -94,7 +94,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/net/sctp/stream.c b/net/sctp/stream.c
-index c241cc552e8d5..bfcff6d6a4386 100644
+index ee6514af830f7..0527728aee986 100644
 --- a/net/sctp/stream.c
 +++ b/net/sctp/stream.c
 @@ -735,7 +735,7 @@ struct sctp_chunk *sctp_process_strreset_tsnreq(
