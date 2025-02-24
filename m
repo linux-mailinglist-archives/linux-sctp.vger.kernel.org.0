@@ -1,46 +1,46 @@
-Return-Path: <linux-sctp+bounces-353-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-354-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8738A41D36
-	for <lists+linux-sctp@lfdr.de>; Mon, 24 Feb 2025 12:42:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2931A41D3C
+	for <lists+linux-sctp@lfdr.de>; Mon, 24 Feb 2025 12:43:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7A5116DD0B
-	for <lists+linux-sctp@lfdr.de>; Mon, 24 Feb 2025 11:37:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8BC451892DDD
+	for <lists+linux-sctp@lfdr.de>; Mon, 24 Feb 2025 11:39:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CC49260A48;
-	Mon, 24 Feb 2025 11:20:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A730F221F1F;
+	Mon, 24 Feb 2025 11:20:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o/NtZH1Q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DTXWYUZW"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10F6527FE9D;
-	Mon, 24 Feb 2025 11:20:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794B3221F18;
+	Mon, 24 Feb 2025 11:20:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740396029; cv=none; b=boAR5ttnx3IWX47Ybj9+M6NbzHF5IlrAttWrZ++h7thuzHa1+NdEInP62qE5Y5yrEvmmkF6nZnf3JilkfF7ifvMBkJ1bqeUU6naDg26zwwUFutE41GMiDlYAhK0MJhMxZ1r+waBjgmkJ0Y7lBGq/wpoLSodqCNP3cdMDqvnS7QM=
+	t=1740396049; cv=none; b=bPX1PfD13bdBGNLf5l+0+mHeToAm/SNRdp5lN/682VHUv0j+li0B55yvsJJqzYXkX+Qkyu1TmJEnkTozljq0h71dFcZ/x6d3cV82jTgt0cbp4dCwSgoehJPhaVC/6rKhKR/gGqEgJGxsDE5FLrwXpg9Vg5NnajtMNeB1wEWUOAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740396029; c=relaxed/simple;
+	s=arc-20240116; t=1740396049; c=relaxed/simple;
 	bh=Aw1AhRCRe0h7xFMnZoKTzgHuSv27yUk9wz8rZ4NUg7Y=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=mEvMK1Akw/qK/balfpMjsqX3eKuA7xNNxSRlmvpfRw1KCtP1VNfdHAKaBAdzI0D77W+CJS8pL1ll5tYZ+YhSxHVq7d+ZHxfftSntlMxTCdXBWu9FFy8rELrkL2V3Bs13llQ68982LYvFSeirsxMOvSobCks27HSE1Bb1YOjZY6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o/NtZH1Q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A666CC4CED6;
-	Mon, 24 Feb 2025 11:20:27 +0000 (UTC)
+	 MIME-Version; b=HNuN4sMSVylSyriDDjqsqURE0WXXBr4liDDCa+ewHsiagLsDZ5x+K29bHvw7Y8fjpCCtAooxVUgUNeMFdyF6xdPcxHPqDxJtrfEheRkigV0mCLHpmtQdkAJfgex6C4z439lk1ldmEtl06B6XA0zEFy/8mylK2eb1SzHOSXczkOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DTXWYUZW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8B1BC4CEE6;
+	Mon, 24 Feb 2025 11:20:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740396028;
+	s=k20201202; t=1740396049;
 	bh=Aw1AhRCRe0h7xFMnZoKTzgHuSv27yUk9wz8rZ4NUg7Y=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=o/NtZH1QQ2Jg6XtZmmJlXjVVSft7bDwD8q8Ptl2+fANJibANherP0LjYgMalZEO/O
-	 885xykmuJWr0SC6eo4lb2H+/pDNKUn2/fSCNGiUVGXYvQZplfOjaB0nCTD8LIdHaXh
-	 55I5raTZxkPY2eKR4Ji9q+s1ETjHSN/TDMNFsgW/NRG2Io2bWYihPaA3vGYGDq5yHi
-	 ekyFOU5f+k2SYZVa6AmZo2UawwsBXdGuy9AWa48TMlVV3IAN60jXMh50P/gUgWsbkS
-	 8tynSD11y2sp85fU98O96YVQl2VKXUpCC3rgIVTgov8pLlm5eVXq9Zh2Gicjb9mW6x
-	 vl8NskWnEyO3g==
+	b=DTXWYUZWcBPb9ILS2OLpZRuwRsthPm5zEVkX4bmZccwTYTfmDQNwfRSaF0syumMfb
+	 HxRpAtX74yrSu4y8SVWsY8b/SpJ5gtJkZZkKrRzYBV0Xyj9GnX9sxyIfMw0MRJvPBB
+	 qatsvBramnhEpuEtDtzIOxLZId2q0XYKaLqvx/2dmRUOzICas0hPTGuCXuBROoVtJo
+	 rnJhVOpn7o4CIekCuQfpg7IxU+yxBko33/xvfo78awvGTyA2PcOGsLs5SScQthUU+r
+	 Gm+nEcyIF/M2M8KyPGGoP1hsc4i7TEEJFCLD8OKx/jV9+eBcEWwcnsdbv7+71UBcE7
+	 2RfAzgW4Ci1Pw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -54,12 +54,12 @@ Cc: Yu-Chun Lin <eleanor15x@gmail.com>,
 	pabeni@redhat.com,
 	linux-sctp@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 11/12] sctp: Fix undefined behavior in left shift operation
-Date: Mon, 24 Feb 2025 06:19:59 -0500
-Message-Id: <20250224112002.2214613-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 6/7] sctp: Fix undefined behavior in left shift operation
+Date: Mon, 24 Feb 2025 06:20:29 -0500
+Message-Id: <20250224112033.2214818-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250224112002.2214613-1-sashal@kernel.org>
-References: <20250224112002.2214613-1-sashal@kernel.org>
+In-Reply-To: <20250224112033.2214818-1-sashal@kernel.org>
+References: <20250224112033.2214818-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.129
+X-stable-base: Linux 5.15.178
 Content-Transfer-Encoding: 8bit
 
 From: Yu-Chun Lin <eleanor15x@gmail.com>
