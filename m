@@ -1,64 +1,63 @@
-Return-Path: <linux-sctp+bounces-365-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-366-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6A80A478AE
-	for <lists+linux-sctp@lfdr.de>; Thu, 27 Feb 2025 10:07:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3A12A478B6
+	for <lists+linux-sctp@lfdr.de>; Thu, 27 Feb 2025 10:09:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E76A7188B335
-	for <lists+linux-sctp@lfdr.de>; Thu, 27 Feb 2025 09:06:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 396583AFDC9
+	for <lists+linux-sctp@lfdr.de>; Thu, 27 Feb 2025 09:08:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D21022618F;
-	Thu, 27 Feb 2025 09:06:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A2B8226D06;
+	Thu, 27 Feb 2025 09:09:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WVx082+a"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AZgyLCW7"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1266A1EB5F3;
-	Thu, 27 Feb 2025 09:06:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B82E1EB5F3;
+	Thu, 27 Feb 2025 09:09:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740647175; cv=none; b=ej8c+BB5QZ25V5JWS+tTemc/bHhy781h3jejSDJqFjiP3WLngqWZ1qk689EEFnxgnq26avNr77AAtB6jMDG5c1EQnClQgk4s/piz2JkKT74lDq6m66K3eW3ejz6F7wZ+PAS2c/AW8OMsNuDNO39q1qEvVFat3pZFvT3vcYBAJF8=
+	t=1740647342; cv=none; b=o1pHv6xB/jXWo+Y4sqXEKe0IRYGrtjvOu2yrN+sRlsTOFEQQyI6Ui6aTcvebJABwSMznolSzI4CFzoPPZ12JFbiFcs3C35R8O0CarUXZ5WE6/xMO9KW2mO3m7GRnPJiHmJo9pbhmSf3ik4pk6LC+sUIUvlq78WY9cYGSDkx9Xm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740647175; c=relaxed/simple;
-	bh=N1M+rRf2NUE4/xDm4cfzB4S+xLOeRa/qlHLE5rAdoGQ=;
+	s=arc-20240116; t=1740647342; c=relaxed/simple;
+	bh=jVHp5b+f8Y6KpzJR7YUoxdZIpETxeOJJOXSWOkHqVBU=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BUn801RbioFSG6Eh6frH1HscBUZnG7wv4C0ZkrUifucATKdU8ScOo2JolLyQu0mnv/W7F7iRc92W7F/qruvECtnUqm25rpo2uFKnBVAcmKOsUmg8fElj3CLuqkfdS7VpiPrBOwK28GKct5KqmSmyOEmQryuWcVu9UqsegWnL6xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WVx082+a; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06683C4CEDD;
-	Thu, 27 Feb 2025 09:06:08 +0000 (UTC)
+	 Content-Type:MIME-Version; b=L87XPWMsDi8TnW1x1guyzXBU3Ax9lyQ0ibz/2519x9GsxNhqiSy1LVN7z15z8AHEKL1UervZf/dcHOXuabXROG7IY8p29kBeBKGPmdXHMjdhreEIFx1PcscAT88O6EuvwmWgkYOc3Ync1twBcK6SaqZd+atRK3ojdS6qmjrPvYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AZgyLCW7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE7F2C4CEDD;
+	Thu, 27 Feb 2025 09:08:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740647174;
-	bh=N1M+rRf2NUE4/xDm4cfzB4S+xLOeRa/qlHLE5rAdoGQ=;
+	s=k20201202; t=1740647341;
+	bh=jVHp5b+f8Y6KpzJR7YUoxdZIpETxeOJJOXSWOkHqVBU=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=WVx082+a/Iiau0I6vbuA3qUcYZM6r2OT/SsccLf/31pd/Afm6BVndj23L4TRxCg90
-	 4n6pbSpVfcJuBANbftkZfMHZDiTmoGdI94TQhlDRM5UMgf99oUO6GDL0JYGvvf1Jun
-	 J4kQbP0P6VDvR5rH4BgFR5Mf477FjMUzOK3AefhCCHcpyyZb7buqS2nyd5sJxPh2up
-	 f0ng3SuchXUESroJwvAxluTB3GwdO8fP6jKrwLezJ9zCAsnIxLgMRZWysEq5EX5t+n
-	 5n27nCDyKXpZIOruj1BnHgdfTui1xTfMFco6HWXvIj+75rrBGa5fB2f2xl/bj3/Ipa
-	 cJ4bdFET5YG0g==
-Message-ID: <89d843e16bd34e760a7ade6f14e46228f1bf56e8.camel@kernel.org>
-Subject: Re: [PATCH net-next 4/4] net/tcp_ao: use sock_kmemdup for tcp_ao_key
+	b=AZgyLCW7nkAb14L4flqHGiS153ZvrP0JT6q3c8W2XILS3/jweXLQQPWbG4DauGUOJ
+	 6yX6EmQ0TfMYal4vgQYuhA7PlfMHWTljns4A8f4TGgJb6Bqc4DpYVMxTRLtsiZhfup
+	 SwoJiwVPdTe3HYMIplkvHANLtEluZt1YYJUHBNoLjKuUGJBYTyiwTypdVdh0G05Z4n
+	 mEwUo2Oq6S3UWLx0odtMkv9H8gLqXU4bm7pRIsXgez6KD3TIbA0pdDZGESW3/i3Gnt
+	 71vNDIT2uDS8qxm99OkhGqrXciU2EkIGzOflZ3XFf+Yw3pLsIbBOksVS+Yh8P/oZ5F
+	 rAyBHvnSpEz1w==
+Message-ID: <61415314eec15410e42d31fd6d1a8411a937e747.camel@kernel.org>
+Subject: Re: [PATCH net-next 1/4] sock: add sock_kmemdup helper
 From: Geliang Tang <geliang@kernel.org>
-To: Eric Dumazet <edumazet@google.com>
-Cc: Kuniyuki Iwashima <kuniyu@amazon.com>, Paolo Abeni <pabeni@redhat.com>, 
- Willem de Bruijn <willemb@google.com>, "David S. Miller"
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,  Simon Horman
- <horms@kernel.org>, Neal Cardwell <ncardwell@google.com>, David Ahern
- <dsahern@kernel.org>,  Matthieu Baerts <matttbe@kernel.org>, Mat Martineau
- <martineau@kernel.org>, Marcelo Ricardo Leitner
- <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, Geliang Tang
- <tanggeliang@kylinos.cn>, netdev@vger.kernel.org, mptcp@lists.linux.dev, 
- linux-sctp@vger.kernel.org
-Date: Thu, 27 Feb 2025 17:04:35 +0800
-In-Reply-To: <CANn89i+ZLAPPKVCzAMrchJBvisiOsEZyVN-TqGUkEH8EFApbpQ@mail.gmail.com>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>, netdev@vger.kernel.org, 
+ mptcp@lists.linux.dev, linux-sctp@vger.kernel.org, Eric Dumazet
+ <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@amazon.com>, Paolo Abeni
+ <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>, Jakub Kicinski
+ <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, Simon Horman
+ <horms@kernel.org>, David Ahern <dsahern@kernel.org>, Neal Cardwell
+ <ncardwell@google.com>, Mat Martineau <martineau@kernel.org>, Marcelo
+ Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>
+Date: Thu, 27 Feb 2025 17:05:54 +0800
+In-Reply-To: <773003d9-bbee-4941-a3e7-3590ea80bdb2@kernel.org>
 References: <cover.1740643844.git.tanggeliang@kylinos.cn>
-	 <38054b456a54cc5c7628c81a42816a770f0bff27.1740643844.git.tanggeliang@kylinos.cn>
-	 <CANn89i+ZLAPPKVCzAMrchJBvisiOsEZyVN-TqGUkEH8EFApbpQ@mail.gmail.com>
+	 <a26c04cba801be45ce01a41b6a14a871246177c5.1740643844.git.tanggeliang@kylinos.cn>
+	 <773003d9-bbee-4941-a3e7-3590ea80bdb2@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
@@ -69,49 +68,58 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Thu, 2025-02-27 at 09:35 +0100, Eric Dumazet wrote:
-> On Thu, Feb 27, 2025 at 9:24 AM Geliang Tang <geliang@kernel.org>
-> wrote:
-> > 
+On Thu, 2025-02-27 at 09:45 +0100, Matthieu Baerts wrote:
+> Hi Geliang,
+> 
+> On 27/02/2025 09:23, Geliang Tang wrote:
 > > From: Geliang Tang <tanggeliang@kylinos.cn>
 > > 
-> > Instead of using sock_kmalloc() to allocate a tcp_ao_key "new_key"
-> > and
-> > then immediately duplicate the input "key" to it in
-> > tcp_ao_copy_key(),
-> > the newly added sock_kmemdup() helper can be used to simplify the
-> > code.
-> > 
-> > Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-> > ---
-> >  net/ipv4/tcp_ao.c | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> > 
-> > diff --git a/net/ipv4/tcp_ao.c b/net/ipv4/tcp_ao.c
-> > index bbb8d5f0eae7..d21412d469cc 100644
-> > --- a/net/ipv4/tcp_ao.c
-> > +++ b/net/ipv4/tcp_ao.c
-> > @@ -246,12 +246,11 @@ static struct tcp_ao_key
-> > *tcp_ao_copy_key(struct sock *sk,
-> >  {
-> >         struct tcp_ao_key *new_key;
-> > 
-> > -       new_key = sock_kmalloc(sk, tcp_ao_sizeof_key(key),
-> > +       new_key = sock_kmemdup(sk, key, tcp_ao_sizeof_key(key),
-> >                                GFP_ATOMIC);
-> >         if (!new_key)
-> >                 return NULL;
-> > 
-> > -       *new_key = *key;
+> > This patch adds the sock version of kmemdup() helper, named
+> > sock_kmemdup(),
+> > to duplicate the input "src" memory block using the socket's option
+> > memory
+> > buffer.
 > 
-> Note that this only copies 'sizeof(struct tcp_ao_key)' bytes, which
-> is
-> smaller than tcp_ao_sizeof_key(key)
+> Thank you for suggesting this series.
+> 
+> (...)
+> 
+> > diff --git a/net/core/sock.c b/net/core/sock.c
+> > index 5ac445f8244b..95e81d24f4cc 100644
+> > --- a/net/core/sock.c
+> > +++ b/net/core/sock.c
+> > @@ -2819,6 +2819,21 @@ void *sock_kmalloc(struct sock *sk, int
+> > size, gfp_t priority)
+> >  }
+> >  EXPORT_SYMBOL(sock_kmalloc);
+> >  
+> > +/*
+> > + * Duplicate the input "src" memory block using the socket's
+> > + * option memory buffer.
+> > + */
+> > +void *sock_kmemdup(struct sock *sk, const void *src,
+> > +		   int size, gfp_t priority)
+> > +{
+> > +	void *mem;
+> > +
+> > +	mem = sock_kmalloc(sk, size, priority);
+> > +	if (mem)
+> > +		memcpy(mem, src, size);
+> > +	return mem;
+> > +}
+> 
+> 
+> I think you will need to add an EXPORT_SYMBOL() here, if you plan to
+> use
+> it in SCTP which can be compiled as a module.
 
-Yes, indeed. sock_kmemdup() shouldn't be used here then. I'll drop this
-patch in v2.
+Yes, indeed. I'll add this in v2.
 
 Thanks,
 -Geliang
+
+> 
+> Cheers,
+> Matt
 
 
