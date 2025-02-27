@@ -1,128 +1,161 @@
-Return-Path: <linux-sctp+bounces-363-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-364-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81C78A477E9
-	for <lists+linux-sctp@lfdr.de>; Thu, 27 Feb 2025 09:35:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A27DCA4781F
+	for <lists+linux-sctp@lfdr.de>; Thu, 27 Feb 2025 09:45:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 216F13A9FDB
-	for <lists+linux-sctp@lfdr.de>; Thu, 27 Feb 2025 08:35:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 27727188A640
+	for <lists+linux-sctp@lfdr.de>; Thu, 27 Feb 2025 08:45:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16FA7225403;
-	Thu, 27 Feb 2025 08:35:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49AE1226173;
+	Thu, 27 Feb 2025 08:45:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HzGU+NXR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qbrIJkFL"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EAD5223711
-	for <linux-sctp@vger.kernel.org>; Thu, 27 Feb 2025 08:35:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A18A225A22;
+	Thu, 27 Feb 2025 08:45:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740645320; cv=none; b=q0AmISNNeuPdvMciJXr9+SGQMHzMigPJZ4coBM0aaNelQYALp18fj9VSy03MCg5SE3P4AZUewOJ8rUYQPbVvkjIh9QYY/XhvRlwajAFKlXbapvA2ODPyYRVvMYxdFep4PamnlJZdcgsYeJinOEqdGWdQ5CNFduGHgpoe8JgJP+0=
+	t=1740645909; cv=none; b=NzE92zvZ+HllMsDRWTpmQdn+vJv/h6TJOy5BEXBfDn0JEwIXriFiwMi0XN2rlbiyZnvxarLODRrDKbO148s7w4L94/ugqVsZ+lUQL81IL8l5qhPUiv7TQSOaynE5Nr4BNPNgPUyyTWs0Xo1tlU3eBK7Ow/oCBvPUL/y3qPp9RGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740645320; c=relaxed/simple;
-	bh=xPMrcZXlyzkOROzTylH2sE2WQhKnhPRp81sgczS0BDY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Z7hD4gMnS1uZgLaabScxQAAKHPpSH8+waUqfLUCzbminpzw76BVMGZrb1JwbGWtIawxoxjOsuLwojVbhisYBKuezRN2Zhj/AsRmwuOuxNB83dp5kapiOAPPoUdOzyQwUr/6CxYzQ26NKayCRnnT+a7mJLARUSVrQAirtIgXurUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HzGU+NXR; arc=none smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-471fe5e0a80so6571531cf.1
-        for <linux-sctp@vger.kernel.org>; Thu, 27 Feb 2025 00:35:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1740645317; x=1741250117; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EbUNq4GyX64nqzEmvp+umfuZHI26ffw9v99H9Suo7JE=;
-        b=HzGU+NXRvHEegbXS0+SMUpFYF+3KoeWCz2qMFDBPnmHFMNRm+hhRLHoeXdcxqXa8lE
-         xQvE/sTAjt40g8NXGkK5j08LkTnB9e7FROCcEO1kl7nguY3MCGaSdRW9420Bf/W9skYm
-         cJi6u4THLBigEv1O5NogZQ6+/iwhF3irdrRhhFGZ2T5jIMMOfVLvzrZXUIGsB/ue4GOm
-         JJI29VQkIkiTX9kJCMUsw0do1IjEW5sFl+V7eMpVEzUTcABoSAXhRSySk4SYuWjve7x3
-         VfmAlbKzfIWhDykk5xZO1QhSmXvjelQNK3gMIADwA7WNAEni2UCUPs63NbJrPEu+mcQF
-         f7hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740645317; x=1741250117;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EbUNq4GyX64nqzEmvp+umfuZHI26ffw9v99H9Suo7JE=;
-        b=o0YzFImgx44f5WVA5JNECfmF2iCZyZqjnVCsDiQmy3TuJ5T8TXnjVg5wGeo3/u2L8W
-         seuaszVTm3aqCAop7KjqI2iKWppYPR1bEZb3lzvKtxw8Li9v9j6IdLd5MB/Wm6Ic+v8r
-         kt1+fMpuycznWBKffayQShIMIMIbzK7nemn8lPS9cyFRM4FPlDriF15reyaCxs/+LpUh
-         tvPz2ZY2CHQt5iSwhhXsGBzwM7lCoQs1MIYv8Fx1SB91EzlL+fXPv+4SyjxQeLL0bEkT
-         PBsUu5JOgml321OehG7dLMZAwfqL59IttyOAfhN+AuXI8FCWtQcvMJ6igxMtvwOKi63f
-         EZFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWy6eaThd35cxfLSQz3dwf6ZN8S3yWPbf860DJZMksNrLzaGyR0glDT3tOdAeTj/f5x6Dz9FGPlw+h8@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/JeXIZMnhTwdRpe/nN6g38U8Csgve19T7NJb3HQGMNMmxSUWT
-	K1GeAVOqTiP/SfKKZ2TkNjsTxJod0tykMYAzk4ZTfx3anAajZ9q5//Sl9EUN9ITTLBDz6p4b0qr
-	hEn6ENtXLUJnU+Mqh6GqSUtuSuuPWQIrof//S
-X-Gm-Gg: ASbGncttUvhfoBkVCu0CqvK6maIOEBM5kgqemIOuVGaKYjsx1gEZbsuc2hDyxY5VM5Z
-	0CFhpLlmlYUV97vR4iVQUV+zNKomyTauvTT7xqLDvDWuScvrCzHnEw6oPcCEsnp0rS9EX/8sraL
-	vZBVoZaM8=
-X-Google-Smtp-Source: AGHT+IF7aj3xZqg1BXSkAfM9Yrb4ohI/2Ky9Ht430sL32q+fWf5c8humNsilGQHX1CYP+rTmJHV5RbiY8qCIFlua/4w=
-X-Received: by 2002:ac8:598b:0:b0:472:95f:d25e with SMTP id
- d75a77b69052e-4722473cfb4mr342060211cf.19.1740645316870; Thu, 27 Feb 2025
- 00:35:16 -0800 (PST)
+	s=arc-20240116; t=1740645909; c=relaxed/simple;
+	bh=Ek01IMVH3iqPTxcu67ld4CLzLkQBdYy5qpO3EhaMqSI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PE3WevnTeOAqnRjoOfdAPr3MMSz0iQfIJC79nJMBKWxRO5LE5OLsHU4ue/iJeyVeVfyGANHiXfifWFnYkoTnQ0zBQ5rptT83Q070hfOp6CQOBa9uJZ3Go0+KlNk/3780ZuKlzW8UIVagUIm+WWs3i1tjGtzLokKQJJKERlnr1H8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qbrIJkFL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 155CCC4CEDD;
+	Thu, 27 Feb 2025 08:45:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740645908;
+	bh=Ek01IMVH3iqPTxcu67ld4CLzLkQBdYy5qpO3EhaMqSI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=qbrIJkFLd7OPHEPObUNNwlxyn68ABw3Szs2g1BJ46L/uMdWgS43gM1wwrmxLhvohw
+	 vzdikHANaqTrgClt2e8POMPZDDT58lO0LwmDNY6QIQnOJKGasA225RkZVHB/zaddbd
+	 UpxgR2i9zPgaAn0IM+zkLFQdxb+/4p/ZefBqhdaGcj8n2j0nI32gByjSaxKE3/iNWg
+	 tFViZ0yARlLGdmb8JOqtlh1hz4fV8PJDLefogMu9O9v9fVypqYoR5vCmBAZK8nldzt
+	 H5eKvRZIfULxpoWsJuhlnOPZZ+Q7SJAHxBnTyKHXUwx+9YntFWB9P+GInFCsxPBB7c
+	 uLA7UfE2NZS+g==
+Message-ID: <773003d9-bbee-4941-a3e7-3590ea80bdb2@kernel.org>
+Date: Thu, 27 Feb 2025 09:45:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1740643844.git.tanggeliang@kylinos.cn> <38054b456a54cc5c7628c81a42816a770f0bff27.1740643844.git.tanggeliang@kylinos.cn>
-In-Reply-To: <38054b456a54cc5c7628c81a42816a770f0bff27.1740643844.git.tanggeliang@kylinos.cn>
-From: Eric Dumazet <edumazet@google.com>
-Date: Thu, 27 Feb 2025 09:35:05 +0100
-X-Gm-Features: AQ5f1JryXKMVP6N9LHTCBYmNcUmx9qDszFAnKpx8VGAyOne3EBu3Vo70b-0zGuA
-Message-ID: <CANn89i+ZLAPPKVCzAMrchJBvisiOsEZyVN-TqGUkEH8EFApbpQ@mail.gmail.com>
-Subject: Re: [PATCH net-next 4/4] net/tcp_ao: use sock_kmemdup for tcp_ao_key
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net-next 1/4] sock: add sock_kmemdup helper
+Content-Language: en-GB
 To: Geliang Tang <geliang@kernel.org>
-Cc: Kuniyuki Iwashima <kuniyu@amazon.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Willem de Bruijn <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>, Neal Cardwell <ncardwell@google.com>, 
-	David Ahern <dsahern@kernel.org>, Matthieu Baerts <matttbe@kernel.org>, 
-	Mat Martineau <martineau@kernel.org>, Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, 
-	Xin Long <lucien.xin@gmail.com>, Geliang Tang <tanggeliang@kylinos.cn>, netdev@vger.kernel.org, 
-	mptcp@lists.linux.dev, linux-sctp@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: Geliang Tang <tanggeliang@kylinos.cn>, netdev@vger.kernel.org,
+ mptcp@lists.linux.dev, linux-sctp@vger.kernel.org,
+ Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@amazon.com>,
+ Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
+ Neal Cardwell <ncardwell@google.com>, Mat Martineau <martineau@kernel.org>,
+ Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+ Xin Long <lucien.xin@gmail.com>
+References: <cover.1740643844.git.tanggeliang@kylinos.cn>
+ <a26c04cba801be45ce01a41b6a14a871246177c5.1740643844.git.tanggeliang@kylinos.cn>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <a26c04cba801be45ce01a41b6a14a871246177c5.1740643844.git.tanggeliang@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Feb 27, 2025 at 9:24=E2=80=AFAM Geliang Tang <geliang@kernel.org> w=
-rote:
->
+Hi Geliang,
+
+On 27/02/2025 09:23, Geliang Tang wrote:
 > From: Geliang Tang <tanggeliang@kylinos.cn>
->
-> Instead of using sock_kmalloc() to allocate a tcp_ao_key "new_key" and
-> then immediately duplicate the input "key" to it in tcp_ao_copy_key(),
-> the newly added sock_kmemdup() helper can be used to simplify the code.
->
-> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-> ---
->  net/ipv4/tcp_ao.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/net/ipv4/tcp_ao.c b/net/ipv4/tcp_ao.c
-> index bbb8d5f0eae7..d21412d469cc 100644
-> --- a/net/ipv4/tcp_ao.c
-> +++ b/net/ipv4/tcp_ao.c
-> @@ -246,12 +246,11 @@ static struct tcp_ao_key *tcp_ao_copy_key(struct so=
-ck *sk,
->  {
->         struct tcp_ao_key *new_key;
->
-> -       new_key =3D sock_kmalloc(sk, tcp_ao_sizeof_key(key),
-> +       new_key =3D sock_kmemdup(sk, key, tcp_ao_sizeof_key(key),
->                                GFP_ATOMIC);
->         if (!new_key)
->                 return NULL;
->
-> -       *new_key =3D *key;
+> 
+> This patch adds the sock version of kmemdup() helper, named sock_kmemdup(),
+> to duplicate the input "src" memory block using the socket's option memory
+> buffer.
 
-Note that this only copies 'sizeof(struct tcp_ao_key)' bytes, which is
-smaller than tcp_ao_sizeof_key(key)
+Thank you for suggesting this series.
+
+(...)
+
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index 5ac445f8244b..95e81d24f4cc 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -2819,6 +2819,21 @@ void *sock_kmalloc(struct sock *sk, int size, gfp_t priority)
+>  }
+>  EXPORT_SYMBOL(sock_kmalloc);
+>  
+> +/*
+> + * Duplicate the input "src" memory block using the socket's
+> + * option memory buffer.
+> + */
+> +void *sock_kmemdup(struct sock *sk, const void *src,
+> +		   int size, gfp_t priority)
+> +{
+> +	void *mem;
+> +
+> +	mem = sock_kmalloc(sk, size, priority);
+> +	if (mem)
+> +		memcpy(mem, src, size);
+> +	return mem;
+> +}
+
+
+I think you will need to add an EXPORT_SYMBOL() here, if you plan to use
+it in SCTP which can be compiled as a module.
+
+Cheers,
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
+
 
