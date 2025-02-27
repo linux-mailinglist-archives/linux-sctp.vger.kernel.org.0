@@ -1,50 +1,67 @@
-Return-Path: <linux-sctp+bounces-357-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-358-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F208BA442D3
-	for <lists+linux-sctp@lfdr.de>; Tue, 25 Feb 2025 15:32:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED047A477AA
+	for <lists+linux-sctp@lfdr.de>; Thu, 27 Feb 2025 09:23:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 34B168603A9
-	for <lists+linux-sctp@lfdr.de>; Tue, 25 Feb 2025 14:29:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E10AC3A9322
+	for <lists+linux-sctp@lfdr.de>; Thu, 27 Feb 2025 08:23:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FB4426A1BB;
-	Tue, 25 Feb 2025 14:30:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BADAE2236F7;
+	Thu, 27 Feb 2025 08:23:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U5+51SdR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rtq2K3N7"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423F5269D06;
-	Tue, 25 Feb 2025 14:30:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A7E12206BE;
+	Thu, 27 Feb 2025 08:23:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740493806; cv=none; b=QwCvFSR1p1J5s4rCuNk9ODiqJxPDXvpiDkPM8RuStUE39hy+9XQjAFeinL3H4ECUIJa1uuXMbEcV+ta5Zmz3ep9wGJGum6III0L1ILmeCSpIdV8YQV4Kgzn+fMrhmDGpPtNeGwz700GUHwyQaKlBTPE0iBrLIQ6cULXreZCcSSM=
+	t=1740644634; cv=none; b=kHOHKQEnITiZdyIH9Jq55zG6v5w3Zz3PXzdxADCyV4uNyo5Mp+vdGhj4N70oXODUehE8juNGQrbd3Ff0+VF67agKgTbCPdM6FzeodnTm0YLWLiyUqJgdCxD3EBQVTT2V5xJK9bfrKMSaqfsu1k2NaypQ+iAHaTDeGSX6+QLb2DY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740493806; c=relaxed/simple;
-	bh=lYjpObcEnEszvzK+aJGxjwhQQRARi3ET5qF3EhUkLIQ=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=V2yitnnQMnd2Fv+JvZCof/Zxgh8KzyJ3AHQhlPUGzKowBdP0TRNZlprOLO8pMjHOxUm48QX+RA9pz7JChkbHR+1OdwnLoGu5DcZRCsIFj9gTPeeb10/FV+wVNqkVCJ12QAHjla8B3QB1HfwqBD9RWR8adrhjcUZ84RbP3HIKgmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U5+51SdR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4244C4CEE8;
-	Tue, 25 Feb 2025 14:30:05 +0000 (UTC)
+	s=arc-20240116; t=1740644634; c=relaxed/simple;
+	bh=PdLTmLyeTDgnTiJA/RdFq4UEue65i61KUJwuOFy3wcw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aGKnbhq4fXGMAsDD8hijsmtF/migr1BMFt+GoeNS3mmR5xVC5YPiEsB92qe7K1bKNDiI34w3l+AQQcyxtQTfbzhqh+MPxnt1FHO47QKhA5T+sRZY30YX1Kdz4dTfYAw98BLabrDfIn/13rzd1PD6WJStEU6U51t0HR4WdyyrGaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rtq2K3N7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 839AFC4CEDD;
+	Thu, 27 Feb 2025 08:23:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740493805;
-	bh=lYjpObcEnEszvzK+aJGxjwhQQRARi3ET5qF3EhUkLIQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=U5+51SdRk8hGafYwIxqpUFe+KIvMBMPUF5N6l1wHBHNVO2oRK1ZVz4EdvUFJ5H9xB
-	 1QCvX6E5vMYDsIgEnfkjRMpMhJO42jndtzxC2swYJmRW24YSZ223W1EHDCBGONX1uG
-	 sXlhBdz2e8Eimk0uRrBaA6u2tZ4f5hNkjJ3cQj2GRp8YTpwOcQXL/sds3dULh4dfzQ
-	 e8TVHgWhX7JNRz5FYOQPJZEyhIxUxRCJASnxU5axSaFtapFiTYa7zLgDFrVtdLwNaa
-	 Z3ApKyxAixo8ve/KOT0LvnGw7tIkm5kkrqEqExq7gKIdMpdCxe5yWikZrS0PivWXMq
-	 gdZd7nNTty3fg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7120D380CEDC;
-	Tue, 25 Feb 2025 14:30:38 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1740644634;
+	bh=PdLTmLyeTDgnTiJA/RdFq4UEue65i61KUJwuOFy3wcw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=rtq2K3N7zkNRXfw5WGz6Yo365HqS+SxHLaTvt4y1rS0t2zbLl2sKJG80TdQMIC1V2
+	 Kd7vJhSpMTaN8CbegpqobVEG4oCbYQsq10gRcVLbL22BOvRx38oo834N/vubU1ZzA9
+	 vfWGbjLb9OMWeaNslGuAFmBKuKGx5V4TOMGwZq7gQsWW5SkBtFHVCBB83MVqLfNLgP
+	 LxsP/j+2t0cFMlMd22xK2q8MNBZsfVHNiuK5KunGxpcdX5QVRX63UozCQ3Vs5W6BNc
+	 iP9FOSfrItbaQ/7yi1UvDrooFu9iXaWqpYPCK8alz7I/+sJUgajx9HtETCpEDEos+o
+	 wfInmdw4BpZ7g==
+From: Geliang Tang <geliang@kernel.org>
+To: Eric Dumazet <edumazet@google.com>,
+	Kuniyuki Iwashima <kuniyu@amazon.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Willem de Bruijn <willemb@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Neal Cardwell <ncardwell@google.com>,
+	David Ahern <dsahern@kernel.org>,
+	Matthieu Baerts <matttbe@kernel.org>,
+	Mat Martineau <martineau@kernel.org>,
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+	Xin Long <lucien.xin@gmail.com>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>,
+	netdev@vger.kernel.org,
+	mptcp@lists.linux.dev,
+	linux-sctp@vger.kernel.org
+Subject: [PATCH net-next 0/4] add sock_kmemdup helper
+Date: Thu, 27 Feb 2025 16:23:22 +0800
+Message-ID: <cover.1740643844.git.tanggeliang@kylinos.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -52,41 +69,111 @@ List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] sctp: Remove unused payload from sctp_idatahdr
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <174049383727.4190834.5787481246783621819.git-patchwork-notify@kernel.org>
-Date: Tue, 25 Feb 2025 14:30:37 +0000
-References: <20250223204505.2499-3-thorsten.blum@linux.dev>
-In-Reply-To: <20250223204505.2499-3-thorsten.blum@linux.dev>
-To: Thorsten Blum <thorsten.blum@linux.dev>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, marcelo.leitner@gmail.com,
- lucien.xin@gmail.com, kees@kernel.org, linux-sctp@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 
-Hello:
+From: Geliang Tang <tanggeliang@kylinos.cn>
 
-This patch was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+While developing MPTCP BPF path manager [1], I found it's useful to
+add a new sock_kmemdup() helper.
 
-On Sun, 23 Feb 2025 21:45:07 +0100 you wrote:
-> Remove the unused payload array from the struct sctp_idatahdr.
-> 
-> Cc: Kees Cook <kees@kernel.org>
-> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
-> ---
->  include/linux/sctp.h | 1 -
->  1 file changed, 1 deletion(-)
+My use case is this:
 
-Here is the summary with links:
-  - [net-next] sctp: Remove unused payload from sctp_idatahdr
-    https://git.kernel.org/netdev/net-next/c/287044abff82
+In mptcp_userspace_pm_append_new_local_addr() function (see patch 3
+in this patchset), there is a code that uses sock_kmalloc() to
+allocate an address entry "e", then immediately duplicate the input
+"entry" to it:
 
-You are awesome, thank you!
+	e = sock_kmalloc(sk, sizeof(*e), GFP_ATOMIC);
+	if (!e) {
+		ret = -ENOMEM;
+		goto append_err;
+	}
+	*e = *entry;
+
+When I implemented MPTCP BPF path manager, I needed to implement a
+code similar to this in BPF.
+
+The kfunc sock_kmalloc() can be easily invoked in BPF to allocate
+an entry "e", but the code "*e = *entry;" that assigns "entry" to
+"e" is not easy to implemented. 
+
+I had to implement such a copy entry helper in BPF:
+
+static void mptcp_pm_copy_addr(struct mptcp_addr_info *dst,
+                               struct mptcp_addr_info *src)
+{
+       dst->id = src->id;
+       dst->family = src->family;
+       dst->port = src->port;
+
+       if (src->family == AF_INET) {
+               dst->addr.s_addr = src->addr.s_addr;
+       } else if (src->family == AF_INET6) {
+               dst->addr6.s6_addr32[0] = src->addr6.s6_addr32[0];
+               dst->addr6.s6_addr32[1] = src->addr6.s6_addr32[1];
+               dst->addr6.s6_addr32[2] = src->addr6.s6_addr32[2];
+               dst->addr6.s6_addr32[3] = src->addr6.s6_addr32[3];
+       }
+}
+
+static void mptcp_pm_copy_entry(struct mptcp_pm_addr_entry *dst,
+                                struct mptcp_pm_addr_entry *src)
+{
+       mptcp_pm_copy_addr(&dst->addr, &src->addr);
+
+       dst->flags = src->flags;
+       dst->ifindex = src->ifindex;
+}
+
+And add write permission for BPF to each field of mptcp_pm_addr_entry:
+
+@@ -74,24 +74,6 @@ static int bpf_mptcp_pm_btf_struct_access(struct bpf_verifier_log *log,
+               case offsetof(struct mptcp_pm_addr_entry, addr.port):
+                       end = offsetofend(struct mptcp_pm_addr_entry, addr.port);
+                       break;
+#if IS_ENABLED(CONFIG_MPTCP_IPV6)
+               case offsetof(struct mptcp_pm_addr_entry, addr.addr6.s6_addr32[0]):
+                       end = offsetofend(struct mptcp_pm_addr_entry, addr.addr6.s6_addr32[0]);
+                       break;
+               case offsetof(struct mptcp_pm_addr_entry, addr.addr6.s6_addr32[1]):
+                       end = offsetofend(struct mptcp_pm_addr_entry, addr.addr6.s6_addr32[1]);
+                       break;
+               case offsetof(struct mptcp_pm_addr_entry, addr.addr6.s6_addr32[2]):
+                       end = offsetofend(struct mptcp_pm_addr_entry, addr.addr6.s6_addr32[2]);
+                       break;
+               case offsetof(struct mptcp_pm_addr_entry, addr.addr6.s6_addr32[3]):
+                       end = offsetofend(struct mptcp_pm_addr_entry, addr.addr6.s6_addr32[3]);
+                       break;
+#else
+               case offsetof(struct mptcp_pm_addr_entry, addr.addr.s_addr):
+                       end = offsetofend(struct mptcp_pm_addr_entry, addr.addr.s_addr);
+                       break;
+#endif
+
+
+But if there's a sock_kmemdup() helper, it will become much simpler,
+only need to call kfunc sock_kmemdup() instead in BPF.
+
+So this patchset adds this new helper and uses it in several places.
+
+[1]
+https://patchwork.kernel.org/project/mptcp/cover/cover.1738924875.git.tanggeliang@kylinos.cn/
+
+Geliang Tang (4):
+  sock: add sock_kmemdup helper
+  net: use sock_kmemdup for ip_options
+  mptcp: use sock_kmemdup for address entry
+  net/tcp_ao: use sock_kmemdup for tcp_ao_key
+
+ include/net/sock.h       |  2 ++
+ net/core/sock.c          | 15 +++++++++++++++
+ net/ipv4/tcp_ao.c        |  3 +--
+ net/ipv6/exthdrs.c       |  3 +--
+ net/mptcp/pm_userspace.c |  3 +--
+ net/mptcp/protocol.c     |  7 ++-----
+ net/sctp/protocol.c      |  7 ++-----
+ 7 files changed, 24 insertions(+), 16 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.43.0
 
 
