@@ -1,45 +1,46 @@
-Return-Path: <linux-sctp+bounces-367-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-368-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 639D0A49675
-	for <lists+linux-sctp@lfdr.de>; Fri, 28 Feb 2025 11:09:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A24DAA49678
+	for <lists+linux-sctp@lfdr.de>; Fri, 28 Feb 2025 11:09:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00DC616AE0C
-	for <lists+linux-sctp@lfdr.de>; Fri, 28 Feb 2025 10:09:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F9C0164B2E
+	for <lists+linux-sctp@lfdr.de>; Fri, 28 Feb 2025 10:09:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 162EA25D52B;
-	Fri, 28 Feb 2025 10:01:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4580825D53E;
+	Fri, 28 Feb 2025 10:01:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kr3e59p4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lkEgypt5"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDE5925D218;
-	Fri, 28 Feb 2025 10:01:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19F1D2561DE;
+	Fri, 28 Feb 2025 10:01:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740736907; cv=none; b=k2wtEWr8KMKq0eOl7uEU164E1FLTJuGog8L8bd0dsmZCKHX+/WKbdpyLbhUfzHTLFyaQY9mrLYVyLuTKAzTFZOZrwhdu/Uind7ybfFlerUUGIHBvNKck9bsIJ0WqgqoWWQlXF9sJDBU6MFdMSQfgZRGf349TwogoarrtTQWoc3g=
+	t=1740736913; cv=none; b=ahJ8RGmi6TdYfSNWy+C4+qDaMlH+ELQvoHtFxgsu9MBvGNSA13dczhqayuDYg13GiNhbUZaLKRqLNrBFYacdbrwEP6jT4eeYHmaVylB/ZvrZIk0Xf+D/5gGmcCrCl5pNFegp2KsUOURM9AbZ+i0e2puntf+AxrTgwGrR/uETx94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740736907; c=relaxed/simple;
-	bh=WG2xZI0wmFn+Azmg6PmV3m8qa+1ewbLpbNmj4jiXmJY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MlcnmXUZMfzeOA7lna+Vk3UvIfHt3tNDqicKqX/kXPJoSELrpSDOW23iMpnySi8APm+/D/6jUAs7nL1+WSrlNe5WgPqCKm5P8WGzo88K1AsIqfw3xZfOYKBIOB+xWpQt9P2kXE3UfhfxtF20cM/KodXhrICQhQD1Tegms5HZ10g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kr3e59p4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5372C4CED6;
-	Fri, 28 Feb 2025 10:01:40 +0000 (UTC)
+	s=arc-20240116; t=1740736913; c=relaxed/simple;
+	bh=DmbSIkOjD/LlT1o10zy3tU/eSic7bXpF/O0NJUnRgck=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=p0L2pLahhDE8uQVfL+Fg8CWbaXgGe9fBczJjK78EXZgoqTkiSGjpxFwz6iW5Vhvh9py8OhF1CA/CEjY+vwNcWtyWRq0FQmPwQbgb5DFVik2/TlBx7694SA1QRQ9S6N1mYyGvNfo0p8KufkLGQ+W+hLglblFJwqXnEjslFytdPl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lkEgypt5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 117FEC4CED6;
+	Fri, 28 Feb 2025 10:01:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740736906;
-	bh=WG2xZI0wmFn+Azmg6PmV3m8qa+1ewbLpbNmj4jiXmJY=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Kr3e59p4oI135FiQwVWVoxKHXIKSsF8DyqNcr0YKvSHIIjXUQ2SfNWvnfVjQNCchF
-	 6Quo2kp8M+Ny868FIibt3EuhvF0ffx2ZOSZS9g7WKsWpB+oGkUu6ix2OldsMRTYboE
-	 5sfAhuWkOdtS7btQS3uVbZme7l6NWHtLJZDDqZysczdO0Dv4Iw7yBBBn3zezhmjnJf
-	 vfRxnS9ZUUQlKqufE97DKS8bf1DgTG4VZYprMx3bWYm5nEYd9V0ibvWIKQspg/mf33
-	 VEYrY9ySmKFi3LCiGeNVUEjBedgFCv3b3maArlIpqTxTWDxABUYL5WA+FqmTkJaUBA
-	 UMFbGIr8ydauw==
+	s=k20201202; t=1740736912;
+	bh=DmbSIkOjD/LlT1o10zy3tU/eSic7bXpF/O0NJUnRgck=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=lkEgypt5q6eaPbWIL3ULLUb2XSQIK7g81eBZd/gneEcaBXRaREyRRo3UbE2yxegLA
+	 Jeu6NPsuNUdJjZvMdPmvEIRPl3HH8IE0/T47Hx8tZv96E64WBd7ofMLXROY3cYVIVo
+	 e8llWtCRC+evYW4SAnrdfuVdKJjG1wFVmeq06oTIxf8AdAmDGzY+5CxYHbJhEj0hDM
+	 T9fJqGgv8hOmx4vcGeI8s1HX+30cLPE2Ebwx5D6QtyYl5VYHv9hkr9OuMiGpjDBcLx
+	 iP9Lb7qMFIm549oErvOIxq4NUEpSb32S69/6Var76Dqz+vC972KsEdQFyehuhHafk7
+	 CZgIPy/wVVwcw==
 From: Geliang Tang <geliang@kernel.org>
 To: Eric Dumazet <edumazet@google.com>,
 	Kuniyuki Iwashima <kuniyu@amazon.com>,
@@ -58,10 +59,12 @@ Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	netdev@vger.kernel.org,
 	mptcp@lists.linux.dev,
 	linux-sctp@vger.kernel.org
-Subject: [PATCH net-next v2 0/3] add sock_kmemdup helper
-Date: Fri, 28 Feb 2025 18:01:30 +0800
-Message-ID: <cover.1740735165.git.tanggeliang@kylinos.cn>
+Subject: [PATCH net-next v2 1/3] sock: add sock_kmemdup helper
+Date: Fri, 28 Feb 2025 18:01:31 +0800
+Message-ID: <f828077394c7d1f3560123497348b438c875b510.1740735165.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1740735165.git.tanggeliang@kylinos.cn>
+References: <cover.1740735165.git.tanggeliang@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -72,114 +75,56 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-v2:
- - add "EXPORT_SYMBOL(sock_kmemdup)" as Matthieu suggested.
- - drop the patch "use sock_kmemdup for tcp_ao_key".
+This patch adds the sock version of kmemdup() helper, named sock_kmemdup(),
+to duplicate the input "src" memory block using the socket's option memory
+buffer.
 
-While developing MPTCP BPF path manager [1], I found it's useful to
-add a new sock_kmemdup() helper.
+Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+---
+ include/net/sock.h |  2 ++
+ net/core/sock.c    | 16 ++++++++++++++++
+ 2 files changed, 18 insertions(+)
 
-My use case is this:
-
-In mptcp_userspace_pm_append_new_local_addr() function (see patch 3
-in this patchset), it uses sock_kmalloc() to allocate an address
-entry "e", then immediately duplicate the input "entry" to it:
-
-'''
-	e = sock_kmalloc(sk, sizeof(*e), GFP_ATOMIC);
-	if (!e) {
-		ret = -ENOMEM;
-		goto append_err;
-	}
-
-	*e = *entry;
-'''
-
-When I implemented MPTCP BPF path manager, I needed to implement a
-code similar to this in BPF.
-
-The kfunc sock_kmalloc() can be easily invoked in BPF to allocate
-an entry "e", but the code "*e = *entry;" that assigns "entry" to
-"e" is not easy to implemented. 
-
-I had to implement such a "copy entry" helper in BPF:
-
-'''
-static void mptcp_pm_copy_addr(struct mptcp_addr_info *dst,
-                               struct mptcp_addr_info *src)
-{
-       dst->id = src->id;
-       dst->family = src->family;
-       dst->port = src->port;
-
-       if (src->family == AF_INET) {
-               dst->addr.s_addr = src->addr.s_addr;
-       } else if (src->family == AF_INET6) {
-               dst->addr6.s6_addr32[0] = src->addr6.s6_addr32[0];
-               dst->addr6.s6_addr32[1] = src->addr6.s6_addr32[1];
-               dst->addr6.s6_addr32[2] = src->addr6.s6_addr32[2];
-               dst->addr6.s6_addr32[3] = src->addr6.s6_addr32[3];
-       }
-}
-
-static void mptcp_pm_copy_entry(struct mptcp_pm_addr_entry *dst,
-                                struct mptcp_pm_addr_entry *src)
-{
-       mptcp_pm_copy_addr(&dst->addr, &src->addr);
-
-       dst->flags = src->flags;
-       dst->ifindex = src->ifindex;
-}
-'''
-
-And add "write permission" for BPF to each field of mptcp_pm_addr_entry:
-
-'''
-@@ static int bpf_mptcp_pm_btf_struct_access(struct bpf_verifier_log *log,
-  case offsetof(struct mptcp_pm_addr_entry, addr.port):
-    end = offsetofend(struct mptcp_pm_addr_entry, addr.port);
-    break;
- #if IS_ENABLED(CONFIG_MPTCP_IPV6)
-  case offsetof(struct mptcp_pm_addr_entry, addr.addr6.s6_addr32[0]):
-    end = offsetofend(struct mptcp_pm_addr_entry, addr.addr6.s6_addr32[0]);
-    break;
-  case offsetof(struct mptcp_pm_addr_entry, addr.addr6.s6_addr32[1]):
-    end = offsetofend(struct mptcp_pm_addr_entry, addr.addr6.s6_addr32[1]);
-    break;
-  case offsetof(struct mptcp_pm_addr_entry, addr.addr6.s6_addr32[2]):
-    end = offsetofend(struct mptcp_pm_addr_entry, addr.addr6.s6_addr32[2]);
-    break;
-  case offsetof(struct mptcp_pm_addr_entry, addr.addr6.s6_addr32[3]):
-    end = offsetofend(struct mptcp_pm_addr_entry, addr.addr6.s6_addr32[3]);
-    break;
- #else
-  case offsetof(struct mptcp_pm_addr_entry, addr.addr.s_addr):
-    end = offsetofend(struct mptcp_pm_addr_entry, addr.addr.s_addr);
-    break;
- #endif
-'''
-
-But if there's a sock_kmemdup() helper, it will become much simpler,
-only need to call kfunc sock_kmemdup() instead in BPF.
-
-So this patchset adds this new helper and uses it in several places.
-
-[1]
-https://lore.kernel.org/mptcp/cover.1738924875.git.tanggeliang@kylinos.cn/
-
-Geliang Tang (3):
-  sock: add sock_kmemdup helper
-  net: use sock_kmemdup for ip_options
-  mptcp: use sock_kmemdup for address entry
-
- include/net/sock.h       |  2 ++
- net/core/sock.c          | 16 ++++++++++++++++
- net/ipv6/exthdrs.c       |  3 +--
- net/mptcp/pm_userspace.c |  3 +--
- net/mptcp/protocol.c     |  7 ++-----
- net/sctp/protocol.c      |  7 ++-----
- 6 files changed, 24 insertions(+), 14 deletions(-)
-
+diff --git a/include/net/sock.h b/include/net/sock.h
+index e771d99f81b0..8daf1b3b12c6 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -1797,6 +1797,8 @@ static inline struct sk_buff *sock_alloc_send_skb(struct sock *sk,
+ }
+ 
+ void *sock_kmalloc(struct sock *sk, int size, gfp_t priority);
++void *sock_kmemdup(struct sock *sk, const void *src,
++		   int size, gfp_t priority);
+ void sock_kfree_s(struct sock *sk, void *mem, int size);
+ void sock_kzfree_s(struct sock *sk, void *mem, int size);
+ void sk_send_sigurg(struct sock *sk);
+diff --git a/net/core/sock.c b/net/core/sock.c
+index 23bce41f7f1f..a0598518ce89 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -2836,6 +2836,22 @@ void *sock_kmalloc(struct sock *sk, int size, gfp_t priority)
+ }
+ EXPORT_SYMBOL(sock_kmalloc);
+ 
++/*
++ * Duplicate the input "src" memory block using the socket's
++ * option memory buffer.
++ */
++void *sock_kmemdup(struct sock *sk, const void *src,
++		   int size, gfp_t priority)
++{
++	void *mem;
++
++	mem = sock_kmalloc(sk, size, priority);
++	if (mem)
++		memcpy(mem, src, size);
++	return mem;
++}
++EXPORT_SYMBOL(sock_kmemdup);
++
+ /* Free an option memory block. Note, we actually want the inline
+  * here as this allows gcc to detect the nullify and fold away the
+  * condition entirely.
 -- 
 2.43.0
 
