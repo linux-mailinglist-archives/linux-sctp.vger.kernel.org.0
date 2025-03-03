@@ -1,85 +1,96 @@
-Return-Path: <linux-sctp+bounces-372-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-373-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87824A4A2A1
-	for <lists+linux-sctp@lfdr.de>; Fri, 28 Feb 2025 20:24:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86174A4CF1E
+	for <lists+linux-sctp@lfdr.de>; Tue,  4 Mar 2025 00:16:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E2781899187
-	for <lists+linux-sctp@lfdr.de>; Fri, 28 Feb 2025 19:24:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0402E3ABB98
+	for <lists+linux-sctp@lfdr.de>; Mon,  3 Mar 2025 23:16:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 049031AB52D;
-	Fri, 28 Feb 2025 19:24:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C859234989;
+	Mon,  3 Mar 2025 23:16:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="utJ2IsOs"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from ganesha.gnumonks.org (ganesha.gnumonks.org [213.95.27.120])
+Received: from smtp-fw-80008.amazon.com (smtp-fw-80008.amazon.com [99.78.197.219])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E92B1C3C12
-	for <linux-sctp@vger.kernel.org>; Fri, 28 Feb 2025 19:24:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.27.120
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF78A1537C8;
+	Mon,  3 Mar 2025 23:16:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.219
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740770645; cv=none; b=ZLF0J/vKvt4Enngr3KCkdeM0fumHVSvjSuxm5BjgjzMnJTQDAHrurcR9+fs9MQdI1GMwKo12VIGBb1g323wV3Nu6W9BoXyayIlkrVtJcYCk+974zCVuYRst3IoebCgMfJiRYC2OV0vKgBWXkO6wGYGKIF3pAPXDyvLEj3ox5PIE=
+	t=1741043807; cv=none; b=Rw31rjGE0f8vcFK3zrNy7e4cbooyPLYr6pqGKYaAOPZZoj4H1NdadAGGDJONsLIu6nOvxtvCAsXbitroRHg97iLkBB599MWjuZbEwty1JMUb04hNtI0auP/XdFUZKDzVEZsOC5y3DhPSXpI+1J0Uxc+pLn6U68Bi2TVy9MjxL6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740770645; c=relaxed/simple;
-	bh=kuNLBR+uGOTRYEjjNnHbq7XdRaPyEPhAoNPL6SLeh7c=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=VJejS2XCENgqTY8/9bfmsPRUc8emOWWVGH3JF7+asgdX+u/L9oRlszwQntsJ98BrhK+8dtcg+yOGu/hxBZkjhhkzrz/2skH7LOuK9wjtNLt9OIOQjL6hu70UOZzWDfukiz6HSu0ghY+1C8iokjfVi8QOtc2SnrpHVx15CgQ/j8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gnumonks.org; spf=pass smtp.mailfrom=gnumonks.org; arc=none smtp.client-ip=213.95.27.120
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gnumonks.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gnumonks.org
-Received: from uucp by ganesha.gnumonks.org with local-bsmtp (Exim 4.94.2)
-	(envelope-from <laforge@gnumonks.org>)
-	id 1to5xi-00EHXL-NO; Fri, 28 Feb 2025 20:23:54 +0100
-Received: from laforge by localhost.localdomain with local (Exim 4.98)
-	(envelope-from <laforge@gnumonks.org>)
-	id 1to5xc-00000002hUX-40Dg;
-	Fri, 28 Feb 2025 20:23:48 +0100
-Date: Fri, 28 Feb 2025 20:23:48 +0100
-From: Harald Welte <laforge@gnumonks.org>
-To: linux-sctp@vger.kernel.org
-Cc: Vadim Yanitskiy <vyanitskiy@sysmocom.de>
-Subject: obtaining metrics of skb duration in sk_receive_queue
-Message-ID: <Z8INRNOmfHejh2aw@nataraja>
+	s=arc-20240116; t=1741043807; c=relaxed/simple;
+	bh=r5La5+5hmAHBPH8HRhX5Op6QDEw96wGl7iEja/R/NQo=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=iF28voeXDAeZg6U4dZSfeSK+t/VNC1PxfL/zhPa2C6HzRbqu6A2wz7NBY6WCLBw/iPSLLWmLMoU+HTuF1nV05qXy3Ts3wTCc9dHLjNPKxFPrHd2vOBTJrrRdv7vSLpqRe078JxiXVDVfvQHqfb2jBPKZjzwDDrn/lmWqm8NlrNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=utJ2IsOs; arc=none smtp.client-ip=99.78.197.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1741043804; x=1772579804;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Mj1EmNXhvxl4Nn+MCAuDdRx1cIyMTvK9oaD1vpww+gc=;
+  b=utJ2IsOscU4Z1/Wg6MPOukeV4Xu9s1gdFOJdI4aYS/JEJhR9RMSaHaXA
+   0DN44f2ZqrCYWXj1aZ/mmwunnW0xIPq4i34HpOo/amgRKLmWkGdnp5kPq
+   TX9ERNQzKIOPN+rPubtRJyqTJ7dvBwZaLN7qDwHr3YL6W22e5PoDl5cH+
+   w=;
+X-IronPort-AV: E=Sophos;i="6.13,330,1732579200"; 
+   d="scan'208";a="175163777"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.214])
+  by smtp-border-fw-80008.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2025 23:16:42 +0000
+Received: from EX19MTAUWC001.ant.amazon.com [10.0.21.151:18980]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.58.163:2525] with esmtp (Farcaster)
+ id 35e0a8b4-73ce-4e66-8250-9171df3aff74; Mon, 3 Mar 2025 23:16:42 +0000 (UTC)
+X-Farcaster-Flow-ID: 35e0a8b4-73ce-4e66-8250-9171df3aff74
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
+ Mon, 3 Mar 2025 23:16:42 +0000
+Received: from 6c7e67bfbae3.amazon.com (10.106.101.38) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
+ Mon, 3 Mar 2025 23:16:37 +0000
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
+To: <geliang@kernel.org>
+CC: <davem@davemloft.net>, <dsahern@kernel.org>, <edumazet@google.com>,
+	<horms@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
+	<linux-sctp@vger.kernel.org>, <lucien.xin@gmail.com>,
+	<marcelo.leitner@gmail.com>, <martineau@kernel.org>, <matttbe@kernel.org>,
+	<mptcp@lists.linux.dev>, <ncardwell@google.com>, <netdev@vger.kernel.org>,
+	<pabeni@redhat.com>, <tanggeliang@kylinos.cn>, <willemb@google.com>
+Subject: Re: [PATCH net-next v2 1/3] sock: add sock_kmemdup helper
+Date: Mon, 3 Mar 2025 15:16:27 -0800
+Message-ID: <20250303231627.52523-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <f828077394c7d1f3560123497348b438c875b510.1740735165.git.tanggeliang@kylinos.cn>
+References: <f828077394c7d1f3560123497348b438c875b510.1740735165.git.tanggeliang@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D031UWA003.ant.amazon.com (10.13.139.47) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
 
-Hi!
+From: Geliang Tang <geliang@kernel.org>
+Date: Fri, 28 Feb 2025 18:01:31 +0800
+> From: Geliang Tang <tanggeliang@kylinos.cn>
+> 
+> This patch adds the sock version of kmemdup() helper, named sock_kmemdup(),
+> to duplicate the input "src" memory block using the socket's option memory
+> buffer.
+> 
+> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 
-I'm currently facing a problem whose analysis would require to understand the
-latency of how long a DATA chunk stays in the socket receive queue.  Basically
-I'm trying to figure out the time between
-
-1) the kernel SCTP stack making data available to the process (socket becomes readable)
-2) the process actually performing a sctp_recvmsg to retrieve the data.
-
-Ideally I'd like to see a histogram of those latencies to understand if there's anything
-happening in the application process that causes delayed reads.
-
-If anyone has encountered the same situation and/or is familiar with a solution, I'd appreciate
-any pointers.
-
-I suppose I could do kprobe+kretprobe on sctp_poll() in order to determine when the socket
-becomes readable (return value & EPOLLIN)? Then store the timestamp in a
-per-socket map containing a per-skb map containing the timestamps?
-
-But then kprobe/kretprobe for sctp_recvmsg won't be sufficient as I
-cannot access the skb at either the function entry nor the function
-exit... only somewhere inside the function.  So it looks like a dead
-end?
-
-Thanks in advance.
-
--- 
-- Harald Welte <laforge@gnumonks.org>          https://laforge.gnumonks.org/
-============================================================================
-"Privacy in residential applications is a desirable marketing option."
-                                                  (ETSI EN 300 175-7 Ch. A6)
+Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 
