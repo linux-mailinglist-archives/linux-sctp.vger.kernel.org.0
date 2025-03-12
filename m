@@ -1,50 +1,52 @@
-Return-Path: <linux-sctp+bounces-375-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-376-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8BD4A4D16F
-	for <lists+linux-sctp@lfdr.de>; Tue,  4 Mar 2025 03:10:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79E0BA5D4B5
+	for <lists+linux-sctp@lfdr.de>; Wed, 12 Mar 2025 04:22:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CE57017355A
-	for <lists+linux-sctp@lfdr.de>; Tue,  4 Mar 2025 02:10:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AA7B189954F
+	for <lists+linux-sctp@lfdr.de>; Wed, 12 Mar 2025 03:22:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4663153836;
-	Tue,  4 Mar 2025 02:10:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hF+czT7R"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F37817C210;
+	Wed, 12 Mar 2025 03:22:37 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9639333D8;
-	Tue,  4 Mar 2025 02:10:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7C67208A7;
+	Wed, 12 Mar 2025 03:22:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741054202; cv=none; b=HRxzW0BiX1XIdvVtX8waMkUg80RrRFV2sHC7AsYP4oKbmQmM6m16lcfZmJUsPSO2T8UkMn6igZ/iq17xB0cYhyDPfj8OMUSCiJkxpKtwtBaozDMWIucsDkOoaKq8/qb4tdvDQBa0sZmttVUtOEoAjb2hg64XfvHE0TEdTVYqTq4=
+	t=1741749757; cv=none; b=ZZ6sF1H/RW5mo9i8sKafiMYddQOWKTE8+DiQAZZ6FVN0LWeiQh1As4V/DAgQiJEiWmqtq7lXu7qEFg07kJmvSt2TDjeyRh9ndu8KWNoQFaPek2Junl1vH2VfaDJFbv5YvRnxiomUkVcOl3JD8zrr3PVmDEiW6H9AsfO5IMUCC3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741054202; c=relaxed/simple;
-	bh=gDz7jPKhwI5o2NYRXck79Ja6LSh4lD7YLzweCdtUnHc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=L7rhXmeWTgKpihZXv9YOfPG8XjqOy8104isMQRMw3JGHuZy214DxX4Ww1LlnzLrRCij0vEMcP1fxKB1qTK548KYp+TzzsdzAFeWCiguBwzxa7woGDSLPQeoODznFCKm64JkLu6p7XN3wqxNxivBrCHWSttgYDZS6cxLyFPDfMnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hF+czT7R; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B749EC4CEE4;
-	Tue,  4 Mar 2025 02:10:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741054201;
-	bh=gDz7jPKhwI5o2NYRXck79Ja6LSh4lD7YLzweCdtUnHc=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=hF+czT7RBf8iRMo8I5kGAzQP8gyNHC3T+7ZKirsaUXcKyryxv37EK9xWGI5ZAXfDh
-	 PtbU9RIjr9MUmU6+MN9NSs76fkabxehgccisQFY3MSw62LGgUpYhqbWj+sh2Q3NuLF
-	 NNV26Nf3CGW3OO9UcaNXcZGKfPEmy5ouwsx1hElMh0xl+vH5xdtxFioUks5UqHL30z
-	 4XyuWTDKPH+oTr9jghc4SpYokZp9R7ddA6nPJEmzpP6QWxeJGf4rhSUwsoCQ60JEgj
-	 9EmIK2grIOUffvTr9bvZat84/HigDOufqsP7lJ+n+2pZLB8uBO4RNIBqVX/hsBcwGO
-	 7Cutr1U8uEB1w==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADE63380AA7F;
-	Tue,  4 Mar 2025 02:10:35 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1741749757; c=relaxed/simple;
+	bh=TbXH7Y9Ntg+37ovkSqV+ypWVa1EdQELoePjgBPAgeu4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gaUQh1mUFxJV50HgB39wBIPHFBtuamir2j48+P0SHxOUXE/JgIufWlDKUE1WLMn3E3MG7GSY0A8C8GaxKNy0aFomp8pIgip1it5+zvEGu80/bkf6w+qZ0BYt7usgbEZcS8tyszIrOlu/JhBOVZePMz0m6D6l3HyTtuDDmR/z11s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from localhost.localdomain (unknown [124.16.141.245])
+	by APP-01 (Coremail) with SMTP id qwCowABHT1fb_dBnwcZuFA--.29647S2;
+	Wed, 12 Mar 2025 11:22:08 +0800 (CST)
+From: Wentao Liang <vulab@iscas.ac.cn>
+To: marcelo.leitner@gmail.com,
+	lucien.xin@gmail.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com
+Cc: horms@kernel.org,
+	linux-sctp@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Wentao Liang <vulab@iscas.ac.cn>
+Subject: [PATCH] sctp: handle error of sctp_sf_heartbeat() in sctp_sf_do_asconf()
+Date: Wed, 12 Mar 2025 11:21:46 +0800
+Message-ID: <20250312032146.674-1-vulab@iscas.ac.cn>
+X-Mailer: git-send-email 2.42.0.windows.2
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -52,50 +54,53 @@ List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 0/3] add sock_kmemdup helper
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <174105423423.3834266.11247119550844608140.git-patchwork-notify@kernel.org>
-Date: Tue, 04 Mar 2025 02:10:34 +0000
-References: <cover.1740735165.git.tanggeliang@kylinos.cn>
-In-Reply-To: <cover.1740735165.git.tanggeliang@kylinos.cn>
-To: Geliang Tang <geliang@kernel.org>
-Cc: edumazet@google.com, kuniyu@amazon.com, pabeni@redhat.com,
- willemb@google.com, davem@davemloft.net, kuba@kernel.org, horms@kernel.org,
- ncardwell@google.com, dsahern@kernel.org, matttbe@kernel.org,
- martineau@kernel.org, marcelo.leitner@gmail.com, lucien.xin@gmail.com,
- tanggeliang@kylinos.cn, netdev@vger.kernel.org, mptcp@lists.linux.dev,
- linux-sctp@vger.kernel.org
+X-CM-TRANSID:qwCowABHT1fb_dBnwcZuFA--.29647S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xry3tryDGw1kZF1DWFyrCrg_yoWkKwc_tw
+	429F4UWrW7tFWrCFW7Gw1ru34kK3ySka4UZrZFga9rJ3WUJrWkXrykXFn8Cw4rC3WrZr1k
+	twn8GryrKw17AjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUba8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+	Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+	1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+	6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+	0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+	8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFV
+	Cjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWl
+	x4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r
+	1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_
+	JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+	sGvfC2KfnxnUUI43ZEXa7VUbGQ6JUUUUU==
+X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiDAgTA2fQiJyojwABsR
 
-Hello:
+In sctp_sf_do_asconf(), SCTP_DISPOSITION_NOMEM error code returned
+from sctp_sf_heartbeat() represent a failure of sent HEARTBEAT. The
+return value of sctp_sf_heartbeat() needs to be checked and propagates
+to caller function.
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Signed-off-by: Wentao Liang <vulab@iscas.ac.cn>
+---
+ net/sctp/sm_statefuns.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-On Fri, 28 Feb 2025 18:01:30 +0800 you wrote:
-> From: Geliang Tang <tanggeliang@kylinos.cn>
-> 
-> v2:
->  - add "EXPORT_SYMBOL(sock_kmemdup)" as Matthieu suggested.
->  - drop the patch "use sock_kmemdup for tcp_ao_key".
-> 
-> While developing MPTCP BPF path manager [1], I found it's useful to
-> add a new sock_kmemdup() helper.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,v2,1/3] sock: add sock_kmemdup helper
-    https://git.kernel.org/netdev/net-next/c/456cc675b6d4
-  - [net-next,v2,2/3] net: use sock_kmemdup for ip_options
-    https://git.kernel.org/netdev/net-next/c/483cec55c1cc
-  - [net-next,v2,3/3] mptcp: use sock_kmemdup for address entry
-    https://git.kernel.org/netdev/net-next/c/52f83c0b5f85
-
-You are awesome, thank you!
+diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
+index a0524ba8d787..89100546670a 100644
+--- a/net/sctp/sm_statefuns.c
++++ b/net/sctp/sm_statefuns.c
+@@ -3973,8 +3973,10 @@ enum sctp_disposition sctp_sf_do_asconf(struct net *net,
+ 	asconf_ack->dest = chunk->source;
+ 	sctp_add_cmd_sf(commands, SCTP_CMD_REPLY, SCTP_CHUNK(asconf_ack));
+ 	if (asoc->new_transport) {
+-		sctp_sf_heartbeat(ep, asoc, type, asoc->new_transport, commands);
+-		((struct sctp_association *)asoc)->new_transport = NULL;
++		if (SCTP_DISPOSITION_NOMEM == sctp_sf_heartbeat(ep, asoc, type, asoc->new_transport, commands)) {
++			((struct sctp_association *)asoc)->new_transport = NULL;
++			return SCTP_DISPOSITION_NOMEM;
++		}
+ 	}
+ 
+ 	return SCTP_DISPOSITION_CONSUME;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.42.0.windows.2
 
 
