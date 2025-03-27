@@ -1,154 +1,145 @@
-Return-Path: <linux-sctp+bounces-439-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-441-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AD60A736A6
-	for <lists+linux-sctp@lfdr.de>; Thu, 27 Mar 2025 17:21:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F7F8A73FF8
+	for <lists+linux-sctp@lfdr.de>; Thu, 27 Mar 2025 22:12:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF8CB189CE13
-	for <lists+linux-sctp@lfdr.de>; Thu, 27 Mar 2025 16:20:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D1353A8B41
+	for <lists+linux-sctp@lfdr.de>; Thu, 27 Mar 2025 21:07:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1C49207E1A;
-	Thu, 27 Mar 2025 16:20:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 404CC1DC98C;
+	Thu, 27 Mar 2025 21:06:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="kYpVbHXO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kkm2litp"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6BB417BB21
-	for <linux-sctp@vger.kernel.org>; Thu, 27 Mar 2025 16:20:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 224C41CCB21;
+	Thu, 27 Mar 2025 21:06:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743092415; cv=none; b=Abl039vxM9HFgU5c3VkYqT3F59X1Zkcsoaij0AgGxu7Fq+6NUHMo23Mmt6tzaOycwCLjZH1zF/xI6LZsD/4T1QQ1tr+0xRNd6p3VbHvgLDEAXJ5KdauSgBSua2N2Ho3CMSBAuXhmPk/R5xUb+9/hXznSg/TBjqJhz9dcTwLnGlE=
+	t=1743109595; cv=none; b=fARKbSeTJ8/45Ai7mR25GFooVQztkSWusmdY4kCBtWskO60FJ+Ag227n2gd3KtLW32JBOiOBCvDFym/liGH/Gk2Q7vqc/hklLiU1I4DCcjSKb+KiyZIVSSJKaxwNx5JxfcL3xf7IiuPPdutzBgFRoYKBkfX5JCoRuefiDRV8aYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743092415; c=relaxed/simple;
-	bh=NVwNdpFq+nrFVf9YMmHiCb/6V19g4IwZkEMgGwL2onM=;
-	h=Date:Subject:In-Reply-To:CC:From:To:Message-ID:Mime-Version:
-	 Content-Type; b=arAFKPHVeCEiIed+xTgXIz1ANO7RPL0CapOIJzx4hhho6QyG67PyvVzufL6uYKwjs2E27SUAUdAHk+L44rRLgEsMGU2IqWd1Ja8kKOty6vsptMdjrzK9EeyRgLC/dqVs6h36jsC2cqLIQt2Xe3/2/rUIAXBrGF+faWQHD24Xrpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=kYpVbHXO; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-22401f4d35aso28668845ad.2
-        for <linux-sctp@vger.kernel.org>; Thu, 27 Mar 2025 09:20:12 -0700 (PDT)
+	s=arc-20240116; t=1743109595; c=relaxed/simple;
+	bh=GLqglL9v23gJuG69hfxF1A3fwXDbnmKCTJK5LlaQ9fc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QEiXXZssRmxGpTgF3jRiQtt6VK6g4Cl8DgLRZ3Dnwn8lq7aNQ5gVlcH9GwTGOK1dam5RSgrNlKtZrUy4xAyParb77+8+sfTgBoXbDclRffJsWr92BYXAeAKli0/IFHqmCXmWL8T6B2uenJ5vcE7MJx3DtbnFQfSKDNJKYey4Tmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kkm2litp; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43948f77f1aso11174885e9.0;
+        Thu, 27 Mar 2025 14:06:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1743092412; x=1743697212; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kX05jx75Xb8+ENPYRjK+Gc3Ht1e9kjVMOGIod7/HdTg=;
-        b=kYpVbHXOgUpLRMTokda7b4lmD2DDWFPI2/1xILmmVtvv2Uw2c425hHMb6Mh3XvOHcy
-         nP8Sil2DtAmwEzSGosSFOLRmQxPK0h32eU2gWjNMDVPHCiA1hN9BeUxBlsKxkGufn3G3
-         TcU/USq5mdFBfH0YQ84YyaDyymgPlO23ua3WuznzjPqV//xHsgEpA/FAqpZZiXhxdgRb
-         dM7o2SRY3KiDdmyuRpL0DXg5EldGGr7oEX4+yMoTg1p2xyBHS0DPepwNmXiT2Elk7/6w
-         gzIfRy2jc5Y2IQle7KV3aoz4JzA3VybBDskwGHOBLoZbb2KnEXpw4TivDslOd9+I6MHq
-         GV+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743092412; x=1743697212;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1743109592; x=1743714392; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kX05jx75Xb8+ENPYRjK+Gc3Ht1e9kjVMOGIod7/HdTg=;
-        b=hAxOv6pwltiYguwvxSBOqAITwxDYT4Q8TX5G6Rz/xd3P09jOnguMdAHLY5AAjSffK+
-         1MQ8QUetSGsxpB+4JPCEzIaVE3ckDdI3ROieeN8xz/T4tfkBoHcADhdDu7axKbOp7lnO
-         ansixBCp2h50ZXHLa5hWnsLUcwFkm7znDAM57XFEqg3M1Rvne8ljCDnbRkfuOt3rxmEn
-         Cuf+u+l+xUMJL1qQtTaYFSNrkf7fx5WtXirauoTWueFgxQS4PNvqHAmyNvQIf9yMHxAS
-         KK4xUUrMHOh0jHGKtLYGzNbV8+HYh+qHf0RmR+duWCTyaAQqKG5ols6ZRBjgtUppb6CF
-         NcTA==
-X-Forwarded-Encrypted: i=1; AJvYcCUX4K75WMAW0PysstUr6hipwux6HwI8+cTTzh+3PJYcAc8iaHODPZNMcMKW/SPBTabfJ2n0TvNIjwTN@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywg+Qo1V3pEFA86N6w1pFOP/SMy1sMRLPqFYtsje1C4DAkhbp7g
-	vAYa1u6pyj8b9cflWz/62AafFvnn3PPerlUs5SCL94j/X5zCV1TQX6A8oMiHJWc=
-X-Gm-Gg: ASbGnctWbSpJ4fBzYmKtCFxB77I2kxZbLSlhm56a7juJUmLWlUelG01JayjB/fKyajw
-	zj4r0ufnuABosHBc8CM9536xCHWcV1fBATBtwMCl5ZHmPKR3a7R3rhSMSHX9yeqWiWTyFRH4CAs
-	/WAoO8yic90AEzhd0FYC5erlaiPHWg2m2Z38C1pH8wLvWRN9uC6HkO+s4emu/e797yYsn3wBYs/
-	/ZTyPrKQRlH/DYjuCIdFJMrpa0OJzAEnu2nya0gxB4LZ/Mp0/kOKrLUqzNfDPhy4Aru66XES3dq
-	vGzdfqQ0l/Tqp3ouG5eOvquxytNOuAfOBwrIdw==
-X-Google-Smtp-Source: AGHT+IGClNJzmnXOK1L/PFNFl5ogZb2gMU/Eqg4X3l9WVxApkZth9g72YE2t9vJ4dK3KZhjxhfYK+Q==
-X-Received: by 2002:a17:903:228c:b0:224:216e:332f with SMTP id d9443c01a7336-22804968a3cmr61064755ad.48.1743092411962;
-        Thu, 27 Mar 2025 09:20:11 -0700 (PDT)
-Received: from localhost ([50.145.13.30])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2291eec780bsm1682245ad.19.2025.03.27.09.20.11
+        bh=JFrrEKOtsin+8uVvD5v18PtpdZsRPpaDruCArBuJl1k=;
+        b=Kkm2litpaQ0gLSLmjnPKXuOxEHmTgt7X+ucU14TgE+Aw/CmeiSK1s9jAKuDfv3kKBy
+         +gHUaOA5l1MtjuzLB3Lat+OaTOj1p2jWLe0WbWOCPF3up6tb2a6N0bn9hmk93nBy0as5
+         zC+3pWlFwXiS9VxewszNANbqzfCF/Nlnz/Wq50xo0xJQdaNJ16pYsX6Vk8+81l2S+Hrg
+         Y5ejOGGq91ElguZc3MNBuQJEj3qIRmOPnY6o/GBwaAykpi67SeuQrmqlFrqGdyWNtpOz
+         VkUQ9eFajvm5b2GKlbSH+WlZAEQRcAAQiiOFjuH3Z2oqlRr9O86ntGL24G1YCouwM4g4
+         wM+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743109592; x=1743714392;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JFrrEKOtsin+8uVvD5v18PtpdZsRPpaDruCArBuJl1k=;
+        b=dlfpE8CFrAyNmY0xWUZYPgfrlccYh04z7JNTh9Uz4UuNL8JyeXH/qH0AiowhC1xONI
+         6EHbKuA/Q25unW3stsV7Zwaj5pDGxkRBdk9oMwZyRGerHCWzwrbDU2oOxo7O0lHOS32Q
+         VMHkEAYzqi1Jgj9Flp64CxmFv8LzM4Y0p+a3yOqCKYB4yU/oZudQ+52FYe1PxfPa8Zr/
+         MQczIm9DUOSpCYVw+e9tcu/qp1RZSx8UYbzEKqxDRpVDlBNQXqQQ3KrO6ueBg0SnuDqE
+         pCrigiP+6CIFNhxKJUSV5K8H/UocWDRskRpgk1ANg20Z7gAopBt7VTfSMu6aPqkQi5SR
+         fMOA==
+X-Forwarded-Encrypted: i=1; AJvYcCU03O20HeGKVC1/LSTPYV8yjwTjim//txTmSJWlruYwi9K33/fb5F5/F9tV6E+ZnJugywfrQCBoUiqS4TzjwDUF@vger.kernel.org, AJvYcCU8nmgKiFW0WywIIZdXePrafSwJ8rtX6CwOOYkGHAAjAqIPR19LnrEzWf9WZ64E0GiiBurSqto5pVXLVQo=@vger.kernel.org, AJvYcCUAnWhglOdTHw6g0tNmrthtL6Hcqi/u/o/iPiQyRXo2B0Z8oovXGzTi2u++YjnYujcZZWHJZQEOA8TLiBs8@vger.kernel.org, AJvYcCUUxxURu1mJm6KA0o2acp9uVMOg8f1c5qU9mQT83d982Rjf0rC4Rc2a7LnsTS7Wwyl8NUGLXsl7gt0tGw==@vger.kernel.org, AJvYcCUhGUEt0rvairnw0z5niNDLn5Z5SbM4xnr5Z+x4t1UBVNaF2TjmJAE7Rgi9oEM39CwKELRoZFYWRFIoY42Y7QQEmqW2@vger.kernel.org, AJvYcCUp88RW1e3Xfwjp4kRfV7di1O/MnE0yESPwf9M0ZorBHd33ng+qvcdZMCjmYJOvNIn/1ses2dZK1opznE95@vger.kernel.org, AJvYcCV5IgPu43ZaC8mjK5NLpsSuJqfJDnFTBo/Sl/9x+HzTeB5S/aA86u0r6rA6nFByZnGVXSSl/VnTJXMxRw==@vger.kernel.org, AJvYcCVCxjhH5xAGiYUUXrMnUHlZRqQHEZyJ/RDZrSr+Uh+yawD8i5Aua4I0BqqTRtX7r0W2Cqwz/26Xtt+wL3vRog==@vger.kernel.org, AJvYcCVqd5XuAEcnnZgaDhXhCW9P6hpB1mfJoWosJfQHbPuryMzY5z5BDnnSmGrV7QWnqBkhfr1ZQf0c+RBC@vger.kernel.org, AJvY
+ cCWSfOWumUpZu2absMG0N6+iQriIERlSoa3vRvUBZOiF3BlWIsyxuZhmAKc7KoqN0JDn5b4=@vger.kernel.org, AJvYcCWnXMjYcYFiXz/Fqshp0EnTFzS/EW33ey+YRXP2xhlSp2HVGrg/XEjyxFU4/5drvgqHviBE@vger.kernel.org, AJvYcCX1wOPJ68qoOL5Ka/LuBbbx5PfJU+1dpMR6uFXsMXbV2xZ1MeIWcfo0Zfz+akrAY6y98X+fmLCY@vger.kernel.org, AJvYcCX35mqW0E735dB7FMYMXjK7nCwXHSJcJm/gf5q2kjDtzkT+3FN+A9Rqq96U0DUH8YE6BdGdQwySXXAz@vger.kernel.org, AJvYcCXFXnwlHh0EcaT8A/cCSIgKg+zpCwTnCb4XpRaWUMbi4XqE/tfkDq6aIS+Roz+oWMHUK09Tny2cQZUna0c=@vger.kernel.org, AJvYcCXMkD5aWcsyREYDPWOxMweObii9/uOsDsi/laVUJzeU0v/iGTAcBf4F/C3q7Fh9dAYtJATe+fzpRl80VTQ=@vger.kernel.org, AJvYcCXgO4iUj6g68aVSmHi+0JU2B4zVRo7os36L4eRs//ciGd1Om5toAsxqIaYO85qpyf/NcLsisgUuRQ9vRdpO@vger.kernel.org, AJvYcCXwesdZbEqz2OBK0NvLd31E2XWE6Xrb7mqlk0+0YUURxxgXfxlJLajXfM8V5oe530nCgKU2NKYOozmtOAlSBdCbZg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyiSJvo39Wz7u6Ea1UTi+5uZ3ewG2dKwgA1ggl19j4WgW5ECz4J
+	Ea5VEEM0rxLtvW1bAgxcgEGvU7cAUPH/wDrI7meAoYGnm2QEKT+j
+X-Gm-Gg: ASbGncujgRpcj4OijFlrTCTg7ebhGT1gcQz5C4MlqpvYZa3jaabiRrDOpDJfKm3R+61
+	bEbMepDF+m4cwX3NkysWmqCDFpDiEbtzmlpS0deJlhTrPB+a+xunk1XrCBU9ieAVl3WrUYrl8SW
+	pHrz3iPeuLpYicZgKFjV1l3aVvLr9bOgBPd/i/vXxdTout04d2GGJsEKyG4v9e6EYd5WdXUrZrB
+	DV9TZc84aqlWSr5+T6CDdOTOpZ131yM1M4WB+bKNw3gMnRWPDqSz5jlD+2gPG51UJn4Ny0jstLU
+	roHGEk2GWz2nUCq+TwITjTEogSmXbCtWmbL5f2Hq0WyVdSNAhMlSrQsKO1G3zs5akgsZXRINA9s
+	ApFIpuJ4=
+X-Google-Smtp-Source: AGHT+IF3JVFu2jCYFxmmspP8DgX1SusdSEIsW7Os+9zvssuS6MfQig2v8nl6xgtDIG4B7nUqszDWww==
+X-Received: by 2002:a05:600c:4e05:b0:43d:26e3:f2f6 with SMTP id 5b1f17b1804b1-43d84f5e5bcmr60988395e9.5.1743109592161;
+        Thu, 27 Mar 2025 14:06:32 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d82dedc2dsm49307315e9.2.2025.03.27.14.06.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Mar 2025 09:20:11 -0700 (PDT)
-Date: Thu, 27 Mar 2025 09:20:11 -0700 (PDT)
-X-Google-Original-Date: Thu, 27 Mar 2025 09:20:02 PDT (-0700)
-Subject:     Re: [RFC PATCH V3 01/43] rv64ilp32_abi: uapi: Reuse lp64 ABI interface
-In-Reply-To: <CAHk-=wiVgTJpSxrQbEi28pUOmuWXrox45vV9kPhe9q5CcRxEbw@mail.gmail.com>
-CC: guoren@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-  Greg KH <gregkh@linuxfoundation.org>, Paul Walmsley <paul.walmsley@sifive.com>, anup@brainfault.org,
-  atishp@atishpatra.org, oleg@redhat.com, kees@kernel.org, tglx@linutronix.de,
-  Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, brauner@kernel.org,
-  akpm@linux-foundation.org, rostedt@goodmis.org, edumazet@google.com, unicorn_wang@outlook.com,
-  inochiama@outlook.com, gaohan@iscas.ac.cn, shihua@iscas.ac.cn, jiawei@iscas.ac.cn,
-  wuwei2016@iscas.ac.cn, drew@pdp7.com, prabhakar.mahadev-lad.rj@bp.renesas.com, ctsai390@andestech.com,
-  wefu@redhat.com, kuba@kernel.org, pabeni@redhat.com, josef@toxicpanda.com, dsterba@suse.com,
-  mingo@redhat.com, peterz@infradead.org, boqun.feng@gmail.com, xiao.w.wang@intel.com,
-  qingfang.deng@siflower.com.cn, leobras@redhat.com, jszhang@kernel.org,
-  Conor Dooley <conor.dooley@microchip.com>, samuel.holland@sifive.com, yongxuan.wang@sifive.com, luxu.kernel@bytedance.com,
-  david@redhat.com, ruanjinjie@huawei.com, cuiyunhui@bytedance.com, wangkefeng.wang@huawei.com,
-  qiaozhe@iscas.ac.cn, Ard Biesheuvel <ardb@kernel.org>, ast@kernel.org, linux-kernel@vger.kernel.org,
-  linux-riscv@lists.infradead.org, kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-mm@kvack.org,
-  linux-crypto@vger.kernel.org, bpf@vger.kernel.org, linux-input@vger.kernel.org,
-  linux-perf-users@vger.kernel.org, linux-serial@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-  linux-arch@vger.kernel.org, maple-tree@lists.infradead.org, linux-trace-kernel@vger.kernel.org,
-  netdev@vger.kernel.org, linux-atm-general@lists.sourceforge.net, linux-btrfs@vger.kernel.org,
-  netfilter-devel@vger.kernel.org, coreteam@netfilter.org, linux-nfs@vger.kernel.org, linux-sctp@vger.kernel.org,
-  linux-usb@vger.kernel.org, linux-media@vger.kernel.org
-From: Palmer Dabbelt <palmer@dabbelt.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Message-ID: <mhng-16d3c75b-cf60-499e-98b0-098d630874b4@palmer-ri-x1c9a>
+        Thu, 27 Mar 2025 14:06:31 -0700 (PDT)
+Date: Thu, 27 Mar 2025 21:06:25 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: guoren@kernel.org
+Cc: arnd@arndb.de, gregkh@linuxfoundation.org,
+ torvalds@linux-foundation.org, paul.walmsley@sifive.com,
+ palmer@dabbelt.com, anup@brainfault.org, atishp@atishpatra.org,
+ oleg@redhat.com, kees@kernel.org, tglx@linutronix.de, will@kernel.org,
+ mark.rutland@arm.com, brauner@kernel.org, akpm@linux-foundation.org,
+ rostedt@goodmis.org, edumazet@google.com, unicorn_wang@outlook.com,
+ inochiama@outlook.com, gaohan@iscas.ac.cn, shihua@iscas.ac.cn,
+ jiawei@iscas.ac.cn, wuwei2016@iscas.ac.cn, drew@pdp7.com,
+ prabhakar.mahadev-lad.rj@bp.renesas.com, ctsai390@andestech.com,
+ wefu@redhat.com, kuba@kernel.org, pabeni@redhat.com, josef@toxicpanda.com,
+ dsterba@suse.com, mingo@redhat.com, peterz@infradead.org,
+ boqun.feng@gmail.com, xiao.w.wang@intel.com, qingfang.deng@siflower.com.cn,
+ leobras@redhat.com, jszhang@kernel.org, conor.dooley@microchip.com,
+ samuel.holland@sifive.com, yongxuan.wang@sifive.com,
+ luxu.kernel@bytedance.com, david@redhat.com, ruanjinjie@huawei.com,
+ cuiyunhui@bytedance.com, wangkefeng.wang@huawei.com, qiaozhe@iscas.ac.cn,
+ ardb@kernel.org, ast@kernel.org, linux-kernel@vger.kernel.org,
+ linux-riscv@lists.infradead.org, kvm@vger.kernel.org,
+ kvm-riscv@lists.infradead.org, linux-mm@kvack.org,
+ linux-crypto@vger.kernel.org, bpf@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ linux-serial@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-arch@vger.kernel.org, maple-tree@lists.infradead.org,
+ linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-atm-general@lists.sourceforge.net, linux-btrfs@vger.kernel.org,
+ netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+ linux-nfs@vger.kernel.org, linux-sctp@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-media@vger.kernel.org
+Subject: Re: [RFC PATCH V3 00/43] rv64ilp32_abi: Build CONFIG_64BIT
+ kernel-self with ILP32 ABI
+Message-ID: <20250327210625.7a3021d0@pumpkin>
+In-Reply-To: <20250325121624.523258-1-guoren@kernel.org>
+References: <20250325121624.523258-1-guoren@kernel.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, 25 Mar 2025 13:41:30 PDT (-0700), Linus Torvalds wrote:
-> On Tue, 25 Mar 2025 at 05:17, <guoren@kernel.org> wrote:
->>
->> The rv64ilp32 abi kernel accommodates the lp64 abi userspace and
->> leverages the lp64 abi Linux interface. Hence, unify the
->> BITS_PER_LONG = 32 memory layout to match BITS_PER_LONG = 64.
->
-> No.
->
-> This isn't happening.
->
-> You can't do crazy things in the RISC-V code and then expect the rest
-> of the kernel to just go "ok, we'll do crazy things".
->
-> We're not doing crazy __riscv_xlen hackery with random structures
-> containing 64-bit values that the kernel then only looks at the low 32
-> bits. That's wrong on *so* many levels.
+On Tue, 25 Mar 2025 08:15:41 -0400
+guoren@kernel.org wrote:
 
-FWIW: this has come up a few times and we've generally said "nobody 
-wants this", but that doesn't seem to stick...
+> From: "Guo Ren (Alibaba DAMO Academy)" <guoren@kernel.org>
+> 
+> Since 2001, the CONFIG_64BIT kernel has been built with the LP64 ABI,
+> but this patchset allows the CONFIG_64BIT kernel to use an ILP32 ABI
+> for construction to reduce cache & memory footprint (Compared to
+> kernel-lp64-abi, kernel-rv64ilp32-abi decreased the used memory by
+> about 20%, as shown in "free -h" in the following demo.)
+...
 
-> I'm willing to say "big-endian is dead", but I'm not willing to accept
-> this kind of crazy hackery.
->
-> Not today, not ever.
+Why on earth would you want to run a 64bit application on a 32bit kernel.
+IIRC the main justification for 64bit was to get a larger address space.
 
-OK, maybe that will stick ;)
+Now you might want to compile a 32bit (ILP32) system that actually
+runs in 64bit mode (c/f x32) so that 64bit maths (long long) is
+more efficient - but that is a different issue.
+(I suspect you'd need to change the process switch code to save
+all 64bits of the registers - but maybe not much else??)
 
-> If you want to run a ilp32 kernel on 64-bit hardware (and support
-> 64-bit ABI just in a 32-bit virtual memory size), I would suggest you
->
->  (a) treat the kernel as natively 32-bit (obviously you can then tell
-> the compiler to use the rv64 instructions, which I presume you're
-> already doing - I didn't look)
->
->  (b) look at making the compat stuff do the conversion the "wrong way".
->
-> And btw, that (b) implies *not* just ignoring the high bits. If
-> user-space gives 64-bit pointer, you don't just treat it as a 32-bit
-> one by dropping the high bits. You add some logic to convert it to an
-> invalid pointer so that user space gets -EFAULT.
->
->             Linus
+	David
 
