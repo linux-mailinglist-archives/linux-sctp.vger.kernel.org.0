@@ -1,194 +1,177 @@
-Return-Path: <linux-sctp+bounces-451-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-452-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 946A5A77662
-	for <lists+linux-sctp@lfdr.de>; Tue,  1 Apr 2025 10:26:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3897A77A8A
+	for <lists+linux-sctp@lfdr.de>; Tue,  1 Apr 2025 14:17:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 450B53A66D2
-	for <lists+linux-sctp@lfdr.de>; Tue,  1 Apr 2025 08:24:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D7A6188F151
+	for <lists+linux-sctp@lfdr.de>; Tue,  1 Apr 2025 12:17:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15C551EA7C9;
-	Tue,  1 Apr 2025 08:24:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="3Fq/qU1j"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24F43202F9D;
+	Tue,  1 Apr 2025 12:17:21 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from hr2.samba.org (hr2.samba.org [144.76.82.148])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E18A31E98F9;
-	Tue,  1 Apr 2025 08:24:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.76.82.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55FC4202965;
+	Tue,  1 Apr 2025 12:17:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743495881; cv=none; b=IHe9Dr7txe2I3jlDUxiqV7V3Hgcq4kFBU1yYmZyuCXat6tWUfJqH36xPZKTL7x6xrWwFnY2cZnM4tnVmQTsV7zV12EJV7UrvC/+iQjKog4pXq7v96wRxlCNTbUAi1XTRcna2qBThkToMFKBO4lfL8++r2qypVNcQL7hGZa21VM4=
+	t=1743509841; cv=none; b=eacJtYPfKHsoIRC+M3tv1+YcNDnXISCVZjga/WScjI3rUzMA80ON2iQiszo+sOdwyRqOoANOYINbF/T6O/XbyS1LI5SKTEw2+ofKfILgBIp1y7y0eWm7Vd9keCqc94dIJrEeua8SEU9jcFtNLqPZmC0AbSSHtrqGk9oS3G7BrIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743495881; c=relaxed/simple;
-	bh=SB2q6xQ56/3mpPcfMH9fyJWiPwvHFAbAR+tuJWgebls=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZzXnRECO0kaPl5WMWl8MyClGZwxJ9hvz74Ax0BRdYMgMmRXZZ4NwEbKPsBvMMSgiPAmx3FzmxRC/+BpjV0bi5aiy15jM+l3MhkRkaFwBowzFKsxYQfYEBSFyoVOO8dBEKmUGwGesD8hswGbbYC85b2W/vQraxD2VuIx6fhA5mHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=3Fq/qU1j; arc=none smtp.client-ip=144.76.82.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samba.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-	s=42; h=From:Cc:To:Date:Message-ID;
-	bh=P2vCMgKs60kE2AEX7EBwSn8Ro/J/oeai91FyuRtK384=; b=3Fq/qU1j2+zydWavWoxfAcA+HK
-	TKI4UvNHnhwFprYvUSDhd/3g172hIDos3qtk3cBwAqJau7Jhvq4tL41vm2l+ADVCkiocupdWJOVV9
-	3ql30+yvvyae6VsUM3J7Ho+XZD0hOHcAcb3P3IaIR9Fau7GUsyxSJRscTfjSw1IIJ/+i8wF6Y7WJW
-	vpnL7/YUDkat74R3AevuO9U2FwYyU0h5hqTzt9D7JnIfzoT6hCTiiqAHln7Nfpr5hkPfZwYhz9lRN
-	fLYDUS+e8G5ZMVcKG8sSMA005efyjFsifeGCyB0zCn9XI47K+K3yIgCUMzDP2hA8J6QinWnPoiBrH
-	AToIIUnvWg47OEFx9eir/cQlNMMu9gkPCUuvmtc0NA+8ULSsYhiEONjvU/M7aKAobjU56cv1KLDYy
-	rD56flFnuBVlPW0d8J7D3M+Ja1yDDNunOFIiCoQAP8LG52u2txNMmM8CdZicF/Y+R05Hcl8XrdDW2
-	XC695dYaZdJI//kShfqpRZux;
-Received: from [127.0.0.2] (localhost [127.0.0.1])
-	by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
-	(Exim)
-	id 1tzWvB-007dPk-1c;
-	Tue, 01 Apr 2025 08:24:33 +0000
-Message-ID: <51bb66d4-eaf3-4247-ba11-d793b6f0d56c@samba.org>
-Date: Tue, 1 Apr 2025 10:24:32 +0200
+	s=arc-20240116; t=1743509841; c=relaxed/simple;
+	bh=3mz+zkd+0flPsLy0Ofm1nfq5/fbalcBJT6YtqE7p5ow=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c6gDlaBCHU9dREDDtJVC1oXkA/LUEXd1D7vJERmeZsldSHfv1XuJFvVs9tnbrvFGT2niO/LrweDyeaDHpkLrh/KIarHe0IOoL8pgeoetfscNnvFSABspxRfJrRROVYwplx7UcVYEpBxfmK34jCZTjg8GFgpXZ+wgkvLUoIgkxOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5ed1ac116e3so9462884a12.3;
+        Tue, 01 Apr 2025 05:17:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743509836; x=1744114636;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Le/fZ22YF+TB0PY0qqmz1Qiiab5GI/mdQmTFzYxcG4I=;
+        b=tiXww2r0781mneYgxH9z7mg8pgo3jhMDcZq+26cJ+Hoh+5bQsDcL+DiSDc/RyCvKP2
+         ZHCeTwQnFgpgqmjSdejvq6FnHChV66kTSg1tEqR8FfZWg8HCY7hbIxWsBBaIRTLlJ+5L
+         BWI8hBXBc6TWVHlhVZIG6niGp27BC6PtuRir5jrOlIEVnyUAl5P7Vgo2S0tKdXOJCxqR
+         IXemX9VIm2vjFJGqBzTETb1WIcq506x/8+XJEUcu9StEVDnmbXpuV3pxvd4WhQznewk+
+         8qVbMbsPDojaaoMMILesXm7egtC8yPczKJscrCH2qvAvskv9kcnO8/IxgrnqOFlwM86I
+         EYAg==
+X-Forwarded-Encrypted: i=1; AJvYcCU+PaEMmljuTidEfyjK1KNeTRu6vsWiwlABmYi2FRzjIL7wJoNubvBT8kWM5Q7TaodpPOnyP0b63yGbIz3LGOjC@vger.kernel.org, AJvYcCU6LinRDa3RkrxTiRw5OR8fIoqPus07QVq0DNtsIoRZkotn7GWmQcZSD1iy3lkIlH+uHn9xlB2/9to=@vger.kernel.org, AJvYcCUKDCrTm29DSu8VC1278vU3l36ZXnMScQ3oLw1OdmBMl6mqKBHtm6YVPMV0lziuR3uZEO8XbXj03lsZUg+h@vger.kernel.org, AJvYcCUobLm1LYSWmtA+WSFOC/8GwhYItRRg4r+p5VnhxebN5WJ3qlhVA4wEyLQfl5FCZalJsng+H6nX@vger.kernel.org, AJvYcCVWp7jILbT/+ax0UMneqs3UsvAYmV9DNfzgSVqOOFsW+Xn7Ynb+Z6ykBEQs8chiQiLOC7DFReVgyjVRgg==@vger.kernel.org, AJvYcCVrBwxkxrv++hSc9HNBj/crKKTC2XNzmGQDKmo7Z6l6xVcUOfU8eVT6bNhROv53oHDZWypMkKqurTCrIw==@vger.kernel.org, AJvYcCWE1spL4JwQrhqSEZdrsCvFnXw4SdrsqrchA3OQ0oudy4C+id8nfqHSN6zwcz5/cBoq+0z1fp19ew8U@vger.kernel.org, AJvYcCWOxLuN7+WXel60zUlNyB4WeOhKgpOtcT0qG0GiosBzbbZe1stp37NOZM1Ti0UMwKIg+2Uja1ElI9prWw==@vger.kernel.org, AJvYcCWfeqo4td43zvrLkSggo/oEFxaPZVHU6JP+Yc+bEIQrdaV5M12/cbdOj1UFvOjL+DW6QX6Kkdd+u3J1XQ==@vger.kernel.org, AJvYcCX+Eah1SuAFPLKZxIRur9ig
+ Wzqjzfn1pGEjuOjgxv0CiXc6YIH+sQSMaV+BjN24p+CByeUmlM2ImEDymQ==@vger.kernel.org, AJvYcCXBp4JJVdttGdnDV5l8Do10TlAeZJ6oIcIx7Dv2zP3Nc5TAr/e2ayPiHUgAcYZY2JmP4Tq3UA==@vger.kernel.org, AJvYcCXSVfvVPiXq0DQAQtYgM2BToHFLvwiVh93nYUYBQub+grHYDT/R8ZvqWu4+6hRZs+fEZv44krwctoDU@vger.kernel.org, AJvYcCXg3LlsUyJtvsxI4QBwkqHrlpecTzAk7d9xKc9SfhzJ3DPUqiR2NC39IP4UpP0k/3QmgZY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy41sxJG1EgEMJS+0Lr+MvpGg7CB6CERi8HGG7AJEBJv681V3R2
+	EtM4IfaQEi4mgU4HRI7/Rm4QUkZ2Hi1gCC2l+3pqd3sngFoK4lRu
+X-Gm-Gg: ASbGncvW2OafqMDoMgTvg9sHyFmGf2O+WEEe0/BCdiSB0PxAU4XdZJ0yIQH87jSZ5JK
+	W3I9ZhaG5JlK7qLJlLuCrnuxRA3eHfKx8q7Vz8Gwidr42I0bMCImhMpJ+MSsnVqjD5+vpM3xnPB
+	T9IsTgoNOB7ciet9sbFwisLM0xzxM79I63W4w+jJmmm8rPVnzC3mt7STKPHchkdVLE8XC0BOBb1
+	EY9LtzWgbzYuQQSD6061Qi6pk0y/pUN/NKXbSLv4JqmFfEbk1k8SVwE4xA1sKhw5jJsCR+OsFJK
+	vCGx6xvAXvxUHu9mCIgVzIcItHZuZK2g0X4=
+X-Google-Smtp-Source: AGHT+IFIWumNmX/1ZXWS3yLA6haOkNuwqHqavN++vEeVvWZeAOABaH1HwDwax0vsW9FqMkDo2Sxlag==
+X-Received: by 2002:a05:6402:26c8:b0:5e5:be7f:a1f6 with SMTP id 4fb4d7f45d1cf-5edfcc021a5mr10721198a12.1.1743509836211;
+        Tue, 01 Apr 2025 05:17:16 -0700 (PDT)
+Received: from gmail.com ([2a03:2880:30ff:3::])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5edc16eda94sm7144316a12.33.2025.04.01.05.17.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Apr 2025 05:17:14 -0700 (PDT)
+Date: Tue, 1 Apr 2025 05:17:09 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Stefan Metzmacher <metze@samba.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Jens Axboe <axboe@kernel.dk>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>, Christoph Hellwig <hch@lst.de>,
+	Karsten Keil <isdn@linux-pingi.de>,
+	Ayush Sawal <ayush.sawal@chelsio.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@amazon.com>,
+	Willem de Bruijn <willemb@google.com>,
+	David Ahern <dsahern@kernel.org>,
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+	Xin Long <lucien.xin@gmail.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	Joerg Reuter <jreuter@yaina.de>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Johan Hedberg <johan.hedberg@gmail.com>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	Oliver Hartkopp <socketcan@hartkopp.net>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Robin van der Gracht <robin@protonic.nl>,
+	Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+	Alexander Aring <alex.aring@gmail.com>,
+	Stefan Schmidt <stefan@datenfreihafen.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Alexandra Winter <wintera@linux.ibm.com>,
+	Thorsten Winkler <twinkler@linux.ibm.com>,
+	James Chapman <jchapman@katalix.com>,
+	Jeremy Kerr <jk@codeconstruct.com.au>,
+	Matt Johnston <matt@codeconstruct.com.au>,
+	Matthieu Baerts <matttbe@kernel.org>,
+	Mat Martineau <martineau@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Remi Denis-Courmont <courmisch@gmail.com>,
+	Allison Henderson <allison.henderson@oracle.com>,
+	David Howells <dhowells@redhat.com>,
+	Marc Dionne <marc.dionne@auristor.com>,
+	Wenjia Zhang <wenjia@linux.ibm.com>,
+	Jan Karcher <jaka@linux.ibm.com>,
+	"D. Wythe" <alibuda@linux.alibaba.com>,
+	Tony Lu <tonylu@linux.alibaba.com>,
+	Wen Gu <guwen@linux.alibaba.com>, Jon Maloy <jmaloy@redhat.com>,
+	Boris Pismenny <borisp@nvidia.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stefano Garzarella <sgarzare@redhat.com>,
+	Martin Schiller <ms@dev.tdt.de>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Jonathan Lemon <jonathan.lemon@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
+	linux-hams@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+	linux-can@vger.kernel.org, dccp@vger.kernel.org,
+	linux-wpan@vger.kernel.org, linux-s390@vger.kernel.org,
+	mptcp@lists.linux.dev, linux-rdma@vger.kernel.org,
+	rds-devel@oss.oracle.com, linux-afs@lists.infradead.org,
+	tipc-discussion@lists.sourceforge.net,
+	virtualization@lists.linux.dev, linux-x25@vger.kernel.org,
+	bpf@vger.kernel.org, isdn4linux@listserv.isdn4linux.de,
+	io-uring@vger.kernel.org
+Subject: Re: [RFC PATCH 1/4] net: introduce get_optlen() and put_optlen()
+ helpers
+Message-ID: <Z+vZRcbvh6r1fnZL@gmail.com>
+References: <cover.1743449872.git.metze@samba.org>
+ <156e83128747b2cf7c755bffa68f2519bd255f78.1743449872.git.metze@samba.org>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 3/4] net: pass a kernel pointer via 'optlen_t' to
- proto[ops].getsockopt() hooks
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
- Jens Axboe <axboe@kernel.dk>, Pavel Begunkov <asml.silence@gmail.com>,
- Breno Leitao <leitao@debian.org>, Jakub Kicinski <kuba@kernel.org>,
- Christoph Hellwig <hch@lst.de>, Karsten Keil <isdn@linux-pingi.de>,
- Ayush Sawal <ayush.sawal@chelsio.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Kuniyuki Iwashima <kuniyu@amazon.com>, Willem de Bruijn
- <willemb@google.com>, David Ahern <dsahern@kernel.org>,
- Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
- Xin Long <lucien.xin@gmail.com>, Neal Cardwell <ncardwell@google.com>,
- Joerg Reuter <jreuter@yaina.de>, Marcel Holtmann <marcel@holtmann.org>,
- Johan Hedberg <johan.hedberg@gmail.com>,
- Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
- Oliver Hartkopp <socketcan@hartkopp.net>,
- Marc Kleine-Budde <mkl@pengutronix.de>,
- Robin van der Gracht <robin@protonic.nl>,
- Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
- Alexander Aring <alex.aring@gmail.com>,
- Stefan Schmidt <stefan@datenfreihafen.org>,
- Miquel Raynal <miquel.raynal@bootlin.com>,
- Alexandra Winter <wintera@linux.ibm.com>,
- Thorsten Winkler <twinkler@linux.ibm.com>,
- James Chapman <jchapman@katalix.com>, Jeremy Kerr <jk@codeconstruct.com.au>,
- Matt Johnston <matt@codeconstruct.com.au>,
- Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>,
- Geliang Tang <geliang@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>,
- Remi Denis-Courmont <courmisch@gmail.com>,
- Allison Henderson <allison.henderson@oracle.com>,
- David Howells <dhowells@redhat.com>, Marc Dionne <marc.dionne@auristor.com>,
- Wenjia Zhang <wenjia@linux.ibm.com>, Jan Karcher <jaka@linux.ibm.com>,
- "D. Wythe" <alibuda@linux.alibaba.com>, Tony Lu <tonylu@linux.alibaba.com>,
- Wen Gu <guwen@linux.alibaba.com>, Jon Maloy <jmaloy@redhat.com>,
- Boris Pismenny <borisp@nvidia.com>, John Fastabend
- <john.fastabend@gmail.com>, Stefano Garzarella <sgarzare@redhat.com>,
- Martin Schiller <ms@dev.tdt.de>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Jonathan Lemon <jonathan.lemon@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
- linux-hams@vger.kernel.org, linux-bluetooth@vger.kernel.org,
- linux-can@vger.kernel.org, dccp@vger.kernel.org, linux-wpan@vger.kernel.org,
- linux-s390@vger.kernel.org, mptcp@lists.linux.dev,
- linux-rdma@vger.kernel.org, rds-devel@oss.oracle.com,
- linux-afs@lists.infradead.org, tipc-discussion@lists.sourceforge.net,
- virtualization@lists.linux.dev, linux-x25@vger.kernel.org,
- bpf@vger.kernel.org, isdn4linux@listserv.isdn4linux.de,
- io-uring@vger.kernel.org
-References: <cover.1743449872.git.metze@samba.org>
- <d482e207223f434f0d306d3158b2142dceac4631.1743449872.git.metze@samba.org>
- <20250331224946.13899fcf@pumpkin>
-Content-Language: en-US, de-DE
-From: Stefan Metzmacher <metze@samba.org>
-In-Reply-To: <20250331224946.13899fcf@pumpkin>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <156e83128747b2cf7c755bffa68f2519bd255f78.1743449872.git.metze@samba.org>
 
-Am 31.03.25 um 23:49 schrieb David Laight:
-> On Mon, 31 Mar 2025 22:10:55 +0200
-> Stefan Metzmacher <metze@samba.org> wrote:
-> 
->> The motivation for this is to remove the SOL_SOCKET limitation
->> from io_uring_cmd_getsockopt().
->>
->> The reason for this limitation is that io_uring_cmd_getsockopt()
->> passes a kernel pointer.
->>
->> The first idea would be to change the optval and optlen arguments
->> to the protocol specific hooks also to sockptr_t, as that
->> is already used for setsockopt() and also by do_sock_getsockopt()
->> sk_getsockopt() and BPF_CGROUP_RUN_PROG_GETSOCKOPT().
->>
->> But as Linus don't like 'sockptr_t' I used a different approach.
->>
->> Instead of passing the optlen as user or kernel pointer,
->> we only ever pass a kernel pointer and do the
->> translation from/to userspace in do_sock_getsockopt().
->>
->> The simple solution would be to just remove the
->> '__user' from the int *optlen argument, but it
->> seems the compiler doesn't complain about
->> '__user' vs. without it, so instead I used
->> a helper struct in order to make sure everything
->> compiles with a typesafe change.
->>
->> That together with get_optlen() and put_optlen() helper
->> macros make it relatively easy to review and check the
->> behaviour is most likely unchanged.
-> 
-> I've looked into this before (and fallen down the patch rabbit hole).
+Hello Stefan,
 
-Yes, if you want to change the logic at the same time as
-changing the kind of argument variable, then it get messy
-quite fast.
+On Mon, Mar 31, 2025 at 10:10:53PM +0200, Stefan Metzmacher wrote:
+> --- a/include/linux/sockptr.h
+> +++ b/include/linux/sockptr.h
+> @@ -169,4 +169,26 @@ static inline int check_zeroed_sockptr(sockptr_t src, size_t offset,
+>  	return memchr_inv(src.kernel + offset, 0, size) == NULL;
+>  }
+>  
+> +#define __check_optlen_t(__optlen)				\
+> +({								\
+> +	int __user *__ptr __maybe_unused = __optlen; 		\
+> +	BUILD_BUG_ON(sizeof(*(__ptr)) != sizeof(int));		\
+> +})
 
-> I think the best (final) solution is to pass a validated non-negative
-> 'optlen' into all getsockopt() functions and to have them usually return
-> either -errno or the modified length.
-> This simplifies 99% of the functions.
+I am a bit confused about this macro. I understand that this macro's
+goal is to check that __optlen is a pointer to an integer, otherwise
+failed to build.
 
-Yes, maybe not 99%, but a lot.
+It is unclear to me if that is what it does. Let's suppose that __optlen
+is not an integer pointer. Then:
 
-> The problem case is functions that want to update the length and return
-> an error.
-> By best solution is to support return values of -errno << 20 | length
-> (as well as -errno and length).
-> 
-> There end up being some slight behaviour changes.
-> - Some code tries to 'undo' actions if the length can't be updated.
->    I'm sure this is unnecessary and the recovery path is untested and
->    could be buggy. Provided the kernel data is consistent there is
->    no point trying to get code to recover from EFAULT.
->    The 'length' has been read - so would also need to be readonly
->    or unmapped by a second thread!
-> - A lot of getsockopt functions actually treat a negative length as 4.
->    I think this 'bug' needs to preserved to avoid breaking applications.
-> 
-> The changes are mechanical but very widespread.
-> 
-> They also give the option of not writing back the length if unchanged.
+> int __user *__ptr __maybe_unused = __optlen;
 
-See my other mail regarding proto[_ops].getsockopt_iter(),
-where implementation could be converted step by step.
+This will generate a compile failure/warning due invalid casting,
+depending on -Wincompatible-pointer-types.
 
-But we may still need to keep the current  proto[ops].getsockopt()
-as proto[ops].getsockopt_legacy() in order to keep the
-insane uapi semantics alive.
+> BUILD_BUG_ON(sizeof(*(__ptr)) != sizeof(int));
 
-metze
-
-
+Then this comparison will always false, since __ptr is a pointer to int,
+and you are comparing the size of its content with the sizeof(int).
 
