@@ -1,100 +1,165 @@
-Return-Path: <linux-sctp+bounces-487-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-488-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEFF0A87D52
-	for <lists+linux-sctp@lfdr.de>; Mon, 14 Apr 2025 12:17:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D541AA67B8
+	for <lists+linux-sctp@lfdr.de>; Fri,  2 May 2025 02:17:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DA07188AF62
-	for <lists+linux-sctp@lfdr.de>; Mon, 14 Apr 2025 10:17:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8BC84C6478
+	for <lists+linux-sctp@lfdr.de>; Fri,  2 May 2025 00:17:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4177825E471;
-	Mon, 14 Apr 2025 10:17:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 844846FB9;
+	Fri,  2 May 2025 00:17:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="b/GkN4LF"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1D7B1EB5F1
-	for <linux-sctp@vger.kernel.org>; Mon, 14 Apr 2025 10:17:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7D2801;
+	Fri,  2 May 2025 00:17:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744625846; cv=none; b=KQ2U7MALMPedCYzGpYAC7HHl3bv05THAsc/vrHim6lrIcyIWLHqyUUFxnGpUznidpcDkZcAOu2qTPtKKmYygGWN1hkKyQBKJsbOebr1tXhkz3yFhN3RSwQ2C6bBgZUnKuPkcdeqNpq+ID7GrfQbUnv0BQ6djf3iDqbXJMO4HAFA=
+	t=1746145058; cv=none; b=a5uvLcGzZidQsoZnVQiHInYGSNeaGpAfxU1kTLEU+JLPmR8k1tdkLYroU/Gq9rq5dCF/H+WzvXhuKPG/kl4j+/1EyIX2V6N7ajb2ltlfDt6ZNaVT+rIlQthV/8zacI9Nv8k551c/S5kOgDv0CAw2YUi9WuvEa/jTDvBoX0mOwdE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744625846; c=relaxed/simple;
-	bh=2c7M1E1lRjaBDF0DTAAPrSRSxY+BYWh8WNPLmGeCIVw=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=Yi+1qo7lGVv5267whJOnu8rtqWUkSG4zt5om7xa516NWIWFhX7sbtXywNGhDbXPeXWSxA5dnkF+nK/Qm0HZt4XCYRKnF5dxyRiN4WS9XsUiVZnv+nZlvDf3Q2/o0EADeDkPm7U9R6gx9dOgTVuofGbTymfY3mI1pB1j8eleawpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-85b3f480d86so375055239f.3
-        for <linux-sctp@vger.kernel.org>; Mon, 14 Apr 2025 03:17:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744625844; x=1745230644;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CtlMRSkBTs7/GQxA1jZuBkOtfqExXnDhTxodFQXsVWE=;
-        b=kiz06eTr0LNZkVsNyRLUIFjJMUOmJZmmW6ddUl18uOP+9vylJ7mC4qkYXMQjO5f+Ao
-         4ln8Rmad7r8+Ygb5KAy+KeYFBgU5rTDstUj4/lHTlIbXKbwSODxuD5EhF3HGhSLU0h3O
-         9sXfkINGA8dFlvQaUnCiNJAD8aw80b86wKa12tJzSjsnNWDTy30gF4Edf8QWtToGM43f
-         TODD2Lg0QrJaKAE1Jnc4JjizVJbne3tyTsMzwIpRPKojh+SmNqWP/dUOpGz6V7BvNIze
-         QvxAglO0LZI7PDsfKBX1dgVpCrw5LSQ9WzgZlZnXwth45D4/ba6SNWlsrTgF7g1Y4wuo
-         LJ3g==
-X-Forwarded-Encrypted: i=1; AJvYcCVALwRGEPoi/yXABSvteFbzO3XwfBsBZ8gM+qtGvmcG5Yo7EdgsYKSDR7j0noh4HyT/JjK/qnN1vPJP@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzhXNLCf/8vKx7pHDKMPwhFLn8HtwX3YyVhETSOqPE2tZZARDJ
-	q14UrOuZZ2VoUvZk6OPMzFy16J4jf/9S3SskxomNNlZc2Q51BUXva0uSOlWqGZI486gy1guEYUV
-	pXoWo0zt0xkJc0jVmgByquQHlJkYOxm3NHECJPCVQ7rF8UKda1Sq5hGk=
-X-Google-Smtp-Source: AGHT+IEsWK/XLzkCHRNQgrHF5KhLezLNJO4VLrlEScGVacAR/kgdUOYuphvjLeyiCMwRREts1QtXMXzftrH3GbUhtWKQod+vnsQX
+	s=arc-20240116; t=1746145058; c=relaxed/simple;
+	bh=5i8bFsSgpcufvSYsYIHQhogwNQunbUypD6CAxiA3sVw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ga2hYc7BbD2X3DtZuNwyfyPHUuhWuZzWW2rpxgPRLng5tQG1ag3YAP5YhXK2oaNYuaOOU1Bd5cup5xqkNMyeUv8Aq7mLmjf3+s9d987S8a99V01dqHgFQeeheSlM8ydeQ6KHjvMFjif9hHIHOIRI6iobD7OnmP4L9A2Gdb3IgWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=b/GkN4LF; arc=none smtp.client-ip=46.235.229.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+	; s=bytemarkmx; h=MIME-Version:Message-ID:Date:Subject:From:Content-Type:From
+	:Subject; bh=95JfMuuwwwlYjV2zqmhexIQdacuaBYC+NdT7w2fT52Q=; b=b/GkN4LFfJPns1b8
+	gYuHMMcWTgo60iqVAS5m2gmE2RnqYwrpJBKjyScBAcECfIqtEfsme8QZ1xw1W6Xk3Xc1P6eqwkRUK
+	g/+5XUkFwjBpH2CWGNru7C3GC5BBzmmpR2Azw1xyMkL71qQWxxlYbXZr12qvqKKNC9QQZvOmxIBEE
+	p5ZcyIudvFvipfIi4w2FzoJihyW2OynGwKHlAEVs6vFvw7hI5X6Scii1UXjWtoZo4j6NNAnoBoJL+
+	sTh3NtGdt4jG/6s113Uq9kFaOP1xftnU2v/b5qkPb9kX7jxoYeFx3TdWVuiBEcwFyGwKMTUCVWlxb
+	M2modQL7Z8V5CG81ug==;
+Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
+	by mx.treblig.org with esmtp (Exim 4.96)
+	(envelope-from <linux@treblig.org>)
+	id 1uAdTs-000xxT-1s;
+	Thu, 01 May 2025 23:38:16 +0000
+From: linux@treblig.org
+To: marcelo.leitner@gmail.com,
+	lucien.xin@gmail.com
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	linux-sctp@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Dr. David Alan Gilbert" <linux@treblig.org>
+Subject: [PATCH net-next] sctp: Remove unused sctp_assoc_del_peer and sctp_chunk_iif
+Date: Fri,  2 May 2025 00:38:15 +0100
+Message-ID: <20250501233815.99832-1-linux@treblig.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:2190:b0:3d3:dece:3dab with SMTP id
- e9e14a558f8ab-3d7ec1dd57cmr100206425ab.1.1744625843764; Mon, 14 Apr 2025
- 03:17:23 -0700 (PDT)
-Date: Mon, 14 Apr 2025 03:17:23 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67fce0b3.050a0220.3483fc.0024.GAE@google.com>
-Subject: [syzbot] Monthly sctp report (Apr 2025)
-From: syzbot <syzbot+list56b130d2c18ef7a5ca58@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org, 
-	lucien.xin@gmail.com, marcelo.leitner@gmail.com, netdev@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hello sctp maintainers/developers,
+From: "Dr. David Alan Gilbert" <linux@treblig.org>
 
-This is a 31-day syzbot report for the sctp subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/sctp
+sctp_assoc_del_peer() last use was removed in 2015 by
+commit 73e6742027f5 ("sctp: Do not try to search for the transport twice")
+which now uses rm_peer instead of del_peer.
 
-During the period, 2 new issues were detected and 0 were fixed.
-In total, 3 issues are still open and 70 have already been fixed.
+sctp_chunk_iif() last use was removed in 2016 by
+commit 1f45f78f8e51 ("sctp: allow GSO frags to access the chunk too")
 
-Some of the still happening issues:
+Remove them.
 
-Ref Crashes Repro Title
-<1> 3863    Yes   KMSAN: uninit-value in sctp_inq_pop (2)
-                  https://syzkaller.appspot.com/bug?extid=70a42f45e76bede082be
-<2> 29      No    KMSAN: uninit-value in sctp_assoc_bh_rcv
-                  https://syzkaller.appspot.com/bug?extid=773e51afe420baaf0e2b
-<3> 1       No    WARNING: refcount bug in sctp_generate_timeout_event
-                  https://syzkaller.appspot.com/bug?extid=c7dd9f1bd1d2ad0e5637
-
+Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ include/net/sctp/sm.h      |  1 -
+ include/net/sctp/structs.h |  2 --
+ net/sctp/associola.c       | 18 ------------------
+ net/sctp/sm_make_chunk.c   |  8 --------
+ 4 files changed, 29 deletions(-)
 
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
+diff --git a/include/net/sctp/sm.h b/include/net/sctp/sm.h
+index 64c42bd56bb2..3bfd261a53cc 100644
+--- a/include/net/sctp/sm.h
++++ b/include/net/sctp/sm.h
+@@ -161,7 +161,6 @@ const struct sctp_sm_table_entry *sctp_sm_lookup_event(
+ 					enum sctp_event_type event_type,
+ 					enum sctp_state state,
+ 					union sctp_subtype event_subtype);
+-int sctp_chunk_iif(const struct sctp_chunk *);
+ struct sctp_association *sctp_make_temp_asoc(const struct sctp_endpoint *,
+ 					     struct sctp_chunk *,
+ 					     gfp_t gfp);
+diff --git a/include/net/sctp/structs.h b/include/net/sctp/structs.h
+index dcd288fa1bb6..1ad7ce71d0a7 100644
+--- a/include/net/sctp/structs.h
++++ b/include/net/sctp/structs.h
+@@ -2152,8 +2152,6 @@ struct sctp_transport *sctp_assoc_add_peer(struct sctp_association *,
+ 				     const union sctp_addr *address,
+ 				     const gfp_t gfp,
+ 				     const int peer_state);
+-void sctp_assoc_del_peer(struct sctp_association *asoc,
+-			 const union sctp_addr *addr);
+ void sctp_assoc_rm_peer(struct sctp_association *asoc,
+ 			 struct sctp_transport *peer);
+ void sctp_assoc_control_transport(struct sctp_association *asoc,
+diff --git a/net/sctp/associola.c b/net/sctp/associola.c
+index 760152e751c7..5793d71852b8 100644
+--- a/net/sctp/associola.c
++++ b/net/sctp/associola.c
+@@ -736,24 +736,6 @@ struct sctp_transport *sctp_assoc_add_peer(struct sctp_association *asoc,
+ 	return peer;
+ }
+ 
+-/* Delete a transport address from an association.  */
+-void sctp_assoc_del_peer(struct sctp_association *asoc,
+-			 const union sctp_addr *addr)
+-{
+-	struct list_head	*pos;
+-	struct list_head	*temp;
+-	struct sctp_transport	*transport;
+-
+-	list_for_each_safe(pos, temp, &asoc->peer.transport_addr_list) {
+-		transport = list_entry(pos, struct sctp_transport, transports);
+-		if (sctp_cmp_addr_exact(addr, &transport->ipaddr)) {
+-			/* Do book keeping for removing the peer and free it. */
+-			sctp_assoc_rm_peer(asoc, transport);
+-			break;
+-		}
+-	}
+-}
+-
+ /* Lookup a transport by address. */
+ struct sctp_transport *sctp_assoc_lookup_paddr(
+ 					const struct sctp_association *asoc,
+diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
+index f80208edd6a5..3ead591c72fd 100644
+--- a/net/sctp/sm_make_chunk.c
++++ b/net/sctp/sm_make_chunk.c
+@@ -115,14 +115,6 @@ static void sctp_control_set_owner_w(struct sctp_chunk *chunk)
+ 	skb->destructor = sctp_control_release_owner;
+ }
+ 
+-/* What was the inbound interface for this chunk? */
+-int sctp_chunk_iif(const struct sctp_chunk *chunk)
+-{
+-	struct sk_buff *skb = chunk->skb;
+-
+-	return SCTP_INPUT_CB(skb)->af->skb_iif(skb);
+-}
+-
+ /* RFC 2960 3.3.2 Initiation (INIT) (1)
+  *
+  * Note 2: The ECN capable field is reserved for future use of
+-- 
+2.49.0
 
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
 
