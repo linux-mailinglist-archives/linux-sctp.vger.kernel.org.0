@@ -1,46 +1,46 @@
-Return-Path: <linux-sctp+bounces-496-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-497-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E075AAB25E4
-	for <lists+linux-sctp@lfdr.de>; Sun, 11 May 2025 02:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B002BAB25E6
+	for <lists+linux-sctp@lfdr.de>; Sun, 11 May 2025 02:43:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 726904608B8
-	for <lists+linux-sctp@lfdr.de>; Sun, 11 May 2025 00:42:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72FB8460421
+	for <lists+linux-sctp@lfdr.de>; Sun, 11 May 2025 00:42:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 262571946BC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E9F8199FA2;
 	Sun, 11 May 2025 00:41:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rm/YLJLE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dQ45jumq"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC89D179BF;
-	Sun, 11 May 2025 00:41:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DD961922C4;
+	Sun, 11 May 2025 00:41:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746924096; cv=none; b=sHsVPR76S+a+jQwVk91FRnYEX+OwjPJSUdNozNQwlRlChgFewS1gnFIRN6mcBfqHrj8PUYAUy2LWC375PNiHigl6iPE46H61IC0E4/iDQMcVZKh1Nm3pG7oF3JcA5zKJKkabbyTJZbeKFKTAti9v1xzNTn+uHXVJnEV/4O328UE=
+	t=1746924096; cv=none; b=L6uEZLsZzg/ftHvbWQ+iMJgf0P3QWRcEgpd4239xW20ZwklvomZbyIzan/m4zmH3uEdBBqxoeJWfCPs8HCizcIhboKk2oN+vQtv9zqyG46xqIR1XRbiN+O8Q7pep7Ea6fsmruXvNGPPJL3fLH6KV5E9Y3f1S+FfsUsY6f4qQzrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1746924096; c=relaxed/simple;
-	bh=rzxlJ+REpOzn2hxjAiUOHuapxr7sRcF5AgoLopDe6KQ=;
+	bh=/A9NtJJ0pcYSzi7Q5tbR5gfyPyk7AS4gT0Xn3zsrRXA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OrfusT1qe0YH6f7u94HSbpaoQ3BG5hulC52Wdku+eaTEbN0FaXwkkMw4ZhyMjP3hd86T1JyBcJvsUf+l+Q9uM0Uao6Axv/Y86PpyuBll2ivvgbPZ2snAx1p7w9xRzCVRYCTpMcwpe+bQIjPkzzXN3W92znvZIeCpcZ4wNNmnT4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rm/YLJLE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B472C4CEE7;
-	Sun, 11 May 2025 00:41:33 +0000 (UTC)
+	 MIME-Version; b=d2KgJ7S6Y7EcI3pkhQgadH3d804VslCoQZUiGnzLIuVJ5WEWLZBbdZuMn97cvZvotfQcVOpxdheGsBdf5NE+FoKlWdrVjFwBXCihufit8TeaYuCDDrDfd5GoYps101Up8WmRsD8BFf3QB49+5OjB5/84TIPceDIuiGY2VPKeLRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dQ45jumq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9761C4CEEF;
+	Sun, 11 May 2025 00:41:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746924094;
-	bh=rzxlJ+REpOzn2hxjAiUOHuapxr7sRcF5AgoLopDe6KQ=;
+	s=k20201202; t=1746924095;
+	bh=/A9NtJJ0pcYSzi7Q5tbR5gfyPyk7AS4gT0Xn3zsrRXA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rm/YLJLE66m5WNVbp4MovT3aGm3bwEndEL51q8a2/boVKXK6nYdKZg/vVQFQPKleJ
-	 l/e30U3014fXykXrZAK8jxbJXcO/IFBp/aO5zaW34w01OvvqOE9nn9qtjsuhAkBoLr
-	 KWFW+hv0HpWlJgsIdqR8vFsplS6Td3hKtaN3oaw7NWBsPLn7kEMc5vC1p7fS3WK9mA
-	 eNKHlUbYel1pBeiUIJ+VwhaQy2a7E5/DpVmiKdbpBvdqp8Z6rMZqxc0yVOJXSfFXi+
-	 Nec2eKKlsISTaovL4hCDhNNmMPKRpxIJ343FGc9JCrhCcHfF4wKShEW/P36xp/EL7g
-	 R2t/fWbZO9oUA==
+	b=dQ45jumq+j1KKVo/UHlGTJd20e4DFKDf4HDb7zNpC1qGye2USU/ef8NjVPsV0T14A
+	 M4jug2r/Yq+VOS1fGQCxzyXAYoyoevhEV9K80h9QVcttRSXM+iMcoZJkQbp9lQCszx
+	 ITOq1tQ3BQYVL+VjDTaZbvKR9A2dg1fYJ5d3vWpy6ATm10LTVbR11DIvSHr7zk/FXp
+	 +7hSbi+HClEtL8cFGC8eYxB7glmb8eNbM/ZqywcVrB8xrRphB55w2ygtQI4t75sOh3
+	 GFOjOLIPmoXEpUY7A2BNrk9RdobQ6OX+wMc9mDAWhkfGgZVv65FSbPiSRRJoeuttck
+	 6zPsnrLDxUwaw==
 From: Eric Biggers <ebiggers@kernel.org>
 To: netdev@vger.kernel.org
 Cc: linux-nvme@lists.infradead.org,
@@ -51,9 +51,9 @@ Cc: linux-nvme@lists.infradead.org,
 	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
 	Sagi Grimberg <sagi@grimberg.me>,
 	Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH net-next 05/10] sctp: use skb_crc32c() instead of __skb_checksum()
-Date: Sat, 10 May 2025 17:41:05 -0700
-Message-ID: <20250511004110.145171-6-ebiggers@kernel.org>
+Subject: [PATCH net-next 06/10] net: fold __skb_checksum() into skb_checksum()
+Date: Sat, 10 May 2025 17:41:06 -0700
+Message-ID: <20250511004110.145171-7-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250511004110.145171-1-ebiggers@kernel.org>
 References: <20250511004110.145171-1-ebiggers@kernel.org>
@@ -67,194 +67,211 @@ Content-Transfer-Encoding: 8bit
 
 From: Eric Biggers <ebiggers@google.com>
 
-Make sctp_compute_cksum() just use the new function skb_crc32c(),
-instead of calling __skb_checksum() with a skb_checksum_ops struct that
-does CRC32C.  This is faster and simpler.
+Now that the only remaining caller of __skb_checksum() is
+skb_checksum(), fold __skb_checksum() into skb_checksum().  This makes
+struct skb_checksum_ops unnecessary, so remove that too and simply do
+the "regular" net checksum.  It also makes the wrapper functions
+csum_partial_ext() and csum_block_add_ext() unnecessary, so remove those
+too and just use the underlying functions.
 
 Signed-off-by: Eric Biggers <ebiggers@google.com>
 ---
- include/net/sctp/checksum.h | 29 +++--------------------------
- net/netfilter/Kconfig       |  4 ++--
- net/netfilter/ipvs/Kconfig  |  2 +-
- net/openvswitch/Kconfig     |  2 +-
- net/sched/Kconfig           |  2 +-
- net/sctp/Kconfig            |  1 -
- net/sctp/offload.c          |  1 -
- 7 files changed, 8 insertions(+), 33 deletions(-)
+ include/linux/skbuff.h |  9 -------
+ include/net/checksum.h | 12 ---------
+ net/core/skbuff.c      | 59 +++++-------------------------------------
+ 3 files changed, 7 insertions(+), 73 deletions(-)
 
-diff --git a/include/net/sctp/checksum.h b/include/net/sctp/checksum.h
-index 291465c25810..654d37ec0402 100644
---- a/include/net/sctp/checksum.h
-+++ b/include/net/sctp/checksum.h
-@@ -13,51 +13,28 @@
-  *
-  * Written or modified by:
-  *    Dinakaran Joseph
-  *    Jon Grimm <jgrimm@us.ibm.com>
-  *    Sridhar Samudrala <sri@us.ibm.com>
-- *
-- * Rewritten to use libcrc32c by:
-  *    Vlad Yasevich <vladislav.yasevich@hp.com>
-  */
- 
- #ifndef __sctp_checksum_h__
- #define __sctp_checksum_h__
- 
- #include <linux/types.h>
- #include <linux/sctp.h>
--#include <linux/crc32c.h>
--#include <linux/crc32.h>
--
--static inline __wsum sctp_csum_update(const void *buff, int len, __wsum sum)
--{
--	return (__force __wsum)crc32c((__force __u32)sum, buff, len);
--}
--
--static inline __wsum sctp_csum_combine(__wsum csum, __wsum csum2,
--				       int offset, int len)
--{
--	return (__force __wsum)crc32c_combine((__force __u32)csum,
--					      (__force __u32)csum2, len);
--}
--
--static const struct skb_checksum_ops sctp_csum_ops = {
--	.update  = sctp_csum_update,
--	.combine = sctp_csum_combine,
--};
- 
- static inline __le32 sctp_compute_cksum(const struct sk_buff *skb,
- 					unsigned int offset)
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index 33b33bb18aa6..eac5c8dde4a5 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -4181,19 +4181,10 @@ static inline int memcpy_from_msg(void *data, struct msghdr *msg, int len)
+ static inline int memcpy_to_msg(struct msghdr *msg, void *data, int len)
  {
- 	struct sctphdr *sh = (struct sctphdr *)(skb->data + offset);
- 	__le32 old = sh->checksum;
--	__wsum new;
-+	u32 new;
- 
- 	sh->checksum = 0;
--	new = ~__skb_checksum(skb, offset, skb->len - offset, ~(__wsum)0,
--			      &sctp_csum_ops);
-+	new = ~skb_crc32c(skb, offset, skb->len - offset, ~0);
- 	sh->checksum = old;
--
--	return cpu_to_le32((__force __u32)new);
-+	return cpu_to_le32(new);
+ 	return copy_to_iter(data, len, &msg->msg_iter) == len ? 0 : -EFAULT;
  }
  
- #endif /* __sctp_checksum_h__ */
-diff --git a/net/netfilter/Kconfig b/net/netfilter/Kconfig
-index 3b2183fc7e56..2560416218d0 100644
---- a/net/netfilter/Kconfig
-+++ b/net/netfilter/Kconfig
-@@ -210,11 +210,11 @@ config NF_CT_PROTO_GRE
+-struct skb_checksum_ops {
+-	__wsum (*update)(const void *mem, int len, __wsum wsum);
+-	__wsum (*combine)(__wsum csum, __wsum csum2, int offset, int len);
+-};
+-
+-extern const struct skb_checksum_ops *crc32c_csum_stub __read_mostly;
+-
+-__wsum __skb_checksum(const struct sk_buff *skb, int offset, int len,
+-		      __wsum csum, const struct skb_checksum_ops *ops);
+ __wsum skb_checksum(const struct sk_buff *skb, int offset, int len,
+ 		    __wsum csum);
+ u32 skb_crc32c(const struct sk_buff *skb, int offset, int len, u32 crc);
  
- config NF_CT_PROTO_SCTP
- 	bool 'SCTP protocol connection tracking support'
- 	depends on NETFILTER_ADVANCED
- 	default y
--	select CRC32
-+	select NET_CRC32C
- 	help
- 	  With this option enabled, the layer 3 independent connection
- 	  tracking code will be able to do state tracking on SCTP connections.
+ static inline void * __must_check
+diff --git a/include/net/checksum.h b/include/net/checksum.h
+index 243f972267b8..e57986b173f8 100644
+--- a/include/net/checksum.h
++++ b/include/net/checksum.h
+@@ -96,16 +96,10 @@ static __always_inline __wsum
+ csum_block_add(__wsum csum, __wsum csum2, int offset)
+ {
+ 	return csum_add(csum, csum_shift(csum2, offset));
+ }
  
- 	  If unsure, say Y.
-@@ -473,11 +473,11 @@ config NETFILTER_SYNPROXY
+-static __always_inline __wsum
+-csum_block_add_ext(__wsum csum, __wsum csum2, int offset, int len)
+-{
+-	return csum_block_add(csum, csum2, offset);
+-}
+-
+ static __always_inline __wsum
+ csum_block_sub(__wsum csum, __wsum csum2, int offset)
+ {
+ 	return csum_block_add(csum, ~csum2, offset);
+ }
+@@ -113,16 +107,10 @@ csum_block_sub(__wsum csum, __wsum csum2, int offset)
+ static __always_inline __wsum csum_unfold(__sum16 n)
+ {
+ 	return (__force __wsum)n;
+ }
  
- endif # NF_CONNTRACK
+-static __always_inline
+-__wsum csum_partial_ext(const void *buff, int len, __wsum sum)
+-{
+-	return csum_partial(buff, len, sum);
+-}
+-
+ #define CSUM_MANGLED_0 ((__force __sum16)0xffff)
  
- config NF_TABLES
- 	select NETFILTER_NETLINK
--	select CRC32
-+	select NET_CRC32C
- 	tristate "Netfilter nf_tables support"
- 	help
- 	  nftables is the new packet classification framework that intends to
- 	  replace the existing {ip,ip6,arp,eb}_tables infrastructure. It
- 	  provides a pseudo-state machine with an extensible instruction-set
-diff --git a/net/netfilter/ipvs/Kconfig b/net/netfilter/ipvs/Kconfig
-index 8c5b1fe12d07..c203252e856d 100644
---- a/net/netfilter/ipvs/Kconfig
-+++ b/net/netfilter/ipvs/Kconfig
-@@ -103,11 +103,11 @@ config	IP_VS_PROTO_AH
- 	  This option enables support for load balancing AH (Authentication
- 	  Header) transport protocol. Say Y if unsure.
+ static __always_inline void csum_replace_by_diff(__sum16 *sum, __wsum diff)
+ {
+ 	*sum = csum_fold(csum_add(diff, ~csum_unfold(*sum)));
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index b9900cc16a24..bfa892ccc7f7 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -3438,24 +3438,22 @@ int skb_store_bits(struct sk_buff *skb, int offset, const void *from, int len)
+ 	return -EFAULT;
+ }
+ EXPORT_SYMBOL(skb_store_bits);
  
- config  IP_VS_PROTO_SCTP
- 	bool "SCTP load balancing support"
--	select CRC32
-+	select NET_CRC32C
- 	help
- 	  This option enables support for load balancing SCTP transport
- 	  protocol. Say Y if unsure.
+ /* Checksum skb data. */
+-__wsum __skb_checksum(const struct sk_buff *skb, int offset, int len,
+-		      __wsum csum, const struct skb_checksum_ops *ops)
++__wsum skb_checksum(const struct sk_buff *skb, int offset, int len, __wsum csum)
+ {
+ 	int start = skb_headlen(skb);
+ 	int i, copy = start - offset;
+ 	struct sk_buff *frag_iter;
+ 	int pos = 0;
  
- comment "IPVS scheduler"
-diff --git a/net/openvswitch/Kconfig b/net/openvswitch/Kconfig
-index 5481bd561eb4..e6aaee92dba4 100644
---- a/net/openvswitch/Kconfig
-+++ b/net/openvswitch/Kconfig
-@@ -9,12 +9,12 @@ config OPENVSWITCH
- 	depends on !NF_CONNTRACK || \
- 		   (NF_CONNTRACK && ((!NF_DEFRAG_IPV6 || NF_DEFRAG_IPV6) && \
- 				     (!NF_NAT || NF_NAT) && \
- 				     (!NETFILTER_CONNCOUNT || NETFILTER_CONNCOUNT)))
- 	depends on PSAMPLE || !PSAMPLE
--	select CRC32
- 	select MPLS
-+	select NET_CRC32C
- 	select NET_MPLS_GSO
- 	select DST_CACHE
- 	select NET_NSH
- 	select NF_CONNTRACK_OVS if NF_CONNTRACK
- 	select NF_NAT_OVS if NF_NAT
-diff --git a/net/sched/Kconfig b/net/sched/Kconfig
-index 9f0b3f943fca..ad914d2b2e22 100644
---- a/net/sched/Kconfig
-+++ b/net/sched/Kconfig
-@@ -794,11 +794,11 @@ config NET_ACT_SKBEDIT
- 	  module will be called act_skbedit.
+ 	/* Checksum header. */
+ 	if (copy > 0) {
+ 		if (copy > len)
+ 			copy = len;
+-		csum = INDIRECT_CALL_1(ops->update, csum_partial_ext,
+-				       skb->data + offset, copy, csum);
++		csum = csum_partial(skb->data + offset, copy, csum);
+ 		if ((len -= copy) == 0)
+ 			return csum;
+ 		offset += copy;
+ 		pos	= copy;
+ 	}
+@@ -3481,17 +3479,13 @@ __wsum __skb_checksum(const struct sk_buff *skb, int offset, int len,
  
- config NET_ACT_CSUM
- 	tristate "Checksum Updating"
- 	depends on NET_CLS_ACT && INET
--	select CRC32
-+	select NET_CRC32C
- 	help
- 	  Say Y here to update some common checksum after some direct
- 	  packet alterations.
+ 			skb_frag_foreach_page(frag,
+ 					      skb_frag_off(frag) + offset - start,
+ 					      copy, p, p_off, p_len, copied) {
+ 				vaddr = kmap_atomic(p);
+-				csum2 = INDIRECT_CALL_1(ops->update,
+-							csum_partial_ext,
+-							vaddr + p_off, p_len, 0);
++				csum2 = csum_partial(vaddr + p_off, p_len, 0);
+ 				kunmap_atomic(vaddr);
+-				csum = INDIRECT_CALL_1(ops->combine,
+-						       csum_block_add_ext, csum,
+-						       csum2, pos, p_len);
++				csum = csum_block_add(csum, csum2, pos);
+ 				pos += p_len;
+ 			}
  
- 	  To compile this code as a module, choose M here: the
-diff --git a/net/sctp/Kconfig b/net/sctp/Kconfig
-index 3669ba351856..24d5a35ce894 100644
---- a/net/sctp/Kconfig
-+++ b/net/sctp/Kconfig
-@@ -5,11 +5,10 @@
+ 			if (!(len -= copy))
+ 				return csum;
+@@ -3508,14 +3502,13 @@ __wsum __skb_checksum(const struct sk_buff *skb, int offset, int len,
+ 		end = start + frag_iter->len;
+ 		if ((copy = end - offset) > 0) {
+ 			__wsum csum2;
+ 			if (copy > len)
+ 				copy = len;
+-			csum2 = __skb_checksum(frag_iter, offset - start,
+-					       copy, 0, ops);
+-			csum = INDIRECT_CALL_1(ops->combine, csum_block_add_ext,
+-					       csum, csum2, pos, copy);
++			csum2 = skb_checksum(frag_iter, offset - start, copy,
++					     0);
++			csum = csum_block_add(csum, csum2, pos);
+ 			if ((len -= copy) == 0)
+ 				return csum;
+ 			offset += copy;
+ 			pos    += copy;
+ 		}
+@@ -3523,22 +3516,10 @@ __wsum __skb_checksum(const struct sk_buff *skb, int offset, int len,
+ 	}
+ 	BUG_ON(len);
  
- menuconfig IP_SCTP
- 	tristate "The SCTP Protocol"
- 	depends on INET
- 	depends on IPV6 || IPV6=n
--	select CRC32
- 	select CRYPTO
- 	select CRYPTO_HMAC
- 	select CRYPTO_SHA1
- 	select NET_CRC32C
- 	select NET_UDP_TUNNEL
-diff --git a/net/sctp/offload.c b/net/sctp/offload.c
-index 502095173d88..e6f863c031b4 100644
---- a/net/sctp/offload.c
-+++ b/net/sctp/offload.c
-@@ -109,11 +109,10 @@ int __init sctp_offload_init(void)
+ 	return csum;
+ }
+-EXPORT_SYMBOL(__skb_checksum);
+-
+-__wsum skb_checksum(const struct sk_buff *skb, int offset,
+-		    int len, __wsum csum)
+-{
+-	const struct skb_checksum_ops ops = {
+-		.update  = csum_partial_ext,
+-		.combine = csum_block_add_ext,
+-	};
+-
+-	return __skb_checksum(skb, offset, len, csum, &ops);
+-}
+ EXPORT_SYMBOL(skb_checksum);
  
- 	ret = inet6_add_offload(&sctp6_offload, IPPROTO_SCTP);
- 	if (ret)
- 		goto ipv4;
+ /* Both of above in one bottle. */
  
--	crc32c_csum_stub = &sctp_csum_ops;
- 	return ret;
+ __wsum skb_copy_and_csum_bits(const struct sk_buff *skb, int offset,
+@@ -3758,36 +3739,10 @@ __sum16 __skb_checksum_complete(struct sk_buff *skb)
  
- ipv4:
- 	inet_del_offload(&sctp_offload, IPPROTO_SCTP);
- out:
+ 	return sum;
+ }
+ EXPORT_SYMBOL(__skb_checksum_complete);
+ 
+-static __wsum warn_crc32c_csum_update(const void *buff, int len, __wsum sum)
+-{
+-	net_warn_ratelimited(
+-		"%s: attempt to compute crc32c without libcrc32c.ko\n",
+-		__func__);
+-	return 0;
+-}
+-
+-static __wsum warn_crc32c_csum_combine(__wsum csum, __wsum csum2,
+-				       int offset, int len)
+-{
+-	net_warn_ratelimited(
+-		"%s: attempt to compute crc32c without libcrc32c.ko\n",
+-		__func__);
+-	return 0;
+-}
+-
+-static const struct skb_checksum_ops default_crc32c_ops = {
+-	.update  = warn_crc32c_csum_update,
+-	.combine = warn_crc32c_csum_combine,
+-};
+-
+-const struct skb_checksum_ops *crc32c_csum_stub __read_mostly =
+-	&default_crc32c_ops;
+-EXPORT_SYMBOL(crc32c_csum_stub);
+-
+  /**
+  *	skb_zerocopy_headlen - Calculate headroom needed for skb_zerocopy()
+  *	@from: source buffer
+  *
+  *	Calculates the amount of linear headroom needed in the 'to' skb passed
 -- 
 2.49.0
 
