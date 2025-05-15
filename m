@@ -1,100 +1,103 @@
-Return-Path: <linux-sctp+bounces-513-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-514-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF69FAB7F22
-	for <lists+linux-sctp@lfdr.de>; Thu, 15 May 2025 09:46:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71D85AB8E88
+	for <lists+linux-sctp@lfdr.de>; Thu, 15 May 2025 20:09:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 155313B7593
-	for <lists+linux-sctp@lfdr.de>; Thu, 15 May 2025 07:46:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F6711BC645D
+	for <lists+linux-sctp@lfdr.de>; Thu, 15 May 2025 18:09:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33BC51F0E50;
-	Thu, 15 May 2025 07:46:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95CCA25A646;
+	Thu, 15 May 2025 18:09:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mgTeyS0n"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2AE4B1E51
-	for <linux-sctp@vger.kernel.org>; Thu, 15 May 2025 07:46:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60BAA1F4C96;
+	Thu, 15 May 2025 18:09:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747295199; cv=none; b=mlCiROBdE4BL+uwb+Ga3lPnqob3mYF9XhKrbi7WWB/fW92JYbLouygtSoupPDpp57G5F968mwvFjF5pa1vhWLtcbIXYUp+TFh1u4gyg2bp8og+5RsCnKzwGrZgNpExzOE4HwkKCrnoPlrnZuKxcp4bHlSO9GICRrjJSnNy2KvBU=
+	t=1747332544; cv=none; b=PTqkWbFZhDw0Vlg5AAhdOt27LtB9REmk28sA3JaKKeELXolmWLjumct29JbZAq0YvVOvzxr04JYiB0ez1J7MlT+BIaFzDtG/tVqth7YfwqpXvOvOhJ8WYeLe0yKVqbTIRFfdFPcP/HSADirnv/ejw0qSYtZdJck4AvZFNNfetyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747295199; c=relaxed/simple;
-	bh=GcPWC9DTX9rlILvVyRFyZgGWozsdOzRauear8FzHQzY=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=u4kDgDIl0+AcvLEw0wb14LH+WN1JWsdm8nZDKsI0yJEpnAlv157jhAJxya2YNW2KNk4XVTkRImFTmosK92HL5IP37hvucc3t0jaic4RNVkYk61MiPqXT1IwetdN0PzOsEg40PEhi3+DT576PHG7pHtPXLzi8SnPTVc/9YJ4tWfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-85b418faf73so125084039f.1
-        for <linux-sctp@vger.kernel.org>; Thu, 15 May 2025 00:46:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747295197; x=1747899997;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=S86UjQFMGu5iYwtVlwx0AEIGx4zFd27s3P2snhatw/0=;
-        b=ePSVLkwhYgDHXCYSoAahgrE0q9Nj+Z+q/7VRn2m1D/kWYncn38oB3kOWG+LBhWymxv
-         43EKuqjbGAWWBj2fHYVqfAbfuwN4cG8RQQ+zoxyb7GM+W+clF18O4ccZfIMGz80seZvc
-         JbTnvoJvOnDPV2dhVlT1gRw47ooLAY9JTk4JA9pkxRWeR5psOfcOdNW/aT/dL6RR51fY
-         88oTTWGI5S9vyt02UvYGNKHINwyChcnQB3o65RKWVRHV8LBVFbYpZfORk4ab5KgQRs34
-         a9Q9jt10fCPY2PJLSo+a76m35kDxDoCdkZJVX9EKfkHI0hA0stxTpHf/mWKw/Harg4JP
-         lpeA==
-X-Forwarded-Encrypted: i=1; AJvYcCWhQI49zoMXmrQgH5TxaMVue1wTbpMSixx1X+LXQoEyxG5C10jpSag2VCY25x0ZisqGVTbAPJ2uB/hj@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8jdK7zH4aXPY//Y099QUcQFfF2hHpYt7sXmnalJ3+h9V48o4o
-	8BfJWxP0h8nLrpLASaweKpxLgPDsuAdrpZnAdNgvtNjD4CePEM5sbKkppDibMPxws5aCLlqCCfb
-	z44Ri9chBRXdbMuvbTtYG7cS+XUQeJ8jWGQPnjUX3G2SnLMrrjg8fEKQ=
-X-Google-Smtp-Source: AGHT+IFoNQrhWrXpNLY7oh5rJ2tJ3Nb5XXwI5DRU6GxO6PTblFimDaCE8hr8eSKPRhk6PwZQLqVfgGYEsjiTdbz8CYNpTJjk9hQY
+	s=arc-20240116; t=1747332544; c=relaxed/simple;
+	bh=EMbkV613PdDRHIH0TklJGK8IdRcNls/AaRkWvfzUGpQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fLphbU13iFSvd2LMNBIDKl7G7gl3F1ws1qm3ymYOm8TO7zTgNKMWICYfkC+PsvjQWjUvGpkNRG5lkWiL084KhMfmrAI4RtWj+BcpJ0Pv7uKJD7dHigq8GVHRHEcFc66dcgUwVIwlfaGCTerbK1TOWXR+9TUB1XehLDmc0T2ubS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mgTeyS0n; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BBDBC4CEE7;
+	Thu, 15 May 2025 18:09:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747332543;
+	bh=EMbkV613PdDRHIH0TklJGK8IdRcNls/AaRkWvfzUGpQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mgTeyS0nRo/8GGQox7waepWvBt89X11Tjc4IIkuPLN0GqeY5JaU0dP3ym2OYbstyL
+	 hPFl1HqPwySKYVlNGI38eFb3BPYb3C2/AcLkuR50wXRdHE08PjpxH9cqqp+Mas8EYK
+	 myf9BJtwv/4ZVcfwyLFJvrIrIAML+DPXg8il6uwFuWTw6hOY1VNhSmZOBCVAOktZe5
+	 jIGzEPHRseWZPp8ondAPHuPX3YYAZUytRpBBj/4SyF2rV8x/Ga8V0gNi+mZuNkdA/z
+	 rU46XFYpoJRDo7+XpyKuN9P7N0Qyw6cTd0saAbr5xlcFyL2S1yity0q4TbtzPQ+f7d
+	 z44zZxxq4c07w==
+Date: Thu, 15 May 2025 11:09:01 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, linux-nvme@lists.infradead.org,
+	linux-sctp@vger.kernel.org, linux-rdma@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+	Sagi Grimberg <sagi@grimberg.me>, Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH net-next 08/10] net: add
+ skb_copy_and_crc32c_datagram_iter()
+Message-ID: <20250515180901.GA1411@quark>
+References: <20250511004110.145171-1-ebiggers@kernel.org>
+ <20250511004110.145171-9-ebiggers@kernel.org>
+ <20250513144154.49f8faaa@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:dc03:0:b0:86a:93c:f5fb with SMTP id
- ca18e2360f4ac-86a093cf6admr582105939f.1.1747295196799; Thu, 15 May 2025
- 00:46:36 -0700 (PDT)
-Date: Thu, 15 May 2025 00:46:36 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <68259bdc.a00a0220.a2f23.0198.GAE@google.com>
-Subject: [syzbot] Monthly sctp report (May 2025)
-From: syzbot <syzbot+listc23b11af384e20c3b1fb@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org, 
-	lucien.xin@gmail.com, marcelo.leitner@gmail.com, netdev@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250513144154.49f8faaa@kernel.org>
 
-Hello sctp maintainers/developers,
+On Tue, May 13, 2025 at 02:41:54PM -0700, Jakub Kicinski wrote:
+> On Sat, 10 May 2025 17:41:08 -0700 Eric Biggers wrote:
+> > +/**
+> > + *	skb_copy_and_crc32c_datagram_iter - Copy datagram to an iovec iterator
+> > + *		and update a CRC32C value.
+> > + *	@skb: buffer to copy
+> > + *	@offset: offset in the buffer to start copying from
+> > + *	@to: iovec iterator to copy to
+> > + *	@len: amount of data to copy from buffer to iovec
+> > + *	@crcp: pointer to CRC32C value to update
+> > + */
+> 
+> When you repost please toss a Return: statement here.
+> kernel-doc -Wall is complaining
 
-This is a 31-day syzbot report for the sctp subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/sctp
+I'll plan to fold in the following:
 
-During the period, 0 new issues were detected and 0 were fixed.
-In total, 4 issues are still open and 70 have already been fixed.
-
-Some of the still happening issues:
-
-Ref Crashes Repro Title
-<1> 3934    Yes   KMSAN: uninit-value in sctp_inq_pop (2)
-                  https://syzkaller.appspot.com/bug?extid=70a42f45e76bede082be
-<2> 83      No    KMSAN: uninit-value in sctp_assoc_bh_rcv
-                  https://syzkaller.appspot.com/bug?extid=773e51afe420baaf0e2b
-<3> 3       Yes   INFO: rcu detected stall in inet6_rtm_newaddr (3)
-                  https://syzkaller.appspot.com/bug?extid=3e17d9c9a137bb913b61
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
+diff --git a/net/core/datagram.c b/net/core/datagram.c
+index 3599eda959917..fa87abb666324 100644
+--- a/net/core/datagram.c
++++ b/net/core/datagram.c
+@@ -538,10 +538,12 @@ static size_t crc32c_and_copy_to_iter(const void *addr, size_t bytes,
+  *	@skb: buffer to copy
+  *	@offset: offset in the buffer to start copying from
+  *	@to: iovec iterator to copy to
+  *	@len: amount of data to copy from buffer to iovec
+  *	@crcp: pointer to CRC32C value to update
++ *
++ *	Return: 0 on success, -EFAULT if there was a fault during copy.
+  */
+ int skb_copy_and_crc32c_datagram_iter(const struct sk_buff *skb, int offset,
+ 				      struct iov_iter *to, int len, u32 *crcp)
+ {
+ 	return __skb_datagram_iter(skb, offset, to, len, true,
 
