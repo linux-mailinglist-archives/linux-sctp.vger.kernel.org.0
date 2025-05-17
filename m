@@ -1,66 +1,66 @@
-Return-Path: <linux-sctp+bounces-528-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-529-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B527EABAC6A
-	for <lists+linux-sctp@lfdr.de>; Sat, 17 May 2025 22:30:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64503ABAC6F
+	for <lists+linux-sctp@lfdr.de>; Sat, 17 May 2025 22:32:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FA02175A8A
-	for <lists+linux-sctp@lfdr.de>; Sat, 17 May 2025 20:30:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 550DA1B600BD
+	for <lists+linux-sctp@lfdr.de>; Sat, 17 May 2025 20:33:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71E7D207DEE;
-	Sat, 17 May 2025 20:30:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 640501F8744;
+	Sat, 17 May 2025 20:32:43 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C971957FF;
-	Sat, 17 May 2025 20:30:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7EFF257D;
+	Sat, 17 May 2025 20:32:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747513810; cv=none; b=coATRkaZAYM9+VX+cwLomPe/OQPqUpUN7YaD0wH+t713e2+hzNKtQFxYVKTjhLj5r3kG0z18cWCejumCf079HH+e6+T3oEbHiOD1JaecRXFQENp12nN0xvB64xTB5194Z2H1s9R1T7mS/uoh9ZBI4QlM4eF+eXRcAJkENBVk/DQ=
+	t=1747513963; cv=none; b=ZnCfv5WuW7rBVqg7tysOlMrASLnB71JIySCGN4ygydQUWZYpg7H3N0ZdC3hoQV2ENb54MVZnocSPwFCq+fDQ66gpDVmDErU8qVhGbXNV8LUFnFDOtdRi8t3Yd88FihKUl2Yr8Eo/WMQKdwwThZVIqd+dtjXXYDISUmdck95veqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747513810; c=relaxed/simple;
-	bh=o8dPAkAOuRO1ZrsKaQ+UVHRAKhmxaT6ZPG4kBz5MReQ=;
+	s=arc-20240116; t=1747513963; c=relaxed/simple;
+	bh=qIIxQ9sVCU43yU/3zZ4J8T6U0kzGxVTjqQXqVz/70p0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q9mL0/Xbnv46thMvwDOPQQhdKb248iwsHrjkziT5Gop1yA3Kmbzg5p4SeCQCuUGjJMh482BkGPOVLjMmtQhveeTXr7POXmYvAwfIPTa2sAd77vJ8Yg8odZ7dUmQwjEd+32DrcVjU6R3Tqpomcued7KVWJ1kRqgNewtV4YUSDLNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=grimberg.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.52
+	 In-Reply-To:Content-Type; b=ddy+ceuHyWjgwNnl+xWtQJOcz9kpUGT2OKtQ1bhdJQn/Ia/ITgUGkGJkZusN7YznXR/LEgCvCbKAOxXTZVrahSwa4Aw0AqR6wKokUsSg0UPnn7Cwj3OOa5hnFOi6d9QEYNj4SQOSpq7olby6G97WknWUtM0iu+oxuge2AiHZ0QE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=grimberg.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=grimberg.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3a0ac853894so2630444f8f.3;
-        Sat, 17 May 2025 13:30:08 -0700 (PDT)
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3a35b7e60cbso1834044f8f.1;
+        Sat, 17 May 2025 13:32:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747513807; x=1748118607;
+        d=1e100.net; s=20230601; t=1747513959; x=1748118759;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZZ6Cdn9EsHHItXTMwN7zCQevwD72gZm5vOAf0aeJXRQ=;
-        b=clEq3ZsQbJG9vYH22wb5ym8F7MfsRrVyEKjWeh5uHfKx93rB56yDhwNI6EzGhTArKs
-         pVn2N3te0sKcFEW9mkfS4i63roJlmUSVWBxNhiIR6lsDMkY82SC1a0llWs4S4PNgoFrp
-         34RlLkFgMsuBkE6NMU0eIAnQTjbS/HE4RlH3OPz/VdCqZOtFTEuQymF2fkFqVZvSeC9i
-         APpwduXPMt3Tn++4taajSPyvk7PG7oqj7VN4Dq1pPmgi2lFgJ8E9cgpKbNb1/NjWVEZu
-         BpPXuBhrxDQN5OQEyLmvCGfj/YNXTobn3Y75DO4yVjk1yQzGArHhAWdVm78TPeWIUgcK
-         5fVg==
-X-Forwarded-Encrypted: i=1; AJvYcCV38w5qhaSlb2eo88Koo9RgM7ZqsENvTFv8x1ckBiJTKUOnFrr39Du18Ly6LyDGES5H8Q2co3Yt8IXTIjU=@vger.kernel.org, AJvYcCVpA4XQFpuHWf3+3qHTjuJWy+F0XVx94Je+6XSOvdtalmi3NxUkT0LUcdBJRu46QdSd7TXOp/JI0JxvSQ==@vger.kernel.org, AJvYcCWWNvHNpEVc/4s79BWszTEmIJPWzqKYE2nLCGX9vW/RKDeSYlVzW5tetNdMVKzeNrfou8hlJ2RLvEhvug==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAo6YJjXqjXYQd+9/jcl4cc3sOisPbDFEraAt5MCl84D2BnPpk
-	rvbZLfpHRVVjhO+Uu5gBkKeXp7GY1rpXPrV+xhrwHSr/bA27TUl9WjH+
-X-Gm-Gg: ASbGncswEVxnlpvecK819MWv5ohJAoGGYpkq8yIIBGC9mIff+7PImtT2bI+Y11sLSct
-	V05jCwjjD886K/Ana0Og9ho1ftcKApVFXa/IMpe+phL+2dIjt9GNklXzE8OkIcyJ+t/6r5KHh4V
-	EaAlcqfw0y6vrvBfa1EuL0sfjdukKDO8HUXs782cS1B6hNX9NvjsXEWBop4mH00f8DVT0zQP7Ii
-	6dBIxKtAAcVJOzuQCciSsRXmC1hUHlR1lsCjX2TyoTWJh3mwcCg/BpVVznxFLXhyBn8Xc9dFUSu
-	hF6FwysUE75laA2fakQilwSMboz9/s5rJPsIxej2hg6VuEPd/HZfRhu0d5a2JFO5nHY78obkwgo
-	FdoQMYt1t
-X-Google-Smtp-Source: AGHT+IFJqmkPD/xMbGwBXZGrXyFwki275AFmJligoT0yK4fE+E9Upt7H8FQdLTM+3nYtdYFvxxk6Bw==
-X-Received: by 2002:a05:6000:40ce:b0:3a3:68c7:e486 with SMTP id ffacd0b85a97d-3a368c7e67bmr2248890f8f.51.1747513806737;
-        Sat, 17 May 2025 13:30:06 -0700 (PDT)
+        bh=2gkpn3xaIBbZi1bxxpLiN+y0w6dCFyLFgmm6rxbmcas=;
+        b=dw13LKxKwBRv7l374NgdW0tBwU7hd9a1LFeQFivwFsRlMTMvZyJeZ6clSqyTFu20dQ
+         UYEygKNvC00+sOenaNVCPh5Wu5OLKuRE5p/niKSF2B3lVIsjCv9vuqllSQFPU39J99+y
+         J0yNL7eWbrjQ2u+/zb2SVZYWilKwqn892KDpVfJA77PznzzzNdVrLd14Md/l5Q8TJh6+
+         X8xuTajmCYdHDf2H3L+9g3Iac0abL8/pehjh3vFlk6dLEJDlulh6r4CNUmanAZrow2QG
+         Qjk1G3cEubAy5Kj/S4RMHMoKRXeNtM5aJPwFzNo3w4zeH+fJTKYT+HAeKY+Ercj4VhV5
+         rcjA==
+X-Forwarded-Encrypted: i=1; AJvYcCVIMf4d3YwcTpHo6ibU63lzVtVSV9FMp4sqhoQZLLtQx5nHfi5/Sdi/HYUQXZcoSlXRa8pl93ZsqNJJtw==@vger.kernel.org, AJvYcCVKjkiETB+Z1qEeuNUhxn2ogOBbwBgA4H5OnE8+sZsd2lqkjaXjwQTq4YuTsJqRz01XvBOvBOJVRC2eXYo=@vger.kernel.org, AJvYcCXpGlObklkNCnlRDgjc/ID6mABV/Bc8nZniqCtsZmG2I2iz+Gl2qWOibj0kpB9PIOGm/4E0xMEh6Szj8Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSeRrCiWpdluMsEMt3o8z/dTe7vjE4JuVWHtxV8ecoEOSxyC4y
+	PJmRqHt3Ae9GIiKhm7cPoqCtcB3k0IAnEw7ke4sEQErFJUSmRTMDo43kAgBuqQ==
+X-Gm-Gg: ASbGncu0FfFxGUDVusEoZYmxHUdSfpEvYFoagWK/Eo6Dg7vL3RK89Mh335M1En3qHns
+	3ZDP4mpct3Rf5jzaGxXaDHSUufxZRqdQypKxG5XWE3/mU71JdLkCv9WqR1ve8MvjSZPnX6gR8ST
+	Qt4py/OuZ+RsK4KMJwV85zmTzKo43qRVRjIOw6ouH+uoVLQyiCobxA9xCqhsvuyD1WTcaOIQ8a9
+	yb7SCapSdMqknxhGt6qF/EWXPYR3YmfUUwh6KkGyW6snuM/33LcpD9FCNW1RcXMwPj3XKzl3co6
+	IRE1HDCSxmlYTfUm9i61bt3F6DXbWYK75kksPclefugyciV3ltKLjNAWBv4JDUDRrtNcoUMzit4
+	snQ7/oufY
+X-Google-Smtp-Source: AGHT+IF4nmgt7DDatNcx/D0XJAtOOMwNnYCOY/5VUcm/4MWcQgU0UcD5GNCZqqVa1d3GOfAzhn0v3w==
+X-Received: by 2002:a05:6000:4010:b0:3a3:6b07:bdcc with SMTP id ffacd0b85a97d-3a36b07beebmr351310f8f.15.1747513958838;
+        Sat, 17 May 2025 13:32:38 -0700 (PDT)
 Received: from [10.100.102.74] (89-138-68-29.bb.netvision.net.il. [89.138.68.29])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a35ca8cb2dsm7162321f8f.84.2025.05.17.13.30.05
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442fd515bb5sm79959715e9.23.2025.05.17.13.32.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 May 2025 13:30:06 -0700 (PDT)
-Message-ID: <b208773f-aefc-4708-a2df-17c9f64be270@grimberg.me>
-Date: Sat, 17 May 2025 23:30:04 +0300
+        Sat, 17 May 2025 13:32:38 -0700 (PDT)
+Message-ID: <ca77a49b-e531-4ebe-abfd-c2f962910943@grimberg.me>
+Date: Sat, 17 May 2025 23:32:37 +0300
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -70,7 +70,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH net-next 09/10] nvme-tcp: use crc32c() and
  skb_copy_and_crc32c_datagram_iter()
-To: Eric Biggers <ebiggers@kernel.org>
+To: Eric Biggers <ebiggers@kernel.org>, Christoph Hellwig <hch@infradead.org>
 Cc: netdev@vger.kernel.org, linux-nvme@lists.infradead.org,
  linux-sctp@vger.kernel.org, linux-rdma@vger.kernel.org,
  linux-kernel@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
@@ -78,22 +78,23 @@ Cc: netdev@vger.kernel.org, linux-nvme@lists.infradead.org,
  Ard Biesheuvel <ardb@kernel.org>
 References: <20250511004110.145171-1-ebiggers@kernel.org>
  <20250511004110.145171-10-ebiggers@kernel.org>
- <8b4db290-00c0-4627-a03e-d39a22c56fcf@grimberg.me>
- <20250517172954.GA1239@sol>
+ <aCbAsCkTPMNE6Ogb@infradead.org> <20250516053100.GA10488@sol>
 Content-Language: en-US
 From: Sagi Grimberg <sagi@grimberg.me>
-In-Reply-To: <20250517172954.GA1239@sol>
+In-Reply-To: <20250516053100.GA10488@sol>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
->> Let's call it rcv_dgst (recv digest) and snd_dgst (send digest).
->> Other than that, looks good to me.
->>
->> Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
-> rcv_dgst would be awfully close to recv_ddgst which holds the on-wire digest
-> that is received.  I think I slightly prefer *_crc, since that helps
-> differentiate the in-progress values from the finalized values.
+>   	if (queue->hdr_digest && !req->offset)
+> -		nvme_tcp_hdgst(queue->snd_hash, pdu, sizeof(*pdu));
+> +		*(__le32 *)(pdu + 1) = nvme_tcp_hdgst(pdu, sizeof(*pdu));
 
-yea, sounds good.
+I'd move this assignment to a helper nvme_tcp_set_hdgst(), especially as it
+has two call-sites.
+
+Other than that,
+
+Reviewed-by: Sagi Grimberg <sagi@grimberg.me
+
 
