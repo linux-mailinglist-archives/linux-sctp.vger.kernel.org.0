@@ -1,46 +1,46 @@
-Return-Path: <linux-sctp+bounces-534-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-535-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A28FAABC5F5
-	for <lists+linux-sctp@lfdr.de>; Mon, 19 May 2025 19:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 02945ABC5FB
+	for <lists+linux-sctp@lfdr.de>; Mon, 19 May 2025 19:52:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2CF116FCD5
-	for <lists+linux-sctp@lfdr.de>; Mon, 19 May 2025 17:52:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71D92173C1B
+	for <lists+linux-sctp@lfdr.de>; Mon, 19 May 2025 17:52:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27BFE289341;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC293289817;
 	Mon, 19 May 2025 17:51:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g+NY6IHX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CpqOLcbd"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBE55288CA9;
-	Mon, 19 May 2025 17:51:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC11C28937F;
+	Mon, 19 May 2025 17:51:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747677118; cv=none; b=jmP/ptO+0Te+J8pyaJYsTQvVKKZ1bcYpyoEQXpGmdZzktmckoDbl0J/Y7npo4hxPnfGKzBf3caR9jHnwre+QxJkdV9MueOGCTCVJ4mBy+btUOgugze16kzeeCg+cs5hQb/OhgRjS1bPeGbxza5jBB48qKmWAaK8fbgfPM1e6Q9w=
+	t=1747677118; cv=none; b=AlRVVx8epQ6Nkz/SG0mIfyVSKNqlcWZAygAdvX0SvS74DK42it9mTHCv5msKZtnBpsBWN5PgMi/iiCU4EfzH+04j/tz7+C5f5BeBKEl4FEDarcBozWObZ3kEwEDoTq4g84TGtA2ZxieC8V1yY8noDbYF2GsSPrDJ2T7C7IQhyEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1747677118; c=relaxed/simple;
-	bh=CZeHbIh3l9QIcf9yTA+bjElzQVy8LoKCuirQSGJR4qw=;
+	bh=qXgV9satb45eNRR3L104eZrX/IdR9NTQp49GiqE+3gE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pep5Fn5zWh70qY71d8nmRkLaIHOQgJOlQKX97JuZnkYOsdfVFIdx9WNesqdfjU2aLdvLA3WpFb0+z/vxK7V6YIJ6l19e/YFi09FoDsd6KPNmRojCk8S/ztrMtMdlF9eS2oQ5umixYAb+lqVf65dQv/Fmh5DAsaQdY2WEdNR3jG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g+NY6IHX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63DBFC4CEED;
+	 MIME-Version; b=AA8BA3bCgbo/17a5+XGDobNMfDwbdl/DXYQJ0gsO7iQ48gLvEVMl6eAjU67U+gsA5P+ZtlsoRCu9py55ZGsAQU4L0DOM/5iuECOvmYhtDDc242tNsRTNkWH2KMA2BogGIEl69zI7BX2qYBtIsNWwEhUj32A3/jTajGO1ZzFUIPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CpqOLcbd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C762EC4CEF4;
 	Mon, 19 May 2025 17:51:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747677117;
-	bh=CZeHbIh3l9QIcf9yTA+bjElzQVy8LoKCuirQSGJR4qw=;
+	s=k20201202; t=1747677118;
+	bh=qXgV9satb45eNRR3L104eZrX/IdR9NTQp49GiqE+3gE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=g+NY6IHX2iV5SsY3RZYOow0Nztm2bCj7yjW+42uNiNSFXbjFwzEOzIa1yHobNoIhb
-	 Jv+foKP87FEXKxWolLkrodJKpVSjv4B9H6I+GRogdRK2Z4nuyzhOckT+8nJ5ZDO6u6
-	 bgTAfn5MWjHJOkFPnE22alDEqU8YZ7gFez4x/tPKtOifW0lsdtxFP/1nwDGl75C34T
-	 DU6mk33vfWRZVLao7AKYFosr0dpXFaWcwaOcY/RaNbU9mKu+Wae54MLODBQcPKkMR9
-	 oX6rrbKA+6GmCjpGtO2UdFB+En5qzUkjpnNSabxBiQDMB3ByfHC5K7WlUMoOQKfHsJ
-	 uP2ZUx4JCFUoA==
+	b=CpqOLcbddjxKZISEVtDFk+/IF3H693CmEJVHkGUHSaHVKbdhuQx70BGwFU7IJhx6B
+	 W9wBUwc+orbMN2pXbfpEvvH1D9aMRr+yqdI1KR9/l3/Niak2jcHpiC4sIZpASg0tre
+	 +jl753yjFJx4dVmw+VsnvnsiE2lSDoeFw3P5kSSRIgzBPOSQMSZ6u6Ulh/b8xCDVwJ
+	 K8zXhQlSxcM+ycmCftLdAnVhnhQGJzjQY+90r6Iz1oIJqYBhb8SffJGFKCwGY2Bq3h
+	 NBUKYcVpi4rS2s2i+jW/wj5iz878bGlGCNufREw1AFZb7ALnlGC5fjgFOjvb526ZeC
+	 RsZdP9qnwDJBw==
 From: Eric Biggers <ebiggers@kernel.org>
 To: netdev@vger.kernel.org
 Cc: linux-nvme@lists.infradead.org,
@@ -50,10 +50,11 @@ Cc: linux-nvme@lists.infradead.org,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
 	Sagi Grimberg <sagi@grimberg.me>,
-	Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH v2 03/10] net: use skb_crc32c() in skb_crc32c_csum_help()
-Date: Mon, 19 May 2025 10:50:05 -0700
-Message-ID: <20250519175012.36581-4-ebiggers@kernel.org>
+	Ard Biesheuvel <ardb@kernel.org>,
+	Bernard Metzler <bmt@zurich.ibm.com>
+Subject: [PATCH v2 04/10] RDMA/siw: use skb_crc32c() instead of __skb_checksum()
+Date: Mon, 19 May 2025 10:50:06 -0700
+Message-ID: <20250519175012.36581-5-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250519175012.36581-1-ebiggers@kernel.org>
 References: <20250519175012.36581-1-ebiggers@kernel.org>
@@ -71,45 +72,68 @@ Instead of calling __skb_checksum() with a skb_checksum_ops struct that
 does CRC32C, just call the new function skb_crc32c().  This is faster
 and simpler.
 
+Reviewed-by: Bernard Metzler <bmt@zurich.ibm.com>
 Signed-off-by: Eric Biggers <ebiggers@google.com>
 ---
- net/core/dev.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/infiniband/sw/siw/Kconfig |  1 +
+ drivers/infiniband/sw/siw/siw.h   | 22 +---------------------
+ 2 files changed, 2 insertions(+), 21 deletions(-)
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index d93bee5eb5d8c..430b3d3240d8f 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -3597,11 +3597,11 @@ int skb_checksum_help(struct sk_buff *skb)
- EXPORT_SYMBOL(skb_checksum_help);
- 
- #ifdef CONFIG_NET_CRC32C
- int skb_crc32c_csum_help(struct sk_buff *skb)
- {
--	__le32 crc32c_csum;
-+	u32 crc;
- 	int ret = 0, offset, start;
- 
- 	if (skb->ip_summed != CHECKSUM_PARTIAL)
- 		goto out;
- 
-@@ -3625,14 +3625,12 @@ int skb_crc32c_csum_help(struct sk_buff *skb)
- 
- 	ret = skb_ensure_writable(skb, offset + sizeof(__le32));
- 	if (ret)
- 		goto out;
- 
--	crc32c_csum = cpu_to_le32(~__skb_checksum(skb, start,
--						  skb->len - start, ~(__u32)0,
--						  crc32c_csum_stub));
--	*(__le32 *)(skb->data + offset) = crc32c_csum;
-+	crc = ~skb_crc32c(skb, start, skb->len - start, ~0);
-+	*(__le32 *)(skb->data + offset) = cpu_to_le32(crc);
- 	skb_reset_csum_not_inet(skb);
- out:
- 	return ret;
+diff --git a/drivers/infiniband/sw/siw/Kconfig b/drivers/infiniband/sw/siw/Kconfig
+index ae4a953e2a039..186f182b80e79 100644
+--- a/drivers/infiniband/sw/siw/Kconfig
++++ b/drivers/infiniband/sw/siw/Kconfig
+@@ -1,10 +1,11 @@
+ config RDMA_SIW
+ 	tristate "Software RDMA over TCP/IP (iWARP) driver"
+ 	depends on INET && INFINIBAND
+ 	depends on INFINIBAND_VIRT_DMA
+ 	select CRC32
++	select NET_CRC32C
+ 	help
+ 	This driver implements the iWARP RDMA transport over
+ 	the Linux TCP/IP network stack. It enables a system with a
+ 	standard Ethernet adapter to interoperate with a iWARP
+ 	adapter or with another system running the SIW driver.
+diff --git a/drivers/infiniband/sw/siw/siw.h b/drivers/infiniband/sw/siw/siw.h
+index 385067e07faf1..d9e5a2e4c471a 100644
+--- a/drivers/infiniband/sw/siw/siw.h
++++ b/drivers/infiniband/sw/siw/siw.h
+@@ -691,33 +691,13 @@ static inline void siw_crc_oneshot(const void *data, size_t len, u8 out[4])
+ 	siw_crc_init(&crc);
+ 	siw_crc_update(&crc, data, len);
+ 	return siw_crc_final(&crc, out);
  }
- EXPORT_SYMBOL(skb_crc32c_csum_help);
+ 
+-static inline __wsum siw_csum_update(const void *buff, int len, __wsum sum)
+-{
+-	return (__force __wsum)crc32c((__force __u32)sum, buff, len);
+-}
+-
+-static inline __wsum siw_csum_combine(__wsum csum, __wsum csum2, int offset,
+-				      int len)
+-{
+-	return (__force __wsum)crc32c_combine((__force __u32)csum,
+-					      (__force __u32)csum2, len);
+-}
+-
+ static inline void siw_crc_skb(struct siw_rx_stream *srx, unsigned int len)
+ {
+-	const struct skb_checksum_ops siw_cs_ops = {
+-		.update = siw_csum_update,
+-		.combine = siw_csum_combine,
+-	};
+-	__wsum crc = (__force __wsum)srx->mpa_crc;
+-
+-	crc = __skb_checksum(srx->skb, srx->skb_offset, len, crc,
+-			     &siw_cs_ops);
+-	srx->mpa_crc = (__force u32)crc;
++	srx->mpa_crc = skb_crc32c(srx->skb, srx->skb_offset, len, srx->mpa_crc);
+ }
+ 
+ #define siw_dbg(ibdev, fmt, ...)                                               \
+ 	ibdev_dbg(ibdev, "%s: " fmt, __func__, ##__VA_ARGS__)
+ 
 -- 
 2.49.0
 
