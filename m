@@ -1,47 +1,47 @@
-Return-Path: <linux-sctp+bounces-543-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-544-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1859AABD19F
-	for <lists+linux-sctp@lfdr.de>; Tue, 20 May 2025 10:16:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 347C6ABD1A4
+	for <lists+linux-sctp@lfdr.de>; Tue, 20 May 2025 10:16:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C07EC188E7E0
-	for <lists+linux-sctp@lfdr.de>; Tue, 20 May 2025 08:16:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 038D8189ADC7
+	for <lists+linux-sctp@lfdr.de>; Tue, 20 May 2025 08:16:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A480425F78B;
-	Tue, 20 May 2025 08:16:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F0BA262FD4;
+	Tue, 20 May 2025 08:16:12 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
+Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 023A325EFBC;
-	Tue, 20 May 2025 08:16:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.178.238
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CD612627EC;
+	Tue, 20 May 2025 08:16:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.166.238
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747728962; cv=none; b=joW0NCSwa5pW6k3q/TmoOuSZSxlMlpX918oswdsqLYRU1FsdUDlvhVDNw0sgujrDdavWSuuXW6IRhvdUPjX5YpS3B0iUdwUTnQNnnH7VoEevnldditKra9mBSYCAGMJYZGc6Jq8JrnQKjTbu6+Qk0J4MdGGFr0w7r5cYZMgqq7E=
+	t=1747728972; cv=none; b=FUDn5a43m5Wnrii3UX6ZbKWeY2vFYNK5l4qjhEGOkB60jgUsZd7d/7byxy8HblfOyNfO63stSwYry+JlFCyL33NUTUnsJGyD6wYeKePicl8RrOjhXdvVhm9c8m5sDTChnaGMkh3hAYor4k7jGZzIP/gO71jj4CUo9eWsHcQQJkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747728962; c=relaxed/simple;
+	s=arc-20240116; t=1747728972; c=relaxed/simple;
 	bh=eRsh0sf/CoJclcRpAgRyFSFVd6eQ6h9RgcAOCC82rC0=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tqfzWpZzEGhM8xTWrRvcvmtlVJMosnSbkl4PH8F5aWXQm9Uj3B22BgR9M6sLA2+kAAIN/vZhPtz03EGRGJJMe3gFYHDqKWVVq3Rw9z7dCvaBbX4eafa1WdeUOIcVY6AgCXEDCRMAH/h9HyI1ErDC3NbXjjjcMgzFD4LTRrbCCj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; arc=none smtp.client-ip=205.220.178.238
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=UUeug/7C6OoXPDDEPs6i2xMCpB/6s+uoeW+45OEqTFoHEQE4pE5CErBLmDm8UYPoolhYosbEPgFy+MCCD57uy2aAdXLFRrSZNDRGuBy9gWZqi0FOs5Y77OkdQrsj88m3+UL3Xw0Q/xfCREKfmqyVLgZV1uj3fT7vWVr3OaF+Alk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; arc=none smtp.client-ip=205.220.166.238
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
-Received: from pps.filterd (m0250811.ppops.net [127.0.0.1])
-	by mx0a-0064b401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54K4qS6p014612;
-	Tue, 20 May 2025 08:15:45 GMT
+Received: from pps.filterd (m0250809.ppops.net [127.0.0.1])
+	by mx0a-0064b401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54K50mgE003122;
+	Tue, 20 May 2025 01:16:01 -0700
 Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.wrs.com [147.11.82.252])
-	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 46pfp0u0mk-1
+	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 46psykjmkq-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Tue, 20 May 2025 08:15:45 +0000 (GMT)
+	Tue, 20 May 2025 01:16:00 -0700 (PDT)
 Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
  ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.43; Tue, 20 May 2025 01:15:28 -0700
+ 15.1.2507.43; Tue, 20 May 2025 01:15:44 -0700
 Received: from pek-lpg-core1.wrs.com (147.11.136.210) by
  ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
- 15.1.2507.43 via Frontend Transport; Tue, 20 May 2025 01:15:18 -0700
+ 15.1.2507.43 via Frontend Transport; Tue, 20 May 2025 01:15:34 -0700
 From: <jianqi.ren.cn@windriver.com>
 To: <gregkh@linuxfoundation.org>, <stable@vger.kernel.org>
 CC: <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
@@ -49,9 +49,9 @@ CC: <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
         <lucien.xin@gmail.com>, <davem@davemloft.net>, <edumazet@google.com>,
         <kuba@kernel.org>, <pabeni@redhat.com>, <linux-sctp@vger.kernel.org>,
         <netdev@vger.kernel.org>
-Subject: [PATCH 5.15.y] sctp: add mutual exclusion in proc_sctp_do_udp_port()
-Date: Tue, 20 May 2025 16:15:32 +0800
-Message-ID: <20250520081532.1955511-1-jianqi.ren.cn@windriver.com>
+Subject: [PATCH 6.1.y] sctp: add mutual exclusion in proc_sctp_do_udp_port()
+Date: Tue, 20 May 2025 16:15:48 +0800
+Message-ID: <20250520081548.1955523-1-jianqi.ren.cn@windriver.com>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
@@ -61,21 +61,21 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Authority-Analysis: v=2.4 cv=F8pXdrhN c=1 sm=1 tr=0 ts=682c3a31 cx=c_pps a=/ZJR302f846pc/tyiSlYyQ==:117 a=/ZJR302f846pc/tyiSlYyQ==:17 a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8 a=1XWaLZrsAAAA:8 a=bC-a23v3AAAA:8 a=hSkVLCK3AAAA:8 a=pGLkceISAAAA:8 a=t7CeM3EgAAAA:8
+X-Authority-Analysis: v=2.4 cv=a8kw9VSF c=1 sm=1 tr=0 ts=682c3a40 cx=c_pps a=/ZJR302f846pc/tyiSlYyQ==:117 a=/ZJR302f846pc/tyiSlYyQ==:17 a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8 a=1XWaLZrsAAAA:8 a=bC-a23v3AAAA:8 a=hSkVLCK3AAAA:8 a=pGLkceISAAAA:8 a=t7CeM3EgAAAA:8
  a=ZVfp-KmhnKN58tcK2D4A:9 a=-FEs8UIgK8oA:10 a=FO4_E8m0qiDe52t0p3_H:22 a=cQPPKAXgyycSBL8etih5:22 a=FdTzh2GWekK77mhwV6Dw:22
-X-Proofpoint-GUID: XoJNS2vjhIl5_V4ICFwSncqb1Ujh0dll
-X-Proofpoint-ORIG-GUID: XoJNS2vjhIl5_V4ICFwSncqb1Ujh0dll
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTIwMDA2NyBTYWx0ZWRfX3+h5PGtuHbwF 3Hu+97fggtMZiroUq4sma/eWD25xKvnh3eetieZN0mI40rmiCqP8bGZwf73vpsi1ruZNvdAfBdC xgjSgLbS6E3Gq8XlxR+2qp4Crno8fkozMWPLtasT+QUgcCdxRS0SWZMcojSQZKpX2s0NdR/5j2u
- FPx0Fk1BCBC0DNHfaUJOD79vSVKQ5XBzasQlohqJxWeBm/3rr3Ia4rQrr3JEhVOGM1Iv7KipZXw IR0ZjszXGf34ZMlReI0qYgWLyqFNQYtYqCZdHJ9OtaewF691luxQ/1nUiurnAVQ0ILamkAifn+r 8E7xDCTX31ZDF6x8a4J58IHtiflblbW35zGdUIMromTeJ3+FxQqE7+ll61CUFCLK1dQi4bZ5drx
- pFu+ez+q3UNd5WIg9yWMadsc3X7e7gk9S61cxQmaVrH9fq3qgxlL4pkTEY1Ln8ScQbpIC6Lp
+X-Proofpoint-GUID: Q0e2b9P62_p93hHRH-M1oBjsmDDLU_mb
+X-Proofpoint-ORIG-GUID: Q0e2b9P62_p93hHRH-M1oBjsmDDLU_mb
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTIwMDA2NyBTYWx0ZWRfXzddR/Il853Ss 0omsDqdzcpaY7IZvy9MnSU9eho5vbQ6R5B1VL9r+opTl11XkBpqKRLFCgK/oFY2+IlIB7ncO1UT V78C9TEggU4hmSuA6HPLd30IT2+YHYvuxWB0tlB8+frf3iJnXQrkupbh8C1wHrOkhpn6L6SUdbi
+ cWhHwq/Gu/YZioIJhhZDdo8hdUV/ZWJMC7tfYlir7QAxbkdiRRDVjkG1MHPfNX+DnUMMb5qONwa hM3Gwfad/XdE0Tt+qo1P2Digxq1Uw1tcJ2ymgiiuo6JLgB0wNCDJzZqzzYSBXBRZ/88XSi47r2a /2BqsF3xv3tTAA4d7MBgqbLgt+SuB5RVtGg98wXhVNtbTxI+w5AQcxQfeojialdoJfWvHZ3a/KJ
+ SvjC9vSIBDNMuBVJLI8N0R2EWkMH+DA79nhbSsWWqQUTzdgn2bHbd+6gHs2cfkKbaYtfumgR
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
  definitions=2025-05-20_03,2025-05-16_03,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- adultscore=0 mlxlogscore=999 priorityscore=1501 malwarescore=0 bulkscore=0
- mlxscore=0 suspectscore=0 impostorscore=0 lowpriorityscore=0 clxscore=1011
- classifier=spam authscore=0 authtc=n/a authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.21.0-2505070000
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
+ lowpriorityscore=0 adultscore=0 spamscore=0 bulkscore=0 phishscore=0
+ impostorscore=0 mlxlogscore=999 mlxscore=0 priorityscore=1501
+ clxscore=1015 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.21.0-2505070000
  definitions=main-2505200067
 
 From: Eric Dumazet <edumazet@google.com>
