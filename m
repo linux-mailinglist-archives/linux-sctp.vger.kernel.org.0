@@ -1,96 +1,91 @@
-Return-Path: <linux-sctp+bounces-546-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-547-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBA9BABDEA6
-	for <lists+linux-sctp@lfdr.de>; Tue, 20 May 2025 17:18:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25E28ABE8F8
+	for <lists+linux-sctp@lfdr.de>; Wed, 21 May 2025 03:21:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B85F1BA64EC
-	for <lists+linux-sctp@lfdr.de>; Tue, 20 May 2025 15:18:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 315477B5DFD
+	for <lists+linux-sctp@lfdr.de>; Wed, 21 May 2025 01:20:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81CB025A2D7;
-	Tue, 20 May 2025 15:18:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 957BE190472;
+	Wed, 21 May 2025 01:20:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WIkvmAtt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ozhp8qRN"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5026B25229C;
-	Tue, 20 May 2025 15:18:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DDA918FC80;
+	Wed, 21 May 2025 01:20:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747754311; cv=none; b=Vbt9yVQYIg/trOmt9P36y+W3mLnAJqin1NDSnogCxd2AgIgqXNmbHenrSydaboVPpbOcA2sW4WWEyGfwIPTLCtf0B03nUwbJn9l2Vi8cSxe1mO0Uz2SAxwPTNlxUmeS1Jop9NwwRp4ac38ppjla6q6kybI5hVdf9yl2k+tMaLxc=
+	t=1747790420; cv=none; b=clZw1ZMqlHWQcYhcU7LcN/OomA7ycv3NP5Iyod5KHForHIzz8FgZ61zrKwa8TDUmgbhpncoUJcG7JD9JyvRHiM6lQu3LP7DEGiMNIJ2Oum9NIjeKSqT1lg2u/2h5qCXsqYZLPlzUXl9gp+449uPltIporFJ35drWwgWyvpytptA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747754311; c=relaxed/simple;
-	bh=gOcAH/YL5VciW2jCfOJM+RDZl3zKyoeTRxoKCucXQKc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oNmkEERJHOsT0jVLXqV6syU2YG7UI19X5CVFnJpIomX9/PuNl8AGpn81o0b/x9XxDuHwzaZfjouNbhPcDIZfY4hYjDvOZR2YtQyvKLI0lpgpfAyi3QBJ2g1ZAUVKrLXIyKhc9MCWaW8eI7exBoGHgHKrFnbEdeuuI2ZXS26nCh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WIkvmAtt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A749C4CEEA;
-	Tue, 20 May 2025 15:18:30 +0000 (UTC)
+	s=arc-20240116; t=1747790420; c=relaxed/simple;
+	bh=X3CVAGPtJAeUMBOAhMThiN5wbimJFSIBytMVTLCCCsI=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=l0flLVx+wL2wHbsIww2IHkkrLanpxuqtsXfDYyhQeKa5AzC5PjD4VxW+XlcXdKfQLWi45xc8+kZrNPTion3xBV/RR5fogJf/29OK1jI44wGtLyAG5b0OLbUfUeUSfqwj3nGpVxbBB9CO/BlR+tjvIMlfqRQ/co3U7byC6VbRDoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ozhp8qRN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0E80C4CEE9;
+	Wed, 21 May 2025 01:20:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747754310;
-	bh=gOcAH/YL5VciW2jCfOJM+RDZl3zKyoeTRxoKCucXQKc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WIkvmAtt5TOeMvCDGBbPJgB4JjBBPqqSvNUUZs5g4513rRX5RxJkhlFPLNQkiiSyC
-	 kEEBnlMGbFy/UU2efYx4TS3uT1GkmLUB264f5DqVEAa1qu5AO0ZRlBcHoeOMvtBA6A
-	 dlCY/nTm3or20KEx0j9YfHik5x+PVGGk4VLjiEfUS3XV41Kx+8Mm28DQSJyEUF+vYJ
-	 OZB17ZWCrXlQ1JSY2UVx+PS5QsvjVLI4un1blQBMuTIzblz8vEuUEAWl+bbvgzxDeR
-	 +cE1X4cBIWWYk68/zYN0cY9FKSUESNiQcbeSYO/YpWyDDzCytghiSikW029Z+g86CS
-	 Ha7+ngUMOWpVw==
-Date: Tue, 20 May 2025 08:18:17 -0700
-From: Eric Biggers <ebiggers@kernel.org>
-To: Leon Romanovsky <leon@kernel.org>
-Cc: Bernard Metzler <BMT@zurich.ibm.com>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-	"linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-	"linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	Sagi Grimberg <sagi@grimberg.me>, Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH net-next 04/10] RDMA/siw: use skb_crc32c() instead of
- __skb_checksum()
-Message-ID: <20250520151817.GA1249@sol>
-References: <20250511004110.145171-1-ebiggers@kernel.org>
- <20250511004110.145171-5-ebiggers@kernel.org>
- <BN8PR15MB2513872CE462784A1A4E50B7999CA@BN8PR15MB2513.namprd15.prod.outlook.com>
- <20250520131841.GH7435@unreal>
+	s=k20201202; t=1747790419;
+	bh=X3CVAGPtJAeUMBOAhMThiN5wbimJFSIBytMVTLCCCsI=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=ozhp8qRN43gjD0eESqhjCzep/HMLodsCUPy9+5FFuWDyE6z5k5uf63Q2wD7e0JQLv
+	 cKdHrgEvaidVysDoFXE7TW+AeU4ITMG0MqNz/pC7Q4pCkjOxcZJk2Lat6wnvrgTDkb
+	 SmM7EcRbmSlnZ9rGHHOZggAeiZWZIKF4RNZYX55PQ1DTUiC/mJc1ms/amOPFqXolv8
+	 oEXTzN2dx3b2QDKCOWqhslMKb/rGMVtYzV/VDKUbC4oXzSBPbHOFlDDr/baXhMjMao
+	 1HCqQ8SMg82CR5zUL3CNkEn0/rmxa/lrb0ZDPggH0MqA5pYmbbW/DI2mzwpkCoLeFx
+	 SBYTxRHLHjz8g==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAD6D380AAD0;
+	Wed, 21 May 2025 01:20:56 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250520131841.GH7435@unreal>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] sctp: Do not wake readers in __sctp_write_space()
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <174779045574.1526198.16807580460563727004.git-patchwork-notify@kernel.org>
+Date: Wed, 21 May 2025 01:20:55 +0000
+References: <20250516081727.1361451-1-oss@malat.biz>
+In-Reply-To: <20250516081727.1361451-1-oss@malat.biz>
+To: Petr Malat <oss@malat.biz>
+Cc: linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+ marcelo.leitner@gmail.com, lucien.xin@gmail.com
 
-On Tue, May 20, 2025 at 04:18:41PM +0300, Leon Romanovsky wrote:
-> On Mon, May 19, 2025 at 09:04:04AM +0000, Bernard Metzler wrote:
-> > 
-> 
-> <...>
-> 
-> > > 
-> > 
-> > Thanks Eric!
-> > Works fine. Correct checksum tested against siw and cxgb4 peers.
-> > 
-> > Reviewed-by: Bernard Metzler <bmt@zurich.ibm.com>
-> 
-> This patch should go through RDMA repository, Please resend it.
-> 
-> Thanks
+Hello:
 
-It depends on patches 1-2, and patches 6-7 depend on this one.  So your proposal
-would require that we drag this out over 3 cycles (patches 1-3,5,8-10 in net in
-6.16, patch 4 in RDMA in 6.17, patches 6-7 in net in 6.18).  Can we please just
-take the whole series through net in 6.16?  There aren't any conflicts.
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-- Eric
+On Fri, 16 May 2025 10:17:28 +0200 you wrote:
+> Function __sctp_write_space() doesn't set poll key, which leads to
+> ep_poll_callback() waking up all waiters, not only these waiting
+> for the socket being writable. Set the key properly using
+> wake_up_interruptible_poll(), which is preferred over the sync
+> variant, as writers are not woken up before at least half of the
+> queue is available. Also, TCP does the same.
+> 
+> [...]
+
+Here is the summary with links:
+  - sctp: Do not wake readers in __sctp_write_space()
+    https://git.kernel.org/netdev/net-next/c/af295892a7ab
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
