@@ -1,46 +1,46 @@
-Return-Path: <linux-sctp+bounces-568-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-569-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 064C5ACD2E6
-	for <lists+linux-sctp@lfdr.de>; Wed,  4 Jun 2025 03:12:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69F37ACD387
+	for <lists+linux-sctp@lfdr.de>; Wed,  4 Jun 2025 03:19:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9FF73A1232
-	for <lists+linux-sctp@lfdr.de>; Wed,  4 Jun 2025 01:11:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 513D11756D4
+	for <lists+linux-sctp@lfdr.de>; Wed,  4 Jun 2025 01:18:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B261E25CC6E;
-	Wed,  4 Jun 2025 00:59:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4357E264A76;
+	Wed,  4 Jun 2025 01:02:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IG2Wl491"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UFPryiza"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F5625CC5A;
-	Wed,  4 Jun 2025 00:59:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A003202961;
+	Wed,  4 Jun 2025 01:02:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748998794; cv=none; b=kzGlU95o0jtG+PpED9Cd11yLuS3P9rUcXnimKfb4sTnKlSabNgUh8pTn9G2W3Y+AKRKmVGm2YC/ijqSvreCVeQDIq1efsneNj8CuX2aZTGFIJ5XGz2VbNZrWUpH8JidYJN+GLYEWdS9GWg8seW3dxV7jaUWkS3AWa9bdFs89VzY=
+	t=1748998956; cv=none; b=Wc/+Z6J3T/Vf/NVpRyc5PXDw7w8RSp9HHe3XIBBRQ/FF0eJkTS/H3XecawWuxXnJQ39g8Gx0pol4cXwqOzqpSXq6LVTsvHRbJNTELT+OVmmoILNzfGoGB6VoxkxQ8BvCLqC//WpWzIdJj2gURQazkcbIpqX9H/2Dvbl2xuie6d0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748998794; c=relaxed/simple;
-	bh=XbjDtZGA81sTlSc5HaEVqzyX/b2ASvd7c8eC6cp+m2k=;
+	s=arc-20240116; t=1748998956; c=relaxed/simple;
+	bh=qRF0GB9M0xbizYuJeyiMlpyA5tApnc9Nb4DCyv2HXJI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eI9h7g/K3/sj32Txhu2Okt4I0DEOSospVDKqUxvl3Gz1va8kMoJ1cQYhSVX0nZ8NpaHrf7fWtohK7IfpFpzK/LegrqpewHYmZv2aQMV/+2cgxW8xW68C2iSn1lp7IVI+2+jVGdy5rT7AOeZc6RM1gtv8SiJxoYfK06EAcMqgq0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IG2Wl491; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78908C4CEED;
-	Wed,  4 Jun 2025 00:59:53 +0000 (UTC)
+	 MIME-Version:Content-Type; b=Ec+HuXOyytECEUlkrVD7wwcgOmwhMMtsoyULdY5T7VNb/9sFm4muevsw76olJDdmIJgoWQjHeVGGBShRr4mqiwx6xNc7N2MmOjSVYKCOTsiRs9J978qYZXqFMOmUgNXmg9qUWWqpxlUvwThvnSGEdqeIKRfZGmVT+sPpsi8fthE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UFPryiza; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0050AC4CEEF;
+	Wed,  4 Jun 2025 01:02:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748998794;
-	bh=XbjDtZGA81sTlSc5HaEVqzyX/b2ASvd7c8eC6cp+m2k=;
+	s=k20201202; t=1748998956;
+	bh=qRF0GB9M0xbizYuJeyiMlpyA5tApnc9Nb4DCyv2HXJI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IG2Wl491YAHRTQTFK04NKrKI3f0UnIrciOIIyMOODD80siig+ccCMRKX2QTnIDv9C
-	 amRgB2lRDktM/7MxpBQG7WxB4fwpu07wxTk/nWYQ/S79vLsB78kme2Yi+bZp6J8NUX
-	 HgiaXGXz3dBwgb/IeQXrBnD0ClKnvqT6cW/Y2iBGj9crBCJyApmFPBfD/2dYQfV8Q6
-	 Jf1HXhoFzx9Xy8EE4OhIC852lXCjYRPTyCMs8Lb6rOVTlgVy+7DZRpSRy2E2uezfYI
-	 7qAmQDdGhEnck25qVlPn6z19kdd8jRUqb9BCn5CT7zft5q950p3C0PU14Np8KoMRU/
-	 9PIqXarzpeNgA==
+	b=UFPryizaQgvCyh/4U6ORW83YLDuadLqxc3ZfsOVV97yDtOJIr7ixoWLdUFeU26xgx
+	 xLiKXOFF4UXCWeSNRPlPX4wAhig04m89idHllSw/QfmTscQrJJLFxC29Gk2WGY8VOK
+	 O8AeftsklYX5RnUWXWiArM1UxulV0+j0sOdPKR0hHx7O9eASlhV4md9jK/KfUoGxMP
+	 s33TZwQ1aXJRCGvCet2yvTdbFcJAZ62cWNI2jqkuib0xSyZ5poXyE5HslKGLQUcFix
+	 Qr2eSGP2RQEv+2vC8XfbPiuOj2OjSghFcsupBBJ1Ci4GYRq9qbPQ/6kTRtWHMGX2Z8
+	 /OAW2WaTX+Dgg==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -50,12 +50,12 @@ Cc: Petr Malat <oss@malat.biz>,
 	Sasha Levin <sashal@kernel.org>,
 	marcelo.leitner@gmail.com,
 	linux-sctp@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 16/93] sctp: Do not wake readers in __sctp_write_space()
-Date: Tue,  3 Jun 2025 20:58:02 -0400
-Message-Id: <20250604005919.4191884-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 11/62] sctp: Do not wake readers in __sctp_write_space()
+Date: Tue,  3 Jun 2025 21:01:22 -0400
+Message-Id: <20250604010213.3462-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250604005919.4191884-1-sashal@kernel.org>
-References: <20250604005919.4191884-1-sashal@kernel.org>
+In-Reply-To: <20250604010213.3462-1-sashal@kernel.org>
+References: <20250604010213.3462-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.31
+X-stable-base: Linux 6.6.92
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
@@ -134,10 +134,10 @@ functionality or significant risk.
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-index 53725ee7ba06d..b301d64d9d80f 100644
+index b84c5e0a76f52..adc04e88f349f 100644
 --- a/net/sctp/socket.c
 +++ b/net/sctp/socket.c
-@@ -9100,7 +9100,8 @@ static void __sctp_write_space(struct sctp_association *asoc)
+@@ -9094,7 +9094,8 @@ static void __sctp_write_space(struct sctp_association *asoc)
  		wq = rcu_dereference(sk->sk_wq);
  		if (wq) {
  			if (waitqueue_active(&wq->wait))
