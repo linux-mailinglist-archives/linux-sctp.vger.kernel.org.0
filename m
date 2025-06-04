@@ -1,140 +1,153 @@
-Return-Path: <linux-sctp+bounces-565-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-566-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96792AC68C6
-	for <lists+linux-sctp@lfdr.de>; Wed, 28 May 2025 14:05:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50CA3ACD134
+	for <lists+linux-sctp@lfdr.de>; Wed,  4 Jun 2025 02:53:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7245F1BA505E
-	for <lists+linux-sctp@lfdr.de>; Wed, 28 May 2025 12:05:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF42B1898CBE
+	for <lists+linux-sctp@lfdr.de>; Wed,  4 Jun 2025 00:53:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7461B27AC56;
-	Wed, 28 May 2025 12:04:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 904B1199949;
+	Wed,  4 Jun 2025 00:51:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QFkRyBf0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="on6DCo+k"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA3AE215789;
-	Wed, 28 May 2025 12:04:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 665967082D;
+	Wed,  4 Jun 2025 00:51:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748433897; cv=none; b=sMX6/plhGoS81nNm6qpP+sE3ecqyJNzTIuUsfdGkz9l+AtWy9y9TnT0hI8elMm8kGOQPeaIyVk4HZfTPZeZ8t8RZbK/mPZzbrrBeVJK3RN2F1A2m2nInduPA/5rzdutMc5nrRp3cVENDrFL3lwli1X8Oxf0fU7T2e4s8cIAgwjU=
+	t=1748998292; cv=none; b=cfriJycPN0HJ/V+j24VQJ+mQEthSaLJiqE5lgknkmzVTH44LGbEF9zSLIXpMoNgV29QfN9WMPDyTrrlbEY4Jkvu/q2YE9UY5Lwtn4PJfxRHNWjXKX49PzzDZRClvaAL+OYLbuw1dyBup6UjBJSKpj5oDfr99V+mLMfM7DXSwRo8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748433897; c=relaxed/simple;
-	bh=RoGHGChwtbOy+sfOXKMb48wRo0w/WA7Y4z/Aca77rmE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=h4j15ejNHtFb1AZBaGJnlee2GQVQ0Eb/5i36nzv5zXOkKcKwVUjdOTAtRpxQDSvO+wReJlmiypfJjRBFbNEbV6iK9xpANbSh4x/rust1h4FYO2DYO9x8ly754Enc/F2gr3RcoZ1GShHNyMLOvjlMoEwi1o5ybQHTqvVwc5yd1oU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QFkRyBf0; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-442eb5d143eso47210205e9.0;
-        Wed, 28 May 2025 05:04:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748433894; x=1749038694; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4VmHlr7Z4zrk9pRHBfeJ2K5eXUzwBXbKq6/2Cos+GoY=;
-        b=QFkRyBf0QQM3yvXRnt23Lkg2NNKOVGMdkY06gLnLnj1B1xbggor145iK/19ptcJkIT
-         J4mTeLPB9oIrkcf/68CmlG0J9fFxXeY/dsUBrvsDeqSxhNMFL7c6FHAV2PXsOpcr5lhn
-         7dFEIiI1rd7vAwFMdL9AGdnt57QBZP1dWDELpsaZrCjIuE3VK13IvD65MfS9Nty5cmoG
-         M4iAaqIy1dluuT2j4irRBie3PL5T8iq/ex7d02StJPT5XnOo7gNYujX6tO3EensmKJoU
-         nuA3q0/YHkoRv0+ZmFhLbuoQMi4eUsnzpM5U/0YBcCZloELigZD5TSqPDlgPA+2/sD+2
-         8qqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748433894; x=1749038694;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4VmHlr7Z4zrk9pRHBfeJ2K5eXUzwBXbKq6/2Cos+GoY=;
-        b=VNKbZguJv4Yo30+IEUKxOrQ4QdRlKGpancSqJGvtMyrOZJ9b0x3Coxk3fvRW0iNITN
-         40W+P30WmblzB/4RLlYT6hI+M0HLXemwkhW0VSs1T7JR/QUCv8xgr/dy8wn+ZsAJzOkn
-         7ziPUzYqi3QDiN2yEVpaqzRt6NP18SnZvgwYA5APLuOHbZ9Wj74bsXJeoXgFhiMkp6Lq
-         7dE+iJU5QlsHrtiP5cMnnejNN1L6AD1tU8rybqiT72vHjRx4AhtxPd1+tpCI2VC6sPWR
-         P8LwRE9Nd8VLaw+Pgyk13T9K8PA1Jx5ZXgAo0RR0zW7uGs3c2o1yHLFfqo5+4zSFwR9s
-         Tt4A==
-X-Forwarded-Encrypted: i=1; AJvYcCVi8iLET6R7KX//Wg9kGuyD4dLMXIephQddm9IWH//QiPwxdBacPT0qSkoboz9GM3olmW4Mamvu@vger.kernel.org, AJvYcCWzIGyBw4OfdGdbTZ6UTAivhvD/eBpE/wkkg/infjEtei05HCeKo0KrLx5gzaaFoSZfYDyZ62Doq1ji@vger.kernel.org
-X-Gm-Message-State: AOJu0Yym1cx5FDvX+7u8mEzb22MaoBpii4EKlwOCKUbADlu6Z9AsO6Vi
-	O1l/XbbA9eMj/WEVDOqflYmqjUs6oyBxFUn9neTiihHrz7gu+IT3/35b
-X-Gm-Gg: ASbGncsIbsIln6zA8aH1G/CNez3xy573tGLPrPhUWmPS2sDbiHZ2hDOkeQ2dFHC9X7N
-	lDOaJwx1xjM4avASic3+7t4q7UD/+/zjCxquI6nt6XZg6Imyri7yk2U5GEbGVRhV6HpnkpmBBix
-	zL8dFU8XbX3mMm8U4siDGu/UpHw5KISPD+oMr9Bf9uRafzG1Eag2BFGsLdPxZpxFkqVikhr5d6d
-	J8HddHYQ1by87uHnfY3ko4S1OExpIjAuNDs2Il47ZWl+4KtsT19faIblQB5F6wSZq0hGnDF/s0P
-	FjLZwi58a0XU2OwNOazzj0tGVO9QzzQqOglWNmnePm4xH0Fgivk6yfhcLvVcl77LLdOgehkCJWT
-	tMpGCPJkDNiyxGg==
-X-Google-Smtp-Source: AGHT+IFn1yyvWoI5RoHYwFSLD7Ity5bFJc0yVWi6F1hSRC0s6DQRAWp9avrmnluhH8IXNnEbwpXfsQ==
-X-Received: by 2002:a05:600c:4448:b0:442:ff8e:11ac with SMTP id 5b1f17b1804b1-44c91ad6fd3mr145503345e9.12.1748433893551;
-        Wed, 28 May 2025 05:04:53 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-450787cc3b9sm15663375e9.26.2025.05.28.05.04.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 May 2025 05:04:53 -0700 (PDT)
-Date: Wed, 28 May 2025 13:04:45 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Xin Long <lucien.xin@gmail.com>
-Cc: Benjamin Poirier <benjamin.poirier@gmail.com>, Christoph Hellwig
- <hch@lst.de>, marcelo.leitner@gmail.com, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- linux-sctp@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH] sctp: mark sctp_do_peeloff static
-Message-ID: <20250528130445.391f90ca@pumpkin>
-In-Reply-To: <CADvbK_d_3YQh0s_aOts3YiyHu_uxUxO4okCZDdi=+F4xbVnmKg@mail.gmail.com>
-References: <20250526054745.2329201-1-hch@lst.de>
-	<CADvbK_d-dhZB-j9=PtCtsnvdmx980n7m8hEDrPnv+h6g7ijF-w@mail.gmail.com>
-	<aDTDOgqCrVryvr0_@f4>
-	<CADvbK_d_3YQh0s_aOts3YiyHu_uxUxO4okCZDdi=+F4xbVnmKg@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	s=arc-20240116; t=1748998292; c=relaxed/simple;
+	bh=XbjDtZGA81sTlSc5HaEVqzyX/b2ASvd7c8eC6cp+m2k=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LY34tV9TEYqt4aB2EoGc5T2/t8cMQLKGA9MZxriHlx06H4SeUwvI9mxdw+rPqmZGNJe9BM4ZEzGD60+xCcQK1ekeNmxyGJEWh+YRYIHaOPU1mlGj48GYad/GBNwdMw/xMsO77curNyRXNGyCIUyUDPWpzZUi8f3eoI7P8OTWC/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=on6DCo+k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56732C4CEF2;
+	Wed,  4 Jun 2025 00:51:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748998292;
+	bh=XbjDtZGA81sTlSc5HaEVqzyX/b2ASvd7c8eC6cp+m2k=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=on6DCo+kflf/GwNZ/GTyAZJu23P4eMr42NlzpIgFp3JS8GKb2RMrdJFeqWnHfqwxy
+	 n6l1brvKbuTIEqoQgiVphL8iiZ5dG/Zkxa/YqR4pPRKkkQYvE9pql7ZNPoGsVsNuD7
+	 4hI9uIbifQVoNFqzLl46r9evgnth/qp+YwgPSlBCJGNp8cLIt5TBljxF3CAf/Hy1HU
+	 nZBo4ulZx+0oDdAMraTZWh/f64c6oQMeT262p73ALPESZ+/rQtArTVGQ0YAUXEehqr
+	 QUU8/FfXY+W3/5R7TqtKFyeU5Xvz19u1vQ22QNFTZTpPbYGcgVkLRCIYiLwgaT30pe
+	 SQdqvJwWml9mQ==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Petr Malat <oss@malat.biz>,
+	Xin Long <lucien.xin@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	marcelo.leitner@gmail.com,
+	linux-sctp@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.15 020/118] sctp: Do not wake readers in __sctp_write_space()
+Date: Tue,  3 Jun 2025 20:49:11 -0400
+Message-Id: <20250604005049.4147522-20-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250604005049.4147522-1-sashal@kernel.org>
+References: <20250604005049.4147522-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.15
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, 27 May 2025 10:23:37 -0400
-Xin Long <lucien.xin@gmail.com> wrote:
+From: Petr Malat <oss@malat.biz>
 
-> On Mon, May 26, 2025 at 3:38=E2=80=AFPM Benjamin Poirier
-> <benjamin.poirier@gmail.com> wrote:
-> >
-> > On 2025-05-26 14:25 -0400, Xin Long wrote: =20
-> > > On Mon, May 26, 2025 at 1:47=E2=80=AFAM Christoph Hellwig <hch@lst.de=
-> wrote: =20
-> > > >
-> > > > sctp_do_peeloff is only used inside of net/sctp/socket.c,
-> > > > so mark it static.
-...
+[ Upstream commit af295892a7abbf05a3c2ba7abc4d81bb448623d6 ]
 
-> > I don't see a problem with marking sctp_do_peeloff() static again.
-> > =20
-> > > While there=E2=80=99s no known in-tree usage beyond SCTP itself, we c=
-an=E2=80=99t be
-> > > sure whether this function has been used by out-of-tree kernel module=
-s. =20
-> >
-> > The mainline kernel does not need to cater to out-of-tree users. =20
-> Thank you for chiming in.
->=20
-> I didn't know it was exported for the in-tree kernel dlm, and this
-> patch should be applied to net-next.
+Function __sctp_write_space() doesn't set poll key, which leads to
+ep_poll_callback() waking up all waiters, not only these waiting
+for the socket being writable. Set the key properly using
+wake_up_interruptible_poll(), which is preferred over the sync
+variant, as writers are not woken up before at least half of the
+queue is available. Also, TCP does the same.
 
-The most likely module use would be bpf or io_uring.
-But they'd probably end up using the sockopt interface (the same
-as applications).
+Signed-off-by: Petr Malat <oss@malat.biz>
+Acked-by: Xin Long <lucien.xin@gmail.com>
+Link: https://patch.msgid.link/20250516081727.1361451-1-oss@malat.biz
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
 
-Mind you 'peeloff' is all a strange idea that seems (to me) solving
-a problem that has nothing at all to do with sctp (as a protocol).
-The entire 'many-to-one' seems to be there to avoid the overhead
-of a lot of sockets when the data data is low.
-I'm sure epoll() solves the actual problem.
+Based on my analysis of the commit and comparison with similar
+historical commits, here is my assessment: **YES** This commit should be
+backported to stable kernel trees. ## Detailed Analysis: ### 1. **Core
+Issue Being Fixed** The commit addresses a specific bug in SCTP's
+`__sctp_write_space()` function where `wake_up_interruptible()` is
+called without setting a poll key. This causes `ep_poll_callback()` to
+wake up **all** waiters on the socket, not just those waiting for
+writability (EPOLLOUT events). This is inefficient and can cause
+spurious wake-ups for readers waiting on the same socket. ### 2. **Code
+Changes Analysis** The fix is minimal and surgical: ```c // Before:
+wake_up_interruptible(&wq->wait); // After:
+wake_up_interruptible_poll(&wq->wait, EPOLLOUT | EPOLLWRNORM |
+EPOLLWRBAND); ``` ### 3. **Consistency with Existing Patterns** Looking
+at `/home/sasha/linux/net/core/stream.c:41-42`, I can see that the fix
+aligns with established patterns in the kernel networking stack: ```c
+wake_up_interruptible_poll(&wq->wait, EPOLLOUT | EPOLLWRNORM |
+EPOLLWRBAND); ``` This is exactly what TCP and other protocols use in
+their write space callbacks, making SCTP consistent with the rest of the
+networking subsystem. ### 4. **Comparison with Historical Similar
+Commits** **Positive Indicators (matching YES backports):** - **Similar
+Commit #1**: Also SCTP-related, fixes socket behavior issue affecting
+users - **Similar Commit #4**: TCP polling fix with similar wake-up
+improvements - **Similar Commit #5**: SCTP wake-up related fix that was
+backported **Risk Assessment:** - The change is contained to a single
+function (`__sctp_write_space`) - No architectural changes - Follows
+existing kernel patterns exactly - Low regression risk - improves
+efficiency without changing core behavior ### 5. **Impact and Benefits**
+- **Performance improvement**: Eliminates spurious wake-ups for readers
+when only write space becomes available - **Correctness**: Ensures only
+appropriate waiters are woken (those waiting for EPOLLOUT) -
+**Consistency**: Aligns SCTP behavior with TCP and other protocols ###
+6. **Stable Tree Criteria Compliance** ✅ **Important bugfix**: Fixes
+incorrect polling behavior affecting performance ✅ **Minimal risk**:
+Single-line change following established patterns ✅ **Small and
+contained**: Only affects one function in SCTP ✅ **No new features**:
+Pure bugfix ✅ **No architectural changes**: Maintains existing
+interfaces ### 7. **Clear Author Intent** The commit message explicitly
+states this change makes SCTP behave "as TCP does," indicating this is a
+correctness fix to align with established networking patterns rather
+than a new feature. This commit exhibits all the characteristics of a
+good stable backport candidate: it's a small, contained bugfix that
+improves correctness and performance without introducing new
+functionality or significant risk.
 
-	David
+ net/sctp/socket.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+index 53725ee7ba06d..b301d64d9d80f 100644
+--- a/net/sctp/socket.c
++++ b/net/sctp/socket.c
+@@ -9100,7 +9100,8 @@ static void __sctp_write_space(struct sctp_association *asoc)
+ 		wq = rcu_dereference(sk->sk_wq);
+ 		if (wq) {
+ 			if (waitqueue_active(&wq->wait))
+-				wake_up_interruptible(&wq->wait);
++				wake_up_interruptible_poll(&wq->wait, EPOLLOUT |
++						EPOLLWRNORM | EPOLLWRBAND);
+ 
+ 			/* Note that we try to include the Async I/O support
+ 			 * here by modeling from the current TCP/UDP code.
+-- 
+2.39.5
 
 
