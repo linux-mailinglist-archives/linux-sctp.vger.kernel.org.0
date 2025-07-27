@@ -1,113 +1,160 @@
-Return-Path: <linux-sctp+bounces-593-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-594-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57BC7B1275E
-	for <lists+linux-sctp@lfdr.de>; Sat, 26 Jul 2025 01:26:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9FE4B13202
+	for <lists+linux-sctp@lfdr.de>; Sun, 27 Jul 2025 23:25:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 555487B9468
-	for <lists+linux-sctp@lfdr.de>; Fri, 25 Jul 2025 23:24:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D2221671EE
+	for <lists+linux-sctp@lfdr.de>; Sun, 27 Jul 2025 21:25:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57D2F261571;
-	Fri, 25 Jul 2025 23:25:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vCT6Nob5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FA7B242927;
+	Sun, 27 Jul 2025 21:25:39 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8E12609D4;
-	Fri, 25 Jul 2025 23:25:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9299623C4FB
+	for <linux-sctp@vger.kernel.org>; Sun, 27 Jul 2025 21:25:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753485950; cv=none; b=mZyktXEo4Zj6V8qoN/xaRi5tTROLWa4uHCDnkdjoyJiyTsnTnn3aVQtAJXqqYDT29CIG7YHqUEb6UAnhgULk23eDExTJpTQ1pnHojKgJStqiDeiC+ChjNXdRBGTnqiskX6Z0tLMhDRovS2GtVo0hu8ktLrTes5GO2QZ/bx9QvRw=
+	t=1753651539; cv=none; b=tTt0gZ0kW6rKSAet27BsN6hStQMD648e0Kodp1sYx6DbuvsLHSi9ShUzZwz0TbDP/WozT9lupXG4f+LBzDFjlbPm9vvBAK7HJh3HwmPGJ6YikxckD42AEao42Ui+QsG7H3g1JuTJpMKVTKvpwayCmmr0fW/5aIvp1wUEXj7FUjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753485950; c=relaxed/simple;
-	bh=k+gS4GQuoGUziec6fqwcYVbZRGH00+uvJgsa8lL3+8w=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=MXMqqiAW3Lr8V2fbvHEvjdUcjEHYxRf9jPrRcDhSrvQAdchLwEp9hlagM+03MvSZu2bvikg0Zn86Q9mdJN5P6csT94J/KzHOIirTwNKVsHMWgs7uIO/raibgIFSzdTCHm0BXQW+0uUImqLD8GivGZB84FQ5J0v5zbeDISOD1V+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vCT6Nob5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 025E6C4CEE7;
-	Fri, 25 Jul 2025 23:25:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753485950;
-	bh=k+gS4GQuoGUziec6fqwcYVbZRGH00+uvJgsa8lL3+8w=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=vCT6Nob53ktddXRTiLA22iurf8QTUFtVDRLwYuc6tyc4ZtFba8TWPyirgGONVqnEn
-	 qWJs3HcdFvOyjhO2y5ekUJEwu6HZlHQQuJteftEtJ+XLMUjEhc1rfJERKUN8FLq3Lj
-	 Qq18dCgTiE56LRrsa8OgZi3oHsggkp/cnyl8DXKmc9zHr13JqY5QQyL0Te3vDOZGfn
-	 3I8DA1ebMR8M/dQZ3eC+j7iWq7o8NvRjA+U8C9uFOGW1TJZJlm4aftY1NEOuQGnQkG
-	 6lQBcLmz5hr1Lt8HNHOl1/tgJa5ddBRhFhOgkptX909zq/16Vn4H71Fol+pvAOchvB
-	 Q6oWs7LNvJw1A==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADD3F383BF4E;
-	Fri, 25 Jul 2025 23:26:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1753651539; c=relaxed/simple;
+	bh=vCn40UUDOGw/cGn46/9TLk9ExbLqzknDAf9psSCEoro=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=grhhjPr9V4xlV/zBqOr2G2cJVQs8nWTF2VwJpyf/GbdAiSNZqLbR37LDlbHmQToOLAjiy+lPcj9Ie4/tViKcwYwLXRp5QoPZeR0Ken56nMf9iuSbJCxbZkaCROQkMVnOfuRdkn5o+FRDk6X2GRRI+P+W7rktxogHkDBh8Uw7dkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-87c056ae7c0so832186039f.2
+        for <linux-sctp@vger.kernel.org>; Sun, 27 Jul 2025 14:25:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753651536; x=1754256336;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kDz96/NZdwrM4WZ2hwJOdssYjQnPlecps7fWxJhLeoE=;
+        b=V9K7ExgMvESLddX2DhPJZAODEF1LA/7ybEJ5POfkfGAqmbZXNnpnK5o0FcWLeehwwH
+         Y53Q29rDVzzp+s3/GSCWT/3W/ffvt2zAAKbnUGdIB6DUypZlzoEC4S0tB3KGcyCPtK2I
+         CNVroxFd6yNYnLDB/2q/jZf6yY8ODWu35ATinzDRkGAPqbg70neOaLqW6Vrk07movQvt
+         Hgmc2NfkKeNWexfInjg7fzpxxPYx4CSHRLCkGW1VfU/owGYEF/QtXCbn+vDvCzQIMfDs
+         tJo8cZKRyLLPYPl3UOEVt+n/zUzvlZ3pSWEbT42Aa0YXPfgfAh2pizXsE2mGqPfZld3C
+         xWeQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUzMjUx0ZO/It0Dd8vSGdcMIm3q52MpoewkmgYHUaSnqyVvBvPFLnor7BlCi6413rnILxs0w/qytbLa@vger.kernel.org
+X-Gm-Message-State: AOJu0YycZDZYocda4bHfye6X9kuTSiX6CYUVnubKUTvKWHoKu/vGGNim
+	c1QHFNwU9Ssstf95iEuGT84ukW8NoqNSalw/eyERfrzFUv0XE/2lcejGxm3p/MkT7DnILQwz3/T
+	sT7cH4FGA3hGaQs/BNEkLrw8hZtc61EKBZ3sSqRTJifohMWXZai0FaBJTHEc=
+X-Google-Smtp-Source: AGHT+IGV/vmcOJppMjmvKEjjQJU8CcsxIXujF1febzAXDp9rprnfabmGVT7kwNAJwOtVnimBVNYTCCYWMSzYzwLc01EiFXk2wQZz
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/3] net: Add sockaddr_inet unified address
- structure
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <175348596749.3366157.11889906791238903563.git-patchwork-notify@kernel.org>
-Date: Fri, 25 Jul 2025 23:26:07 +0000
-References: <20250722171528.work.209-kees@kernel.org>
-In-Reply-To: <20250722171528.work.209-kees@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: marcelo.leitner@gmail.com, kuba@kernel.org, Jason@zx2c4.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- pabeni@redhat.com, lucien.xin@gmail.com, horms@kernel.org,
- linux-kernel@vger.kernel.org, wireguard@lists.zx2c4.com,
- netdev@vger.kernel.org, linux-sctp@vger.kernel.org,
- linux-hardening@vger.kernel.org
+X-Received: by 2002:a05:6602:341b:b0:87c:4496:329d with SMTP id
+ ca18e2360f4ac-8800f104e04mr1771256539f.5.1753651536014; Sun, 27 Jul 2025
+ 14:25:36 -0700 (PDT)
+Date: Sun, 27 Jul 2025 14:25:36 -0700
+In-Reply-To: <67f0b437.050a0220.0a13.022c.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <68869950.a00a0220.b12ec.006c.GAE@google.com>
+Subject: Re: [syzbot] [sctp?] KMSAN: uninit-value in sctp_assoc_bh_rcv
+From: syzbot <syzbot+773e51afe420baaf0e2b@syzkaller.appspotmail.com>
+To: davem@davemloft.net, edumazet@google.com, horms@kernel.org, 
+	kuba@kernel.org, linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org, 
+	lucien.xin@gmail.com, marcelo.leitner@gmail.com, netdev@vger.kernel.org, 
+	pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hello:
+syzbot has found a reproducer for the following issue on:
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+HEAD commit:    ec2df4364666 Merge tag 'spi-fix-v6.16-rc7' of git://git.ke..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=126d74f0580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7753c32e11ff6a95
+dashboard link: https://syzkaller.appspot.com/bug?extid=773e51afe420baaf0e2b
+compiler:       Debian clang version 20.1.7 (++20250616065708+6146a88f6049-1~exp1~20250616065826.132), Debian LLD 20.1.7
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14e838a2580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1084a782580000
 
-On Tue, 22 Jul 2025 10:18:30 -0700 you wrote:
-> Hi!
-> 
-> Repeating patch 1, as it has the rationale:
-> 
->     There are cases in networking (e.g. wireguard, sctp) where a union is
->     used to provide coverage for either IPv4 or IPv6 network addresses,
->     and they include an embedded "struct sockaddr" as well (for "sa_family"
->     and raw "sa_data" access). The current struct sockaddr contains a
->     flexible array, which means these unions should not be further embedded
->     in other structs because they do not technically have a fixed size (and
->     are generating warnings for the coming -Wflexible-array-not-at-end flag
->     addition). But the future changes to make struct sockaddr a fixed size
->     (i.e. with a 14 byte sa_data member) make the "sa_data" uses with an IPv6
->     address a potential place for the compiler to get upset about object size
->     mismatches. Therefore, we need a sockaddr that cleanly provides both an
->     sa_family member and an appropriately fixed-sized sa_data member that does
->     not bloat member usage via the potential alternative of sockaddr_storage
->     to cover both IPv4 and IPv6, to avoid unseemly churn in the affected code
->     bases.
-> 
-> [...]
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/3f86f1075111/disk-ec2df436.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c90594c19d7f/vmlinux-ec2df436.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/8eac8db13156/bzImage-ec2df436.xz
 
-Here is the summary with links:
-  - [net-next,1/3] ipv6: Add sockaddr_inet unified address structure
-    https://git.kernel.org/netdev/net-next/c/463deed51796
-  - [net-next,2/3] wireguard: peer: Replace sockaddr with sockaddr_inet
-    https://git.kernel.org/netdev/net-next/c/9203e0a82c0b
-  - [net-next,3/3] sctp: Replace sockaddr with sockaddr_inet in sctp_addr union
-    https://git.kernel.org/netdev/net-next/c/511d10b4c2f9
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+773e51afe420baaf0e2b@syzkaller.appspotmail.com
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+=====================================================
+BUG: KMSAN: uninit-value in sctp_assoc_bh_rcv+0x34e/0xbc0 net/sctp/associola.c:987
+ sctp_assoc_bh_rcv+0x34e/0xbc0 net/sctp/associola.c:987
+ sctp_inq_push+0x2a3/0x350 net/sctp/inqueue.c:88
+ sctp_backlog_rcv+0x3c7/0xda0 net/sctp/input.c:331
+ sk_backlog_rcv+0x142/0x420 include/net/sock.h:1148
+ __release_sock+0x1d3/0x330 net/core/sock.c:3213
+ release_sock+0x6b/0x270 net/core/sock.c:3767
+ sctp_wait_for_connect+0x458/0x820 net/sctp/socket.c:9367
+ sctp_sendmsg_to_asoc+0x223a/0x2260 net/sctp/socket.c:1886
+ sctp_sendmsg+0x3910/0x49f0 net/sctp/socket.c:2032
+ inet_sendmsg+0x269/0x2a0 net/ipv4/af_inet.c:851
+ sock_sendmsg_nosec net/socket.c:712 [inline]
+ __sock_sendmsg+0x278/0x3d0 net/socket.c:727
+ __sys_sendto+0x593/0x720 net/socket.c:2180
+ __do_sys_sendto net/socket.c:2187 [inline]
+ __se_sys_sendto net/socket.c:2183 [inline]
+ __x64_sys_sendto+0x130/0x200 net/socket.c:2183
+ x64_sys_call+0x3c0b/0x3db0 arch/x86/include/generated/asm/syscalls_64.h:45
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xd9/0x210 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+Uninit was created at:
+ slab_post_alloc_hook mm/slub.c:4154 [inline]
+ slab_alloc_node mm/slub.c:4197 [inline]
+ __do_kmalloc_node mm/slub.c:4327 [inline]
+ __kmalloc_node_track_caller_noprof+0x96d/0x12f0 mm/slub.c:4347
+ kmalloc_reserve+0x22f/0x4b0 net/core/skbuff.c:601
+ __alloc_skb+0x347/0x7d0 net/core/skbuff.c:670
+ alloc_skb include/linux/skbuff.h:1336 [inline]
+ sctp_packet_pack net/sctp/output.c:472 [inline]
+ sctp_packet_transmit+0x18a1/0x46d0 net/sctp/output.c:621
+ sctp_outq_flush_transports net/sctp/outqueue.c:1173 [inline]
+ sctp_outq_flush+0x1c7d/0x67c0 net/sctp/outqueue.c:1221
+ sctp_outq_uncork+0x9e/0xc0 net/sctp/outqueue.c:764
+ sctp_cmd_interpreter net/sctp/sm_sideeffect.c:-1 [inline]
+ sctp_side_effects net/sctp/sm_sideeffect.c:1204 [inline]
+ sctp_do_sm+0x8c8e/0x9720 net/sctp/sm_sideeffect.c:1175
+ sctp_assoc_bh_rcv+0x88b/0xbc0 net/sctp/associola.c:1034
+ sctp_inq_push+0x2a3/0x350 net/sctp/inqueue.c:88
+ sctp_backlog_rcv+0x3c7/0xda0 net/sctp/input.c:331
+ sk_backlog_rcv+0x142/0x420 include/net/sock.h:1148
+ __release_sock+0x1d3/0x330 net/core/sock.c:3213
+ release_sock+0x6b/0x270 net/core/sock.c:3767
+ sctp_wait_for_connect+0x458/0x820 net/sctp/socket.c:9367
+ sctp_sendmsg_to_asoc+0x223a/0x2260 net/sctp/socket.c:1886
+ sctp_sendmsg+0x3910/0x49f0 net/sctp/socket.c:2032
+ inet_sendmsg+0x269/0x2a0 net/ipv4/af_inet.c:851
+ sock_sendmsg_nosec net/socket.c:712 [inline]
+ __sock_sendmsg+0x278/0x3d0 net/socket.c:727
+ __sys_sendto+0x593/0x720 net/socket.c:2180
+ __do_sys_sendto net/socket.c:2187 [inline]
+ __se_sys_sendto net/socket.c:2183 [inline]
+ __x64_sys_sendto+0x130/0x200 net/socket.c:2183
+ x64_sys_call+0x3c0b/0x3db0 arch/x86/include/generated/asm/syscalls_64.h:45
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xd9/0x210 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+CPU: 0 UID: 0 PID: 5812 Comm: syz-executor343 Not tainted 6.16.0-rc7-syzkaller-00140-gec2df4364666 #0 PREEMPT(none) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2025
+=====================================================
 
 
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
