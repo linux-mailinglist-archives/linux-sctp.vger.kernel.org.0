@@ -1,160 +1,156 @@
-Return-Path: <linux-sctp+bounces-594-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-595-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9FE4B13202
-	for <lists+linux-sctp@lfdr.de>; Sun, 27 Jul 2025 23:25:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 116DAB1DD88
+	for <lists+linux-sctp@lfdr.de>; Thu,  7 Aug 2025 21:40:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D2221671EE
-	for <lists+linux-sctp@lfdr.de>; Sun, 27 Jul 2025 21:25:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E77BF18A0CCE
+	for <lists+linux-sctp@lfdr.de>; Thu,  7 Aug 2025 19:40:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FA7B242927;
-	Sun, 27 Jul 2025 21:25:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5FCC202F8E;
+	Thu,  7 Aug 2025 19:40:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mm+YRI2M"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9299623C4FB
-	for <linux-sctp@vger.kernel.org>; Sun, 27 Jul 2025 21:25:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1937E4AEE2;
+	Thu,  7 Aug 2025 19:40:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753651539; cv=none; b=tTt0gZ0kW6rKSAet27BsN6hStQMD648e0Kodp1sYx6DbuvsLHSi9ShUzZwz0TbDP/WozT9lupXG4f+LBzDFjlbPm9vvBAK7HJh3HwmPGJ6YikxckD42AEao42Ui+QsG7H3g1JuTJpMKVTKvpwayCmmr0fW/5aIvp1wUEXj7FUjk=
+	t=1754595616; cv=none; b=k9UyPZPGEhlwNiPz2gGyzXAboiS9fBsHPEcW8XDsLSqMxqwZNZ0MKXM96cjgrjsUN6tNA7TtcQuRjYAxwkXbtJC86clWgowvmuhKn8mrEG395aYh6dRK7x8AYAFTigs+h7e43fe3BkHa/aHhvUjiCsRSRr7NnnY73tWsEjZT5WE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753651539; c=relaxed/simple;
-	bh=vCn40UUDOGw/cGn46/9TLk9ExbLqzknDAf9psSCEoro=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=grhhjPr9V4xlV/zBqOr2G2cJVQs8nWTF2VwJpyf/GbdAiSNZqLbR37LDlbHmQToOLAjiy+lPcj9Ie4/tViKcwYwLXRp5QoPZeR0Ken56nMf9iuSbJCxbZkaCROQkMVnOfuRdkn5o+FRDk6X2GRRI+P+W7rktxogHkDBh8Uw7dkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-87c056ae7c0so832186039f.2
-        for <linux-sctp@vger.kernel.org>; Sun, 27 Jul 2025 14:25:36 -0700 (PDT)
+	s=arc-20240116; t=1754595616; c=relaxed/simple;
+	bh=EZIEeOnW1Z0fE8adlPk3i3tVG6j/UoYNBYyEH7vY/Lc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HfHr/FLk1ZAPH81Y43KKhh1gVdvtcj1APpQUv7AqfMIlV84lloBgy/d/ZCCisJLSv9tNQD/JFMPzWO9YbO4Xj3Mu0eCyb+E9ScnN8o4scX5BIy5LjL6iiTJZN5D92XerZnESqaZrRosb9afGXPnOpih1h7t/Yl6Foo2f0vkIYuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mm+YRI2M; arc=none smtp.client-ip=209.85.219.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e75668006b9so1447837276.3;
+        Thu, 07 Aug 2025 12:40:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754595614; x=1755200414; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fTGv50AjxFne2hYKUgwleceqM6cCsBh+NvLVhbsB/64=;
+        b=Mm+YRI2MV+XOo8zEGpwLg3OX4wk7rAIeRMMT9IGZY3aUKckkvFG3VLizqcs8FyCZPs
+         xluc2YqoukuhXmkHwt6SktKyywOZffKipRlRYDHYUx02Hz9lJm9TciR11+aJkcIX3RBU
+         SPgDQMF0TvQjteCGy/4hhklIqvjtJXuBv7omYHqDLVvhYxn0fzDPPpp9GRa9c5x1TNFg
+         fl2qtRAEsGMmj/dNMJwbYNa0x+//suJF5y3Hn44XvJshzNstRQRYwt3H92J0T8esAJEV
+         +pvbBDKKYRra4cU9XdbN0jMzG5i4MJpS/s4uSgeqCTt+Q1RYLnKl2O95/BdoENeq6eoH
+         AxEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753651536; x=1754256336;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kDz96/NZdwrM4WZ2hwJOdssYjQnPlecps7fWxJhLeoE=;
-        b=V9K7ExgMvESLddX2DhPJZAODEF1LA/7ybEJ5POfkfGAqmbZXNnpnK5o0FcWLeehwwH
-         Y53Q29rDVzzp+s3/GSCWT/3W/ffvt2zAAKbnUGdIB6DUypZlzoEC4S0tB3KGcyCPtK2I
-         CNVroxFd6yNYnLDB/2q/jZf6yY8ODWu35ATinzDRkGAPqbg70neOaLqW6Vrk07movQvt
-         Hgmc2NfkKeNWexfInjg7fzpxxPYx4CSHRLCkGW1VfU/owGYEF/QtXCbn+vDvCzQIMfDs
-         tJo8cZKRyLLPYPl3UOEVt+n/zUzvlZ3pSWEbT42Aa0YXPfgfAh2pizXsE2mGqPfZld3C
-         xWeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUzMjUx0ZO/It0Dd8vSGdcMIm3q52MpoewkmgYHUaSnqyVvBvPFLnor7BlCi6413rnILxs0w/qytbLa@vger.kernel.org
-X-Gm-Message-State: AOJu0YycZDZYocda4bHfye6X9kuTSiX6CYUVnubKUTvKWHoKu/vGGNim
-	c1QHFNwU9Ssstf95iEuGT84ukW8NoqNSalw/eyERfrzFUv0XE/2lcejGxm3p/MkT7DnILQwz3/T
-	sT7cH4FGA3hGaQs/BNEkLrw8hZtc61EKBZ3sSqRTJifohMWXZai0FaBJTHEc=
-X-Google-Smtp-Source: AGHT+IGV/vmcOJppMjmvKEjjQJU8CcsxIXujF1febzAXDp9rprnfabmGVT7kwNAJwOtVnimBVNYTCCYWMSzYzwLc01EiFXk2wQZz
+        d=1e100.net; s=20230601; t=1754595614; x=1755200414;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fTGv50AjxFne2hYKUgwleceqM6cCsBh+NvLVhbsB/64=;
+        b=JDEYNDBu7C2JJo+Zbob1QkB8qWKmQU9faPSkDJ15ATkc8pKvWQO/ZRZu6caY9KUYl4
+         lRZFu9R8FppOJnlBanowV+rTgwQxgM+aBOxu4LQsC0WZTqBCkJEcp5UQkQQU7dMQpqz4
+         xVBb8pwL/7igFIKcoknapx67unDQjDf2dIWO2jPCSSzU2i/wlEcFy/0elRQLyCYpkkT/
+         T62NyUqswG/LIHQ8NczCQUMS8g1aCQkxLzzuBiw2fgM6KUQbYBERHDeBAZBfUI5xMtE7
+         4tcrpopfsUGYJSiVaQ+QTaoPQQij8zh4Kds8YCI/sy6dvlmEVQK7yYFRdS/2fy1NOkJ5
+         xO8A==
+X-Forwarded-Encrypted: i=1; AJvYcCXl4XcLEqoZp5R0E8Wp9LkvGTJ8J0SPyMZPndBbnQfMmleMvFYX0j5ypm/oMbT9gZdlfDJvJ0RctCql@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFOzsdShgkt86WkIaRgTddhz6wjFi6I1hG8EDJPpGamtYq8Dak
+	cK0o8dWSOdbLqVNUutgGbUMxZKPx7vClNhiiwCvvOzEFdJXMeQ3SGq4GN7+ngw==
+X-Gm-Gg: ASbGnctcmc6rz/jmeaMi+lwPBmX3l4gC4tGgHlzzbpzrEaDoW3inbLd/gM8uOZp4idm
+	hVT6snH1+LhZ9r0snarSYm4hBD+f5OaxRL/8vCSxaKWAXfPQXGLMye3fIm8/xE4elWJjzQ7655S
+	8xeJK+aR1tb69QxhCI17yZCN2O5a7ByUsYT7DzI2o6Hm1EFEaw0Z+ElQ4ZJnP+21x+mJwXq12iT
+	uRaipL2yVOJLD01NVeISX32O+KdIl9O8bbQqFArMOyXCueYv8WSSi1VXu1G+U5gLuraBHZT8SXF
+	Ze2VoCHVaSDv4fIrupOeDRZ5n1dQ3ops8PTB1cWeakvob3tLoUl2lK7bGjBtAaHXEa80IcvuBCU
+	IkGDvI8VCGNKfIKZVw/XxhfhF+EwFUsMlMRa0IMTR9F02osNwg3WRFT6JnAy946E=
+X-Google-Smtp-Source: AGHT+IGxyN/ZEThXz0KUcvWci5mn4HMf3lqHzYz3qlPewTV14gBqawdMOu/5V9WKX6IK2gkG7TeXAQ==
+X-Received: by 2002:a05:6902:2882:b0:e8e:2a6b:251f with SMTP id 3f1490d57ef6-e904b62e457mr592000276.32.1754595613593;
+        Thu, 07 Aug 2025 12:40:13 -0700 (PDT)
+Received: from wsfd-netdev58.anl.eng.rdu2.dc.redhat.com ([66.187.232.140])
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e8fe073284fsm6025644276.21.2025.08.07.12.40.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Aug 2025 12:40:13 -0700 (PDT)
+From: Xin Long <lucien.xin@gmail.com>
+To: network dev <netdev@vger.kernel.org>,
+	linux-sctp@vger.kernel.org
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+	Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+Subject: [PATCH net] sctp: linearize cloned gso packets in sctp_rcv
+Date: Thu,  7 Aug 2025 15:40:11 -0400
+Message-ID: <dd7dc337b99876d4132d0961f776913719f7d225.1754595611.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:341b:b0:87c:4496:329d with SMTP id
- ca18e2360f4ac-8800f104e04mr1771256539f.5.1753651536014; Sun, 27 Jul 2025
- 14:25:36 -0700 (PDT)
-Date: Sun, 27 Jul 2025 14:25:36 -0700
-In-Reply-To: <67f0b437.050a0220.0a13.022c.GAE@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <68869950.a00a0220.b12ec.006c.GAE@google.com>
-Subject: Re: [syzbot] [sctp?] KMSAN: uninit-value in sctp_assoc_bh_rcv
-From: syzbot <syzbot+773e51afe420baaf0e2b@syzkaller.appspotmail.com>
-To: davem@davemloft.net, edumazet@google.com, horms@kernel.org, 
-	kuba@kernel.org, linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org, 
-	lucien.xin@gmail.com, marcelo.leitner@gmail.com, netdev@vger.kernel.org, 
-	pabeni@redhat.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-syzbot has found a reproducer for the following issue on:
+A cloned head skb still shares these frag skbs in fraglist with the
+original head skb. It's not safe to access these frag skbs.
 
-HEAD commit:    ec2df4364666 Merge tag 'spi-fix-v6.16-rc7' of git://git.ke..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=126d74f0580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7753c32e11ff6a95
-dashboard link: https://syzkaller.appspot.com/bug?extid=773e51afe420baaf0e2b
-compiler:       Debian clang version 20.1.7 (++20250616065708+6146a88f6049-1~exp1~20250616065826.132), Debian LLD 20.1.7
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14e838a2580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1084a782580000
+syzbot reported two use-of-uninitialized-memory bugs caused by this:
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/3f86f1075111/disk-ec2df436.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c90594c19d7f/vmlinux-ec2df436.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/8eac8db13156/bzImage-ec2df436.xz
+  BUG: KMSAN: uninit-value in sctp_inq_pop+0x15b7/0x1920 net/sctp/inqueue.c:211
+   sctp_inq_pop+0x15b7/0x1920 net/sctp/inqueue.c:211
+   sctp_assoc_bh_rcv+0x1a7/0xc50 net/sctp/associola.c:998
+   sctp_inq_push+0x2ef/0x380 net/sctp/inqueue.c:88
+   sctp_backlog_rcv+0x397/0xdb0 net/sctp/input.c:331
+   sk_backlog_rcv+0x13b/0x420 include/net/sock.h:1122
+   __release_sock+0x1da/0x330 net/core/sock.c:3106
+   release_sock+0x6b/0x250 net/core/sock.c:3660
+   sctp_wait_for_connect+0x487/0x820 net/sctp/socket.c:9360
+   sctp_sendmsg_to_asoc+0x1ec1/0x1f00 net/sctp/socket.c:1885
+   sctp_sendmsg+0x32b9/0x4a80 net/sctp/socket.c:2031
+   inet_sendmsg+0x25a/0x280 net/ipv4/af_inet.c:851
+   sock_sendmsg_nosec net/socket.c:718 [inline]
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
+and
+
+  BUG: KMSAN: uninit-value in sctp_assoc_bh_rcv+0x34e/0xbc0 net/sctp/associola.c:987
+   sctp_assoc_bh_rcv+0x34e/0xbc0 net/sctp/associola.c:987
+   sctp_inq_push+0x2a3/0x350 net/sctp/inqueue.c:88
+   sctp_backlog_rcv+0x3c7/0xda0 net/sctp/input.c:331
+   sk_backlog_rcv+0x142/0x420 include/net/sock.h:1148
+   __release_sock+0x1d3/0x330 net/core/sock.c:3213
+   release_sock+0x6b/0x270 net/core/sock.c:3767
+   sctp_wait_for_connect+0x458/0x820 net/sctp/socket.c:9367
+   sctp_sendmsg_to_asoc+0x223a/0x2260 net/sctp/socket.c:1886
+   sctp_sendmsg+0x3910/0x49f0 net/sctp/socket.c:2032
+   inet_sendmsg+0x269/0x2a0 net/ipv4/af_inet.c:851
+   sock_sendmsg_nosec net/socket.c:712 [inline]
+
+This patch fixes it by linearizing cloned gso packets in sctp_rcv().
+
+Fixes: 90017accff61 ("sctp: Add GSO support")
 Reported-by: syzbot+773e51afe420baaf0e2b@syzkaller.appspotmail.com
-
-=====================================================
-BUG: KMSAN: uninit-value in sctp_assoc_bh_rcv+0x34e/0xbc0 net/sctp/associola.c:987
- sctp_assoc_bh_rcv+0x34e/0xbc0 net/sctp/associola.c:987
- sctp_inq_push+0x2a3/0x350 net/sctp/inqueue.c:88
- sctp_backlog_rcv+0x3c7/0xda0 net/sctp/input.c:331
- sk_backlog_rcv+0x142/0x420 include/net/sock.h:1148
- __release_sock+0x1d3/0x330 net/core/sock.c:3213
- release_sock+0x6b/0x270 net/core/sock.c:3767
- sctp_wait_for_connect+0x458/0x820 net/sctp/socket.c:9367
- sctp_sendmsg_to_asoc+0x223a/0x2260 net/sctp/socket.c:1886
- sctp_sendmsg+0x3910/0x49f0 net/sctp/socket.c:2032
- inet_sendmsg+0x269/0x2a0 net/ipv4/af_inet.c:851
- sock_sendmsg_nosec net/socket.c:712 [inline]
- __sock_sendmsg+0x278/0x3d0 net/socket.c:727
- __sys_sendto+0x593/0x720 net/socket.c:2180
- __do_sys_sendto net/socket.c:2187 [inline]
- __se_sys_sendto net/socket.c:2183 [inline]
- __x64_sys_sendto+0x130/0x200 net/socket.c:2183
- x64_sys_call+0x3c0b/0x3db0 arch/x86/include/generated/asm/syscalls_64.h:45
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xd9/0x210 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-Uninit was created at:
- slab_post_alloc_hook mm/slub.c:4154 [inline]
- slab_alloc_node mm/slub.c:4197 [inline]
- __do_kmalloc_node mm/slub.c:4327 [inline]
- __kmalloc_node_track_caller_noprof+0x96d/0x12f0 mm/slub.c:4347
- kmalloc_reserve+0x22f/0x4b0 net/core/skbuff.c:601
- __alloc_skb+0x347/0x7d0 net/core/skbuff.c:670
- alloc_skb include/linux/skbuff.h:1336 [inline]
- sctp_packet_pack net/sctp/output.c:472 [inline]
- sctp_packet_transmit+0x18a1/0x46d0 net/sctp/output.c:621
- sctp_outq_flush_transports net/sctp/outqueue.c:1173 [inline]
- sctp_outq_flush+0x1c7d/0x67c0 net/sctp/outqueue.c:1221
- sctp_outq_uncork+0x9e/0xc0 net/sctp/outqueue.c:764
- sctp_cmd_interpreter net/sctp/sm_sideeffect.c:-1 [inline]
- sctp_side_effects net/sctp/sm_sideeffect.c:1204 [inline]
- sctp_do_sm+0x8c8e/0x9720 net/sctp/sm_sideeffect.c:1175
- sctp_assoc_bh_rcv+0x88b/0xbc0 net/sctp/associola.c:1034
- sctp_inq_push+0x2a3/0x350 net/sctp/inqueue.c:88
- sctp_backlog_rcv+0x3c7/0xda0 net/sctp/input.c:331
- sk_backlog_rcv+0x142/0x420 include/net/sock.h:1148
- __release_sock+0x1d3/0x330 net/core/sock.c:3213
- release_sock+0x6b/0x270 net/core/sock.c:3767
- sctp_wait_for_connect+0x458/0x820 net/sctp/socket.c:9367
- sctp_sendmsg_to_asoc+0x223a/0x2260 net/sctp/socket.c:1886
- sctp_sendmsg+0x3910/0x49f0 net/sctp/socket.c:2032
- inet_sendmsg+0x269/0x2a0 net/ipv4/af_inet.c:851
- sock_sendmsg_nosec net/socket.c:712 [inline]
- __sock_sendmsg+0x278/0x3d0 net/socket.c:727
- __sys_sendto+0x593/0x720 net/socket.c:2180
- __do_sys_sendto net/socket.c:2187 [inline]
- __se_sys_sendto net/socket.c:2183 [inline]
- __x64_sys_sendto+0x130/0x200 net/socket.c:2183
- x64_sys_call+0x3c0b/0x3db0 arch/x86/include/generated/asm/syscalls_64.h:45
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xd9/0x210 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-CPU: 0 UID: 0 PID: 5812 Comm: syz-executor343 Not tainted 6.16.0-rc7-syzkaller-00140-gec2df4364666 #0 PREEMPT(none) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2025
-=====================================================
-
-
+Reported-by: syzbot+70a42f45e76bede082be@syzkaller.appspotmail.com
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
 ---
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+ net/sctp/input.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/sctp/input.c b/net/sctp/input.c
+index 2dc2666988fb..7e99894778d4 100644
+--- a/net/sctp/input.c
++++ b/net/sctp/input.c
+@@ -117,7 +117,7 @@ int sctp_rcv(struct sk_buff *skb)
+ 	 * it's better to just linearize it otherwise crc computing
+ 	 * takes longer.
+ 	 */
+-	if ((!is_gso && skb_linearize(skb)) ||
++	if (((!is_gso || skb_cloned(skb)) && skb_linearize(skb)) ||
+ 	    !pskb_may_pull(skb, sizeof(struct sctphdr)))
+ 		goto discard_it;
+ 
+-- 
+2.47.1
+
 
