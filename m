@@ -1,50 +1,56 @@
-Return-Path: <linux-sctp+bounces-597-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-598-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E8E2B1EF5A
-	for <lists+linux-sctp@lfdr.de>; Fri,  8 Aug 2025 22:20:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0DD2B21573
+	for <lists+linux-sctp@lfdr.de>; Mon, 11 Aug 2025 21:40:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0EEF872391E
-	for <lists+linux-sctp@lfdr.de>; Fri,  8 Aug 2025 20:20:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A3B2190751B
+	for <lists+linux-sctp@lfdr.de>; Mon, 11 Aug 2025 19:40:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1895222568;
-	Fri,  8 Aug 2025 20:19:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85A9D2BD580;
+	Mon, 11 Aug 2025 19:40:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="REgt2gii"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lpO9cKfY"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9BDC1F2BBB;
-	Fri,  8 Aug 2025 20:19:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56C9825A655;
+	Mon, 11 Aug 2025 19:40:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754684396; cv=none; b=T9HzAp2WUaqLe+aih+Bd7LDtvxtVakrG4rbotq6CDJEYXay4cSFrSPsZcxE9+yOZGJc3X+fQipVWZyw1b995sECwjU6Lk3cV+8TH6fabxj5kseOKoiLsHX5GafCjBNmuOg6/wpj07rMcxeySi3Ms1ViQqG0iae9rkm+kPRnvvGQ=
+	t=1754941214; cv=none; b=EwpFB8vou0Br2Em3cwZwwQotzsF7fZPTl9F/hCIBcJ1ifwRe/e+M5IhH0VgTvswXv8J5hIIbFOhlQrWo4pvHnaPA8wCG0g8tZanH6kdEAphaE5XZGvh1typ29+WhNBjPltDCmOTzU2r5tfIlYZ8UwWBkMnJfkxheQ8jP8s3kPUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754684396; c=relaxed/simple;
-	bh=/3QRMC2vD0qDAwbINPgYcIR1G66c5eVra2axNLfOSls=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=FOvngcM9uCHh96Ej4khj5k5Rfg020xYg3SdIVUj8F2y9AvylHo7LarCh9nUnghS98gQEhLotj38175oOKxfVAjm83kuRINUtVVX2gmq/V54GVwof+tPNLzk7LaG6Gq+h7WabiAvD8teiv+1uWnpoaUfPQWk9URqLxqiHnrBFpaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=REgt2gii; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39E34C4CEED;
-	Fri,  8 Aug 2025 20:19:56 +0000 (UTC)
+	s=arc-20240116; t=1754941214; c=relaxed/simple;
+	bh=QgPZaGcKIgqEdVY1/jsfyCrTOcvIAZWhecB6vPL72pU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u5usUPXDKG3wqpW8i4LTrgxLlEsO/BfOOBMw6xAstgJaOR5jpD3Lr/5dWCaOWaPlPdDsV71fn/qC7MqJYWOjRzFm9qjI3hHnf8wfl8/R4v81xTtcm5WddGhaCCQwEw3wGjeu8n78qQ8ITSJIUwcd6oXFV8VkytPwmbh2G7+JvH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lpO9cKfY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFE0FC4CEED;
+	Mon, 11 Aug 2025 19:40:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754684396;
-	bh=/3QRMC2vD0qDAwbINPgYcIR1G66c5eVra2axNLfOSls=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=REgt2giicXwp8zuPqp9iotG2WIT0mbu19Jdl2rNKrd2agDjYvNMb6t4huUnpqiuRM
-	 aU5RTzxHJC09KKlUiwoCYDJJdnY96xRM4EqGksNftJuk6DqllKUE4ptvfGVHYqj6tw
-	 H3AZfGZEp3tW8dhw9kpgg0RO9EGrnImJHLFip83jFEUW8bsoWwzVGRjhlGKrvONBIY
-	 R4flG5ELzLTcaSSAgnaI2l46M40JprSAS9V4WX/jpl3s76aFORp/5bK4DqmLGMvM9G
-	 BADtZKdJkHQ1akE0EfiVVuYeDblfxOi7DHrLAZgALPVniHmHzOCtkiJhtRa12VrWzG
-	 McUIREqlo4Nzw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE003383BF5A;
-	Fri,  8 Aug 2025 20:20:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1754941213;
+	bh=QgPZaGcKIgqEdVY1/jsfyCrTOcvIAZWhecB6vPL72pU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=lpO9cKfYMjFDxNyIxlB2cTSBi2wRLPE9ym0n7nYzhdSlcWBxee5VT4JY6y57+OGou
+	 e3C7fVW9woTXGi084814W33WwKAVIUmTDyeq4j+9WD8z2py+rflUiTr51oScQ848iA
+	 7/svtjlC82ydKoze3TSBnEIhns7yyY5+J8hiiIfWV06sdApqWarAuSPfJAzFyOnxMk
+	 T6iNISgOtolNRhCJQpY+doCNFDu0/FPAenasGrkrTn38v3xIjahEO/SImszrWGG1Qi
+	 smmuAqjM6OQGz2yqmips2zeAu8nQggAHI09ooEcywAZ7t0BGBHH2t7C+BSMSCGzr9g
+	 /Ai/ivlf3F4qA==
+From: Eric Biggers <ebiggers@kernel.org>
+To: linux-sctp@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Xin Long <lucien.xin@gmail.com>,
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc: linux-crypto@vger.kernel.org,
+	Eric Biggers <ebiggers@kernel.org>
+Subject: [PATCH net-next 0/2] sctp: Convert to use crypto lib, and upgrade cookie auth
+Date: Mon, 11 Aug 2025 12:37:39 -0700
+Message-ID: <20250811193741.412592-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -52,55 +58,38 @@ List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] sctp: linearize cloned gso packets in sctp_rcv
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <175468440950.254982.15282866112466128113.git-patchwork-notify@kernel.org>
-Date: Fri, 08 Aug 2025 20:20:09 +0000
-References: 
- <dd7dc337b99876d4132d0961f776913719f7d225.1754595611.git.lucien.xin@gmail.com>
-In-Reply-To: 
- <dd7dc337b99876d4132d0961f776913719f7d225.1754595611.git.lucien.xin@gmail.com>
-To: Xin Long <lucien.xin@gmail.com>
-Cc: netdev@vger.kernel.org, linux-sctp@vger.kernel.org, davem@davemloft.net,
- kuba@kernel.org, edumazet@google.com, pabeni@redhat.com, horms@kernel.org,
- marcelo.leitner@gmail.com, n.zhandarovich@fintech.ru
 
-Hello:
+This series converts SCTP chunk and cookie authentication to use the
+crypto library API instead of crypto_shash.  This is much simpler (the
+diffstat should speak for itself), and also faster too.  In addition,
+this series upgrades the cookie authentication to use HMAC-SHA256.
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+I've tested that kernels with this series applied can continue to
+communicate using SCTP with older ones, in either direction, using any
+choice of None, HMAC-SHA1, or HMAC-SHA256 chunk authentication.
 
-On Thu,  7 Aug 2025 15:40:11 -0400 you wrote:
-> A cloned head skb still shares these frag skbs in fraglist with the
-> original head skb. It's not safe to access these frag skbs.
-> 
-> syzbot reported two use-of-uninitialized-memory bugs caused by this:
-> 
->   BUG: KMSAN: uninit-value in sctp_inq_pop+0x15b7/0x1920 net/sctp/inqueue.c:211
->    sctp_inq_pop+0x15b7/0x1920 net/sctp/inqueue.c:211
->    sctp_assoc_bh_rcv+0x1a7/0xc50 net/sctp/associola.c:998
->    sctp_inq_push+0x2ef/0x380 net/sctp/inqueue.c:88
->    sctp_backlog_rcv+0x397/0xdb0 net/sctp/input.c:331
->    sk_backlog_rcv+0x13b/0x420 include/net/sock.h:1122
->    __release_sock+0x1da/0x330 net/core/sock.c:3106
->    release_sock+0x6b/0x250 net/core/sock.c:3660
->    sctp_wait_for_connect+0x487/0x820 net/sctp/socket.c:9360
->    sctp_sendmsg_to_asoc+0x1ec1/0x1f00 net/sctp/socket.c:1885
->    sctp_sendmsg+0x32b9/0x4a80 net/sctp/socket.c:2031
->    inet_sendmsg+0x25a/0x280 net/ipv4/af_inet.c:851
->    sock_sendmsg_nosec net/socket.c:718 [inline]
-> 
-> [...]
+Eric Biggers (2):
+  sctp: Use HMAC-SHA1 and HMAC-SHA256 library for chunk authentication
+  sctp: Convert cookie authentication to use HMAC-SHA256
 
-Here is the summary with links:
-  - [net] sctp: linearize cloned gso packets in sctp_rcv
-    https://git.kernel.org/netdev/net/c/fd60d8a08619
+ Documentation/networking/ip-sysctl.rst |  11 +-
+ include/net/netns/sctp.h               |   4 +-
+ include/net/sctp/auth.h                |  17 +--
+ include/net/sctp/constants.h           |   9 +-
+ include/net/sctp/structs.h             |  35 ++----
+ net/sctp/Kconfig                       |  47 ++-----
+ net/sctp/auth.c                        | 166 +++++--------------------
+ net/sctp/chunk.c                       |   3 +-
+ net/sctp/endpointola.c                 |  23 ++--
+ net/sctp/protocol.c                    |  11 +-
+ net/sctp/sm_make_chunk.c               |  60 +++------
+ net/sctp/sm_statefuns.c                |   2 +-
+ net/sctp/socket.c                      |  41 +-----
+ net/sctp/sysctl.c                      |  51 ++++----
+ 14 files changed, 122 insertions(+), 358 deletions(-)
 
-You are awesome, thank you!
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.50.1
 
 
