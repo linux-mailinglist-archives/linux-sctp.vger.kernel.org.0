@@ -1,161 +1,136 @@
-Return-Path: <linux-sctp+bounces-613-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-614-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CA61B2AFA0
-	for <lists+linux-sctp@lfdr.de>; Mon, 18 Aug 2025 19:41:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15E6BB2AFA7
+	for <lists+linux-sctp@lfdr.de>; Mon, 18 Aug 2025 19:43:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2877162447F
-	for <lists+linux-sctp@lfdr.de>; Mon, 18 Aug 2025 17:41:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C59513B42F0
+	for <lists+linux-sctp@lfdr.de>; Mon, 18 Aug 2025 17:42:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B7C831159E;
-	Mon, 18 Aug 2025 17:41:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EEF3320CCE;
+	Mon, 18 Aug 2025 17:42:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HDyNN7LF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MGgciPgN"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D12ED2773D9;
-	Mon, 18 Aug 2025 17:41:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A89042773E8;
+	Mon, 18 Aug 2025 17:42:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755538884; cv=none; b=ofzMzIKeWo239mfuzXUgozVHLDIw46rK1GYXQWjfsZ7ihMVTtbZp7IsYXl/V9p1LkzhCi2+ipKUwrZFaaVmgycsjTxBo2l5lNFeNK/WZ+YZe3AkaxeHGfcLvpESdyndpW+EdVsh7hRK/Uqz37nl9BUMlcmV2NvzRd6uSRC6A7us=
+	t=1755538939; cv=none; b=aDH46+urrW7q7eIe6p93W0pDvFCqqwjY5AKLnzvRE7/xgZa+TOdazqWvTu1xLppO6PK+SvRn4BNIVsR/dmZOzJC8koA/oZVq6+wUUfBduKiG9ImPUGAYt9izSTWteXctGDVrYrlkB9uOeCM8adVftipC+8/jd6iPEsYMgIa6pcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755538884; c=relaxed/simple;
-	bh=BRCDXyDsdBES13f9KmFR7mYxTA+tpPWyzhpBVQAtlIw=;
+	s=arc-20240116; t=1755538939; c=relaxed/simple;
+	bh=RrvDux+Lx/XTZFwTOGzjvmyW/h6xwQh+7vPyz1hA90I=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DECD3ZhNf+I4opIzHWoE4obsQlXVzWWaDH6EecvWpCzWTY/1NvT4qLC7uW1mqn2O2CMKPNZgqq2uxnT3fnvK3dKbtmG6dqWGxIQWah4Y/hjkpZnSVSNszF62YbUVlJO4DvaOgEdL/fOaOKNOxkEIE0zOvYJ6x//5G7TVhtagjG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HDyNN7LF; arc=none smtp.client-ip=209.85.166.180
+	 To:Cc:Content-Type; b=Rt58eojt1O+3N2mTYbQaS0eeXJV4m334fUqWkVMDLgB7PpjlTz+xI4ZoFMjKKMfVJJDmssM+82P/gtgCsGr6r04aOoTrOm6pSM0GuAzw9TrrB/+q4MDopCf/kmzaPypcu9D/4E3T66F8c05Fprb/n/XSUOUDSGTw5MrsALPhM1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MGgciPgN; arc=none smtp.client-ip=209.85.166.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-3e66da97a68so4923365ab.3;
-        Mon, 18 Aug 2025 10:41:22 -0700 (PDT)
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-884328c9473so54464139f.0;
+        Mon, 18 Aug 2025 10:42:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755538882; x=1756143682; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1755538936; x=1756143736; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cupmWBQaHmjpXgd6pX7tuh2q7xNfoidH73Q/EBmYAB4=;
-        b=HDyNN7LFtR7fUu7GFwP07OmzWHtSCJBKMVVPf3ciP4aaZBi202vA2dgYqnXkxVoC6P
-         Rmv6Qcf+/IdJ+DHsYzmbdZPvgkU3OmdawoWseNE4JSJCyc5LbjCX3kszoxgDI1ln6DQx
-         AkLudrQkrVhV//4l3/Yiy0CrnWUBNUveARWRHAJmA9waXroM3GbOrAuB9Q7oaCU+Yysl
-         4lKuasYgdwO66aUrJ2AEr8icTrevZ2zZKx3Pr/cU4SI3RWq0Rhxg99SVUF/ZfOBL7iHf
-         vRppRxst4ICb/COMyZKrx5v2n+DdNzsl+1Y2Qp/vGSI5+fjytnmp/BFWcT4z4Swut9vp
-         M3ZQ==
+        bh=vVtLrlXMr05QoNhGVNAMFq2WN3EtCUqtvxnx/TDgHKw=;
+        b=MGgciPgNPv9kB0Hj1EoUDLzsZFW7dJm9/jBCh7ERaix9jrhJ4ql0SrzKIYdLAV/QNo
+         Qo6AebH8cAIXEPC5LOvwgU39w5uMH+UyQD2QQWOEeoHqUozLCSCK08W4GupN6I5e7tfm
+         y6yQs3p01Gj/QE7mQs834+kwa9Q/PWYNJtFv6ga0FKBsWt5TkZsHV7ngxrx+EshTdcM0
+         5DQ0ut3WG2+IgKfRpPJ2uW74CpVhCaNUdhzGB3wd9b64fEzdh1pa3OB56ltn15N1nHp8
+         h+P57Ec2iMZbTBuUeezNb6c0o59eu05RUgFrKEBmr5k4ZGueQkkG3jfsHYnbm0I/Tate
+         G/kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755538882; x=1756143682;
+        d=1e100.net; s=20230601; t=1755538936; x=1756143736;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cupmWBQaHmjpXgd6pX7tuh2q7xNfoidH73Q/EBmYAB4=;
-        b=KTmwyyArYFHIv25+WkkPu6uq404Woh6av0GQO88+tTVaUjUG6xfK6NyyVBvH9V5v6J
-         a34oef14ormgM3x55TsNgQvHkHWk+ejM0iS2HbTo/EK5TnEj3xc5I8/eCzc/VQOBPji8
-         NfvjWUt87jnViCoscVeEHb8W56E4Qb+rbTbQSJL/aTa8KIV6W2AlaJJC/nomn7l872Jc
-         xPhQI6nNgtfqzYX5Dne32yusmb6+Ly56rly28y5O4xWhCwdHcjDcWHtWNaMup+txZ2iE
-         UiNWG1SMBWYKhM99M1HADTzaF4GPytURqZjg9ykBjSXl+/yXgLEQ1bpCGOAm9HgUvDZM
-         tjVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUIT7ydu7diLUx/b/REfH3itamX6uZSh3joGSk8OsF3jCneCTn5OtyQ6wijQnMkv1ns+KwGs74iEz7JU58=@vger.kernel.org, AJvYcCVcBL4ON04At+MKLQPEjlT4k4hWVqL3KFPuDmw9oHqj9ZrFp+Sx5KKpHyo8zPCe6+dml07GkY4B@vger.kernel.org, AJvYcCXKYXn42cpwvb0Fs/ogazgYuTAdQxBSCttgH83IaJag2B8PRo9P9SVvjWGCohT4xX7jWLyE8h9wvuywvA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzco7vQaJT0tdIRvJkvl6+vG2ZKXMm9QFoQPMDdedF9/xWxL/fO
-	NZHiQ4M6Vl1USvJEwA+sM9QoNHp5NMNCziQ2pxyAkcGm1LwwkS2rYnzNha2ZMZdB/iiQGoR1Bn6
-	EiU9RYEggwaVkbayYTpzeHzH1oUG+3lo=
-X-Gm-Gg: ASbGncsTysvC+L14l1cPg+OH35uwtt9b3ssSIlUyV1U8YGEKlBbqiIp9IrXK4YYx24H
-	tlPcATotUoHu3Dkcrzw/6TWq40tstKmPsLCBB8Gh4AedhcjEiK7m5Gd/FfwM6TBm6HqSFcay8ee
-	CL4/B2ESGiwTSrSiFwfdGlG1dieIrAJ9nkaWIr34QvECohQuAg5bRSMfr7OgY08ZycYKYN9RHG2
-	MOyyk3XKv6oEpWw0hditMlglqMIRVg=
-X-Google-Smtp-Source: AGHT+IGG/nkbwhWdA04ID0qu1G89kSKYxtCap80Ns8DEFOpqPanZ0RuEC0EP4IKzHY0+rY/oJNve34YfNKsCQPrR97k=
-X-Received: by 2002:a05:6e02:1d89:b0:3e5:7e24:3edc with SMTP id
- e9e14a558f8ab-3e58391e0e7mr175045915ab.20.1755538881258; Mon, 18 Aug 2025
- 10:41:21 -0700 (PDT)
+        bh=vVtLrlXMr05QoNhGVNAMFq2WN3EtCUqtvxnx/TDgHKw=;
+        b=m9jZyRe/gq/umC4Sgu2GKPh+r8iLM7saKl2ppJqZz2FKNEByIgLf9nLGoWCIBfbakf
+         ZOO40HWvLcv9QjlekEFpLkCl+BARhWCISyZh0zEgYHKAj5L4QvVNpOhObvTxGiUj+A2j
+         Xx895h7R3C5JYk6tqh/3AJ5bWxPlxz4KKr2S1smL0UTC04ovFExlrS4IPBTBNf86Kn2l
+         4gSGcubvPtiZz/FYEktybLurhvhci7q4k0WIp++k8QAT5iyF3gt1fN7QkRzMlACKVqNQ
+         gIEfinUkhjcQRmVkhgPTHGN/k3kqij/xr0QdGLrhPDdxMPUIySW5fAUm5rDG5Yl8FDPT
+         oirA==
+X-Forwarded-Encrypted: i=1; AJvYcCWdAc9YYf55YfqBI03bWBVe58DGiXnNbtEsCPkYmTKfYot3xNzwGahJKlSR8Ru5sLGBpBDvr9I5@vger.kernel.org, AJvYcCX/+VaOPEPcBjR4DGx0D3ZZ+Yy2/d4HmNK/WrgwZifzf4XdnU4PbkDijo/K3D4cWrCQa6OYd4QA5gPEfNs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxzm9KO1tNwCIqu35ukenu8BIACvAsNcqmQ13luDdosoK0G5Dq1
+	sHXI9oGShnR7ESdp1toLHsLylwMtn/cPRdIZIA+BRvdiy2Js98haC+1r1dZC+guj4VRkSMdfbjg
+	VrY8zj/mnOLb8izVP1WS0jE49Mi1IZVk=
+X-Gm-Gg: ASbGnctn3r2xmdBFI8jFN8T0DmVS9dmVpazLIiqKMV05GGLb3uLhtGcK6e7qaF6Fyag
+	HCYLpl307rAIIfDkU2BolquFvfaqexPreRGrfHjAAbebo6FzRl5b5ujYJ8pGEQ3FgdYbSG2fkYE
+	nul3T4jdWSxlKJ80VUWdVilvERYiAg2JN/qmEFx5hG5RrMI12Zl31iBLAka6p5/98aTAQg6L/F1
+	0WfM0730ySNneBWHGWx
+X-Google-Smtp-Source: AGHT+IErxtt599bf1vSaG8tgEn9hx/UdjhH8RNUGA3QRxTj/dIAqWyiawi7o9QIa/1UDdVwUBrZbZo9bheov04VRF20=
+X-Received: by 2002:a05:6602:3417:b0:881:886b:9bdd with SMTP id
+ ca18e2360f4ac-8846667ac20mr75605039f.5.1755538935682; Mon, 18 Aug 2025
+ 10:42:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250813040121.90609-1-ebiggers@kernel.org> <20250813040121.90609-4-ebiggers@kernel.org>
- <20250815120910.1b65fbd6@kernel.org> <CADvbK_csEoZhA9vnGnYbfV90omFqZ6dX+V3eVmWP7qCOqWDAKw@mail.gmail.com>
- <20250815215009.GA2041@quark> <20250815180617.0bc1b974@kernel.org>
- <CADvbK_fmCRARc8VznH8cQa-QKaCOQZ6yFbF=1-VDK=zRqv_cXw@mail.gmail.com>
- <20250818084345.708ac796@kernel.org> <20250818173158.GA12939@google.com>
-In-Reply-To: <20250818173158.GA12939@google.com>
+References: <20250813040121.90609-1-ebiggers@kernel.org>
+In-Reply-To: <20250813040121.90609-1-ebiggers@kernel.org>
 From: Xin Long <lucien.xin@gmail.com>
-Date: Mon, 18 Aug 2025 13:41:10 -0400
-X-Gm-Features: Ac12FXy-2BAP6rOYHclimGJTrQf4jlwx4S7fJovjnxRkK-zlRwGPdqwxeI7JuTY
-Message-ID: <CADvbK_dG74iD7VS7dgS6fXzn5BVez0tzTV3o1x6qKYigt1BLUQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 3/3] sctp: Convert cookie authentication to
- use HMAC-SHA256
+Date: Mon, 18 Aug 2025 13:42:04 -0400
+X-Gm-Features: Ac12FXzuY3rqG20iHwnIVyWeOvXo7pZ4Wb8UMPOwftRSqCje7LiizkRNlN0boUE
+Message-ID: <CADvbK_c+5SjTXx18evELOuKEVpnr3CpXAJ9H61LBYD4YbYo1mw@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 0/3] sctp: Convert to use crypto lib, and
+ upgrade cookie auth
 To: Eric Biggers <ebiggers@kernel.org>
-Cc: Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, linux-sctp@vger.kernel.org, 
-	netdev@vger.kernel.org, Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, 
-	linux-crypto@vger.kernel.org
+Cc: linux-sctp@vger.kernel.org, netdev@vger.kernel.org, 
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, linux-crypto@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 18, 2025 at 1:32=E2=80=AFPM Eric Biggers <ebiggers@kernel.org> =
-wrote:
+On Wed, Aug 13, 2025 at 12:03=E2=80=AFAM Eric Biggers <ebiggers@kernel.org>=
+ wrote:
 >
-> On Mon, Aug 18, 2025 at 08:43:45AM -0700, Jakub Kicinski wrote:
-> > On Sat, 16 Aug 2025 13:15:12 -0400 Xin Long wrote:
-> > > > > Ideally we'd just fail the write and remove the last mentions of =
-md5 and
-> > > > > sha1 from the code.  But I'm concerned there could be a case wher=
-e
-> > > > > userspace is enabling cookie authentication by setting
-> > > > > cookie_hmac_alg=3Dmd5 or cookie_hmac_alg=3Dsha1, and by just fail=
-ing the
-> > > > > write the system would end up with cookie authentication not enab=
-led.
-> > > > >
-> > > > > It would have been nice if this sysctl had just been a boolean to=
-ggle.
-> > > > >
-> > > > > A deprecation warning might be a good idea.  How about the follow=
-ing on
-> > > > > top of this patch:
-> > > >
-> > > > No strong opinion but I find the deprecation warnings futile.
-> > > > Chances are we'll be printing this until the end of time.
-> > > > Either someone hard-cares and we'll need to revert, or nobody
-> > > > does and we can deprecate today.
-> > > Reviewing past network sysctl changes, several commits have simply
-> > > removed or renamed parameters:
-> > >
-> > > 4a7f60094411 ("tcp: remove thin_dupack feature")
-> > > 4396e46187ca ("tcp: remove tcp_tw_recycle")
-> > > d8b81175e412 ("tcp: remove sk_{tr}x_skb_cache")
-> > > 3e0b8f529c10 ("net/ipv6: Expand and rename accept_unsolicited_na to
-> > > accept_untracked_na")
-> > > 5027d54a9c30 ("net: change accept_ra_min_rtr_lft to affect all RA lif=
-etimes")
-> > >
-> > > It seems to me that if we deprecate something, it's okay to change th=
-e
-> > > sysctls, so I would prefer rejecting writes with md5 or sha1, or even
-> > > better following Eric=E2=80=99s suggestion and turn this into a simpl=
-e boolean
-> > > toggle.
-> >
-> > Slight preference towards reject. bool is worse in case we need to
-> > revert (if it takes a few releases for the regression report to appear
-> > we may have to maintain backward compat with both string and bool
-> > formats going forward).
+> This series converts SCTP chunk and cookie authentication to use the
+> crypto library API instead of crypto_shash.  This is much simpler (the
+> diffstat should speak for itself), and also faster too.  In addition,
+> this series upgrades the cookie authentication to use HMAC-SHA256.
 >
-> To be clear, by "It would have been nice if this sysctl had just been a
-> boolean toggle", I meant it would have been nice if it had been that way
-> *originally*.  I wasn't suggesting making that change now.
+> I've tested that kernels with this series applied can continue to
+> communicate using SCTP with older ones, in either direction, using any
+> choice of None, HMAC-SHA1, or HMAC-SHA256 chunk authentication.
 >
-> It would be safest to continue to honor existing attempts to enable
-> cookie authentication (by writing md5 or sha1), as this patch does.
+> Changed in v2:
+> - Added patch which adds CONFIG_CRYPTO_SHA1 to some selftests configs
 >
-> If you'd prefer that those attempts be rejected instead, I can do that,
-> but how about I do it as a separate patch on top of this one?  That way
-> if there's a problem with it, we can just revert that patch, instead of
-> the entire upgrade to the cookie auth.
+> Eric Biggers (3):
+>   selftests: net: Explicitly enable CONFIG_CRYPTO_SHA1 for IPsec
+>   sctp: Use HMAC-SHA1 and HMAC-SHA256 library for chunk authentication
+>   sctp: Convert cookie authentication to use HMAC-SHA256
 >
-Sounds good to me.
-
-Thanks.
+>  Documentation/networking/ip-sysctl.rst       |  11 +-
+>  include/net/netns/sctp.h                     |   4 +-
+>  include/net/sctp/auth.h                      |  17 +-
+>  include/net/sctp/constants.h                 |   9 +-
+>  include/net/sctp/structs.h                   |  35 +---
+>  net/sctp/Kconfig                             |  47 ++----
+>  net/sctp/auth.c                              | 166 ++++---------------
+>  net/sctp/chunk.c                             |   3 +-
+>  net/sctp/endpointola.c                       |  23 +--
+>  net/sctp/protocol.c                          |  11 +-
+>  net/sctp/sm_make_chunk.c                     |  60 +++----
+>  net/sctp/sm_statefuns.c                      |   2 +-
+>  net/sctp/socket.c                            |  41 +----
+>  net/sctp/sysctl.c                            |  51 +++---
+>  tools/testing/selftests/net/config           |   1 +
+>  tools/testing/selftests/net/netfilter/config |   1 +
+>  16 files changed, 124 insertions(+), 358 deletions(-)
+>
+>
+> base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+> --
+> 2.50.1
+>
+Acked-by: Xin Long <lucien.xin@gmail.com>
 
