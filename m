@@ -1,59 +1,50 @@
-Return-Path: <linux-sctp+bounces-620-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-621-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D7EDB2B317
-	for <lists+linux-sctp@lfdr.de>; Mon, 18 Aug 2025 22:59:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20E91B2E091
+	for <lists+linux-sctp@lfdr.de>; Wed, 20 Aug 2025 17:18:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16CF35E180F
-	for <lists+linux-sctp@lfdr.de>; Mon, 18 Aug 2025 20:58:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE4A660323D
+	for <lists+linux-sctp@lfdr.de>; Wed, 20 Aug 2025 15:11:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C7CF27814A;
-	Mon, 18 Aug 2025 20:57:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F341D36998D;
+	Wed, 20 Aug 2025 15:00:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YlzPjmj/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hTs1lLk/"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 605D6275863;
-	Mon, 18 Aug 2025 20:57:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C233236997F;
+	Wed, 20 Aug 2025 15:00:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755550640; cv=none; b=fTcnXgPXYQDXmqAFWkXsdlxNTp3e9amooNh3zh8eHuV9rRBXyZL80viBpBJO5kru6ljW1axNPS1Y32NrAr5w9sKRfYkFBKUAZI8dnCB7KrKs0sfzKODwf3M1hkRiQfL7edCzpBsmZ0v1XUz+EUTXOyAivzXJSC5XOvRnauZfUPA=
+	t=1755702015; cv=none; b=pOau8KZy+RSVFjtMDRpmIBkzM2GNJOM3qXsrxtLXJGk/fTTYO/T1X3ljFVoEPDiIEZ68E9B3JYiYbFzVq42xab8YEytEUp1Tdi+r5fzIDbyBlrxxLdpMmnVnVoNNLRBfTR7CHg6XHc3MllHRPVWiFSZsqGPoQ4hwepRc56p+eMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755550640; c=relaxed/simple;
-	bh=UzeZX8fOjHw0e510IMB/ad2rM/hW7VREZRVqo/Zesl4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=H3V5H2bUVgzuuXCemkv5ygwTdBjZ7V+QOPRk4mIa5k96fHXY5JNEgglZ+jBYt8c2WyDTe5M0HEBmhrhXc/vqigs/RYU4nGpLgolc3PvkM8DnCTrI4xy2ELSihr3B0w4G7CrUBMXgv8VRKWVN3bFqkX+X2+/4Vc6rcrsBRTnBR0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YlzPjmj/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16B65C4CEF1;
-	Mon, 18 Aug 2025 20:57:20 +0000 (UTC)
+	s=arc-20240116; t=1755702015; c=relaxed/simple;
+	bh=djRjEZpHr3njE9TC9l8pfnazmpDUiF/8PuqxoqJGmOc=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=A1d5JCHmJpUM/OkihhOY2DFaOX51EGElj4FThM2HVo3U62UkCX/MBqgKzMRQliHCG7RzqILatmLpFm7YFeXgrEsZKJ1crLvYCRm7aUU2X8LLxOuJswzuzQuA8bjqf+GlrNU07eI+BosIsK4N7kU+Uo2Bz4RohPWJ/xeL23Qrqq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hTs1lLk/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B918C113CF;
+	Wed, 20 Aug 2025 15:00:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755550640;
-	bh=UzeZX8fOjHw0e510IMB/ad2rM/hW7VREZRVqo/Zesl4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YlzPjmj/VkbdNBtgJSfkFnvdC3fAG9hYzmetv/0JmuMhuGYmI1BZ1vq3LkiP22aai
-	 dmo2KSe9DUK1WHi3k7kpR+8madfTa4Xklf9YelaSjgyCQlSPb2YRs94zb3iuNiJK+5
-	 B8GBAGrDxC6jwesT0Nkeh4knBLZLD2xy1y/pD2xKO5iD/VdOysZ3NdwfhacpfLJ7WN
-	 eI4AN+os5wPjfVd36y8Z7Bm42WDvyw/7rDxGEk2mSxzecS9FWKQ43rgMrjUasm9hR1
-	 iND2Tn1hdYJ9V7RBcpM+uky/TgBEZJecdp4CWsewAxDest9kX5Xb9boL/Zkac4jlik
-	 d/WdzzxO6OAxQ==
-From: Eric Biggers <ebiggers@kernel.org>
-To: linux-sctp@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Xin Long <lucien.xin@gmail.com>,
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc: linux-crypto@vger.kernel.org,
-	Eric Biggers <ebiggers@kernel.org>
-Subject: [PATCH net-next v3 5/5] sctp: Stop accepting md5 and sha1 for net.sctp.cookie_hmac_alg
-Date: Mon, 18 Aug 2025 13:54:26 -0700
-Message-ID: <20250818205426.30222-6-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250818205426.30222-1-ebiggers@kernel.org>
-References: <20250818205426.30222-1-ebiggers@kernel.org>
+	s=k20201202; t=1755702015;
+	bh=djRjEZpHr3njE9TC9l8pfnazmpDUiF/8PuqxoqJGmOc=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=hTs1lLk/syCdBejoyIk992U6msUJnqrC6Qp1RE+XZ0u2Nvm+w3RH/B1F7z2ciREu2
+	 +MiOZVitfn6utxXoNaFBXXmj3xk7n5pbe5HaEqIqltLyOsgI7vI5VwqEaNik1Xv4yJ
+	 iQK9UkjgFbU+lsrF8AoYNaolka6DO1FtBuh8bYY5he1czUpPrkRh8/vmbu9ALBqqBy
+	 QwmA9jVzj/mxnkhbD7ZGA27cAz+0ZL1brUTyesV7eSQqZjZ9KpxtXYkHvF5sY+vu3p
+	 Yc71dicMaTrF018aD9C+Mk8mOeVDWM+hVlfYyxYMVwNm6O2fTej0THyNCnX44Ze1zs
+	 5DxHZX7q8Cgrg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33E5A383BF4E;
+	Wed, 20 Aug 2025 15:00:26 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -61,62 +52,51 @@ List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v3 0/5] sctp: Convert to use crypto lib,
+ and upgrade cookie auth
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <175570202481.267477.17609756872767538276.git-patchwork-notify@kernel.org>
+Date: Wed, 20 Aug 2025 15:00:24 +0000
+References: <20250818205426.30222-1-ebiggers@kernel.org>
+In-Reply-To: <20250818205426.30222-1-ebiggers@kernel.org>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: linux-sctp@vger.kernel.org, netdev@vger.kernel.org, lucien.xin@gmail.com,
+ marcelo.leitner@gmail.com, linux-crypto@vger.kernel.org
 
-The upgrade of the cookie authentication algorithm to HMAC-SHA256 kept
-some backwards compatibility for the net.sctp.cookie_hmac_alg sysctl by
-still accepting the values 'md5' and 'sha1'.  Those algorithms are no
-longer actually used, but rather those values were just treated as
-requests to enable cookie authentication.
+Hello:
 
-As requested at
-https://lore.kernel.org/netdev/CADvbK_fmCRARc8VznH8cQa-QKaCOQZ6yFbF=1-VDK=zRqv_cXw@mail.gmail.com/
-and https://lore.kernel.org/netdev/20250818084345.708ac796@kernel.org/ ,
-go further and start rejecting 'md5' and 'sha1' completely.
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Signed-off-by: Eric Biggers <ebiggers@kernel.org>
----
- Documentation/networking/ip-sysctl.rst | 3 ---
- net/sctp/sysctl.c                      | 4 +---
- 2 files changed, 1 insertion(+), 6 deletions(-)
+On Mon, 18 Aug 2025 13:54:21 -0700 you wrote:
+> This series converts SCTP chunk and cookie authentication to use the
+> crypto library API instead of crypto_shash.  This is much simpler (the
+> diffstat should speak for itself), and also faster too.  In addition,
+> this series upgrades the cookie authentication to use HMAC-SHA256.
+> 
+> I've tested that kernels with this series applied can continue to
+> communicate using SCTP with older ones, in either direction, using any
+> choice of None, HMAC-SHA1, or HMAC-SHA256 chunk authentication.
+> 
+> [...]
 
-diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
-index 3d6782683eee7..43badb338d22b 100644
---- a/Documentation/networking/ip-sysctl.rst
-+++ b/Documentation/networking/ip-sysctl.rst
-@@ -3509,13 +3509,10 @@ cookie_hmac_alg - STRING
- 	Valid values are:
- 
- 	* sha256
- 	* none
- 
--	md5 and sha1 are also accepted for backwards compatibility, but cause
--	sha256 to be selected.
--
- 	Default: sha256
- 
- rcvbuf_policy - INTEGER
- 	Determines if the receive buffer is attributed to the socket or to
- 	association.   SCTP supports the capability to create multiple
-diff --git a/net/sctp/sysctl.c b/net/sctp/sysctl.c
-index 19acc57c3ed97..15e7db9a3ab2e 100644
---- a/net/sctp/sysctl.c
-+++ b/net/sctp/sysctl.c
-@@ -399,13 +399,11 @@ static int proc_sctp_do_hmac_alg(const struct ctl_table *ctl, int write,
- 		tbl.data = tmp;
- 		tbl.maxlen = sizeof(tmp) - 1;
- 		ret = proc_dostring(&tbl, 1, buffer, lenp, ppos);
- 		if (ret)
- 			return ret;
--		if (!strcmp(tmp, "sha256") ||
--		    /* for backwards compatibility */
--		    !strcmp(tmp, "md5") || !strcmp(tmp, "sha1")) {
-+		if (!strcmp(tmp, "sha256")) {
- 			net->sctp.cookie_auth_enable = 1;
- 			return 0;
- 		}
- 		if (!strcmp(tmp, "none")) {
- 			net->sctp.cookie_auth_enable = 0;
+Here is the summary with links:
+  - [net-next,v3,1/5] selftests: net: Explicitly enable CONFIG_CRYPTO_SHA1 for IPsec
+    https://git.kernel.org/netdev/net-next/c/490a9591b5fe
+  - [net-next,v3,2/5] sctp: Fix MAC comparison to be constant-time
+    https://git.kernel.org/netdev/net-next/c/dd91c79e4f58
+  - [net-next,v3,3/5] sctp: Use HMAC-SHA1 and HMAC-SHA256 library for chunk authentication
+    https://git.kernel.org/netdev/net-next/c/bf40785fa437
+  - [net-next,v3,4/5] sctp: Convert cookie authentication to use HMAC-SHA256
+    https://git.kernel.org/netdev/net-next/c/2f3dd6ec901f
+  - [net-next,v3,5/5] sctp: Stop accepting md5 and sha1 for net.sctp.cookie_hmac_alg
+    https://git.kernel.org/netdev/net-next/c/d5a253702add
+
+You are awesome, thank you!
 -- 
-2.50.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
