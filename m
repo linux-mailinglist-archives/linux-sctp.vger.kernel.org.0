@@ -1,232 +1,324 @@
-Return-Path: <linux-sctp+bounces-637-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-638-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B5AEBE8414
-	for <lists+linux-sctp@lfdr.de>; Fri, 17 Oct 2025 13:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E06C2BEB6FC
+	for <lists+linux-sctp@lfdr.de>; Fri, 17 Oct 2025 22:06:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3D663B90F0
-	for <lists+linux-sctp@lfdr.de>; Fri, 17 Oct 2025 11:06:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D9C83BF677
+	for <lists+linux-sctp@lfdr.de>; Fri, 17 Oct 2025 20:06:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D792C3321A8;
-	Fri, 17 Oct 2025 11:06:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5ED52566D9;
+	Fri, 17 Oct 2025 20:06:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ICzucdh2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kIawjOZC"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28EED3314DA
-	for <linux-sctp@vger.kernel.org>; Fri, 17 Oct 2025 11:06:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC19623A98E
+	for <linux-sctp@vger.kernel.org>; Fri, 17 Oct 2025 20:06:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760699170; cv=none; b=SxbmTXJxcfu/XgOrNPIfEewcIFo58XAle+Vijtjcg9Q07HOBURvu72/DlABkLsw9S2vDJt49qPpIrvEBmyMg6/xwz6nVOTLrMognRPTZeRFAHVodW0rsw6OGqGto34sF+5JCfx+Zwi0rg8Ty1irkO+kvBU9jPIK5DRevPfDq9wI=
+	t=1760731578; cv=none; b=suXz3rScbeFO8CuFFokTB20NsT0QxuFbJ8rNW8brYsEH7Nq58pRQQluiHwffy+4f1E6roBeGJBq2aYPDfmWV2KJscgPFbqyEIYYKB87bkajr/54xYOG+kZeF62NtDj4pxC4341Ds9GUpOVLKk477kEHtKdDycedf3OLiWSx+Zws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760699170; c=relaxed/simple;
-	bh=xzQfCkUEgadYLpzqT93CHRmbHNjxwXb4AN0nnSfXYBI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VF2EDkYBRNt+blOv9vYgNkKkn+QbG9C4DpWVs2zR8ayBQEm27K7/4spWicGl6x2wyDkk6X4qrtNrXtsvw4VRTnNdv/qGfcHGAaXx31xKZDN9zTNXmDqbn/oEjyerIYx7qDajgbJ5d0bOqp8k9SYycbKWxcKHTWHEkw7hUhzWT5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ICzucdh2; arc=none smtp.client-ip=209.85.214.171
+	s=arc-20240116; t=1760731578; c=relaxed/simple;
+	bh=cllDsiwwk+W+8je7GSypbkbGwzmLegWWAjz8z3XJoU8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gUDCWU3I2mQvEyUBvmSuptjnlgfRPzIkgCuvjj+m3C7mbiCteuE/G+DS7pei3HSTGf+0/1+wlbviGHrjIcGAycN3kWD78660oFex8MsfqeSu9wFKdTyHpQnYb7m/86IP/mr07eV6rVtkij6cRYrfeLdpNO4EZG8IfILmZGGvJCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kIawjOZC; arc=none smtp.client-ip=209.85.222.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-290a3a4c7ecso19441215ad.0
-        for <linux-sctp@vger.kernel.org>; Fri, 17 Oct 2025 04:06:08 -0700 (PDT)
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-891208f6185so123151985a.1
+        for <linux-sctp@vger.kernel.org>; Fri, 17 Oct 2025 13:06:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760699168; x=1761303968; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=67IESv2a/v8Pf8yKPhY3ug7MsqHojZ5k4tSpnUKX3+0=;
-        b=ICzucdh2DQJSWZ9+ktmrxaPKba9vTeNvo7pxjkT1e4rMY34oz+7ONT9ZJQGY1UBy3h
-         cF/fWGZlgdn112mWA9DXCUP+a3ze8RDFUJqR89Kx1f8srGI8Ymm64DK2/grWBdjI4ej3
-         wua8AttLgQwcj6zlRJekJqtOWsJz0l5195VX0VoSPW1sx4WIFIT2NEJXaIwdMAutAlmU
-         qn0V05lom72ZuUTg5TpeOlkd62XnvXLH41BIOd8ffjxrL52kpFW19MfR/ZawXkXRwJSk
-         BJIRnljszL1phtwO0BPVim8j915Y/VZ8lq163Kzp4bEJRXUIVXM+BYg3OjiH8OX3GNFV
-         lO8w==
+        d=gmail.com; s=20230601; t=1760731575; x=1761336375; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=q4TfnaTw7bDrM3EMC/hypSarQpF6+CV/k1XhSGZFUlo=;
+        b=kIawjOZCrc2PIvyMQ7Evpq1LGUeDf4wQOmgnBXvcQNWHVebP9kA+tiof95GKHme74n
+         DL5DGOhXQYe1Jj1hCIUMk7qn+E3Cbs/sqtEm0xC4KrCURDLQNFmsWqUazbZD3+gSm+4t
+         RDpjvZ+/OlncFToWUQsW8kbatUVuxEY35K5t4F1ZvoIW4f8/kZyUX8G/m0iNfGPRrO6M
+         197dUDurTQ0lfnit4hXMnjbQEPOBWlJIQDshTiARhGTmC0YxGSW87G4qIsLRBcuyrFjk
+         vxEgOtW7HWCkJAbNTGghc11AG6b2/DFFA7yxS1HVE/7nLpa3OodyeAUtJbuna9FmLFqN
+         3sRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760699168; x=1761303968;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=67IESv2a/v8Pf8yKPhY3ug7MsqHojZ5k4tSpnUKX3+0=;
-        b=UrgPlk/Ol+u03E724pvbLlFTG2OqnZ1uMmsm5Q9akDZgPoz8vKNY3mffd6sHh0ViLT
-         5P22IJP4XvuXpotIsDMGMMpEi8CKkvUaDhhHRv5U1CIZ90ugfpIGdNrTilj8HO7ncauB
-         DUlzLRjIEVE+7zVcRmPQ7Ni3yuC+szzUL668CFOvZdlO2+viniIFLV9lCSB2aGXwf067
-         5Nv7LQ8ajfUxHvC/h2ROxfqZkPrOHYDJ7XdOyyB0864s9w0W/ZnxBQIjj9DZA+Zf4Lp3
-         S+vEoSG2UVU66h4CEJI2cyx58NsPraqNTdU5RdDG9NVMZrAByCDMgG+w7saQUf3v0KOV
-         D9Vg==
-X-Forwarded-Encrypted: i=1; AJvYcCUALlWAciU+dEE/kmbia/xOv4WG0hbludX06Ts/ROBtbvMGyiegRCu8jeV2c/voePXiWVXSBKRRjhub@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7Nc/Ke4Vrx1SIuwKOCJyic606UD6r0hWKayBroRuflMk0ATHl
-	Q13ZhdtELMU5N7TYvzUDS1E1z9IK0w9PFm7nWWKxyPhW/jq/aNSxbgrz
-X-Gm-Gg: ASbGncuDIVQyatS4AuXgO4i5jgMV5CMhp+P0z1xNVEDREE86JR1p+AD+nqms3VKnDXn
-	6HntrD0Uc8pSxYxEHJYXMnpGFNlKGNiK06TU2vmieTBIiZCvsEs1eZudnmVMathDmIipM0XIdxR
-	tyfrql6+m6+A30fLtRBZd69QZavoWHkxYC0IUrNCNnoHFbmdTlAgzava23JI9NSlytklBpjWSmd
-	dWE/tH699kNRaczrb8SNTHTX6ay605QMiAShWn/3GyS9J3XZxZnsPe8C/JRiySBACwkeXsN9i1Z
-	l7v+dRR6QmLzPV0dxeB7PMhTXPYFmh51jDCAVmJ79eQ+ZQrWBzaD9vnBDzHH5c0WJvwvrOswtJy
-	bfPY17RKLYGpQHT3Vr+obH1mlRmncjXeYYUuEKFKKFNxdRsrAcowUXpqY5fgBqYpFTSH7mBG0Br
-	4nxd7qhuGSx/fIBxNMJmQYpOH0
-X-Google-Smtp-Source: AGHT+IHzhvlggPHZaUtm7049vZphaYLbBwyOQ68yKmFVwhS+ouCLslfd4ghVDEV6+hTwf8xect5v6g==
-X-Received: by 2002:a17:903:2884:b0:266:3098:666 with SMTP id d9443c01a7336-290ca121a21mr28881865ad.32.1760699168235;
-        Fri, 17 Oct 2025 04:06:08 -0700 (PDT)
-Received: from t14s.localdomain ([177.37.143.35])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-290993466absm61409965ad.35.2025.10.17.04.06.07
+        d=1e100.net; s=20230601; t=1760731575; x=1761336375;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q4TfnaTw7bDrM3EMC/hypSarQpF6+CV/k1XhSGZFUlo=;
+        b=ax9OukY2lBQp33kWNZsqbWgbplmpGUOkZJ0gW6S9xXUn2WC1Nwc+Ip2yE/W+cvtDqz
+         mLmZFqnPQ7vloxHVW6X1otNuIfKAd39HQXUJvzZN22y+m6180kjkhFG/qReD0Fi75oLm
+         DMVT02y6GDcAtq303Y1LgNxi/3eqDSfGIpWhuatWCegcf5+OK5iNBHiySU/EH9E+evJn
+         +7Hofb6EghwrdSnEEqSYV9T9PESQlS4Zh5TS3j+eZHzxG/iQEf4pxF0NXDTA1jDCjTkC
+         JZpXIikAMqAWLsu1Q0l8SoCCfhkO5k5H4auLZM7ZZZGIu1PUIXXcHlRCJ8CrNFpf7X8Z
+         v81g==
+X-Forwarded-Encrypted: i=1; AJvYcCVDLglxyJsNr+c9pCPjweT0i7L3r09UDqabmpAg8NUf36QZfhTUD22L+h6vYMIoRr7cvbl8Au71hWLX@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDiA9NCsIei2eZsHq0kM7MHMD6gwuzRWLrSQIWxp+CzvuU9XnO
+	4zpwXy/LrOwf4+pzR9wNckOzoh8SWf9koTjYf9uaH/q4BDR9zckC8Gvq803caVJg
+X-Gm-Gg: ASbGncuW/Zup/PB+iAw1V07O8bk0D7z4VhjypP+UfC2Wl73+kYW/oA9QXgdp01Zt757
+	jwuh5Ihnj+VAvWX1xTtyLUe+zOGzkVZtCEqXzSirWuJUA+bK2MtWCsgaG+yF2LuDOeFU0c+y1v9
+	62wUto3V55D2MHt2r8QFW6bg5NNlA2uxwwNX+JO3JmiXSuV8G8Lahu64SK++rtZVlb0bsUDW0T7
+	TeWXXnFQl7z8zSUPqDNROrjoM5JfRQ4AxQ2YLSx8bjw+cv0CxDwNRelN0BsjaSZt60BUFr7K7Ph
+	iPLw8pojmNfSe+Rz5ll3tW2EbMUoFucIHXeHvwTg/IZiBU2FFxMnjWuO8yPPm9d+qDZcRzr/bWL
+	xz0n0u1Qdrl08gTOaaBtf+fZKdZroZj9a9pF5vy4Yg03QbWpzh45KVNh6jgFu9WVx2JEfPBWJLI
+	/NI8J9xPK0mfRVlIfXnYDqXWGy3mGTyAe5h4y3+QFtsQQX64THFAc=
+X-Google-Smtp-Source: AGHT+IHBSWCSfO0Jwq6JFVatwtCridxQj/KS+Q4RcWnxtl3CmZSYNbUSK/RXcje7bpg6GOf5Tf5uQA==
+X-Received: by 2002:a05:620a:28c8:b0:863:696d:e372 with SMTP id af79cd13be357-8907050ce40mr601750485a.62.1760731575434;
+        Fri, 17 Oct 2025 13:06:15 -0700 (PDT)
+Received: from wsfd-netdev58.anl.eng.rdu2.dc.redhat.com ([66.187.232.140])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-891cd0976bcsm37669885a.14.2025.10.17.13.06.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Oct 2025 04:06:07 -0700 (PDT)
-Received: by t14s.localdomain (Postfix, from userid 1000)
-	id 47AE211C1FCF; Fri, 17 Oct 2025 08:06:05 -0300 (-03)
-Date: Fri, 17 Oct 2025 08:06:05 -0300
-From: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To: Alexey Simakov <bigalex934@gmail.com>
-Cc: Xin Long <lucien.xin@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
+        Fri, 17 Oct 2025 13:06:14 -0700 (PDT)
+From: Xin Long <lucien.xin@gmail.com>
+To: network dev <netdev@vger.kernel.org>,
+	linux-sctp@vger.kernel.org
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
 	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, linux-sctp@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	lvc-project@linuxtesting.org
-Subject: Re: [PATCH net] sctp: avoid NULL dereference when chunk data buffer
- is missing
-Message-ID: <aPIjHd4jkx__LFTR@t14s.localdomain>
-References: <20251015184510.6547-1-bigalex934@gmail.com>
- <aO_67_pJD71FBLmd@t14s.localdomain>
- <20251017071550.q7qg2a5e7xu6yvlr@home-server>
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+	Hangbin Liu <liuhangbin@gmail.com>
+Subject: [PATCH net] selftests: net: fix server bind failure in sctp_vrf.sh
+Date: Fri, 17 Oct 2025 16:06:14 -0400
+Message-ID: <be2dacf52d0917c4ba5e2e8c5a9cb640740ad2b6.1760731574.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251017071550.q7qg2a5e7xu6yvlr@home-server>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 17, 2025 at 10:15:50AM +0300, Alexey Simakov wrote:
-> On Wed, Oct 15, 2025 at 04:50:07PM -0300, Marcelo Ricardo Leitner wrote:
-> > On Wed, Oct 15, 2025 at 09:45:10PM +0300, Alexey Simakov wrote:
-> > > chunk->skb pointer is dereferenced in the if-block where it's supposed
-> > > to be NULL only.
-> > 
-> > The issue is well spotted. More below.
-> > 
-> > > 
-> > > Use the chunk header instead, which should be available at this point
-> > > in execution.
-> > > 
-> > > Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> > > 
-> > > Fixes: 90017accff61 ("sctp: Add GSO support")
-> > > Signed-off-by: Alexey Simakov <bigalex934@gmail.com>
-> > > ---
-> > >  net/sctp/inqueue.c | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/net/sctp/inqueue.c b/net/sctp/inqueue.c
-> > > index 5c1652181805..f1830c21953f 100644
-> > > --- a/net/sctp/inqueue.c
-> > > +++ b/net/sctp/inqueue.c
-> > > @@ -173,7 +173,8 @@ struct sctp_chunk *sctp_inq_pop(struct sctp_inq *queue)
-> > 
-> > With more context here:
-> > 
-> >                if ((skb_shinfo(chunk->skb)->gso_type & SKB_GSO_SCTP) == SKB_GSO_SCTP) {
-> >                        /* GSO-marked skbs but without frags, handle
-> >                         * them normally
-> >                         */
-> > 
-> >                        if (skb_shinfo(chunk->skb)->frag_list)
-> >                                chunk->head_skb = chunk->skb;
-> > 
-> >                        /* skbs with "cover letter" */
-> >                        if (chunk->head_skb && chunk->skb->data_len == chunk->skb->len)
-> > 		           ^^^^^^^^^^^^^^^^^^
-> > 
-> > chunk->head_skb would also not be guaranteed.
-> > 
-> > >  				chunk->skb = skb_shinfo(chunk->skb)->frag_list;
-> > 
-> > But chunk->skb can only be NULL if chunk->head_skb is not, then.
-> > 
-> > Thing is, we cannot replace chunk->skb here then, because otherwise
-> > when freeing this chunk in sctp_chunk_free below it will not reference
-> > chunk->head_skb and will cause a leak.
-> > 
-> > With that, the check below should be done just before replacing
-> > chunk->skb right above, inside the if() block. We're sure that
-> > otherwise chunk->skb is non-NULL because of outer if() condition.
-> > 
-> > Thanks,
-> > Marcelo
-> > 
-> > >  
-> > >  			if (WARN_ON(!chunk->skb)) {
-> > > -				__SCTP_INC_STATS(dev_net(chunk->skb->dev), SCTP_MIB_IN_PKT_DISCARDS);
-> > > +				__SCTP_INC_STATS(dev_net(chunk->head_skb->dev),
-> > > +						 SCTP_MIB_IN_PKT_DISCARDS);
-> > >  				sctp_chunk_free(chunk);
-> > >  				goto next_chunk;
-> > >  			}
-> I'm not sure, that correctly understand the new location of updated check.
-> There a few assumtions below.
-> > > -- 
-> > > 2.34.1
-> > > 
-> 		/* Is the queue empty?  */
-> 		entry = sctp_list_dequeue(&queue->in_chunk_list);
-> 		if (!entry)
-> 			return NULL;
-> 
-> 		chunk = list_entry(entry, struct sctp_chunk, list);
-> 
-> 		if (skb_is_gso(chunk->skb) && skb_is_gso_sctp(chunk->skb)) {
-> 			/* GSO-marked skbs but without frags, handle
-> 			 * them normally
-> 			 */
-> 			if (skb_shinfo(chunk->skb)->frag_list)
-> 				chunk->head_skb = chunk->skb;
-> 
-> 			/* skbs with "cover letter" */
-> 			if (chunk->head_skb && chunk->skb->data_len == chunk->skb->len)
-> Adding this check here will not fix problem, since chunk->skb always true here because it dereferencing in
-> checks above.
+sctp_vrf.sh could fail:
 
-Exactly.
+  TEST 12: bind vrf-2 & 1 in server, connect from client 1 & 2, N [FAIL]
+  not ok 1 selftests: net: sctp_vrf.sh # exit=3
 
-> 				chunk->skb = skb_shinfo(chunk->skb)->frag_list;
-> Adding here could make sense, chunk->skb changed => do something if it became null.
+The failure happens when the server bind in a new run conflicts with an
+existing association from the previous run:
 
-Yes. But then it needs to restore chunk->skb somehow. So instead it's better
-to do the WARN_ON(!skb_shinfo(chunk->skb)->frag_list).
+[1] ip netns exec $SERVER_NS ./sctp_hello server ...
+[2] ip netns exec $CLIENT_NS ./sctp_hello client ...
+[3] ip netns exec $SERVER_NS pkill sctp_hello ...
+[4] ip netns exec $SERVER_NS ./sctp_hello server ...
 
-if (skb_is_gso(chunk->skb) && skb_is_gso_sctp(chunk->skb)) {
-	/* GSO-marked skbs but without frags, handle
-	 * them normally
-	 */
-	if (skb_shinfo(chunk->skb)->frag_list)
-		chunk->head_skb = chunk->skb;
+It occurs if the client in [2] sends a message and closes immediately.
+With the message unacked, no SHUTDOWN is sent. Killing the server in [3]
+triggers a SHUTDOWN the client also ignores due to the unacked message,
+leaving the old association alive. This causes the bind at [4] to fail
+until the message is acked and the client responds to a second SHUTDOWN
+after the server’s T2 timer expires (3s).
 
-	/* skbs with "cover letter" */
-	if (chunk->head_skb && chunk->skb->data_len == chunk->skb->len) {
-		if (WARN_ON(!skb_shinfo(chunk->skb)->frag_list)) {
-			__SCTP_INC_STATS(dev_net(chunk->skb->dev),
-			                                 ^-- can be skb again
-					 SCTP_MIB_IN_PKT_DISCARDS);
-			sctp_chunk_free(chunk);
-			   ^---- so this can actually free chunk->skb
-			goto next_chunk;
-		}
-		chunk->skb = skb_shinfo(chunk->skb)->frag_list;
-	}
-}
+This patch fixes the issue by preventing the client from sending data.
+Instead, the client blocks on recv() and waits for the server to close.
+It also waits until both the server and the client sockets are fully
+released in stop_server and wait_client before restarting.
 
-Makes sense?
+Additionally, replace 2>&1 >/dev/null with -q in sysctl and grep, and
+drop other redundant 2>&1 >/dev/null redirections, and fix a typo from
+N to Y (connect successfully) in the description of the last test.
 
-> 
-> 			if (WARN_ON(!chunk->skb)) {
-> 				__SCTP_INC_STATS(dev_net(chunk->head_skb->dev),
-> 						 SCTP_MIB_IN_PKT_DISCARDS);
-> 				sctp_chunk_free(chunk);
-> 				goto next_chunk;
-> 			}
-> 		}
+Fixes: a61bd7b9fef3 ("selftests: add a selftest for sctp vrf")
+Reported-by: Hangbin Liu <liuhangbin@gmail.com>
+Tested-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+---
+ tools/testing/selftests/net/sctp_hello.c | 17 +-----
+ tools/testing/selftests/net/sctp_vrf.sh  | 73 +++++++++++++++---------
+ 2 files changed, 47 insertions(+), 43 deletions(-)
+
+diff --git a/tools/testing/selftests/net/sctp_hello.c b/tools/testing/selftests/net/sctp_hello.c
+index f02f1f95d227..a04dac0b8027 100644
+--- a/tools/testing/selftests/net/sctp_hello.c
++++ b/tools/testing/selftests/net/sctp_hello.c
+@@ -29,7 +29,6 @@ static void set_addr(struct sockaddr_storage *ss, char *ip, char *port, int *len
+ static int do_client(int argc, char *argv[])
+ {
+ 	struct sockaddr_storage ss;
+-	char buf[] = "hello";
+ 	int csk, ret, len;
+ 
+ 	if (argc < 5) {
+@@ -56,16 +55,10 @@ static int do_client(int argc, char *argv[])
+ 
+ 	set_addr(&ss, argv[3], argv[4], &len);
+ 	ret = connect(csk, (struct sockaddr *)&ss, len);
+-	if (ret < 0) {
+-		printf("failed to connect to peer\n");
++	if (ret < 0)
+ 		return -1;
+-	}
+ 
+-	ret = send(csk, buf, strlen(buf) + 1, 0);
+-	if (ret < 0) {
+-		printf("failed to send msg %d\n", ret);
+-		return -1;
+-	}
++	recv(csk, NULL, 0, 0);
+ 	close(csk);
+ 
+ 	return 0;
+@@ -75,7 +68,6 @@ int main(int argc, char *argv[])
+ {
+ 	struct sockaddr_storage ss;
+ 	int lsk, csk, ret, len;
+-	char buf[20];
+ 
+ 	if (argc < 2 || (strcmp(argv[1], "server") && strcmp(argv[1], "client"))) {
+ 		printf("%s server|client ...\n", argv[0]);
+@@ -125,11 +117,6 @@ int main(int argc, char *argv[])
+ 		return -1;
+ 	}
+ 
+-	ret = recv(csk, buf, sizeof(buf), 0);
+-	if (ret <= 0) {
+-		printf("failed to recv msg %d\n", ret);
+-		return -1;
+-	}
+ 	close(csk);
+ 	close(lsk);
+ 
+diff --git a/tools/testing/selftests/net/sctp_vrf.sh b/tools/testing/selftests/net/sctp_vrf.sh
+index c854034b6aa1..667b211aa8a1 100755
+--- a/tools/testing/selftests/net/sctp_vrf.sh
++++ b/tools/testing/selftests/net/sctp_vrf.sh
+@@ -20,9 +20,9 @@ setup() {
+ 	modprobe sctp_diag
+ 	setup_ns CLIENT_NS1 CLIENT_NS2 SERVER_NS
+ 
+-	ip net exec $CLIENT_NS1 sysctl -w net.ipv6.conf.default.accept_dad=0 2>&1 >/dev/null
+-	ip net exec $CLIENT_NS2 sysctl -w net.ipv6.conf.default.accept_dad=0 2>&1 >/dev/null
+-	ip net exec $SERVER_NS sysctl -w net.ipv6.conf.default.accept_dad=0 2>&1 >/dev/null
++	ip net exec $CLIENT_NS1 sysctl -wq net.ipv6.conf.default.accept_dad=0
++	ip net exec $CLIENT_NS2 sysctl -wq net.ipv6.conf.default.accept_dad=0
++	ip net exec $SERVER_NS sysctl -wq net.ipv6.conf.default.accept_dad=0
+ 
+ 	ip -n $SERVER_NS link add veth1 type veth peer name veth1 netns $CLIENT_NS1
+ 	ip -n $SERVER_NS link add veth2 type veth peer name veth1 netns $CLIENT_NS2
+@@ -62,17 +62,40 @@ setup() {
+ }
+ 
+ cleanup() {
+-	ip netns exec $SERVER_NS pkill sctp_hello 2>&1 >/dev/null
++	wait_client $CLIENT_NS1
++	wait_client $CLIENT_NS2
++	stop_server
+ 	cleanup_ns $CLIENT_NS1 $CLIENT_NS2 $SERVER_NS
+ }
+ 
+-wait_server() {
++start_server() {
+ 	local IFACE=$1
+ 	local CNT=0
+ 
+-	until ip netns exec $SERVER_NS ss -lS src $SERVER_IP:$SERVER_PORT | \
+-		grep LISTEN | grep "$IFACE" 2>&1 >/dev/null; do
+-		[ $((CNT++)) = "20" ] && { RET=3; return $RET; }
++	ip netns exec $SERVER_NS ./sctp_hello server $AF $SERVER_IP $SERVER_PORT $IFACE &
++	disown
++	until ip netns exec $SERVER_NS ss -SlH | grep -q "$IFACE"; do
++		[ $((CNT++)) -eq 30 ] && { RET=3; return $RET; }
++		sleep 0.1
++	done
++}
++
++stop_server() {
++	local CNT=0
++
++	ip netns exec $SERVER_NS pkill sctp_hello
++	while ip netns exec $SERVER_NS ss -SaH | grep -q .; do
++		[ $((CNT++)) -eq 30 ] && break
++		sleep 0.1
++	done
++}
++
++wait_client() {
++	local CLIENT_NS=$1
++	local CNT=0
++
++	while ip netns exec $CLIENT_NS ss -SaH | grep -q .; do
++		[ $((CNT++)) -eq 30 ] && break
+ 		sleep 0.1
+ 	done
+ }
+@@ -81,14 +104,12 @@ do_test() {
+ 	local CLIENT_NS=$1
+ 	local IFACE=$2
+ 
+-	ip netns exec $SERVER_NS pkill sctp_hello 2>&1 >/dev/null
+-	ip netns exec $SERVER_NS ./sctp_hello server $AF $SERVER_IP \
+-		$SERVER_PORT $IFACE 2>&1 >/dev/null &
+-	disown
+-	wait_server $IFACE || return $RET
++	start_server $IFACE || return $RET
+ 	timeout 3 ip netns exec $CLIENT_NS ./sctp_hello client $AF \
+-		$SERVER_IP $SERVER_PORT $CLIENT_IP $CLIENT_PORT 2>&1 >/dev/null
++		$SERVER_IP $SERVER_PORT $CLIENT_IP $CLIENT_PORT
+ 	RET=$?
++	wait_client $CLIENT_NS
++	stop_server
+ 	return $RET
+ }
+ 
+@@ -96,25 +117,21 @@ do_testx() {
+ 	local IFACE1=$1
+ 	local IFACE2=$2
+ 
+-	ip netns exec $SERVER_NS pkill sctp_hello 2>&1 >/dev/null
+-	ip netns exec $SERVER_NS ./sctp_hello server $AF $SERVER_IP \
+-		$SERVER_PORT $IFACE1 2>&1 >/dev/null &
+-	disown
+-	wait_server $IFACE1 || return $RET
+-	ip netns exec $SERVER_NS ./sctp_hello server $AF $SERVER_IP \
+-		$SERVER_PORT $IFACE2 2>&1 >/dev/null &
+-	disown
+-	wait_server $IFACE2 || return $RET
++	start_server $IFACE1 || return $RET
++	start_server $IFACE2 || return $RET
+ 	timeout 3 ip netns exec $CLIENT_NS1 ./sctp_hello client $AF \
+-		$SERVER_IP $SERVER_PORT $CLIENT_IP $CLIENT_PORT 2>&1 >/dev/null && \
++		$SERVER_IP $SERVER_PORT $CLIENT_IP $CLIENT_PORT && \
+ 	timeout 3 ip netns exec $CLIENT_NS2 ./sctp_hello client $AF \
+-		$SERVER_IP $SERVER_PORT $CLIENT_IP $CLIENT_PORT 2>&1 >/dev/null
++		$SERVER_IP $SERVER_PORT $CLIENT_IP $CLIENT_PORT
+ 	RET=$?
++	wait_client $CLIENT_NS1
++	wait_client $CLIENT_NS2
++	stop_server
+ 	return $RET
+ }
+ 
+ testup() {
+-	ip netns exec $SERVER_NS sysctl -w net.sctp.l3mdev_accept=1 2>&1 >/dev/null
++	ip netns exec $SERVER_NS sysctl -wq net.sctp.l3mdev_accept=1
+ 	echo -n "TEST 01: nobind, connect from client 1, l3mdev_accept=1, Y "
+ 	do_test $CLIENT_NS1 || { echo "[FAIL]"; return $RET; }
+ 	echo "[PASS]"
+@@ -123,7 +140,7 @@ testup() {
+ 	do_test $CLIENT_NS2 && { echo "[FAIL]"; return $RET; }
+ 	echo "[PASS]"
+ 
+-	ip netns exec $SERVER_NS sysctl -w net.sctp.l3mdev_accept=0 2>&1 >/dev/null
++	ip netns exec $SERVER_NS sysctl -wq net.sctp.l3mdev_accept=0
+ 	echo -n "TEST 03: nobind, connect from client 1, l3mdev_accept=0, N "
+ 	do_test $CLIENT_NS1 && { echo "[FAIL]"; return $RET; }
+ 	echo "[PASS]"
+@@ -160,7 +177,7 @@ testup() {
+ 	do_testx vrf-1 vrf-2 || { echo "[FAIL]"; return $RET; }
+ 	echo "[PASS]"
+ 
+-	echo -n "TEST 12: bind vrf-2 & 1 in server, connect from client 1 & 2, N "
++	echo -n "TEST 12: bind vrf-2 & 1 in server, connect from client 1 & 2, Y "
+ 	do_testx vrf-2 vrf-1 || { echo "[FAIL]"; return $RET; }
+ 	echo "[PASS]"
+ }
+-- 
+2.47.1
+
 
