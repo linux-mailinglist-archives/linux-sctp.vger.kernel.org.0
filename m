@@ -1,66 +1,66 @@
-Return-Path: <linux-sctp+bounces-639-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-640-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BC3FBF233F
-	for <lists+linux-sctp@lfdr.de>; Mon, 20 Oct 2025 17:48:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66EEBBF3AC9
+	for <lists+linux-sctp@lfdr.de>; Mon, 20 Oct 2025 23:13:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DCE7189ACD9
-	for <lists+linux-sctp@lfdr.de>; Mon, 20 Oct 2025 15:49:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C53A53B069A
+	for <lists+linux-sctp@lfdr.de>; Mon, 20 Oct 2025 21:10:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE81E274B5F;
-	Mon, 20 Oct 2025 15:48:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70DC6332EBC;
+	Mon, 20 Oct 2025 21:09:28 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCAA4244669
-	for <linux-sctp@vger.kernel.org>; Mon, 20 Oct 2025 15:48:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.79
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799CE230BCC
+	for <linux-sctp@vger.kernel.org>; Mon, 20 Oct 2025 21:09:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760975312; cv=none; b=GdMEAnFTIUqbu/sBQBQhXDsASgNycVtVaUWa0Bv0gbFiMw/V7GP9EK8xLuVjI+aK51RASE4TpkjvGbQOmj5m8xKawEmMEjkEFs8Gn5Zwat8fOUy1w3fzp3ZaZ7nEnSlRjkS5z6jZ3847co5dv5miHc0C/L1IbJZp+6eR3v7wd+Y=
+	t=1760994568; cv=none; b=j69/N3Tn+jFHZKexeQU3idFdGePqjnokZC6ex1HYgoQssGulzQs2as8NOpVpRioRux6OIrtCKMQzZraXFc7BVCsdmTCyzUsbTPsEk3ejSvn5OwUboKWUMkM0DY3i7B60gmdHWCkl53RpFDXUTPV1AfDH+VnfrUhBejmVzqZxYsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760975312; c=relaxed/simple;
-	bh=fbvmBFj3s1pjbMOYuKSpXRyWaXLLisJ97RIjzYQnnWw=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=KgLCIYPvZq+xkaEa5l37vtzSB40NpLmm0x+H6wDyKDt70y3DdX3UePU9kc/l/szCy/n5XOuPde8uEMJn7HWyTaEqFyoKoSCrJ1vUWaLDzkuKVRH70/gJ9e/q1HNkYeDlyGJlAJ9zbfWRyBF27txVbu29BAyJnOL70uhavebku6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.79
+	s=arc-20240116; t=1760994568; c=relaxed/simple;
+	bh=bReRybpNL/hzm5Z1ABBJMKdETWBrbE1IJm3RQyP8kf8=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=PfYMep2MAbk8swKKOcgtPwi3//ZrHL6rizHqAaExtCu71rIa813bZMju+wPbG8TaHTMy2nisepO7E6o7clvMx8mGDDhQbKWnLsox6+J/YlsFczR7X07+V9zGrWbvtlQ7EIm4/58a9WiL1LmEnkC6umpBW99zrtDsZCeBxWlRLQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.77
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-93e86696bd9so256795539f.2
-        for <linux-sctp@vger.kernel.org>; Mon, 20 Oct 2025 08:48:30 -0700 (PDT)
+Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-93e4da7a183so453154039f.1
+        for <linux-sctp@vger.kernel.org>; Mon, 20 Oct 2025 14:09:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760975310; x=1761580110;
+        d=1e100.net; s=20230601; t=1760994565; x=1761599365;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=XZmsIKT9OKKXitH38og/5N6gCJDMeix2o0WQRyJEKLE=;
-        b=HseaxW8q7CLIQ9BRPXB9z+doARer9FQxyOZmVi74U1AAbc6gXbiLmt+9L5mxgw7de9
-         x6jc+WsqCG36Pc/9os7hOcmQR06gCMX4i0ZRtFNlEonZWD9tvNEJi3lv52Y820odDZh5
-         4NdjYjbL892sU69QmboMGysHodlzUUbW1YWe7u6JuZmje7wXjhB+R/Bpn58OoCnstznK
-         SzoONTuoG9oXQYPyY3zpyz6AJ8FdfzPR4R0VCUDF+bjlYGIvyinTvUoajl0F5xg0ME2I
-         P3ULth6ZlYEWgqq7k1XdMgL8Zf+BUFRlGBnqR0d8or/mbpmMFxep5avnqbCkjFcUTtf3
-         i8Zg==
-X-Forwarded-Encrypted: i=1; AJvYcCWW5uZdTS6BBkJQq60C89Xkr3kGx6QUYrrAFx2OxG5oca1PKmkXsyHoLrkVbH9dDGOY7mg2ldO+klss@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy++/6CpAFTJaEUdL1O4zxw6ulBm5gnZDd7BYWiUjW0dYMGN3ig
-	heH/wctTH3UqW01j5hyiUrmnvq6VQgsNmjq1rHPy9N8BsXKq+xpjB4XO2EnEz7J42JaIrDJmr5I
-	pEPbKlvJSs7uQhSG+FOMIrtDpmzvdICpGcGimY1RD8AZHF6Q8ep9v5WU7GD0=
-X-Google-Smtp-Source: AGHT+IEigfyyBPRR8b0Tg9arVSJPFJMdxJNP9ibzm6Hm13d0UNALPPrp9Zb3JRzZo4xaprEB7kFl0Hl7Re/7AK1aQjq4qpZwzo9+
+        bh=+V+MdXb/YmgAev9Sw7gcszmGhR3iqiEIadv8VJjYG7I=;
+        b=eR+b7vxHS9sSiscrnZwGZNZxxbVoSHriUg8i1bm4i5sD3v4G9Wpm9MZ8ZR1J/gmMmZ
+         x27r81j/OPtlHtYd2Du6lAV2Kderskxdp9vwi/rr2R1KbVyMyLxDlFR7r6/Z7Yw3Xmqn
+         raXT0mLGGqJ222p1JMvImLfjjULkMRtm/+7pKJOqx6Rbe175XpeVCzZPNxaltH+qCpSa
+         xJWygHq4nv3aT4nyuMyz/lZL1nGO+oJDaD7wXRi7n69aKCu52NjFkPr4xGlfKIeAmLp6
+         y1GzhVCHQUcV8/lrCWAQEmhq4fRfFtvJ6+PgR27V2fXCeavvwAy310qi1U3GhTfJVWhW
+         g4oA==
+X-Forwarded-Encrypted: i=1; AJvYcCUoVrsNoqscHR5zvfo2r7EOTnVaRrluMurPi2QjWUZvvCiDSZWozNy4JO25xbc3gGGu7gC8xA1Tbu2V@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPXQpS4uTzQA1bFztCGo0fNT7nbqv0tgSAsGX8T0e4JA6CLU+2
+	eW/XNYg9XfYs/SypAd9nZixUCt8noR4lPO8yHI9CRR8+jFlvVSmlbxpdBZ1IxQK6H5+hmDEN09i
+	piFbqihu3/LHbH9zTfx27exJTEpH7w7NmHs9hOYaviDeWOiAKWENPxNhZRxo=
+X-Google-Smtp-Source: AGHT+IGiQbQSbJGoWUDS16sfg8Ogdo7rD7/vboTuECjLxjeioWAaGSzyvoClxUnJdmKvOwDhuoGUM6gfVTPdjeAHN7HFvuBTstFL
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:601c:b0:940:d6a0:635c with SMTP id
- ca18e2360f4ac-940d6a06fb7mr704565739f.14.1760975309969; Mon, 20 Oct 2025
- 08:48:29 -0700 (PDT)
-Date: Mon, 20 Oct 2025 08:48:29 -0700
+X-Received: by 2002:a05:6602:6015:b0:93f:c5a3:2ad7 with SMTP id
+ ca18e2360f4ac-93fc5a32d96mr1294638839f.6.1760994565634; Mon, 20 Oct 2025
+ 14:09:25 -0700 (PDT)
+Date: Mon, 20 Oct 2025 14:09:25 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <68f659cd.050a0220.91a22.044c.GAE@google.com>
-Subject: [syzbot] [sctp?] KMSAN: uninit-value in sctp_inq_pop (3)
-From: syzbot <syzbot+d101e12bccd4095460e7@syzkaller.appspotmail.com>
+Message-ID: <68f6a505.050a0220.91a22.0454.GAE@google.com>
+Subject: [syzbot] [sctp?] KMSAN: uninit-value in sctp_sf_eat_data_6_2
+From: syzbot <syzbot+aa85f41343d9a3174009@syzkaller.appspotmail.com>
 To: davem@davemloft.net, edumazet@google.com, horms@kernel.org, 
 	kuba@kernel.org, linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org, 
 	lucien.xin@gmail.com, marcelo.leitner@gmail.com, netdev@vger.kernel.org, 
@@ -73,12 +73,11 @@ syzbot found the following issue on:
 
 HEAD commit:    d9043c79ba68 Merge tag 'sched_urgent_for_v6.18_rc2' of git..
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11168de2580000
+console output: https://syzkaller.appspot.com/x/log.txt?x=114b752f980000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=bbd3e7f3c2e28265
-dashboard link: https://syzkaller.appspot.com/bug?extid=d101e12bccd4095460e7
+dashboard link: https://syzkaller.appspot.com/bug?extid=aa85f41343d9a3174009
 compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14098d42580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=118a9734580000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15449734580000
 
 Downloadable assets:
 disk image: https://storage.googleapis.com/syzbot-assets/57a87b0986c0/disk-d9043c79.raw.xz
@@ -86,37 +85,13 @@ vmlinux: https://storage.googleapis.com/syzbot-assets/019c87e1df0a/vmlinux-d9043
 kernel image: https://storage.googleapis.com/syzbot-assets/54f8a8b0734b/bzImage-d9043c79.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d101e12bccd4095460e7@syzkaller.appspotmail.com
+Reported-by: syzbot+aa85f41343d9a3174009@syzkaller.appspotmail.com
 
 =====================================================
-BUG: KMSAN: uninit-value in sctp_inq_pop+0x14dc/0x19e0 net/sctp/inqueue.c:211
- sctp_inq_pop+0x14dc/0x19e0 net/sctp/inqueue.c:211
- sctp_assoc_bh_rcv+0x1a0/0xbc0 net/sctp/associola.c:980
- sctp_inq_push+0x2a6/0x350 net/sctp/inqueue.c:88
- sctp_backlog_rcv+0x3c7/0xda0 net/sctp/input.c:331
- sk_backlog_rcv+0x142/0x420 include/net/sock.h:1158
- __release_sock+0x1ef/0x380 net/core/sock.c:3180
- release_sock+0x6b/0x270 net/core/sock.c:3735
- sctp_sendmsg+0x3a2b/0x49f0 net/sctp/socket.c:2036
- inet_sendmsg+0x26c/0x2a0 net/ipv4/af_inet.c:853
- sock_sendmsg_nosec net/socket.c:727 [inline]
- __sock_sendmsg+0x278/0x3d0 net/socket.c:742
- sock_sendmsg+0x170/0x280 net/socket.c:765
- splice_to_socket+0x10e6/0x1a60 fs/splice.c:886
- do_splice_from fs/splice.c:938 [inline]
- do_splice+0x1fd2/0x30d0 fs/splice.c:1351
- __do_splice fs/splice.c:1433 [inline]
- __do_sys_splice fs/splice.c:1636 [inline]
- __se_sys_splice+0x549/0x8c0 fs/splice.c:1618
- __x64_sys_splice+0x114/0x1a0 fs/splice.c:1618
- x64_sys_call+0x3140/0x3e30 arch/x86/include/generated/asm/syscalls_64.h:276
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xd9/0xfa0 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-Uninit was stored to memory at:
- sctp_inq_pop+0x144a/0x19e0 net/sctp/inqueue.c:207
- sctp_assoc_bh_rcv+0x1a0/0xbc0 net/sctp/associola.c:980
+BUG: KMSAN: uninit-value in sctp_sf_eat_data_6_2+0x5fb/0xf10 net/sctp/sm_statefuns.c:3210
+ sctp_sf_eat_data_6_2+0x5fb/0xf10 net/sctp/sm_statefuns.c:3210
+ sctp_do_sm+0x196/0x9720 net/sctp/sm_sideeffect.c:1172
+ sctp_assoc_bh_rcv+0x88b/0xbc0 net/sctp/associola.c:1034
  sctp_inq_push+0x2a6/0x350 net/sctp/inqueue.c:88
  sctp_backlog_rcv+0x3c7/0xda0 net/sctp/input.c:331
  sk_backlog_rcv+0x142/0x420 include/net/sock.h:1158
@@ -172,7 +147,7 @@ Uninit was created at:
  do_syscall_64+0xd9/0xfa0 arch/x86/entry/syscall_64.c:94
  entry_SYSCALL_64_after_hwframe+0x77/0x7f
 
-CPU: 0 UID: 0 PID: 6071 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(none) 
+CPU: 0 UID: 0 PID: 6190 Comm: syz.1.23 Not tainted syzkaller #0 PREEMPT(none) 
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/02/2025
 =====================================================
 
