@@ -1,150 +1,118 @@
-Return-Path: <linux-sctp+bounces-642-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-643-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3233BF6A3F
-	for <lists+linux-sctp@lfdr.de>; Tue, 21 Oct 2025 15:04:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95200BF6D7F
+	for <lists+linux-sctp@lfdr.de>; Tue, 21 Oct 2025 15:42:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6869134F808
-	for <lists+linux-sctp@lfdr.de>; Tue, 21 Oct 2025 13:04:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5446340051B
+	for <lists+linux-sctp@lfdr.de>; Tue, 21 Oct 2025 13:42:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83091337B97;
-	Tue, 21 Oct 2025 13:01:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69A4B31DDAE;
+	Tue, 21 Oct 2025 13:42:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kWNjZXq8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qco9XJSn"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EFEB337B99
-	for <linux-sctp@vger.kernel.org>; Tue, 21 Oct 2025 13:01:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D2128643A
+	for <linux-sctp@vger.kernel.org>; Tue, 21 Oct 2025 13:42:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761051716; cv=none; b=BAKS3a1OPp92+3K+umQmdQorV7axyX+SvfE/ILysjEujPHvaIu9106NOo7734za1NSNWVnNc2QgraJvRfj0X+CAmNXpGf0DybdWAKoSeOgR4u8DL+cwX/uxLQzQ+8cWPNzNdBU1sU/kkP5RNXaw//hK4S1WhRG3pXishuz8naUw=
+	t=1761054145; cv=none; b=ArjA21oymkHtAT2zSmqn5scyReZSbhi+ORvvGubWhmuN8UojONqTxQWGbtc989xRocFln+OBkyQqH0rOQX354L4xE6YDcIHVcC9XSadx+v9BPPtdonz8ZVGPkjp4XKKfgw4BD1k7vlvehG1A91aGdzcIbmPGiN5QF+UHgxzG6hg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761051716; c=relaxed/simple;
-	bh=/6e4Ptuqnezl7IG4EEoTOuL0lZT0IuoppTJCNRC7C4I=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=aDiEOKtjikNcpmZ4E7iNc2pqbDXBRGTvRUlU3z0BEdmZxjhffBZF5hFdu5AePoXLVg+R7FoGwVNANjOgf689mycAvzLZDiB/XUNSOyaz7rj26Fv3S1nmcnyLzcXEqASkMFLoAF5rocnKicp1vXbjULPHBLKs74W79Xi4+j//gkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kWNjZXq8; arc=none smtp.client-ip=209.85.167.52
+	s=arc-20240116; t=1761054145; c=relaxed/simple;
+	bh=bxHGLz+xlJewzMmRFIuIR23gQThD28fVSG7QUjGyY9c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CsZwkDdO2f1jvrvDOhlLUkfq8HPX73ScDwSuJuJqw+51NlPxrd6JiRcyNz5FvBbcPafLNfwKODnd0UopcJbJRMzWN/TtKnuz86KGKsJTMnVz/1yaHajD0qmGY9yZVr40h0aoBHZ1P2jySaEfjTiJ5gu1vF1fU/d05mWeJrjJxhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qco9XJSn; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-579363a4602so5611957e87.0
-        for <linux-sctp@vger.kernel.org>; Tue, 21 Oct 2025 06:01:53 -0700 (PDT)
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7a226a0798cso3545257b3a.2
+        for <linux-sctp@vger.kernel.org>; Tue, 21 Oct 2025 06:42:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761051712; x=1761656512; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OyY2Eyt9nzPKJbJW/4VOy5YSdTPy2ZRF5S/Kzk7Ode8=;
-        b=kWNjZXq80o/qoZVI+9DD+JK1Oet5mMlhG9MQTquN/CWrh42hu7s5/uZQlXgMh1tznv
-         0P+ObtgxnXWVARYezIInwqP0Zw2wOf1wnHux69aTuSVHZuiJHgf91wwnCLBAJN50gVPy
-         FbyXgd2E8iZFwJleCe/C8r5pgnQE6XiCK5dA9vaAG3n54MvCJj5M2NcgyWCLAXb3Uw1a
-         1ZPPel6rCtDKrMrpvyAfJNS1ZuFS5E4UIrMPyRNatK0dS0fNiVUrnAh6FiKD0j7buKtW
-         /KDgltGDwivQNyKhGv7TEsbI/ccSMF84JagS2h/nOAh1aAv2otJqAMZajQHvLWFVZDDR
-         3yog==
+        d=gmail.com; s=20230601; t=1761054143; x=1761658943; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wgZPMxLu6X9wz+t1vCeUGO6rtKpKjgYYhFE+lvxINzo=;
+        b=Qco9XJSn8o7aI7jdnej999Q66H4OF/VjuIKBTfCudYuafg1UVi1nseppeUfwH4ea1d
+         Z2PPyBMozXJYzWqvNU4l0rULNb3p/5uCHR8Gp3vMbB3bcbFIwEzh3i1uen4r5Yp6lNC1
+         n6F2gLb5kBy2K69Td+Y/5YJhsMX3JXhlTmmwMP3q3jd0Qz3MqMwLc9O+G5zm9P2FHRpZ
+         +BuQSYEQeGs4VZb32Xu7d5yDMlSpQ8CQ+iTaQ2d3xkjToyqRtCJrELpHl0CFNImyY+Lg
+         o49fjDhsO9Deed8OOfsouuVjvq2JnrijkquNucDx5HGx1gSUGPQ+c1KiRCGkR+c5F81x
+         RcyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761051712; x=1761656512;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OyY2Eyt9nzPKJbJW/4VOy5YSdTPy2ZRF5S/Kzk7Ode8=;
-        b=nLkpUGGMUqVdbdzskG1Swbt61ZgwPT+iuEcSnK2OCMT76DUtt+E3oFHNKPuq3YlqKH
-         wkBJRQa3LefMiGR+xabAcwjc+tB+DiO+2POA6WaBa09/Z78vgKvefb+aeJiPvrRgm3Rs
-         ksZ9LnHBFv3qjFR2blnGTaksbKbx0UJ/DP9K2cmWiuMFJvGEGHMlxYhQMBCYKlGP9oiP
-         4RQlxT35eBYYfgzTwLcBQiGqlFwU1E4VHF3Ev2F2KnrYp8XipS8PSE7zJWFV/tStKUG0
-         BHkLz4a99w/6I5x5E9dobSxUNjNsnYWEdPuLf30pMBxSWSX0bm17gIlUHu7nUW2EDDfJ
-         zuNw==
-X-Forwarded-Encrypted: i=1; AJvYcCWUAWbVlbZvL0kHCqzwegn1IklbfZgKQ+NNeStPsAXSGl6iZFNAukLgtUYbhCfaPFPWcjCBq4zYu8rx@vger.kernel.org
-X-Gm-Message-State: AOJu0YwN87J8AGzXSPErmwdlFNNtlVCbvTDERKRYXlTEVwfBSEK+NnAM
-	w4e1+7qEtqEI2DxNqYsrf96CCCI7s9eorMOM8RM5SDt2q7VdgbtXpD4V
-X-Gm-Gg: ASbGncvZ+4qMktzW4PWj7f6NxoStOJYzNLzu61Yp/gQmo1VJOtXEEMclAn3cJh6HJph
-	Dt4NYJg2uUwxV5y1ikOfkKckCN7vPx7HwWuc3Y3+2g/pn6TaW42VsztkRD6q1HpftQ8syBvsZ/o
-	ojtOmfMFutIGlkf+Q2rV18TbU9jUcX1/WIXMO7H+5kQbitylS37ScPjeGdHaoXiELBxd0A712XO
-	3qtsfVREmFXjIpzVGKieLItUaoAP/kiKSrY6wdm7ogx6evyXozypZClP5NRjCi81lyWuf/fO04H
-	9G7iw90cnyAtd/D/sHf0WWrVT4xiS25HZmhVMyn45B/nSkO4jpGx4eDhESkvESvn42BSPoZoSST
-	5eIDuRT5jp+ax3RlJ3cBqi6ld2Pduq45rsAAPUz9Dnf3EeFqIKa0X+nLE0f2rztNfRRjbeKjoJB
-	iVB2bAtrEXhctgCeylR7VA93Z6FUE=
-X-Google-Smtp-Source: AGHT+IGS9wuVDvvevxvg8K71lROg6rYpbM4tkxXD2Kfjl5l0kw3W7LqaDVVdOT+MS4gADMX6EMuH1A==
-X-Received: by 2002:a05:6512:e8b:b0:57c:2474:372b with SMTP id 2adb3069b0e04-591d8584a95mr5461765e87.49.1761051711762;
-        Tue, 21 Oct 2025 06:01:51 -0700 (PDT)
-Received: from home-server.lan ([82.208.126.183])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-591def1b37dsm3624098e87.87.2025.10.21.06.01.50
+        d=1e100.net; s=20230601; t=1761054143; x=1761658943;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wgZPMxLu6X9wz+t1vCeUGO6rtKpKjgYYhFE+lvxINzo=;
+        b=qwpX79vjEk0LJ3S7TSdMQs2mp6FhHzD0zaV6qWMuIkjyACT8oL6Ym9Cs211Ax1Lyvf
+         /qveo9fxj9G1YXyNPXELai2D3/ICThVWpLzQr4jdCTzbXVFZok4JA7x/bEveYo9jHIb8
+         184k1T/xCcNz5H3lcjGvtQ/eNXAxMDIC0Xr8AOM9hUNhyP+QO1vT3DlRc/j+EZhFEVc7
+         /cbPV3h46ZPKt82ySMJyvI/CMpYgMl5ms5izfqKtFw70vcWaOP/mvDjYghTaPtBAJYx2
+         fLO5mc1El8Tu1l15Q8bESUEi1mvBFEuypzg591sOrJimdqlwfJUQ6X0xAQvo1P2H32x6
+         VdCg==
+X-Forwarded-Encrypted: i=1; AJvYcCUZJODEfJFtP4nz0z1aA168IjySFLNzDXOFUBTmLFDq+9Ml25FveNurJEKZQUT428kHON5cnIQJbpHt@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHujEaV7srpDtMuf2X7jt0l0JCLPPZqpMQ6qm1SdfJOTRWTM/n
+	b6LLAZSFGqBzNfGnBUkH4JVODtgGxUEn35wZKM3xT4UenC1GI7KwQlcK
+X-Gm-Gg: ASbGncvLbHugdSWv5LKtmfTJ4kIPmj/D3jua3tI0EK98Hp1oa2tXfo3ELmADuLR6QUt
+	QBEypb/P8WOK4XAedq4F25ZjIUYeSdzJZQRpJtNy5LfaM3leYsNgATIVKq8SwVmqk+CSWcnQROd
+	nil9isUP9+m5kWXeMkALsZ3cLUVs0EI13U9FON8HzzPqB/rvbxmbrcFAhk/QOwPVj+OjZkGUija
+	ZX7FweCj7uh5OcODMex/nIe4r7AK6smQX7mtz3QBITztlxBrqBm/C11kLHZTOjQkwvteveIq/xg
+	xp5V81zVm5lscT/5QLwfs+iblH/o/o88EW129B2ZLDEZsK7RW3NYxNIvNLvN9bsXPD2ou7udORF
+	0PRNW7+/ApZGslWgWocV3d6tQTZ650Ii75qdbWFPK+ypFkALOHzX8fhaEGnVE5q93kqZKuGOVf7
+	ZTX6qqSd2iFFgfakWKfG5+e2hRhKVr
+X-Google-Smtp-Source: AGHT+IEtBrPuQQUxw2bft59BW11T/7eOEgF3RMVKZ3jPGBy5mT6+NnW6S4WaVnFWlQfeAnAVDZwRzA==
+X-Received: by 2002:a05:6a21:6daa:b0:32d:b924:ed87 with SMTP id adf61e73a8af0-334a854ac50mr21383426637.20.1761054142909;
+        Tue, 21 Oct 2025 06:42:22 -0700 (PDT)
+Received: from t14s.localdomain ([2804:29b8:508a:1537:573a:39d:6287:7ddf])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7a23010e211sm11306341b3a.62.2025.10.21.06.42.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Oct 2025 06:01:50 -0700 (PDT)
-From: Alexey Simakov <bigalex934@gmail.com>
-To: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc: Alexey Simakov <bigalex934@gmail.com>,
-	Xin Long <lucien.xin@gmail.com>,
+        Tue, 21 Oct 2025 06:42:22 -0700 (PDT)
+Received: by t14s.localdomain (Postfix, from userid 1000)
+	id 60D4711CF92D; Tue, 21 Oct 2025 10:42:19 -0300 (-03)
+Date: Tue, 21 Oct 2025 10:42:19 -0300
+From: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To: Alexey Simakov <bigalex934@gmail.com>
+Cc: Xin Long <lucien.xin@gmail.com>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	linux-sctp@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, linux-sctp@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
 	lvc-project@linuxtesting.org
-Subject: [PATCH v2 net] sctp: avoid NULL dereference when chunk data buffer is missing
-Date: Tue, 21 Oct 2025 16:00:36 +0300
-Message-Id: <20251021130034.6333-1-bigalex934@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Subject: Re: [PATCH v2 net] sctp: avoid NULL dereference when chunk data
+ buffer is missing
+Message-ID: <aPeNu7-COwBQS21U@t14s.localdomain>
+References: <20251021130034.6333-1-bigalex934@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251021130034.6333-1-bigalex934@gmail.com>
 
-chunk->skb pointer is dereferenced in the if-block where it's supposed
-to be NULL only.
+On Tue, Oct 21, 2025 at 04:00:36PM +0300, Alexey Simakov wrote:
+> chunk->skb pointer is dereferenced in the if-block where it's supposed
+> to be NULL only.
+> 
+> chunk->skb can only be NULL if chunk->head_skb is not. Check for frag_list
+> instead and do it just before replacing chunk->skb. We're sure that
+> otherwise chunk->skb is non-NULL because of outer if() condition.
+> 
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> 
+> Fixes: 90017accff61 ("sctp: Add GSO support")
+> Signed-off-by: Alexey Simakov <bigalex934@gmail.com>
 
-chunk->skb can only be NULL if chunk->head_skb is not. Check for frag_list
-instead and do it just before replacing chunk->skb. We're sure that
-otherwise chunk->skb is non-NULL because of outer if() condition.
+Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
-
-Fixes: 90017accff61 ("sctp: Add GSO support")
-Signed-off-by: Alexey Simakov <bigalex934@gmail.com>
----
-
-v2 - change the condition in if-block and update
-its location for preventing potential memory leak
-per Marcelo Ricardo Leitner's suggestion.
-
-link to v1: https://lore.kernel.org/lkml/20251015184510.6547-1-bigalex934@gmail.com/
-
- net/sctp/inqueue.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
-
-diff --git a/net/sctp/inqueue.c b/net/sctp/inqueue.c
-index 5c1652181805..f5a7d5a38755 100644
---- a/net/sctp/inqueue.c
-+++ b/net/sctp/inqueue.c
-@@ -169,13 +169,14 @@ struct sctp_chunk *sctp_inq_pop(struct sctp_inq *queue)
- 				chunk->head_skb = chunk->skb;
- 
- 			/* skbs with "cover letter" */
--			if (chunk->head_skb && chunk->skb->data_len == chunk->skb->len)
-+			if (chunk->head_skb && chunk->skb->data_len == chunk->skb->len) {
-+				if (WARN_ON(!skb_shinfo(chunk->skb)->frag_list)) {
-+					__SCTP_INC_STATS(dev_net(chunk->skb->dev),
-+							 SCTP_MIB_IN_PKT_DISCARDS);
-+					sctp_chunk_free(chunk);
-+					goto next_chunk;
-+				}
- 				chunk->skb = skb_shinfo(chunk->skb)->frag_list;
--
--			if (WARN_ON(!chunk->skb)) {
--				__SCTP_INC_STATS(dev_net(chunk->skb->dev), SCTP_MIB_IN_PKT_DISCARDS);
--				sctp_chunk_free(chunk);
--				goto next_chunk;
- 			}
- 		}
- 
--- 
-2.34.1
-
+Thx.
 
