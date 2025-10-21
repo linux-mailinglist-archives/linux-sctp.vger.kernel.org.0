@@ -1,118 +1,176 @@
-Return-Path: <linux-sctp+bounces-643-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-644-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95200BF6D7F
-	for <lists+linux-sctp@lfdr.de>; Tue, 21 Oct 2025 15:42:36 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 455ABBF8F7E
+	for <lists+linux-sctp@lfdr.de>; Tue, 21 Oct 2025 23:44:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5446340051B
-	for <lists+linux-sctp@lfdr.de>; Tue, 21 Oct 2025 13:42:26 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 011744E4C07
+	for <lists+linux-sctp@lfdr.de>; Tue, 21 Oct 2025 21:44:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69A4B31DDAE;
-	Tue, 21 Oct 2025 13:42:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AA13296159;
+	Tue, 21 Oct 2025 21:44:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qco9XJSn"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MlaQ1cxV"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D2128643A
-	for <linux-sctp@vger.kernel.org>; Tue, 21 Oct 2025 13:42:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD8FB23A9AD
+	for <linux-sctp@vger.kernel.org>; Tue, 21 Oct 2025 21:44:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761054145; cv=none; b=ArjA21oymkHtAT2zSmqn5scyReZSbhi+ORvvGubWhmuN8UojONqTxQWGbtc989xRocFln+OBkyQqH0rOQX354L4xE6YDcIHVcC9XSadx+v9BPPtdonz8ZVGPkjp4XKKfgw4BD1k7vlvehG1A91aGdzcIbmPGiN5QF+UHgxzG6hg=
+	t=1761083067; cv=none; b=R8m6+DPbe1/mmWM+/cSHTXTBD6EFQnsTgERyleEhhB6lD5XNkhyqPMPLuI7birwZtLciSGq00qgCSZCf2gFiTRhW1xZTVPCcjle5/xKBJo2I7S+fO0X73GEBWJb5WN5NTDepD1yYAv1em1lfWeWNMo49haWl59atxSOwc4YAHxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761054145; c=relaxed/simple;
-	bh=bxHGLz+xlJewzMmRFIuIR23gQThD28fVSG7QUjGyY9c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CsZwkDdO2f1jvrvDOhlLUkfq8HPX73ScDwSuJuJqw+51NlPxrd6JiRcyNz5FvBbcPafLNfwKODnd0UopcJbJRMzWN/TtKnuz86KGKsJTMnVz/1yaHajD0qmGY9yZVr40h0aoBHZ1P2jySaEfjTiJ5gu1vF1fU/d05mWeJrjJxhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qco9XJSn; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7a226a0798cso3545257b3a.2
-        for <linux-sctp@vger.kernel.org>; Tue, 21 Oct 2025 06:42:23 -0700 (PDT)
+	s=arc-20240116; t=1761083067; c=relaxed/simple;
+	bh=A1uYCgWXD3EFMM4SSZGAaRuJmaC/u0D8x4ZC15Bjuoc=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=cyui6Xlreou7v6IYCm6PLa1hvVzjsmilwG2hMfUvlwbcpw3QBp6PvObpGvCwFyTJXTKGLAdxxKeW2PACkd3h/1WVvuB8+0o/SCzo3My5rwjQH/S+YbIYHjg8u4nsIvnUao7Pkm006KLPZ6s0zrbOQ1RD7ZsPW8eNN+hrApNwKhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MlaQ1cxV; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-32eb18b5659so4982556a91.2
+        for <linux-sctp@vger.kernel.org>; Tue, 21 Oct 2025 14:44:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761054143; x=1761658943; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wgZPMxLu6X9wz+t1vCeUGO6rtKpKjgYYhFE+lvxINzo=;
-        b=Qco9XJSn8o7aI7jdnej999Q66H4OF/VjuIKBTfCudYuafg1UVi1nseppeUfwH4ea1d
-         Z2PPyBMozXJYzWqvNU4l0rULNb3p/5uCHR8Gp3vMbB3bcbFIwEzh3i1uen4r5Yp6lNC1
-         n6F2gLb5kBy2K69Td+Y/5YJhsMX3JXhlTmmwMP3q3jd0Qz3MqMwLc9O+G5zm9P2FHRpZ
-         +BuQSYEQeGs4VZb32Xu7d5yDMlSpQ8CQ+iTaQ2d3xkjToyqRtCJrELpHl0CFNImyY+Lg
-         o49fjDhsO9Deed8OOfsouuVjvq2JnrijkquNucDx5HGx1gSUGPQ+c1KiRCGkR+c5F81x
-         RcyA==
+        d=google.com; s=20230601; t=1761083065; x=1761687865; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=sc3ZtO3cOGM0x3KSmvG19vKOhgTXTPdy54qUUa1gbjs=;
+        b=MlaQ1cxVaAsRqRsUUnkYWxDLO+oi62sC4DfEnf02qgTeMnXNvJPUmCzwY/CBsTYCy7
+         7TY/n30CYyREzVkP4sTQ8TleR6OxU1ya1SezPL572C/dkG13hwVOpprd71v1QY+6j2iL
+         fTWLftNNap3fJblnmEP2G7i/ZwaYxaJ/L237KhUNGKJceva/CwRssBAALk7PK2nQpvw4
+         9sGokqqBzV09zYUJvXVLxgF0YzQYLTIXlT2ynx8YDWYeRrX6DHbLBI5THUI/JzHnPI8U
+         hZj6uoDCdhMihW5gMowS1uCLQIbFIWCRV7cH8AhhcfhknNeZjV+OTFitZnQlbD97T+D0
+         ba8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761054143; x=1761658943;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wgZPMxLu6X9wz+t1vCeUGO6rtKpKjgYYhFE+lvxINzo=;
-        b=qwpX79vjEk0LJ3S7TSdMQs2mp6FhHzD0zaV6qWMuIkjyACT8oL6Ym9Cs211Ax1Lyvf
-         /qveo9fxj9G1YXyNPXELai2D3/ICThVWpLzQr4jdCTzbXVFZok4JA7x/bEveYo9jHIb8
-         184k1T/xCcNz5H3lcjGvtQ/eNXAxMDIC0Xr8AOM9hUNhyP+QO1vT3DlRc/j+EZhFEVc7
-         /cbPV3h46ZPKt82ySMJyvI/CMpYgMl5ms5izfqKtFw70vcWaOP/mvDjYghTaPtBAJYx2
-         fLO5mc1El8Tu1l15Q8bESUEi1mvBFEuypzg591sOrJimdqlwfJUQ6X0xAQvo1P2H32x6
-         VdCg==
-X-Forwarded-Encrypted: i=1; AJvYcCUZJODEfJFtP4nz0z1aA168IjySFLNzDXOFUBTmLFDq+9Ml25FveNurJEKZQUT428kHON5cnIQJbpHt@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHujEaV7srpDtMuf2X7jt0l0JCLPPZqpMQ6qm1SdfJOTRWTM/n
-	b6LLAZSFGqBzNfGnBUkH4JVODtgGxUEn35wZKM3xT4UenC1GI7KwQlcK
-X-Gm-Gg: ASbGncvLbHugdSWv5LKtmfTJ4kIPmj/D3jua3tI0EK98Hp1oa2tXfo3ELmADuLR6QUt
-	QBEypb/P8WOK4XAedq4F25ZjIUYeSdzJZQRpJtNy5LfaM3leYsNgATIVKq8SwVmqk+CSWcnQROd
-	nil9isUP9+m5kWXeMkALsZ3cLUVs0EI13U9FON8HzzPqB/rvbxmbrcFAhk/QOwPVj+OjZkGUija
-	ZX7FweCj7uh5OcODMex/nIe4r7AK6smQX7mtz3QBITztlxBrqBm/C11kLHZTOjQkwvteveIq/xg
-	xp5V81zVm5lscT/5QLwfs+iblH/o/o88EW129B2ZLDEZsK7RW3NYxNIvNLvN9bsXPD2ou7udORF
-	0PRNW7+/ApZGslWgWocV3d6tQTZ650Ii75qdbWFPK+ypFkALOHzX8fhaEGnVE5q93kqZKuGOVf7
-	ZTX6qqSd2iFFgfakWKfG5+e2hRhKVr
-X-Google-Smtp-Source: AGHT+IEtBrPuQQUxw2bft59BW11T/7eOEgF3RMVKZ3jPGBy5mT6+NnW6S4WaVnFWlQfeAnAVDZwRzA==
-X-Received: by 2002:a05:6a21:6daa:b0:32d:b924:ed87 with SMTP id adf61e73a8af0-334a854ac50mr21383426637.20.1761054142909;
-        Tue, 21 Oct 2025 06:42:22 -0700 (PDT)
-Received: from t14s.localdomain ([2804:29b8:508a:1537:573a:39d:6287:7ddf])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7a23010e211sm11306341b3a.62.2025.10.21.06.42.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Oct 2025 06:42:22 -0700 (PDT)
-Received: by t14s.localdomain (Postfix, from userid 1000)
-	id 60D4711CF92D; Tue, 21 Oct 2025 10:42:19 -0300 (-03)
-Date: Tue, 21 Oct 2025 10:42:19 -0300
-From: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To: Alexey Simakov <bigalex934@gmail.com>
-Cc: Xin Long <lucien.xin@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, linux-sctp@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	lvc-project@linuxtesting.org
-Subject: Re: [PATCH v2 net] sctp: avoid NULL dereference when chunk data
- buffer is missing
-Message-ID: <aPeNu7-COwBQS21U@t14s.localdomain>
-References: <20251021130034.6333-1-bigalex934@gmail.com>
+        d=1e100.net; s=20230601; t=1761083065; x=1761687865;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sc3ZtO3cOGM0x3KSmvG19vKOhgTXTPdy54qUUa1gbjs=;
+        b=r97I/hPj8hyMSFRlOBp9SLjjsYOY5x2CnHm2hAtG70LMNzoMoVxp6Mbhe792rmX7BV
+         jBtsZTGuiuySS54YSiJy1ovmm11jerTQBDNpJgMIXvRGvJZPPEmQacKpSm7u99wSOYmJ
+         SelpuoKQuEg6BRUafMW1LIyZhfe44/A6bE/RtXp+V3SkVs1gdmySGXa4kTX8Jq4MFD6D
+         rq2g1QWtNfox7pVdb/tLHdHuNJBfO7tbpyWECLnC5JTTHMeNx+BSEI1jzoUuwGJxRgas
+         9Z8lz3M/VufIF7w+kHuwfz0I2NTzbMF9Mm0/EmLco6Wq9Hq2pXwtubQGcHOTGNwwRylp
+         ofAA==
+X-Forwarded-Encrypted: i=1; AJvYcCU+AHq1mQ1MDUuBoPu5CRtJbZIb+QN+zx47nkOVScO0Q+lAckMrEOuvIr6RsW0PdiIW8FUZLQHDIWU+@vger.kernel.org
+X-Gm-Message-State: AOJu0YxV5kgAOfPBbnS7zv9QSOYNZG6RosyZ9aDOXSHhe0aVhBAqFEsy
+	LSoTHPs4qrAlkEEqgPiUc1/6cdQ8fPhpBXdewmd8jQ7BRxRv4UU56PC0IMXo+gNY+gcW209sZ4Y
+	XuSEXyw==
+X-Google-Smtp-Source: AGHT+IEoix6B3N1uwiotc68nIE0sRzTrG2q22EWs+o41UwKu2RSo/4u9xKIBpshSgiRR3c7jJebvRGhYmQU=
+X-Received: from pjbst4.prod.google.com ([2002:a17:90b:1fc4:b0:339:dc19:ae60])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1d88:b0:32b:df0e:9283
+ with SMTP id 98e67ed59e1d1-33bcf90e86cmr24116541a91.34.1761083064916; Tue, 21
+ Oct 2025 14:44:24 -0700 (PDT)
+Date: Tue, 21 Oct 2025 21:43:17 +0000
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251021130034.6333-1-bigalex934@gmail.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.0.915.g61a8936c21-goog
+Message-ID: <20251021214422.1941691-1-kuniyu@google.com>
+Subject: [PATCH v1 net-next 0/8] sctp: Avoid redundant copy in sctp_accept()
+ and sctp_do_peeloff().
+From: Kuniyuki Iwashima <kuniyu@google.com>
+To: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: Simon Horman <horms@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	Kuniyuki Iwashima <kuni1840@gmail.com>, netdev@vger.kernel.org, linux-sctp@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Oct 21, 2025 at 04:00:36PM +0300, Alexey Simakov wrote:
-> chunk->skb pointer is dereferenced in the if-block where it's supposed
-> to be NULL only.
-> 
-> chunk->skb can only be NULL if chunk->head_skb is not. Check for frag_list
-> instead and do it just before replacing chunk->skb. We're sure that
-> otherwise chunk->skb is non-NULL because of outer if() condition.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> 
-> Fixes: 90017accff61 ("sctp: Add GSO support")
-> Signed-off-by: Alexey Simakov <bigalex934@gmail.com>
+When sctp_accept() and sctp_do_peeloff() allocates a new socket,
+somehow sk_alloc() is used, and the new socket goes through full
+initialisation, but most of the fields are overwritten later.
 
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+  1)
+  sctp_accept()
+  |- sctp_v[46]_create_accept_sk()
+  |  |- sk_alloc()
+  |  |- sock_init_data()
+  |  |- sctp_copy_sock()
+  |  `- newsk->sk_prot->init() / sctp_init_sock()
+  |
+  `- sctp_sock_migrate()
+     `- sctp_copy_descendant(newsk, oldsk)
 
-Thx.
+  sock_init_data() initialises struct sock, but many fields are
+  overwritten by sctp_copy_sock(), which inherits fields of struct
+  sock and inet_sock from the parent socket.
+
+  sctp_init_sock() fully initialises struct sctp_sock, but later
+  sctp_copy_descendant() inherits most fields from the parent's
+  struct sctp_sock by memcpy().
+
+  2)
+  sctp_do_peeloff()
+  |- sock_create()
+  |  |
+  |  ...
+  |      |- sk_alloc()
+  |      |- sock_init_data()
+  |  ...
+  |    `- newsk->sk_prot->init() / sctp_init_sock()
+  |
+  |- sctp_copy_sock()
+  `- sctp_sock_migrate()
+     `- sctp_copy_descendant(newsk, oldsk)
+
+  sock_create() creates a brand new socket, but sctp_copy_sock()
+  and sctp_sock_migrate() overwrite most of the fields.
+
+So, sk_alloc(), sock_init_data(), sctp_copy_sock(), and
+sctp_copy_descendant() can be replaced with a single function
+like sk_clone_lock().
+
+This series does the conversion and removes TODO comment added
+by commit 4a997d49d92ad ("tcp: Save lock_sock() for memcg in
+inet_csk_accept().").
+
+Tested accept() and SCTP_SOCKOPT_PEELOFF and both work properly.
+
+  socket(AF_INET, SOCK_STREAM, IPPROTO_SCTP) = 3
+  bind(3, {sa_family=AF_INET, sin_port=htons(0), sin_addr=inet_addr("127.0.0.1")}, 16) = 0
+  listen(3, -1)                           = 0
+  getsockname(3, {sa_family=AF_INET, sin_port=htons(49460), sin_addr=inet_addr("127.0.0.1")}, [16]) = 0
+  socket(AF_INET, SOCK_STREAM, IPPROTO_SCTP) = 4
+  connect(4, {sa_family=AF_INET, sin_port=htons(49460), sin_addr=inet_addr("127.0.0.1")}, 16) = 0
+  accept(3, NULL, NULL)                   = 5
+
+  socket(AF_INET, SOCK_SEQPACKET, IPPROTO_SCTP) = 3
+  bind(3, {sa_family=AF_INET, sin_port=htons(0), sin_addr=inet_addr("127.0.0.1")}, 16) = 0
+  listen(3, -1)                           = 0
+  getsockname(3, {sa_family=AF_INET, sin_port=htons(48240), sin_addr=inet_addr("127.0.0.1")}, [16]) = 0
+  socket(AF_INET, SOCK_SEQPACKET, IPPROTO_SCTP) = 4
+  connect(4, {sa_family=AF_INET, sin_port=htons(48240), sin_addr=inet_addr("127.0.0.1")}, 16) = 0
+  getsockopt(3, SOL_SCTP, SCTP_SOCKOPT_PEELOFF, "*\0\0\0\5\0\0\0", [8]) = 5
+
+
+Kuniyuki Iwashima (8):
+  sctp: Defer SCTP_DBG_OBJCNT_DEC() to sctp_destroy_sock().
+  sctp: Don't copy sk_sndbuf and sk_rcvbuf in sctp_sock_migrate().
+  sctp: Don't call sk->sk_prot->init() in sctp_v[46]_create_accept_sk().
+  net: Add sk_clone().
+  sctp: Use sk_clone() in sctp_accept().
+  sctp: Remove sctp_pf.create_accept_sk().
+  sctp: Use sctp_clone_sock() in sctp_do_peeloff().
+  sctp: Remove sctp_copy_sock() and sctp_copy_descendant().
+
+ include/net/inet_sock.h    |   8 --
+ include/net/sctp/sctp.h    |   3 +-
+ include/net/sctp/structs.h |   3 -
+ include/net/sock.h         |   7 +-
+ net/core/sock.c            |  21 ++--
+ net/ipv4/af_inet.c         |   4 +-
+ net/sctp/ipv6.c            |  51 ---------
+ net/sctp/protocol.c        |  33 ------
+ net/sctp/socket.c          | 209 +++++++++++++++++--------------------
+ 9 files changed, 115 insertions(+), 224 deletions(-)
+
+-- 
+2.51.0.915.g61a8936c21-goog
+
 
