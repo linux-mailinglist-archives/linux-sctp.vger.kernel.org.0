@@ -1,70 +1,70 @@
-Return-Path: <linux-sctp+bounces-661-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-662-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6A55BFE46A
-	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 23:17:57 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77EEBBFE473
+	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 23:17:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 419761A073B5
-	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 21:18:14 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 591D84E7B63
+	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 21:17:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37720303A1C;
-	Wed, 22 Oct 2025 21:17:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CABC1303C9C;
+	Wed, 22 Oct 2025 21:17:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EFQTv753"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1WrajX+P"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72334302CDB
-	for <linux-sctp@vger.kernel.org>; Wed, 22 Oct 2025 21:17:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D19279918
+	for <linux-sctp@vger.kernel.org>; Wed, 22 Oct 2025 21:17:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761167854; cv=none; b=RYxP5kj8OIxbcLcZQFHfKVg8ibJh/v7nb60oB6O9COmKK4TDANHue2/cJxn/tI5oJNwAvVByeRd0MTuR0ozj1ZNTkmjglxrMyuf72wDauv5fNLB5ttuhJXxIzB5orxd+aMygFeiODIcnAh8/m2NcMPCqh3iO/GgwVCXmnuJfvZk=
+	t=1761167855; cv=none; b=Z558y2XmgZc6cTKOyqYSy8mjT849+juzYveDDiCYdZ08tl0t9krF6CtQtduLU9RdC5+PaGKnVxmRmRiQxgbcApuS6Y/EB6tiK9MzeJzJXnTYevwQ0c2nZHsu88aqw7noMfuSVivzUajww6J2Ts1wUYt/9l7OEfUj3JJUFF1FZBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761167854; c=relaxed/simple;
-	bh=alW2OfdKBEU5AzaHWjUns9JqU0y2wQe4t3H5xAjpbf0=;
+	s=arc-20240116; t=1761167855; c=relaxed/simple;
+	bh=QptB+PtfCGErbwrCihZ5NZWiDF5LNLfj9kJ1h3qxklQ=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=VGQcOhQld4S01PXzxqr4IyTMvzzipEJ5YIWBaDL6gZazXroM2YOvjlYmNxYZudlr7C6sMaIv9xrjrtjR7yJVElmLOg/CiZPtCLoL22s5gdduunemrRhm8TBBF6Jc8pwi7UiCAWPt1/+1J8rF6AGL87npNQoNYFkJ8RE849wZ1UM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EFQTv753; arc=none smtp.client-ip=209.85.216.73
+	 To:Cc:Content-Type; b=l79LZwLQsbr/6DgzYRlIHntEB2i1g8agizD8qT80kQd8ughCNHiWNW8xq2hYDUhJJpMKeyVuicHTAxl7d/lh7RJWmyuz+SHlvdVU1dNgfHG6g2kh1W3FkE4U3MdJoc2SGwDGIjBHIFVNKW69Bs1mUTYm5I6+MLR322IvSpp2KTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1WrajX+P; arc=none smtp.client-ip=209.85.210.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-33bc5d7c289so246502a91.0
-        for <linux-sctp@vger.kernel.org>; Wed, 22 Oct 2025 14:17:32 -0700 (PDT)
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-77f610f7325so72484b3a.1
+        for <linux-sctp@vger.kernel.org>; Wed, 22 Oct 2025 14:17:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761167852; x=1761772652; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1761167853; x=1761772653; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zwporhNQ93/IJT4Lo5ugkOD0L0ch9jm4N4xixU1Rb8g=;
-        b=EFQTv753WeMvaaBchANgpFMCuRAzS+ItPKJe9L2BWbvtRWJBCj1wsyREzsxi71RU3R
-         yOZh8KU6lQWUExhC5hdWmTBjzra3tYCJyJcTFFJl8iu812ZTYfUiiWJcyZNLGq/SyQfD
-         B/de89FgW6mSGiL/giS5LGU0zHoXEvnjo8oMnYovM5gQ45DhCC2QEdGnpKCtGXZhVKLw
-         r+X0wBw3jLiEUYe0qVg8/tZaPZkO49wdG2pFG+vJtFynF+W84nn2nkjndLlwlnL3Dw3Q
-         uPd44Xpsn942r0E8rCveZrazUbt8YZUWFAlCdlitFsz95FARQMRDq9oaR7mYCLKOsnX8
-         2wRg==
+        bh=+x0HtiSQIGqMUo3vEudJ0qk/2gl6PsSQ5y94WRZHcMY=;
+        b=1WrajX+PmDwLfXQ8cxrvWwkrI35BTVqcEG/OWNy+jcjeUumKdeqgUbQDQ7HHKDenOT
+         HFjFzD9hZvcfWtTddcu9Uiw3CS1MYFgOP2wgRhlnO+S55O16FqhYpdI/4yMSId2DPsUQ
+         pudUk5PYJjLnSDvlIdsC8o3PMTpmGd9z10JVvQqCAEeHLZ+hNKoyUcVxOUn51HkLJYyn
+         zbGeDNLq5rhjoiInDgy/JkBTVPHbXcoEoOrD2zXK6ydXZhu8+5KXuoVhSmPVq1+j8GLs
+         Yk9LJczpSm+7YSK71+9cci8aLhEgTtZEGxkFS7iH0gduriQOWFpUm925mfte0zkomSHh
+         CAMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761167852; x=1761772652;
+        d=1e100.net; s=20230601; t=1761167853; x=1761772653;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zwporhNQ93/IJT4Lo5ugkOD0L0ch9jm4N4xixU1Rb8g=;
-        b=vmSd7EEW2SDYA6Cm4Enlx7DQ+b1PI+37q1L+HadHg7IXrnTkl6b1bcAdvwR9+Rgdc0
-         0oAx4iemj6825P0ppfurSUxMTpgtYQJ70Rvn0Rh9iKvsObsw9q8s0Z2Ho6nUx4BXEol0
-         p/XRLk9924JbVqhjFzexKY4ecmyKJky4vk/65sTO1dYqCIAQe5hTyyNi4GLy5te3OPaA
-         /q9UM4QC3VIjOAaACgjf/dbGUT0N1nwaBBOGb3RVguJJJfyDhAee+7emKcuYCwdlwzoS
-         pF15eycApQ53NigzOAmPQjG4Gw57gQqPDTfDGTeGP6U+NItZxSSySvJdFiCAhlnCqghb
-         m61w==
-X-Forwarded-Encrypted: i=1; AJvYcCVOwwZPdz0oYQeRGzSufl2ZJIiMmdKOVCFyp/JPvFFw2+2uCbAz1nFGBlDnhQtjhlWxs/cDzCHsKeTu@vger.kernel.org
-X-Gm-Message-State: AOJu0YzyU2rXSgjuAtOBSMWcz/aKheI3gt1cHjNMlGMN5yJZmZj6f2zC
-	jy7BiH7I1kVA12a0SoBk4IyQh98H0VOqhLzTjaJAbwSZCgoyoIRsL/HsZNmGuwi3E4l4PnV37To
-	L9Qx01A==
-X-Google-Smtp-Source: AGHT+IHK+xIruY6Mrq3zvIns7TdUM64EWxcttl837ipMFSoE34xdVH8a1Y4gNglX733Ng0LhUAHMkGxAgqQ=
-X-Received: from pjzn8.prod.google.com ([2002:a17:90b:d08:b0:332:7fae:e138])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2692:b0:32b:9506:1780
- with SMTP id 98e67ed59e1d1-33bcf88821emr29096468a91.9.1761167851739; Wed, 22
- Oct 2025 14:17:31 -0700 (PDT)
-Date: Wed, 22 Oct 2025 21:17:05 +0000
+        bh=+x0HtiSQIGqMUo3vEudJ0qk/2gl6PsSQ5y94WRZHcMY=;
+        b=iMluXKPYRIoyWLAD7oSErjffXhb7gThqT4nuJowficoZwNLlLsklknXmMRqfhP0NaD
+         CN87hnMjghp7ivw62xIRfUyCLOY6e78OId7QdBAKrtJUzM8VF/SkiY5IiOfUajr1i4pH
+         VxlN8ylqc/ZywJhLes6rgS06FnjAEyNEJT9r+DHkRUqnDlpvYLOXgRm8javfgjOalBTh
+         21bHzJ+mnVYLrUPRnbVd56QwleVaxxxcqqLvfvHbuIC2rW2mTo02/1hgSwpqNcohevS8
+         8C99Jt86St3Kk+Lk+XyaPDFTnigmb42d+GCBN2b1dqvaE2bugvEeP/fqsQleIU4/WOB5
+         oXcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXjRmBzVVilJMEOvWBWtmJMQfyF0Nhy4yMwIj5S08m6ch7iPzIfiOogE9BhOHOvxoLCBVlmb9LEetJr@vger.kernel.org
+X-Gm-Message-State: AOJu0YydYTIf0yJcRaRrBi9AADyAZH/js6AFx8Y4hrrsAOIP0/w9Qgoq
+	+ZNrefttblBPKw2aNEBmIQrQZqTIcWceuRqbZki/Ek1WiP8F+C1+V0VNsz8ZzJdCMqNcyLrZtvy
+	8/C4oOw==
+X-Google-Smtp-Source: AGHT+IEOrN4oMV2jjEdQEjxn/lYNtvQ78FszhWzGZOqt5YYf9TY6LNgJkeagSnsb6audzDqFOgCl48107W0=
+X-Received: from pjbgm5.prod.google.com ([2002:a17:90b:1005:b0:33b:a0cd:53ed])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:9392:b0:32d:a478:5216
+ with SMTP id adf61e73a8af0-334a864aa42mr24492225637.56.1761167853369; Wed, 22
+ Oct 2025 14:17:33 -0700 (PDT)
+Date: Wed, 22 Oct 2025 21:17:06 +0000
 In-Reply-To: <20251022211722.2819414-1-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20251022211722.2819414-1-kuniyu@google.com>
 X-Mailer: git-send-email 2.51.1.814.gb8fa24458f-goog
-Message-ID: <20251022211722.2819414-6-kuniyu@google.com>
-Subject: [PATCH v2 net-next 5/8] sctp: Use sk_clone() in sctp_accept().
+Message-ID: <20251022211722.2819414-7-kuniyu@google.com>
+Subject: [PATCH v2 net-next 6/8] sctp: Remove sctp_pf.create_accept_sk().
 From: Kuniyuki Iwashima <kuniyu@google.com>
 To: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, 
 	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
@@ -84,199 +84,139 @@ Cc: Simon Horman <horms@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
 	Kuniyuki Iwashima <kuni1840@gmail.com>, netdev@vger.kernel.org, linux-sctp@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-sctp_accept() calls sctp_v[46]_create_accept_sk() to allocate a new
-socket and calls sctp_sock_migrate() to copy fields from the parent
-socket to the new socket.
+sctp_v[46]_create_accept_sk() are no longer used.
 
-sctp_v4_create_accept_sk() allocates sk by sk_alloc(), initialises
-it by sock_init_data(), and copy a bunch of fields from the parent
-socekt by sctp_copy_sock().
-
-sctp_sock_migrate() calls sctp_copy_descendant() to copy most fields
-in sctp_sock from the parent socket by memcpy().
-
-These can be simply replaced by sk_clone().
-
-Let's consolidate sctp_v[46]_create_accept_sk() to sctp_clone_sock()
-with sk_clone().
-
-We will reuse sctp_clone_sock() for sctp_do_peeloff() and then remove
-sctp_copy_descendant().
-
-Note that sock_reset_flag(newsk, SOCK_ZAPPED) is not copied to
-sctp_clone_sock() as sctp does not use SOCK_ZAPPED at all.
+Let's remove sctp_pf.create_accept_sk().
 
 Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
 ---
- net/ipv4/af_inet.c |   4 +-
- net/sctp/socket.c  | 113 ++++++++++++++++++++++++++++++---------------
- 2 files changed, 77 insertions(+), 40 deletions(-)
+ include/net/sctp/structs.h |  3 ---
+ net/sctp/ipv6.c            | 45 --------------------------------------
+ net/sctp/protocol.c        | 27 -----------------------
+ 3 files changed, 75 deletions(-)
 
-diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-index e8771faa5bbf..77f6ae0fc231 100644
---- a/net/ipv4/af_inet.c
-+++ b/net/ipv4/af_inet.c
-@@ -755,9 +755,7 @@ EXPORT_SYMBOL(inet_stream_connect);
- 
- void __inet_accept(struct socket *sock, struct socket *newsock, struct sock *newsk)
- {
--	/* TODO: use sk_clone_lock() in SCTP and remove protocol checks */
--	if (mem_cgroup_sockets_enabled &&
--	    (!IS_ENABLED(CONFIG_IP_SCTP) || sk_is_tcp(newsk))) {
-+	if (mem_cgroup_sockets_enabled) {
- 		gfp_t gfp = GFP_KERNEL | __GFP_NOFAIL;
- 
- 		mem_cgroup_sk_alloc(newsk);
-diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-index 70c75ac8da55..826f17747f17 100644
---- a/net/sctp/socket.c
-+++ b/net/sctp/socket.c
-@@ -4842,6 +4842,74 @@ static int sctp_disconnect(struct sock *sk, int flags)
- 	return 0;
+diff --git a/include/net/sctp/structs.h b/include/net/sctp/structs.h
+index 2ae390219efd..3dd304e411d0 100644
+--- a/include/net/sctp/structs.h
++++ b/include/net/sctp/structs.h
+@@ -497,9 +497,6 @@ struct sctp_pf {
+ 	int  (*bind_verify) (struct sctp_sock *, union sctp_addr *);
+ 	int  (*send_verify) (struct sctp_sock *, union sctp_addr *);
+ 	int  (*supported_addrs)(const struct sctp_sock *, __be16 *);
+-	struct sock *(*create_accept_sk) (struct sock *sk,
+-					  struct sctp_association *asoc,
+-					  bool kern);
+ 	int (*addr_to_user)(struct sctp_sock *sk, union sctp_addr *addr);
+ 	void (*to_sk_saddr)(union sctp_addr *, struct sock *sk);
+ 	void (*to_sk_daddr)(union sctp_addr *, struct sock *sk);
+diff --git a/net/sctp/ipv6.c b/net/sctp/ipv6.c
+index c0762424a854..069b7e45d8bd 100644
+--- a/net/sctp/ipv6.c
++++ b/net/sctp/ipv6.c
+@@ -777,50 +777,6 @@ static enum sctp_scope sctp_v6_scope(union sctp_addr *addr)
+ 	return retval;
  }
  
-+static struct sock *sctp_clone_sock(struct sock *sk,
-+				    struct sctp_association *asoc,
-+				    enum sctp_socket_type type)
-+{
-+	struct sock *newsk = sk_clone(sk, GFP_KERNEL, false);
-+	struct inet_sock *newinet;
-+	struct sctp_sock *newsp;
-+	int err = -ENOMEM;
-+
-+	if (!newsk)
-+		return ERR_PTR(err);
-+
-+	/* sk_clone() sets refcnt to 2 */
-+	sock_put(newsk);
-+
-+	newinet = inet_sk(newsk);
-+	newsp = sctp_sk(newsk);
-+
-+	newsp->pf->to_sk_daddr(&asoc->peer.primary_addr, newsk);
-+	newinet->inet_dport = htons(asoc->peer.port);
-+
-+	newsp->pf->copy_ip_options(sk, newsk);
-+	atomic_set(&newinet->inet_id, get_random_u16());
-+
-+	inet_set_bit(MC_LOOP, newsk);
-+	newinet->mc_ttl = 1;
-+	newinet->mc_index = 0;
-+	newinet->mc_list = NULL;
-+
-+#if IS_ENABLED(CONFIG_IPV6)
-+	if (sk->sk_family == AF_INET6) {
-+		struct ipv6_pinfo *newnp = inet6_sk(newsk);
-+
-+		newinet->pinet6 = &((struct sctp6_sock *)newsk)->inet6;
-+		newinet->ipv6_fl_list = NULL;
-+
-+		memcpy(newnp, inet6_sk(sk), sizeof(struct ipv6_pinfo));
-+		newnp->ipv6_mc_list = NULL;
-+		newnp->ipv6_ac_list = NULL;
-+	}
-+#endif
-+
-+	skb_queue_head_init(&newsp->pd_lobby);
-+
-+	newsp->ep = sctp_endpoint_new(newsk, GFP_KERNEL);
-+	if (!newsp->ep)
-+		goto out_release;
-+
-+	SCTP_DBG_OBJCNT_INC(sock);
-+	sk_sockets_allocated_inc(newsk);
-+	sock_prot_inuse_add(sock_net(sk), newsk->sk_prot, 1);
-+
-+	err = sctp_sock_migrate(sk, newsk, asoc, type);
-+	if (err)
-+		goto out_release;
-+
-+	/* Set newsk security attributes from original sk and connection
-+	 * security attribute from asoc.
-+	 */
-+	security_sctp_sk_clone(asoc, sk, newsk);
-+
-+	return newsk;
-+
-+out_release:
-+	sk_common_release(newsk);
-+	return ERR_PTR(err);
-+}
-+
- /* 4.1.4 accept() - TCP Style Syntax
-  *
-  * Applications use accept() call to remove an established SCTP
-@@ -4851,18 +4919,13 @@ static int sctp_disconnect(struct sock *sk, int flags)
-  */
- static struct sock *sctp_accept(struct sock *sk, struct proto_accept_arg *arg)
- {
--	struct sctp_sock *sp, *newsp;
--	struct sctp_endpoint *ep;
--	struct sock *newsk = NULL;
- 	struct sctp_association *asoc;
--	long timeo;
-+	struct sock *newsk = NULL;
- 	int error = 0;
-+	long timeo;
- 
- 	lock_sock(sk);
- 
--	sp = sctp_sk(sk);
--	ep = sp->ep;
+-/* Create and initialize a new sk for the socket to be returned by accept(). */
+-static struct sock *sctp_v6_create_accept_sk(struct sock *sk,
+-					     struct sctp_association *asoc,
+-					     bool kern)
+-{
+-	struct ipv6_pinfo *newnp, *np = inet6_sk(sk);
+-	struct sctp6_sock *newsctp6sk;
+-	struct inet_sock *newinet;
+-	struct sock *newsk;
 -
- 	if (!sctp_style(sk, TCP)) {
- 		error = -EOPNOTSUPP;
- 		goto out;
-@@ -4883,43 +4946,19 @@ static struct sock *sctp_accept(struct sock *sk, struct proto_accept_arg *arg)
- 	/* We treat the list of associations on the endpoint as the accept
- 	 * queue and pick the first association on the list.
- 	 */
--	asoc = list_entry(ep->asocs.next, struct sctp_association, asocs);
+-	newsk = sk_alloc(sock_net(sk), PF_INET6, GFP_KERNEL, sk->sk_prot, kern);
+-	if (!newsk)
+-		return NULL;
 -
--	newsk = sp->pf->create_accept_sk(sk, asoc, arg->kern);
--	if (!newsk) {
--		error = -ENOMEM;
--		goto out;
--	}
-+	asoc = list_entry(sctp_sk(sk)->ep->asocs.next,
-+			  struct sctp_association, asocs);
- 
--	newsp = sctp_sk(newsk);
--	newsp->ep = sctp_endpoint_new(newsk, GFP_KERNEL);
--	if (!newsp->ep) {
--		error = -ENOMEM;
--		goto out_release;
-+	newsk = sctp_clone_sock(sk, asoc, SCTP_SOCKET_TCP);
-+	if (IS_ERR(newsk)) {
-+		error = PTR_ERR(newsk);
-+		newsk = NULL;
- 	}
- 
--	skb_queue_head_init(&newsp->pd_lobby);
+-	sock_init_data(NULL, newsk);
 -
--	sk_sockets_allocated_inc(newsk);
--	sock_prot_inuse_add(sock_net(sk), newsk->sk_prot, 1);
--	SCTP_DBG_OBJCNT_INC(sock);
+-	sctp_copy_sock(newsk, sk, asoc);
+-	sock_reset_flag(sk, SOCK_ZAPPED);
 -
--	/* Populate the fields of the newsk from the oldsk and migrate the
--	 * asoc to the newsk.
+-	newsctp6sk = (struct sctp6_sock *)newsk;
+-	newinet = inet_sk(newsk);
+-	newinet->pinet6 = &newsctp6sk->inet6;
+-	newinet->ipv6_fl_list = NULL;
+-
+-	sctp_sk(newsk)->v4mapped = sctp_sk(sk)->v4mapped;
+-
+-	newnp = inet6_sk(newsk);
+-
+-	memcpy(newnp, np, sizeof(struct ipv6_pinfo));
+-	newnp->ipv6_mc_list = NULL;
+-	newnp->ipv6_ac_list = NULL;
+-
+-	sctp_v6_copy_ip_options(sk, newsk);
+-
+-	/* Initialize sk's sport, dport, rcv_saddr and daddr for getsockname()
+-	 * and getpeername().
 -	 */
--	error = sctp_sock_migrate(sk, newsk, asoc, SCTP_SOCKET_TCP);
--	if (error)
--		goto out_release;
+-	sctp_v6_to_sk_daddr(&asoc->peer.primary_addr, newsk);
 -
- out:
- 	release_sock(sk);
- 	arg->err = error;
- 	return newsk;
+-	newsk->sk_v6_rcv_saddr = sk->sk_v6_rcv_saddr;
 -
--out_release:
--	sk_common_release(newsk);
--	newsk = NULL;
--	goto out;
+-	return newsk;
+-}
+-
+ /* Format a sockaddr for return to user space. This makes sure the return is
+  * AF_INET or AF_INET6 depending on the SCTP_I_WANT_MAPPED_V4_ADDR option.
+  */
+@@ -1167,7 +1123,6 @@ static struct sctp_pf sctp_pf_inet6 = {
+ 	.bind_verify   = sctp_inet6_bind_verify,
+ 	.send_verify   = sctp_inet6_send_verify,
+ 	.supported_addrs = sctp_inet6_supported_addrs,
+-	.create_accept_sk = sctp_v6_create_accept_sk,
+ 	.addr_to_user  = sctp_v6_addr_to_user,
+ 	.to_sk_saddr   = sctp_v6_to_sk_saddr,
+ 	.to_sk_daddr   = sctp_v6_to_sk_daddr,
+diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
+index ad2722d1ec15..2c3398f75d76 100644
+--- a/net/sctp/protocol.c
++++ b/net/sctp/protocol.c
+@@ -580,32 +580,6 @@ static int sctp_v4_is_ce(const struct sk_buff *skb)
+ 	return INET_ECN_is_ce(ip_hdr(skb)->tos);
  }
  
- /* The SCTP ioctl handler. */
+-/* Create and initialize a new sk for the socket returned by accept(). */
+-static struct sock *sctp_v4_create_accept_sk(struct sock *sk,
+-					     struct sctp_association *asoc,
+-					     bool kern)
+-{
+-	struct sock *newsk = sk_alloc(sock_net(sk), PF_INET, GFP_KERNEL,
+-			sk->sk_prot, kern);
+-	struct inet_sock *newinet;
+-
+-	if (!newsk)
+-		return NULL;
+-
+-	sock_init_data(NULL, newsk);
+-
+-	sctp_copy_sock(newsk, sk, asoc);
+-	sock_reset_flag(newsk, SOCK_ZAPPED);
+-
+-	sctp_v4_copy_ip_options(sk, newsk);
+-
+-	newinet = inet_sk(newsk);
+-
+-	newinet->inet_daddr = asoc->peer.primary_addr.v4.sin_addr.s_addr;
+-
+-	return newsk;
+-}
+-
+ static int sctp_v4_addr_to_user(struct sctp_sock *sp, union sctp_addr *addr)
+ {
+ 	/* No address mapping for V4 sockets */
+@@ -1113,7 +1087,6 @@ static struct sctp_pf sctp_pf_inet = {
+ 	.bind_verify   = sctp_inet_bind_verify,
+ 	.send_verify   = sctp_inet_send_verify,
+ 	.supported_addrs = sctp_inet_supported_addrs,
+-	.create_accept_sk = sctp_v4_create_accept_sk,
+ 	.addr_to_user  = sctp_v4_addr_to_user,
+ 	.to_sk_saddr   = sctp_v4_to_sk_saddr,
+ 	.to_sk_daddr   = sctp_v4_to_sk_daddr,
 -- 
 2.51.1.814.gb8fa24458f-goog
 
