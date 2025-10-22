@@ -1,100 +1,127 @@
-Return-Path: <linux-sctp+bounces-654-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-655-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCCA8BFAB36
-	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 09:53:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 374D4BFAB53
+	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 09:56:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C4E319C4101
-	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 07:53:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5A2D3B880A
+	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 07:55:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A000C2FD1DB;
-	Wed, 22 Oct 2025 07:53:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A107E2FE05C;
+	Wed, 22 Oct 2025 07:55:57 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from air.basealt.ru (air.basealt.ru [193.43.8.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07EF32F49FC
-	for <linux-sctp@vger.kernel.org>; Wed, 22 Oct 2025 07:53:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 797AE2FC876;
+	Wed, 22 Oct 2025 07:55:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.43.8.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761119611; cv=none; b=Fc83hY4RqDEVWOGKdqsDDeP8z24PajEBFoUYSPXdjvwzWLYLZ8NwWqq/miBTipwbKn7AZ1Qio6p0ZeaqdPhAvt4wORtYJbYOwulP/MnaBNKKtzNvtRhyFUPlN6/F74Nxu9+2JTiNsrq+DDQt/dKGlcic+hnTGl3+d2is0M9vmfs=
+	t=1761119757; cv=none; b=qrScEeWFGmH5BW01iw2ebdaQemJhJw049uW51LvnVj+b0no9MEov1IeuXweDhd9m6hrP3TRqXLfFwmj1YcgACpSimZQO1fr+Lqr0WnUQpSTB7UhqbPXQBVNdyTbfFWNcAPHreJ+pLwvHKZ2Gtkt78tm0Z/6emrhCUMzsn3LDqqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761119611; c=relaxed/simple;
-	bh=ufaQz49n6GDzpdFGe7nVKvW3X2a8XA6eNMe1oyPxgyU=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=UkaDXml+MgjmLG25Hl1WRfCwQqZITNK2IIj1g3qNjRIlVcErfUbhdrC7d4NpUGq4eddUlK3dSP5Y4vKFS/IkfXQlcg1GZ+fGIuLR8+dhabKcDvomre0zDvJeZENqFlIL0blhqHiWCwpuMPAwR5XbrGmSNwaPdWVZIqAFlpLDO1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-93eaaa7435bso437317239f.2
-        for <linux-sctp@vger.kernel.org>; Wed, 22 Oct 2025 00:53:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761119609; x=1761724409;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9BZl/sACGkzllJfolRARBo2gSVYuEA7sZCtXyyRozaA=;
-        b=uGzZ1xoO/HM9qKMjR/egNGGkwgulbynwVETOPZcFkEvha3P49piQV/nNOhyKLrRGxL
-         uLZUNiFO3MWyPtsMFUdS94dlz8wgTB+93vLAk4PXVCX2GznUgq4ZxHNP3q9ffx+gAjSp
-         Uaj1VhMA3HPPS7GPilSqA3B0kM5+Z00I5N6mGPAPvR1RRi7HlmaM56D/kCw0HmrobGgM
-         G1WYWh5+yNrdlGAuuYE9AoZCGYFhG0skT/RDpnZTSCD8SszneQXlzM04RthoyowyXapa
-         WUagjExmMPmI3pOy55e0L7+8F3vzhBb0E7UK1qkeZjVpiyGgy6ywTlQVzv8edjX167Do
-         H51A==
-X-Forwarded-Encrypted: i=1; AJvYcCUMkrr82R06SGfB6823FHMm3dO6oYdUFK7UqIVFo0UTri//1nNRXsw8kugakOnDg68IdeRrBd2kQczu@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUmiK8B8OaWjBTAFjtguFMif0Nu3qSsUYyhRBFuQM1sy7sseXk
-	CfnJxwXGNsyT6z4ny6mct+P7fpl2MpB/tXx1jEULCAkV6KeA4wNJJbZLh5lryOya5/h+unI4LL8
-	tAAYoJ7DMiG3pShMBwp9sBCHVnhC519nelRMVmsJx2ffQbMckGMTfWk4rd94=
-X-Google-Smtp-Source: AGHT+IH9xYY9rCes5+PP6dDPXa/IwAKtwc/tmp/IjLpaD9sBIBOYjZMLkWP3s5EMxOBU3H/gGQ4hdPoWGEccuBCz8qS+ALCwTcPJ
+	s=arc-20240116; t=1761119757; c=relaxed/simple;
+	bh=UlNcC04S5c0snHRJA8LAa0og7brdTQ+d6kkeWV6kDHY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UUG4RDcWMTwd6f07aybAuISnhkRvH3/cXUC6qAzQoX9PbEGb8BS2noy+OOfAEQT3xYb5hKnqP8eWNpVeuS6xCxDOYmjRledNXRPVhMRqLHoIbhfvd/ahNzifEIBCjTuBgYdHw84jBwySw65ujxCd+TeAAWpZclavIlD8wOIN0+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=193.43.8.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
+Received: from altlinux.ipa.basealt.ru (unknown [178.76.204.78])
+	(Authenticated sender: kovalevvv)
+	by air.basealt.ru (Postfix) with ESMTPSA id 2CAEF233B2;
+	Wed, 22 Oct 2025 10:55:50 +0300 (MSK)
+From: Vasiliy Kovalev <kovalev@altlinux.org>
+To: stable@vger.kernel.org
+Cc: Vlad Yasevich <vyasevich@gmail.com>,
+	Neil Horman <nhorman@tuxdriver.com>,
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+	linux-sctp@vger.kernel.org,
+	lvc-project@linuxtesting.org,
+	kovalev@altlinux.org
+Subject: [PATCH 6.1.y] sctp: linearize cloned gso packets in sctp_rcv
+Date: Wed, 22 Oct 2025 10:55:49 +0300
+Message-Id: <20251022075549.195012-1-kovalev@altlinux.org>
+X-Mailer: git-send-email 2.33.8
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:6d8c:b0:93e:7edc:12c with SMTP id
- ca18e2360f4ac-93e7edc1fb8mr2484491039f.0.1761119609102; Wed, 22 Oct 2025
- 00:53:29 -0700 (PDT)
-Date: Wed, 22 Oct 2025 00:53:29 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <68f88d79.050a0220.346f24.0039.GAE@google.com>
-Subject: [syzbot] Monthly sctp report (Oct 2025)
-From: syzbot <syzbot+list414156adcf2ae8feb6cc@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org, 
-	lucien.xin@gmail.com, marcelo.leitner@gmail.com, netdev@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hello sctp maintainers/developers,
+From: Xin Long <lucien.xin@gmail.com>
 
-This is a 31-day syzbot report for the sctp subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/sctp
+commit fd60d8a086191fe33c2d719732d2482052fa6805 upstream.
 
-During the period, 3 new issues were detected and 0 were fixed.
-In total, 7 issues are still open and 75 have already been fixed.
+A cloned head skb still shares these frag skbs in fraglist with the
+original head skb. It's not safe to access these frag skbs.
 
-Some of the still happening issues:
+syzbot reported two use-of-uninitialized-memory bugs caused by this:
 
-Ref Crashes Repro Title
-<1> 111     Yes   INFO: rcu detected stall in NF_HOOK (2)
-                  https://syzkaller.appspot.com/bug?extid=34c2df040c6cfa15fdfe
-<2> 34      Yes   INFO: rcu detected stall in sock_close (5)
-                  https://syzkaller.appspot.com/bug?extid=9a29e1dba699b6f46a03
-<3> 1       No    WARNING: refcount bug in sctp_generate_timeout_event (2)
-                  https://syzkaller.appspot.com/bug?extid=b86c971dee837a7f5993
+  BUG: KMSAN: uninit-value in sctp_inq_pop+0x15b7/0x1920 net/sctp/inqueue.c:211
+   sctp_inq_pop+0x15b7/0x1920 net/sctp/inqueue.c:211
+   sctp_assoc_bh_rcv+0x1a7/0xc50 net/sctp/associola.c:998
+   sctp_inq_push+0x2ef/0x380 net/sctp/inqueue.c:88
+   sctp_backlog_rcv+0x397/0xdb0 net/sctp/input.c:331
+   sk_backlog_rcv+0x13b/0x420 include/net/sock.h:1122
+   __release_sock+0x1da/0x330 net/core/sock.c:3106
+   release_sock+0x6b/0x250 net/core/sock.c:3660
+   sctp_wait_for_connect+0x487/0x820 net/sctp/socket.c:9360
+   sctp_sendmsg_to_asoc+0x1ec1/0x1f00 net/sctp/socket.c:1885
+   sctp_sendmsg+0x32b9/0x4a80 net/sctp/socket.c:2031
+   inet_sendmsg+0x25a/0x280 net/ipv4/af_inet.c:851
+   sock_sendmsg_nosec net/socket.c:718 [inline]
 
+and
+
+  BUG: KMSAN: uninit-value in sctp_assoc_bh_rcv+0x34e/0xbc0 net/sctp/associola.c:987
+   sctp_assoc_bh_rcv+0x34e/0xbc0 net/sctp/associola.c:987
+   sctp_inq_push+0x2a3/0x350 net/sctp/inqueue.c:88
+   sctp_backlog_rcv+0x3c7/0xda0 net/sctp/input.c:331
+   sk_backlog_rcv+0x142/0x420 include/net/sock.h:1148
+   __release_sock+0x1d3/0x330 net/core/sock.c:3213
+   release_sock+0x6b/0x270 net/core/sock.c:3767
+   sctp_wait_for_connect+0x458/0x820 net/sctp/socket.c:9367
+   sctp_sendmsg_to_asoc+0x223a/0x2260 net/sctp/socket.c:1886
+   sctp_sendmsg+0x3910/0x49f0 net/sctp/socket.c:2032
+   inet_sendmsg+0x269/0x2a0 net/ipv4/af_inet.c:851
+   sock_sendmsg_nosec net/socket.c:712 [inline]
+
+This patch fixes it by linearizing cloned gso packets in sctp_rcv().
+
+Fixes: 90017accff61 ("sctp: Add GSO support")
+Reported-by: syzbot+773e51afe420baaf0e2b@syzkaller.appspotmail.com
+Reported-by: syzbot+70a42f45e76bede082be@syzkaller.appspotmail.com
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+Reviewed-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Link: https://patch.msgid.link/dd7dc337b99876d4132d0961f776913719f7d225.1754595611.git.lucien.xin@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+[ kovalev: bp to fix CVE-2025-38718 ]
+Signed-off-by: Vasiliy Kovalev <kovalev@altlinux.org>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+This patch is lost/missing, as it has already been added
+into stable branches less than and greater than 6.1.
+---
+ net/sctp/input.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
+diff --git a/net/sctp/input.c b/net/sctp/input.c
+index 4ee9374dcfb9..182898cb754a 100644
+--- a/net/sctp/input.c
++++ b/net/sctp/input.c
+@@ -114,7 +114,7 @@ int sctp_rcv(struct sk_buff *skb)
+ 	 * it's better to just linearize it otherwise crc computing
+ 	 * takes longer.
+ 	 */
+-	if ((!is_gso && skb_linearize(skb)) ||
++	if (((!is_gso || skb_cloned(skb)) && skb_linearize(skb)) ||
+ 	    !pskb_may_pull(skb, sizeof(struct sctphdr)))
+ 		goto discard_it;
+ 
+-- 
+2.50.1
 
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
 
