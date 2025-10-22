@@ -1,191 +1,100 @@
-Return-Path: <linux-sctp+bounces-653-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-654-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECDAABFA999
-	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 09:36:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCCA8BFAB36
+	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 09:53:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 01D3C18859B1
-	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 07:36:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C4E319C4101
+	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 07:53:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F82A2FABF8;
-	Wed, 22 Oct 2025 07:36:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uUY/wzPi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A000C2FD1DB;
+	Wed, 22 Oct 2025 07:53:31 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F8F42F8BF7
-	for <linux-sctp@vger.kernel.org>; Wed, 22 Oct 2025 07:36:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07EF32F49FC
+	for <linux-sctp@vger.kernel.org>; Wed, 22 Oct 2025 07:53:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761118580; cv=none; b=dGN1RqVVTYYZ48BtQoY6aCa6vBUcLATFt1421DkdbOkQFfX13o5ZM2LcsFATS7z7zhCSSgJImV/U1pmG6m62URtFQlfofyciKPdHC/LXjd6QI+dFSR0SO2qKhADXsfNJE+RUjmpXB1kKq5e8oAAfo9aZa+NcUcsZHT4pq7zv+5o=
+	t=1761119611; cv=none; b=Fc83hY4RqDEVWOGKdqsDDeP8z24PajEBFoUYSPXdjvwzWLYLZ8NwWqq/miBTipwbKn7AZ1Qio6p0ZeaqdPhAvt4wORtYJbYOwulP/MnaBNKKtzNvtRhyFUPlN6/F74Nxu9+2JTiNsrq+DDQt/dKGlcic+hnTGl3+d2is0M9vmfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761118580; c=relaxed/simple;
-	bh=HtL0aGay5CU8yJyT2Iu8i0PDBnx2pTOwklzMoFah6lY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=as2fr4AFuP/39k3BvrLEt1FsJM4A2BW70pfYMAzaVUwfLTBrRFsOKCywyzruWYibZYKcjRrlzm3X5KgUxbW6XsTYtFuYwPOCWoraXLShYu20m2qT2wAJ22sjli28SlaTJZxzxirbYvPQzWl/mzU5cwnVNSVVjYetVJjq7KIZtt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uUY/wzPi; arc=none smtp.client-ip=209.85.215.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b6cdba2663dso547538a12.2
-        for <linux-sctp@vger.kernel.org>; Wed, 22 Oct 2025 00:36:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761118578; x=1761723378; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ne8X6oQ4TY+MTpe6fx1BsCXP/E1vxBBg8ZkVw63H44g=;
-        b=uUY/wzPifgUsJFUghCJryyQaEuc6ihbjoqkj6Wkcqzd1/nrYhrL4eIr+4Un9uJs5z3
-         fEMwkIBT/rGMMXaLONqULUCRot4M+tiRTBn4mZVSNpfl8g/w4wVMPovgvilM3ZubqYz9
-         m1wieEl+be7LC2nrn8jXhXlhNnNwejhHSNotWEJDgtvVRgt9rjWIFygOzi0J1MeSTs0F
-         p/Dc4mi9PMI0d+4mdVIpplQD1Gg0WQ5r9LkzcqWNlbDjPCK0vZ96w4pkUY+pOp7gF3KG
-         uc5xlVZYdDbMbW5hpmysJ8aqgebAxyTuUzw6N0wZFU9q03ItESYdChqjolr933FVMKf7
-         lxzg==
+	s=arc-20240116; t=1761119611; c=relaxed/simple;
+	bh=ufaQz49n6GDzpdFGe7nVKvW3X2a8XA6eNMe1oyPxgyU=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=UkaDXml+MgjmLG25Hl1WRfCwQqZITNK2IIj1g3qNjRIlVcErfUbhdrC7d4NpUGq4eddUlK3dSP5Y4vKFS/IkfXQlcg1GZ+fGIuLR8+dhabKcDvomre0zDvJeZENqFlIL0blhqHiWCwpuMPAwR5XbrGmSNwaPdWVZIqAFlpLDO1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-93eaaa7435bso437317239f.2
+        for <linux-sctp@vger.kernel.org>; Wed, 22 Oct 2025 00:53:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761118578; x=1761723378;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ne8X6oQ4TY+MTpe6fx1BsCXP/E1vxBBg8ZkVw63H44g=;
-        b=FrOcl6LwXc632/4psYXW+NgVsF/aEnLJbtcJdI3ZM1TX5S6UpsibDjx2eMGCc5noay
-         P2DGHAIUtckwBoNy2W1Fw9oYcxD4DIrN1oKxtxwWZqMZJJNpV58s5HvPJ/+4sQPvrYq3
-         9yviXpfkHHnpD6VU5TUQ9qkS39X5H8htCYG+Jit32LrIy+YBIYjidbQYI3z7CV+AGZ3s
-         2HZgolVorIfBMf/OpPlFL3ZC10Bxg2ASc+b7VY78/J0jXZndsMXdPpqdRqRGcgWpqCg5
-         l+RJMSCEEF//LzKYEQPQqpD7OCSQGdomUIk1HTBclr02vKo/LodIXsnvBCOU3Go29SPq
-         J8cA==
-X-Forwarded-Encrypted: i=1; AJvYcCWNqrcLu7wEyQWmezoGtVUCBUOdGae/U0SnY+jqxRCmxz/Pr1ph4fkLgpF6h+OVMAp87Z59+nvlLKwy@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAr203NWY9b3RCUE8GOZzTNLIo/es7jUWmvsUykqfKXJkjHCsz
-	s5hbwO859efk1H5Jc85A/n0viLTZW2czZnAtt0ICudEfnDR5d+K5pTlxUcKRIGiP6vy03cEYy5P
-	Uhx1Z/XdX5zFeJBqU+HXdE0PhqnqBgRI5Oo4DUXdR
-X-Gm-Gg: ASbGncslgKpVCAobphc6oDdWyL+5B3jPhYTduV3QC/muW2pE+yeNyAT+uB9urDZ28uY
-	AV0sdy6PNscyuHGI8zC7bg1CPINukZ7aArAhelSLj99KDRgEwOv58XLfuXQu0dv/V2v9HjWslUm
-	yAzr63idAV9mtI/STy5RhqRvB0SixCDcfqANCTlcerCgEK0MtLSE+INAmwkp6mDznPxFnePUCjV
-	nWnW1qrq0VtTCyyGO9QaZJIbhtIyUqUmV7tvabPleUqgtUPhTCRycK11xDiVCvGhnb9GSMj6dgF
-	WJMC8nnr0jMsX/KbLA==
-X-Google-Smtp-Source: AGHT+IF46vH0gAmljTCW6BchroEOcDOXkUgTIvPI2YZtYG9N39bSh/pHYkEmo3qgB6WjMhviNr012jnggIGiG1snhbI=
-X-Received: by 2002:a17:902:e74a:b0:267:776b:a315 with SMTP id
- d9443c01a7336-290caf844ddmr249836795ad.32.1761118577438; Wed, 22 Oct 2025
- 00:36:17 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1761119609; x=1761724409;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9BZl/sACGkzllJfolRARBo2gSVYuEA7sZCtXyyRozaA=;
+        b=uGzZ1xoO/HM9qKMjR/egNGGkwgulbynwVETOPZcFkEvha3P49piQV/nNOhyKLrRGxL
+         uLZUNiFO3MWyPtsMFUdS94dlz8wgTB+93vLAk4PXVCX2GznUgq4ZxHNP3q9ffx+gAjSp
+         Uaj1VhMA3HPPS7GPilSqA3B0kM5+Z00I5N6mGPAPvR1RRi7HlmaM56D/kCw0HmrobGgM
+         G1WYWh5+yNrdlGAuuYE9AoZCGYFhG0skT/RDpnZTSCD8SszneQXlzM04RthoyowyXapa
+         WUagjExmMPmI3pOy55e0L7+8F3vzhBb0E7UK1qkeZjVpiyGgy6ywTlQVzv8edjX167Do
+         H51A==
+X-Forwarded-Encrypted: i=1; AJvYcCUMkrr82R06SGfB6823FHMm3dO6oYdUFK7UqIVFo0UTri//1nNRXsw8kugakOnDg68IdeRrBd2kQczu@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUmiK8B8OaWjBTAFjtguFMif0Nu3qSsUYyhRBFuQM1sy7sseXk
+	CfnJxwXGNsyT6z4ny6mct+P7fpl2MpB/tXx1jEULCAkV6KeA4wNJJbZLh5lryOya5/h+unI4LL8
+	tAAYoJ7DMiG3pShMBwp9sBCHVnhC519nelRMVmsJx2ffQbMckGMTfWk4rd94=
+X-Google-Smtp-Source: AGHT+IH9xYY9rCes5+PP6dDPXa/IwAKtwc/tmp/IjLpaD9sBIBOYjZMLkWP3s5EMxOBU3H/gGQ4hdPoWGEccuBCz8qS+ALCwTcPJ
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251021214422.1941691-1-kuniyu@google.com> <20251021214422.1941691-8-kuniyu@google.com>
-In-Reply-To: <20251021214422.1941691-8-kuniyu@google.com>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Wed, 22 Oct 2025 00:36:05 -0700
-X-Gm-Features: AS18NWBKLOhVXyIMHsuYPqRGPiGNf1_PCd92__b5F-phGX71rLqYea5U9RwDCTA
-Message-ID: <CAAVpQUAxenM9_MRAo3z5ChFnr3-DN8yq+mR2xC4+ceuOaSL3=A@mail.gmail.com>
-Subject: Re: [PATCH v1 net-next 7/8] sctp: Use sctp_clone_sock() in sctp_do_peeloff().
-To: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: Simon Horman <horms@kernel.org>, Kuniyuki Iwashima <kuni1840@gmail.com>, netdev@vger.kernel.org, 
-	linux-sctp@vger.kernel.org
+X-Received: by 2002:a05:6602:6d8c:b0:93e:7edc:12c with SMTP id
+ ca18e2360f4ac-93e7edc1fb8mr2484491039f.0.1761119609102; Wed, 22 Oct 2025
+ 00:53:29 -0700 (PDT)
+Date: Wed, 22 Oct 2025 00:53:29 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <68f88d79.050a0220.346f24.0039.GAE@google.com>
+Subject: [syzbot] Monthly sctp report (Oct 2025)
+From: syzbot <syzbot+list414156adcf2ae8feb6cc@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org, 
+	lucien.xin@gmail.com, marcelo.leitner@gmail.com, netdev@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 21, 2025 at 2:44=E2=80=AFPM Kuniyuki Iwashima <kuniyu@google.co=
-m> wrote:
->
-> sctp_do_peeloff() calls sock_create() to allocate and initialise
-> struct sock, inet_sock, and sctp_sock, but later sctp_copy_sock()
-> and sctp_sock_migrate() overwrite most fields.
->
-> What sctp_do_peeloff() does is more like accept().
->
-> Let's use sock_create_lite() and sctp_clone_sock().
->
-> Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
-> ---
->  net/sctp/socket.c | 36 +++++++++++++++---------------------
->  1 file changed, 15 insertions(+), 21 deletions(-)
->
-> diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-> index 826f17747f176..60d3e340dfeda 100644
-> --- a/net/sctp/socket.c
-> +++ b/net/sctp/socket.c
-> @@ -5671,11 +5671,11 @@ static int sctp_getsockopt_autoclose(struct sock =
-*sk, int len, char __user *optv
->
->  /* Helper routine to branch off an association to a new socket.  */
->  static int sctp_do_peeloff(struct sock *sk, sctp_assoc_t id,
-> -               struct socket **sockp)
-> +                          struct socket **sockp)
->  {
->         struct sctp_association *asoc =3D sctp_id2assoc(sk, id);
-> -       struct sctp_sock *sp =3D sctp_sk(sk);
->         struct socket *sock;
-> +       struct sock *newsk;
->         int err =3D 0;
->
->         /* Do not peel off from one netns to another one. */
-> @@ -5691,30 +5691,24 @@ static int sctp_do_peeloff(struct sock *sk, sctp_=
-assoc_t id,
->         if (!sctp_style(sk, UDP))
->                 return -EINVAL;
->
-> -       /* Create a new socket.  */
-> -       err =3D sock_create(sk->sk_family, SOCK_SEQPACKET, IPPROTO_SCTP, =
-&sock);
-> -       if (err < 0)
-> +       err =3D sock_create_lite(sk->sk_family, SOCK_SEQPACKET, IPPROTO_S=
-CTP, &sock);
-> +       if (err)
->                 return err;
->
-> -       sctp_copy_sock(sock->sk, sk, asoc);
-> -
-> -       /* Make peeled-off sockets more like 1-1 accepted sockets.
-> -        * Set the daddr and initialize id to something more random and a=
-lso
-> -        * copy over any ip options.
-> -        */
-> -       sp->pf->to_sk_daddr(&asoc->peer.primary_addr, sock->sk);
-> -       sp->pf->copy_ip_options(sk, sock->sk);
-> -
-> -       /* Populate the fields of the newsk from the oldsk and migrate th=
-e
-> -        * asoc to the newsk.
-> -        */
-> -       err =3D sctp_sock_migrate(sk, sock->sk, asoc,
-> -                               SCTP_SOCKET_UDP_HIGH_BANDWIDTH);
-> -       if (err) {
-> +       newsk =3D sctp_clone_sock(sk, asoc, SCTP_SOCKET_UDP_HIGH_BANDWIDT=
-H);
-> +       if (IS_ERR(newsk)) {
->                 sock_release(sock);
-> -               sock =3D NULL;
-> +               *sockp =3D NULL;
-> +               return PTR_ERR(newsk);
->         }
->
-> +       lock_sock_nested(newsk, SINGLE_DEPTH_NESTING);
-> +       __inet_accept(sk->sk_socket, sock, newsk);
+Hello sctp maintainers/developers,
 
-Oh I assumed __inet_accept() was exported to MPTCP,
-but it's built-in, and SCTP=3Dm needs this.
+This is a 31-day syzbot report for the sctp subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/sctp
 
-diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-index 77f6ae0fc231..ffd4d75d0a7a 100644
---- a/net/ipv4/af_inet.c
-+++ b/net/ipv4/af_inet.c
-@@ -788,6 +788,7 @@ void __inet_accept(struct socket *sock, struct
-socket *newsock, struct sock *new
+During the period, 3 new issues were detected and 0 were fixed.
+In total, 7 issues are still open and 75 have already been fixed.
 
-  newsock->state =3D SS_CONNECTED;
- }
-+EXPORT_SYMBOL(__inet_accept);
+Some of the still happening issues:
 
- /*
-  * Accept a pending connection. The TCP layer now gives BSD semantics.
+Ref Crashes Repro Title
+<1> 111     Yes   INFO: rcu detected stall in NF_HOOK (2)
+                  https://syzkaller.appspot.com/bug?extid=34c2df040c6cfa15fdfe
+<2> 34      Yes   INFO: rcu detected stall in sock_close (5)
+                  https://syzkaller.appspot.com/bug?extid=9a29e1dba699b6f46a03
+<3> 1       No    WARNING: refcount bug in sctp_generate_timeout_event (2)
+                  https://syzkaller.appspot.com/bug?extid=b86c971dee837a7f5993
 
---
-pw-bot: cr
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
 
