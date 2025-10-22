@@ -1,79 +1,81 @@
-Return-Path: <linux-sctp+bounces-656-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-657-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A82FBFE452
-	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 23:17:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF8FEBFE455
+	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 23:17:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E34941A06F57
-	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 21:17:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DA111A06FDB
+	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 21:17:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 968FC296BB2;
-	Wed, 22 Oct 2025 21:17:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3084A2F83D8;
+	Wed, 22 Oct 2025 21:17:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="o3iGMxjQ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="N/3A7BCc"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE259277C9A
-	for <linux-sctp@vger.kernel.org>; Wed, 22 Oct 2025 21:17:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A915F279918
+	for <linux-sctp@vger.kernel.org>; Wed, 22 Oct 2025 21:17:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761167847; cv=none; b=DqxOJ/g3X4fLf4i69dRJLHJQDjF2KL0dz5xBqn4ogSRb+U2DRQ+xr3bFDhbVP90c51e74ZprbBOkW+LbkVA0Jq9IfhIJU75x+wbKFzJbldr8RYQ/rabdsBMH+1hze0CP52zaDRKR2xvQEfDGsmBKMl+EoXK18cQrjX8EqZsdfEc=
+	t=1761167848; cv=none; b=HWSyS4xeioe0KEAvsJ7k9ivNShN7Q2yM3d+wywEiGb7J7lJxjmWRapDFggxfI4zl0dIEWvk2WdM09fqV8iWzVYUDYtv6gAtc5Z2w1FfhLlSMgWUS7KKTB9S5su480QhBKAohoUOWPsUKUXGu9gqiobXfxAFTyctNR20W2tOf6m8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761167847; c=relaxed/simple;
-	bh=7/cxEwMmZ++WTTO8EVxit+7JaDEKfmEUgCnplptK1hE=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=YtW/04bXzp+X7wqbioPdupCVx28+WW2aP3GIiaH9fdlHDlpoK6iwWNjiW53woBeGcwtCJ8zW+twDJF93R7TU+EGwO9KTZB+RnQ/I6jSFsdQ8DV8IiU1ky7MimCZm7hhZhZXlXn5/yk4oPQVuTRTmJMErA8hOwEB4dTMN9cZrWp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=o3iGMxjQ; arc=none smtp.client-ip=209.85.216.73
+	s=arc-20240116; t=1761167848; c=relaxed/simple;
+	bh=ahGep6W32+gNV6oNtpOuYveNFz+hFzSORjjfmF+eRZ8=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=ca33g3sent2MyAH42YutF4oapGEKhrvZr1S5NEU4hqM7hb9aExfubDE89jT3jzIKB9n1Gtt6sqOE7S1lueDiPXDToBjnd1SLWYlpxjlCGuDpcR4dzfCYxxMjCG67Ik+v64dWlu9CNK4tUG0uy10DHs8TRwyZA226EFcYh1ZdDEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=N/3A7BCc; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-33d75897745so277174a91.0
-        for <linux-sctp@vger.kernel.org>; Wed, 22 Oct 2025 14:17:25 -0700 (PDT)
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-33dadf7c5beso90390a91.0
+        for <linux-sctp@vger.kernel.org>; Wed, 22 Oct 2025 14:17:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761167844; x=1761772644; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=qW7guxq7h7ph5o/bQVxn1/WVYaA8UvxQBGzNlqrVyYk=;
-        b=o3iGMxjQQ1GahR4TAtKoJEpCjmVwRC/NV4nKLs6Qpm4NVzzWCATwTaOYNKiUwzRICB
-         IzrH7tqchzgzLtlKoQXlwJQVlO51Hp98juaQJsdbv+y6a52BixcKyHcpCE6LJJgAJuD6
-         oPtgcInEobYJr+JbxkiVAhHTzLgSfpJZMio1XPf2tzvzNvkjwpZFGZBpB5JQHSzIbTWX
-         rj7H2dAFBl2CDKkvER9TI8/BEUI1nWPvYwDHnoTDIAvo0LQBElmBT2sNbGBxuEvyq8t4
-         PP1KPXLDjIFWmaN+ymKwCUtvTpOx5k64raegdRZSrmtrKGSZmlheHLs5uG2B8foIRqU1
-         OW2A==
+        d=google.com; s=20230601; t=1761167846; x=1761772646; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zC1K3IqyVSO0xtPymYXFv2IA0fNslGgFU0Blzcbsmno=;
+        b=N/3A7BCcvIgMLf1iQ+tYgZJC91KJWkAgj1GoqBrrpUfBN2E8NzX0cHBnGJvnnFN7Co
+         IQDzDdZbjnkgssV0cO2BZeGP4Fccs/nQLWE+SL4i/oJqS0XEjubnXH4e4nIoghi1UYp5
+         2wXjCIFvzb6IKo6k9PAgvCPDUE5JvLt5FAB5j8go0A0g6a3A8GgSbUFQQAT75C71r/Ab
+         M1ZC8SuYwp9GZP6NRA6/D8RNnVs59DjMGsf1iYU0+9prrxyn7Q2EcpOnvctQjFPM+Vj6
+         ww0vnMBuZUCfJ4WPdte1YbG3eTMYYXtCZT9grCluYzExuBbmbwlHDU0VIX/riTeGJiKL
+         jHJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761167844; x=1761772644;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qW7guxq7h7ph5o/bQVxn1/WVYaA8UvxQBGzNlqrVyYk=;
-        b=f+GHjnQfbKFlDcA7v9UziAb2YKTXCBV9E9Gzcl8sXJKJszFANCuSfBOpeTgu3CPoSF
-         Xgjf3lR+FkTFXaNsEItQ60qJjivxCqS34Av8IIua+hBi7UlJuEM8a5+ArZ6T2qndvpln
-         j6KMY9gufpPHlyJqxX8YjUALedBSV703TC8PwMcS3H/6vf6YlmXnJ8pM50Z191nwEbBQ
-         uzxT115CLEbziJNxHl++5PEgbIqjDAIoSmljOm7tlXMCk3bmjZVsTYck7gx4Ffe7PEJv
-         CyAsC/aJqPa/XncR6bhD0NuNFehusE5uPbEDHW+w581Zc1okgKLwCEtS1muQPMlpNHmw
-         lpVw==
-X-Forwarded-Encrypted: i=1; AJvYcCW7CVmVYHNZv4sFCIElKAMXmu3MsYqYo7/UZyI5533zWnpGKLr3r+WGG0UrRFDkp9fvuD06WuURWimu@vger.kernel.org
-X-Gm-Message-State: AOJu0YyRhseiVUg3Jrl/KEwZ+gSvPmn+qskbJfqWIBE8eR1VtlILeKoV
-	zGEKokZTMlCesbSbCs5Hsg5C55Tdx/NUmzs1xT6B//3YzhbPc3tibqIYGkm3Vazjul8sADCSX5d
-	mY7wEOw==
-X-Google-Smtp-Source: AGHT+IEbLefywCGXkV0YtrKS7jEu8/+y1XTcDlnr43VAcpUpFm+cbgZAvq6aa6lgrqMnkp39rhehddofZEQ=
-X-Received: from pjqc14.prod.google.com ([2002:a17:90a:a60e:b0:33b:51fe:1a77])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2ec7:b0:33b:6650:57c3
- with SMTP id 98e67ed59e1d1-33bcf8ec60dmr29138222a91.21.1761167844486; Wed, 22
- Oct 2025 14:17:24 -0700 (PDT)
-Date: Wed, 22 Oct 2025 21:17:00 +0000
+        d=1e100.net; s=20230601; t=1761167846; x=1761772646;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zC1K3IqyVSO0xtPymYXFv2IA0fNslGgFU0Blzcbsmno=;
+        b=gtq2yx8vzDsHTv4NH7Zmz6n1tHFxqZ3bC2v2VQcCg/wIcGLbvXCo2v/SmE3yV4NsIH
+         Owb3vUHiSHcodpuKdEndjmnCtRhNJ6u3pvd79Q8LGziq+LOyWlaWlkVtzj97Hvuy+Kii
+         wMes2Qp/S/t8qLvhjPEqmsUAjRvcYjmpi0d2d08Wq0sUnThuIyglEeOR6qnIsmGyPwPd
+         +W4n+D4iT+A4qhjRPWWlOUp9G5aXsnoUmW3El6HjK/f5KkhjPyJZJOtBpQcVCM9L/bKd
+         gPEiD5takifNeXheSZ7pUn3aIXyyB3KDBBmb0j2xQYwqxFUqPakFUZkY6WIRefdzzOU0
+         1y1A==
+X-Forwarded-Encrypted: i=1; AJvYcCXhwIngsxyCe9MxwWXmDwji6BdGlJ9QXzGPYHEWRmThIDob4SlQgMxLfoCRbWjPPDVONWsHGUvVhvlV@vger.kernel.org
+X-Gm-Message-State: AOJu0YwX9mJvWm+4htRTDmncSxKL00WifgpZCeWmV3adSGv8yq30FWst
+	bGfhCvfowtf48c1GgTvRNltHX3DU+ROsBXhI4XOKAdDQ3YcnxBFeDf8s5QBmN8JwnrFv5nQtqe/
+	CwHkZCg==
+X-Google-Smtp-Source: AGHT+IFWEulJ5rWTn8gl2RfPZa6sZRrfZaT0vTzM1+EoEHyNwJau+tizb6zu7WA33NEsXmZNF6/glxvztEI=
+X-Received: from pjyd13.prod.google.com ([2002:a17:90a:dfcd:b0:33b:cfaf:ce3e])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1b4a:b0:33b:aaf9:e980
+ with SMTP id 98e67ed59e1d1-33bcf939e86mr30875872a91.35.1761167845941; Wed, 22
+ Oct 2025 14:17:25 -0700 (PDT)
+Date: Wed, 22 Oct 2025 21:17:01 +0000
+In-Reply-To: <20251022211722.2819414-1-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20251022211722.2819414-1-kuniyu@google.com>
 X-Mailer: git-send-email 2.51.1.814.gb8fa24458f-goog
-Message-ID: <20251022211722.2819414-1-kuniyu@google.com>
-Subject: [PATCH v2 net-next 0/8] sctp: Avoid redundant initialisation in
- sctp_accept() and sctp_do_peeloff().
+Message-ID: <20251022211722.2819414-2-kuniyu@google.com>
+Subject: [PATCH v2 net-next 1/8] sctp: Defer SCTP_DBG_OBJCNT_DEC() to sctp_destroy_sock().
 From: Kuniyuki Iwashima <kuniyu@google.com>
 To: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, 
 	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
@@ -82,101 +84,56 @@ Cc: Simon Horman <horms@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
 	Kuniyuki Iwashima <kuni1840@gmail.com>, netdev@vger.kernel.org, linux-sctp@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-When sctp_accept() and sctp_do_peeloff() allocates a new socket,
-somehow sk_alloc() is used, and the new socket goes through full
-initialisation, but most of the fields are overwritten later.
+SCTP_DBG_OBJCNT_INC() is called only when sctp_init_sock()
+returns 0 after successfully allocating sctp_sk(sk)->ep.
 
-  1)
-  sctp_accept()
-  |- sctp_v[46]_create_accept_sk()
-  |  |- sk_alloc()
-  |  |- sock_init_data()
-  |  |- sctp_copy_sock()
-  |  `- newsk->sk_prot->init() / sctp_init_sock()
-  |
-  `- sctp_sock_migrate()
-     `- sctp_copy_descendant(newsk, oldsk)
+OTOH, SCTP_DBG_OBJCNT_DEC() is called in sctp_close().
 
-  sock_init_data() initialises struct sock, but many fields are
-  overwritten by sctp_copy_sock(), which inherits fields of struct
-  sock and inet_sock from the parent socket.
+The code seems to expect that the socket is always exposed
+to userspace once SCTP_DBG_OBJCNT_INC() is incremented, but
+there is a path where the assumption is not true.
 
-  sctp_init_sock() fully initialises struct sctp_sock, but later
-  sctp_copy_descendant() inherits most fields from the parent's
-  struct sctp_sock by memcpy().
+In sctp_accept(), sctp_sock_migrate() could fail after
+sctp_init_sock().
 
-  2)
-  sctp_do_peeloff()
-  |- sock_create()
-  |  |
-  |  ...
-  |      |- sk_alloc()
-  |      |- sock_init_data()
-  |  ...
-  |    `- newsk->sk_prot->init() / sctp_init_sock()
-  |
-  |- sctp_copy_sock()
-  `- sctp_sock_migrate()
-     `- sctp_copy_descendant(newsk, oldsk)
+Then, sk_common_release() does not call inet_release() nor
+sctp_close().  Instead, it calls sk->sk_prot->destroy().
 
-  sock_create() creates a brand new socket, but sctp_copy_sock()
-  and sctp_sock_migrate() overwrite most of the fields.
+Let's move SCTP_DBG_OBJCNT_DEC() from sctp_close() to
+sctp_destroy_sock().
 
-So, sk_alloc(), sock_init_data(), sctp_copy_sock(), and
-sctp_copy_descendant() can be replaced with a single function
-like sk_clone_lock().
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+---
+ net/sctp/socket.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-This series does the conversion and removes TODO comment added
-by commit 4a997d49d92ad ("tcp: Save lock_sock() for memcg in
-inet_csk_accept().").
-
-Tested accept() and SCTP_SOCKOPT_PEELOFF and both work properly.
-
-  socket(AF_INET, SOCK_STREAM, IPPROTO_SCTP) = 3
-  bind(3, {sa_family=AF_INET, sin_port=htons(0), sin_addr=inet_addr("127.0.0.1")}, 16) = 0
-  listen(3, -1)                           = 0
-  getsockname(3, {sa_family=AF_INET, sin_port=htons(49460), sin_addr=inet_addr("127.0.0.1")}, [16]) = 0
-  socket(AF_INET, SOCK_STREAM, IPPROTO_SCTP) = 4
-  connect(4, {sa_family=AF_INET, sin_port=htons(49460), sin_addr=inet_addr("127.0.0.1")}, 16) = 0
-  accept(3, NULL, NULL)                   = 5
-  ...
-  socket(AF_INET, SOCK_SEQPACKET, IPPROTO_SCTP) = 3
-  bind(3, {sa_family=AF_INET, sin_port=htons(0), sin_addr=inet_addr("127.0.0.1")}, 16) = 0
-  listen(3, -1)                           = 0
-  getsockname(3, {sa_family=AF_INET, sin_port=htons(48240), sin_addr=inet_addr("127.0.0.1")}, [16]) = 0
-  socket(AF_INET, SOCK_SEQPACKET, IPPROTO_SCTP) = 4
-  connect(4, {sa_family=AF_INET, sin_port=htons(48240), sin_addr=inet_addr("127.0.0.1")}, 16) = 0
-  getsockopt(3, SOL_SCTP, SCTP_SOCKOPT_PEELOFF, "*\0\0\0\5\0\0\0", [8]) = 5
-
-
-Changes:
-  v2:
-    * Patch 7: Export __inet_accept()
-
-  v1: https://lore.kernel.org/netdev/20251021214422.1941691-1-kuniyu@google.com/
-
-
-Kuniyuki Iwashima (8):
-  sctp: Defer SCTP_DBG_OBJCNT_DEC() to sctp_destroy_sock().
-  sctp: Don't copy sk_sndbuf and sk_rcvbuf in sctp_sock_migrate().
-  sctp: Don't call sk->sk_prot->init() in sctp_v[46]_create_accept_sk().
-  net: Add sk_clone().
-  sctp: Use sk_clone() in sctp_accept().
-  sctp: Remove sctp_pf.create_accept_sk().
-  sctp: Use sctp_clone_sock() in sctp_do_peeloff().
-  sctp: Remove sctp_copy_sock() and sctp_copy_descendant().
-
- include/net/inet_sock.h    |   8 --
- include/net/sctp/sctp.h    |   3 +-
- include/net/sctp/structs.h |   3 -
- include/net/sock.h         |   7 +-
- net/core/sock.c            |  21 ++--
- net/ipv4/af_inet.c         |   5 +-
- net/sctp/ipv6.c            |  51 ---------
- net/sctp/protocol.c        |  33 ------
- net/sctp/socket.c          | 209 +++++++++++++++++--------------------
- 9 files changed, 116 insertions(+), 224 deletions(-)
-
+diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+index ed8293a34240..d190e75e4645 100644
+--- a/net/sctp/socket.c
++++ b/net/sctp/socket.c
+@@ -1553,8 +1553,6 @@ static void sctp_close(struct sock *sk, long timeout)
+ 	spin_unlock_bh(&net->sctp.addr_wq_lock);
+ 
+ 	sock_put(sk);
+-
+-	SCTP_DBG_OBJCNT_DEC(sock);
+ }
+ 
+ /* Handle EPIPE error. */
+@@ -5109,9 +5107,12 @@ static void sctp_destroy_sock(struct sock *sk)
+ 		sp->do_auto_asconf = 0;
+ 		list_del(&sp->auto_asconf_list);
+ 	}
++
+ 	sctp_endpoint_free(sp->ep);
++
+ 	sk_sockets_allocated_dec(sk);
+ 	sock_prot_inuse_add(sock_net(sk), sk->sk_prot, -1);
++	SCTP_DBG_OBJCNT_DEC(sock);
+ }
+ 
+ static void sctp_destruct_sock(struct sock *sk)
 -- 
 2.51.1.814.gb8fa24458f-goog
 
