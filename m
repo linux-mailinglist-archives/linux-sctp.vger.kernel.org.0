@@ -1,127 +1,183 @@
-Return-Path: <linux-sctp+bounces-655-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-656-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 374D4BFAB53
-	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 09:56:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A82FBFE452
+	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 23:17:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5A2D3B880A
-	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 07:55:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E34941A06F57
+	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 21:17:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A107E2FE05C;
-	Wed, 22 Oct 2025 07:55:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 968FC296BB2;
+	Wed, 22 Oct 2025 21:17:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="o3iGMxjQ"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from air.basealt.ru (air.basealt.ru [193.43.8.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 797AE2FC876;
-	Wed, 22 Oct 2025 07:55:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.43.8.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE259277C9A
+	for <linux-sctp@vger.kernel.org>; Wed, 22 Oct 2025 21:17:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761119757; cv=none; b=qrScEeWFGmH5BW01iw2ebdaQemJhJw049uW51LvnVj+b0no9MEov1IeuXweDhd9m6hrP3TRqXLfFwmj1YcgACpSimZQO1fr+Lqr0WnUQpSTB7UhqbPXQBVNdyTbfFWNcAPHreJ+pLwvHKZ2Gtkt78tm0Z/6emrhCUMzsn3LDqqw=
+	t=1761167847; cv=none; b=DqxOJ/g3X4fLf4i69dRJLHJQDjF2KL0dz5xBqn4ogSRb+U2DRQ+xr3bFDhbVP90c51e74ZprbBOkW+LbkVA0Jq9IfhIJU75x+wbKFzJbldr8RYQ/rabdsBMH+1hze0CP52zaDRKR2xvQEfDGsmBKMl+EoXK18cQrjX8EqZsdfEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761119757; c=relaxed/simple;
-	bh=UlNcC04S5c0snHRJA8LAa0og7brdTQ+d6kkeWV6kDHY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UUG4RDcWMTwd6f07aybAuISnhkRvH3/cXUC6qAzQoX9PbEGb8BS2noy+OOfAEQT3xYb5hKnqP8eWNpVeuS6xCxDOYmjRledNXRPVhMRqLHoIbhfvd/ahNzifEIBCjTuBgYdHw84jBwySw65ujxCd+TeAAWpZclavIlD8wOIN0+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=193.43.8.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
-Received: from altlinux.ipa.basealt.ru (unknown [178.76.204.78])
-	(Authenticated sender: kovalevvv)
-	by air.basealt.ru (Postfix) with ESMTPSA id 2CAEF233B2;
-	Wed, 22 Oct 2025 10:55:50 +0300 (MSK)
-From: Vasiliy Kovalev <kovalev@altlinux.org>
-To: stable@vger.kernel.org
-Cc: Vlad Yasevich <vyasevich@gmail.com>,
-	Neil Horman <nhorman@tuxdriver.com>,
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	linux-sctp@vger.kernel.org,
-	lvc-project@linuxtesting.org,
-	kovalev@altlinux.org
-Subject: [PATCH 6.1.y] sctp: linearize cloned gso packets in sctp_rcv
-Date: Wed, 22 Oct 2025 10:55:49 +0300
-Message-Id: <20251022075549.195012-1-kovalev@altlinux.org>
-X-Mailer: git-send-email 2.33.8
+	s=arc-20240116; t=1761167847; c=relaxed/simple;
+	bh=7/cxEwMmZ++WTTO8EVxit+7JaDEKfmEUgCnplptK1hE=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=YtW/04bXzp+X7wqbioPdupCVx28+WW2aP3GIiaH9fdlHDlpoK6iwWNjiW53woBeGcwtCJ8zW+twDJF93R7TU+EGwO9KTZB+RnQ/I6jSFsdQ8DV8IiU1ky7MimCZm7hhZhZXlXn5/yk4oPQVuTRTmJMErA8hOwEB4dTMN9cZrWp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=o3iGMxjQ; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-33d75897745so277174a91.0
+        for <linux-sctp@vger.kernel.org>; Wed, 22 Oct 2025 14:17:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1761167844; x=1761772644; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=qW7guxq7h7ph5o/bQVxn1/WVYaA8UvxQBGzNlqrVyYk=;
+        b=o3iGMxjQQ1GahR4TAtKoJEpCjmVwRC/NV4nKLs6Qpm4NVzzWCATwTaOYNKiUwzRICB
+         IzrH7tqchzgzLtlKoQXlwJQVlO51Hp98juaQJsdbv+y6a52BixcKyHcpCE6LJJgAJuD6
+         oPtgcInEobYJr+JbxkiVAhHTzLgSfpJZMio1XPf2tzvzNvkjwpZFGZBpB5JQHSzIbTWX
+         rj7H2dAFBl2CDKkvER9TI8/BEUI1nWPvYwDHnoTDIAvo0LQBElmBT2sNbGBxuEvyq8t4
+         PP1KPXLDjIFWmaN+ymKwCUtvTpOx5k64raegdRZSrmtrKGSZmlheHLs5uG2B8foIRqU1
+         OW2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761167844; x=1761772644;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qW7guxq7h7ph5o/bQVxn1/WVYaA8UvxQBGzNlqrVyYk=;
+        b=f+GHjnQfbKFlDcA7v9UziAb2YKTXCBV9E9Gzcl8sXJKJszFANCuSfBOpeTgu3CPoSF
+         Xgjf3lR+FkTFXaNsEItQ60qJjivxCqS34Av8IIua+hBi7UlJuEM8a5+ArZ6T2qndvpln
+         j6KMY9gufpPHlyJqxX8YjUALedBSV703TC8PwMcS3H/6vf6YlmXnJ8pM50Z191nwEbBQ
+         uzxT115CLEbziJNxHl++5PEgbIqjDAIoSmljOm7tlXMCk3bmjZVsTYck7gx4Ffe7PEJv
+         CyAsC/aJqPa/XncR6bhD0NuNFehusE5uPbEDHW+w581Zc1okgKLwCEtS1muQPMlpNHmw
+         lpVw==
+X-Forwarded-Encrypted: i=1; AJvYcCW7CVmVYHNZv4sFCIElKAMXmu3MsYqYo7/UZyI5533zWnpGKLr3r+WGG0UrRFDkp9fvuD06WuURWimu@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRhseiVUg3Jrl/KEwZ+gSvPmn+qskbJfqWIBE8eR1VtlILeKoV
+	zGEKokZTMlCesbSbCs5Hsg5C55Tdx/NUmzs1xT6B//3YzhbPc3tibqIYGkm3Vazjul8sADCSX5d
+	mY7wEOw==
+X-Google-Smtp-Source: AGHT+IEbLefywCGXkV0YtrKS7jEu8/+y1XTcDlnr43VAcpUpFm+cbgZAvq6aa6lgrqMnkp39rhehddofZEQ=
+X-Received: from pjqc14.prod.google.com ([2002:a17:90a:a60e:b0:33b:51fe:1a77])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2ec7:b0:33b:6650:57c3
+ with SMTP id 98e67ed59e1d1-33bcf8ec60dmr29138222a91.21.1761167844486; Wed, 22
+ Oct 2025 14:17:24 -0700 (PDT)
+Date: Wed, 22 Oct 2025 21:17:00 +0000
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.1.814.gb8fa24458f-goog
+Message-ID: <20251022211722.2819414-1-kuniyu@google.com>
+Subject: [PATCH v2 net-next 0/8] sctp: Avoid redundant initialisation in
+ sctp_accept() and sctp_do_peeloff().
+From: Kuniyuki Iwashima <kuniyu@google.com>
+To: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: Simon Horman <horms@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	Kuniyuki Iwashima <kuni1840@gmail.com>, netdev@vger.kernel.org, linux-sctp@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-From: Xin Long <lucien.xin@gmail.com>
+When sctp_accept() and sctp_do_peeloff() allocates a new socket,
+somehow sk_alloc() is used, and the new socket goes through full
+initialisation, but most of the fields are overwritten later.
 
-commit fd60d8a086191fe33c2d719732d2482052fa6805 upstream.
+  1)
+  sctp_accept()
+  |- sctp_v[46]_create_accept_sk()
+  |  |- sk_alloc()
+  |  |- sock_init_data()
+  |  |- sctp_copy_sock()
+  |  `- newsk->sk_prot->init() / sctp_init_sock()
+  |
+  `- sctp_sock_migrate()
+     `- sctp_copy_descendant(newsk, oldsk)
 
-A cloned head skb still shares these frag skbs in fraglist with the
-original head skb. It's not safe to access these frag skbs.
+  sock_init_data() initialises struct sock, but many fields are
+  overwritten by sctp_copy_sock(), which inherits fields of struct
+  sock and inet_sock from the parent socket.
 
-syzbot reported two use-of-uninitialized-memory bugs caused by this:
+  sctp_init_sock() fully initialises struct sctp_sock, but later
+  sctp_copy_descendant() inherits most fields from the parent's
+  struct sctp_sock by memcpy().
 
-  BUG: KMSAN: uninit-value in sctp_inq_pop+0x15b7/0x1920 net/sctp/inqueue.c:211
-   sctp_inq_pop+0x15b7/0x1920 net/sctp/inqueue.c:211
-   sctp_assoc_bh_rcv+0x1a7/0xc50 net/sctp/associola.c:998
-   sctp_inq_push+0x2ef/0x380 net/sctp/inqueue.c:88
-   sctp_backlog_rcv+0x397/0xdb0 net/sctp/input.c:331
-   sk_backlog_rcv+0x13b/0x420 include/net/sock.h:1122
-   __release_sock+0x1da/0x330 net/core/sock.c:3106
-   release_sock+0x6b/0x250 net/core/sock.c:3660
-   sctp_wait_for_connect+0x487/0x820 net/sctp/socket.c:9360
-   sctp_sendmsg_to_asoc+0x1ec1/0x1f00 net/sctp/socket.c:1885
-   sctp_sendmsg+0x32b9/0x4a80 net/sctp/socket.c:2031
-   inet_sendmsg+0x25a/0x280 net/ipv4/af_inet.c:851
-   sock_sendmsg_nosec net/socket.c:718 [inline]
+  2)
+  sctp_do_peeloff()
+  |- sock_create()
+  |  |
+  |  ...
+  |      |- sk_alloc()
+  |      |- sock_init_data()
+  |  ...
+  |    `- newsk->sk_prot->init() / sctp_init_sock()
+  |
+  |- sctp_copy_sock()
+  `- sctp_sock_migrate()
+     `- sctp_copy_descendant(newsk, oldsk)
 
-and
+  sock_create() creates a brand new socket, but sctp_copy_sock()
+  and sctp_sock_migrate() overwrite most of the fields.
 
-  BUG: KMSAN: uninit-value in sctp_assoc_bh_rcv+0x34e/0xbc0 net/sctp/associola.c:987
-   sctp_assoc_bh_rcv+0x34e/0xbc0 net/sctp/associola.c:987
-   sctp_inq_push+0x2a3/0x350 net/sctp/inqueue.c:88
-   sctp_backlog_rcv+0x3c7/0xda0 net/sctp/input.c:331
-   sk_backlog_rcv+0x142/0x420 include/net/sock.h:1148
-   __release_sock+0x1d3/0x330 net/core/sock.c:3213
-   release_sock+0x6b/0x270 net/core/sock.c:3767
-   sctp_wait_for_connect+0x458/0x820 net/sctp/socket.c:9367
-   sctp_sendmsg_to_asoc+0x223a/0x2260 net/sctp/socket.c:1886
-   sctp_sendmsg+0x3910/0x49f0 net/sctp/socket.c:2032
-   inet_sendmsg+0x269/0x2a0 net/ipv4/af_inet.c:851
-   sock_sendmsg_nosec net/socket.c:712 [inline]
+So, sk_alloc(), sock_init_data(), sctp_copy_sock(), and
+sctp_copy_descendant() can be replaced with a single function
+like sk_clone_lock().
 
-This patch fixes it by linearizing cloned gso packets in sctp_rcv().
+This series does the conversion and removes TODO comment added
+by commit 4a997d49d92ad ("tcp: Save lock_sock() for memcg in
+inet_csk_accept().").
 
-Fixes: 90017accff61 ("sctp: Add GSO support")
-Reported-by: syzbot+773e51afe420baaf0e2b@syzkaller.appspotmail.com
-Reported-by: syzbot+70a42f45e76bede082be@syzkaller.appspotmail.com
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
-Reviewed-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Link: https://patch.msgid.link/dd7dc337b99876d4132d0961f776913719f7d225.1754595611.git.lucien.xin@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-[ kovalev: bp to fix CVE-2025-38718 ]
-Signed-off-by: Vasiliy Kovalev <kovalev@altlinux.org>
----
-This patch is lost/missing, as it has already been added
-into stable branches less than and greater than 6.1.
----
- net/sctp/input.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Tested accept() and SCTP_SOCKOPT_PEELOFF and both work properly.
 
-diff --git a/net/sctp/input.c b/net/sctp/input.c
-index 4ee9374dcfb9..182898cb754a 100644
---- a/net/sctp/input.c
-+++ b/net/sctp/input.c
-@@ -114,7 +114,7 @@ int sctp_rcv(struct sk_buff *skb)
- 	 * it's better to just linearize it otherwise crc computing
- 	 * takes longer.
- 	 */
--	if ((!is_gso && skb_linearize(skb)) ||
-+	if (((!is_gso || skb_cloned(skb)) && skb_linearize(skb)) ||
- 	    !pskb_may_pull(skb, sizeof(struct sctphdr)))
- 		goto discard_it;
- 
+  socket(AF_INET, SOCK_STREAM, IPPROTO_SCTP) = 3
+  bind(3, {sa_family=AF_INET, sin_port=htons(0), sin_addr=inet_addr("127.0.0.1")}, 16) = 0
+  listen(3, -1)                           = 0
+  getsockname(3, {sa_family=AF_INET, sin_port=htons(49460), sin_addr=inet_addr("127.0.0.1")}, [16]) = 0
+  socket(AF_INET, SOCK_STREAM, IPPROTO_SCTP) = 4
+  connect(4, {sa_family=AF_INET, sin_port=htons(49460), sin_addr=inet_addr("127.0.0.1")}, 16) = 0
+  accept(3, NULL, NULL)                   = 5
+  ...
+  socket(AF_INET, SOCK_SEQPACKET, IPPROTO_SCTP) = 3
+  bind(3, {sa_family=AF_INET, sin_port=htons(0), sin_addr=inet_addr("127.0.0.1")}, 16) = 0
+  listen(3, -1)                           = 0
+  getsockname(3, {sa_family=AF_INET, sin_port=htons(48240), sin_addr=inet_addr("127.0.0.1")}, [16]) = 0
+  socket(AF_INET, SOCK_SEQPACKET, IPPROTO_SCTP) = 4
+  connect(4, {sa_family=AF_INET, sin_port=htons(48240), sin_addr=inet_addr("127.0.0.1")}, 16) = 0
+  getsockopt(3, SOL_SCTP, SCTP_SOCKOPT_PEELOFF, "*\0\0\0\5\0\0\0", [8]) = 5
+
+
+Changes:
+  v2:
+    * Patch 7: Export __inet_accept()
+
+  v1: https://lore.kernel.org/netdev/20251021214422.1941691-1-kuniyu@google.com/
+
+
+Kuniyuki Iwashima (8):
+  sctp: Defer SCTP_DBG_OBJCNT_DEC() to sctp_destroy_sock().
+  sctp: Don't copy sk_sndbuf and sk_rcvbuf in sctp_sock_migrate().
+  sctp: Don't call sk->sk_prot->init() in sctp_v[46]_create_accept_sk().
+  net: Add sk_clone().
+  sctp: Use sk_clone() in sctp_accept().
+  sctp: Remove sctp_pf.create_accept_sk().
+  sctp: Use sctp_clone_sock() in sctp_do_peeloff().
+  sctp: Remove sctp_copy_sock() and sctp_copy_descendant().
+
+ include/net/inet_sock.h    |   8 --
+ include/net/sctp/sctp.h    |   3 +-
+ include/net/sctp/structs.h |   3 -
+ include/net/sock.h         |   7 +-
+ net/core/sock.c            |  21 ++--
+ net/ipv4/af_inet.c         |   5 +-
+ net/sctp/ipv6.c            |  51 ---------
+ net/sctp/protocol.c        |  33 ------
+ net/sctp/socket.c          | 209 +++++++++++++++++--------------------
+ 9 files changed, 116 insertions(+), 224 deletions(-)
+
 -- 
-2.50.1
+2.51.1.814.gb8fa24458f-goog
 
 
