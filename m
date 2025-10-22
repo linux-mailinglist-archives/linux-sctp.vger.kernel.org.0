@@ -1,70 +1,70 @@
-Return-Path: <linux-sctp+bounces-657-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-658-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF8FEBFE455
-	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 23:17:32 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7C4FBFE45B
+	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 23:17:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DA111A06FDB
-	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 21:17:56 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B99274E6163
+	for <lists+linux-sctp@lfdr.de>; Wed, 22 Oct 2025 21:17:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3084A2F83D8;
-	Wed, 22 Oct 2025 21:17:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2D7D3019AF;
+	Wed, 22 Oct 2025 21:17:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="N/3A7BCc"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HfawnsO3"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A915F279918
-	for <linux-sctp@vger.kernel.org>; Wed, 22 Oct 2025 21:17:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FBD72F83C9
+	for <linux-sctp@vger.kernel.org>; Wed, 22 Oct 2025 21:17:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761167848; cv=none; b=HWSyS4xeioe0KEAvsJ7k9ivNShN7Q2yM3d+wywEiGb7J7lJxjmWRapDFggxfI4zl0dIEWvk2WdM09fqV8iWzVYUDYtv6gAtc5Z2w1FfhLlSMgWUS7KKTB9S5su480QhBKAohoUOWPsUKUXGu9gqiobXfxAFTyctNR20W2tOf6m8=
+	t=1761167849; cv=none; b=tokTE4K46Gcwq1Tc4oZLMgwNNqKVXidgcG93+x80OQCFDKiK+We9hyamZgXTQDxgrYTNAqbzk0wYRN3m5bufnJffLklXXZr8mnDk4UDDVPLyAof3o0nBbSfRpR3F/VXPaLfVdw4TE9xg5l+iemi974sLYVnsxFmW01J/L/mB8U0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761167848; c=relaxed/simple;
-	bh=ahGep6W32+gNV6oNtpOuYveNFz+hFzSORjjfmF+eRZ8=;
+	s=arc-20240116; t=1761167849; c=relaxed/simple;
+	bh=OI//fQhY6GrWZcEbV1qfJgwOYOHPWnMBLceuSeRu0zY=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ca33g3sent2MyAH42YutF4oapGEKhrvZr1S5NEU4hqM7hb9aExfubDE89jT3jzIKB9n1Gtt6sqOE7S1lueDiPXDToBjnd1SLWYlpxjlCGuDpcR4dzfCYxxMjCG67Ik+v64dWlu9CNK4tUG0uy10DHs8TRwyZA226EFcYh1ZdDEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=N/3A7BCc; arc=none smtp.client-ip=209.85.216.73
+	 To:Cc:Content-Type; b=ua+bWvNec4kowwOgbl0ZmpiqgSkgAyMOLPMe5SvRUGZxYQUbVOrCj0QzbIXxux2qK6YyvmLh4jyzOslbDX3zOZAPoGppG6Xn92SPw/W+I1Q2WO5OPNKWYnTsm44vPROiAA+c78kLzUwnh6oH8BCkM5mj8huW9EKlJxKlyrzSq54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HfawnsO3; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-33dadf7c5beso90390a91.0
-        for <linux-sctp@vger.kernel.org>; Wed, 22 Oct 2025 14:17:26 -0700 (PDT)
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-33bba464b08so87351a91.0
+        for <linux-sctp@vger.kernel.org>; Wed, 22 Oct 2025 14:17:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761167846; x=1761772646; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1761167847; x=1761772647; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zC1K3IqyVSO0xtPymYXFv2IA0fNslGgFU0Blzcbsmno=;
-        b=N/3A7BCcvIgMLf1iQ+tYgZJC91KJWkAgj1GoqBrrpUfBN2E8NzX0cHBnGJvnnFN7Co
-         IQDzDdZbjnkgssV0cO2BZeGP4Fccs/nQLWE+SL4i/oJqS0XEjubnXH4e4nIoghi1UYp5
-         2wXjCIFvzb6IKo6k9PAgvCPDUE5JvLt5FAB5j8go0A0g6a3A8GgSbUFQQAT75C71r/Ab
-         M1ZC8SuYwp9GZP6NRA6/D8RNnVs59DjMGsf1iYU0+9prrxyn7Q2EcpOnvctQjFPM+Vj6
-         ww0vnMBuZUCfJ4WPdte1YbG3eTMYYXtCZT9grCluYzExuBbmbwlHDU0VIX/riTeGJiKL
-         jHJg==
+        bh=x2FlQaGpNmdYyCjDaF+cX7u2dk7mvT/GjpYgyYEIStQ=;
+        b=HfawnsO3U9XRZptpEq3XNCLVmgP5AhWLk2Y6GLRGbujGUuQQ29uaeMOIH8ABgiJlq2
+         8RDl2aaqNyesGZMi991QaXEgoXUA7dwHGPVMyIIhZibihcEfmQYMiqOOq6yxiZ0JkE9c
+         +FSkzbU6v90PYP6Hte1xvX/1qla+tT8r1KClm46F6fBPrLSfW7P1vQzneXx3+i8GrNHa
+         kvH6Ms1XxfSGC+sweHH3iSZV+RD8lBvpncd7BfnBBjvdeT4kzEqmTv3fO7RhAwiU1zV+
+         YUkQ2tHTWJBge5DCGYKD0K3AS/Yy9MmHZvB3utmm79a8QFpuag/UL1aHsDGT3x6aoEJ8
+         Hffg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761167846; x=1761772646;
+        d=1e100.net; s=20230601; t=1761167847; x=1761772647;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zC1K3IqyVSO0xtPymYXFv2IA0fNslGgFU0Blzcbsmno=;
-        b=gtq2yx8vzDsHTv4NH7Zmz6n1tHFxqZ3bC2v2VQcCg/wIcGLbvXCo2v/SmE3yV4NsIH
-         Owb3vUHiSHcodpuKdEndjmnCtRhNJ6u3pvd79Q8LGziq+LOyWlaWlkVtzj97Hvuy+Kii
-         wMes2Qp/S/t8qLvhjPEqmsUAjRvcYjmpi0d2d08Wq0sUnThuIyglEeOR6qnIsmGyPwPd
-         +W4n+D4iT+A4qhjRPWWlOUp9G5aXsnoUmW3El6HjK/f5KkhjPyJZJOtBpQcVCM9L/bKd
-         gPEiD5takifNeXheSZ7pUn3aIXyyB3KDBBmb0j2xQYwqxFUqPakFUZkY6WIRefdzzOU0
-         1y1A==
-X-Forwarded-Encrypted: i=1; AJvYcCXhwIngsxyCe9MxwWXmDwji6BdGlJ9QXzGPYHEWRmThIDob4SlQgMxLfoCRbWjPPDVONWsHGUvVhvlV@vger.kernel.org
-X-Gm-Message-State: AOJu0YwX9mJvWm+4htRTDmncSxKL00WifgpZCeWmV3adSGv8yq30FWst
-	bGfhCvfowtf48c1GgTvRNltHX3DU+ROsBXhI4XOKAdDQ3YcnxBFeDf8s5QBmN8JwnrFv5nQtqe/
-	CwHkZCg==
-X-Google-Smtp-Source: AGHT+IFWEulJ5rWTn8gl2RfPZa6sZRrfZaT0vTzM1+EoEHyNwJau+tizb6zu7WA33NEsXmZNF6/glxvztEI=
-X-Received: from pjyd13.prod.google.com ([2002:a17:90a:dfcd:b0:33b:cfaf:ce3e])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1b4a:b0:33b:aaf9:e980
- with SMTP id 98e67ed59e1d1-33bcf939e86mr30875872a91.35.1761167845941; Wed, 22
- Oct 2025 14:17:25 -0700 (PDT)
-Date: Wed, 22 Oct 2025 21:17:01 +0000
+        bh=x2FlQaGpNmdYyCjDaF+cX7u2dk7mvT/GjpYgyYEIStQ=;
+        b=R8xQ/NEP+gemcMKc1wt4Ddp+T4zKUGssEkp02/vg6YRqbR1zgQmEEkmLwUTcy6iLUg
+         K5onTNX+6SnvynCVR1XP4WVGXSldGoHjYbOY4uCblhguEUvBzW3yyww4qIWubCHe4zY5
+         +qzWQjqtkoiOzkrlyfCmIt0VW9do1ERdUNpxXspuKYrWbRx6TA2LbDy34Cgyj7E1zPTv
+         bFQWjC4b1Oftu22d+RxQiV+PudWv8wY+P3LD5yFXu9zpdYwZA94TLi94wcXEdW5B1uAL
+         pX6NxXk7aNxVZmCZi2wlYtJwjuzWOTaAHe4OIUBMppWYLr6XwswoXGKtthAkfJYZeTe0
+         LbUg==
+X-Forwarded-Encrypted: i=1; AJvYcCXVP5iXR/+ljWJwjvrUaPThR3k6PLj+rqUtHFbwAiLPr9hF/iJ3AjFvv8GzTaK6uRpbkc/jzdurNTbO@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWVMdFF5fRu0fa1wPXoXvuWpaXEl0ITGaDRquSYyMyv5fhawcD
+	nvjfQS0pVBkLHQLOmcxlmw/k+TZL44O2WX2jU9c5pYnxS9sf3ZvYOPqqnMnerjY5L8eM+mIjILi
+	ZIOLGiQ==
+X-Google-Smtp-Source: AGHT+IEqCWncMKW63ViAefeXIG8huhYzveq16ITZnOEt6ymZcmRtkiVJaC0gBCk+W5U19OSFwJwnartQvRI=
+X-Received: from pjbft22.prod.google.com ([2002:a17:90b:f96:b0:32e:d644:b829])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4c4e:b0:32e:6019:5d19
+ with SMTP id 98e67ed59e1d1-33bcf921526mr26449310a91.34.1761167847410; Wed, 22
+ Oct 2025 14:17:27 -0700 (PDT)
+Date: Wed, 22 Oct 2025 21:17:02 +0000
 In-Reply-To: <20251022211722.2819414-1-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20251022211722.2819414-1-kuniyu@google.com>
 X-Mailer: git-send-email 2.51.1.814.gb8fa24458f-goog
-Message-ID: <20251022211722.2819414-2-kuniyu@google.com>
-Subject: [PATCH v2 net-next 1/8] sctp: Defer SCTP_DBG_OBJCNT_DEC() to sctp_destroy_sock().
+Message-ID: <20251022211722.2819414-3-kuniyu@google.com>
+Subject: [PATCH v2 net-next 2/8] sctp: Don't copy sk_sndbuf and sk_rcvbuf in sctp_sock_migrate().
 From: Kuniyuki Iwashima <kuniyu@google.com>
 To: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, 
 	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
@@ -84,56 +84,44 @@ Cc: Simon Horman <horms@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
 	Kuniyuki Iwashima <kuni1840@gmail.com>, netdev@vger.kernel.org, linux-sctp@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-SCTP_DBG_OBJCNT_INC() is called only when sctp_init_sock()
-returns 0 after successfully allocating sctp_sk(sk)->ep.
+sctp_sock_migrate() is called from 2 places.
 
-OTOH, SCTP_DBG_OBJCNT_DEC() is called in sctp_close().
+1) sctp_accept() calls sp->pf->create_accept_sk() before
+   sctp_sock_migrate(), and sp->pf->create_accept_sk() calls
+   sctp_copy_sock().
 
-The code seems to expect that the socket is always exposed
-to userspace once SCTP_DBG_OBJCNT_INC() is incremented, but
-there is a path where the assumption is not true.
+2) sctp_do_peeloff() also calls sctp_copy_sock() before
+   sctp_sock_migrate().
 
-In sctp_accept(), sctp_sock_migrate() could fail after
-sctp_init_sock().
+sctp_copy_sock() copies sk_sndbuf and sk_rcvbuf from the
+parent socket.
 
-Then, sk_common_release() does not call inet_release() nor
-sctp_close().  Instead, it calls sk->sk_prot->destroy().
+Let's not copy the two fields in sctp_sock_migrate().
 
-Let's move SCTP_DBG_OBJCNT_DEC() from sctp_close() to
-sctp_destroy_sock().
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
 Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
 ---
- net/sctp/socket.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ net/sctp/socket.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
 diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-index ed8293a34240..d190e75e4645 100644
+index d190e75e4645..735b1222af95 100644
 --- a/net/sctp/socket.c
 +++ b/net/sctp/socket.c
-@@ -1553,8 +1553,6 @@ static void sctp_close(struct sock *sk, long timeout)
- 	spin_unlock_bh(&net->sctp.addr_wq_lock);
+@@ -9523,12 +9523,9 @@ static int sctp_sock_migrate(struct sock *oldsk, struct sock *newsk,
+ 	struct sctp_bind_hashbucket *head;
+ 	int err;
  
- 	sock_put(sk);
--
--	SCTP_DBG_OBJCNT_DEC(sock);
- }
+-	/* Migrate socket buffer sizes and all the socket level options to the
+-	 * new socket.
++	/* Migrate all the socket level options to the new socket.
++	 * Brute force copy old sctp opt.
+ 	 */
+-	newsk->sk_sndbuf = oldsk->sk_sndbuf;
+-	newsk->sk_rcvbuf = oldsk->sk_rcvbuf;
+-	/* Brute force copy old sctp opt. */
+ 	sctp_copy_descendant(newsk, oldsk);
  
- /* Handle EPIPE error. */
-@@ -5109,9 +5107,12 @@ static void sctp_destroy_sock(struct sock *sk)
- 		sp->do_auto_asconf = 0;
- 		list_del(&sp->auto_asconf_list);
- 	}
-+
- 	sctp_endpoint_free(sp->ep);
-+
- 	sk_sockets_allocated_dec(sk);
- 	sock_prot_inuse_add(sock_net(sk), sk->sk_prot, -1);
-+	SCTP_DBG_OBJCNT_DEC(sock);
- }
- 
- static void sctp_destruct_sock(struct sock *sk)
+ 	/* Restore the ep value that was overwritten with the above structure
 -- 
 2.51.1.814.gb8fa24458f-goog
 
