@@ -1,122 +1,113 @@
-Return-Path: <linux-sctp+bounces-669-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-670-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53716C02A28
-	for <lists+linux-sctp@lfdr.de>; Thu, 23 Oct 2025 19:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A0C3CC02C2A
+	for <lists+linux-sctp@lfdr.de>; Thu, 23 Oct 2025 19:38:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D67B3A131F
-	for <lists+linux-sctp@lfdr.de>; Thu, 23 Oct 2025 17:03:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F9BE3B0D5F
+	for <lists+linux-sctp@lfdr.de>; Thu, 23 Oct 2025 17:38:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77BC1345CDF;
-	Thu, 23 Oct 2025 16:56:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39E6734B422;
+	Thu, 23 Oct 2025 17:38:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BAzeb67q"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WQvTCQ2p"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E40C2345CDB
-	for <linux-sctp@vger.kernel.org>; Thu, 23 Oct 2025 16:56:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC13534B408
+	for <linux-sctp@vger.kernel.org>; Thu, 23 Oct 2025 17:38:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761238577; cv=none; b=fN5GW2S8ZrnWR+9PovdrgvFK7BpJ6q1bgJVHRVVdK7af9aqNOUHmm+b1kOf3qE0g3FS8QxBmfmSyiREtMzsHyI+mMAEm60LQhAh52GZ7kVZzaOkph4KVQi86bZ1Adml3VQXtYDZ9t7dE3B9DEfbD9A+hadZosnIpYnGdWILx4vk=
+	t=1761241094; cv=none; b=bn7yrMWGbj1JxEeSns8PHfqAgsK49O8OhrnTIrt8gl3iUzB/QMoC4ECW9OAADpoTfSmLBimwXn9K6bPB53t8p19fltGkA1nwUN3rHYf6ocEfsHBpt+J9kuVb6toZo64MwVKAF9eChvUwRYEulpxJ0jRzqSh4Uxml4BiX81IIlTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761238577; c=relaxed/simple;
-	bh=7sTaFAY0i0UpyN/V+3nClAJ0FqgP+WzfxcAytNEo09Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EiqZVK2VWkW37T+rmQfYDHhI0wrlZpba2Sll2+r3K+kIxmHV7JNJdTGbz+hRMRn/fGPJ4LiYEyB+ykqPegtzYXR81pZPf0oYn2Dzsx7vWP1tJDYTJJBemFlksDMaBdV0L5aAtQRhVPsPHwz7DTrBcS5aGf+2eFAHF+hhvdy4ImE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BAzeb67q; arc=none smtp.client-ip=209.85.210.172
+	s=arc-20240116; t=1761241094; c=relaxed/simple;
+	bh=ywuqBEwRpRScnW+bb5t/i7Wkw4UY4DDO5j+kmL9KXEA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=bdusQRkgcKytzY6374jsM1U8ayQqgu4l3nsWW2WPuhokvi7PnyHjqBntPmZ3sfO+Hz5T3RFr38YNHm5WatQajhnFaKHrp/Hvq1TQdxJUg9KBpR9CfjvotD1LJLH9C2sTrNKCxB0Sq41vHHzO7ia8ZAKhi6J52Jxdw4ufVHhqtqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WQvTCQ2p; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-77f67ba775aso1324335b3a.3
-        for <linux-sctp@vger.kernel.org>; Thu, 23 Oct 2025 09:56:15 -0700 (PDT)
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-290aaff26c1so2483025ad.3
+        for <linux-sctp@vger.kernel.org>; Thu, 23 Oct 2025 10:38:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761238575; x=1761843375; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1761241092; x=1761845892; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IyIF9He3AQaNVecfdTsFNoyNYPTFP7D9PI/cuCCk9Bw=;
-        b=BAzeb67qK9p+jvgts23+2lIY3fglCm57lUZ2jwpZeCJ7Ccz5n2n2wBheVkShVnjHUD
-         1UU6AIG1JRvQEhMCsP8LVLmvjNzWL/cWCwDo9nH5ppGM7FMnYajgkq0jnlAKUyvMiWK1
-         cyr+icMPeY4+ilxLLW+ADdkQAj/gSktc21YcZPVDFJNcWpSFONp+hd/ZbwFoALMHUzQ2
-         3AVr2PIrGY6Xbj8zjVDdnjhzz4gs55SbodlqQjgak9blbdPTluheimM0Wc4xcvv0/grK
-         xLXUYP8DOCYNeg8bXcy8YPF9cvSqIvA2b1EBhvHFjXTKmBpmxdGUYWqJNvDoC0fooPd7
-         LDeg==
+        bh=ywuqBEwRpRScnW+bb5t/i7Wkw4UY4DDO5j+kmL9KXEA=;
+        b=WQvTCQ2poQ0X9GhbZuZkC9Z4n1R0iEJDBtYFiyVZ3meO8N9uKX1HVXbvcP+9/b0DxG
+         6iVcPY/brnKMN2r+VNHegV0SY4w/c6ERr5yDJq5z+SqusZUrRo/tJHIIHDADWh31qVxv
+         BaezDXoL7fp30b8l+GXtAzWTsh7vo1rzve9hxJlJX+75aCa3w+8N6aBdQMg11AzaNurQ
+         Ouk8ClgLzowIVgGb0ENVkbExGBkmKndvmmOBVhb0W75Haavx/RGKlx3b1ZAB9jxlXMoE
+         d/70SFMOrYugIjnaWAsHqMQO5hlAF+TWX4CkFofAPO6rujT3LcUFI2vwJmMSK3Q7xMwM
+         lmxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761238575; x=1761843375;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1761241092; x=1761845892;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IyIF9He3AQaNVecfdTsFNoyNYPTFP7D9PI/cuCCk9Bw=;
-        b=EEEpNpaC6361gsZ/P1GGBjSrNyDexxTPLVNoPGD45J7qqlbZ0CUOjgcSnNO9Otor82
-         UTcABZX+w0Js4vwNsBsT/Gyg+NxdyxdjoBHJCsn8XRvu8FGF3oWNoeS6FRtyOJTaeBM9
-         XOawjsF1DrTt2wryDm9JDABS5EsfizsIrDex7Gj4GwGXD//YYrJc2lLY5UBA9Bk3xuE0
-         bOdAWZQYXsz1X0m4/p1eUjTbtZ4EiIlz79yH8ftkS8nOreOsx1ZezAD+Gw5o/KwcQySZ
-         mcXoUrNXyrDRbUGPEqUEd88DRqTiQPN+LB+2fGv5Mm+Eav5oPvZbiyHPyP1UXmplGVbT
-         EMsA==
-X-Forwarded-Encrypted: i=1; AJvYcCVGJHFaPRI9KG8zJDv1wvMWNHLole98w9KkGKtR28Od6X1axNpco1uFooVC6inF6bF9KZB9lRhdGkJA@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnGSWRPB2r9vaPkK4I3CE2C44rXsfO4N1szAtR1LtIgozLEXex
-	pJ37GsMLmWO6HHNiWCOQ4pLH6fK/I+3tzA6qOKX+vnPMwUk/W2vJ8VeKVEvfa79eEbYi3O7DACE
-	ApjMF4+0o5WKo4qqJdtABQWq2b7QATZ4=
-X-Gm-Gg: ASbGncsCKjoyOyHm4NMflGU/ADtymi9bXfst5hRSNQZOGQhRBIJ+OXOhBL6/C4Y1eiw
-	K2DPB2OERt/aa9EDnIxBIxsUG6RFSKx6g5iKYmk6FlJCygjIUhbz4bNVtYhEdpouffcNYzErhmX
-	NpOo/IuQ7nHCBXE0t58xvoFvKrDOo8dAidoR2+7yQD/XZlIgAUT5BfB2UffJQ61wNfqTdI7z3N5
-	xxQpbO0FMl6gM6nkIcrserrfMROVH5VcZIU7AinDPRv2rDs3p+v1GY2tOLmluG0ej5JqWuCxY/i
-	tsJH8JgOydWxNpCOAhC6MliNqZJr2w==
-X-Google-Smtp-Source: AGHT+IEvRoXJfYMZjLnM9ZP63L/5zp9Rf14uYE21EAJuMeQwO8GZzBEVXuVhiBcrXsZ+KWISLhDWamGqzNn6ZRdV9YM=
-X-Received: by 2002:a05:6a00:3a21:b0:781:4ec:4ec4 with SMTP id
- d2e1a72fcca58-7a220d30df8mr31645438b3a.31.1761238575072; Thu, 23 Oct 2025
- 09:56:15 -0700 (PDT)
+        bh=ywuqBEwRpRScnW+bb5t/i7Wkw4UY4DDO5j+kmL9KXEA=;
+        b=Rx1NTCweOyRCdD99cMVY1xlJNU36zEgaP+7N+Ra7+3/pxsV7FEZ61Xm30iNFsompEa
+         wtO+q4vcuxq5nZq8tnmo3Tvi3bQMUXV/2jucGWRUfL+BXlMACtDbz50uktjZEAfeFdje
+         qmngRMCHxRDjYSnEKkZXYOL/VRVnb1+3YOZmP8SpxZ3idPzuN8UvJ20jbaLeG+BGOkoN
+         OM4XpkGVwILSgfSh+qM0iK6tBbOKHesjAjJMLWoBF0gMFyAYJQZFOBMYPN1k78RtQsYx
+         GQG8raw67xOizGyI8lFQBMivwMleoTcY/TGdZkuQwrTWLtWGz8NRLAqOGWjciXlG/4l3
+         S2KA==
+X-Forwarded-Encrypted: i=1; AJvYcCXo9kUkPO/Ldd53ruadPGLm6PFE+eLkSIuKx/iQcLvjfuYO6ig35SweyArsLfgAiIKbcjGx8LUiULwm@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzvcw+wfx3E9UoQHHbUtgC8tCRjODzenGPXCd/OR9E/1C/To5hq
+	Jn/4fDdEUWkVM0ohuiEbwL4OK2rwWBgL/5kN30vWsLFCzfSGFcpoWIEg
+X-Gm-Gg: ASbGncui6apXwqWhD4aDB1hba93adCXKvM5VDpy+RK/OGOaRvbIVcEKH4N+REH/eyMz
+	1Q5XGnm2AWGd2OTgRGuDDmhqWTo4fjmuum4mdXtDLY5n8Tl9WKg3A912ARKt2D3Li+4kLdzJNMi
+	575BrhohYLZkEBgJF1aR3XvSxx4PK/fDTFpiOWcPviLt111K1vlIWNecpvyBlP91nDla6x6mdR1
+	BBTzOTExWLw0TVz53+Qct1YGXJEa6m2gWgd+Ymtoy9w6b96ExvqQJBNtkhd4n/ZRa/H6lJWMDbk
+	X4gSFQ7Inpp1NpdskQTN/uhWgZ/EXu6kFHFJKgPESF/Ou58zxxFX+mZlbGUFfIuC84ZwE2+i1U/
+	L3kBlBIozBFiDlOl5NCrjfnCFthyCiTq0hj0nBpYlq+AsoLmJUY/PPVyNW+7S2mGI3uwjdgOigf
+	rPeeSWAVIiLZnNS5vn7YXY4DgZsN2tYzUrDhi+I2CYD/swM3PhixP/wUcHmBJNPp4=
+X-Google-Smtp-Source: AGHT+IHS0h+JRFSFpKN3ABn8gJENaNAJSEiO+0aN8t2XO48O5XiQnQC/G+gPhMwXVqJDR85nhMuBag==
+X-Received: by 2002:a17:903:2a8d:b0:27e:eee6:6df2 with SMTP id d9443c01a7336-292d3fb7f47mr76907185ad.7.1761241091900;
+        Thu, 23 Oct 2025 10:38:11 -0700 (PDT)
+Received: from ranganath.. ([2401:4900:c919:de72:5515:28c0:ad28:8093])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2946ddea29csm29417515ad.30.2025.10.23.10.38.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Oct 2025 10:38:11 -0700 (PDT)
+From: Ranganath V N <vnranganath.20@gmail.com>
+To: lucien.xin@gmail.com
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	horms@kernel.org,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-sctp@vger.kernel.org,
+	marcelo.leitner@gmail.com,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	syzbot+d101e12bccd4095460e7@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com,
+	vnranganath.20@gmail.com
+Subject: Re: [PATCH] net: sctp: fix KMSAN uninit-value in sctp_inq_pop
+Date: Thu, 23 Oct 2025 23:08:01 +0530
+Message-ID: <20251023173801.11428-1-vnranganath.20@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <CADvbK_c2zqQ76kzPmTovWqpRdN2ad7duHsCs9fW9oVNCLdd-Xw@mail.gmail.com>
+References: <CADvbK_c2zqQ76kzPmTovWqpRdN2ad7duHsCs9fW9oVNCLdd-Xw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251023-kmsan_fix-v1-1-d08c18db8877@gmail.com>
-In-Reply-To: <20251023-kmsan_fix-v1-1-d08c18db8877@gmail.com>
-From: Xin Long <lucien.xin@gmail.com>
-Date: Thu, 23 Oct 2025 12:56:02 -0400
-X-Gm-Features: AS18NWCOd__EDody6eeBwzndQnzzqlcDk_m68XoL7saCBzCoOClxu7kW1b4-ve8
-Message-ID: <CADvbK_c2zqQ76kzPmTovWqpRdN2ad7duHsCs9fW9oVNCLdd-Xw@mail.gmail.com>
-Subject: Re: [PATCH] net: sctp: fix KMSAN uninit-value in sctp_inq_pop
-To: Ranganath V N <vnranganath.20@gmail.com>
-Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, linux-sctp@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com, 
-	syzbot+d101e12bccd4095460e7@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 23, 2025 at 5:52=E2=80=AFAM Ranganath V N <vnranganath.20@gmail=
-.com> wrote:
->
-> Fix an issue detected by syzbot:
->
-> KMSAN reported an uninitialized-value access in sctp_inq_pop
-Hi, Ranganath,
+Hi Xin,
 
-The issue is actually caused by skb trimming via sk_filter() in sctp_rcv().
-In the reproducer, skb->len becomes 1 after sk_filter(), which bypassed the
-original check:
+Thank you for the feedback and response to the patch.
+I would like to know that above analysis is valid or not.
+And do you want me to test this suggestion with the syzbot?
 
-        if (skb->len < sizeof(struct sctphdr) + sizeof(struct sctp_chunkhdr=
-) +
-                       skb_transport_offset(skb))
-
-(TBH, I didn't expect it would allow BPF to trim skb in sk_filter().)
-
-To handle this safely, a new check should be performed after sk_filter() li=
-ke:
-
-+       if (sk_filter(sk, skb) || skb->len < sizeof(struct sctp_chunkhdr))
-                goto discard_release;
-
-Could you please proceed with this change in sctp_rcv()?
-
-Thanks.
+regards,
+Ranganath
 
