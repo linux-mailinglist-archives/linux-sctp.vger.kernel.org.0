@@ -1,70 +1,70 @@
-Return-Path: <linux-sctp+bounces-683-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-684-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7B8EC03D05
-	for <lists+linux-sctp@lfdr.de>; Fri, 24 Oct 2025 01:18:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15DFDC03D0E
+	for <lists+linux-sctp@lfdr.de>; Fri, 24 Oct 2025 01:18:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4253F34E75E
-	for <lists+linux-sctp@lfdr.de>; Thu, 23 Oct 2025 23:18:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1FB63B5ABB
+	for <lists+linux-sctp@lfdr.de>; Thu, 23 Oct 2025 23:18:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E0C22797AC;
-	Thu, 23 Oct 2025 23:18:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31FE92C21F7;
+	Thu, 23 Oct 2025 23:18:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pjxjJHzE"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hU94jje9"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0EC42C08B6
-	for <linux-sctp@vger.kernel.org>; Thu, 23 Oct 2025 23:17:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC6602C21D6
+	for <linux-sctp@vger.kernel.org>; Thu, 23 Oct 2025 23:18:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761261480; cv=none; b=dklp7fKum7BFE9L1K7gDe2PlYbpKNhOjYKsm+bGNbzIYp6+dv8y7pbuGN0lwQTxCz1gSRyqD2HeN10Y2prGXsHXJ4cf/DJyLDu9TLGQfVyOA0gpTQbPKr9UGAYG+JHmBAVn0CgrkKsraT27MNYS9LEgOVLeeAKlhlVlvCViodjM=
+	t=1761261483; cv=none; b=TXT2dedgTYbeBg5xECEl4hP1oQn+l85jXJaMnfzPpokw5sqfg3se4zO5EQ7PYC59JynSxgv5axjIxmwY0WpxpIgWjd7A3U8GdO1qoh34qpbH0juafEAhXMRKjUiB4XoAPHkQq1kK8rW3gXRDjg29xd+2XWIqbH5GOrzl/mCwSIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761261480; c=relaxed/simple;
-	bh=+hRKG9omY0Aq7FrPtGSJ7PhHS3uo5f5KziTlgQCvngs=;
+	s=arc-20240116; t=1761261483; c=relaxed/simple;
+	bh=6rwbuac3gNgBbkj6Sd2BmJoBBMEjemK4B3VYq4on/60=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=lHUjCC3lcYpwjOibMP/DWjhheZJIvM5oY8CGFObYx+Gq29/x4InP5NHhiNlRf78XNoesBY6ZlS0MGlpz0FH3lezJdsks7JK6uRJG3jiStDNW7eySQ5L99keJ3RJESr5ly33TDpZV8TK6wuHt/NdNIL+gVf5m01fruJFdIPAZ5dk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pjxjJHzE; arc=none smtp.client-ip=209.85.216.74
+	 To:Cc:Content-Type; b=jI4Wik9xRbo3xRwOSb+qWCowC+TngYZuZHJ2FpKhwfhsfxh3G6wCGh58QFSw9ikQKGu1Mce1JfkcEsnM6sbOyUQykiD7ngoZCeF12Gi6as3voJNtFQXJPhWfK01/BqvdjX00Ll3cf46DJvWY+hP7yx+TQGfDh2LfIVFoOTjKVHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hU94jje9; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-32ee157b9c9so1099020a91.2
-        for <linux-sctp@vger.kernel.org>; Thu, 23 Oct 2025 16:17:58 -0700 (PDT)
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-33bc5d7c289so2807917a91.0
+        for <linux-sctp@vger.kernel.org>; Thu, 23 Oct 2025 16:18:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761261478; x=1761866278; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1761261480; x=1761866280; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YBNqMuHC+hxsg/yyO/qKPrU3e816knFdIUNFx5rrobA=;
-        b=pjxjJHzElg7LH5HC+mjrRZoMF97PiDsoPk5fQKZvnTF0JglS7f1hv6FXOrgm511iFt
-         69SXLSnNN4gi7W4Q36bGXnRG0PWWOQdFJ3GVHc8euMJWAbR9ECO7Nk/qqWnUghb6hI7i
-         1TZ3IkduDRQvqatnFnNg7zDjAvq4xOJtXjGAlC1xAstM6ElJR/1mmA0xvcjjJjrclE99
-         mR7wpw6htSsSTDveJ5Mw+f2HQSg1DK99TRQdyZ/6Q152k6G5BEFeTIQIzZB7QkGAJ7Zu
-         4lw2mylEehhbxgteyRlVrI7jU/7B0+E5F4/nLRaI+wDJOZ6tZVlO+nVkmpYJBw0u/9Em
-         jR+g==
+        bh=5uVUwAa/FpVfjqwBskmNBroZUDoDv09TNyZorhuCnkg=;
+        b=hU94jje9+IJ0Wh1KYMGoE9PhHnTfIJ1kBRaLqsQV3PPQTEWy+PSIzACHfHtS4UaDhP
+         dXLwUsgJA0bO5oW23V0YV8lWohCRMvDiP8WjhbVZReQ0bTswd/BZNek0O+LzxalABcen
+         xuHuEoloMNF/cV8k1lpLo54SRdtkLCeIZL5xygLiLTLp4Y28umUwssEK4TD6cj/paLnz
+         bBhDgJCTw1uemxXx06mjD0AHpa/5qdDquCEYjRkkVKDnHhPxE3bF/P7PwFssdfEUQRm8
+         VHBLRj4Og9qSDFmG6YYIB1U2VBVQc5XnG0S4X4UmjiJZw6lhEbffocMcf0VEYwU94fVs
+         aVkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761261478; x=1761866278;
+        d=1e100.net; s=20230601; t=1761261480; x=1761866280;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YBNqMuHC+hxsg/yyO/qKPrU3e816knFdIUNFx5rrobA=;
-        b=MObys9/o7vhoJPfWX20ttHS5F1hlRtbiloD3iaCnx6xsUFjD2S2cdqS7sJ661JtcWz
-         T2hefj7n1CxtycYcw0+Gro144vXg1npjr0zilCCs/ribBERwxSQZty+R3sER+FXNgU5R
-         kVNOhRmVwUdPtbVVM0jQHrs4pWKHePZld8R/2LHGq5viwYw2nouG4pVjKOfZC4ZLxXv0
-         8ZmQTDjVc7dQFCsNxyLTgZwVC8oV7uqhuSy1OkuFI4k+66YtOrpUGPssW4/LH+nW2DhD
-         TlVA1Gqr1FnixfTznA0mpkuaDcqtP1uN5L1YsmNwyTktdcAkI5GEk4YPtJLFauXPMYc/
-         APWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCURSDsJZydXKY4GsP+7duxdxqOzPBu9W1PErTfuLyTwiDZdJaldUsAYp464SdA8J/o6Oq0eFD6lpdfc@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSOZzcZIYbTUq1y2lL9ZVoJZ4K3f+gPsd3InonsmwLpIvHGirA
-	SgZEX7cepjTEdb5Xsp0q6Ate5GvLUKOgwhg5CDoUG4BUJtJYwkCCq1tL9Yr+PsQYU44KkqVoH90
-	beUFgxw==
-X-Google-Smtp-Source: AGHT+IFAbORmVtMDxn8zOvFrk1gxynhYIDz39bK4aVzqEZ7+of00HG6eJ9eZUcG1Fl4LHM3y3TDXJ65manw=
-X-Received: from pjbqe7.prod.google.com ([2002:a17:90b:4f87:b0:329:d461:9889])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4c11:b0:32b:9774:d340
- with SMTP id 98e67ed59e1d1-33bcf91909fmr38273872a91.33.1761261478290; Thu, 23
- Oct 2025 16:17:58 -0700 (PDT)
-Date: Thu, 23 Oct 2025 23:16:52 +0000
+        bh=5uVUwAa/FpVfjqwBskmNBroZUDoDv09TNyZorhuCnkg=;
+        b=NLab4RfRi9JzcVGdLZ53VHNsiYqmxtO7RbIeg7oE9ACwUJ8jdidRYuguTdZqLYpybn
+         RAl1rEmDUOsdKllbBj/cRPrAo/Q8OsAzFbyfVFDAlKtQVyeaQD3NJ7UTimnCvbPnka82
+         N4tzmADYXR5G5D6g0/Z/cW5Ga7vgsmB1Jv2ONIUtJrPjqOiRLM8mRR/6OGLSrQnUgoUF
+         uyxifPZXlgKOATkHssSlM97lZXyCbyrTjSQkt6qCv3VrWc9+KoQBa7b+QrwSfh8K/kQl
+         BF5IB1IaKk7KVfD9t65uGgjL2E0FmmOv+2CEtWW8tPzJe/TDaueF14qd3Ej5tnGGDLQK
+         p5sg==
+X-Forwarded-Encrypted: i=1; AJvYcCWdV3Vahfmpda/wFf0IMr31oZmH8ZLeK70aTcDm6+O2MPC728kDVJ8GiE3ePwarSJGqEx26fPdSzARz@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxej2XSKByiUDaajwrmxznffL4tiCbpSx2iui1qW/47YDVDt9pV
+	rAdPlSGj8AcOS7o4cZ5/ECy605nxlgtoo2cdSMvFqQxtjsW/hOqbq/q1TNnKsevA/KlFttvNKbQ
+	WUifrsQ==
+X-Google-Smtp-Source: AGHT+IF5dZqUv6nmwu+wY0jCEaMSjp+KPvrTJORHwkMfz5kigOX0Hsp5tTaOTx79/BSTFB4LTTGDOWCGcYc=
+X-Received: from pjbch10.prod.google.com ([2002:a17:90a:f40a:b0:33b:ba24:b204])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:530f:b0:330:6c5a:4af4
+ with SMTP id 98e67ed59e1d1-33fd662e554mr248299a91.35.1761261479988; Thu, 23
+ Oct 2025 16:17:59 -0700 (PDT)
+Date: Thu, 23 Oct 2025 23:16:53 +0000
 In-Reply-To: <20251023231751.4168390-1-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20251023231751.4168390-1-kuniyu@google.com>
 X-Mailer: git-send-email 2.51.1.851.g4ebd6896fd-goog
-Message-ID: <20251023231751.4168390-4-kuniyu@google.com>
-Subject: [PATCH v3 net-next 3/8] sctp: Don't call sk->sk_prot->init() in sctp_v[46]_create_accept_sk().
+Message-ID: <20251023231751.4168390-5-kuniyu@google.com>
+Subject: [PATCH v3 net-next 4/8] net: Add sk_clone().
 From: Kuniyuki Iwashima <kuniyu@google.com>
 To: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, 
 	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
@@ -84,149 +84,97 @@ Cc: Simon Horman <horms@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
 	Kuniyuki Iwashima <kuni1840@gmail.com>, netdev@vger.kernel.org, linux-sctp@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-sctp_accept() calls sctp_v[46]_create_accept_sk() to allocate a new
-socket and calls sctp_sock_migrate() to copy fields from the parent
-socket to the new socket.
+sctp_accept() will use sk_clone_lock(), but it will be called
+with the parent socket locked, and sctp_migrate() acquires the
+child lock later.
 
-sctp_v[46]_create_accept_sk() calls sctp_init_sock() to initialise
-sctp_sock, but most fields are overwritten by sctp_copy_descendant()
-called from sctp_sock_migrate().
+Let's add no lock version of sk_clone_lock().
 
-Things done in sctp_init_sock() but not in sctp_sock_migrate() are
-the following:
-
-  1. Copy sk->sk_gso
-  2. Copy sk->sk_destruct (sctp_v6_init_sock())
-  3. Allocate sctp_sock.ep
-  4. Initialise sctp_sock.pd_lobby
-  5. Count sk_sockets_allocated_inc(), sock_prot_inuse_add(),
-     and SCTP_DBG_OBJCNT_INC()
-
-Let's do these in sctp_copy_sock() and sctp_sock_migrate() and avoid
-calling sk->sk_prot->init() in sctp_v[46]_create_accept_sk().
-
-Note that sk->sk_destruct is already copied in sctp_copy_sock().
+Note that lockdep complains if we simply use bh_lock_sock_nested().
 
 Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
 ---
- net/sctp/ipv6.c     |  8 +-------
- net/sctp/protocol.c |  8 +-------
- net/sctp/socket.c   | 27 ++++++++++++++++++++++-----
- 3 files changed, 24 insertions(+), 19 deletions(-)
+v3: Check if (lock) for bh_unlock_sock(). (Xin Long)
+---
+ include/net/sock.h |  7 ++++++-
+ net/core/sock.c    | 24 ++++++++++++++++--------
+ 2 files changed, 22 insertions(+), 9 deletions(-)
 
-diff --git a/net/sctp/ipv6.c b/net/sctp/ipv6.c
-index d725b2158758..c0762424a854 100644
---- a/net/sctp/ipv6.c
-+++ b/net/sctp/ipv6.c
-@@ -789,7 +789,7 @@ static struct sock *sctp_v6_create_accept_sk(struct sock *sk,
+diff --git a/include/net/sock.h b/include/net/sock.h
+index 01ce231603db..c7e58b8e8a90 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -1822,7 +1822,12 @@ struct sock *sk_alloc(struct net *net, int family, gfp_t priority,
+ void sk_free(struct sock *sk);
+ void sk_net_refcnt_upgrade(struct sock *sk);
+ void sk_destruct(struct sock *sk);
+-struct sock *sk_clone_lock(const struct sock *sk, const gfp_t priority);
++struct sock *sk_clone(const struct sock *sk, const gfp_t priority, bool lock);
++
++static inline struct sock *sk_clone_lock(const struct sock *sk, const gfp_t priority)
++{
++	return sk_clone(sk, priority, true);
++}
  
- 	newsk = sk_alloc(sock_net(sk), PF_INET6, GFP_KERNEL, sk->sk_prot, kern);
- 	if (!newsk)
--		goto out;
-+		return NULL;
- 
- 	sock_init_data(NULL, newsk);
- 
-@@ -818,12 +818,6 @@ static struct sock *sctp_v6_create_accept_sk(struct sock *sk,
- 
- 	newsk->sk_v6_rcv_saddr = sk->sk_v6_rcv_saddr;
- 
--	if (newsk->sk_prot->init(newsk)) {
--		sk_common_release(newsk);
--		newsk = NULL;
--	}
--
--out:
- 	return newsk;
+ struct sk_buff *sock_wmalloc(struct sock *sk, unsigned long size, int force,
+ 			     gfp_t priority);
+diff --git a/net/core/sock.c b/net/core/sock.c
+index a99132cc0965..7a9bbc2afcf0 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -2462,13 +2462,16 @@ static void sk_init_common(struct sock *sk)
  }
  
-diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
-index 9dbc24af749b..ad2722d1ec15 100644
---- a/net/sctp/protocol.c
-+++ b/net/sctp/protocol.c
-@@ -590,7 +590,7 @@ static struct sock *sctp_v4_create_accept_sk(struct sock *sk,
- 	struct inet_sock *newinet;
- 
- 	if (!newsk)
--		goto out;
-+		return NULL;
- 
- 	sock_init_data(NULL, newsk);
- 
-@@ -603,12 +603,6 @@ static struct sock *sctp_v4_create_accept_sk(struct sock *sk,
- 
- 	newinet->inet_daddr = asoc->peer.primary_addr.v4.sin_addr.s_addr;
- 
--	if (newsk->sk_prot->init(newsk)) {
--		sk_common_release(newsk);
--		newsk = NULL;
--	}
--
--out:
- 	return newsk;
- }
- 
-diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-index 735b1222af95..70c75ac8da55 100644
---- a/net/sctp/socket.c
-+++ b/net/sctp/socket.c
-@@ -4851,7 +4851,7 @@ static int sctp_disconnect(struct sock *sk, int flags)
+ /**
+- *	sk_clone_lock - clone a socket, and lock its clone
+- *	@sk: the socket to clone
+- *	@priority: for allocation (%GFP_KERNEL, %GFP_ATOMIC, etc)
++ * sk_clone - clone a socket
++ * @sk: the socket to clone
++ * @priority: for allocation (%GFP_KERNEL, %GFP_ATOMIC, etc)
++ * @lock: if true, lock the cloned sk
+  *
+- *	Caller must unlock socket even in error path (bh_unlock_sock(newsk))
++ * If @lock is true, the clone is locked by bh_lock_sock(), and
++ * caller must unlock socket even in error path by bh_unlock_sock().
   */
- static struct sock *sctp_accept(struct sock *sk, struct proto_accept_arg *arg)
+-struct sock *sk_clone_lock(const struct sock *sk, const gfp_t priority)
++struct sock *sk_clone(const struct sock *sk, const gfp_t priority,
++		      bool lock)
  {
--	struct sctp_sock *sp;
-+	struct sctp_sock *sp, *newsp;
- 	struct sctp_endpoint *ep;
- 	struct sock *newsk = NULL;
- 	struct sctp_association *asoc;
-@@ -4891,19 +4891,35 @@ static struct sock *sctp_accept(struct sock *sk, struct proto_accept_arg *arg)
- 		goto out;
+ 	struct proto *prot = READ_ONCE(sk->sk_prot);
+ 	struct sk_filter *filter;
+@@ -2497,9 +2500,13 @@ struct sock *sk_clone_lock(const struct sock *sk, const gfp_t priority)
+ 		__netns_tracker_alloc(sock_net(newsk), &newsk->ns_tracker,
+ 				      false, priority);
  	}
++
+ 	sk_node_init(&newsk->sk_node);
+ 	sock_lock_init(newsk);
+-	bh_lock_sock(newsk);
++
++	if (lock)
++		bh_lock_sock(newsk);
++
+ 	newsk->sk_backlog.head	= newsk->sk_backlog.tail = NULL;
+ 	newsk->sk_backlog.len = 0;
  
-+	newsp = sctp_sk(newsk);
-+	newsp->ep = sctp_endpoint_new(newsk, GFP_KERNEL);
-+	if (!newsp->ep) {
-+		error = -ENOMEM;
-+		goto out_release;
-+	}
-+
-+	skb_queue_head_init(&newsp->pd_lobby);
-+
-+	sk_sockets_allocated_inc(newsk);
-+	sock_prot_inuse_add(sock_net(sk), newsk->sk_prot, 1);
-+	SCTP_DBG_OBJCNT_INC(sock);
-+
- 	/* Populate the fields of the newsk from the oldsk and migrate the
- 	 * asoc to the newsk.
+@@ -2590,12 +2597,13 @@ struct sock *sk_clone_lock(const struct sock *sk, const gfp_t priority)
+ 	 * destructor and make plain sk_free()
  	 */
- 	error = sctp_sock_migrate(sk, newsk, asoc, SCTP_SOCKET_TCP);
--	if (error) {
--		sk_common_release(newsk);
--		newsk = NULL;
--	}
-+	if (error)
-+		goto out_release;
- 
- out:
- 	release_sock(sk);
- 	arg->err = error;
- 	return newsk;
-+
-+out_release:
-+	sk_common_release(newsk);
-+	newsk = NULL;
-+	goto out;
+ 	newsk->sk_destruct = NULL;
+-	bh_unlock_sock(newsk);
++	if (lock)
++		bh_unlock_sock(newsk);
+ 	sk_free(newsk);
+ 	newsk = NULL;
+ 	goto out;
  }
+-EXPORT_SYMBOL_GPL(sk_clone_lock);
++EXPORT_SYMBOL_GPL(sk_clone);
  
- /* The SCTP ioctl handler. */
-@@ -9469,6 +9485,7 @@ void sctp_copy_sock(struct sock *newsk, struct sock *sk,
- 	newsk->sk_rcvtimeo = READ_ONCE(sk->sk_rcvtimeo);
- 	newsk->sk_sndtimeo = READ_ONCE(sk->sk_sndtimeo);
- 	newsk->sk_rxhash = sk->sk_rxhash;
-+	newsk->sk_gso_type = sk->sk_gso_type;
- 
- 	newinet = inet_sk(newsk);
- 
+ static u32 sk_dst_gso_max_size(struct sock *sk, const struct net_device *dev)
+ {
 -- 
 2.51.1.851.g4ebd6896fd-goog
 
