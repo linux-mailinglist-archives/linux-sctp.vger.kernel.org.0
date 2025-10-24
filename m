@@ -1,88 +1,87 @@
-Return-Path: <linux-sctp+bounces-695-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-696-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A934C0696A
-	for <lists+linux-sctp@lfdr.de>; Fri, 24 Oct 2025 15:56:39 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78B71C06A84
+	for <lists+linux-sctp@lfdr.de>; Fri, 24 Oct 2025 16:15:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AA30950564F
-	for <lists+linux-sctp@lfdr.de>; Fri, 24 Oct 2025 13:56:12 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E28835645A8
+	for <lists+linux-sctp@lfdr.de>; Fri, 24 Oct 2025 14:12:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C8D131A80B;
-	Fri, 24 Oct 2025 13:56:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CDB32F39BC;
+	Fri, 24 Oct 2025 14:12:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gqz7D3Mh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W1PzIkg9"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 236213195FE
-	for <linux-sctp@vger.kernel.org>; Fri, 24 Oct 2025 13:56:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D53F32E62D8
+	for <linux-sctp@vger.kernel.org>; Fri, 24 Oct 2025 14:12:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761314171; cv=none; b=rJSNZMHG/RND3H0Gg+rhF5A0wrWsNsbIEiHF0xWKMpnsPOZ/wZYjAxQ1PiwRGnjQJwhozNEzPxFmvP2FCdTnhOoytvbqX8NfJwNY6QhVG4D3dm7YyR7SzIv085GBPAI0/7iqYVKubQ1cVjVrENhLqcbb9WlGo9SLoYdDjOKPL58=
+	t=1761315162; cv=none; b=keY2hormy2UdkRjsn9MBLyAwq/qLB/y7MB8CLCWQPrJYkEo5piJ5PmVyeVypID6Sxw8LujScNuzMo71hpReJVdc28sSEAz6gUqp1Y1/ikHugrHAr0zGQxDJHCn6JQdWGA5lCIdGAlqC/+X3/Yk358DwRyp2yg+ME3JtiDdgIO6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761314171; c=relaxed/simple;
-	bh=ff/DRF40bPQ0ZOkhkE1U8SbP6PSmE0d8pJrKGabISdY=;
+	s=arc-20240116; t=1761315162; c=relaxed/simple;
+	bh=OK9/lQOmRM72qgAim0TKGE3N+cKFv8A+be/fDyKb6aU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=t23hrLoO7pFwqowTi/FaVvvCDyTymuAmNshR3pJg0yp9lbc4rhhKNZzGQ40OHd6OOQvc3IpUNv9WaLwX1FMdefL8RuYKl2JHpcEzaMCjQseTigvq6c87wzC1COmZpp1cQqiFMmUZIMSTfK8gL5k72cDCxR3OLKZRAhXH0eLHwKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gqz7D3Mh; arc=none smtp.client-ip=209.85.215.177
+	 To:Cc:Content-Type; b=baObsGsnMFQySY8nN/2H9bZFDSTsH7gOjTNrkRTx5b/fAZftB74XwSCAdQq+38tC8sML/DLjTwYkn2Fi3wjNRGRigaV1lv7Qy6gwo5Uhm/3KqBlrtq7PD/BGfElRHxXMRHbuyWe2Qv0CdHWKZGbqS9AG3J0f1tdcqMSglxajgkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W1PzIkg9; arc=none smtp.client-ip=209.85.210.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b6a225b7e9eso1557095a12.0
-        for <linux-sctp@vger.kernel.org>; Fri, 24 Oct 2025 06:56:09 -0700 (PDT)
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7a26ea3bf76so2863019b3a.2
+        for <linux-sctp@vger.kernel.org>; Fri, 24 Oct 2025 07:12:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761314169; x=1761918969; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1761315160; x=1761919960; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2ECDvdIBbgPjfBzu0WR5UMZQdnbEC4fTao32NLRSQs8=;
-        b=Gqz7D3Mh9JR2DOamw+9adVY69uRP+CCKCvyPh3varLTM3B6GFV2O/O7Yr3hSGgmiqa
-         SQ/To/qqzQ+50PFSOO3M7Tt2f2lc+NMRGviMK2goFR+9WjPulocbgykmxTGdBaJliD68
-         fL1xTeQaXgnn8epvrDzgsD6POjFVx7IT7CA6EeQ/4gGtpcEo7qpK6mSL3QOdykOke3A4
-         gtLUXusgoNnEIfxubt9y+OJ5sTe4KxAJyr78B0eEcwABjKBZz8vZqXQvkVXGmVCPenS+
-         B4LnKL4UwHxZVgWyr9/+l0Y35dOoORmooyqXGAzFOen4O7IXtcXwzjnn2pRyFCpvnQcw
-         s6UA==
+        bh=EvyImBAdb6rXKYgmYW9JwwdeMZ17st++GDQENS3K4mQ=;
+        b=W1PzIkg9+F8CQYiBGbdnB1XrOnPuHzB9XnG0HHqgswuIR97kSVmd4ameXsHAKKo9et
+         GbDzWSYCp1z/vsVPItDaRzx0+EN//fjbUmOuny5JE3WhPcBEHcom1j4A48/qOto0BHTQ
+         oIuVje2h1NJDTYbx7jj70ADd2IxpnX0ady2L3ZsX3BiUmAYKMhJU8aCmugMXW6szTnUG
+         xp48aWgrScoJwc10VarwyGWtvGPZ0opM20Fp9zus6611Qh7WwPcSsBRvjt3OofCpZ/Fa
+         uY+ye5B/r5em0DNC0EsEvioS9GKmqtn0t8/6vYB69Fcez2YsXnM3tCvMnRni3FN83Hr5
+         Gkvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761314169; x=1761918969;
+        d=1e100.net; s=20230601; t=1761315160; x=1761919960;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2ECDvdIBbgPjfBzu0WR5UMZQdnbEC4fTao32NLRSQs8=;
-        b=QgcEu0Zfjsrmib4a5B4DHGYx+OnUPh7871QgcojLdQFH1Cs7MulgvCHe1koXJvt2D8
-         Uh5W2jlCYjcBtn12D1G7F7GUB6cc6pBJsIRcLQN6JnPoLTNbHfdjRfEwD8r3gsCLMu7a
-         h3ECsE2Dwd7Xj5LL4/7CIrvZmI72e/WseZJcFjhoaJB82MVdvXJ3GVjWA239qvtKiNxT
-         riapggtXmvVEY/b6ZSbkfwQqk7w/MfVPS5sW3WeDAB3nHKiR1bzMoceGy2Fi96EAH8oW
-         oIAk78I3mgLskUpZkjCrafLV0MGeYCMVDPmB9KL80YJgRhLL8OpN6BjSessH5xAiAawN
-         L2UA==
-X-Forwarded-Encrypted: i=1; AJvYcCV1KpDtE1sp2SamuRVUuGhxtsrIGVqrV9+/YVv3Oll9hlKJe0BmXrB6BDq34mPd4yrGBauEabi2ZSdM@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4Ve5mZBuDXmeBeMFR3ruYSMz/z+QqiqM0qxXPDJKHqMgrBe3y
-	NNXLvQUiP0Ye9wtsyuHNVVk7GMSAI7MlOsejTBuG4V7qOTnOAZbKKd6VamX3GYqdAo1IMQa+coX
-	1YJXannyQFVuhwFacKe35d5h8HSQfkgA=
-X-Gm-Gg: ASbGnctVtWCcpVTr0Nfqe0lQ2J796XfGhWjK30tRv8WuxGKJ4LLLtoW+vl8SSh9BLe6
-	GmaIkGzKHCztmvldBPyPsKkIjC2tQNnk2xhiNCuRjsihhoeLNXi0Fb3HpjtyLnuRJEmoblwf78K
-	r+OIsLSLEcTEyvQH8hJJgwHuHT8OXPj6KKtDZzGCO3twMohTEEorbdPXFXI2rRu4kS007DNUI7R
-	3J+ucg64MXNzj8W+1bKezoyKilquun4U6q63HlMHu6p6ua91OH3DSRkeFp9Bcc=
-X-Google-Smtp-Source: AGHT+IFUweA0FrNrhak9yFCS0iUPJ7kUrOYCjCdpYrDuihK8hXnTOP0JEsYsYmBDMl7Q+wZKtOAGXdprbWIPS18TACQ=
-X-Received: by 2002:a17:903:234e:b0:290:a3b9:d4c3 with SMTP id
- d9443c01a7336-2948ba5d932mr28420075ad.56.1761314169363; Fri, 24 Oct 2025
- 06:56:09 -0700 (PDT)
+        bh=EvyImBAdb6rXKYgmYW9JwwdeMZ17st++GDQENS3K4mQ=;
+        b=Pug7PIMkgVHujWiybe33hwuBq9puAbfwUGxyi/f6WxOWPSRo4Eso5lGXzWj3R0cdzw
+         GWgfBh+Ue6Vv1w3tDjCsEq6GFf70ejqcZixXM6JptrJ7I/YsqBlMaZXAciG8D5M2FTNx
+         1J0zPRXtomJL8ZgFaEnuYSKM1y9CdM5+t6PWCPRNnvxIAJYCiuEpsuB/cPONZvPwxhgU
+         QYGcaUUFPEFDkyLjlInm5qEtiSSWGIYCdm41Q4WQk8e+1COmnfx/lC4w32Uy8uJXZsxE
+         noC/MhcBIg3LR4i/REmOKT1vlYDERhLD5WjgAhQWGe9aAUjiMUPnMvs67xyPdKeD6yWo
+         l+bg==
+X-Forwarded-Encrypted: i=1; AJvYcCXjEgrJ3CjJYEgFreCYNXKhrCrPf7i263VwY+eIsPE5tN34eVQbDJ0C5cOafSRxMQpkGm/vyqLx56E4@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlPzydk85AY6UBtnqOGAt3QSg/xaNF4Y3zB5FeCXERyDYMQXzF
+	kJTabq/f8Hkx2B+5xkAKcJJPV4DBBx+BMQJdlpaBlbxa5m4Lr8lKW9nOApuKqQGgKSb8Cnbuexl
+	XcludDGXHRP33fz6MnSfs4F0Nl8/IQ/c=
+X-Gm-Gg: ASbGncvqvaHXrUHI1MshD68SUEF60qik1kVA8pDYjrnyBxxNvoefjnBctP+AAxzLr3H
+	F4xhccvOsjM7UGYii/tuBKmZGG5uim4p9cmMLSTw4u971vXbQwDizXdGiOOour82xv8YTM+nTZX
+	SEjr/NNyqRKywh2qc1b2wzLzagnkrE233zuKRmrT8hHFoXvCJyXgPTinvu8T7HDMaRZ5bUfYElS
+	Y2UbSXFa/x9FV93y8vQkYLuiQDm2snJaAn/qJDQVJs0cleTSwYnN6J6lJnDuRk=
+X-Google-Smtp-Source: AGHT+IFaN08L/NgEjkp4mYFHtFOETY6D/Qz+y3hE+IbwqvPh2WW7tZVaAoUrWtZI8Phl20N2JUIHm7SzEnBJms27k90=
+X-Received: by 2002:a17:903:1cb:b0:294:9476:494a with SMTP id
+ d9443c01a7336-29494764a84mr4844805ad.56.1761315160051; Fri, 24 Oct 2025
+ 07:12:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251023231751.4168390-1-kuniyu@google.com> <20251023231751.4168390-3-kuniyu@google.com>
-In-Reply-To: <20251023231751.4168390-3-kuniyu@google.com>
+References: <20251023231751.4168390-1-kuniyu@google.com> <20251023231751.4168390-4-kuniyu@google.com>
+In-Reply-To: <20251023231751.4168390-4-kuniyu@google.com>
 From: Xin Long <lucien.xin@gmail.com>
-Date: Fri, 24 Oct 2025 09:55:55 -0400
-X-Gm-Features: AWmQ_blIGrBy3zirHzHyn1AAGAhjWECgDtZHAfJu_PfzbWO6ze6xstFwEJynfS8
-Message-ID: <CADvbK_dJGFQG9jx5KioFn3-z01w3xO=MeWxwsQ1fUHdkNN6NGw@mail.gmail.com>
-Subject: Re: [PATCH v3 net-next 2/8] sctp: Don't copy sk_sndbuf and sk_rcvbuf
- in sctp_sock_migrate().
+Date: Fri, 24 Oct 2025 10:12:28 -0400
+X-Gm-Features: AWmQ_bne-CfmcVyN7lDHoWatl9jmV41UsDq3Abt_8CRbX1OIxeer8YyCEVb3Eo4
+Message-ID: <CADvbK_dWdj5WNWZ82WWCwie6SWidKoWzqWEpzLinm-186x6Tbw@mail.gmail.com>
+Subject: Re: [PATCH v3 net-next 3/8] sctp: Don't call sk->sk_prot->init() in sctp_v[46]_create_accept_sk().
 To: Kuniyuki Iwashima <kuniyu@google.com>
 Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
 	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -94,19 +93,28 @@ Content-Transfer-Encoding: quoted-printable
 On Thu, Oct 23, 2025 at 7:17=E2=80=AFPM Kuniyuki Iwashima <kuniyu@google.co=
 m> wrote:
 >
-> sctp_sock_migrate() is called from 2 places.
+> sctp_accept() calls sctp_v[46]_create_accept_sk() to allocate a new
+> socket and calls sctp_sock_migrate() to copy fields from the parent
+> socket to the new socket.
 >
-> 1) sctp_accept() calls sp->pf->create_accept_sk() before
->    sctp_sock_migrate(), and sp->pf->create_accept_sk() calls
->    sctp_copy_sock().
+> sctp_v[46]_create_accept_sk() calls sctp_init_sock() to initialise
+> sctp_sock, but most fields are overwritten by sctp_copy_descendant()
+> called from sctp_sock_migrate().
 >
-> 2) sctp_do_peeloff() also calls sctp_copy_sock() before
->    sctp_sock_migrate().
+> Things done in sctp_init_sock() but not in sctp_sock_migrate() are
+> the following:
 >
-> sctp_copy_sock() copies sk_sndbuf and sk_rcvbuf from the
-> parent socket.
+>   1. Copy sk->sk_gso
+>   2. Copy sk->sk_destruct (sctp_v6_init_sock())
+>   3. Allocate sctp_sock.ep
+>   4. Initialise sctp_sock.pd_lobby
+>   5. Count sk_sockets_allocated_inc(), sock_prot_inuse_add(),
+>      and SCTP_DBG_OBJCNT_INC()
 >
-> Let's not copy the two fields in sctp_sock_migrate().
+> Let's do these in sctp_copy_sock() and sctp_sock_migrate() and avoid
+> calling sk->sk_prot->init() in sctp_v[46]_create_accept_sk().
+>
+> Note that sk->sk_destruct is already copied in sctp_copy_sock().
 >
 > Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
 Acked-by: Xin Long <lucien.xin@gmail.com>
