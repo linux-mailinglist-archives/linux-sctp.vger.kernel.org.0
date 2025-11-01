@@ -1,159 +1,144 @@
-Return-Path: <linux-sctp+bounces-729-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-730-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D007C26BDF
-	for <lists+linux-sctp@lfdr.de>; Fri, 31 Oct 2025 20:30:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92EFEC2830C
+	for <lists+linux-sctp@lfdr.de>; Sat, 01 Nov 2025 17:38:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05D1F1A6094B
-	for <lists+linux-sctp@lfdr.de>; Fri, 31 Oct 2025 19:29:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8CE99189A556
+	for <lists+linux-sctp@lfdr.de>; Sat,  1 Nov 2025 16:37:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3269E28BAAC;
-	Fri, 31 Oct 2025 19:28:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="m8hVTjqu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B012B26561E;
+	Sat,  1 Nov 2025 16:37:22 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B359348860
-	for <linux-sctp@vger.kernel.org>; Fri, 31 Oct 2025 19:28:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E885A34D3A7;
+	Sat,  1 Nov 2025 16:37:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761938906; cv=none; b=osxe20+zQuhKakyEFTPMaMPO51m9rdfU6eYx7oHEnss0/AEMrP8vCd0QjEuKRM1czF8rq422YYznlIObcKG2UEEWB3mHZDiF5WA5NVZGr6ObM12pyjr3bSM2f/1Gu5xPNLWVaFy0+/+mMRmX3RdkGmy65xxX0nYA3gjriJiJJGs=
+	t=1762015042; cv=none; b=jMVwiLhfm3jMvWxaCZuKlLv6G3WzzI5CpsTV3n7aGwMmsM1J/I997zKFhtAyozgMszZ7GGMxYk59zcjPaTz8Vit9Q98i7Rk4oNPt4BrpbJBoAXzgmbO7HJ4TCetzFF37CMOQzQ9T7cXMDRmc9c3RJnv+Kc1GidGWmUX0VhlTtC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761938906; c=relaxed/simple;
-	bh=mUJznE05kUPl0IhO/e5znFzRpuOXnTth9Kcu9imUesY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iqY0bqxv1mEqyOLGsu6FbjKD+qvmY9HWcXbaF3RccKzDfps28eKdZ50TKA9Ej3D7QM11lEkAREn57NXaFchbtNHFmZSptrq9+bBkyfIUZmaBQJUT9P2vVOexwKw3fFP2sR7Urwp38swQIDPlFQnkiQt6dcyotIHFzmaVCGqDChs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=m8hVTjqu; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7a2738daea2so2683249b3a.0
-        for <linux-sctp@vger.kernel.org>; Fri, 31 Oct 2025 12:28:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761938904; x=1762543704; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RDwjr1ZOLq8cLo3fTSn/h/+rtzM3FDrXyupCisosREA=;
-        b=m8hVTjqudFney8nxFZYvBqMxQKej6AwYCS2apItgNKy/k2kVj9wcesr9yTwmpqGdA9
-         P69WApwnDpcMgqsBjOu0PbAq46ewJZVHWJDNCeJovvs3G27dHe7c/bLwmcGQ/GY4kidH
-         6LMFhz4ALpX2oKhPzimcDzeet5llptAyJskMEgA7guUigV5W7ltoCI0x4jiY0uBnM8+Q
-         qMAQ+BAqy1Mg3N+v76c/LNDFD0CcKRb/8AOf6JtPdO6aWNVNLntc97P5SceH3WXhK6gO
-         mbgbF2ndxALECRsLY9IWJolTZyvphF0xXx5GZ8qmcJH6/impAvfmdCqHN8WVu9wzyL/e
-         LbXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761938904; x=1762543704;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RDwjr1ZOLq8cLo3fTSn/h/+rtzM3FDrXyupCisosREA=;
-        b=CZSG65tqrUQ0/4uyMTZkcLIqJ5FZClla0T68VTXvtbSDC0EM+qzujITZVbjftMrRok
-         CLi67cTAo7s7JB5mO01FX/Wb5UedmEnnrdG3eg+Mn83YolfMRG2w6sHqp6+zKq12IJCi
-         rKy5+qDdGglyihrkAOynQBE7CdzFv9tmcZAVlS/ITCd/Mm4Z7KibJkhQerorl/o9vN+8
-         eZ1HMqj5ruBUzdVVguVmGwAl1qrwORGRZS2wL+Q43HZiwnYnlZVgtFto2Rgxbp7cFqNn
-         A0ec7Wh5Q8jr0uFGZnYVXK9Eqv+EYQpXId2NV2Lf0B7zqhR7XUEtrLh3b68TGgf0+mZj
-         H2dQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWchyvndQy9RxBktykDZ6t7Y7VWZfUlKe9ai4TtlgPmsKxkljP3DgzrEqT5SywrWqZP+sehnNQ/JKIH@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4evhNJzyU5goQ+4eIznoBiEXq6qwtjInyJzNIkNnwvFPJ9Wgi
-	r3ZIFELPuLsqoQTRj9vch4pFn85LjgqcDX0T5nVowWOCNDaAGOlKhMvJZAUOrQEj0dS0QzQ9nG7
-	5mywUAyqGGW8OXN60TOcdhwGMBvXogJ7yI7QyAMDv
-X-Gm-Gg: ASbGnctbpMSAfcES/3xorQg0Iv3AEc26+rGfxxtCkfDsL6vpaNi7tohMcgXnYR2NPGk
-	wbpQZ9HdqfPnb6iFdc325IWgAD3DDFbX8v8GPokfJJuhr4pkn+uUSrCi7g3goNzsOD9zZsB6Ctw
-	W4Nq7isBe5X5o9LgpIRuHoI5EBPr1i3OciImRg3qtqA/6OxF/8Ii5ZU5WMZ8qkJgtaHHZvuf+AQ
-	p58VFRfiX9V8m+NQvKxT2lxPqpDDAmdWbRz7JCAgE9wlO91e9uxq4vVlqLKlmNEaYPTz5+X/TGD
-	SDPX8rD3jmbNjXPQZw==
-X-Google-Smtp-Source: AGHT+IFigqOtFBCYUqwCmY3qziL8qVWGu/nRTorElbmyiYpFccuK+2gunWWZPScjAXWItngFYakwtYJJBQr3HV87VJ8=
-X-Received: by 2002:a17:903:187:b0:295:1277:7926 with SMTP id
- d9443c01a7336-2951a4976f9mr68144065ad.23.1761938903604; Fri, 31 Oct 2025
- 12:28:23 -0700 (PDT)
+	s=arc-20240116; t=1762015042; c=relaxed/simple;
+	bh=B+ip0vUVqEsJmoaAWpIRIaah/ynRxJ2G5jP6uXOcx1s=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=aOlWiJNCEIDk0YhUOlPONEb0yonIiTT5gm03Q+saiTtNcOwS+h+uKzvwLsiNB0G6S4gaqFPrYPZuix9k3wFKIHXWHtDiK0/Nhdu3LgvyaisNLfqWbKRvNe5MgkcR2LgKkRWvFKSHmUZIPWkDcgaR3ltQ/F2/pBCdUxjevEc11Lk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: fe40d808b74011f0a38c85956e01ac42-20251102
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
+	IP_UNTRUSTED, SRC_UNTRUSTED, IP_UNFAMILIAR, SRC_UNFAMILIAR, DN_TRUSTED
+	SRC_TRUSTED, SA_EXISTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
+	DMARC_NOPASS, CIE_GOOD_SPF, CIE_UNKNOWN, GTI_FG_BS, GTI_RG_INFO
+	GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:48c632b1-43e4-4524-afb9-81608eb814f5,IP:10,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-30,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:-20
+X-CID-INFO: VERSION:1.3.6,REQID:48c632b1-43e4-4524-afb9-81608eb814f5,IP:10,URL
+	:0,TC:0,Content:0,EDM:0,RT:0,SF:-30,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:-20
+X-CID-META: VersionHash:a9d874c,CLOUDID:80434152ae953d646c7bde4402a63861,BulkI
+	D:251102003116LS0FDXU4,BulkQuantity:2,Recheck:0,SF:10|66|78|102|850,TC:nil
+	,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:nil
+	,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: fe40d808b74011f0a38c85956e01ac42-20251102
+X-User: hehuiwen@kylinos.cn
+Received: from localhost.localdomain [(120.228.9.121)] by mailgw.kylinos.cn
+	(envelope-from <hehuiwen@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1751878440; Sun, 02 Nov 2025 00:37:01 +0800
+From: Huiwen He <hehuiwen@kylinos.cn>
+To: marcelo.leitner@gmail.com,
+	lucien.xin@gmail.com
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	linux-sctp@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Huiwen He <hehuiwen@kylinos.cn>
+Subject: [PATCH] sctp: make sctp_transport_init() void
+Date: Sun,  2 Nov 2025 00:36:56 +0800
+Message-Id: <20251101163656.585550-1-hehuiwen@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251028161506.3294376-1-stefan.wiehler@nokia.com> <20251028161506.3294376-2-stefan.wiehler@nokia.com>
-In-Reply-To: <20251028161506.3294376-2-stefan.wiehler@nokia.com>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Fri, 31 Oct 2025 12:28:10 -0700
-X-Gm-Features: AWmQ_blgcBeSUdxPtx55HtoAsZERyYHkYCJ5aCAKAIqjn5k5KTf1zjWOPzbN5ao
-Message-ID: <CAAVpQUBk7CnezW6bOK-5GF3-kQwJZBwz0hLS4TTEiPYTkov+HQ@mail.gmail.com>
-Subject: Re: [PATCH net v3 1/3] sctp: Hold RCU read lock while iterating over
- address list
-To: Stefan Wiehler <stefan.wiehler@nokia.com>
-Cc: Xin Long <lucien.xin@gmail.com>, "David S . Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, linux-sctp@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 28, 2025 at 9:15=E2=80=AFAM Stefan Wiehler <stefan.wiehler@noki=
-a.com> wrote:
->
-> With CONFIG_PROVE_RCU_LIST=3Dy and by executing
->
->   $ netcat -l --sctp &
->   $ netcat --sctp localhost &
->   $ ss --sctp
->
-> one can trigger the following Lockdep-RCU splat(s):
->
->   WARNING: suspicious RCU usage
->   6.18.0-rc1-00093-g7f864458e9a6 #5 Not tainted
->   -----------------------------
->   net/sctp/diag.c:76 RCU-list traversed in non-reader section!!
->
->   other info that might help us debug this:
->
->   rcu_scheduler_active =3D 2, debug_locks =3D 1
->   2 locks held by ss/215:
->    #0: ffff9c740828bec0 (nlk_cb_mutex-SOCK_DIAG){+.+.}-{4:4}, at: __netli=
-nk_dump_start+0x84/0x2b0
->    #1: ffff9c7401d72cd0 (sk_lock-AF_INET6){+.+.}-{0:0}, at: sctp_sock_dum=
-p+0x38/0x200
->
->   stack backtrace:
->   CPU: 0 UID: 0 PID: 215 Comm: ss Not tainted 6.18.0-rc1-00093-g7f864458e=
-9a6 #5 PREEMPT(voluntary)
->   Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.3-=
-0-ga6ed6b701f0a-prebuilt.qemu.org 04/01/2014
->   Call Trace:
->    <TASK>
->    dump_stack_lvl+0x5d/0x90
->    lockdep_rcu_suspicious.cold+0x4e/0xa3
->    inet_sctp_diag_fill.isra.0+0x4b1/0x5d0
->    sctp_sock_dump+0x131/0x200
->    sctp_transport_traverse_process+0x170/0x1b0
->    ? __pfx_sctp_sock_filter+0x10/0x10
->    ? __pfx_sctp_sock_dump+0x10/0x10
->    sctp_diag_dump+0x103/0x140
->    __inet_diag_dump+0x70/0xb0
->    netlink_dump+0x148/0x490
->    __netlink_dump_start+0x1f3/0x2b0
->    inet_diag_handler_cmd+0xcd/0x100
->    ? __pfx_inet_diag_dump_start+0x10/0x10
->    ? __pfx_inet_diag_dump+0x10/0x10
->    ? __pfx_inet_diag_dump_done+0x10/0x10
->    sock_diag_rcv_msg+0x18e/0x320
->    ? __pfx_sock_diag_rcv_msg+0x10/0x10
->    netlink_rcv_skb+0x4d/0x100
->    netlink_unicast+0x1d7/0x2b0
->    netlink_sendmsg+0x203/0x450
->    ____sys_sendmsg+0x30c/0x340
->    ___sys_sendmsg+0x94/0xf0
->    __sys_sendmsg+0x83/0xf0
->    do_syscall_64+0xbb/0x390
->    entry_SYSCALL_64_after_hwframe+0x77/0x7f
->    ...
->    </TASK>
->
-> Fixes: 8f840e47f190 ("sctp: add the sctp_diag.c file")
-> Signed-off-by: Stefan Wiehler <stefan.wiehler@nokia.com>
+sctp_transport_init() is static and never returns NULL. It is only
+called by sctp_transport_new(), so change it to void and remove the
+redundant return value check.
 
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+Signed-off-by: Huiwen He <hehuiwen@kylinos.cn>
+---
+ net/sctp/transport.c | 16 +++++-----------
+ 1 file changed, 5 insertions(+), 11 deletions(-)
+
+diff --git a/net/sctp/transport.c b/net/sctp/transport.c
+index 4d258a6e8033..97da92390aa7 100644
+--- a/net/sctp/transport.c
++++ b/net/sctp/transport.c
+@@ -37,10 +37,10 @@
+ /* 1st Level Abstractions.  */
+ 
+ /* Initialize a new transport from provided memory.  */
+-static struct sctp_transport *sctp_transport_init(struct net *net,
+-						  struct sctp_transport *peer,
+-						  const union sctp_addr *addr,
+-						  gfp_t gfp)
++static void sctp_transport_init(struct net *net,
++				struct sctp_transport *peer,
++				const union sctp_addr *addr,
++				gfp_t gfp)
+ {
+ 	/* Copy in the address.  */
+ 	peer->af_specific = sctp_get_af_specific(addr->sa.sa_family);
+@@ -83,8 +83,6 @@ static struct sctp_transport *sctp_transport_init(struct net *net,
+ 	get_random_bytes(&peer->hb_nonce, sizeof(peer->hb_nonce));
+ 
+ 	refcount_set(&peer->refcnt, 1);
+-
+-	return peer;
+ }
+ 
+ /* Allocate and initialize a new transport.  */
+@@ -98,16 +96,12 @@ struct sctp_transport *sctp_transport_new(struct net *net,
+ 	if (!transport)
+ 		goto fail;
+ 
+-	if (!sctp_transport_init(net, transport, addr, gfp))
+-		goto fail_init;
++	sctp_transport_init(net, transport, addr, gfp);
+ 
+ 	SCTP_DBG_OBJCNT_INC(transport);
+ 
+ 	return transport;
+ 
+-fail_init:
+-	kfree(transport);
+-
+ fail:
+ 	return NULL;
+ }
+-- 
+2.25.1
+
 
