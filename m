@@ -1,112 +1,116 @@
-Return-Path: <linux-sctp+bounces-738-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-739-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A448C3D9B3
-	for <lists+linux-sctp@lfdr.de>; Thu, 06 Nov 2025 23:30:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F643C3D9E9
+	for <lists+linux-sctp@lfdr.de>; Thu, 06 Nov 2025 23:34:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3EDB84E496A
-	for <lists+linux-sctp@lfdr.de>; Thu,  6 Nov 2025 22:30:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D576D188C5FA
+	for <lists+linux-sctp@lfdr.de>; Thu,  6 Nov 2025 22:34:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AD2B29B229;
-	Thu,  6 Nov 2025 22:30:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79A7C33342D;
+	Thu,  6 Nov 2025 22:34:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mj6m02xe"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C58B06A33B
-	for <linux-sctp@vger.kernel.org>; Thu,  6 Nov 2025 22:30:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.207
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEDC33074AC
+	for <linux-sctp@vger.kernel.org>; Thu,  6 Nov 2025 22:34:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762468231; cv=none; b=at1JFttWT8KK5R7JMZs7TrfB8PjF9tzKIu4yzcC1C8yUrJAERrgAOjNfeZq0/rotIstU2mGda16FWMS0/0JSyvB2bJMnZF44qwlDg1hOarVlfd4eU7WkWNEhAnjbHItuXQlQmyC8Q0vsYpqQoffMzqteS296ghVFXLkoJTK8ggY=
+	t=1762468465; cv=none; b=UTIwb+eETgv0jjkMiRz74w38fv4IPr2057MUpZZmje6MswHLhiGX69G04kn1rsMerkd6JIHJ4/miv9SQk9DY1eu093eczACuovF349FyRA+2ZNuZchHPhz+MxCM92T301SDnjUQKmQ+cCORXnHA6DQaj1fb/ZKCUEup7ReZMFtc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762468231; c=relaxed/simple;
-	bh=aoqPzFm7oDwFwoc7LASh6+cxqVFFNRpQUn4XqSIeZsw=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=apxetZYrrJ/Y+O6yfRi2HYpCainG/FZ3ckt5T4cTFQckqoDbhfodpPseUXMfY61eU8SjKc+M9YS+vOOxq55Vtfplrn+fvTbym1uCoHPUM6qspSLfhajOPyzr9UBPLH31DtsHNVjx3z2e9qnPL+8XWQmftXRpFM81r+9ZCl/KqrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.207
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-433154d39abso5208245ab.0
-        for <linux-sctp@vger.kernel.org>; Thu, 06 Nov 2025 14:30:29 -0800 (PST)
+	s=arc-20240116; t=1762468465; c=relaxed/simple;
+	bh=kyqti1pS/iu7iHuIrRG7HhYXvuqmPftlCcRpvSx1U6I=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=GCVej5xufFlr97gBe45vRpZJbMI62BA4HpPBCjhG1fBk4UkmTb5vcF4cpSeECZe06Mpb41b3RJwO4ryDircF48vnDlIeHZwoXGgLQs0ONmQNRR+A+ekV3pPI9AaZiHb+cABlGRpTyvPkml9+Alo49IZLHsOGpU68dNy8Apvt4AA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mj6m02xe; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b95d06db747so104440a12.1
+        for <linux-sctp@vger.kernel.org>; Thu, 06 Nov 2025 14:34:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1762468463; x=1763073263; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=wZSGjMt1Kw8fTsX45N5jWnuu8usaMSJDnzmOrQObllg=;
+        b=mj6m02xeppZJeFLKXno33EmBTrlqkCvy62Fl6u2A4ufP9McN6RQl2mPoR+ARMxunhr
+         BuvyBFedePEYbcpYTY8+jbYuFDNnhrybuyg7T3GWa7gspsI6+QKVKc3xvLWThvT5uAgu
+         nEJR54f0h1sSQ6REU97AlLUsAe+lHaBI9yVC9QSbLu+f0e+6rew2TOaA66FJKKq80/vT
+         nr27jo0FzYpQd6SEwlWxqkI2DKLUgMLR5LDl3arjXOq7gPWURPx5Rk9yHjCIQT1TDKyb
+         FW8N0I1dkoVVmOZEsgEA5LCSfHaHNT9ns7OjrOLPa59OVWM1zVyzp8x0FDliNWhGLCcO
+         xSXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762468229; x=1763073029;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+        d=1e100.net; s=20230601; t=1762468463; x=1763073263;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=M9i4whal81/zcSAHBrOH8La+Wz6AFlPsYwQERm7FWms=;
-        b=i1psc9/G/YSmZefIccRMK02kCEZ7cilJs1sJPJvDqehzREsCbIFCVLROw9RztjT6t+
-         keEtgGKd8Uk22DaRKQwid9HjhK8DhoBF9OTjld3HzQY3IuHC0kD7H48eNNeNXg5piCYi
-         SW+DTo64eGJGSMEcd69rveC7MPfqpTyRkI5jXM9yCZFiz7kO2ZVk8RxAhE3Oo7j/RwP4
-         yOWf7WS09p2emkqVFH2UxYf2WgJtdS2CPLeRUx9MAx8QWlYPB3ZN1LFFB3n2lwzX+HiQ
-         APoK3aM2xGqz5aYoiwK4RuX2QLA/2SPpffArZEX0RWWVoq9JGBDLPHtY1NGDBv7teP4I
-         LRSA==
-X-Forwarded-Encrypted: i=1; AJvYcCVk8Eeh829MGFE+gD8tUJTW8bd4sAF556mi5OWT4GSyDJpcfcKQgxIFXuki5vbcJL1WkRghi8YZhDaK@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuEnRAZebPrP3Fh1PKQ9OQZ8xt2Mz08W32EsdAytbxMPtjWCp/
-	0EO35wJ0ikjXp6AdI/4skNMqzTCqeF9B/I4U2HNDSHW3st0LGgxY66TwGnGuDa057T/f2GbIden
-	480TqIZmKp7mH60R5gWT56QhNf5L6gsrMmXVyKRLbIig3t4k4I3Yzit611yU=
-X-Google-Smtp-Source: AGHT+IH5uw/iIj2y/V+P1SCd4V3iW16EXYXodigyiDNJPk+hbLfxZatAWtBsRRM4fNFj+ssVTx5tKZKEMYQ2Fz3AzQBLKa1C0Bj2
+        bh=wZSGjMt1Kw8fTsX45N5jWnuu8usaMSJDnzmOrQObllg=;
+        b=rr2gfS8JSGqPiab1hfQugDdp8ZgFPw50SYaWeRys88F01E/gTcyZq56C99CFn/iHxP
+         mLke68dfXBw4HbThjzvnjkYvkm/a5fbMemdIZe8ZVY8P/4+vjpc2iVAVOyIvGCVzMEaG
+         bXZX2X8IaOKyUDIJabtjkA/JcutrZ0PEZwitHqkx1g+/c1Oq+3G1ALrlSqDVLSjA/nCf
+         cxDeV+o2qfN4OOM6k+qi16Z0lvGOtjfdirryqxCS/Qg1W3s0ptkJurN/S+s3qomgswwU
+         oYOR1H5HFP6Hh9PLjXEwhirW8yeY9xWe/xlxB74zc2rhStySy4Zkhudy/g34t2ofJSlL
+         q+uQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWa+5MMnPrMYpOu5ipJkGRFO9ByjSlTN0kHHwizFarBLn+nR8eR3MSO26Nv05QM3gUMC822BcW3Rcl0@vger.kernel.org
+X-Gm-Message-State: AOJu0YxIGOoUWQvikTqAe4Y0W7IliCAT4Z6Y5lM/Blh0DnNhxZ0CaGxR
+	8GwACzpXAD1h3NvJqX07y7VqB7wvUqRVvNIGSxeqyqcCx26pD2286IFtUjjc2IAbLn3PwUTre8g
+	UQxMPNA==
+X-Google-Smtp-Source: AGHT+IELFjqiOhYzJtQPJi83GurzhMZjUszfoBRWsW9ystcLY03Me8W0XbtwPWs3W8rSDmDZ3b3wJD+ztbE=
+X-Received: from pjtv11.prod.google.com ([2002:a17:90a:c90b:b0:341:4c7:aacc])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4d8a:b0:32e:72bd:6d5a
+ with SMTP id 98e67ed59e1d1-3434a19fcc1mr1662189a91.1.1762468463051; Thu, 06
+ Nov 2025 14:34:23 -0800 (PST)
+Date: Thu,  6 Nov 2025 22:34:06 +0000
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1546:b0:433:150:bacf with SMTP id
- e9e14a558f8ab-4335f5928c2mr16471755ab.26.1762468229031; Thu, 06 Nov 2025
- 14:30:29 -0800 (PST)
-Date: Thu, 06 Nov 2025 14:30:29 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <690d2185.a70a0220.22f260.000e.GAE@google.com>
-Subject: [syzbot] [sctp?] BUG: corrupted list in sctp_destroy_sock
-From: syzbot <syzbot+ba535cb417f106327741@syzkaller.appspotmail.com>
-To: davem@davemloft.net, edumazet@google.com, horms@kernel.org, 
-	kuba@kernel.org, kuniyu@google.com, linux-kernel@vger.kernel.org, 
-	linux-sctp@vger.kernel.org, lucien.xin@gmail.com, marcelo.leitner@gmail.com, 
-	netdev@vger.kernel.org, pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.2.1041.gc1ab5b90ca-goog
+Message-ID: <20251106223418.1455510-1-kuniyu@google.com>
+Subject: [PATCH v1 net-next] sctp: Don't inherit do_auto_asconf in sctp_clone_sock().
+From: Kuniyuki Iwashima <kuniyu@google.com>
+To: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: Simon Horman <horms@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	Kuniyuki Iwashima <kuni1840@gmail.com>, netdev@vger.kernel.org, linux-sctp@vger.kernel.org, 
+	syzbot+ba535cb417f106327741@syzkaller.appspotmail.com
 Content-Type: text/plain; charset="UTF-8"
 
-Hello,
+syzbot reported list_del(&sp->auto_asconf_list) corruption
+in sctp_destroy_sock().
 
-syzbot found the following issue on:
+The repro calls setsockopt(SCTP_AUTO_ASCONF, 1) to a SCTP
+listener, calls accept(), and close()s the child socket.
 
-HEAD commit:    1a2352ad82b5 Merge git://git.kernel.org/pub/scm/linux/kern..
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1110fe7c580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=810aeb811fb1cca1
-dashboard link: https://syzkaller.appspot.com/bug?extid=ba535cb417f106327741
-compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12ff9704580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11372bcd980000
+setsockopt(SCTP_AUTO_ASCONF, 1) sets sp->do_auto_asconf
+to 1 and links sp->auto_asconf_list to a per-netns list.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/1ba55bd42dcf/disk-1a2352ad.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/57da62b6c7d2/vmlinux-1a2352ad.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/7d8bb5da864a/bzImage-1a2352ad.xz
+Both fields are placed after sp->pd_lobby in struct sctp_sock,
+and sctp_copy_descendant() did not copy the fields before the
+cited commit.
 
-The issue was bisected to:
+Also, sctp_clone_sock() did not set them explicitly.
 
-commit 16942cf4d3e31b6246b7d000dd823f7b0b38bf8c
-Author: Kuniyuki Iwashima <kuniyu@google.com>
-Date:   Thu Oct 23 23:16:54 2025 +0000
+In addition, sctp_auto_asconf_init() is called from
+sctp_sock_migrate(), but it initialises the fields only
+conditionally.
 
-    sctp: Use sk_clone() in sctp_accept().
+The two fields relied on __GFP_ZERO added in sk_alloc(),
+but sk_clone() does not use it.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1634e32f980000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1534e32f980000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1134e32f980000
+Let's clear newsp->do_auto_asconf in sctp_clone_sock().
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ba535cb417f106327741@syzkaller.appspotmail.com
-Fixes: 16942cf4d3e3 ("sctp: Use sk_clone() in sctp_accept().")
-
- slab net_namespace start ffff88803347c900 pointer offset 4344 size 9088
+[0]:
 list_del corruption. prev->next should be ffff8880799e9148, but was ffff8880799e8808. (prev=ffff88803347d9f8)
-------------[ cut here ]------------
 kernel BUG at lib/list_debug.c:64!
 Oops: invalid opcode: 0000 [#1] SMP KASAN PTI
-CPU: 0 UID: 0 PID: 6008 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
+CPU: 0 UID: 0 PID: 6008 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full)
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/02/2025
 RIP: 0010:__list_del_entry_valid_or_report+0x15a/0x190 lib/list_debug.c:62
 Code: e8 7b 26 71 fd 43 80 3c 2c 00 74 08 4c 89 ff e8 7c ee 92 fd 49 8b 17 48 c7 c7 80 0a bf 8b 48 89 de 4c 89 f9 e8 07 c6 94 fc 90 <0f> 0b 4c 89 f7 e8 4c 26 71 fd 43 80 3c 2c 00 74 08 4c 89 ff e8 4d
@@ -139,53 +143,44 @@ Call Trace:
  syscall_exit_to_user_mode include/linux/entry-common.h:210 [inline]
  do_syscall_64+0x2bd/0xfa0 arch/x86/entry/syscall_64.c:100
  entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f3890b8efc9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd5dc3b8a8 EFLAGS: 00000246 ORIG_RAX: 00000000000001b4
-RAX: 0000000000000000 RBX: 0000000000015724 RCX: 00007f3890b8efc9
-RDX: 0000000000000000 RSI: 000000000000001e RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000001 R09: 000000055dc3bb9f
-R10: 0000001b2ec20000 R11: 0000000000000246 R12: 00007f3890de5fac
-R13: 00007f3890de5fa0 R14: ffffffffffffffff R15: 0000000000000003
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__list_del_entry_valid_or_report+0x15a/0x190 lib/list_debug.c:62
-Code: e8 7b 26 71 fd 43 80 3c 2c 00 74 08 4c 89 ff e8 7c ee 92 fd 49 8b 17 48 c7 c7 80 0a bf 8b 48 89 de 4c 89 f9 e8 07 c6 94 fc 90 <0f> 0b 4c 89 f7 e8 4c 26 71 fd 43 80 3c 2c 00 74 08 4c 89 ff e8 4d
-RSP: 0018:ffffc90003067ad8 EFLAGS: 00010246
-RAX: 000000000000006d RBX: ffff8880799e9148 RCX: b056988859ee6e00
-RDX: 0000000000000000 RSI: 0000000000000202 RDI: 0000000000000000
-RBP: dffffc0000000000 R08: ffffc90003067807 R09: 1ffff9200060cf00
-R10: dffffc0000000000 R11: fffff5200060cf01 R12: 1ffff1100668fb3f
-R13: dffffc0000000000 R14: ffff88803347d9f8 R15: ffff88803347d9f8
-FS:  00005555823e5500(0000) GS:ffff88812613e000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000200000000480 CR3: 00000000741ce000 CR4: 00000000003526f0
 
-
+Fixes: 16942cf4d3e3 ("sctp: Use sk_clone() in sctp_accept().")
+Reported-by: syzbot+ba535cb417f106327741@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/netdev/690d2185.a70a0220.22f260.000e.GAE@google.com/
+Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ include/net/sctp/structs.h | 4 ----
+ net/sctp/socket.c          | 1 +
+ 2 files changed, 1 insertion(+), 4 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+diff --git a/include/net/sctp/structs.h b/include/net/sctp/structs.h
+index 5900196d65fd..affee44bd38e 100644
+--- a/include/net/sctp/structs.h
++++ b/include/net/sctp/structs.h
+@@ -228,10 +228,6 @@ struct sctp_sock {
+ 
+ 	atomic_t pd_mode;
+ 
+-	/* Fields after this point will be skipped on copies, like on accept
+-	 * and peeloff operations
+-	 */
+-
+ 	/* Receive to here while partial delivery is in effect. */
+ 	struct sk_buff_head pd_lobby;
+ 
+diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+index 38d2932acebf..d808096f5ab1 100644
+--- a/net/sctp/socket.c
++++ b/net/sctp/socket.c
+@@ -4885,6 +4885,7 @@ static struct sock *sctp_clone_sock(struct sock *sk,
+ 	}
+ #endif
+ 
++	newsp->do_auto_asconf = 0;
+ 	skb_queue_head_init(&newsp->pd_lobby);
+ 
+ 	newsp->ep = sctp_endpoint_new(newsk, GFP_KERNEL);
+-- 
+2.51.2.1041.gc1ab5b90ca-goog
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
 
