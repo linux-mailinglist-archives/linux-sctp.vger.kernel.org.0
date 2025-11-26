@@ -1,100 +1,144 @@
-Return-Path: <linux-sctp+bounces-747-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-748-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76BBFC7F3DE
-	for <lists+linux-sctp@lfdr.de>; Mon, 24 Nov 2025 08:46:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 69A8DC88AA1
+	for <lists+linux-sctp@lfdr.de>; Wed, 26 Nov 2025 09:34:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 146753A63B9
-	for <lists+linux-sctp@lfdr.de>; Mon, 24 Nov 2025 07:46:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2F133B4FE4
+	for <lists+linux-sctp@lfdr.de>; Wed, 26 Nov 2025 08:34:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2471D1A295;
-	Mon, 24 Nov 2025 07:46:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 390593164AD;
+	Wed, 26 Nov 2025 08:34:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="L8ykWSB/"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F9CC21D58B
-	for <linux-sctp@vger.kernel.org>; Mon, 24 Nov 2025 07:46:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D58F313542
+	for <linux-sctp@vger.kernel.org>; Wed, 26 Nov 2025 08:34:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763970388; cv=none; b=XG9ThabWbtv3efGCN9ltTMX4KaUGXQwwoXKKuiQ8XAifqeuzB8P5bQgzviC+j5I6JHI7gEKsW/39EHxHDCtkrf+nRzK3wlPx259mdT0awdiBCDazU3GptpjhYzGxU8nHh/rzLHatGPWkrl+x6BBCV1kK3dw8rgAkd/CGOtxp9B0=
+	t=1764146080; cv=none; b=dhsfoK6sW1johGNeWBI2PxwXpnsl2XCenaeWx9uN+n4rA9YE+qodIhtZUIHtdHCZ1+1F+QJZDuDY7KGDmIZhE39G29iSVJO80AYMKVdRrTkXO9NFemoyWrB7BHPFZpVR91iv9s6CMPoUKBiURXosP+jfM+77v9hraJAYa9FoBqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763970388; c=relaxed/simple;
-	bh=P1Qnt7dE/JNs8Xq8k8Ilp+gjpzoNArTSyZC0RoLgO8U=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=QIQS7UkF4gw3NGZS8uEgcAaTGrNzcuSjnKhNHBqjSN//7OKFJJvLdYDlAm1sqqLnOEDscJmo6NQsadYiYhNu36/gXW5NiNHw/7OiGKJQoaK1W/TjWvAqH9p2Peh/NmupocGltrgM4o8Z7PSieLe9Q4NeIERyjNIjJYHWB+r0m/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-937e5f9ea74so385159339f.1
-        for <linux-sctp@vger.kernel.org>; Sun, 23 Nov 2025 23:46:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763970385; x=1764575185;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+	s=arc-20240116; t=1764146080; c=relaxed/simple;
+	bh=PvUIJvSgMdPOtL9W8rtLNpPwhlZeahTZTO8EKu6PnoA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ZvxP193x2dh1aXMxKxhiMKc8x3dchNN54dTK+OkxkhV6UnCQDEL78OAD0UQM5NzQWdQPX1aIJXQn1S7PgCLId37qVwDrKwcWYzNDXwo7FBAXaJdg7ExbordnVFdfFcEPFkZohLe2nhvX0G8KmqLHHXv6it+V96vdgWf7BmGuyTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=L8ykWSB/; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4777771ed1aso42205455e9.2
+        for <linux-sctp@vger.kernel.org>; Wed, 26 Nov 2025 00:34:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1764146076; x=1764750876; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Em/20aVI2j5vJXiyoo0oMdRjjZFMPYlo6bZRrdj/+vY=;
-        b=l+3W/W/JPTUBHuMVSg40wk57fYRxcaIQw+CN6zB/ZVRQw3U+HhL1QCQtqfXfvzx4C4
-         0GB6oGoe3JmWU7yhkXTNr1DFQU13JKiizWrebu8+bZlEF1BqkS72g8NTt6OZ0b4XRvFX
-         QTuWVFWWAsIKWZKI8NBX6SeAax/8Zy7id6jKAdj0EoIdfqSobMq1XgbHYCjFddjtIEth
-         GW6RxQIH1cb6R7sWuFhKo4z4Vuo5Tj0/wTAOujh96qwpgVALYnBzqGKebB6x39GUFH3o
-         YmBHpzPsBfzB/I7pEgMVXVhQLi5ML0+3a6KUp9jW4OY6X3c+OrPPBdJ/PnZmyg6kwVpM
-         Wb8w==
-X-Forwarded-Encrypted: i=1; AJvYcCWb0f17z7hTmyXkQm+OvT9o4DRsfUee1Wl2TGlvXl8VqR8xk6zxTY2996AnO540C95BsT5SUXHjAX3r@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNx32R7WAS8C6YLnZBrUIJIRwBDLzmP/Sxh5X+STC/7ReQ0gB0
-	a6OOrBZCJmO9pkkgvbI05/NHmtkZ3Fcb70KlbSEu8BBHbWK90KiN4UmV1auHfxe5AKgnYqvO7Xh
-	qSk7/0jx+z5JjIpvyVhxn3jaDlaCI7VGCBW30p3IWsZfeWBnmU4DmMEfa/U8=
-X-Google-Smtp-Source: AGHT+IGrX0xdmXVKtphDI18dGVhIgTFkImohtzxBkwFVEo3zJxc7BfZWaWPsukHllCA6q8TpIHKU2JHC4JQ9jiNZmxelNsejQhmA
+        bh=oXYtZ24dEe4pYQc6SEgeXi/+vsS3K8tFfHn3ZfaclBM=;
+        b=L8ykWSB/gWHDy7jc+PrY9K6S8gQ/e9n4m2Cte5nUFNFT0u9aAEEuOa/GZm5lRV7zXF
+         0HnlGFQT930m3dU9U1hGHTEF0qbaWFEWzeTcDZFzL/KvGaCm5WccsgdUvgfKnY/oTK63
+         NoNjwhXaRq6WfoUYEdSKVY5ymKtYbpFOxzTZewgPF5sYwnE4Q3sagFLUX0D/VHvtj1pW
+         bRZ37tPbcnqbiP5i9YQZPZw1TRpSnGOySSaa/nolQKitlC5delplYQqKbqm/Mh8DZm5U
+         n9/H06QqzMTo9uZ6Tl22tvurS0gzqbeYf5cCrTuEIZGyxjifOQkxy12ooCT/+YoIoMBZ
+         ULgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764146076; x=1764750876;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oXYtZ24dEe4pYQc6SEgeXi/+vsS3K8tFfHn3ZfaclBM=;
+        b=M1OeTAQ43cca/Iq5dihCLyYlY45Qze/q1QalpOd8yWI/CSEUvJfHqhSDZJmK6dEFdx
+         fP0oygfmsWOjzaxzqaDZ3LS67eX8QT2IGk2C0q/MZuisWwWqed2+lbPnfVPvQdYXw7fW
+         EiVF2uNUqlYVPQ+hq0FGzpjqpoNX0U6LMoWpZJzbSiaRPIef9mRyq4AgudMpBpI8ByLW
+         FxCQHtlh519Pg/JWrAZUj3B+ryAIxluCQNFEHq//A/8qO37MD5JCkznVJevhKkqhIQ71
+         n90956Zoqo+oUS/0FH0bZAC7uV7Ul5qTZ9c6RigsCdrUhQ4fW03tnTN1DLUnmnFDWRuo
+         BQLg==
+X-Gm-Message-State: AOJu0Yx1xBpgXZS5Rl3IdA2K1TvskA2T98L1EeRr7iZQpo8Uu1vR++wx
+	thBEQo/5wW0IDlkES0LMpZWrIMs4TJVg8YPDuweI8MuYWgncrf3AQJZbHXSv5apjA00=
+X-Gm-Gg: ASbGnctBsmEZXFfwhPwntoe2O8cCcI8rQFU94iL/Z9JXgEvo1/P7CMYpmeftzbukmlX
+	OjzVgO9gGNdKSQZA1W5/QLGmviWZ5u3IiLNPreREka5UBmpjWGwcKyPoPJCewnFmqXiUThWpb0s
+	OEb2kwMFtjfjnYF9SwZrdlsA9RZ+3/fQyzTYng6LBgvOCvK1K1QtI1p1/6lwXDCcxE9l1D3xsBk
+	O95sjE22b3/hUsG2fojQw+94YdXPWpQ9RQQzrDQ9V2aDaWsKVAEcrTf23P3BFO5BHzyfJODYKxI
+	G61VWmew74joAs1rv08FZPKHW9ZbT2L1sigErOU1YHQqE5RAiqwH3SvGSOxeLWTrbPqXZcnFge1
+	Ckkc3SdiHhp4pgrzk8aoVfzfqbOk036h+gryTbsLuZaO4tDKM6/ywZyOwNvM77ReRkRKsOcHeuP
+	dHvL9xFY/bswKW89fZ3Kf3J7qaJw==
+X-Google-Smtp-Source: AGHT+IEXMnOjmgYAtAR0yBN5uekvG7782bIRKI/MdtxVAPWNeJQqVu53fbTtnitKymyvAkHfqAmC8w==
+X-Received: by 2002:a05:600c:1994:b0:477:5aaa:57a6 with SMTP id 5b1f17b1804b1-477c016e402mr165463215e9.10.1764146076373;
+        Wed, 26 Nov 2025 00:34:36 -0800 (PST)
+Received: from localhost ([41.210.159.101])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-47903e65d51sm38474565e9.0.2025.11.26.00.34.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Nov 2025 00:34:35 -0800 (PST)
+Date: Wed, 26 Nov 2025 11:34:31 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-sctp@vger.kernel.org
+Subject: [bug report] net/sctp: convert sctp_getsockopt_peeloff_common() to
+ FD_PREPARE()
+Message-ID: <aSa7l8aK1cHv1GEI@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:b25:b0:42d:878b:6e40 with SMTP id
- e9e14a558f8ab-435b986a6a0mr59376545ab.13.1763970385329; Sun, 23 Nov 2025
- 23:46:25 -0800 (PST)
-Date: Sun, 23 Nov 2025 23:46:25 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <69240d51.a70a0220.d98e3.007f.GAE@google.com>
-Subject: [syzbot] Monthly sctp report (Nov 2025)
-From: syzbot <syzbot+listc1352ec1fd6125277eba@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org, 
-	lucien.xin@gmail.com, marcelo.leitner@gmail.com, netdev@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello sctp maintainers/developers,
+Hello Christian Brauner,
 
-This is a 31-day syzbot report for the sctp subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/sctp
+Commit 859ceac73090 ("net/sctp: convert
+sctp_getsockopt_peeloff_common() to FD_PREPARE()") from Nov 23, 2025
+(linux-next), leads to the following Smatch static checker warning:
 
-During the period, 1 new issues were detected and 2 were fixed.
-In total, 6 issues are still open and 77 have already been fixed.
+	net/sctp/socket.c:5733 sctp_getsockopt_peeloff_common()
+	warn: 'newsock' was already freed. (line 5731)
 
-Some of the still happening issues:
+net/sctp/socket.c
+    5719 static int sctp_getsockopt_peeloff_common(struct sock *sk,
+    5720                                           sctp_peeloff_arg_t *peeloff, int len,
+    5721                                           char __user *optval,
+    5722                                           int __user *optlen, unsigned flags)
+    5723 {
+    5724         struct socket *newsock;
+    5725         int retval;
+    5726 
+    5727         retval = sctp_do_peeloff(sk, peeloff->associd, &newsock);
+    5728         if (retval < 0)
+    5729                 return retval;
+    5730 
+    5731         FD_PREPARE(fdf, flags & SOCK_CLOEXEC, sock_alloc_file(newsock, 0, NULL));
+                                                                       ^^^^^^^
+sock_alloc_file() calls sock_release() on error.
 
-Ref Crashes Repro Title
-<1> 115     Yes   INFO: rcu detected stall in NF_HOOK (2)
-                  https://syzkaller.appspot.com/bug?extid=34c2df040c6cfa15fdfe
-<2> 36      Yes   INFO: rcu detected stall in sock_close (5)
-                  https://syzkaller.appspot.com/bug?extid=9a29e1dba699b6f46a03
-<3> 1       No    WARNING: refcount bug in sctp_transport_put (5)
-                  https://syzkaller.appspot.com/bug?extid=e94b93511bda261f4c43
+    5732         if (fdf.err) {
+--> 5733                 sock_release(newsock);
+                         ^^^^^^^^^^^^^^^^^^^^^
+double free.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+    5734                 return fdf.err;
+    5735         }
+    5736 
+    5737         pr_debug("%s: sk:%p, newsk:%p, sd:%d\n", __func__, sk, newsock->sk,
+    5738                  fd_prepare_fd(fdf));
+    5739 
+    5740         if (flags & SOCK_NONBLOCK)
+    5741                 fd_prepare_file(fdf)->f_flags |= O_NONBLOCK;
+    5742 
+    5743         /* Return the fd mapped to the new socket.  */
+    5744         if (put_user(len, optlen))
+    5745                 return -EFAULT;
+    5746 
+    5747         peeloff->sd = fd_prepare_fd(fdf);
+    5748         if (copy_to_user(optval, peeloff, len))
+    5749                 return -EFAULT;
+    5750 
+    5751         return fd_publish(fdf);
+    5752 }
 
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
+regards,
+dan carpenter
 
