@@ -1,85 +1,86 @@
-Return-Path: <linux-sctp+bounces-749-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-750-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5EA8C88AE8
-	for <lists+linux-sctp@lfdr.de>; Wed, 26 Nov 2025 09:38:48 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id A681CC91E9F
+	for <lists+linux-sctp@lfdr.de>; Fri, 28 Nov 2025 13:00:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A845A4E492C
-	for <lists+linux-sctp@lfdr.de>; Wed, 26 Nov 2025 08:38:38 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1C3184EA454
+	for <lists+linux-sctp@lfdr.de>; Fri, 28 Nov 2025 11:59:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B150B318143;
-	Wed, 26 Nov 2025 08:37:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB44430F921;
+	Fri, 28 Nov 2025 11:45:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GFa7vQkd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="leq+IpPJ"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4F7631A57C
-	for <linux-sctp@vger.kernel.org>; Wed, 26 Nov 2025 08:37:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50DA33126A4
+	for <linux-sctp@vger.kernel.org>; Fri, 28 Nov 2025 11:45:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764146258; cv=none; b=UjW0Tt1vqR30Q4TgPKIXQ2RAdbFwg6XIuPzP+6Vq59DC2xIeh0lYLOpskWcyJ1Key7sC3He7k5rf28j/QH8wbS8mnLHB6FbfLw/g2Fc5IddaIc94pMrud39zqY6O0zDEwjjhwdgOjy8vvyVpDlCRk6Pjk5ASc+QF/2rxq98RiU0=
+	t=1764330357; cv=none; b=n39tIvMjePijNWBvaKXMfW8c+plA2TOoZ9HqB6RdDTUWPagqT+rcCdQTe66ARxP00u9qo2CfE+3RYdFPRuf+4Ac981hsPiZ0E+2zeocuGxrL0RQl49NMfKDQi2JPwD+GrRDr+GLTaaOMpYUrtby5B/AdfhYSAPjNQV6Z4YpyIJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764146258; c=relaxed/simple;
-	bh=ASqx3xWPQILVdmK7Ru3KczkfE5BXp+h8k9F3GYoUA08=;
+	s=arc-20240116; t=1764330357; c=relaxed/simple;
+	bh=2YRbN/e2slbFuDZyprgcbkHYVPiHV7m/ynPviIf4Lkc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W2WmeOT4SClcBWvNQ5pckBe460Lku7KTjzuP/9OsWPc9Kkg6Vs3wj9PMeeqRzimA0ZfOu/W6V2U1pqXNPq9LXjdSwblmYT1sVVZ1/NHB+BR6u+Lq+U1sxhPL3EFAV1qSt2Pmm8iavXj5QQo5L5ef9YDqNMKi0xdGf6iFZRu1gOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GFa7vQkd; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-477770019e4so53381655e9.3
-        for <linux-sctp@vger.kernel.org>; Wed, 26 Nov 2025 00:37:36 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=cOe6p1IsWF+fqnl6HOG8UjL0CaIuATe3C5lT2cBRPxtffS82pTbVpWb0wdXrXbHWGStI+9Hu4keIaxGqnQfOucc4gzXFFntFGWQ1Zrd3wKdjNRzN2L6M4QYT2QHNR6yAIl1epOZNHZNojvVQJLn54CchEByr34uFsJqz79KnusI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=leq+IpPJ; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-7aab7623f42so1913435b3a.2
+        for <linux-sctp@vger.kernel.org>; Fri, 28 Nov 2025 03:45:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1764146255; x=1764751055; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1764330355; x=1764935155; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8utulqj/0eoFwTVbVzeVJuQFzJSaJPV84d8GEWszOv4=;
-        b=GFa7vQkdGIqXke3sDXtlIfdi6CkVfQNuPJuAPcR+u6MwXfcYUHIIJ42g28Ugp3FrGc
-         +PfzEwmsnfOdltFXXaTcoP5M4nKdwaYGrxBzqatZSwoaaLzoR6ntpjt77J6VwRM5mrY/
-         Rlqh4mfJjVCAywHHVvKkCdQY7xpRYpoVHHbTH3PP/FbcGrZwVl3RbJ4X1E0Ln97UvMtg
-         eeoX0VcwfTm/Bg6nM/W75x2dHcq3s9uQVBxiYRMZhx5p10PxD+leEnXwy88tuc+geRXB
-         uQ9ujkQDMjUnMVH2le7lvCnYaJw2iuCsb3XmHD1Pv2UcMHR6imbgOyqiKjyixdjMa4R7
-         VvZg==
+        bh=e7n7+ApfcE1pRInZlg39LMjOnbFZe/xUWP3K8pe6R8s=;
+        b=leq+IpPJp+iKXU5TGTBKXkuAXwJdRzWeQ3oKJeLOgpdde1quUlMsXYMA8rfFRwwz8w
+         oAA7hWXLB4JBonw5UF9GMlttfeTJartOggR8MM++PwebeG8VxuJ8YXNdw4hQdDTMyKqi
+         6cbalHXb139bly2GA4F5W4U0KW3FWQOaK08Z6pwdJ5OQKcFXqoNWPi+fSrsVZW0zVckv
+         3/LAmZjM1GkLWsqMXpHaTVfWkkvFulboRmnXLpKM5cTU/9x+ZkCdyBXGMzZx5MegnqH/
+         hrOyxdKIdS64yAgDRaVvU5S0f9/TLJ8ZLML6Td53tJirlbZx5T+jXloTH1czb4ZVc/gC
+         STmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764146255; x=1764751055;
+        d=1e100.net; s=20230601; t=1764330355; x=1764935155;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8utulqj/0eoFwTVbVzeVJuQFzJSaJPV84d8GEWszOv4=;
-        b=Lr5r3llQZrJ11473jV4gZWZzc5uOO5+zysVRWAE4hSkK8OBZT834L0N2vnOW2JhdO6
-         TtPpf/9D/aFKfKF+1fphoSqMgh9fjagoDWzL3ZVJtgpqHfafJ2i91j9m6mFgkQXAkeRZ
-         uJC9hFrjXlsRVF4hfrTRFriBvE85FTRsCKJtBf6XKfwLfyhgMjyrmP5AMa5/7820mtxj
-         NXSrITZm/F2GRpcs3xO4+r780wraD/m5ZVWf4s+iAWUuyGppMNgnEopQQaha6KQ6NYg0
-         7Gegy7/vfkF18ZM74E6+BZHJFKgSKeSF/thfJYdhSWWiPTMIVhou0HBtIHckOKG94ggr
-         2/Qg==
-X-Gm-Message-State: AOJu0Yyg5r2zbix1dkwQ0fAfQUwfbhJ6DXoThxZzIABgZa7KpyeJzcUn
-	WUlFErhayQWhpZ9pvKhNqS3/hZ2RbtWEc1ZUfu/92lAs8enoNl8qfMI8xCQEBOTYN88=
-X-Gm-Gg: ASbGnctlxJsesodwHtaAb2QW5hGaRZwa2aWs1Mgt1YPNygkjuJsf+lo89/Tsn1qOGuK
-	RC2f5jig/ap63XtUGJeNqx7k5elx31VpP4HAiGz7XyaFleqabIQcMKSnWIa8Ub3LgaQdyzWG7us
-	L3alH+L6SKwEVxSyxj32zWW6SR2zGRZVNBL6uWPmH+2rYZkOb4sslf6X4kiV5my4wRP5SP47ohF
-	peA4wamNXZ82pRmmw4/bkd4ONtg+tmzurM7fWGwM4l0UVvV8keTDbEojDJuhJtBTbjGMIUGO847
-	REkIArlDs+tiOJ2NBnMLJtPtFtArGm+xmQe8165uUPrcCn9SwWkvJ8th1IhWFef6+ZIHKTvmpOa
-	4WYVILbkirqaBV3DbNuMK26Dmm2Oe0KsA9s/KQmhXYVafSKJJSKVrhTUPW7Be2hX7dVidYLCHd6
-	OoP9KFjDPSdmNc530=
-X-Google-Smtp-Source: AGHT+IGRJ2/pqR/Hf0lm57sCpUP9yqTnnrA5zicFoy+l7UzHAtYJd+zRJNx2T4yxsLMeeUE3d/bsUQ==
-X-Received: by 2002:a05:600c:154e:b0:45d:d8d6:7fcc with SMTP id 5b1f17b1804b1-47904b24920mr58197045e9.27.1764146254959;
-        Wed, 26 Nov 2025 00:37:34 -0800 (PST)
-Received: from localhost ([41.210.159.101])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-479053023d4sm34710365e9.15.2025.11.26.00.37.33
+        bh=e7n7+ApfcE1pRInZlg39LMjOnbFZe/xUWP3K8pe6R8s=;
+        b=d/7HPwkpUenwPBVLM2sAhGyW3Y5fpUMXK1XP7vzP1+FLP/v6IN7yswQ7GI2pVud9/Z
+         lzVuTKBkwwnt+lfkJVBTkSIDmVHoNLF/DcCchDmMI1nLz0C08XHR/ZUtCcdmoYQzjW9v
+         Qlu3oeuQAzA9HiVNXRafeqSfFZ+H57t2tATJloVhCK1JvSt3YSNjmN+Vy0LPkOld2pWa
+         kWSWexc9agewPdf4COM9XlBJdZ3g+3+VVj7a1v0Zt4PXTjoszKpz3Z38ua78N6Kbn4B4
+         TYg2VluUWJ6/j7oYjqXtshmT76bQ5pAJoMiSi9w/wBwT/twkp0qivfJEb4Y872u+1Vbr
+         T5MQ==
+X-Gm-Message-State: AOJu0YxIlthFRL6PbzGzpHcNBO0oOsiK60kpjDlXYDWycg0xi3lgCft9
+	QNRG6KexWI/B5tTO71kMKqnqnsftVELlc+dnTYotL02o0qd4zaQwl56Q
+X-Gm-Gg: ASbGncueM3TwNoowmzvCS+2FKAaBB7Ud/LKxbKOPQ80kaGICSQDNIMlplL0a5qh7t7l
+	OYQzOEuPZnU3mh9d4hZOIwXcp/bGUXSDUO+7WtHAoCXYNXwdT3RuY9BSBGmQHBCUiK4kLule9fy
+	I0RDb/1rdW9iVgNFdnhsC71pEhWR8zOkcHWt0o0G1aqF296aH4UwHpRH2ttt//6BrVDeAs2Nw+c
+	xYB8bNnettDaTKS+Q0TSD/XBYhkoprMY9LFmvmqJwzJAtROMgHzfJGopg4mOBOD9yi4A1tLXu4a
+	eKQTplQyzyZUZMpgW925dZf8fcEGu64PfkYKfV+P5vd2jEc+aFEJFBsMs5PU7kdTSTzLpOZ1ZVT
+	dqdvDcgo6aeRbnp61BuRP0N/1rHLDKt8EmAWQn5n6fFszz03c8V9BtCr9Q528AnaOey6bpVkzQZ
+	jj/lGxZ2ys6A==
+X-Google-Smtp-Source: AGHT+IEEh/KLfepRQiKiH0gycBvfNn1MgxncpjWzIHBMW32qZdCRGK48//NA0GzFOcIg+7+5Gl92nQ==
+X-Received: by 2002:a05:7022:20f:b0:11b:78e6:8323 with SMTP id a92af1059eb24-11c9d860ee4mr15711090c88.37.1764330355404;
+        Fri, 28 Nov 2025 03:45:55 -0800 (PST)
+Received: from t14s.localdomain ([2804:29b8:508a:1537::1d7])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11dcb057cb0sm20402862c88.9.2025.11.28.03.45.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Nov 2025 00:37:34 -0800 (PST)
-Date: Wed, 26 Nov 2025 11:37:29 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Christian Brauner <brauner@kernel.org>
+        Fri, 28 Nov 2025 03:45:54 -0800 (PST)
+Received: by t14s.localdomain (Postfix, from userid 1000)
+	id 6802F12A9BB3; Fri, 28 Nov 2025 08:45:52 -0300 (-03)
+Date: Fri, 28 Nov 2025 08:45:52 -0300
+From: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To: David Laight <david.laight.linux@gmail.com>
 Cc: linux-sctp@vger.kernel.org
-Subject: Re: [bug report] net/sctp: convert sctp_getsockopt_peeloff_common()
- to FD_PREPARE()
-Message-ID: <aSa8SXDUZHq62XuB@stanley.mountain>
-References: <aSa7l8aK1cHv1GEI@stanley.mountain>
+Subject: Re: sctp on RHEL9
+Message-ID: <pzrmyhcns6wwyiouqashxwryeakcajvxaqwyr7vl2vxvcwkzi4@eltvekq6ok6n>
+References: <20251118230743.5a862e9a@pumpkin>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -88,29 +89,15 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aSa7l8aK1cHv1GEI@stanley.mountain>
+In-Reply-To: <20251118230743.5a862e9a@pumpkin>
 
-Similar warning in sock_map_fd()
+On Tue, Nov 18, 2025 at 11:07:43PM +0000, David Laight wrote:
+> A bit of a gamble...
+> 
+> Anyone any idea why RHEL9 should reject sctp setsockopt() calls like SCTP_INITMSG?
 
-net/socket.c:510 sock_map_fd() warn: passing freed memory 'sock' (line 508)
+More likely an invalid buffer as argument. It has to have the exact
+size of struct sctp_initmsg, and not more than that.
 
-net/socket.c
-   504  static int sock_map_fd(struct socket *sock, int flags)
-   505  {
-   506          int fd;
-   507  
-   508          fd = FD_ADD(flags, sock_alloc_file(sock, flags, NULL));
-                                                   ^^^^
-Freed on error.
-
-   509          if (fd < 0)
-   510                  sock_release(sock);
-                        ^^^^^^^^^^^^^^^^^^
-double freed.
-
-   511          return fd;
-   512  }
-
-regards,
-dan carpenter
+  Marcelo
 
