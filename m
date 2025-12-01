@@ -1,119 +1,97 @@
-Return-Path: <linux-sctp+bounces-752-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-753-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDF2DC91F84
-	for <lists+linux-sctp@lfdr.de>; Fri, 28 Nov 2025 13:19:43 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32EDCC99569
+	for <lists+linux-sctp@lfdr.de>; Mon, 01 Dec 2025 23:11:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C24E3AA92F
-	for <lists+linux-sctp@lfdr.de>; Fri, 28 Nov 2025 12:19:42 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2B4534E2E56
+	for <lists+linux-sctp@lfdr.de>; Mon,  1 Dec 2025 22:11:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC3DA30C372;
-	Fri, 28 Nov 2025 12:19:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XaU4kG48"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D21EF287253;
+	Mon,  1 Dec 2025 22:09:04 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BFC730B525
-	for <linux-sctp@vger.kernel.org>; Fri, 28 Nov 2025 12:19:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27243286415
+	for <linux-sctp@vger.kernel.org>; Mon,  1 Dec 2025 22:09:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764332380; cv=none; b=uWffo+OpQGESEsbAMmk+0P1NtafliBZfhfX4P+RoIxzqsxH7/4NHfbGSdED4Tu7hT0wMqFXaGdlm6YuLIhiE1gUyQrHBpGij98AtbUwk6PCw5ZSbqD6AKxvc6L0gg6bo0JgnsFos0tWt0mYiNLynJK9vVawX7B/cSTpPDQEs/So=
+	t=1764626944; cv=none; b=jWXejNhZHoxJJ9Ek7l5GeHRCzVXgUvwF3lEIG0YhGnIwdGSaaOCRcgjj8yADIsiiuC0m9cDdOBN1sHzGYsTBio8EitxrDJm8d1SHrUkcYLZry8QMXvW5ou3wr5jfo5OCubN+kAymoWo67pn/nw+6N8eVydahdE+EKuIqHUV3a+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764332380; c=relaxed/simple;
-	bh=4riameGlM0ZpoM1sWTxRFAt04DG3mRNiEWeI7fAV0PE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ho7CfMJV/vOQfftcjMvVR3+Y0KgAs9YC8kb87MPasMXDE6AvmZRnkPPjQhrN3iyw1GwYCXn169xPeS+WuvAro83g0u3runLFucv6HUEbr5xfvgzxlDSkzMsv+40+TjCrwrpNRvSUySDXduozZZGSBVk2BzyMR/j/t8oDA5u4/LU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XaU4kG48; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3437af8444cso2036476a91.2
-        for <linux-sctp@vger.kernel.org>; Fri, 28 Nov 2025 04:19:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764332379; x=1764937179; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hBheqsQQGxEUX96/r9+OVrqv02+hgTdT0dhM92aVvHs=;
-        b=XaU4kG48kijokh5Xtq3ehqBwo41Frzu6oxoEtcuUcTAO/3LvYwX2sx+1i6gucr05BF
-         pfRJWg5crMXPzzEBmAEhGl/IbnMt2bYUDNjxEe1gRS1J7EsCr1nuXmR/vrGl8c1zL6sN
-         opTgxSN/JqBGijUkv7ogBe8OnfRRA60Bq1UjiytHkM5c7gsvgswYR7wKOWrbvntFSA6w
-         CFFOVxXLLM9kpcs4NNr+NhF8KFRC99RMvmzNrxWw61+cgfvWuI9jagb9E0JXrxxUMO2V
-         qqTQkFMuJsAECYVHsqnEb7PV5kZujTQOXCu+PXPa+ORnaAXOltnDfHHx+wgk1vkhc6p0
-         Rc5g==
+	s=arc-20240116; t=1764626944; c=relaxed/simple;
+	bh=Uw9kUV9EdAkxOYByN1jtz7gLbs5Uy6OVyl/gd7NOE5s=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=Q0ecVGbZeVqbCpc0go+BZVUnxgwYXWyQRn734bu5q+kr5JiBM0axjSDNCbbX/3VFa+928BJR5epokvf9fvmC3cDsBagikqjm4rPpkrC48cvGPxAIrjHMHaKB+lNuhlBZprXqE4Y5+tmdV+AKQfOw/3RwWg2f4tY5TjfitjTDsvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-4501f50b40cso3540841b6e.1
+        for <linux-sctp@vger.kernel.org>; Mon, 01 Dec 2025 14:09:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764332379; x=1764937179;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hBheqsQQGxEUX96/r9+OVrqv02+hgTdT0dhM92aVvHs=;
-        b=chXmkcbaCRqJs09rZ0ABcYhuffiXDPSabbF2UC3U1vWl+67kPdcWsP8Wj8tkYO0nPB
-         bDaNC+slI0/5dZ2G6sOXUxvdnCMUwAV9OM+tXqDLTsRlOqLy6y3V/qYVWxBCitlJe/fq
-         WWJZYkhvRenm7EIio3U3GCk0umPkuKESG3V+AucM6GZEwg9LrqdI1GShcT5AosuFLaK4
-         pjqegwp4aZfFUeLDkV8z6AcSthde4UVKUIuX5OZ55PN25WbyuG61rEACnoEM3EBuB2lB
-         Uonem053rHzmfit7yY2THOgfow67awkEmzDWB61DyFHQ2zhDpJHTCTWAQ6X2DCYRNdw+
-         rg+Q==
-X-Gm-Message-State: AOJu0YwuSrNvWDgoLBiX4AMcBBTyKG6hDBDNu2bvxOIsLtE8/ACKfg5m
-	tRcjwNnLYKCMaAAGdfXYFkLtzppot0y2hqQ9frqfwqDYqu7xs3q1vzlsewiUKrbH
-X-Gm-Gg: ASbGncsaMvn+G4qN/nRwg8H7rnWBtvNQWB8myLmLPb7zkmnJGqBP8bRp1RbVgQ9SflN
-	VcikTOvpMDAhKxKkqGs5PYu/voc2uuTgCtOCpaA5TNpCvBJ48bLExE5oUzfwE7iOG0BVQ/4A2Mq
-	QKWNAZWYmaxOimPF7qQnM99XfT4WuiC1MCvQL6mhlA0ge1OP6EjRb0gt1nnsWAKdnIMpURAYY0V
-	FDj4Ph2O1cCMmYvyInds769AQRmZZZKpKI1Z2okCyxAruBxsgv4e2ibIovGYKQ4FYZ30Rxlye6+
-	MmUvQhjVMs7Xv2VPy0/DBDNIXwXmS/K1FgCiB2R1PC6K5KQCfDyniWxCN0+jSWGQ3ptnNMtbC09
-	BIjdLIewCjZcuVENojVtnbB4dUco+U3latOHAQd36+czqipEfzrs0p1AN3atpqg2rczm2JCQlM5
-	rGOxX7EtM6yylxW/5R3I59TORqKA==
-X-Google-Smtp-Source: AGHT+IE/6aWO2o21z/VFRM3xGQq7lYJ9NyTRBe+r2wP2/uAEeYEg2JmgdhUCTWIETUrX+Oy53ZxG5g==
-X-Received: by 2002:a05:7022:4293:b0:11b:7f9a:9f00 with SMTP id a92af1059eb24-11c9d6128f8mr22525687c88.4.1764332378594;
-        Fri, 28 Nov 2025 04:19:38 -0800 (PST)
-Received: from t14s.localdomain ([177.37.142.105])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11dcb03cc7dsm18754907c88.5.2025.11.28.04.19.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Nov 2025 04:19:38 -0800 (PST)
-Received: by t14s.localdomain (Postfix, from userid 1000)
-	id F3D0912A9BCD; Fri, 28 Nov 2025 09:19:35 -0300 (-03)
-Date: Fri, 28 Nov 2025 09:19:35 -0300
-From: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To: David Laight <david.laight.linux@gmail.com>
-Cc: linux-sctp@vger.kernel.org
-Subject: Re: sctp on RHEL9
-Message-ID: <aSmTVy97eHmx9GJT@t14s.localdomain>
-References: <20251118230743.5a862e9a@pumpkin>
- <pzrmyhcns6wwyiouqashxwryeakcajvxaqwyr7vl2vxvcwkzi4@eltvekq6ok6n>
- <20251128115926.77d8b5a5@pumpkin>
+        d=1e100.net; s=20230601; t=1764626942; x=1765231742;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/vkKw1aMFMsjt7cPjue/zTtcAVsiSrnVVB8Q6f0BvOw=;
+        b=kLEck6UJ34TO5cvEEMO2Shey+G36EVdW/X4t+vsTYv3Ddxf4e5mTPKjt7HsHRZcCsC
+         q5reOOCEVf3asXVnni9sjlf6T+BlMt4zvtXbMc7hgWe2SxHjnbu7yd1ZTj01vTB9VMS0
+         4png3PuLq4UEUjgh7UIZ9lfEwGe5zNlDEcDheJrNLkVfupOisUrMVNBTOLvIeL7rEpd4
+         Ida/rbYgPr1cOF7v8gLen0k1irRf0A/tmlEl4Pa1P6zIBPgoGwNg7DETUE+HvmMpRfPI
+         DdCv7SsF1iaZ/aIFkrE/SN85UFqds3ljPoFDkkMx5PcOkA2EpA+i/Qy7SSphF5Lso4z2
+         wHXw==
+X-Forwarded-Encrypted: i=1; AJvYcCVBMxpNa/K1Qg5WVbac1+Cvrq7qlLJsuXrI6/VUEXtUtgjlquAx9AWc2/Xw978YQRC7AcAAC8sdV8ox@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5/2X+GB6FW7mMi/Vs1nXadZUgqjEcZseYnO5ITqzsQvVq0jwk
+	Vu0C+22IIbPj5nfDMsFDq1SKISEICE405YL+i8vk1NK8tqYbtSMwNHwOMQXFL+5GZ9Zaqc4Q2wC
+	2Tpa4JjwqJg7jAztdOhkSZ8ryzhFAON9AkTbQqNv9TrvgN9y7WNc7X0v1Fos=
+X-Google-Smtp-Source: AGHT+IFCVn9SmBjyBhDsZVB9FNp97B50jkWsVXck4orrLX/hYWor8khmXtZ+VRasjlQ64ebDCoYjuVDiltI/XEWnqYdManqfsXti
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251128115926.77d8b5a5@pumpkin>
+X-Received: by 2002:a05:6808:210c:b0:450:a9d0:b799 with SMTP id
+ 5614622812f47-45115a10e29mr18815486b6e.17.1764626942248; Mon, 01 Dec 2025
+ 14:09:02 -0800 (PST)
+Date: Mon, 01 Dec 2025 14:09:02 -0800
+In-Reply-To: <692d66d3.a70a0220.2ea503.00b2.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <692e11fe.a70a0220.d98e3.018e.GAE@google.com>
+Subject: Re: [syzbot] [fs?] kernel BUG in sctp_getsockopt_peeloff_common
+From: syzbot <syzbot+984a5c208d87765b2ee7@syzkaller.appspotmail.com>
+To: brauner@kernel.org, davem@davemloft.net, edumazet@google.com, 
+	horms@kernel.org, jack@suse.cz, kuba@kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-sctp@vger.kernel.org, lucien.xin@gmail.com, marcelo.leitner@gmail.com, 
+	mjguzik@gmail.com, netdev@vger.kernel.org, pabeni@redhat.com, 
+	syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org, 
+	viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Nov 28, 2025 at 11:59:26AM +0000, David Laight wrote:
-> On Fri, 28 Nov 2025 08:45:52 -0300
-> Marcelo Ricardo Leitner <marcelo.leitner@gmail.com> wrote:
-> 
-> > On Tue, Nov 18, 2025 at 11:07:43PM +0000, David Laight wrote:
-> > > A bit of a gamble...
-> > > 
-> > > Anyone any idea why RHEL9 should reject sctp setsockopt() calls like SCTP_INITMSG?  
-> > 
-> > More likely an invalid buffer as argument. It has to have the exact
-> > size of struct sctp_initmsg, and not more than that.
-> 
-> It was resolved.
-> Basically the code is an out of tree driver and they were using an old version
-> that calls kernel_setsockopt().
-> That was removed from the kernel well before the one RHEL9 is based on, so we'd
-> expected they get a build error (the driver usually runs if it builds).
-> But it seems RHEL9 has a wrapper for kernel_setsockopt() that doesn't actually work.
-> The later driver has its own correct wrapper and worked fine.
+syzbot has bisected this issue to:
 
-Ah ok. kABI can play some tricks, but yeah, this one seems off.
+commit 457528eb27c3a3053181939ca65998477cc39c49
+Author: Christian Brauner <brauner@kernel.org>
+Date:   Sun Nov 23 16:33:47 2025 +0000
 
-  Marcelo
+    net/sctp: convert sctp_getsockopt_peeloff_common() to FD_PREPARE()
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1136a512580000
+start commit:   7d31f578f323 Add linux-next specific files for 20251128
+git tree:       linux-next
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1336a512580000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1536a512580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6336d8e94a7c517d
+dashboard link: https://syzkaller.appspot.com/bug?extid=984a5c208d87765b2ee7
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16a2322c580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12a3c512580000
+
+Reported-by: syzbot+984a5c208d87765b2ee7@syzkaller.appspotmail.com
+Fixes: 457528eb27c3 ("net/sctp: convert sctp_getsockopt_peeloff_common() to FD_PREPARE()")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
