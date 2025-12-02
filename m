@@ -1,45 +1,46 @@
-Return-Path: <linux-sctp+bounces-754-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-755-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF0D6C9B5DD
-	for <lists+linux-sctp@lfdr.de>; Tue, 02 Dec 2025 12:51:34 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD81CC9B93D
+	for <lists+linux-sctp@lfdr.de>; Tue, 02 Dec 2025 14:22:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 985523A6B3A
-	for <lists+linux-sctp@lfdr.de>; Tue,  2 Dec 2025 11:51:33 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 330A03473D3
+	for <lists+linux-sctp@lfdr.de>; Tue,  2 Dec 2025 13:22:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 046FB2288F7;
-	Tue,  2 Dec 2025 11:51:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A429436D507;
+	Tue,  2 Dec 2025 13:22:25 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from mail.sysmocom.de (mail.sysmocom.de [176.9.212.161])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 245DA312821
-	for <linux-sctp@vger.kernel.org>; Tue,  2 Dec 2025 11:51:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 962DF313520
+	for <linux-sctp@vger.kernel.org>; Tue,  2 Dec 2025 13:22:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.212.161
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764676272; cv=none; b=PgJVixC5HA38BWvMCcUEcQydU1gtAxz+TxoooA5OI3/gECPXonpxV87mu9mVqov5Rcu3M0IBp/H1Q4wdWgcu1efs3VPKswWl3/Ag6LLBGDHiRSkUzyeY8vhSoxktavD/BLXMGoMuCMjxU0bEa80mvDMOTOBT413dtpD0+DD5KZY=
+	t=1764681745; cv=none; b=YnD5AJ2xcQ6UR728xsX3E/bCE3zFUsMjhG6wEDmAs9J/PiCDMlUFsgtDwQxpZWj4Fz/exr/V5FEJ5pKEv3wMvP3KPsHpdcP59xkMoOhYpwls3xLHWisD6W2h7hU/ycJ9FBqvTycDUyBlAiqkUq46Y335i7vB6vEYcoLcmOqs+78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764676272; c=relaxed/simple;
-	bh=4QE7S8WILmN+HDB8bsBBGPWU9XAq+Kch+GwHEHfHxX8=;
-	h=Message-ID:Date:MIME-Version:Cc:From:Subject:To:Content-Type; b=Ce59rDQ8EX1I5TtD48x3JYUJY5EdSHBm+r7dkZKI4M6+ta00XtcVbS+EumLxaRbyr/41vvgCTQtzchaonLf01nJKDKfqt8zh02n7BDxlQH4n2oebmAqaqTTnbjvOdYGTKeOejdvxZc8panYN6ODlIPBENDYFqtq88gwfxYNeHcg=
+	s=arc-20240116; t=1764681745; c=relaxed/simple;
+	bh=iDLHgESojPiCyS+fyUnAYGaeddXzG2ZH0r7JsbHN0tI=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
+	 In-Reply-To:Content-Type; b=E/Hwv9uvAJx5V/J/MqIqjR2qMZYIbbHX5UEP3KFJl8jR+iDVzlYFRuV5cKu5E7h+hSuobj9JXiwa7L1WqtpE42dDhP2VOIzTNKtDoF413S7fSFPbOCQSmQVoBmFpVZmN6h+A0Wor6dW3ESsvieYnL4IR/kERLtUF6pBpv4ef7sM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sysmocom.de; spf=pass smtp.mailfrom=sysmocom.de; arc=none smtp.client-ip=176.9.212.161
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sysmocom.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sysmocom.de
 Received: from localhost (localhost [127.0.0.1])
-	by mail.sysmocom.de (Postfix) with ESMTP id 2C4A2C80336;
-	Tue,  2 Dec 2025 11:44:50 +0000 (UTC)
+	by mail.sysmocom.de (Postfix) with ESMTP id 8A4C0C80336;
+	Tue,  2 Dec 2025 13:22:19 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at sysmocom.de
 Received: from mail.sysmocom.de ([127.0.0.1])
 	by localhost (mail.sysmocom.de [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0NKmW3X-fyaC; Tue,  2 Dec 2025 11:44:49 +0000 (UTC)
+	with ESMTP id 6Ga5uKEawRAr; Tue,  2 Dec 2025 13:22:16 +0000 (UTC)
 Received: from [192.168.1.140] (unknown [207.188.170.62])
-	by mail.sysmocom.de (Postfix) with ESMTPSA id A7235C8032A;
-	Tue,  2 Dec 2025 11:44:49 +0000 (UTC)
-Message-ID: <5a5d32a9-1519-43c2-a3f9-3c44b6c2dd05@sysmocom.de>
-Date: Tue, 2 Dec 2025 12:44:48 +0100
+	by mail.sysmocom.de (Postfix) with ESMTPSA id 8BF1AC80333;
+	Tue,  2 Dec 2025 13:22:16 +0000 (UTC)
+Message-ID: <afed2a97-ae37-433f-aa1c-707a119ba049@sysmocom.de>
+Date: Tue, 2 Dec 2025 14:22:15 +0100
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -47,10 +48,14 @@ List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Content-Language: en-US
+To: Andreas Fink <afink@list.fink.org>,
+ "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>
 Cc: Harald Welte <laforge@gnumonks.org>,
  Vadim Yanitskiy <vyanitskiy@sysmocom.de>
+References: <5a5d32a9-1519-43c2-a3f9-3c44b6c2dd05@sysmocom.de>
+ <909d4427-95bc-43f6-b689-2cea54de8f6f@list.fink.org>
 From: Pau Espin Pedrol <pespin@sysmocom.de>
+Content-Language: en-US
 Autocrypt: addr=pespin@sysmocom.de; keydata=
  xsFNBGKFOjcBEADl5wSEGyDFDi9eZdesWVRR5VEbAQ9AhNUp7u4epskERkEMF4GFS69TuNdu
  hYFVS5aDGhhoX6XHSxWx7wuu1ygguMKweJemHZGroljfRShxV8m6jMjMLrg0j1CTWgDiHslD
@@ -94,98 +99,98 @@ Autocrypt: addr=pespin@sysmocom.de; keydata=
  gOLgBEFfVheGvdBurMOBzXPuQ80XwTeA/wIQxDicldmNtvDt6bzVa6KgsnqlINqqkACnELZW
  oFyFgJKp7vtI7eEcBUIEyqIIgECHuOobXoPdDdr6gZlWwXBdBJfltIKb/J+fiy+SnQYC/v/8
  Z1KLlJXGjVr0l2NOkhDoRu0rsNKzULdfG2ieQKTvG8ngDS/zjXSI11ZW46SDKMLI
-Subject: SCTP client discarding INIT_ACK sent with different remote IP address
- from multihomed SCTP server
-To: "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>
+Subject: Re: SCTP client discarding INIT_ACK sent with different remote IP
+ address from multihomed SCTP server
+In-Reply-To: <909d4427-95bc-43f6-b689-2cea54de8f6f@list.fink.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi all,
+Hi,
 
-I recently re-enabled some osmocom tests which validate a multihomed 
-connection scenario (see [1] regarding original issue) and I found out 
-that they were failing in my system (Archlinux), which has a newer 
-kernel (6.17.9-arch1-1) than our jenkins debian hosts which are running 
-the same test successfully. I also tested on a local debian13 server 
-(6.12.57+deb13-amd64) and it also works fine there.
+On 12/2/25 13:13, Andreas Fink wrote:
+> You wrote:
+> 
+>      "That doesn't seem to be problem here though, since indeed the 
+> INIT_ACK is announcing both 127.0.0.1 and 127.0.0.2"
+> 
+> Note: that this is in the REPLY. The question is whats in the original 
+> REQUEST. The node which is sending an INIT should expect the answer to 
+> come from any of these IP's.
+> If he is only connecting to one, then he 
+> might not recognize the connection and drop it.
 
-And actually, Vadim (in CC) is using Archlinux LTS kernel 
-(6.12.57-1-lts, which seems to be the same kernel version as the working 
-debian13 above) and he's seeing the same problems as I.
-
-The scenario boils down to having an SCTP server binding to 2 IP 
-addresses on "lo" interface (127.0.0.1 and 127.0.0.2) on port 2905, and 
-a client connecting to it.
-
-* Working case: If the client connects (INIT) to 127.0.0.1, server 
-answers (INIT ACK) it all works fine as expected.
-* Failing case: If the client connects (SCTP INIT) to 127.0.0.2, server
-  still answers (INIT ACK) with src IP address 127.0.01 (note how it's 
-different from the IP address it received the SCTP INIT due to default 
-route lookup), and the client seems to discard/ignore the  INIT_ACK, and 
-retransmits INIT at some point, for a few times, after it decides the 
-connect() failed.
+The original REQUEST (INIT) contains AFAIU the local addresses of the 
+client, which in all cases binds to only 1 IP address (127.0.01), so 
+AFAIU not relevant here, this doesn't change in any of the scenarios. 
+Since the client only binds to 1 local IP address, no "Address" SCTP 
+param is included during INIT.
 
 
-So, in summary AFAICT the linux SCTP client stack seems to be discarding 
-the INIT_ACK if it came from an IP address != to the one we sent the 
-INIT to.
+ > This kind of issue often > arises if one side has a single ip 
+configure and the other has two
+> configured due to a misconfiguration.
 
-I have been reading a bit through the SCTP specs (RFC4960) and the only 
-explicit limitation seems to be that the INIT_ACK dst IP address needs 
-to be the same as the INIT src IP addr, but it doesn't mention 
-explicitly anything about the INIT_ACK src IP address.
-
- From section 5.1.2 I one can infer that the INIT src IP address needs 
-to be included in the announced SCTP "Addresses" section in INIT_ACK so 
-that the client can figure out which connection it is for. That doesn't 
-seem to be problem here though, since indeed the INIT_ACK is announcing 
-both 127.0.0.1 and 127.0.0.2.
-
-I confirm it's also not a problem about the client not knowing anything 
-about 127.0.0.1, because if client does connectx("127.0.0.2", 
-"127.0.0.1"), it will still discard the INIT_ACK answered from 
-INIT-to-127.0.0.2 and then try with INIT-to-127.0.0.1 (next in list), 
-which will then connect successfully.
-
-This can all be reproduced with sctp_darn and monitoring with wireshark, 
-see below.
-
-Server:
-$ sctp_darn -P 2905 -H 127.0.0.2 -B 127.0.0.1 -l
-
-Client successfully connecting (notice how it sends the INIT to 
-127.0.0.2 instead of 127.0.0.1):
-$ echo "foobar" | sctp_darn -H 127.0.0.1 -P 8000 -c 127.0.0.1 -p 2905 -s
-
-Client failing to connect:
-$ echo "foobar" | sctp_darn -H 127.0.0.1 -P 8000 -c 127.0.0.2 -p 2905 -s
-
-The client knowing the 2 peer addresses doesn't seem to help during 
-connect. It won't still accept the INIT_ACK coming from IPaddr differnet 
-than the one it sent the INIT too. It ends up connecting because it will 
-retry an INIT with the other remote IP address:
-$ echo "foobar" | sctp_darn -H 127.0.0.1 -P 8000 -c 127.0.0.2 -c 
-127.0.0.1 -p 2905 -s
-
-So this raises the question: Is the client expected to accept INIT_ACK 
-coming from a src IP addr != than dst IP addr of the INIT?
-
-* If yes, under which conditions? Why it seems to accept it under some 
-kernels and not in others? Did the policy change on purpose or 
-accidentally? is this controlled by some tunable I'm not aware of?
-
-* If no, then it looks a bit weird that this simple scenario doesn't 
-work out of the box, and I'd expect the server side to transmit the 
-INIT_ACK using the same src IP address as the dst IP address of the INIT 
-it answered to.
+This indeed raises another question: Is the spec mentioning somewhere 
+that one should use the exact same subset of IP addresses when 
+configuring both client and server sides? I wasn't aware of this 
+limitation, is this written somewhere? I was expecting server binding on 
+A+B and client connecting to B would be fine enough, specially since 
+AFAICT the remote addr list at the client is only used at connect time, 
+afterwards it uses the addr list provided by the server.
 
 
-Best Regards,
-Pau
+
+> Then it depends on who hits first 
+> if it works or not. Is this a client server (like in M3UA) or a peer to 
+> peer setup (like in M2PA).
+
+I'm talking about a client-server (connected socket) SCTP setup.
 
 
-[1] https://osmocom.org/issues/6893
+> 
+> Its kind of a grey undefined zone here but I presume giving Sigtran 
+> comes from redundant SS7 kind of setups, you tend to have the two IP's 
+> on two totally different physical subnets and the reply which goes to 
+> one of the IP is kind of expected to come back from that physical path. 
+> Now this logic fails completely on local loop interfaces. We do this 
+> normally by using two separate IP routing tables. So if the answer comes 
+> from another IP, it would also go out on the other physical cable (which 
+> is not automatically the case if you leave it to the kernel).
+
+I am aware by doing all sort of interface/routing splitting this problem 
+can be circumvented, but I'm surprised this kind of simple setup fails 
+to work, specially using the same stack in client and server, and 
+specially since some versions of the stack seem to work fine while 
+others don't. So imho something's wrong somewhere in the linux sctp 
+stack on some newish linux systems apparently.
+
+> 
+> The question which arrises here is also if there is any benefit of even 
+> using two IP's on a loopback interface.  You clearly wont get any 
+> failover/redundancy benefit on a lo interface.
+> 
+> Are you able to reproduce the issue on a ethernet interface as well?
+> 
+
+I agree, much benefit in principle, other than maybe being able to do IP 
+address management/changes without tearing down existing connections, etc.
+
+In this special case (which I think is also a valid one and even 
+common), we make use of the loopback device to do a multihomed setup to 
+easily test that a given program is indeed binding all of the IP 
+addresses it was configured with when using the socket.
+
+ > PS: can you send me the  pcap file or a source snipped to reproduce?
+
+You can easily reproduce (if you are "lucky" and your kernel behaves 
+like mine) by using the sctp_darn commands I shared in my initial post.
+
+I'm also sharing here 2 pcaps for the "-c 127.0.0.2" and the "-c 
+127.0.0.2 -c 127.0.0.1" cases, where it can be seen in both that 
+INIT_ACK is discarded by the client:
+
+http://pespin.espeweb.net/~pespin/tmp/osmocom/sctp_init_ack/sctp_darn_connect_to_127_0_0_2_fails.pcapng.gz
+http://pespin.espeweb.net/~pespin/tmp/osmocom/sctp_init_ack/sctp_darn_connect_to_127_0_0_2_then_127_0_0_1.pcapng.gz
 
 
 -- 
