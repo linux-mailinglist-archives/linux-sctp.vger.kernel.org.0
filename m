@@ -1,46 +1,46 @@
-Return-Path: <linux-sctp+bounces-758-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-759-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DBAEC9BFD6
-	for <lists+linux-sctp@lfdr.de>; Tue, 02 Dec 2025 16:39:33 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68D2BC9C063
+	for <lists+linux-sctp@lfdr.de>; Tue, 02 Dec 2025 16:50:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 652213A2595
-	for <lists+linux-sctp@lfdr.de>; Tue,  2 Dec 2025 15:39:15 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 92C594E3B6B
+	for <lists+linux-sctp@lfdr.de>; Tue,  2 Dec 2025 15:49:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 733C123AB95;
-	Tue,  2 Dec 2025 15:39:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EC6E2F6160;
+	Tue,  2 Dec 2025 15:49:48 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from mail.sysmocom.de (mail.sysmocom.de [176.9.212.161])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6689261B77
-	for <linux-sctp@vger.kernel.org>; Tue,  2 Dec 2025 15:39:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D1CB30F7F3
+	for <linux-sctp@vger.kernel.org>; Tue,  2 Dec 2025 15:49:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.212.161
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764689954; cv=none; b=mf4q54IcbshEdrmo4gp9lwyCGQMZ6HCJE1XyEdky60TskgIVxNBqOBXWLOh1gzHazyQFL6doAI86vzFnN5mZath/a9gT2mNqa9I5bHxZJGDTQyemEcaSCnwzLGoX+CvYkpWrRs9gsYlgQ8gv6ES/ayG7RlSpA2mmoGv1x4uT5fs=
+	t=1764690588; cv=none; b=MGtSYdk2WK+Idhnmy6Jpfc5yu19C/wBhrlwg6GPRXw7FmQCiAsKRmVJNSbabzEzG2DU2tAjt9FxIzWikNpGGGuRKMv3RJbhxUwH3GfwMI9S30J7ANed4lmk9CTMrjrtFKeMLOST1oEah5ZO8oq1UuRr8xWmrr0xHcAd1A5Kce7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764689954; c=relaxed/simple;
-	bh=WaCiT3zSaS9pPXBv1KZxAGF8ZS6sqTzLyQtzN9Z5sCk=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type; b=lPFcjvbLOrnh6TqE1BwL7ps9uUuMGbBiwsxovswAeAuaE/N/FJu9TM5sEAtrCMD6HTvnynvzaSkx92PSL83syIfDHIJz/zId/gpjSKeTmlDZZHYIvEvtpq9GKAyybuHpgG0PS4R968uZSHeXliPzvynOJNNMruEvfjr0WdYdmnY=
+	s=arc-20240116; t=1764690588; c=relaxed/simple;
+	bh=cCba+BFXBsFMLRO8dO4u5rb9i5hhbpQFAgOFvUuFHss=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=WQRFXVKYvYhtxQsbh9FIqUSio7cfh9tZAASfk7mDbXdV3idlYRuC/t+RfkOKqPI5DBMzH/J6iFLXmIBjLCPQpn+MEGtSAWfJhN7qgnoNo6OR0zvSOBGU0r8MZnxS3UgA4ZepxFGWMMkANDM8aO/Bn3HDKMHVTWlx/6+t5iEzQIE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sysmocom.de; spf=pass smtp.mailfrom=sysmocom.de; arc=none smtp.client-ip=176.9.212.161
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sysmocom.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sysmocom.de
 Received: from localhost (localhost [127.0.0.1])
-	by mail.sysmocom.de (Postfix) with ESMTP id D114BC80338;
-	Tue,  2 Dec 2025 15:39:04 +0000 (UTC)
+	by mail.sysmocom.de (Postfix) with ESMTP id 27599C80338;
+	Tue,  2 Dec 2025 15:49:42 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at sysmocom.de
 Received: from mail.sysmocom.de ([127.0.0.1])
 	by localhost (mail.sysmocom.de [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S6xaWKtC1h6h; Tue,  2 Dec 2025 15:39:02 +0000 (UTC)
+	with ESMTP id tnbSBek2Y3KZ; Tue,  2 Dec 2025 15:49:41 +0000 (UTC)
 Received: from [192.168.1.140] (unknown [207.188.170.62])
-	by mail.sysmocom.de (Postfix) with ESMTPSA id 06CBEC80337;
-	Tue,  2 Dec 2025 15:39:01 +0000 (UTC)
-Message-ID: <0f5ee546-3dc7-4c1a-9d1a-ee6561be9f2e@sysmocom.de>
-Date: Tue, 2 Dec 2025 16:39:01 +0100
+	by mail.sysmocom.de (Postfix) with ESMTPSA id 9BED4C80337;
+	Tue,  2 Dec 2025 15:49:41 +0000 (UTC)
+Message-ID: <8225fb9e-07db-4678-93a0-3eb0a7e322d8@sysmocom.de>
+Date: Tue, 2 Dec 2025 16:49:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -48,6 +48,9 @@ List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
+Subject: Re: SCTP client discarding INIT_ACK sent with different remote IP
+ address from multihomed SCTP server
+From: Pau Espin Pedrol <pespin@sysmocom.de>
 To: Andreas Fink <afink@list.fink.org>,
  "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>
 Cc: Harald Welte <laforge@gnumonks.org>,
@@ -58,7 +61,7 @@ References: <5a5d32a9-1519-43c2-a3f9-3c44b6c2dd05@sysmocom.de>
  <f39656f2-4ab9-4f0c-b9df-d081ebede928@list.fink.org>
  <2d22ee22-44f5-49f4-b720-004434117550@sysmocom.de>
  <070033e1-f72b-48d6-adf5-8998d392d566@list.fink.org>
-From: Pau Espin Pedrol <pespin@sysmocom.de>
+ <0f5ee546-3dc7-4c1a-9d1a-ee6561be9f2e@sysmocom.de>
 Content-Language: en-US
 Autocrypt: addr=pespin@sysmocom.de; keydata=
  xsFNBGKFOjcBEADl5wSEGyDFDi9eZdesWVRR5VEbAQ9AhNUp7u4epskERkEMF4GFS69TuNdu
@@ -103,45 +106,21 @@ Autocrypt: addr=pespin@sysmocom.de; keydata=
  gOLgBEFfVheGvdBurMOBzXPuQ80XwTeA/wIQxDicldmNtvDt6bzVa6KgsnqlINqqkACnELZW
  oFyFgJKp7vtI7eEcBUIEyqIIgECHuOobXoPdDdr6gZlWwXBdBJfltIKb/J+fiy+SnQYC/v/8
  Z1KLlJXGjVr0l2NOkhDoRu0rsNKzULdfG2ieQKTvG8ngDS/zjXSI11ZW46SDKMLI
-Subject: Re: SCTP client discarding INIT_ACK sent with different remote IP
- address from multihomed SCTP server
-In-Reply-To: <070033e1-f72b-48d6-adf5-8998d392d566@list.fink.org>
+In-Reply-To: <0f5ee546-3dc7-4c1a-9d1a-ee6561be9f2e@sysmocom.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi,
+By the way, for reference, I found this old email in this same ML which 
+seems to describe the same problem as I'm mentioning, with the 
+difference that I'm now seeing it running newish linux sctp kernel stack 
+on both client+server instead of some "outdated soft/hardware that 
+nobody knows how to configure properly, if that is at all possible".  
+Unfortunately it got no answers AFAICT (I'm always unsure when looking 
+at ML archives, the UIs are not the best ;)
 
-On 12/2/25 16:27, Andreas Fink wrote:
-> that sounds correct but how about the client? how is that one calling ? 
-> is it having -h 127.0.0.1 -b 127.0.0.1 ?
-> 
+"INIT_ACK.src  := INIT.dst /*for outdated clients that ignore RFC*/"
 
-I'm not sure I'm following you Andreas, since I think I already 
-mentioned the working vs non-working scenario in the initial email, and 
-shared a pcap file for the non-working one afterwards, so I'm not sure 
-what information is missing or was not clear from my side.
-By the way, I think you probably don't mean "-b", which is a --bindx-rem 
-"remove" param.
-
-working case:
-"sctp_darn -H 127.0.0.1 -P 8000 -c 127.0.0.1 -p 2905 -s"
-
-non-working case:
-"sctp_darn -H 127.0.0.1 -P 8000 -c 127.0.0.2 -p 2905 -s"
-
-
-I don't really think it's possible to make an even simpler scenario.
-Server listens on addresses A and B, and client connects (tx INIT) to B, 
-while server decides to answer (INIT_ACK) using address A.
-AFAICT, if my sctp linux stack client receives an INIT_ACK with a src 
-addr != INIT dst addr it seems to drop it.
-
-So IMHO either client or server sctp stack (or both) needs 
-fixing/improving, since the stack in my system doesn't seem to be able 
-to interopt with itself in a simple setup on the loopback interface 
-anymore (it seems it did/does on other versions, we currently run fine 
-the same setup in jenkins).
-
+https://lore.kernel.org/linux-sctp/1FCE9E8E-003A-4A00-B18E-52EC46D3064E@gmail.com/T/#u
 
 -- 
 - Pau Espin Pedrol <pespin@sysmocom.de>         http://www.sysmocom.de/
