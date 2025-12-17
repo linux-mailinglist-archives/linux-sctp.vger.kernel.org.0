@@ -1,181 +1,239 @@
-Return-Path: <linux-sctp+bounces-764-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-765-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0126CC7C95
-	for <lists+linux-sctp@lfdr.de>; Wed, 17 Dec 2025 14:18:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 10370CC8201
+	for <lists+linux-sctp@lfdr.de>; Wed, 17 Dec 2025 15:17:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A3E373010CE0
-	for <lists+linux-sctp@lfdr.de>; Wed, 17 Dec 2025 13:13:17 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 05D9130F786B
+	for <lists+linux-sctp@lfdr.de>; Wed, 17 Dec 2025 14:12:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D0CF361DBE;
-	Wed, 17 Dec 2025 13:13:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="Ij2nSalC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EE9335772D;
+	Wed, 17 Dec 2025 13:49:24 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from canpmsgout06.his.huawei.com (canpmsgout06.his.huawei.com [113.46.200.221])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f207.google.com (mail-oi1-f207.google.com [209.85.167.207])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A2503612DD
-	for <linux-sctp@vger.kernel.org>; Wed, 17 Dec 2025 13:13:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.221
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8C5324712
+	for <linux-sctp@vger.kernel.org>; Wed, 17 Dec 2025 13:49:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.207
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765977195; cv=none; b=DFROZoy6rUELEJey8cA7YU9pEvUu1jefSu9RET5sLBTI5HVpbKqLqIw5dEgZCl3XmoIBolbrwo+giPO5c8+sq9UJMU0xHl9BcSgMfwGW31qwI6Ay1shK9TTTVK+YbH4m1CWVPKKrQTv71OZzupsAVu8TCgf3eHA3dMUVz6HoQkg=
+	t=1765979364; cv=none; b=AAW2jUcxRh1JJUFxAPyQjfGKVVJKn5f/KpJYF5CPwXX0/EwFLr/8FS2O7c7KjlraNxAZbpfs9x6oeJMZ96b2ZnCsOEY/uXaaI8G/3BjoOf3ru6QW71JeHjDSHmk3B1v2MRbPDBSf9gJgFPTr/tkIUD1B5pLTzIY/uTitVANOnNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765977195; c=relaxed/simple;
-	bh=EQlvcJ4fgTlN6OzuFjO5QI2y4tCgMrwHMPVx/RGwP/4=;
-	h=Message-ID:Date:MIME-Version:To:CC:From:Subject:Content-Type; b=YqzyzBYyCsxtfXFVUbsC1tU7Tx0nVLzMHkWagKaE6hHzd6RLHFv/ToDHjg6nFmuuGAJriEe4SagGecCGMbOK321aIX1MPVS87Tjo6pWTTcExy8aLGXSwrDHKmA2Aq8jMv/kUThhNouYSym8kF11wvCQ33p73qo47vHAVSSoJnvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Ij2nSalC; arc=none smtp.client-ip=113.46.200.221
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=DajtH0JrZDbGuU/BHPu9AX6fufh9XMsczEHbslvNQ8E=;
-	b=Ij2nSalClkI514lx7u4Kp2YOho9ApTohNfxmK8kHJOqr1pJf/C/B38q/FxIPI8Jt9+3I2BHxm
-	iTbSR7keX3nujpXbcjRtY4R1KMk0OWpc0F3MCm+R0kzWKrBh0OEcL+TaWo/9PgsoONRR72Lv9Ty
-	lILT6M8yrGkjCkZYz69zBGo=
-Received: from mail.maildlp.com (unknown [172.19.163.48])
-	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4dWZ1N3gL7zRhRm
-	for <linux-sctp@vger.kernel.org>; Wed, 17 Dec 2025 21:11:04 +0800 (CST)
-Received: from kwepemk500008.china.huawei.com (unknown [7.202.194.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id 84619180488
-	for <linux-sctp@vger.kernel.org>; Wed, 17 Dec 2025 21:13:05 +0800 (CST)
-Received: from [10.136.112.207] (10.136.112.207) by
- kwepemk500008.china.huawei.com (7.202.194.93) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Wed, 17 Dec 2025 21:13:04 +0800
-Message-ID: <f5a9e456-415c-0a7c-8e73-ba3c297447f0@huawei.com>
-Date: Wed, 17 Dec 2025 21:12:57 +0800
+	s=arc-20240116; t=1765979364; c=relaxed/simple;
+	bh=5Vwwy7hL1uhdo8IHPU9L/moNqREhRtoG6iohSgZOW0c=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=uvEajfHnbJbABU+Toc3P/zdH/BbpVb5W5dd292WVCawa2ROqxnwl8Phzm1oWzjK9PNXI0V370WszFta9Du33bJJMUwdLyC1s+oUoCxm5p0gLA9C+NF2M7gNLyYwhdKZhvr4ebdlprl4vcKgq7AD1RdPHI9gaKdECv46zJb5L0x0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.207
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oi1-f207.google.com with SMTP id 5614622812f47-450aff06525so5665669b6e.0
+        for <linux-sctp@vger.kernel.org>; Wed, 17 Dec 2025 05:49:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765979361; x=1766584161;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=06BWFj+ZWS2ge2WI899eyKp7jOw541WF5gUg5w7TR7U=;
+        b=Cb/wuQ34ZuKaBWxCpJguq3pOE3rqkI/77oVFKUPc3/QYrGU1Hd/OIVKoJDvPPOs/u7
+         99N3P1zpuhoW2wp4sHXNGapwLxqSeNEmD5JOGpAw5HLXiZ5i/XbVmrlCNZuIAQffnmFN
+         tGncxube1w94F908NtQBpxwjpwWkn03NRv/oaA9JMHy/GZswBz1zuNcyE17lf77ZF81e
+         T6XE4P4JA+mZFJsWgp2rhofhkchjsi7RTnZJNIXoqnKacKwkqYgIL+NN/2lg08sQ4scI
+         6O1Y+esnOfb8I+odbZP3KCrfeEiRegkzThmyFkvgy4BjNzArY8Lo4SN13sRjg+ydgYrM
+         9JVA==
+X-Forwarded-Encrypted: i=1; AJvYcCUtS3rcxJUz0Vlc/5fwf12CxWSXHpt3m57cqKYU2vUeg3burp+Moj14Wp4gtohQCA2VcjkAc6iTOkQO@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8mzhTCT+Wgprp8gYK/qVZnN+pXhH+ytC/f46PzDHPlxp30rzH
+	heT3PNF3V598UaCoF0Ssmt8e7g7K7Y27NCTUe6ov3T2s5pci3B8fwW4/qZb2XIRKljYIfJ0LCfm
+	dbBrscemd/20cXNUmrraIwwlzsaZt2sIC24gfj668/fUY+hPXNDkw/acYPAc=
+X-Google-Smtp-Source: AGHT+IHHOhnagbZQhsbBXe1CwfKzGk+4jy262Ev57Vbg8JEw3PW0CcPAidVcZiuzpytWIWykPt/JO9jS19aQdi56YNS7ys3wp/6J
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To: <marcelo.leitner@gmail.com>, <lucien.xin@gmail.com>,
-	<linux-sctp@vger.kernel.org>
-CC: <huyizhen2@huawei.com>, <gaoxingwang1@huawei.com>
-From: Chen Zhen <chenzhen126@huawei.com>
-Subject: [BUG] null-ptr-deref bug in sctp_packet_bundle_auth
+X-Received: by 2002:a05:6820:81ca:b0:659:9a49:8dff with SMTP id
+ 006d021491bc7-65b4524c904mr7747148eaf.65.1765979361191; Wed, 17 Dec 2025
+ 05:49:21 -0800 (PST)
+Date: Wed, 17 Dec 2025 05:49:21 -0800
+In-Reply-To: <682444b7.a00a0220.104b28.0009.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6942b4e1.050a0220.2a2f17.0000.GAE@google.com>
+Subject: Re: [syzbot] [sctp?] INFO: rcu detected stall in inet6_rtm_newaddr (3)
+From: syzbot <syzbot+3e17d9c9a137bb913b61@syzkaller.appspotmail.com>
+To: davem@davemloft.net, dsahern@kernel.org, edumazet@google.com, 
+	horms@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-sctp@vger.kernel.org, lucien.xin@gmail.com, marcelo.leitner@gmail.com, 
+	netdev@vger.kernel.org, pabeni@redhat.com, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
- kwepemk500008.china.huawei.com (7.202.194.93)
 
-Hi all,
+syzbot has found a reproducer for the following issue on:
 
-We tested with syzkaller on linux-6.6 and it reported a null-ptr-deref bug:
+HEAD commit:    12b95d29eb97 Add linux-next specific files for 20251217
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=10c69d92580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2b21d95ed921dffe
+dashboard link: https://syzkaller.appspot.com/bug?extid=3e17d9c9a137bb913b61
+compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10974a2a580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1003177c580000
 
-==================================================================
-general protection fault, probably for non-canonical address 0xdffffc0000000003: 0000 [#1] SMP KASAN PTI
-KASAN: null-ptr-deref in range [0x0000000000000018-0x000000000000001f]
-CPU: 0 PID: 16 Comm: ksoftirqd/0 Tainted: G W 6.6.0 #2
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-RIP: 0010:sctp_packet_bundle_auth net/sctp/output.c:264 [inline]
-RIP: 0010:sctp_packet_append_chunk+0xb36/0x1260 net/sctp/output.c:401
-Code: 4c 89 f2 48 c1 ea 03 80 3c 02 00 0f 85 93 05 00 00 48 b8 00 00 00 00 00 fc ff df 4c 8b 7b 40 49 8d 7f 1c 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 01 38 d0 7c 08 84 d2 0f 85 57
-RSP: 0018:ffffc9000010efe8 EFLAGS: 00010207
-RAX: dffffc0000000000 RBX: ffff88810c746000 RCX: ffffffff8d758fca
-RDX: 0000000000000003 RSI: ffff888100d1cd40 RDI: 000000000000001c
-RBP: ffff88811dea8b78 R08: 0000000000000000 R09: fffffbfff27f8b7d
-R10: fffffbfff27f8b7c R11: ffffffff93fc5be7 R12: ffff88804247c000
-R13: ffff88811dea8bb8 R14: ffff88810c746040 R15: 0000000000000000
-FS: 0000000000000000(0000) GS:ffff88816e600000(0000) knlGS:0000000000000000
-CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000021000000 CR3: 000000011dfb4002 CR4: 0000000000170ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000600
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/9fb4b501730c/disk-12b95d29.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/fc92d98fa8d2/vmlinux-12b95d29.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/f25cfc55950a/bzImage-12b95d29.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3e17d9c9a137bb913b61@syzkaller.appspotmail.com
+
+rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+rcu: 	Tasks blocked on level-0 rcu_node (CPUs 0-1): P6135/1:b..l P5964/2:b..l
+rcu: 	(detected by 1, t=10502 jiffies, g=14189, q=315 ncpus=2)
+task:syz-executor    state:R  running task     stack:19496 pid:5964  tgid:5964  ppid:5963   task_flags:0x400140 flags:0x00080000
 Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5258 [inline]
+ __schedule+0x150e/0x5070 kernel/sched/core.c:6866
+ preempt_schedule_irq+0xb5/0x150 kernel/sched/core.c:7193
+ irqentry_exit+0x5d8/0x660 kernel/entry/common.c:216
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:697
+RIP: 0010:orc_find arch/x86/kernel/unwind_orc.c:228 [inline]
+RIP: 0010:unwind_next_frame+0x214/0x23d0 arch/x86/kernel/unwind_orc.c:510
+Code: ef 08 8b 15 6e 32 47 0c 8d 42 ff 44 39 f8 0f 86 78 04 00 00 44 89 f8 4c 8d 2c 85 f8 f5 e0 90 4c 89 e8 48 c1 e8 03 0f b6 04 28 <84> c0 48 89 eb 0f 85 2c 1c 00 00 45 8b 6d 00 44 89 f8 ff c0 48 8d
+RSP: 0018:ffffc900043eed38 EFLAGS: 00000a03
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: a87a6bbecf920600
+RDX: 00000000000a60ce RSI: ffffffff8be075c0 RDI: ffffffff8be07580
+RBP: dffffc0000000000 R08: ffffffff81742f85 R09: ffffffff8e13f8a0
+R10: ffffc900043eee58 R11: ffffffff81ad9f20 R12: ffffffff8aa4f9ce
+R13: ffffffff910789dc R14: ffffc900043eee08 R15: 000000000009a4f9
+ arch_stack_walk+0x11c/0x150 arch/x86/kernel/stacktrace.c:25
+ stack_trace_save+0x9c/0xe0 kernel/stacktrace.c:122
+ kasan_save_stack mm/kasan/common.c:57 [inline]
+ kasan_save_track+0x3e/0x80 mm/kasan/common.c:78
+ poison_kmalloc_redzone mm/kasan/common.c:398 [inline]
+ __kasan_kmalloc+0x93/0xb0 mm/kasan/common.c:415
+ kasan_kmalloc include/linux/kasan.h:263 [inline]
+ __kmalloc_cache_noprof+0x3e2/0x700 mm/slub.c:5780
+ kmalloc_noprof include/linux/slab.h:957 [inline]
+ kzalloc_noprof include/linux/slab.h:1094 [inline]
+ sctp_inet6addr_event+0x37f/0x740 net/sctp/ipv6.c:86
+ notifier_call_chain+0x19d/0x3a0 kernel/notifier.c:85
+ atomic_notifier_call_chain+0xda/0x180 kernel/notifier.c:223
+ ipv6_add_addr+0xda9/0x1090 net/ipv6/addrconf.c:1186
+ inet6_addr_add+0x3c3/0xce0 net/ipv6/addrconf.c:3050
+ inet6_rtm_newaddr+0x93d/0xd20 net/ipv6/addrconf.c:5059
+ rtnetlink_rcv_msg+0x7cf/0xb70 net/core/rtnetlink.c:6958
+ netlink_rcv_skb+0x208/0x470 net/netlink/af_netlink.c:2550
+ netlink_unicast_kernel net/netlink/af_netlink.c:1318 [inline]
+ netlink_unicast+0x82f/0x9e0 net/netlink/af_netlink.c:1344
+ netlink_sendmsg+0x805/0xb30 net/netlink/af_netlink.c:1894
+ sock_sendmsg_nosec+0x18f/0x1d0 net/socket.c:737
+ __sock_sendmsg net/socket.c:752 [inline]
+ __sys_sendto+0x3ce/0x540 net/socket.c:2221
+ __do_sys_sendto net/socket.c:2228 [inline]
+ __se_sys_sendto net/socket.c:2224 [inline]
+ __x64_sys_sendto+0xde/0x100 net/socket.c:2224
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xfa/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f30ce1915dc
+RSP: 002b:00007ffc905dd720 EFLAGS: 00000293 ORIG_RAX: 000000000000002c
+RAX: ffffffffffffffda RBX: 00007f30cef14620 RCX: 00007f30ce1915dc
+RDX: 0000000000000040 RSI: 00007f30cef14670 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 00007ffc905dd774 R09: 000000000000000c
+R10: 0000000000000000 R11: 0000000000000293 R12: 0000000000000003
+R13: 0000000000000000 R14: 00007f30cef14670 R15: 0000000000000000
+ </TASK>
+task:sed             state:R  running task     stack:24312 pid:6135  tgid:6135  ppid:6134   task_flags:0x400000 flags:0x00080000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5258 [inline]
+ __schedule+0x150e/0x5070 kernel/sched/core.c:6866
+ preempt_schedule_irq+0xb5/0x150 kernel/sched/core.c:7193
+ irqentry_exit+0x5d8/0x660 kernel/entry/common.c:216
+ asm_sysvec_reschedule_ipi+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
+RIP: 0010:arch_atomic64_read arch/x86/include/asm/atomic64_64.h:-1 [inline]
+RIP: 0010:raw_atomic64_read include/linux/atomic/atomic-arch-fallback.h:2583 [inline]
+RIP: 0010:atomic64_read include/linux/atomic/atomic-instrumented.h:1611 [inline]
+RIP: 0010:ktime_get_coarse_real_ts64_mg+0x37/0x1e0 kernel/time/timekeeping.c:2445
+Code: 53 48 83 ec 10 48 89 fb e8 36 04 12 00 48 c7 c7 c0 12 e1 8d be 08 00 00 00 e8 65 62 78 00 48 8b 05 5e 4d 31 0c 48 89 44 24 08 <4c> 8d 73 08 49 89 dd 49 c1 ed 03 4c 89 f0 48 c1 e8 03 48 89 04 24
+RSP: 0018:ffffc900034d75b8 EFLAGS: 00000256
+RAX: 000000261054af24 RBX: ffffc900034d7640 RCX: ffffffff81afc55b
+RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffffffff8de112c0
+RBP: ffffc900034d76b8 R08: ffffffff8de112c7 R09: 1ffffffff1bc2258
+R10: dffffc0000000000 R11: fffffbfff1bc2259 R12: dffffc0000000000
+R13: dffffc0000000000 R14: ffffc900034d7640 R15: dffffc0000000000
+ current_time+0x8e/0x360 fs/inode.c:2343
+ atime_needs_update+0x320/0x6d0 fs/inode.c:2206
+ pick_link+0x549/0xfa0 fs/namei.c:1983
+ step_into_slowpath+0x53b/0x7d0 fs/namei.c:2066
+ step_into fs/namei.c:2091 [inline]
+ walk_component fs/namei.c:2227 [inline]
+ link_path_walk+0xd50/0x18d0 fs/namei.c:2589
+ path_openat+0x2b0/0x3840 fs/namei.c:4782
+ do_filp_open+0x1fa/0x410 fs/namei.c:4813
+ do_sys_openat2+0x121/0x200 fs/open.c:1391
+ do_sys_open fs/open.c:1397 [inline]
+ __do_sys_openat fs/open.c:1413 [inline]
+ __se_sys_openat fs/open.c:1408 [inline]
+ __x64_sys_openat+0x138/0x170 fs/open.c:1408
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xfa/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fabfcd360ba
+RSP: 002b:00007fff94803a88 EFLAGS: 00000206 ORIG_RAX: 0000000000000101
+RAX: ffffffffffffffda RBX: 00007fff94803b00 RCX: 00007fabfcd360ba
+RDX: 0000000000080000 RSI: 00007fff94803b00 RDI: 00000000ffffff9c
+RBP: 00007fff94803af0 R08: 00007fff94803cf7 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000206 R12: 0000000000000017
+R13: 00007fabfcd0a000 R14: 00007fff94803d10 R15: 0000000000000000
+ </TASK>
+rcu: rcu_preempt kthread starved for 10598 jiffies! g14189 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=1
+rcu: 	Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
+rcu: RCU grace-period kthread stack dump:
+task:rcu_preempt     state:R  running task     stack:27168 pid:16    tgid:16    ppid:2      task_flags:0x208040 flags:0x00080000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5258 [inline]
+ __schedule+0x150e/0x5070 kernel/sched/core.c:6866
+ __schedule_loop kernel/sched/core.c:6948 [inline]
+ schedule+0x165/0x360 kernel/sched/core.c:6963
+ schedule_timeout+0x12b/0x270 kernel/time/sleep_timeout.c:99
+ rcu_gp_fqs_loop+0x301/0x1540 kernel/rcu/tree.c:2083
+ rcu_gp_kthread+0x99/0x390 kernel/rcu/tree.c:2285
+ kthread+0x711/0x8a0 kernel/kthread.c:463
+ ret_from_fork+0x599/0xb30 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+ </TASK>
+rcu: Stack dump where RCU GP kthread last ran:
+CPU: 1 UID: 0 PID: 0 Comm: swapper/1 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
+RIP: 0010:pv_native_safe_halt+0x13/0x20 arch/x86/kernel/paravirt.c:82
+Code: cc cc cc cc cc cc cc 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 66 90 0f 00 2d 33 4e 2b 00 f3 0f 1e fa fb f4 <e9> 48 ee 02 00 cc cc cc cc cc cc cc cc 90 90 90 90 90 90 90 90 90
+RSP: 0018:ffffc90000197de0 EFLAGS: 000002c6
+RAX: fcd00228fb9d7700 RBX: ffffffff8197888a RCX: fcd00228fb9d7700
+RDX: 0000000000000001 RSI: ffffffff8d99597b RDI: ffffffff8be075e0
+RBP: ffffc90000197f10 R08: ffff8880b87336db R09: 1ffff110170e66db
+R10: dffffc0000000000 R11: ffffed10170e66dc R12: ffffffff8fa20e70
+R13: 1ffff11003adcb70 R14: 0000000000000001 R15: 0000000000000001
+FS:  0000000000000000(0000) GS:ffff888125d2d000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fabfca09a10 CR3: 0000000076504000 CR4: 00000000003526f0
+Call Trace:
+ <TASK>
+ arch_safe_halt arch/x86/include/asm/paravirt.h:107 [inline]
+ default_idle+0x13/0x20 arch/x86/kernel/process.c:767
+ default_idle_call+0x73/0xb0 kernel/sched/idle.c:122
+ cpuidle_idle_call kernel/sched/idle.c:191 [inline]
+ do_idle+0x1ea/0x520 kernel/sched/idle.c:332
+ cpu_startup_entry+0x44/0x60 kernel/sched/idle.c:430
+ start_secondary+0x101/0x110 arch/x86/kernel/smpboot.c:312
+ common_startup_64+0x13e/0x147
+ </TASK>
 
-sctp_packet_transmit_chunk+0x31/0x250 net/sctp/output.c:189
-sctp_outq_flush_data+0xa29/0x26d0 net/sctp/outqueue.c:1111
-sctp_outq_flush+0xc80/0x1240 net/sctp/outqueue.c:1217
-sctp_cmd_interpreter.isra.0+0x19a5/0x62c0 net/sctp/sm_sideeffect.c:1787
-sctp_side_effects net/sctp/sm_sideeffect.c:1198 [inline]
-sctp_do_sm+0x1a3/0x670 net/sctp/sm_sideeffect.c:1169
-sctp_assoc_bh_rcv+0x33e/0x640 net/sctp/associola.c:1052
-sctp_inq_push+0x1dd/0x280 net/sctp/inqueue.c:88
-sctp_rcv+0x11ae/0x3100 net/sctp/input.c:243
-sctp6_rcv+0x3d/0x60 net/sctp/ipv6.c:1127
-ip6_protocol_deliver_rcu+0x12c1/0x1e40 net/ipv6/ip6_input.c:438
-ip6_input_finish+0xc8/0x260 net/ipv6/ip6_input.c:483
-NF_HOOK include/linux/netfilter.h:308 [inline]
-ip6_input+0xd1/0x430 net/ipv6/ip6_input.c:492
-dst_input include/net/dst.h:487 [inline]
-ip6_rcv_finish+0x1b9/0x5c0 net/ipv6/ip6_input.c:79
-NF_HOOK include/linux/netfilter.h:308 [inline]
-ipv6_rcv+0xf8/0x440 net/ipv6/ip6_input.c:310
-__netif_receive_skb_one_core+0x133/0x1f0 net/core/dev.c:5603
-__netif_receive_skb+0x24/0x1c0 net/core/dev.c:5717
-process_backlog+0x21d/0x7e0 net/core/dev.c:6045
-__napi_poll+0xc2/0x690 net/core/dev.c:6607
-napi_poll net/core/dev.c:6674 [inline]
-net_rx_action+0x87d/0xce0 net/core/dev.c:6810
-handle_softirqs+0x1b4/0x700 kernel/softirq.c:578
-run_ksoftirqd kernel/softirq.c:997 [inline]
-run_ksoftirqd+0x2f/0x60 kernel/softirq.c:989
-smpboot_thread_fn+0x3b9/0x860 kernel/smpboot.c:164
-kthread+0x324/0x420 kernel/kthread.c:388
-ret_from_fork+0x49/0x80 arch/x86/kernel/process.c:152
-ret_from_fork_asm+0x1b/0x30 arch/x86/entry/entry_64.S:293
 
-Modules linked in:
-kernel fault(0x1) notification starting on CPU 0
-kernel fault(0x1) notification finished on CPU 0
----[ end trace 0000000000000000 ]---
-RIP: 0010:sctp_packet_bundle_auth net/sctp/output.c:264 [inline]
-RIP: 0010:sctp_packet_append_chunk+0xb36/0x1260 net/sctp/output.c:401
-Code: 4c 89 f2 48 c1 ea 03 80 3c 02 00 0f 85 93 05 00 00 48 b8 00 00 00 00 00 fc ff df 4c 8b 7b 40 49 8d 7f 1c 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 01 38 d0 7c 08 84 d2 0f 85 57
-RSP: 0018:ffffc9000010efe8 EFLAGS: 00010207
-RAX: dffffc0000000000 RBX: ffff88810c746000 RCX: ffffffff8d758fca
-RDX: 0000000000000003 RSI: ffff888100d1cd40 RDI: 000000000000001c
-RBP: ffff88811dea8b78 R08: 0000000000000000 R09: fffffbfff27f8b7d
-R10: fffffbfff27f8b7c R11: ffffffff93fc5be7 R12: ffff88804247c000
-R13: ffff88811dea8bb8 R14: ffff88810c746040 R15: 0000000000000000
-FS: 0000000000000000(0000) GS:ffff88816e600000(0000) knlGS:0000000000000000
-CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000021000000 CR3: 000000011dfb4002 CR4: 0000000000170ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000600
-Code disassembly (best guess):
-0: 4c 89 f2 mov %r14,%rdx
-3: 48 c1 ea 03 shr $0x3,%rdx
-7: 80 3c 02 00 cmpb $0x0,(%rdx,%rax,1)
-b: 0f 85 93 05 00 00 jne 0x5a4
-11: 48 b8 00 00 00 00 00 movabs $0xdffffc0000000000,%rax
-18: fc ff df
-1b: 4c 8b 7b 40 mov 0x40(%rbx),%r15
-1f: 49 8d 7f 1c lea 0x1c(%r15),%rdi
-23: 48 89 fa mov %rdi,%rdx
-26: 48 c1 ea 03 shr $0x3,%rdx
-
-2a: 0f b6 14 02 movzbl (%rdx,%rax,1),%edx <-- trapping instruction
-2e: 48 89 f8 mov %rdi,%rax
-31: 83 e0 07 and $0x7,%eax
-34: 83 c0 01 add $0x1,%eax
-37: 38 d0 cmp %dl,%al
-39: 7c 08 jl 0x43
-3b: 84 d2 test %dl,%dl
-3d: 0f .byte 0xf
-3e: 85 .byte 0x85
-3f: 57 push %rdi
-==================================================================
-
-The direct cause is that chunk->shkey is NULL in sctp_packet_bundle_auth().
-
-	if (!chunk->auth)
-		return retval;
-
-	auth = sctp_make_auth(asoc, chunk->shkey->key_id);    <=== BUG
-	if (!auth)
-		return retval;
-
-It is simple to fix it by adding a null-ptr check before sctp_make_auth() but maybe
-there are better solutions?
-
-Thanks.
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
