@@ -1,53 +1,53 @@
-Return-Path: <linux-sctp+bounces-770-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-771-lists+linux-sctp=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-sctp@lfdr.de
 Delivered-To: lists+linux-sctp@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26D51D0CDB8
-	for <lists+linux-sctp@lfdr.de>; Sat, 10 Jan 2026 03:51:38 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 982D4D10D41
+	for <lists+linux-sctp@lfdr.de>; Mon, 12 Jan 2026 08:16:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 928853008C55
-	for <lists+linux-sctp@lfdr.de>; Sat, 10 Jan 2026 02:51:25 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8E840300A348
+	for <lists+linux-sctp@lfdr.de>; Mon, 12 Jan 2026 07:16:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D49FD19F40B;
-	Sat, 10 Jan 2026 02:51:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2862B322749;
+	Mon, 12 Jan 2026 07:16:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="WdntDRnw"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="apBjN/Fl"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
+Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 674F9946A
-	for <linux-sctp@vger.kernel.org>; Sat, 10 Jan 2026 02:51:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17C9730FF31
+	for <linux-sctp@vger.kernel.org>; Mon, 12 Jan 2026 07:16:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.225
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768013482; cv=none; b=DMrQjiJAfsgMun8OavwzMyx6wYkGu12/Ng7ERAr/FlMVj+C3C9GxH5z6pU/GZftNQ0bQeOa4fM3iySZMDcu7661gauoa1jm4PpYYl9DEw22yd1RfNeTX+FIlStIxdks0PLCOe/pjr8F/8Fc/4dYjG8ZMbgh928r6hEPWTKCuNYc=
+	t=1768202178; cv=none; b=PsYUixu676vdzlfrOlJ3NdTiUgMaz1FH793ItEaFLWBRviFnj6yR1RFLGyX/Tq3smQnQfSfu4JIR2CxD2jLwSAQ9TZJ6E2LA76UOR+WVZgOU4GBmDnEMMLosh2bDKNK2QUwBgIit23CX/4HDeUe8rN9+3T75ueyCNDgBgZljjoc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768013482; c=relaxed/simple;
-	bh=zbnRhtvWYeIc18nwrdwXW/Yp9U1HOOrQKBWAnzH763Q=;
+	s=arc-20240116; t=1768202178; c=relaxed/simple;
+	bh=//cTIntK1SjcaM+96Rlge2zgb+m943BGnUa3dmCs7+o=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=rE+THR4E6YGGx2+cSaW/Or0q0twV4rzaqwb0ZST9IbZ1GrNeskYvx77OJX538jQu9t4twzMcIHJZzitgMCpyNhYkHjVDHz0USYzuK5KCd65HOR9vuA0gAUMaqt5owDl/qY7kfcXk+eC0/FMgjQIhP4MmyM8SQVP9VKpcVQCiQUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=WdntDRnw; arc=none smtp.client-ip=113.46.200.219
+	 In-Reply-To:Content-Type; b=pJfPbTb7Nph0QsBnQgkM4kOS5hZ0fVcbp2wr6/y6FJfBY817eLc/1b/AlQZ3pncwfltWR+q85DpP2wlUUFn1EppecYIXaSu1D+VhOHABIcoH6P36eWY+PQcJmmZSXlsvTs5tQkZMnx0CaE74RVzUZrynqzQ6k/B2PsvXpVD1Ra0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=apBjN/Fl; arc=none smtp.client-ip=113.46.200.225
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
 	c=relaxed/relaxed; q=dns/txt;
 	h=From;
-	bh=yGE15mLX3y43BLDWhU4swfWek4kpX6Udps+P48qjOpk=;
-	b=WdntDRnwvA8ezyRX3kMBeELLCCZwBfS8eaEPLUxQVKBeyrINSGw10dVoqw7udxfg6O6L3IxSW
-	69hz0KfSietSdRQc+6S5AraxluF8cz0RjTrEH0+i0iQA1K6dkV7eZ/E1Yqc7XRTbs0mdRCOZnVe
-	hOsLSsyS9ihrKWWYu6YEE5c=
-Received: from mail.maildlp.com (unknown [172.19.163.104])
-	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4dp33K5LSmz1prNN
-	for <linux-sctp@vger.kernel.org>; Sat, 10 Jan 2026 10:47:57 +0800 (CST)
+	bh=Kx9bBkjy2grhTLZYd8LPxMhwXd3sbB1FtciBRE9Xmm0=;
+	b=apBjN/FlzW0BGvD0sUbjrjtcH3c3k/wBKVoU0+ulifLto+8j4E8l/kFRnRKe9XRJ9qUSjvZYF
+	UU8eQF4coHP21FtTV8Z1Hgr8W+yGwClzJ/THt2+W5Lz9VZvDIYc3mxAaRtIpQZrxqGzgzLLS0az
+	OHEyDcW2Lq3G9TKC+b+jcW4=
+Received: from mail.maildlp.com (unknown [172.19.163.200])
+	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4dqNr76Khjz1K96D
+	for <linux-sctp@vger.kernel.org>; Mon, 12 Jan 2026 15:12:55 +0800 (CST)
 Received: from kwepemk500008.china.huawei.com (unknown [7.202.194.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id B533E404AD
-	for <linux-sctp@vger.kernel.org>; Sat, 10 Jan 2026 10:51:16 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 2873240563
+	for <linux-sctp@vger.kernel.org>; Mon, 12 Jan 2026 15:16:12 +0800 (CST)
 Received: from [10.136.112.207] (10.136.112.207) by
  kwepemk500008.china.huawei.com (7.202.194.93) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Sat, 10 Jan 2026 10:51:16 +0800
-Message-ID: <ed25debe-09ae-4d6d-d93a-715cd58e8bfc@huawei.com>
-Date: Sat, 10 Jan 2026 10:51:15 +0800
+ 15.2.1544.11; Mon, 12 Jan 2026 15:16:11 +0800
+Message-ID: <0b750a30-8782-fff2-1ebd-a7856a1b0462@huawei.com>
+Date: Mon, 12 Jan 2026 15:16:11 +0800
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -70,7 +70,7 @@ From: Chen Zhen <chenzhen126@huawei.com>
 In-Reply-To: <CADvbK_dvRiP05x-+rfvz0vbRO5a4iVmEFKmSsKiQnLEmKENNxw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
  kwepemk500008.china.huawei.com (7.202.194.93)
 
 On 26/1/10 6:02, Xin Long wrote:
@@ -199,8 +199,12 @@ On 26/1/10 6:02, Xin Long wrote:
 > 
 > Thanks.
 > .
-Yes, I will try with this patch ASAP.
-Thanks for your reply!
+Hi Xin, the patch works for me!
+By using the /proc/self/fail-nth, I can stably trigger failslab force failure of
+sctp_auth_asoc_init_active_key() and reproduce the bug. After applying the patch,
+null-ptr-deref will not recur.
+
+Would you please submit the patch? Thanks.
 
 Best Regards,
 Chen Zhen
