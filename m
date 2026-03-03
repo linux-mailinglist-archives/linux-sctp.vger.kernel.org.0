@@ -1,53 +1,53 @@
-Return-Path: <linux-sctp+bounces-932-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-931-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iGvrB0TSpmnHWgAAu9opvQ
-	(envelope-from <linux-sctp+bounces-932-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Tue, 03 Mar 2026 13:21:24 +0100
+	id MLhJLb/RpmnHWgAAu9opvQ
+	(envelope-from <linux-sctp+bounces-931-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Tue, 03 Mar 2026 13:19:11 +0100
 X-Original-To: lists+linux-sctp@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CEC51EF4A9
-	for <lists+linux-sctp@lfdr.de>; Tue, 03 Mar 2026 13:21:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 35C771EF401
+	for <lists+linux-sctp@lfdr.de>; Tue, 03 Mar 2026 13:19:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D13BC30CE522
-	for <lists+linux-sctp@lfdr.de>; Tue,  3 Mar 2026 12:15:23 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9F1F530B7756
+	for <lists+linux-sctp@lfdr.de>; Tue,  3 Mar 2026 12:14:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0AA8346FB8;
-	Tue,  3 Mar 2026 12:14:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55F35341ADD;
+	Tue,  3 Mar 2026 12:14:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=crudebyte.com header.i=@crudebyte.com header.b="b45/xuqs"
+	dkim=pass (4096-bit key) header.d=crudebyte.com header.i=@crudebyte.com header.b="HqDnIkLb"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E1AF33FE06;
-	Tue,  3 Mar 2026 12:14:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D3F233F8B8;
+	Tue,  3 Mar 2026 12:14:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.189.157.229
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772540097; cv=none; b=pbGopzdmEdcMLJlHZZvt7h0kzV00ZUROfvIsqb1ehrxwGUnNztT4mNADf0GTemAC/H1Apsg0UkyCwPrDU4rIGD8xe5CYbHynKeqjqdQgjiQjYfD3fSabLbaZ8K5mlnFaH5g4kX/QBz3UpjXa1V6gqTlEfwYrsI7QYBK9ku70A7c=
+	t=1772540094; cv=none; b=W9lMdJrNUdzDWV+VZFSxsK42d60SfXOVJtIUn0LyJ7bbFKwvskF66jxmaF/UZ5vhdeVTHekw5LDgbSXQlmEcAe3x0fSexFH9heRdEok6Jc+z3zC1GBhOZvtYg17s90/qgBYn/dFMlhWIuFtUTijaumVUO4uld/EG5+82kjc+9JQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772540097; c=relaxed/simple;
-	bh=Py8Zp69P5/J1BlQCksfycmAarkSiVopSUaC0+sAz+Yc=;
+	s=arc-20240116; t=1772540094; c=relaxed/simple;
+	bh=4gqUQYdXZBfhJ6Y1LdTjX7uZzevwVLYzBnZ178wNSt8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fc2KqkoCld3v9f+4/QuviZs+j7pLDwkOgGYxrBw3iv7pGnhecygJgIJ0ugBZ0D62BRrCblDEfUsrO+tgSCc0yI6JivG5v749wZgQUWDSMiU7TOIee8iJmCk1mNZIpQATSV30yTWm7YYAVnaIYeZm3KgDQzx41MUCrGZOSljYGPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=crudebyte.com; spf=pass smtp.mailfrom=crudebyte.com; dkim=pass (4096-bit key) header.d=crudebyte.com header.i=@crudebyte.com header.b=b45/xuqs; arc=none smtp.client-ip=5.189.157.229
+	 MIME-Version:Content-Type; b=UBeMmEPaf18pdJ+G+Ohs1PxIc3a13vlSmJhiHD4hvs3HyMgc3bcamR27/cPIT6NdkD9WOJXutoXb8kfL7X9mqebspjZm6sbP6wB4iL7s/503e3TQJB/R6PZ7YzuG+y+enNlbKLbRNT/bMCZh4WcsmWIT45t2RWN6ONuwT5zpLag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=crudebyte.com; spf=pass smtp.mailfrom=crudebyte.com; dkim=pass (4096-bit key) header.d=crudebyte.com header.i=@crudebyte.com header.b=HqDnIkLb; arc=none smtp.client-ip=5.189.157.229
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=crudebyte.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crudebyte.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Content-ID:Content-Description;
-	bh=sEoIOy08sNDPM7R5rm77ylqbd67+xSmbEywB7fDE1l0=; b=b45/xuqsDe3UOPQGaSOC3QVfXK
-	OUdoPRzyNDl+yB4fHKVaFWk8VF87HMtM4PYj4R2Fj4RpvcBDUY2ZRib9drn+oqZiRxQCtGar4RuAz
-	RYpsEbooDPugVAlnLrqpLhL+RChtlDNEybUZnd2yTo6Y9uqRr+1WKo0xl+84dQj8eWwrm7umz7n0w
-	S0EXkqOXa2C/JE8ObWOt92H0I3bqxVdgJ9TfYidSDZtw7bmGYFyYek8qwJZQAKn3MZmmf/FUVClZB
-	QWCtVuugHhF8BNOyUJFLJSfWPIXAHjH3TLcWIb8OST54dg+7vIizA1SPKkby0pw/QTg0kPbnj4Wj9
-	VeB+nqiUcTgosudQMsEBFy4QC+CVa0DVQMYM3UhAhXRVcGAw2OrwsIYL9SNJioU6URY8vyDA6TwfM
-	CFYsOZ3h1lK3cnDA5o2cflFeZC32omihqCAVM51Ge0wTTskASCR9w0ENeA5eVA/akwkz+TZ5d3AsE
-	7f82uN5RuzZACblKcmQqEKYQjiNJSERv0YAwUBb/EiPVB4IwaXQdg3R2xm5FyvBpIz+8+5sqHHPrp
-	714s96tE/7YqJbu0kX52r+TMH8FczKREFdRsqPG+YK+I8GIlGaziiB8fLP6RTgOHSdf3lUuYeXzdb
-	ttbE75RJ/SInwkaKpg3BOdQZ8WJQK3Z8q+sKFDgvs=;
+	bh=6morsqL1rf2svzHpl7Mgcq7P7Za1rjxSr9X2GzDxJdQ=; b=HqDnIkLb9g/Hsc8NjMh6Jj9WuM
+	MzJbEDxoSbJB6oNviZ4lhLElZSwdxUq+F82IhdhMr3/l3EIr7ekENzTfWw1alK0l7gFMBknTTbllK
+	rQiTpC5jrJRp5O9Y1BXau586rPz904ODCjVtDrL/S+fcUwcyE3KQHYPQE7yHCQgEDc8jdW2FFMvnt
+	8BFo41dQEnn19Baat6muvD8WHIuTeXI5DV3hJWIvjJJnnIbJ9NBNkEHuffv8Z0iXv2/2WH2/hxxuH
+	bQk7qyA82VKBDS4IWm4WLmrZDk/8F2VTqK9lWDvGIID23xeCtmOUbbOU5nkyVR/RcS3L+8d3GznDt
+	Co3UvqraJhe1cjvRT3F0oMQn4owK/B7J/FhwdoT/TARifEt06mcA+ESiihNW/SIasrPSJHOjZxjau
+	19CUACfNAgbx8938xysaW9hCoTK95R7R5EP2KKkB7w4xq+Xr5QZHTBanCME4DOR0egc7lmc8Iwow+
+	6QdiLyA9W5tnh0qszmpT1je2sF3FDWXPdKIW8B5OWRyh6mmktdJOqx2KnWKFBZUmJIRSr0SYCgoEj
+	OXekGpcPmr2OGrtA46WUBXf4g/mM8I/cnPWeWBCwtWVWaywFhrbuiZs4N+cAgdTRI0a7P2lT1kapU
+	+AuwoWhfJXGO+AHTpCpSIxdbyzli+byB6v/wTaiSQ=;
 From: Christian Schoenebeck <linux_oss@crudebyte.com>
 To: Alexander Viro <viro@zeniv.linux.org.uk>,
  Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
@@ -153,13 +153,14 @@ Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-bluetooth@vger.kernel.org, linux-can@vger.kernel.org,
  linux-sctp@vger.kernel.org, bpf@vger.kernel.org,
  Jeff Layton <jlayton@kernel.org>
-Subject: Re: [PATCH v2 016/110] 9p: use PRIino format for i_ino
-Date: Tue, 03 Mar 2026 12:52:39 +0100
-Message-ID: <12847641.O9o76ZdvQC@weasel>
-In-Reply-To: <20260302-iino-u64-v2-16-e5388800dae0@kernel.org>
+Subject:
+ Re: [PATCH v2 069/110] 9p: replace PRIino with %llu/%llx format strings
+Date: Tue, 03 Mar 2026 13:12:51 +0100
+Message-ID: <13960165.uLZWGnKmhe@weasel>
+In-Reply-To: <20260302-iino-u64-v2-69-e5388800dae0@kernel.org>
 References:
  <20260302-iino-u64-v2-0-e5388800dae0@kernel.org>
- <20260302-iino-u64-v2-16-e5388800dae0@kernel.org>
+ <20260302-iino-u64-v2-69-e5388800dae0@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -168,7 +169,7 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="utf-8"
-X-Rspamd-Queue-Id: 9CEC51EF4A9
+X-Rspamd-Queue-Id: 35C771EF401
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -182,7 +183,7 @@ X-Spamd-Result: default: False [0.34 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_COUNT_THREE(0.00)[3];
-	TAGGED_FROM(0.00)[bounces-932-lists,linux-sctp=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-931-lists,linux-sctp=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FREEMAIL_TO(0.00)[zeniv.linux.org.uk,kernel.org,suse.cz,goodmis.org,efficios.com,intel.com,infradead.org,mit.edu,linux.dev,suse.de,redhat.com,manguebit.org,dilger.ca,suse.com,oracle.com,brown.name,talpey.com,samba.org,gmail.com,microsoft.com,dubeyko.com,ionkov.net,codewreck.org,auristor.com,themaw.net,cs.cmu.edu,fluxnic.net,tyhicks.com,physik.fu-berlin.de,vivo.com,artax.karlin.mff.cuni.cz,nod.at,paragon-software.com,fasheh.com,evilplan.org,linux.alibaba.com,omnibond.com,szeredi.hu,alarsen.net,huawei.com,wdc.com,canonical.com,paul-moore.com,namei.org,hallyn.com,linux.ibm.com,schaufler-ca.com,amd.com,ffwll.ch,linaro.org,google.com,davemloft.net,arm.com,linux.intel.com,dev.tdt.de,yaina.de,holtmann.org,hartkopp.net,pengutronix.de,secunet.com,gondor.apana.org.au,fomichev.me,iogearbox.net];
@@ -201,9 +202,9 @@ X-Spamd-Result: default: False [0.34 / 15.00];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[crudebyte.com:dkim,crudebyte.com:email,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Monday, 2 March 2026 21:24:00 CET Jeff Layton wrote:
-> Convert 9p i_ino format strings to use the PRIino format
-> macro in preparation for the widening of i_ino via kino_t.
+On Monday, 2 March 2026 21:24:53 CET Jeff Layton wrote:
+> Now that i_ino is u64 and the PRIino format macro has been removed,
+> replace all uses in 9p with the concrete format strings.
 > 
 > Signed-off-by: Jeff Layton <jlayton@kernel.org>
 > ---
@@ -212,8 +213,26 @@ On Monday, 2 March 2026 21:24:00 CET Jeff Layton wrote:
 >  fs/9p/vfs_inode_dotl.c | 6 +++---
 >  3 files changed, 8 insertions(+), 8 deletions(-)
 
+9p uses the following macro to convert the 9p network protocol's QID path from
+u64 (all platforms) to ino_t. The 32-bit path of this macro should be dropped
+after this change, as it would unnecessarily truncate the value to 32-bit now
+[fs/9p/v9fs_vfs.h]:
+
+#if (BITS_PER_LONG == 32)
+#define QID2INO(q) ((ino_t) (((q)->path+2) ^ (((q)->path) >> 32)))
+#else
+#define QID2INO(q) ((ino_t) ((q)->path+2))
+#endif
+
+You are not breaking anything, if you happen to send a v3, that would be nice
+to be dropped, otherwise we'll handle that on our end later on:
+
 Reviewed-by: Christian Schoenebeck <linux_oss@crudebyte.com>
 
+I wonder whether that exceeded Claude's context size, or if that's in line
+with the prompt specified by you.
+
+/Christian
 
 
 
