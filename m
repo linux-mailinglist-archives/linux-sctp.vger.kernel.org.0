@@ -1,189 +1,167 @@
-Return-Path: <linux-sctp+bounces-1068-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1069-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gJWfLDFmsGloigIAu9opvQ
-	(envelope-from <linux-sctp+bounces-1068-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Tue, 10 Mar 2026 19:42:57 +0100
+	id 0AbfCIJ2sGnJjQIAu9opvQ
+	(envelope-from <linux-sctp+bounces-1069-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Tue, 10 Mar 2026 20:52:34 +0100
 X-Original-To: lists+linux-sctp@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53FA32568F6
-	for <lists+linux-sctp@lfdr.de>; Tue, 10 Mar 2026 19:42:57 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD7A125732A
+	for <lists+linux-sctp@lfdr.de>; Tue, 10 Mar 2026 20:52:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D9D1930848D7
-	for <lists+linux-sctp@lfdr.de>; Tue, 10 Mar 2026 18:41:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C4FD0304DF38
+	for <lists+linux-sctp@lfdr.de>; Tue, 10 Mar 2026 19:52:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5053B3CBE71;
-	Tue, 10 Mar 2026 18:40:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kH0xiiWz"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1882935A38D;
+	Tue, 10 Mar 2026 19:52:17 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from melduny.fyrkat.no (melduny.fyrkat.no [217.144.76.212])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370E83B637E
-	for <linux-sctp@vger.kernel.org>; Tue, 10 Mar 2026 18:40:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 157633542CF;
+	Tue, 10 Mar 2026 19:52:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.144.76.212
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773168055; cv=none; b=ilDYNdH48+G/5mUcR+5MchHz6Izv2Oth+UvxMxvFa7j26+8sVaUTRvIveSo+IVo0oL6Qx1G5nVaRRrNurhdKVZFaxJqnTWohXAxAJhC1+pVGIddEZNIVXdjxIzi0rHe+wLz+PDFyD125KTRClRIGoUhceaNOcJ9bftJTxbzGBa0=
+	t=1773172337; cv=none; b=Ws8oXW8+FNpP06ngNgolfrMgeCrltogN5WBgdEfTxgRZjUcKhhxPgvIzJ+OFf3GYlG5LLVELld8ZD876phJSN9T92/8Mvb27nneON+owb4ylb7TVF/JuD+Ch1krkZCSmMs351VA28QmC5JEfadJo40z3zjxXWwkiWTY/MaVtJkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773168055; c=relaxed/simple;
-	bh=67BO0RZg8rxb/E50RmGcBJlsPR5Ae9xmCy+Q7v8QtDY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=obpF9d47ETscXfhi8iycuu8WmcXU94DPM+NQ6AOaBRn6a2Aku9Kk7etdXD9uLyGuY24gORivJ7iUf6vHUYKPC4sSQkqCUd5gu4F8nkALFAo2+EbKle3KQmehYJ92kiyzoTzdIEKFtBcboMqDmIDRSGCuG52JVwBvlj4t4du6XzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kH0xiiWz; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c70fb6aa323so4742395a12.3
-        for <linux-sctp@vger.kernel.org>; Tue, 10 Mar 2026 11:40:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773168050; x=1773772850; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bjFZ9oZWWc3RZ4UdO5rq+AZbr7uPDX73K58gh1+yuH0=;
-        b=kH0xiiWz4KeHg8qM+UQYFRGEoaB5YhGQ1/l342lI48vVjCWqHFWSBUDJtSv8g6YdEb
-         WUvbLXs80bxV+xnMTu2IxnxqQ1WawTtw06PwWKuvZNeHk5D3euuYdO1/s0++E4FpGP2z
-         +c3ttwFV6WwPOQpNHM7WUIHZNaqG5koiMMCxTax1rBk+j7pB0850FJbGseMzgmcav/Sc
-         D4sAVnEuBVkUt07E/ANMW8DM/NJ+n/hx2N6JUcXYsLZYrFMsnwCK7vKttbH8x8ketzgA
-         AEJgLDRmf5idGKEt1ix0VwO4x51qzzz9/bjh5SLZJM6RE+ISqePxLY2ZYvsw4O/i3F73
-         NyLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773168050; x=1773772850;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bjFZ9oZWWc3RZ4UdO5rq+AZbr7uPDX73K58gh1+yuH0=;
-        b=EFKkhPqfrVIY/r3EWhvPkiny2XdPUqBxlvGjrf1PDQTIw7gtulxi1MEEthMsB3ABAB
-         bma+uxLlygwwLb2K1YbidzMohpJ65SJwojH6ifp6R2EhyBfJCPGjTN+OMS+nPhiR49vw
-         8Lx1mf5KnMj/ypDqlGE9mxnB4YVBf5kFELN8mhTNqvKe52VFSwyumHve/fR5knY5xdQJ
-         eFjvGX3uXozT7izX6hNQMyUNUOjwfvcbiW3yfT6YPfsqMrmVydHteOsf4A53aya7+Ld0
-         xa5VBCycx3mq6JYX2G+1a0MvCrgp7L9PnwaIruIodQ6YvHlCUFIY3q8N/3Ci9Te0Zj5a
-         loVA==
-X-Forwarded-Encrypted: i=1; AJvYcCVRKo1dSdosqgKuDdCydz+XjQ8E9bHp96Z0HyyxxYSy5uQnu2Gvn19pKcfcxGPgAU8q3cokFD2j534+@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZM18T+EJY+UPfMroTTN/niRbFi+NAO4z8NPPtc1qr+GVwICg/
-	IcfFNqfCUyFK+6qdYpsu8gahPucoNBnKlhPYi8B2B83t3lNLLyNSL5kM
-X-Gm-Gg: ATEYQzzeSP0QIkminPNKm1NwcDJ5PoWn//DIQkCoLVuJlb2bs0gmEwempBmt6tK/OXy
-	PI/9wFBeT4eUpce1j0mHEjfdbLZwFry3h1jo0ElMkEk+NOkEFdVeJNimwYnYlVvGjbI+HJLL57X
-	ra3gakfqN0wH5LUGlRbrPaiQTfiBRg/8+F/I+ubqYoj5bKqVP1D1RhYXDB+CZ4G42JUoJnk1wJn
-	Xz/9COYC/T5YA4cMYkPNw4Cwt2Jyvp3xYxhESOM74xbqTz3oQAL5x76VSRdDmLG9b4tQjj3g2Oy
-	XHs5EW45Jy/3nXCihXiJtgUMvwz+5whWb86Kn+d9Cp6cGVfMJXCoonkX/Dly6R3fl2PMQVqA+OL
-	bFXyzhrf6rAfS7z7kuLvSCNHPJS/ciJOQCM2UvOt/wPk02UsnzgXTsNGkIeNYdz8fv5c+h/WdUx
-	19IV2Tbs7iDW32KMHEgyTDei1sRLoUXcyEQk9yk1D+c5LFBw==
-X-Received: by 2002:a17:903:28c8:b0:2ae:5671:7071 with SMTP id d9443c01a7336-2ae8252cf0fmr96662285ad.43.1773168050081;
-        Tue, 10 Mar 2026 11:40:50 -0700 (PDT)
-Received: from google.com ([2402:7500:a44:85b:2953:97d3:b283:95c3])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae83e58592sm220535625ad.14.2026.03.10.11.40.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2026 11:40:49 -0700 (PDT)
-Date: Wed, 11 Mar 2026 02:40:36 +0800
-From: Kuan-Wei Chiu <visitorckw@gmail.com>
-To: Philipp Hahn <phahn-oss@avm.de>
-Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com,
-	bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr,
-	dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
-	gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org,
-	intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
-	kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-	linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-	linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
-	linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-	ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
-	sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
-	tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev
-Subject: Re: [PATCH 00/61] treewide: Use IS_ERR_OR_NULL over manual NULL
- check - refactor
-Message-ID: <abBlpGKO842B3yl9@google.com>
-References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
+	s=arc-20240116; t=1773172337; c=relaxed/simple;
+	bh=ZC/kikINZ4TAvirVIFkqBizjiOt39ErEkuGXZ1Z0W+Y=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=spsv9j9FnU7JyeT9JkMuLJ5vAVexowszWi1mv5wnm4d1Wf9jIYq0HStyT8DGEoIvlPu4X8jJVdBqNDn8ka0pQoctIlLl68/VYiVM8B0meHe600Js4BcrLOas6s3x+PS7Hjez6hblBX1zrFMIV1FoyyPsYqA7ZrPZqU57Jyx4c8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kolla.no; spf=pass smtp.mailfrom=kolla.no; arc=none smtp.client-ip=217.144.76.212
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kolla.no
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kolla.no
+Received: by melduny.fyrkat.no (Postfix) with ESMTPSA id 51FE78D0F;
+	Tue, 10 Mar 2026 19:40:41 +0000 (UTC)
+Date: Tue, 10 Mar 2026 20:40:36 +0100 (CET)
+From: =?UTF-8?Q?Kolbj=C3=B8rn_Barmen?= <linux-m68k@kolla.no>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+cc: Fernando Fernandez Mancera <fmancera@suse.de>, netdev@vger.kernel.org, 
+    linux-kernel@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>, 
+    Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
+    Selvin Xavier <selvin.xavier@broadcom.com>, 
+    Andrew Lunn <andrew+netdev@lunn.ch>, 
+    "David S. Miller" <davem@davemloft.net>, 
+    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+    Paolo Abeni <pabeni@redhat.com>, Ido Schimmel <idosch@nvidia.com>, 
+    Petr Machata <petrm@nvidia.com>, Simon Horman <horms@kernel.org>, 
+    Saurav Kashyap <skashyap@marvell.com>, Javed Hasan <jhasan@marvell.com>, 
+    "maintainer:BROADCOM BNX2FC 10 GIGABIT FCOE DRIVER" <GR-QLogic-Storage-Upstream@marvell.com>, 
+    "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+    "Martin K. Petersen" <martin.petersen@oracle.com>, 
+    Nilesh Javali <njavali@marvell.com>, 
+    Manish Rangankar <mrangankar@marvell.com>, 
+    Varun Prakash <varun@chelsio.com>, Alexander Aring <aahringo@redhat.com>, 
+    David Teigland <teigland@redhat.com>, 
+    Andreas Gruenbacher <agruenba@redhat.com>, 
+    Nikolay Aleksandrov <razor@blackwall.org>, 
+    David Ahern <dsahern@kernel.org>, Pablo Neira Ayuso <pablo@netfilter.org>, 
+    Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>, 
+    David Howells <dhowells@redhat.com>, 
+    Marc Dionne <marc.dionne@auristor.com>, 
+    Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, 
+    Xin Long <lucien.xin@gmail.com>, Jon Maloy <jmaloy@redhat.com>, 
+    Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, 
+    Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, 
+    Arnd Bergmann <arnd@arndb.de>, 
+    Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+    Eric Biggers <ebiggers@kernel.org>, Michal Simek <michal.simek@amd.com>, 
+    Luca Weiss <luca.weiss@fairphone.com>, Sven Peter <sven@kernel.org>, 
+    Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
+    Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>, 
+    Andrew Morton <akpm@linux-foundation.org>, David Gow <david@davidgow.net>, 
+    Herbert Xu <herbert@gondor.apana.org.au>, 
+    Ryota Sakamoto <sakamo.ryota@gmail.com>, 
+    Kuniyuki Iwashima <kuniyu@google.com>, Kir Chou <note351@hotmail.com>, 
+    Kuan-Wei Chiu <visitorckw@gmail.com>, 
+    Vikas Gupta <vikas.gupta@broadcom.com>, 
+    Bhargava Marreddy <bhargava.marreddy@broadcom.com>, 
+    Rajashekar Hudumula <rajashekar.hudumula@broadcom.com>, 
+    =?UTF-8?Q?Markus_Bl=C3=B6chl?= <markus@blochl.de>, 
+    "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>, 
+    "open list:INFINIBAND SUBSYSTEM" <linux-rdma@vger.kernel.org>, 
+    "open list:NETRONOME ETHERNET DRIVERS" <oss-drivers@corigine.com>, 
+    "open list:BROADCOM BNX2FC 10 GIGABIT FCOE DRIVER" <linux-scsi@vger.kernel.org>, 
+    "open list:DISTRIBUTED LOCK MANAGER (DLM)" <gfs2@lists.linux.dev>, 
+    "open list:ETHERNET BRIDGE" <bridge@lists.linux.dev>, 
+    "open list:NETFILTER" <netfilter-devel@vger.kernel.org>, 
+    "open list:NETFILTER" <coreteam@netfilter.org>, 
+    "open list:RXRPC SOCKETS (AF_RXRPC)" <linux-afs@lists.infradead.org>, 
+    "open list:SCTP PROTOCOL" <linux-sctp@vger.kernel.org>, 
+    "open list:TIPC NETWORK LAYER" <tipc-discussion@lists.sourceforge.net>
+Subject: Re: [PATCH 01/10 net-next] ipv6: convert CONFIG_IPV6 to built-in
+ only and clean up Kconfigs
+In-Reply-To: <01a4936f-77cd-4c60-a1be-cabec872a2bb@kernel.org>
+Message-ID: <e54d887c-5a70-b8c9-aeef-433c5134dd14@kolla.no>
+References: <20260309022013.5199-1-fmancera@suse.de> <20260309022013.5199-2-fmancera@suse.de> <01a4936f-77cd-4c60-a1be-cabec872a2bb@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
-X-Rspamd-Queue-Id: 53FA32568F6
+Content-Type: text/plain; charset=US-ASCII
+X-Rspamd-Queue-Id: BD7A125732A
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [2.04 / 15.00];
+	DMARC_POLICY_REJECT(2.00)[kolla.no : SPF not aligned (relaxed), No valid DKIM,reject];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-1068-lists,linux-sctp=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TO_DN_SOME(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[visitorckw@gmail.com,linux-sctp@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[54];
-	TAGGED_RCPT(0.00)[linux-sctp];
-	NEURAL_HAM(-0.00)[-1.000];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[suse.de,vger.kernel.org,linux-m68k.org,ziepe.ca,kernel.org,broadcom.com,lunn.ch,davemloft.net,google.com,redhat.com,nvidia.com,marvell.com,HansenPartnership.com,oracle.com,chelsio.com,blackwall.org,netfilter.org,strlen.de,nwl.cc,auristor.com,gmail.com,oss.qualcomm.com,arndb.de,amd.com,fairphone.com,bp.renesas.com,renesas.com,linux-foundation.org,davidgow.net,gondor.apana.org.au,hotmail.com,blochl.de,lists.linux-m68k.org,corigine.com,lists.linux.dev,lists.infradead.org,lists.sourceforge.net];
+	TAGGED_FROM(0.00)[bounces-1069-lists,linux-sctp=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	TAGGED_RCPT(0.00)[linux-sctp,netdev];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[linux-m68k@kolla.no,linux-sctp@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[69];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.803];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,suse.de:email,kolla.no:mid]
 X-Rspamd-Action: no action
 
-Hi Philipp,
+On Mon, 9 Mar 2026, Krzysztof Kozlowski wrote:
 
-On Tue, Mar 10, 2026 at 12:48:26PM +0100, Philipp Hahn wrote:
-> While doing some static code analysis I stumbled over a common pattern,
-> where IS_ERR() is combined with a NULL check. For that there is
-> IS_ERR_OR_NULL().
+> On 09/03/2026 03:19, Fernando Fernandez Mancera wrote:
+> > Configuring IPV6 as a module provides little or no benefit and requires
+> > time and resources to maintain. Therefore, drop the support for it.
+> > 
+> > Change CONFIG_IPV6 from tristate to bool. Remove all Kconfig
+> > dependencies across the tree that explicitly checked for IPV6=m. Adjust
+> > all the default configurations from CONFIG_IPV6=m to CONFIG_IPV6=y. In
+> > addition, remove MODULE_DESCRIPTION(), MODULE_ALIAS(), MODULE_AUTHOR()
+> > and MODULE_LICENSE().
+> > 
+> > This is also replacing module_init() by fs_initcall().
+> > 
+> > Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
+> > ---
+-->8--
+> No, I don't want IPV6. It is allowed as module if some users need, but
+> it's heavy bloat added to each person's build testing setup. Kernel
+> image is already huge and barely fits boot partitions when built with
+> KASAN and I do want a generic image with KASAN.
 > 
-> I've written a Coccinelle patch to find and patch those instances.
-> The patches follow grouped by subsystem.
-> 
-> Patches 55-58 may be dropped as they have a (minor?) semantic change:
-> They use WARN_ON() or WARN_ON_ONCE(), but only in the IS_ERR() path, not
-> for the NULL check. Iff it is okay to print the warning also for NULL,
-> then the patches can be applied.
-> 
-> While generating the patch set `checkpatch` complained about mixing
-> [un]likely() with IS_ERR_OR_NULL(), which already uses likely()
-> internally. I found and fixed several locations, where that combination
-> has been used.
+> It must stay module for me. Alternatively, drop it, but then some users
+> will be really affected.
 
-Thanks for the patchset. However, I think we need a explanation for why
-switching to IS_ERR_OR_NULL() is an improvement over the existing code.
+I agree. If anything I would prefer to see IPv4 be made optional (and
+modular) as well, and not as something IPv6 depends on, it's (AFAIK)
+impossible today to build an IPv6-only Linux kernel. 
 
-IMHO, the necessity of IS_ERR_OR_NULL() often highlights a confusing or
-flawed API design. It usually implies that the caller is unsure whether
-a failure results in an error pointer or a NULL pointer. Rather than
-doing a treewide conversion of this pattern, I believe it would be much
-more meaningful to review these instances case-by-case and fix the
-underlying APIs or caller logic instead.
-
-Additionally, a treewide refactoring like this has the practical
-drawback of creating unnecessary merge conflicts when backporting to
-stable trees.
-
-Regards,
-Kuan-Wei
+-- kolla
 
