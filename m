@@ -1,279 +1,256 @@
-Return-Path: <linux-sctp+bounces-1110-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1111-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MFFjLyDasmlMQQAAu9opvQ
-	(envelope-from <linux-sctp+bounces-1110-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Thu, 12 Mar 2026 16:22:08 +0100
+	id kJDoKF3asmlMQQAAu9opvQ
+	(envelope-from <linux-sctp+bounces-1111-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Thu, 12 Mar 2026 16:23:09 +0100
 X-Original-To: lists+linux-sctp@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38C31274415
-	for <lists+linux-sctp@lfdr.de>; Thu, 12 Mar 2026 16:22:08 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF236274468
+	for <lists+linux-sctp@lfdr.de>; Thu, 12 Mar 2026 16:23:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id DEDD9307B664
-	for <lists+linux-sctp@lfdr.de>; Thu, 12 Mar 2026 15:12:23 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 5813C308A737
+	for <lists+linux-sctp@lfdr.de>; Thu, 12 Mar 2026 15:13:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0E8A30F543;
-	Thu, 12 Mar 2026 15:12:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AD573C8729;
+	Thu, 12 Mar 2026 15:12:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="xRu6vREz";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="RojeaC+1";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="xRu6vREz";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="RojeaC+1"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="EEjqtu3m"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from YQZPR01CU011.outbound.protection.outlook.com (mail-canadaeastazon11020074.outbound.protection.outlook.com [52.101.191.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24D7B3BAD89
-	for <linux-sctp@vger.kernel.org>; Thu, 12 Mar 2026 15:12:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773328341; cv=none; b=EiaEZwrrNocJsBdKPnJUYV1/vzGJwgCBHLwkTP0p7Q3PtWvmIZya+elMcskhT1koVdb7C66jQ9hIYp/8EjkYiUpL18wKc9ZSaDrKgB6Ssgxs4djXMjGgE0w4l6cgznijycUtprGpn8/LYSiiBCjLNt7AYf+Utv1NR3EwMzzt5Q8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773328341; c=relaxed/simple;
-	bh=/OlB2wYXzxx2lhu8Gs9ALiFJ9KIIcAJs+OvO6vGrCEY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y+1ok76nE0tclkcy+VRIc7hEuGR2S8wx7ov3bxgSqHfX9sLn2zq5qvTYMNZ8qXMn56ZNmaEIfoJbhtk5SV8wBNhX7GGnp+omUmw5cX+3UaHETxXKgkp/2hyL61pVgdaZrK6+Ud0JHSyT2jprg+4U6La+TpqV4n9btPlG3EJ5Z/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=xRu6vREz; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=RojeaC+1; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=xRu6vREz; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=RojeaC+1; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 56B334D291;
-	Thu, 12 Mar 2026 15:12:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1773328337; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YMN3lOpSDeHzFKXg/7He8rMHmT0WmpOMpEjVHXqTdfM=;
-	b=xRu6vREzGoHgGA2fUdRtHBjA2bI6+qRvJ+qzs72hVNkf5rofPyioB74jN3qYC0SeFB1juk
-	+uMPAE6Ps4ODzS5/FRsPQ609BczthN1Q2WOoDjd3ZX+buc/kjfgEVhdsZXmDnOKnR96QbK
-	21KoogoFiYYWcg5v4GiQO/x3chITNFk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1773328337;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YMN3lOpSDeHzFKXg/7He8rMHmT0WmpOMpEjVHXqTdfM=;
-	b=RojeaC+1VkbWVze91xYdCKbNG6aIJzoN8TYBSjL2bj11VaV2q1HRH+YFNqtt2k6oiP5Uqo
-	I+qIkjWcskTktIBg==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=xRu6vREz;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=RojeaC+1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1773328337; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YMN3lOpSDeHzFKXg/7He8rMHmT0WmpOMpEjVHXqTdfM=;
-	b=xRu6vREzGoHgGA2fUdRtHBjA2bI6+qRvJ+qzs72hVNkf5rofPyioB74jN3qYC0SeFB1juk
-	+uMPAE6Ps4ODzS5/FRsPQ609BczthN1Q2WOoDjd3ZX+buc/kjfgEVhdsZXmDnOKnR96QbK
-	21KoogoFiYYWcg5v4GiQO/x3chITNFk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1773328337;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YMN3lOpSDeHzFKXg/7He8rMHmT0WmpOMpEjVHXqTdfM=;
-	b=RojeaC+1VkbWVze91xYdCKbNG6aIJzoN8TYBSjL2bj11VaV2q1HRH+YFNqtt2k6oiP5Uqo
-	I+qIkjWcskTktIBg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id CDA7B40022;
-	Thu, 12 Mar 2026 15:12:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id VQkzL83XsmnAJAAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Thu, 12 Mar 2026 15:12:13 +0000
-Message-ID: <aebac89f-f3b9-4983-8139-353a3ff19c98@suse.de>
-Date: Thu, 12 Mar 2026 16:12:09 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C0123C7E11;
+	Thu, 12 Mar 2026 15:12:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.191.74
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773328376; cv=fail; b=kBiFs3JfrVGCPgTiNYSjc85zeDdF7fqUfY41Oinqw6Rcvmc1k1gh8t+CqBMaycGCVoSt7rvC15kuoXHMESnqKnkj/QceiuAtLCweX7DtNdrm52js7MK9cFB3Ui9NW/V+rVgE8nMaAyPfGKaeHuyYXPRmF+oIN6i2/LXidpGWgOo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773328376; c=relaxed/simple;
+	bh=HOI4reN2hRx8rWBz6oAMWKyPJy/tvDXVmEzt9LqItl0=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=EQbDk29zPIJmT3pgEXghP6Mvaq+Wb9AYMEuSunqXCNKaMLvgf3A7erl5FWe3phYpWeRu83Uq0OGqqY/j32//0FFKNfNucoJbabv9EoZQSw+ebxJsoqtLLdewFMDJd/vrSJIoHWSN7CT9zPCR8GWyDX35fCvHXd3UVK9mHGnfk20=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=EEjqtu3m; arc=fail smtp.client-ip=52.101.191.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=LE0j6b/XlkqTG3UaFNtuIfldwOrBDEgS3vF/VJcu60LW8Fdo7IglnfZZKZ3UZy4siIKpK637RDhVePq01pfs6wqD7B3BRsNvTs3WSnbHT7nU2pvXI67O8mY69oDf+4bJlZT4voHaSoBsHonM1aFKY0WOHbSk/4XucjlzCfmwwK/3Sraeor0gI3B2CKRXIAzjSTvdseIgUz2Dia5ghBL4wtF28pYx+JCisAEQPBTAgKQs0zXZ/Tf9xYx7L+yhOWFW8QF3zCC0s/J7Aqr+X6YkvVbG4jTCGIfkDfeOvJVHj/IUtLofHvUtyFT4rrCMc032EaFfHwuVdlpXnH90uDZoGw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Nj8argWr4IskjNTGftv6XszdapFwrTl0xocj+akkcx8=;
+ b=VpDU4DiUrDRoAoZTeE2/VUy7DqmYcznCgNnlmJybfBFoj2Zc0pN60E9lmYItwo0zRAQSCFbByp78r9WHygz61JZGOGhoT0MUQKBSmTyL4SSGHzng/jy+TPQSaWFNoQXqGhoggv7x/Zq6AUEDxmjr1++sq2YQWUe1GSEs5Riic6g6UC2Q+Efm5IKkniVa2FbLkgb/7GPzn5pyPDwse4lGdznwiSo4Uks8R994VgoCmEB6eJIzXgeMaI9+wbJxq3m3tmpa4PiUs6NIwAFu6AE1BQyaZgqDTs5WNWjL8rJJTe0ywalW0i2KlLDX/rtKqEfvm380EHWLKUbJhZhend7+0Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Nj8argWr4IskjNTGftv6XszdapFwrTl0xocj+akkcx8=;
+ b=EEjqtu3m32bZZNeYz/Ni/jn6l8HwpWiMBvzmpp7x0ZwrjK5A+3Rz6popPvTBe0nfvgWqE5CE0NQ9mtt8oFKqUEfTSLNYXRwAjwjHBpkkyVsLqnGDLo2bHTg4X/Y+K63eaMr54Yea83ipPWcnI6L9D0+tPaNObs1OMAiHjiOMGfMP8Na7nlt83laxVIxQq7qYYEhknwObBfIgnJ3g1VQZ0iGkJh6m2Q0wbamqUGkdJBHMwPtuIrnMY2iZifElYewky6cmDRtJgnf5SVGOpzU7a00RJp13F+rro4qIr8OQtCac4/K2XsaHSJFdkiQ4uwA+6JTVfKgcpL+pkZljlwjoDg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=efficios.com;
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:be::5)
+ by YT3PR01MB10299.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:90::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.16; Thu, 12 Mar
+ 2026 15:12:50 +0000
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6004:a862:d45d:90c1]) by YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6004:a862:d45d:90c1%3]) with mapi id 15.20.9700.015; Thu, 12 Mar 2026
+ 15:12:46 +0000
+Message-ID: <1e3c2830-765e-4271-89f7-0b6784b37597@efficios.com>
+Date: Thu, 12 Mar 2026 11:12:41 -0400
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/15] tracepoint: Avoid double static_branch evaluation
+ at guarded call sites
+To: "Vineeth Pillai (Google)" <vineeth@bitbyteword.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Peter Zijlstra <peterz@infradead.org>,
+ Dmitry Ilvokhin <d@ilvokhin.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+ Xin Long <lucien.xin@gmail.com>, Jon Maloy <jmaloy@redhat.com>,
+ Aaron Conole <aconole@redhat.com>, Eelco Chaudron <echaudro@redhat.com>,
+ Ilya Maximets <i.maximets@ovn.org>, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-sctp@vger.kernel.org,
+ tipc-discussion@lists.sourceforge.net, dev@openvswitch.org,
+ Oded Gabbay <ogabbay@kernel.org>, Koby Elbaz <koby.elbaz@intel.com>,
+ dri-devel@lists.freedesktop.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ "Gautham R. Shenoy" <gautham.shenoy@amd.com>, Huang Rui <ray.huang@amd.com>,
+ Mario Limonciello <mario.limonciello@amd.com>, Len Brown <lenb@kernel.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ linux-pm@vger.kernel.org, MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Sumit Semwal <sumit.semwal@linaro.org>, linaro-mm-sig@lists.linaro.org,
+ Eddie James <eajames@linux.ibm.com>,
+ Andrew Jeffery <andrew@codeconstruct.com.au>, Joel Stanley <joel@jms.id.au>,
+ linux-fsi@lists.ozlabs.org, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Alex Deucher <alexander.deucher@amd.com>,
+ Danilo Krummrich <dakr@kernel.org>, Matthew Brost <matthew.brost@intel.com>,
+ Philipp Stanner <phasta@kernel.org>, Harry Wentland
+ <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>,
+ amd-gfx@lists.freedesktop.org, Jiri Kosina <jikos@kernel.org>,
+ Benjamin Tissoires <bentiss@kernel.org>, linux-input@vger.kernel.org,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-i2c@vger.kernel.org,
+ Mark Brown <broonie@kernel.org>,
+ Michael Hennerich <michael.hennerich@analog.com>,
+ =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, linux-spi@vger.kernel.org,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ linux-scsi@vger.kernel.org, Chris Mason <clm@fb.com>,
+ David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260312150523.2054552-1-vineeth@bitbyteword.org>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Language: en-US
+In-Reply-To: <20260312150523.2054552-1-vineeth@bitbyteword.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQZPR01CA0182.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:8b::24) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:be::5)
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/10 net-next v2] ipv6: convert CONFIG_IPV6 to built-in
- only and clean up Kconfigs
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, rbm@suse.com,
- Geert Uytterhoeven <geert@linux-m68k.org>, Jason Gunthorpe <jgg@ziepe.ca>,
- Leon Romanovsky <leon@kernel.org>, Selvin Xavier
- <selvin.xavier@broadcom.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>, Ido Schimmel <idosch@nvidia.com>,
- Petr Machata <petrm@nvidia.com>, Simon Horman <horms@kernel.org>,
- Saurav Kashyap <skashyap@marvell.com>, Javed Hasan <jhasan@marvell.com>,
- "maintainer:BROADCOM BNX2FC 10 GIGABIT FCOE DRIVER"
- <GR-QLogic-Storage-Upstream@marvell.com>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Nilesh Javali <njavali@marvell.com>,
- Manish Rangankar <mrangankar@marvell.com>, Varun Prakash
- <varun@chelsio.com>, Alexander Aring <aahringo@redhat.com>,
- David Teigland <teigland@redhat.com>,
- Andreas Gruenbacher <agruenba@redhat.com>,
- Nikolay Aleksandrov <razor@blackwall.org>, David Ahern <dsahern@kernel.org>,
- Pablo Neira Ayuso <pablo@netfilter.org>, Florian Westphal <fw@strlen.de>,
- Phil Sutter <phil@nwl.cc>, David Howells <dhowells@redhat.com>,
- Marc Dionne <marc.dionne@auristor.com>,
- Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
- Xin Long <lucien.xin@gmail.com>, Jon Maloy <jmaloy@redhat.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
- Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
- Arnd Bergmann <arnd@arndb.de>, Eric Biggers <ebiggers@kernel.org>,
- Michal Simek <michal.simek@amd.com>, Luca Weiss <luca.weiss@fairphone.com>,
- Sven Peter <sven@kernel.org>,
- Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
- Andrew Morton <akpm@linux-foundation.org>, David Gow <david@davidgow.net>,
- Kuan-Wei Chiu <visitorckw@gmail.com>, Ryota Sakamoto
- <sakamo.ryota@gmail.com>, Kir Chou <note351@hotmail.com>,
- Kuniyuki Iwashima <kuniyu@google.com>,
- Herbert Xu <herbert@gondor.apana.org.au>,
- Vikas Gupta <vikas.gupta@broadcom.com>,
- Bhargava Marreddy <bhargava.marreddy@broadcom.com>,
- Rajashekar Hudumula <rajashekar.hudumula@broadcom.com>,
- =?UTF-8?Q?Markus_Bl=C3=B6chl?= <markus@blochl.de>,
- Heiner Kallweit <hkallweit1@gmail.com>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
- "open list:INFINIBAND SUBSYSTEM" <linux-rdma@vger.kernel.org>,
- "open list:NETRONOME ETHERNET DRIVERS" <oss-drivers@corigine.com>,
- "open list:BROADCOM BNX2FC 10 GIGABIT FCOE DRIVER"
- <linux-scsi@vger.kernel.org>,
- "open list:DISTRIBUTED LOCK MANAGER (DLM)" <gfs2@lists.linux.dev>,
- "open list:ETHERNET BRIDGE" <bridge@lists.linux.dev>,
- "open list:NETFILTER" <netfilter-devel@vger.kernel.org>,
- "open list:NETFILTER" <coreteam@netfilter.org>,
- "open list:RXRPC SOCKETS (AF_RXRPC)" <linux-afs@lists.infradead.org>,
- "open list:SCTP PROTOCOL" <linux-sctp@vger.kernel.org>,
- "open list:TIPC NETWORK LAYER" <tipc-discussion@lists.sourceforge.net>
-References: <20260310153506.5181-1-fmancera@suse.de>
- <20260310153506.5181-2-fmancera@suse.de> <20260311200219.45796ec4@kernel.org>
-Content-Language: en-US
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-In-Reply-To: <20260311200219.45796ec4@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Flag: NO
-X-Spam-Score: -3.01
-X-Spam-Level: 
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YT3PR01MB10299:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4297b093-1e48-489f-e898-08de8049d0c7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|376014|7416014|1800799024|56012099003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	5kQMFGQNndT0kf70A5gsZUpmCWqs49Hfw7ehDi9le4rZ505JRhw7ub4zBvwYRvsNZ/o45yBwYOpKUBk9fS6dDxmGD02UpIxHZujK0R3KpRBuHcmjQjdvGIoBT9oPrGHrx2PF8SQ15hCYmDMMRfot3XxyQeOyTFQDpfP84yToZaV7xZ97FsJDcfR0LClkCryl3O+dE+e39WIXC+zDhj7/07icyUQOPv3fmuoELvrJn6Rmhr75Xk0/HzI5rY9awHNUB3OblKczO9dbgcgaHUT1Wesf/RARUw592JBLVjFIQCDeK/95NQd5M3+EXz5j+Xzm5Ca0BOYtTxGCmYTpKlQBhyFM/DilxSb/tsHLcENRDPX84AlU3vlewQ1B53s7ucDns8JONVubrpIgAOt8aWHmiGr8MA6qv8ZvM+TNVjMWH8Eq7D9hGmrfVeG/008Ns5fR+qyAvQigD0jv5LjDTUje8/kD9BgnRwJYyV2Jcj6P8NqjgOC5V2KShlNHbmF4EAtJLjazA/q38RrgaoSaayiRLrdmtTpFxXRhgOfBv8V9NBZ9YTiQplRFVxZdO722U+ZxnG/jdFdoJ3Bf+WRYw41J8RVPRUqKcCw+IjnYvsU6SQ54nbpGggZW7mnt/+SDngXZQAcrJFz3ApWCFQiJXIBmguCiC7NQeTdNyjcrd0ByTNGud16Fg8bvpoqZ8FK6OKNa
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?cnUzSGFGQlhPaFc1Z0liamQ1N2Fpc1puWGNXeWpzdS9xR2x4ajFjVDlJMmVk?=
+ =?utf-8?B?R2pHQUxpVnpNREpuU2tUenphcTdwSGhWUW1Ea2VRbUlrUHZqd2h2bXB2TVBa?=
+ =?utf-8?B?MlgzSnJGTjYvWDcrOU9QdWJnWm5PdzNrdGdzVHVFNEI4Y2tEZ1c4OVREc1dK?=
+ =?utf-8?B?WllNUitqQkNtUkpZTGhuSVEwRm9pT3hXdEdKem5UKzQxa2laeUFTWkk4dWNS?=
+ =?utf-8?B?VzFobHRYVnpFUGhYOEVBLzh3YWFoRUl2NDE0Q0hMV29TT0JOWTVFYnpaTmZE?=
+ =?utf-8?B?dGRvVWdZcUwyY2lwNGt4YVZnRlQ3bmtHam8zMStUTkx6c295VWZNaXM5c2tR?=
+ =?utf-8?B?UGJQN3RNNGRKVnhleUgvdW5FLy9yMmNrbDZZaXZTT3Q2dm1mRitXc2JRYW96?=
+ =?utf-8?B?V2x1dEtyK1BpaEtGd25ldTc2NEFPWHVqeWVnQXJyWlVOb0ZZYVdXMzNwc1VV?=
+ =?utf-8?B?cmhYUjdVOHh3YWhzRG1rMW1VRTh4Z3I4dHcvR0kwWUh1RWJHVEVLTzFXZ2Ix?=
+ =?utf-8?B?MTBzU01FRkVlak5wQk83WGRJWS85ejVWaWRIUVRuUTFHWCtvdXNmc1ZHc2NN?=
+ =?utf-8?B?WWhlRE4xUTFZMktWa015UWoweE5RekVJOWFuWkVPLzhGNmZTMkZyZkpJSEh0?=
+ =?utf-8?B?UmtiWllIZVdzd3lSZE1VdWtUak9hRjRLR09wOHNqdndiUlZyNTZkbXBJSnRX?=
+ =?utf-8?B?YkkybzRwc2FNcERGNjNSeXV6VENzVmY0RlcrZ1FPVTA5NkV5OFhOVTlyWXpp?=
+ =?utf-8?B?dG5BZ3RWejdkaVJJZG5CaDdDZVJ3UFovUFE2bU0wNkxUbkhsZER0dFdqakUr?=
+ =?utf-8?B?ZmZRbWFkY2E0bmxpM3daL3pzc1hZRjljaVErZTNJYnk5ZmJ3M3lSUm1nRkFp?=
+ =?utf-8?B?QXRTNWRyZldJbitmL3EzNzlCRmFSRkZZbTNjeHdjWFczdmVHcWkrL0M0cmZM?=
+ =?utf-8?B?K1FYeGZVbHNjTWdOcUtHVnRDSEpKK1FmMEpHQ1dWOUp2QUU0bS9xVk0zMXhP?=
+ =?utf-8?B?K1cwQzNyN0s5T2pjcnZ3TVQwWTdMS2l6bzNHajYrbit3a1c4OHFNK1dESnpp?=
+ =?utf-8?B?a0wyZDgzSWgxZStnMlhVRU84N0paNGx5QU1tcisxQzZlNXkxNWNRMTlHTkwz?=
+ =?utf-8?B?YTd2S2FZSTF4U0Y3ZExUNHdCc2VZN2ZtL3JJVE1Dc1pSOTBhbkpPQ0RkbzNX?=
+ =?utf-8?B?WUNYbmpKZldNd1RkTHRHSjlWNTIxVStGdnY3M2hNZHBCdFl2QUhIeGg0aHor?=
+ =?utf-8?B?L201U3h1RXNOcldwNXhjYjJNVHhzcHliVktlN1Q5K3REWnAvU25KdlNWQldl?=
+ =?utf-8?B?MHJoQzUyV0NQR3NKTzIwQm45ZTl3N3NTZHlDTkZ1bTZXMUhnZEQ3QzVra01m?=
+ =?utf-8?B?MXZCNWVlQ0lkRUhUcE94L21zeWpRSlVUd09NdjRUL05ZK0Y5Qk85ZmM3SUZw?=
+ =?utf-8?B?RGNFalpYcUpsVVZFRW1NUEtQOUpkSktCZFdOQ1ZDNmZPY005OE43bVBjREN3?=
+ =?utf-8?B?dUNnZlJPb05KTDhHdWNKeGIvZXdrQVhGRDg0NndTT1hpbWY2NXhabDBnVnEr?=
+ =?utf-8?B?bk0vSFNxdnJIRVNUVHhkdnVXVDNkYW5PZ3JDakNiU2RqazVIb3d0aVpTdGoy?=
+ =?utf-8?B?ZUowUVM4Mk45MDJZYWZKbm1DVS9LWnN5UEYrQk9oVE5UVzJxNGhkQ3BkbnJK?=
+ =?utf-8?B?dkl2UzlSWHc5am5MMXR0VlNiSDkvYXFXTGVUNFRIdGpYMWl2SGhrdC9lcDJD?=
+ =?utf-8?B?WStFQjJHK3VHTitZOVN5eW9La2FGU2s3ODBBQzVPek11SzNMRkRwbm1FZWNN?=
+ =?utf-8?B?SWxhUUZQck84ckt5aWdaMXQvTmRDQ3diMEN0NXhKdmd1SmJ4eUthTk0rQ2tr?=
+ =?utf-8?B?cWpqeHFTSjVjWThDNUtkLzBZRU5rVERGWDJ4a3IxMitmMTJuY3ppUUxkZXJz?=
+ =?utf-8?B?ckE1U28wY2dTd1lNajhRYkx5S0h6TXd0RWQvbWhkQk1WT3dybWd2WkRhbCs5?=
+ =?utf-8?B?WTB2bWJ5YytMQWlVaXA2MmhzVnF3QlJzSUxQQXJLUTh3MTdsWHc3V3E3ejJK?=
+ =?utf-8?B?YXpqSDFOeFRvS1VkVVh0RGFIQjZ6M3laU1ZEQVVTMDlKcFpBcWxVaVJ6RDZK?=
+ =?utf-8?B?NGRqU3Q4OWJua1N2WjVWZnBxdVVlTllzMnlUMjQ1eVErUWtqcU00Q0x6UUM2?=
+ =?utf-8?B?WERUM1JHQnVVeklJTmYxOTNSVG5uRHZ2YU9KbHpFOWp0eEtOalJjZUdzMmZZ?=
+ =?utf-8?B?d2ZzS05JM2ZzSDZocFlyMTc4N1lXc3NZZTNPYjJ6TzFKZEozRXV6S2EvVE1x?=
+ =?utf-8?B?TVBRc2Jnd0U3YVdROE1GSnB1MjFLdms2UzlsbFV6bitXUmVoUmcvV2VodWRH?=
+ =?utf-8?Q?iiGXhwuhmwDu58Lo=3D?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4297b093-1e48-489f-e898-08de8049d0c7
+X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2026 15:12:45.8608
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2k9rS5kk9/fiMIPTdG3OWGYlodtiZTRGXp/7mV52e2o0TtaUWxB/ks/sHiJVyQHF3VxZWPF+2hYkF1WUhD3xam1jbrEdqicVbSTEDpwqYmU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB10299
+X-Spamd-Result: default: False [1.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[efficios.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[efficios.com:s=selector1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	FREEMAIL_CC(0.00)[vger.kernel.org,suse.com,linux-m68k.org,ziepe.ca,kernel.org,broadcom.com,lunn.ch,davemloft.net,google.com,redhat.com,nvidia.com,marvell.com,HansenPartnership.com,oracle.com,chelsio.com,blackwall.org,netfilter.org,strlen.de,nwl.cc,auristor.com,gmail.com,oss.qualcomm.com,arndb.de,amd.com,fairphone.com,bp.renesas.com,renesas.com,linux-foundation.org,davidgow.net,hotmail.com,gondor.apana.org.au,blochl.de,lists.linux-m68k.org,corigine.com,lists.linux.dev,lists.infradead.org,lists.sourceforge.net];
+	FREEMAIL_CC(0.00)[kernel.org,redhat.com,kernel.dk,vger.kernel.org,davemloft.net,google.com,iogearbox.net,gmail.com,ovn.org,lists.sourceforge.net,openvswitch.org,intel.com,lists.freedesktop.org,linaro.org,amd.com,linux.intel.com,samsung.com,lists.linaro.org,linux.ibm.com,codeconstruct.com.au,jms.id.au,lists.ozlabs.org,ffwll.ch,sang-engineering.com,analog.com,HansenPartnership.com,oracle.com,fb.com,suse.com];
 	FROM_HAS_DN(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-1110-lists,linux-sctp=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-1111-lists,linux-sctp=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_TRACE(0.00)[efficios.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[fmancera@suse.de,linux-sctp@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCPT_COUNT_GT_50(0.00)[68];
+	FROM_NEQ_ENVFROM(0.00)[mathieu.desnoyers@efficios.com,linux-sctp@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[72];
 	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-sctp,netdev];
+	TAGGED_RCPT(0.00)[linux-sctp,renesas];
 	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 38C31274415
+X-Rspamd-Queue-Id: DF236274468
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 3/12/26 4:02 AM, Jakub Kicinski wrote:
-> On Tue, 10 Mar 2026 16:34:24 +0100 Fernando Fernandez Mancera wrote:
->> Maintaining a modular IPv6 stack offers image size and memory savings
->> for specific setups, this benefit is outweighed by the architectural
->> burden it imposes on the subsystems on implementation and maintenance.
->> Therefore, drop it.
->>
->> Change CONFIG_IPV6 from tristate to bool. Remove all Kconfig
->> dependencies across the tree that explicitly checked for IPV6=m. In
->> addition, remove MODULE_DESCRIPTION(), MODULE_ALIAS(), MODULE_AUTHOR()
->> and MODULE_LICENSE().
->>
->> This is also replacing module_init() by device_initcall(). It is not
->> possible to use fs_initcall() as IPv4 does because that creates a race
->> condition on IPv6 addrconf.
->>
->> Finally, modify the default configs from CONFIG_IPV6=m to CONFIG_IPV6=y
->> except for m68k as according to the bloat-o-meter the image is
->> increasing by 330KB~ and that isn't acceptable. Instead, disable IPv6 on
->> this architecture by default. This is aligned with m68k RAM requirements
->> and recommendations [1].
+On 2026-03-12 11:04, Vineeth Pillai (Google) wrote:
+> When a caller already guards a tracepoint with an explicit enabled check:
 > 
-> AI has spotted:
+>    if (trace_foo_enabled() && cond)
+>        trace_foo(args);
 > 
->> diff --git a/arch/m68k/configs/amiga_defconfig b/arch/m68k/configs/amiga_defconfig
->> index 31d16cba9879..de088071dde4 100644
->> --- a/arch/m68k/configs/amiga_defconfig
->> +++ b/arch/m68k/configs/amiga_defconfig
->> @@ -64,7 +64,6 @@ CONFIG_NET_IPIP=m
->>   CONFIG_NET_IPGRE_DEMUX=m
->>   CONFIG_NET_IPGRE=m
->>   CONFIG_NET_IPVTI=m
->> -CONFIG_NET_FOU_IP_TUNNELS=y
->>   CONFIG_INET_AH=m
+> trace_foo() internally re-evaluates the static_branch_unlikely() key.
+> Since static branches are patched binary instructions the compiler cannot
+> fold the two evaluations, so every such site pays the cost twice.
 > 
-> Is CONFIG_NET_FOU_IP_TUNNELS=y removed intentionally? This option
-> provides FOU/GUE encapsulation for IP tunnels and has 'depends on
-> NET_IPIP || NET_IPGRE || IPV6_SIT' as its Kconfig dependency. With IPv6
-> disabled, IPV6_SIT becomes unavailable, but CONFIG_NET_IPIP=m and
-> CONFIG_NET_IPGRE=m are both still present in the defconfig, so the
-> dependency remains satisfiable.
+> This series introduces trace_invoke_##name() as a companion to
+> trace_##name().  It calls __do_trace_##name() directly, bypassing the
+> redundant static-branch re-check, while preserving all other correctness
+> properties of the normal path (RCU-watching assertion, might_fault() for
+> syscall tracepoints).  The internal __do_trace_##name() symbol is not
+> leaked to call sites; trace_invoke_##name() is the only new public API.
 > 
-> Since CONFIG_NET_FOU_IP_TUNNELS has no 'default y', removing it from the
-> defconfig means FOU/GUE encapsulation for IP tunnels will be silently
-> disabled by default on m68k. The commit message describes only disabling
-> IPv6 on m68k, not removing IPv4 FOU tunnel support.
-> 
+>    if (trace_foo_enabled() && cond)
+>        trace_invoke_foo(args);   /* calls __do_trace_foo() directly */
 
-I noticed that when running
+FYI, we have a similar concept in LTTng-UST for userspace
+instrumentation already:
 
-./scripts/config --disable CONFIG_IPV6
+if (lttng_ust_tracepoint_enabled(provider, name))
+         lttng_ust_do_tracepoint(provider, name, ...);
 
-for the m68k, the script was adding CONFIG_LWTUNNEL=y and CONFIG_NET_FOU=y.
-
-CONFIG_LWTUNNEL was selected by multiple IPV6 features. I do not think 
-it makes sense to keep it for m68k given the information there is on 
-http://www.linux-m68k.org/faq/platinfo.html.
-
-CONFIG_NET_FOU was something IPV6_FOU required, probably it should be 
-just dropped from the config instead of explicitly turn it off as it 
-turns off FOU_IP_TUNNELS too. It will be selected by FOU_IP_TUNNELS too 
-anyway.
-
-I will update the config and also the commit message about CONFIG_LWTUNNEL.
-
-FTR; I doubt anyone is running Foo over UDP in m68k but let's avoid 
-doing extra undocumented changes.
+Perhaps it can provide some ideas about API naming.
 
 Thanks,
-Fernando.
 
-> This affects four m68k defconfigs:
-> - amiga_defconfig
-> - apollo_defconfig
-> - atari_defconfig
-> - bvme6000_defconfig
-> 
+Mathieu
 
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
