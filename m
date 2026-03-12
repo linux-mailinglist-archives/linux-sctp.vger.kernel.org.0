@@ -1,159 +1,192 @@
-Return-Path: <linux-sctp+bounces-1103-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1104-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iHIJKfX0sWl7HQAAu9opvQ
-	(envelope-from <linux-sctp+bounces-1103-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Thu, 12 Mar 2026 00:04:21 +0100
+	id GNpKLMMssmmlJQAAu9opvQ
+	(envelope-from <linux-sctp+bounces-1104-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Thu, 12 Mar 2026 04:02:27 +0100
 X-Original-To: lists+linux-sctp@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31DEE26B17D
-	for <lists+linux-sctp@lfdr.de>; Thu, 12 Mar 2026 00:04:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 744A426C89C
+	for <lists+linux-sctp@lfdr.de>; Thu, 12 Mar 2026 04:02:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 03DD3304812C
-	for <lists+linux-sctp@lfdr.de>; Wed, 11 Mar 2026 23:03:56 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 14F3A302DE16
+	for <lists+linux-sctp@lfdr.de>; Thu, 12 Mar 2026 03:02:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC7693A1689;
-	Wed, 11 Mar 2026 23:03:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6D74382F37;
+	Thu, 12 Mar 2026 03:02:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="WxcdvAR4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F8NXL71/"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 969E039DBF5;
-	Wed, 11 Mar 2026 23:03:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AE8638DD3;
+	Thu, 12 Mar 2026 03:02:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773270226; cv=none; b=AkA2Gnlxmrw7n8wlICODGs3io7QO9Oh/YDy07WP09JF/KFh9g5IxYQ17wt6vWQVzPCB+iYEQu7P3mBvtqRc+n31lnQN5NVwKohchMiBQHqmgSZE6jhjwc4hv3UUzJs1InFDBm/aIiY3ylNEkhCwq8TX0CYHFVkpY9m+PERgjhT4=
+	t=1773284543; cv=none; b=S0JFj6zc4zCnFLvfoaayVNtCTvJ+HkbE3TYY+9tYKdChL5kmzc4ca5GcOMjQFcRQMdCBI5RhGPAriaumDHf8ECWoUbPCmJnjw/nFRozQn26FhJIw6QY+XzbNPdwjD3rjTTXJldv1hqa+4p4BgbtFyHzUkCTwgnWP4LSjzebGKVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773270226; c=relaxed/simple;
-	bh=ATo3aRyKmYSXuSYD8x/NeBUp5LJcLKbzHVpozNXQJC0=;
-	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=riWYrESCcc9KNXqP13SZYyXzR58RrYMlS+b2xha5iOXuuIp+StTrVizqL6ketCeeYmMEMoyxUK8taVuLlBt+IYJOKFEOgMITJUBE5YxvJbFyx57ukqqJFBTg7MI8yXilCszhmCyW65ADzTthRqCB0cIhFeDkNxgzAb+Zf6dy7s0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=fail (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=WxcdvAR4 reason="signature verification failed"; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from monstersaurus.ideasonboard.com (cpc89244-aztw30-2-0-cust6594.18-1.cable.virginm.net [86.31.185.195])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id CD91E448;
-	Thu, 12 Mar 2026 00:02:28 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1773270149;
-	bh=ATo3aRyKmYSXuSYD8x/NeBUp5LJcLKbzHVpozNXQJC0=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=WxcdvAR4zphcUuTNTLXCbLGiiCOKCwemLRMbnRdmW3ARcBHAWQiYVeysDpnfCIDuk
-	 B8rMCjKjDjoWJdgj4Zp0scfHxrPnr5P3xl9hFANY/wyWKZBZYHzyf2qsFxVEe9S31Y
-	 m9r/HjFnopry9bsUUdk6/id/Q3d97jYK/FiMa+Qw=
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1773284543; c=relaxed/simple;
+	bh=KEYQl8+VvPcfn6uzVu6YIy+HYhzQOXqkZpAojxKhODA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FKAOaizCHgHx3LVQRTYq21oCj4Vap6RVTeh/TAXoQdI4CxonNvlW6FU8GAJPciGBP2stdkyjuA7qLo/yRU2LMpGHB02WQt+McNWcsQT0XCUvMYXcSLt0e6hh7/uvjWZqciazv6/CGg3i9rlPuwfCzr5zhqsqCbowbiqqKB9x8aE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F8NXL71/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A04AC4CEF7;
+	Thu, 12 Mar 2026 03:02:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773284543;
+	bh=KEYQl8+VvPcfn6uzVu6YIy+HYhzQOXqkZpAojxKhODA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=F8NXL71/vLl3Dq1WAm4Auc0XA4QvHGBmkfPAKKMT6NZVVgMTlNICYyjzHbGeJNcRz
+	 F/Wyghg4yMGVLqcfE4spE2II5KVJdUmo2MxvcpQg3RiL0kv50pky3Us/SgWGfNm4C8
+	 OBewmMfEcqIpb9At+m7LjiAqOwNVG4C2TNES2w0nh0uyTac7Ly/93mEtPAEk62p2+b
+	 RhVSYeBhuL4hLRLBGq/r/1rBww6KvG71fHi3nYyB1s5dHCLtjRQkQCLldoR1mkjmFr
+	 aShv34CDa+y+Ih95SrOoeCJ6uds494cxNGUfz/pgC7e4lbkLCq/zI770KaUawqGkb+
+	 srwBq+9pcpfUw==
+Date: Wed, 11 Mar 2026 20:02:19 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Fernando Fernandez Mancera <fmancera@suse.de>
+Cc: netdev@vger.kernel.org, rbm@suse.com, Geert Uytterhoeven
+ <geert@linux-m68k.org>, Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky
+ <leon@kernel.org>, Selvin Xavier <selvin.xavier@broadcom.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Ido
+ Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>, Simon Horman
+ <horms@kernel.org>, Saurav Kashyap <skashyap@marvell.com>, Javed Hasan
+ <jhasan@marvell.com>, GR-QLogic-Storage-Upstream@marvell.com
+ (maintainer:BROADCOM BNX2FC 10 GIGABIT FCOE DRIVER), "James E.J. Bottomley"
+ <James.Bottomley@HansenPartnership.com>, "Martin K. Petersen"
+ <martin.petersen@oracle.com>, Nilesh Javali <njavali@marvell.com>, Manish
+ Rangankar <mrangankar@marvell.com>, Varun Prakash <varun@chelsio.com>,
+ Alexander Aring <aahringo@redhat.com>, David Teigland
+ <teigland@redhat.com>, Andreas Gruenbacher <agruenba@redhat.com>, Nikolay
+ Aleksandrov <razor@blackwall.org>, David Ahern <dsahern@kernel.org>, Pablo
+ Neira Ayuso <pablo@netfilter.org>, Florian Westphal <fw@strlen.de>, Phil
+ Sutter <phil@nwl.cc>, David Howells <dhowells@redhat.com>, Marc Dionne
+ <marc.dionne@auristor.com>, Marcelo Ricardo Leitner
+ <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, Jon Maloy
+ <jmaloy@redhat.com>, Krzysztof Kozlowski
+ <krzysztof.kozlowski@oss.qualcomm.com>, Bjorn Andersson
+ <bjorn.andersson@oss.qualcomm.com>, Arnd Bergmann <arnd@arndb.de>, Eric
+ Biggers <ebiggers@kernel.org>, Michal Simek <michal.simek@amd.com>, Luca
+ Weiss <luca.weiss@fairphone.com>, Sven Peter <sven@kernel.org>, Lad
+ Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, Kuninori Morimoto
+ <kuninori.morimoto.gx@renesas.com>, Andrew Morton
+ <akpm@linux-foundation.org>, David Gow <david@davidgow.net>, Kuan-Wei Chiu
+ <visitorckw@gmail.com>, Ryota Sakamoto <sakamo.ryota@gmail.com>, Kir Chou
+ <note351@hotmail.com>, Kuniyuki Iwashima <kuniyu@google.com>, Herbert Xu
+ <herbert@gondor.apana.org.au>, Vikas Gupta <vikas.gupta@broadcom.com>,
+ Bhargava Marreddy <bhargava.marreddy@broadcom.com>, Rajashekar Hudumula
+ <rajashekar.hudumula@broadcom.com>, Markus =?UTF-8?B?QmzDtmNobA==?=
+ <markus@blochl.de>, Heiner Kallweit <hkallweit1@gmail.com>,
+ linux-kernel@vger.kernel.org (open list), linux-m68k@lists.linux-m68k.org
+ (open list:M68K ARCHITECTURE), linux-rdma@vger.kernel.org (open
+ list:INFINIBAND SUBSYSTEM), oss-drivers@corigine.com (open list:NETRONOME
+ ETHERNET DRIVERS), linux-scsi@vger.kernel.org (open list:BROADCOM BNX2FC 10
+ GIGABIT FCOE DRIVER), gfs2@lists.linux.dev (open list:DISTRIBUTED LOCK
+ MANAGER (DLM)), bridge@lists.linux.dev (open list:ETHERNET BRIDGE),
+ netfilter-devel@vger.kernel.org (open list:NETFILTER),
+ coreteam@netfilter.org (open list:NETFILTER), linux-afs@lists.infradead.org
+ (open list:RXRPC SOCKETS (AF_RXRPC)), linux-sctp@vger.kernel.org (open
+ list:SCTP PROTOCOL), tipc-discussion@lists.sourceforge.net (open list:TIPC
+ NETWORK LAYER)
+Subject: Re: [PATCH 01/10 net-next v2] ipv6: convert CONFIG_IPV6 to built-in
+ only and clean up Kconfigs
+Message-ID: <20260311200219.45796ec4@kernel.org>
+In-Reply-To: <20260310153506.5181-2-fmancera@suse.de>
+References: <20260310153506.5181-1-fmancera@suse.de>
+	<20260310153506.5181-2-fmancera@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20260310-b4-is_err_or_null-v1-49-bd63b656022d@avm.de>
-References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de> <20260310-b4-is_err_or_null-v1-49-bd63b656022d@avm.de>
-Subject: Re: [PATCH 49/61] media: Prefer IS_ERR_OR_NULL over manual NULL check
-From: Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc: Shuah Khan <skhan@linuxfoundation.org>, Mauro Carvalho Chehab <mchehab@kernel.org>
-To: Philipp Hahn <phahn-oss@avm.de>, amd-gfx@lists.freedesktop.org,
-	apparmor@lists.ubuntu.com, bpf@vger.kernel.org,
-	ceph-devel@vger.kernel.org, cocci@inria.fr, dm-devel@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, gfs2@lists.linux.dev,
-	intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
-	iommu@lists.linux.dev, kvm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-	linux-bluetooth@vger.kernel.org, linux-btrfs@vger.kernel.org,
-	linux-cifs@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-hyperv@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-	linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-mm@kvack.org, linux-modules@vger.kernel.org,
-	linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-	linux-omap@vger.kernel.org, linux-phy@lists.infradead.org,
-	lin@web.codeaurora.org, ux-pm@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-	ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
-	sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
-	tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev
-Date: Wed, 11 Mar 2026 23:03:33 +0000
-Message-ID: <177327021364.3167621.11851238159935183684@ping.linuxembedded.co.uk>
-User-Agent: alot/0.9.1
-X-Spamd-Result: default: False [3.14 / 15.00];
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[signature check failed: fail, {[1] = sig:subspace.kernel.org:reject}];
-	R_DKIM_REJECT(1.00)[ideasonboard.com:s=mail];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	DMARC_POLICY_SOFTFAIL(0.10)[ideasonboard.com : SPF not aligned (relaxed),none];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-1103-lists,linux-sctp=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_CC(0.00)[vger.kernel.org,suse.com,linux-m68k.org,ziepe.ca,kernel.org,broadcom.com,lunn.ch,davemloft.net,google.com,redhat.com,nvidia.com,marvell.com,HansenPartnership.com,oracle.com,chelsio.com,blackwall.org,netfilter.org,strlen.de,nwl.cc,auristor.com,gmail.com,oss.qualcomm.com,arndb.de,amd.com,fairphone.com,bp.renesas.com,renesas.com,linux-foundation.org,davidgow.net,hotmail.com,gondor.apana.org.au,blochl.de,lists.linux-m68k.org,corigine.com,lists.linux.dev];
+	TAGGED_FROM(0.00)[bounces-1104-lists,linux-sctp=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[57];
-	FROM_NEQ_ENVFROM(0.00)[kieran.bingham@ideasonboard.com,linux-sctp@vger.kernel.org];
-	PRECEDENCE_BULK(0.00)[];
-	DKIM_TRACE(0.00)[ideasonboard.com:-];
-	NEURAL_HAM(-0.00)[-0.726];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-sctp];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linuxfoundation.org:email,ideasonboard.com:email,ping.linuxembedded.co.uk:mid,avm.de:email]
-X-Rspamd-Queue-Id: 31DEE26B17D
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[62];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[kuba@kernel.org,linux-sctp@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-sctp,netdev];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 744A426C89C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Quoting Philipp Hahn (2026-03-10 11:49:15)
-> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
-> check.
->=20
-> Change generated with coccinelle.
->=20
-> To: Shuah Khan <skhan@linuxfoundation.org>
-> To: Kieran Bingham <kieran.bingham@ideasonboard.com>
-> To: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: linux-media@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
-> ---
->  drivers/media/test-drivers/vimc/vimc-streamer.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/media/test-drivers/vimc/vimc-streamer.c b/drivers/me=
-dia/test-drivers/vimc/vimc-streamer.c
-> index 15d863f97cbf96b7ca7fbf3d7b6b6ec39fcc8ae3..da5aca50bcb4990c06f28e5a8=
-83eb398606991e9 100644
-> --- a/drivers/media/test-drivers/vimc/vimc-streamer.c
-> +++ b/drivers/media/test-drivers/vimc/vimc-streamer.c
-> @@ -167,7 +167,7 @@ static int vimc_streamer_thread(void *data)
->                 for (i =3D stream->pipe_size - 1; i >=3D 0; i--) {
->                         frame =3D stream->ved_pipeline[i]->process_frame(
->                                         stream->ved_pipeline[i], frame);
-> -                       if (!frame || IS_ERR(frame))
-> +                       if (IS_ERR_OR_NULL(frame))
+On Tue, 10 Mar 2026 16:34:24 +0100 Fernando Fernandez Mancera wrote:
+> Maintaining a modular IPv6 stack offers image size and memory savings
+> for specific setups, this benefit is outweighed by the architectural
+> burden it imposes on the subsystems on implementation and maintenance.
+> Therefore, drop it.
+> 
+> Change CONFIG_IPV6 from tristate to bool. Remove all Kconfig
+> dependencies across the tree that explicitly checked for IPV6=m. In
+> addition, remove MODULE_DESCRIPTION(), MODULE_ALIAS(), MODULE_AUTHOR()
+> and MODULE_LICENSE().
+> 
+> This is also replacing module_init() by device_initcall(). It is not
+> possible to use fs_initcall() as IPv4 does because that creates a race
+> condition on IPv6 addrconf.
+> 
+> Finally, modify the default configs from CONFIG_IPV6=m to CONFIG_IPV6=y
+> except for m68k as according to the bloat-o-meter the image is
+> increasing by 330KB~ and that isn't acceptable. Instead, disable IPv6 on
+> this architecture by default. This is aligned with m68k RAM requirements
+> and recommendations [1].
 
-Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+AI has spotted:
 
->                                 break;
->                 }
->                 //wait for 60hz
->=20
-> --=20
-> 2.43.0
->
+> diff --git a/arch/m68k/configs/amiga_defconfig b/arch/m68k/configs/amiga_defconfig
+> index 31d16cba9879..de088071dde4 100644
+> --- a/arch/m68k/configs/amiga_defconfig
+> +++ b/arch/m68k/configs/amiga_defconfig
+> @@ -64,7 +64,6 @@ CONFIG_NET_IPIP=m
+>  CONFIG_NET_IPGRE_DEMUX=m
+>  CONFIG_NET_IPGRE=m
+>  CONFIG_NET_IPVTI=m
+> -CONFIG_NET_FOU_IP_TUNNELS=y
+>  CONFIG_INET_AH=m
+
+Is CONFIG_NET_FOU_IP_TUNNELS=y removed intentionally? This option
+provides FOU/GUE encapsulation for IP tunnels and has 'depends on
+NET_IPIP || NET_IPGRE || IPV6_SIT' as its Kconfig dependency. With IPv6
+disabled, IPV6_SIT becomes unavailable, but CONFIG_NET_IPIP=m and
+CONFIG_NET_IPGRE=m are both still present in the defconfig, so the
+dependency remains satisfiable.
+
+Since CONFIG_NET_FOU_IP_TUNNELS has no 'default y', removing it from the
+defconfig means FOU/GUE encapsulation for IP tunnels will be silently
+disabled by default on m68k. The commit message describes only disabling
+IPv6 on m68k, not removing IPv4 FOU tunnel support.
+
+This affects four m68k defconfigs:
+- amiga_defconfig
+- apollo_defconfig
+- atari_defconfig
+- bvme6000_defconfig
 
