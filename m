@@ -1,245 +1,236 @@
-Return-Path: <linux-sctp+bounces-1125-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1124-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EISHG1PmsmktQwAAu9opvQ
-	(envelope-from <linux-sctp+bounces-1125-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Thu, 12 Mar 2026 17:14:11 +0100
+	id 4BPnOJ3msmktQwAAu9opvQ
+	(envelope-from <linux-sctp+bounces-1124-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Thu, 12 Mar 2026 17:15:25 +0100
 X-Original-To: lists+linux-sctp@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B257275584
-	for <lists+linux-sctp@lfdr.de>; Thu, 12 Mar 2026 17:14:11 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DDAE27561F
+	for <lists+linux-sctp@lfdr.de>; Thu, 12 Mar 2026 17:15:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 3464A304FF55
-	for <lists+linux-sctp@lfdr.de>; Thu, 12 Mar 2026 16:13:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 75963312634B
+	for <lists+linux-sctp@lfdr.de>; Thu, 12 Mar 2026 16:09:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 759ED3F23A5;
-	Thu, 12 Mar 2026 16:12:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BFA43F7A8F;
+	Thu, 12 Mar 2026 16:09:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bitbyteword.org header.i=@bitbyteword.org header.b="m1ki3q6s"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+Received: from mail-yx1-f44.google.com (mail-yx1-f44.google.com [74.125.224.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 053B93F7AA2
-	for <linux-sctp@vger.kernel.org>; Thu, 12 Mar 2026 16:12:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773331971; cv=none; b=XBbB8El/Yyk6gOXXHSJ2diTtXTYSZurqIX/HJ4p5Mw12HNazFxg7ww7Dq+czdrfnzi5fLZOaKHwxDg3S3iwahJPZKrplp8/l5a6FPYK08kDru30PoYQjBNBKgYG1objx1rwbIUdhZ+I+qpIvc+Cv9+rug9EZlw8EvU2YFd/SYgc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773331971; c=relaxed/simple;
-	bh=J0G6eyWjCZe2EavnpoZMaa3QDnbvlnCWthcPft0y1xg=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70A303F54DE
+	for <linux-sctp@vger.kernel.org>; Thu, 12 Mar 2026 16:09:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773331744; cv=pass; b=O2rKlOa7AECDJsy3Pvtbvu9rpO0RitKauT9SyoJZ73E+Eq0494HhNwm/ywTUVxG+MyOq0tCbrf7RCW1nesKNSkdvO3aKcITwQ9PwEXRP0corbSWyt/mdaEmfUtWDpggCa+qREpGwZjfEPiOC1fVfU/Qbe8jlvHiYB+ksvEPrZOI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773331744; c=relaxed/simple;
+	bh=/9ZhlXnE8IpHyY7rKGq8AMXoEoLmeVmAM+IAe1Oezhg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XbUTK/NbmLE6ra7nSSrK5Faed3f00BGADIJHEMx0KkX4edGhZYGX5p1t+bRvu/mT1UVBhrW/oKsAvRoLRR+sDZiljbmIGvwbkpZJbX4RVyC9M6uTg6VBt+GBEhEZ9KwWGCoGebVpL/lbubYMfw96022Ca2efQc8wIRWOSiL1BJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-40427db1300so762337fac.0
-        for <linux-sctp@vger.kernel.org>; Thu, 12 Mar 2026 09:12:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773331969; x=1773936769;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+	 To:Cc:Content-Type; b=rwVM9tV12CvDAX3YFseBfOV5085cJJjZh7PkY7UydIqkCdhODDtA0Gh4guCKa4LBfl5o0NSzhzliMD4MhE9gx3+JgMHxNOR93NFc+BUfV+aAtYDb7F4HIa/WbqDmyFXpVANyF84+oskUy2qr4bD2LDp5bBV6aYcZ1Uh6nLBy9lc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bitbyteword.org; spf=pass smtp.mailfrom=bitbyteword.org; dkim=pass (2048-bit key) header.d=bitbyteword.org header.i=@bitbyteword.org header.b=m1ki3q6s; arc=pass smtp.client-ip=74.125.224.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bitbyteword.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bitbyteword.org
+Received: by mail-yx1-f44.google.com with SMTP id 956f58d0204a3-64ca1ba0089so1201898d50.1
+        for <linux-sctp@vger.kernel.org>; Thu, 12 Mar 2026 09:09:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773331741; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Kkcy1F1P4hkiIr2KGBpIUFqmhhfJapFlnjr6HCyIWlaxueBmZtm/Zb9bNkwiajJS4h
+         3lZ1MA8ixmEgM3HakUM2hrASnBuhq/Dp5oqOTbS/lyqMZoAZw16nPGJDh9AG2/wOzPqq
+         6ON6vCF6ZaqEnTBr1aGKa9fpxfAVqiuBR6Lzkn6c4iaeWFlGeC9+/TZ3jgKBKPBTjz4x
+         Yjb/fHkqqIhvh3kvOITjnRrkEZRy4hCwbiWgracR1R+SS72MxzwUyTZC1rYT+NKYp646
+         xHe/dO6PwMafX4WSY3zm4kFtonddVLQ8MnGSEOijvN+XUq9iAKxReHwQB55/Y1pPd8QZ
+         mjAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=kI5PTFr09piXXwe+dHgxbmefu5uh1N96l8rxcGpDT20=;
+        fh=vPjqgP+iapgmaUuYPRvFr90JW19W0b333Poe0uQ/yTg=;
+        b=Ba2ccNfGlDTVK3HqmDS+5c5OTB5tBx+0oqFTjOTcDl251zdlRYqhvmdwkqvXSDCt7I
+         TTLcOQj53XwSVlzzhrTaxWw0T8p9R6+sPXnjl2KIS6Yd8YZLc8voLY7IJIICYkk44hXr
+         cVxeK4AgcHVw5OCe8Mu56JcNTDug0lOoy9Jc+FIiyN0BNsrwU9iSDqd/Vx9eOhm7ReV1
+         nwVwnljywoBhnDtnc/Z/8tnNI8t365YPU+VEhqK34GG5xqppv7EhOrmmMRG9WxwM7a9k
+         5eLRwm4CqMW20jD7U4PlMQd84dBdGC4w5jYPxkXuNKK622iyd7FL4Ly98gWRq1an6Pkz
+         21WA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bitbyteword.org; s=google; t=1773331741; x=1773936541; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=r8DuBIlRqwUybKw9BKko7+xZruw6jP0mIyTYZl7vHWM=;
-        b=bVTKXI1M1RMPcy1kySqOQ1Etp7ZiTSIvNOnH46d1cnUhtTL6tu8nTZccZsYH1ePOt0
-         Hf5rEYl2tb4DcvbtTBsCCkPfFJ3IVt91a/LEJUFScPR+emib5XJqY0ajRavh07WfhOxu
-         GXvuKsv/AV44ImT9LDOuRgXlgxYo/c9gok2oyr/5Fhad72z/fGeNtC3l40LEjRqPWn1y
-         BUDIRyFM4A64oBinE/o28XgqwO7b12clEJGp03mbE2iynwZkOr/x1kvFiIsmxKmFCEDo
-         8c5vwu2O+FvUJ+RxXakzRCEn+qgbXzCxcoc/QY5d4DJtO15VAKWuMfZhOIiYGCRQhiOK
-         DDUw==
-X-Forwarded-Encrypted: i=1; AJvYcCXwg9yIL148MWqcK1QgSWVQylr8tVHCFLVe2Pttai+UeEw4K40bIMMaglRUXiACOsReiZBWr83SRXNM@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0a6n2k4yltuBgKp2plvgb1XCdzowCzoK6HeVxRtzBEfTZ+nVB
-	VUsOPHqIHv0AZAWIXIsGmikXZaSdnpGaUFa5LG/gk7GHZ/asiprGy59Wr2yzV4IJRf0=
-X-Gm-Gg: ATEYQzx3rKX7M82QStVqGsgnkj1HrS4l9RL6IyVdAHfjyudPMICeTUg0+sqtbDN5bEX
-	6T2VLz02/EEpEiQirAQmkl7k8RnYj+x8ptqJWA5Y1KxpjVj+Jos1xtBXbjT0LpCaSCNTi5VY1IC
-	eJG6XQA9BY+boudDPZzdmckfwOAJ9YLatRNS/KFKMAFCyBVeUuSDYvgqMPCJK0QhXlYl74Gh60J
-	1M00FZKpAbwdlLhB7YQ+WUh7gUqikA7cGKLQlhukmiSAlUGCEPylp9S8N/t+5gxbWNRz0x/QIYN
-	qnMIXx1Xj7QErbpHIVbUweirQwqbkfRjVSLcUq1v2Km+6/YrHcg8VwED805ygzfHqd4QcMtihZ3
-	C1OeaoU+E1LySAK3QrBvc8l1jzMF7fp7z8G/SPatCCQlR8qL9RBjmowQDS/vW+6wq1q/oHEkzvx
-	7kw9uZDkIpLecynWWX95qtm7xOW4zmC8/8vfhTGG612ckHmPRTfGR1litxQPqLoqDS6QmjRQY=
-X-Received: by 2002:a05:6870:a109:b0:417:3be0:4e4e with SMTP id 586e51a60fabf-4177c8d3750mr3818516fac.16.1773331968737;
-        Thu, 12 Mar 2026 09:12:48 -0700 (PDT)
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com. [209.85.161.43])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4177e1f9f86sm5498746fac.2.2026.03.12.09.12.48
-        for <linux-sctp@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Mar 2026 09:12:48 -0700 (PDT)
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-67bb5e4cf5aso777818eaf.2
-        for <linux-sctp@vger.kernel.org>; Thu, 12 Mar 2026 09:12:48 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXmTAG++PiOu+tyzAI0dD2RLlr5NF3d9aW+Zz7bGYKtxJpcvQiKDi182HXw0SV+4GtW/UPPL7qjXVmx@vger.kernel.org
-X-Received: by 2002:a05:6102:512b:b0:5ff:22f5:e37e with SMTP id
- ada2fe7eead31-601deb4d089mr2630417137.10.1773331557630; Thu, 12 Mar 2026
- 09:05:57 -0700 (PDT)
+        bh=kI5PTFr09piXXwe+dHgxbmefu5uh1N96l8rxcGpDT20=;
+        b=m1ki3q6sM4E2UACesTTqdadtI+Q0abqlUwfIdHI+OjmsRX2whEFMpQZptypVWhQx7h
+         QD04yZlyfzP3xSivF9scjOrX5/FKYwiLrKA2X7JGefZSd1ksKzyMr15sFt8BUlBtCA1S
+         qJU7H/z8w1uO+F9Lf0dqC/P0kEVsXjabxHZfvBx9uTBgICn+qEBxH7rHMoE2jVFa285u
+         ZgHMmgqvOB2dgKagDrzwCVgXrpWT6UXW/+5qlE/3A3PliRynwsbURLgRm9zWpjrvx8vj
+         l50ZunSLyn6Bt2c18cyLVOhmld8Lw2f3Z/Tl83A9P3MTDzd0bDNTqIw9vU+Apak8seEn
+         KC5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773331741; x=1773936541;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=kI5PTFr09piXXwe+dHgxbmefu5uh1N96l8rxcGpDT20=;
+        b=vtkRcDQekQoA4zk+wMaz90GZ5OId7QQq4CkRcT7XNadO/VymdD6nkKoR/QiQEsl/S+
+         KQetNrGtzJbAuNNvToUl/lgQ+JMNakGqhwRR9RXgcxr7eoBhLo5HIP2S0ffSii2rX8Jg
+         CVXNg0sVdL25YfhIike1qO6NatcvYw39J4o0pTTv91BpMsY7dX+XYZO8S0RCK7ux338M
+         Ubhui/BNVyKEFf9iUg1TxUbt7GtJpCzEkFkKCv/70y3V6bguX4tTxGlf6zTzVV3Q6RU0
+         SvORvhJUTGZGaiGY25wahufgENF5TBdPRwaKbqNNdohNPuDgJCC5eGeKGbbDvJW658x9
+         Bgaw==
+X-Forwarded-Encrypted: i=1; AJvYcCU6MRAKAUhcZSaJ5ofvD5aUyAIoe0AlNk2r1/iFV2z1HRA4JQ6SvRkTbNGPrcv2VMOCG5jEaFxuMAkx@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyw1KvvGt//37NZ/lfV0LJ12g03zFmXLX5ivfVV/Rei1yg+G5Sq
+	8aR412dvzlFa19XLDeTuVetNWNCJsE543HU7qU77AG1+0bL0ROM1x1R+iwb7KOYq7kZcLmrC5IQ
+	qmRThqMtEnwMUy9em1z2lI7j/a8HEJgNGHuu45TTyTw==
+X-Gm-Gg: ATEYQzzEspEAbZbggHcvP1tP8gxrwcrYqHmM7z+OUBJPbAZRVlEAgCOH7g2Et+n2nta
+	EtHZqCmBiV1eRWJBLN8LEK9Fvk3L/Nf/x8Wu3X81EXaqcFXyQdYhPNI+18r5p/9iNf2LA9H7GyO
+	slgZRc5bzeAjvqdAMCVJM5eEnUCIUZn3W6tUs0rQN3Sls8AEQawGhT87V3ycqxjY8Ww60Ly6v/1
+	XEf+sOUyABthp6MsgHIFVc1g7LinDfUvRKBezQvkDg9NtYOPr8ZjQFwlcdpok4EIlZMHfde6gd4
+	uJk0kH0=
+X-Received: by 2002:a05:690e:448d:b0:64a:e799:1d9c with SMTP id
+ 956f58d0204a3-64e63079bb0mr62693d50.60.1773331741406; Thu, 12 Mar 2026
+ 09:09:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260310153506.5181-1-fmancera@suse.de> <20260310153506.5181-2-fmancera@suse.de>
- <20260311200219.45796ec4@kernel.org> <aebac89f-f3b9-4983-8139-353a3ff19c98@suse.de>
-In-Reply-To: <aebac89f-f3b9-4983-8139-353a3ff19c98@suse.de>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 12 Mar 2026 17:05:46 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWK0P+EEQXOQ8FMb7DYt-95dAmmbOjMhxCKHnvHRntojA@mail.gmail.com>
-X-Gm-Features: AaiRm51vTFby3MbWyu4EKyWe_lBoIWwNWM0L5hUj3OB8Sdn3mba4moA7Rj12Mh4
-Message-ID: <CAMuHMdWK0P+EEQXOQ8FMb7DYt-95dAmmbOjMhxCKHnvHRntojA@mail.gmail.com>
-Subject: Re: [PATCH 01/10 net-next v2] ipv6: convert CONFIG_IPV6 to built-in
- only and clean up Kconfigs
-To: Fernando Fernandez Mancera <fmancera@suse.de>
-Cc: Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org, rbm@suse.com, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
-	Selvin Xavier <selvin.xavier@broadcom.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+References: <20260312150523.2054552-1-vineeth@bitbyteword.org>
+ <1e3c2830-765e-4271-89f7-0b6784b37597@efficios.com> <20260312112354.3dd99e36@gandalf.local.home>
+ <219d015d-076b-4c80-8f63-88569115fdad@efficios.com> <20260312114041.5193c729@gandalf.local.home>
+ <1becdbce-2c01-468a-bbab-42b5dea9fdf8@efficios.com>
+In-Reply-To: <1becdbce-2c01-468a-bbab-42b5dea9fdf8@efficios.com>
+From: Vineeth Remanan Pillai <vineeth@bitbyteword.org>
+Date: Thu, 12 Mar 2026 12:08:49 -0400
+X-Gm-Features: AaiRm50l09G2avZYKQas6kLTqrDst8ZjnHTnngudy3h6MyVa79lzABXaRh3Trz0
+Message-ID: <CAO7JXPjnnruhM5oC6xMgnYaQ9efzYFqMCFiJLNM3HCQ+ZeCiJw@mail.gmail.com>
+Subject: Re: [PATCH 00/15] tracepoint: Avoid double static_branch evaluation
+ at guarded call sites
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Dmitry Ilvokhin <d@ilvokhin.com>, Masami Hiramatsu <mhiramat@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org, 
 	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>, 
-	Simon Horman <horms@kernel.org>, Saurav Kashyap <skashyap@marvell.com>, 
-	Javed Hasan <jhasan@marvell.com>, 
-	"maintainer:BROADCOM BNX2FC 10 GIGABIT FCOE DRIVER" <GR-QLogic-Storage-Upstream@marvell.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, 
+	Xin Long <lucien.xin@gmail.com>, Jon Maloy <jmaloy@redhat.com>, 
+	Aaron Conole <aconole@redhat.com>, Eelco Chaudron <echaudro@redhat.com>, 
+	Ilya Maximets <i.maximets@ovn.org>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-sctp@vger.kernel.org, tipc-discussion@lists.sourceforge.net, 
+	dev@openvswitch.org, Oded Gabbay <ogabbay@kernel.org>, Koby Elbaz <koby.elbaz@intel.com>, 
+	dri-devel@lists.freedesktop.org, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, 
+	Huang Rui <ray.huang@amd.com>, Mario Limonciello <mario.limonciello@amd.com>, 
+	Len Brown <lenb@kernel.org>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	linux-pm@vger.kernel.org, MyungJoo Ham <myungjoo.ham@samsung.com>, 
+	Kyungmin Park <kyungmin.park@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, linaro-mm-sig@lists.linaro.org, 
+	Eddie James <eajames@linux.ibm.com>, Andrew Jeffery <andrew@codeconstruct.com.au>, 
+	Joel Stanley <joel@jms.id.au>, linux-fsi@lists.ozlabs.org, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Alex Deucher <alexander.deucher@amd.com>, Danilo Krummrich <dakr@kernel.org>, 
+	Matthew Brost <matthew.brost@intel.com>, Philipp Stanner <phasta@kernel.org>, 
+	Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
+	amd-gfx@lists.freedesktop.org, Jiri Kosina <jikos@kernel.org>, 
+	Benjamin Tissoires <bentiss@kernel.org>, linux-input@vger.kernel.org, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-i2c@vger.kernel.org, 
+	Mark Brown <broonie@kernel.org>, Michael Hennerich <michael.hennerich@analog.com>, 
+	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, linux-spi@vger.kernel.org, 
 	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K. Petersen" <martin.petersen@oracle.com>, Nilesh Javali <njavali@marvell.com>, 
-	Manish Rangankar <mrangankar@marvell.com>, Varun Prakash <varun@chelsio.com>, 
-	Alexander Aring <aahringo@redhat.com>, David Teigland <teigland@redhat.com>, 
-	Andreas Gruenbacher <agruenba@redhat.com>, Nikolay Aleksandrov <razor@blackwall.org>, 
-	David Ahern <dsahern@kernel.org>, Pablo Neira Ayuso <pablo@netfilter.org>, 
-	Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>, David Howells <dhowells@redhat.com>, 
-	Marc Dionne <marc.dionne@auristor.com>, 
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, 
-	Jon Maloy <jmaloy@redhat.com>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, 
-	Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Eric Biggers <ebiggers@kernel.org>, Michal Simek <michal.simek@amd.com>, 
-	Luca Weiss <luca.weiss@fairphone.com>, Sven Peter <sven@kernel.org>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
-	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, David Gow <david@davidgow.net>, 
-	Kuan-Wei Chiu <visitorckw@gmail.com>, Ryota Sakamoto <sakamo.ryota@gmail.com>, 
-	Kir Chou <note351@hotmail.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, Vikas Gupta <vikas.gupta@broadcom.com>, 
-	Bhargava Marreddy <bhargava.marreddy@broadcom.com>, 
-	Rajashekar Hudumula <rajashekar.hudumula@broadcom.com>, =?UTF-8?Q?Markus_Bl=C3=B6chl?= <markus@blochl.de>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>, 
-	"open list:INFINIBAND SUBSYSTEM" <linux-rdma@vger.kernel.org>, 
-	"open list:NETRONOME ETHERNET DRIVERS" <oss-drivers@corigine.com>, 
-	"open list:BROADCOM BNX2FC 10 GIGABIT FCOE DRIVER" <linux-scsi@vger.kernel.org>, 
-	"open list:DISTRIBUTED LOCK MANAGER (DLM)" <gfs2@lists.linux.dev>, "open list:ETHERNET BRIDGE" <bridge@lists.linux.dev>, 
-	"open list:NETFILTER" <netfilter-devel@vger.kernel.org>, 
-	"open list:NETFILTER" <coreteam@netfilter.org>, 
-	"open list:RXRPC SOCKETS (AF_RXRPC)" <linux-afs@lists.infradead.org>, 
-	"open list:SCTP PROTOCOL" <linux-sctp@vger.kernel.org>, 
-	"open list:TIPC NETWORK LAYER" <tipc-discussion@lists.sourceforge.net>
+	"Martin K. Petersen" <martin.petersen@oracle.com>, linux-scsi@vger.kernel.org, 
+	Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spamd-Result: default: False [0.04 / 15.00];
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[bitbyteword.org:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,suse.com,ziepe.ca,broadcom.com,lunn.ch,davemloft.net,google.com,redhat.com,nvidia.com,marvell.com,hansenpartnership.com,oracle.com,chelsio.com,blackwall.org,netfilter.org,strlen.de,nwl.cc,auristor.com,gmail.com,oss.qualcomm.com,arndb.de,amd.com,fairphone.com,bp.renesas.com,renesas.com,linux-foundation.org,davidgow.net,hotmail.com,gondor.apana.org.au,blochl.de,lists.linux-m68k.org,corigine.com,lists.linux.dev,lists.infradead.org,lists.sourceforge.net];
-	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-1124-lists,linux-sctp=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-1125-lists,linux-sctp=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_CC(0.00)[goodmis.org,infradead.org,ilvokhin.com,kernel.org,redhat.com,kernel.dk,vger.kernel.org,davemloft.net,google.com,iogearbox.net,gmail.com,ovn.org,lists.sourceforge.net,openvswitch.org,intel.com,lists.freedesktop.org,linaro.org,amd.com,linux.intel.com,samsung.com,lists.linaro.org,linux.ibm.com,codeconstruct.com.au,jms.id.au,lists.ozlabs.org,ffwll.ch,sang-engineering.com,analog.com,hansenpartnership.com,oracle.com,fb.com,suse.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DMARC_NA(0.00)[linux-m68k.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-sctp,netdev];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-sctp@vger.kernel.org];
+	DMARC_NA(0.00)[bitbyteword.org];
+	DKIM_TRACE(0.00)[bitbyteword.org:+];
+	MISSING_XM_UA(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_FIVE(0.00)[6];
-	NEURAL_HAM(-0.00)[-0.998];
-	RCPT_COUNT_GT_50(0.00)[68];
-	R_DKIM_NA(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[vineeth@bitbyteword.org,linux-sctp@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[72];
+	TAGGED_RCPT(0.00)[linux-sctp,renesas];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 0B257275584
+X-Rspamd-Queue-Id: 3DDAE27561F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Fernando,
-
-On Thu, 12 Mar 2026 at 16:12, Fernando Fernandez Mancera
-<fmancera@suse.de> wrote:
-> On 3/12/26 4:02 AM, Jakub Kicinski wrote:
-> > On Tue, 10 Mar 2026 16:34:24 +0100 Fernando Fernandez Mancera wrote:
-> >> Maintaining a modular IPv6 stack offers image size and memory savings
-> >> for specific setups, this benefit is outweighed by the architectural
-> >> burden it imposes on the subsystems on implementation and maintenance.
-> >> Therefore, drop it.
+On Thu, Mar 12, 2026 at 11:49=E2=80=AFAM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+>
+> On 2026-03-12 11:40, Steven Rostedt wrote:
+> > On Thu, 12 Mar 2026 11:28:07 -0400
+> > Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+> >
+> >>> Note, Vineeth came up with the naming. I would have done "do" but whe=
+n I
+> >>> saw "invoke" I thought it sounded better.
 > >>
-> >> Change CONFIG_IPV6 from tristate to bool. Remove all Kconfig
-> >> dependencies across the tree that explicitly checked for IPV6=m. In
-> >> addition, remove MODULE_DESCRIPTION(), MODULE_ALIAS(), MODULE_AUTHOR()
-> >> and MODULE_LICENSE().
-> >>
-> >> This is also replacing module_init() by device_initcall(). It is not
-> >> possible to use fs_initcall() as IPv4 does because that creates a race
-> >> condition on IPv6 addrconf.
-> >>
-> >> Finally, modify the default configs from CONFIG_IPV6=m to CONFIG_IPV6=y
-> >> except for m68k as according to the bloat-o-meter the image is
-> >> increasing by 330KB~ and that isn't acceptable. Instead, disable IPv6 on
-> >> this architecture by default. This is aligned with m68k RAM requirements
-> >> and recommendations [1].
+> >> It works as long as you don't have a tracing subsystem called
+> >> "invoke", then you get into identifier clash territory.
 > >
-> > AI has spotted:
+> > True. Perhaps we should do the double underscore trick.
 > >
-> >> diff --git a/arch/m68k/configs/amiga_defconfig b/arch/m68k/configs/amiga_defconfig
-> >> index 31d16cba9879..de088071dde4 100644
-> >> --- a/arch/m68k/configs/amiga_defconfig
-> >> +++ b/arch/m68k/configs/amiga_defconfig
-> >> @@ -64,7 +64,6 @@ CONFIG_NET_IPIP=m
-> >>   CONFIG_NET_IPGRE_DEMUX=m
-> >>   CONFIG_NET_IPGRE=m
-> >>   CONFIG_NET_IPVTI=m
-> >> -CONFIG_NET_FOU_IP_TUNNELS=y
-> >>   CONFIG_INET_AH=m
+> > Instead of:  trace_invoke_foo()
 > >
-> > Is CONFIG_NET_FOU_IP_TUNNELS=y removed intentionally? This option
-> > provides FOU/GUE encapsulation for IP tunnels and has 'depends on
-> > NET_IPIP || NET_IPGRE || IPV6_SIT' as its Kconfig dependency. With IPv6
-> > disabled, IPV6_SIT becomes unavailable, but CONFIG_NET_IPIP=m and
-> > CONFIG_NET_IPGRE=m are both still present in the defconfig, so the
-> > dependency remains satisfiable.
+> > use:  trace_invoke__foo()
 > >
-> > Since CONFIG_NET_FOU_IP_TUNNELS has no 'default y', removing it from the
-> > defconfig means FOU/GUE encapsulation for IP tunnels will be silently
-> > disabled by default on m68k. The commit message describes only disabling
-> > IPv6 on m68k, not removing IPv4 FOU tunnel support.
 > >
+> > Which will make it more visible to what the trace event is.
+> >
+> > Hmm, we probably should have used: trace__foo() for all tracepoints, as
+> > there's still functions that are called trace_foo() that are not
+> > tracepoints :-p
 >
-> I noticed that when running
+> One certain way to eliminate identifier clash would be to go for a
+> prefix to "trace_", e.g.
 >
-> ./scripts/config --disable CONFIG_IPV6
+> do_trace_foo()
+> call_trace_foo()
+
+This was the initial idea, but it had conflict in the existing source:
+call_trace_sched_update_nr_running. do_trace_##name also had
+collisions when I checked. So, went with trace_invoke_##name. Did not
+check rest of the suggestions here though.
+
+Thanks,
+Vineeth
+
+> emit_trace_foo()
+> __trace_foo()
+> invoke_trace_foo()
+> dispatch_trace_foo()
 >
-> for the m68k, the script was adding CONFIG_LWTUNNEL=y and CONFIG_NET_FOU=y.
+> Thanks,
 >
-> CONFIG_LWTUNNEL was selected by multiple IPV6 features. I do not think
-> it makes sense to keep it for m68k given the information there is on
-> http://www.linux-m68k.org/faq/platinfo.html.
-
-Dunno about lwtunnel...
-
-> CONFIG_NET_FOU was something IPV6_FOU required, probably it should be
-> just dropped from the config instead of explicitly turn it off as it
-> turns off FOU_IP_TUNNELS too. It will be selected by FOU_IP_TUNNELS too
-> anyway.
-
-... but CONFIG_NET_FOU seems to be just a gatekeeping symbol
-for the tristate symbol IPV6_FOU, so FOU is still a module., which is good.
-
-
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> Mathieu
+>
+>
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> https://www.efficios.com
 
