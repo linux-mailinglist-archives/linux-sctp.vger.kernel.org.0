@@ -1,228 +1,302 @@
-Return-Path: <linux-sctp+bounces-1157-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1158-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uK8qLAmNxGlr0QQAu9opvQ
-	(envelope-from <linux-sctp+bounces-1157-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Thu, 26 Mar 2026 02:34:01 +0100
+	id 6KrsFtSE0mliYgcAu9opvQ
+	(envelope-from <linux-sctp+bounces-1158-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Sun, 05 Apr 2026 17:50:44 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51F2432DF1E
-	for <lists+linux-sctp@lfdr.de>; Thu, 26 Mar 2026 02:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A58F139EE8F
+	for <lists+linux-sctp@lfdr.de>; Sun, 05 Apr 2026 17:50:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 284F230467C0
-	for <lists+linux-sctp@lfdr.de>; Thu, 26 Mar 2026 01:28:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 07E103017270
+	for <lists+linux-sctp@lfdr.de>; Sun,  5 Apr 2026 15:48:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3853379EFC;
-	Thu, 26 Mar 2026 01:28:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A92EA2FB084;
+	Sun,  5 Apr 2026 15:48:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MLfhqhkz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SzhnYc9c"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82FBAF4F1;
-	Thu, 26 Mar 2026 01:28:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74C0730B529
+	for <linux-sctp@vger.kernel.org>; Sun,  5 Apr 2026 15:48:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774488531; cv=none; b=PfZcJtRbXoGVAEVhBuPV/c8amRd0+d9nPDDbcTRhcSRkSlozRgxI4LJvZx1N/VrC80RHM3LZ/ocKuQPJV2arhQoYk01jYtCCA0qkqOho9eL/k0wiHSDMoc/DEqUrWTYJt3YsffIBxctROBTU7nowukEM4Y3mghA7t7ve9zuE9P4=
+	t=1775404106; cv=none; b=uphvn8CJ4kLCGyIt48UPbbVrcTvjDblmMwVQTcqKnJmFjuAHm+9htFc3tLLvPlrJ+oRVfH7T4GLnL+iSZk+gmxZ7Y9OyeGUZG8l6P5Kbw7XV5PPlmrkf6SmKxC4ZLuswbpThAONqmXHoZtEZU+m6cNZUVG1KQRz3NY3DgH21/sE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774488531; c=relaxed/simple;
-	bh=0Cq7OMqDyz29Hy/YQIvOOTgh39yp/jjxAwDycnlq/O0=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=WUy6Adt/wTSA2KclWJzTRK3DBM6NvXfdRYO9O51OS3uJiN2S7VmuEBVqfV8fJKFB2cSIbxPioovUs2hkuyPWfq91a2RmVbTK4c8EEq1oxtWUObO/STRlK9n4A+qNfMA5NFkC4CyQ1uy1srPr8fUy2zIJnxggaM3wMmZZPJef4YM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MLfhqhkz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3592AC4CEF7;
-	Thu, 26 Mar 2026 01:28:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774488531;
-	bh=0Cq7OMqDyz29Hy/YQIvOOTgh39yp/jjxAwDycnlq/O0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=MLfhqhkzsxa7tc0jHzhytzV6qchl81dHU9KAPgpYRYmOHYLzk4wblKHPtqEHyv28p
-	 Q/b1ZGVBAKVMA2DtsWIH4xs0i1VJ2p7crVWlc/njQGIq3j2rxJcz4zZlqQtGtXSKGY
-	 qE7kmn3skAAmdHpynUh6G1IcDYzRBpRJQJ2v9dHtuEYl1SHM9u79m3ODxDTtFbRHwF
-	 TrXVRIXikjQcC748T/h8YzRRuj5Is74hno4IqadGPqhCATzpJM+vXtHmT1645lImlw
-	 xbcKSEnaeY6vjDCFgor9rDZ7RPAf5TB+nN0PUncVs3G3ToCrGTMxxDR5q52eHlIdvK
-	 yL93d9yknBOTA==
-Date: Thu, 26 Mar 2026 10:28:40 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: "Vineeth Pillai (Google)" <vineeth@bitbyteword.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Peter Zijlstra
- <peterz@infradead.org>, Dmitry Ilvokhin <d@ilvokhin.com>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
- io-uring@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Marcelo Ricardo Leitner
- <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, Jon Maloy
- <jmaloy@redhat.com>, Aaron Conole <aconole@redhat.com>, Eelco Chaudron
- <echaudro@redhat.com>, Ilya Maximets <i.maximets@ovn.org>,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-sctp@vger.kernel.org,
- tipc-discussion@lists.sourceforge.net, dev@openvswitch.org, Jiri Pirko
- <jiri@resnulli.us>, Oded Gabbay <ogabbay@kernel.org>, Koby Elbaz
- <koby.elbaz@intel.com>, dri-devel@lists.freedesktop.org,
- "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar
- <viresh.kumar@linaro.org>, "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
- Huang Rui <ray.huang@amd.com>, Mario Limonciello
- <mario.limonciello@amd.com>, Len Brown <lenb@kernel.org>, Srinivas
- Pandruvada <srinivas.pandruvada@linux.intel.com>, linux-pm@vger.kernel.org,
- MyungJoo Ham <myungjoo.ham@samsung.com>, Kyungmin Park
- <kyungmin.park@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>,
- Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>, Sumit Semwal
- <sumit.semwal@linaro.org>, linaro-mm-sig@lists.linaro.org, Eddie James
- <eajames@linux.ibm.com>, Andrew Jeffery <andrew@codeconstruct.com.au>, Joel
- Stanley <joel@jms.id.au>, linux-fsi@lists.ozlabs.org, David Airlie
- <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Alex Deucher
- <alexander.deucher@amd.com>, Danilo Krummrich <dakr@kernel.org>, Matthew
- Brost <matthew.brost@intel.com>, Philipp Stanner <phasta@kernel.org>, Harry
- Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>,
- amd-gfx@lists.freedesktop.org, Jiri Kosina <jikos@kernel.org>, Benjamin
- Tissoires <bentiss@kernel.org>, linux-input@vger.kernel.org, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, linux-i2c@vger.kernel.org, Mark Brown
- <broonie@kernel.org>, Michael Hennerich <michael.hennerich@analog.com>,
- Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, linux-spi@vger.kernel.org,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- linux-scsi@vger.kernel.org, Chris Mason <clm@fb.com>, David Sterba
- <dsterba@suse.com>, linux-btrfs@vger.kernel.org, Thomas Gleixner
- <tglx@linutronix.de>, Andrew Morton <akpm@linux-foundation.org>, SeongJae
- Park <sj@kernel.org>, linux-mm@kvack.org, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 01/19] tracepoint: Add trace_call__##name() API
-Message-Id: <20260326102840.80a270ec818fea7e000aeef4@kernel.org>
-In-Reply-To: <20260323160052.17528-2-vineeth@bitbyteword.org>
-References: <20260323160052.17528-1-vineeth@bitbyteword.org>
-	<20260323160052.17528-2-vineeth@bitbyteword.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1775404106; c=relaxed/simple;
+	bh=MrlBMIl68Z2aMl2ScQ2BVndAayou0hU09d6+YgdqAzU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sfy/LdZtzRLTCy9umE+QfarzTmYucQFREIbkMh+nJYl3ElghEFd6PiAaPybrDCE0vLxLctawHUGvuVYP4eMQ3fLKk0iq5vlExfoN9R0eNOipaPzXjY2GkHe6q2LNTqJLLvU2rCmN4rTodwP5mDMe/0DQSJDi6F+vtdFVj0+IxwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SzhnYc9c; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-488aa77a06eso9827305e9.0
+        for <linux-sctp@vger.kernel.org>; Sun, 05 Apr 2026 08:48:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775404100; x=1776008900; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8ejC9X9oL82T7UTRyPRfLQE9jbWqA07yGBE+sGIzbzg=;
+        b=SzhnYc9c09ZUJxViq8NuyR1J7rbrygz0aqcsGwT7xHsRtqeEdMuAMciD4L0qEjBmhr
+         65zFQtLOvov3XBgjrK5tbT23IB3PdDkzugL6mhtsBKr2xEO684tupfhprQBh8wcXUWPS
+         5Z3G/SaLQXD8mmlPwBDKDbh6DfBUcxN/Nm2zA5f5DcwkCPo07WyJEOz+CqOQbVknq2dP
+         pMmqnhNznctm+RdHSjGItJlsN1qEaI6ZslRBtPQvtUbFb6KE1JQpiNkbLF9OyO4CI7fK
+         5akgoU5tGSj49n1jkwBjf0glBNYMnraz4P6u0TSB4AMJ2K0kC2llzR2VUnQpbntlB/rM
+         ASpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775404100; x=1776008900;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8ejC9X9oL82T7UTRyPRfLQE9jbWqA07yGBE+sGIzbzg=;
+        b=LU16ECDL4sqL2+vWnvLeUt/lG02SgTrRiqsy8AluvyLuAl0haPJgi+rwJwq3O2iJ/D
+         lSLq0h6XkH1EN/4IKxArzPm9oNafz7KqzrbEoAZbAmqzosgim697xIgjjfOYu/9T0Dou
+         nnoouFCF2FQn0RwrT3xVtLsZAAl3z3Ega6CDzc/Uilt5Kd1jf4wqsvtlTDPCPbw9aE1z
+         8s6MFxob+Ao1RBwbvN8EA24mKbkZyR1L5N+x/mQzaihg3xrnelkDckURnU9rQXBkMtP1
+         3LnFciecWeSJDoWHZKDDRiRGWplMrEgo/hg0LqJ9MtHQFQKO+8jgd2LKxo3yQAUryklt
+         zTZA==
+X-Forwarded-Encrypted: i=1; AJvYcCW0wRXCYmcpLfbqJ2MaalIUD7eBTEl/DXPXw6WqchwzCIPLY9HLamJwFyGx7sfaGb2AzBC84EQgYKQz@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNObstVftaD5xthMPWqMhhVsmE2EkvprXiJ8UmKNOigWC7PSQr
+	Ki3ASZmkKT7Axi7LQWHcpJUmM4NnFOOh/D29EMCbMOwzQikDYBzejZp8
+X-Gm-Gg: AeBDietHAsqMzHAt82CoskfzN06+9g3JYBrFe+oHBoGnhjDgwFQNeiq5oujEP8F9WgE
+	GDudZttfyyMfh93OooNoLIYBe7nZqzkLs3EPfXhoKLBFkvCkTV7NRyzLq7YA1mAbD+blqmQByKc
+	lz97kRgrBxYsxlECtFP7iOiYZ6gBBLrYoZJgCjluWfOm4dF7NMpuKQ9PlmJvFb7+JATG64JdNGm
+	eAJdnEfYzxLP4NzbgDsOcRIa9GHGKreYRNDQ9x4p2K+9te30FbQAikZKfZ+0GesUdlGJEhdKLWJ
+	PhqUDbdwUCV5zISp5Rqsai4wbyZ4M+NbriVhIUtfXQIJUXGCu+HNzNoWAwrgFX0N0X9/cO/NWyE
+	aojjkc/ai5QDS8hfTKQyIQWTmPfxCPadbw1rOOgq5wwICnXc4SSZK6XUgNZm8VpzY/T5eEXZDAa
+	EgGaRZMxoYWbfW/4bRRTX4OqBLi9j79i23jHEycuTsslL03gAw9oE0n4DAy8G2Et5mxnATXZUpb
+	ccOohv1mmzU
+X-Received: by 2002:a05:600c:1396:b0:487:338:b4f3 with SMTP id 5b1f17b1804b1-488997d1371mr147256185e9.17.1775404099759;
+        Sun, 05 Apr 2026 08:48:19 -0700 (PDT)
+Received: from dohko.chello.ie (188-141-5-72.dynamic.upc.ie. [188.141.5.72])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887e93cf2dsm390530145e9.11.2026.04.05.08.48.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Apr 2026 08:48:19 -0700 (PDT)
+From: David Carlier <devnexen@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	Simon Horman <horms@kernel.org>,
+	Ilya Dryomov <idryomov@gmail.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Matthieu Baerts <matttbe@kernel.org>,
+	Mat Martineau <martineau@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	Aaron Conole <aconole@redhat.com>,
+	Ilya Maximets <i.maximets@ovn.org>,
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+	Xin Long <lucien.xin@gmail.com>,
+	Jon Maloy <jmaloy@redhat.com>,
+	netdev@vger.kernel.org,
+	ceph-devel@vger.kernel.org,
+	linux-wireless@vger.kernel.org,
+	mptcp@lists.linux.dev,
+	dev@openvswitch.org,
+	linux-sctp@vger.kernel.org,
+	tipc-discussion@lists.sourceforge.net,
+	linux-kernel@vger.kernel.org,
+	David Carlier <devnexen@gmail.com>
+Subject: [PATCH v3 net-next] net: use get_random_u{16,32,64}() where appropriate
+Date: Sun,  5 Apr 2026 16:48:16 +0100
+Message-ID: <20260405154816.4774-1-devnexen@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.16 / 15.00];
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	MV_CASE(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[goodmis.org,infradead.org,ilvokhin.com,kernel.org,efficios.com,redhat.com,kernel.dk,vger.kernel.org,davemloft.net,google.com,iogearbox.net,gmail.com,ovn.org,lists.sourceforge.net,openvswitch.org,resnulli.us,intel.com,lists.freedesktop.org,linaro.org,amd.com,linux.intel.com,samsung.com,lists.linaro.org,linux.ibm.com,codeconstruct.com.au,jms.id.au,lists.ozlabs.org,ffwll.ch,sang-engineering.com,analog.com,HansenPartnership.com,oracle.com,fb.com,suse.com,linutronix.de,linux-foundation.org,kvack.org,alien8.de];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[lunn.ch,kernel.org,gmail.com,sipsolutions.net,redhat.com,ovn.org,vger.kernel.org,lists.linux.dev,openvswitch.org,lists.sourceforge.net];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-1157-lists,linux-sctp=lfdr.de];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCPT_COUNT_GT_50(0.00)[81];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mhiramat@kernel.org,linux-sctp@vger.kernel.org];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-1158-lists,linux-sctp=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[25];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-sctp,renesas];
-	NEURAL_HAM(-0.00)[-1.000];
 	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[devnexen@gmail.com,linux-sctp@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,infradead.org:email,goodmis.org:email,bitbyteword.org:email]
-X-Rspamd-Queue-Id: 51F2432DF1E
+	TAGGED_RCPT(0.00)[linux-sctp,netdev];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FROM_HAS_DN(0.00)[]
+X-Rspamd-Queue-Id: A58F139EE8F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, 23 Mar 2026 12:00:20 -0400
-"Vineeth Pillai (Google)" <vineeth@bitbyteword.org> wrote:
+Use the typed random integer helpers instead of
+get_random_bytes() when filling a single integer variable.
+The helpers return the value directly, require no pointer
+or size argument, and better express intent.
 
-> Add trace_call__##name() as a companion to trace_##name().  When a
-> caller already guards a tracepoint with an explicit enabled check:
-> 
->   if (trace_foo_enabled() && cond)
->       trace_foo(args);
-> 
-> trace_foo() internally repeats the static_branch_unlikely() test, which
-> the compiler cannot fold since static branches are patched binary
-> instructions.  This results in two static-branch evaluations for every
-> guarded call site.
-> 
-> trace_call__##name() calls __do_trace_##name() directly, skipping the
-> redundant static-branch re-check.  This avoids leaking the internal
-> __do_trace_##name() symbol into call sites while still eliminating the
-> double evaluation:
-> 
->   if (trace_foo_enabled() && cond)
->       trace_invoke_foo(args);   /* calls __do_trace_foo() directly */
+Skipped sites writing into __be16 fields (netdevsim) where
+a direct assignment would trigger sparse endianness warnings.
 
-nit: trace_call_foo() instead of trace_invoke_foo()?
+Signed-off-by: David Carlier <devnexen@gmail.com>
+---
+ drivers/net/netdevsim/psample.c | 4 ++--
+ net/ceph/auth_x.c               | 2 +-
+ net/core/net_namespace.c        | 2 +-
+ net/mac80211/mesh_plink.c       | 2 +-
+ net/mptcp/subflow.c             | 4 ++--
+ net/openvswitch/flow_table.c    | 2 +-
+ net/sctp/sm_make_chunk.c        | 4 ++--
+ net/tipc/node.c                 | 2 +-
+ 8 files changed, 11 insertions(+), 11 deletions(-)
 
-Anyway looks good to me.
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-
-> 
-> Three locations are updated:
-> - __DECLARE_TRACE: invoke form omits static_branch_unlikely, retains
->   the LOCKDEP RCU-watching assertion.
-> - __DECLARE_TRACE_SYSCALL: same, plus retains might_fault().
-> - !TRACEPOINTS_ENABLED stub: empty no-op so callers compile cleanly
->   when tracepoints are compiled out.
-> 
-> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Vineeth Pillai (Google) <vineeth@bitbyteword.org>
-> Assisted-by: Claude:claude-sonnet-4-6
-> ---
->  include/linux/tracepoint.h | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
-> index 22ca1c8b54f32..ed969705341f1 100644
-> --- a/include/linux/tracepoint.h
-> +++ b/include/linux/tracepoint.h
-> @@ -294,6 +294,10 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
->  			WARN_ONCE(!rcu_is_watching(),			\
->  				  "RCU not watching for tracepoint");	\
->  		}							\
-> +	}								\
-> +	static inline void trace_call__##name(proto)			\
-> +	{								\
-> +		__do_trace_##name(args);				\
->  	}
->  
->  #define __DECLARE_TRACE_SYSCALL(name, proto, args, data_proto)		\
-> @@ -313,6 +317,11 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
->  			WARN_ONCE(!rcu_is_watching(),			\
->  				  "RCU not watching for tracepoint");	\
->  		}							\
-> +	}								\
-> +	static inline void trace_call__##name(proto)			\
-> +	{								\
-> +		might_fault();						\
-> +		__do_trace_##name(args);				\
->  	}
->  
->  /*
-> @@ -398,6 +407,8 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
->  #define __DECLARE_TRACE_COMMON(name, proto, args, data_proto)		\
->  	static inline void trace_##name(proto)				\
->  	{ }								\
-> +	static inline void trace_call__##name(proto)			\
-> +	{ }								\
->  	static inline int						\
->  	register_trace_##name(void (*probe)(data_proto),		\
->  			      void *data)				\
-> -- 
-> 2.53.0
-> 
-
-
+diff --git a/drivers/net/netdevsim/psample.c b/drivers/net/netdevsim/psample.c
+index 47d24bc64ee4..717d157c3ae2 100644
+--- a/drivers/net/netdevsim/psample.c
++++ b/drivers/net/netdevsim/psample.c
+@@ -94,7 +94,7 @@ static void nsim_dev_psample_md_prepare(const struct nsim_dev_psample *psample,
+ 	if (psample->out_tc_occ_max) {
+ 		u64 out_tc_occ;
+ 
+-		get_random_bytes(&out_tc_occ, sizeof(u64));
++		out_tc_occ = get_random_u64();
+ 		md->out_tc_occ = out_tc_occ & (psample->out_tc_occ_max - 1);
+ 		md->out_tc_occ_valid = 1;
+ 	}
+@@ -102,7 +102,7 @@ static void nsim_dev_psample_md_prepare(const struct nsim_dev_psample *psample,
+ 	if (psample->latency_max) {
+ 		u64 latency;
+ 
+-		get_random_bytes(&latency, sizeof(u64));
++		latency = get_random_u64();
+ 		md->latency = latency & (psample->latency_max - 1);
+ 		md->latency_valid = 1;
+ 	}
+diff --git a/net/ceph/auth_x.c b/net/ceph/auth_x.c
+index 692e0b868822..936b43ae4a95 100644
+--- a/net/ceph/auth_x.c
++++ b/net/ceph/auth_x.c
+@@ -571,7 +571,7 @@ static int ceph_x_build_request(struct ceph_auth_client *ac,
+ 			blob = enc_buf + SHA256_DIGEST_SIZE;
+ 		}
+ 
+-		get_random_bytes(&auth->client_challenge, sizeof(u64));
++		auth->client_challenge = get_random_u64();
+ 		blob->client_challenge = auth->client_challenge;
+ 		blob->server_challenge = cpu_to_le64(xi->server_challenge);
+ 
+diff --git a/net/core/net_namespace.c b/net/core/net_namespace.c
+index 1057d16d5dd2..deb8b2ec5674 100644
+--- a/net/core/net_namespace.c
++++ b/net/core/net_namespace.c
+@@ -411,7 +411,7 @@ static __net_init int preinit_net(struct net *net, struct user_namespace *user_n
+ 	ref_tracker_dir_init(&net->refcnt_tracker, 128, "net_refcnt");
+ 	ref_tracker_dir_init(&net->notrefcnt_tracker, 128, "net_notrefcnt");
+ 
+-	get_random_bytes(&net->hash_mix, sizeof(u32));
++	net->hash_mix = get_random_u32();
+ 	net->dev_base_seq = 1;
+ 	net->user_ns = user_ns;
+ 
+diff --git a/net/mac80211/mesh_plink.c b/net/mac80211/mesh_plink.c
+index 803106fc3134..7cbab90c8784 100644
+--- a/net/mac80211/mesh_plink.c
++++ b/net/mac80211/mesh_plink.c
+@@ -712,7 +712,7 @@ void mesh_plink_timer(struct timer_list *t)
+ 				"Mesh plink for %pM (retry, timeout): %d %d\n",
+ 				sta->sta.addr, sta->mesh->plink_retries,
+ 				sta->mesh->plink_timeout);
+-			get_random_bytes(&rand, sizeof(u32));
++			rand = get_random_u32();
+ 			sta->mesh->plink_timeout = sta->mesh->plink_timeout +
+ 					     rand % sta->mesh->plink_timeout;
+ 			++sta->mesh->plink_retries;
+diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
+index 5cfe19990f31..1a7736145dbc 100644
+--- a/net/mptcp/subflow.c
++++ b/net/mptcp/subflow.c
+@@ -72,7 +72,7 @@ static void subflow_req_create_thmac(struct mptcp_subflow_request_sock *subflow_
+ 	struct mptcp_sock *msk = subflow_req->msk;
+ 	u8 hmac[SHA256_DIGEST_SIZE];
+ 
+-	get_random_bytes(&subflow_req->local_nonce, sizeof(u32));
++	subflow_req->local_nonce = get_random_u32();
+ 
+ 	subflow_generate_hmac(READ_ONCE(msk->local_key),
+ 			      READ_ONCE(msk->remote_key),
+@@ -1639,7 +1639,7 @@ int __mptcp_subflow_connect(struct sock *sk, const struct mptcp_pm_local *local,
+ 	ssk = sf->sk;
+ 	subflow = mptcp_subflow_ctx(ssk);
+ 	do {
+-		get_random_bytes(&subflow->local_nonce, sizeof(u32));
++		subflow->local_nonce = get_random_u32();
+ 	} while (!subflow->local_nonce);
+ 
+ 	/* if 'IPADDRANY', the ID will be set later, after the routing */
+diff --git a/net/openvswitch/flow_table.c b/net/openvswitch/flow_table.c
+index 61c6a5f77c2e..67d5b8c0fe79 100644
+--- a/net/openvswitch/flow_table.c
++++ b/net/openvswitch/flow_table.c
+@@ -167,7 +167,7 @@ static struct table_instance *table_instance_alloc(int new_size)
+ 
+ 	ti->n_buckets = new_size;
+ 	ti->node_ver = 0;
+-	get_random_bytes(&ti->hash_seed, sizeof(u32));
++	ti->hash_seed = get_random_u32();
+ 
+ 	return ti;
+ }
+diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
+index 2c0017d058d4..de86ac088289 100644
+--- a/net/sctp/sm_make_chunk.c
++++ b/net/sctp/sm_make_chunk.c
+@@ -2727,7 +2727,7 @@ __u32 sctp_generate_tag(const struct sctp_endpoint *ep)
+ 	__u32 x;
+ 
+ 	do {
+-		get_random_bytes(&x, sizeof(__u32));
++		x = get_random_u32();
+ 	} while (x == 0);
+ 
+ 	return x;
+@@ -2738,7 +2738,7 @@ __u32 sctp_generate_tsn(const struct sctp_endpoint *ep)
+ {
+ 	__u32 retval;
+ 
+-	get_random_bytes(&retval, sizeof(__u32));
++	retval = get_random_u32();
+ 	return retval;
+ }
+ 
+diff --git a/net/tipc/node.c b/net/tipc/node.c
+index af442a5ef8f3..97aa970a0d83 100644
+--- a/net/tipc/node.c
++++ b/net/tipc/node.c
+@@ -1275,7 +1275,7 @@ void tipc_node_check_dest(struct net *net, u32 addr,
+ 			goto exit;
+ 
+ 		if_name = strchr(b->name, ':') + 1;
+-		get_random_bytes(&session, sizeof(u16));
++		session = get_random_u16();
+ 		if (!tipc_link_create(net, if_name, b->identity, b->tolerance,
+ 				      b->net_plane, b->mtu, b->priority,
+ 				      b->min_win, b->max_win, session,
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.53.0
+
 
