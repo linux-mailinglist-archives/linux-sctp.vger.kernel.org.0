@@ -1,187 +1,301 @@
-Return-Path: <linux-sctp+bounces-1162-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1163-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KoBMMAdf1Gm6tQcAu9opvQ
-	(envelope-from <linux-sctp+bounces-1162-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Tue, 07 Apr 2026 03:33:59 +0200
+	id EFYiO5Yf1Wnr0wcAu9opvQ
+	(envelope-from <linux-sctp+bounces-1163-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Tue, 07 Apr 2026 17:15:34 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FBF23A8B8A
-	for <lists+linux-sctp@lfdr.de>; Tue, 07 Apr 2026 03:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 880A23B0C55
+	for <lists+linux-sctp@lfdr.de>; Tue, 07 Apr 2026 17:15:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 71144300F5E4
-	for <lists+linux-sctp@lfdr.de>; Tue,  7 Apr 2026 01:33:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 58641307E1ED
+	for <lists+linux-sctp@lfdr.de>; Tue,  7 Apr 2026 15:08:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06D5D1EA7CE;
-	Tue,  7 Apr 2026 01:33:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ABFE35FF58;
+	Tue,  7 Apr 2026 15:08:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gzSFHsS2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oM/kS0m4"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E83219995E
-	for <linux-sctp@vger.kernel.org>; Tue,  7 Apr 2026 01:33:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775525635; cv=pass; b=MGx/k4r7CFv9G7l6SwPePPYUpdActeV3zv3dNDfmXFILGTvVVY2WNyDRESx73gPO1YvhmGJI3tf3ufoz+4QAmdPFSS5ybbY7nwZ6xIBSlX1bQIZNcWSYey3ITH9vGoU1TOkLy2iAxrsMNvt/XR7QK0YoitLylkpw6WUmFSw0U0w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775525635; c=relaxed/simple;
-	bh=H0LoEFDakMTPfi/BP2bcz4FMwGYT8QVcG3BuR0hJpVA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SyhtLqZtsrqVUwS3IXSCONJDBf6wSJgyidFxmIC6e+szyNIaUQm2jQE+76LsQ6w9O1yh7rzOtenGt6v1LO86mCq3ERBuWtYM2s5QIlxOcYTna3d2Xy/S0PmOagrdmFlFLUxdgL0ihn9re+1fELVtREA5/UAZQrVizowRHcHkyXI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gzSFHsS2; arc=pass smtp.client-ip=209.85.219.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC5E435F602
+	for <linux-sctp@vger.kernel.org>; Tue,  7 Apr 2026 15:08:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775574522; cv=none; b=BjMBOsgsrcrqM0Eqpi9URGYNcqgGidS9q236NPIKmuMRXWaGs41skAWt+W3NSrNJuUtKmvh0X7wJk9haF2T8mOLxs5zWSeeGQ6nzNo2uENHZxsWkcIR5FVopl/3sY2GvxCHIlEpRmsRTBrjhZ0GZirgWBKJkwf283cOr5VXvtpw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775574522; c=relaxed/simple;
+	bh=jymJPdqyE0JtZYcOwQes2cGg9dVOktqNFZiLSsqTKKg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hVMGZVcdrs5k4dzqRsolXRFO3ZZI5Hk6G0U+iAenT9B21W8UOIjbd2NOVMqmo8j9Tq9Y0J38E8FmHTKC44p44PLrwuYcbEFnCKxZHDZxxc9lhna3Fv4+1A3jGRbtVZzFqVtyOwydWcxGiK9CnlYNkWugRlf922yqpZNnK9w/6VQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oM/kS0m4; arc=none smtp.client-ip=209.85.221.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-89f87257904so40619086d6.1
-        for <linux-sctp@vger.kernel.org>; Mon, 06 Apr 2026 18:33:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775525634; cv=none;
-        d=google.com; s=arc-20240605;
-        b=at6PN+FbC3RSEsmHb5uXkgzhVuWv/onCm94KivQrEzBuIO8W+PE0UU8rmlAr/aW0aR
-         /6QvaXq7APZAMwj2Efa0dNHcSvJyBhVgQDJ98Fd3Y4DTUIciHCr0mVv+G8/tXVhDWPQv
-         k6zFo4v3fnhkqksDtfdnNokmBychvUsYdmXZLeZAYZOCXDkEyWg+zRPjppseqaBt9XfP
-         KpvnJF+uUfaM+Jzs3hA8oFV4E3P0vYJ7i2DLHfgFAeTO0XzKgaRLGk1ctOfaLeKLMBJY
-         woNxSasUr7uZ0ouJPMvZKVLX3WfKkMBUzJQBUwwNy8yCum3vaUnq1EIWeRvi5QtytaQ/
-         kI0Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=H0LoEFDakMTPfi/BP2bcz4FMwGYT8QVcG3BuR0hJpVA=;
-        fh=HBNVpiw3LHkJUAo5L9QRTQBkXTTJyr07RyK2VYiPaTs=;
-        b=AZlAKMH9Q4ahsCxVF+8FNh71ZO0D6087QIEUu7N/AIQtHcN5rchtdUcoBlcxL+iRH1
-         /82fFj9i+JhiY0mC9E7upQkc3mJcZWQd98vqkx1fds+4x2qDA1M9SC5EElhpoeg/R2Fn
-         QobroJE7gdlnDgbqkAFH/JmJK61bKz41rf1jnXxI8kJVrSIVd/1CwMPtEXhJn/KFRER8
-         VjOeRwj7TnSjRb6R0mZXGoYKaYcl7JlILOhfCLc82KZjbU5O+jkb2QPJhZagYumwK9cu
-         CxSFLqLARyNsrVeclXClkRBa6BN0mH/DucxCAufWIn31qReZbTCqG847+QX0HHSVf5IA
-         78QQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-43d01d6b50cso4884737f8f.1
+        for <linux-sctp@vger.kernel.org>; Tue, 07 Apr 2026 08:08:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775525634; x=1776130434; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H0LoEFDakMTPfi/BP2bcz4FMwGYT8QVcG3BuR0hJpVA=;
-        b=gzSFHsS2+LSeEfAyisIiX+v7cGWf53UuxRdlaOdcV+g/gWJY3b7CpLck+aVvS3y5p2
-         NP7AnnxXF1/JBg2rEaikZztKBvrGJtbm8oCzR8BcUR9jybpb6iMZVY0pwx1/GoKjfcMa
-         yjRNc4FCItEziHOJI8F45l96CuR/3F84lWQDLSPndT0mOzA0kcty+vnejz8cZIKqIWCO
-         M30N7623h1KWMOFYPj7KJCpT+K8U3/PY0g0fB1P3WUk80qoyY6Z3Lzgzt4MVzTDkuSiA
-         ugvGFaqFJAbjvexFq04TTrMslgppALp/o54V4kWX0UFe1+BKPQTCvRZqyikgtlMy/7lo
-         8r8w==
+        d=gmail.com; s=20251104; t=1775574519; x=1776179319; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=N4jjEPCUJmZT2sKEYrMwlfVHfjzzKvnFJHfospIU05c=;
+        b=oM/kS0m4cIuz+n/KMiXNxqknKvl6gXpm2xPRN5jiAHojDLjnyavSsbdvcq+/0+FaK6
+         uGzGGxKxMk0+9b8oo2l+/+Mk6K8VXhHosQSUDhrYr+pjT4q7uAEj2DIdIYhSWfreT6ax
+         thwqUGZpj6IDhk3ZDWY1xYAHNtEzg1EzpZhH6FT+aU6haOWulOci3yKNWwCAGlZZwm8Q
+         2J7TKX3eU/dE/gGrbn7Weeu6QREpV2MXp2vhn4WJTbzqwlsoUVrEUYxhs10pqltAbbAZ
+         QGSP/70jlOv6ctvjHoJtHrunN7+MLujgDbQxm+skTntIPPToDH81iCGspC+nsVNKZT55
+         ffBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775525634; x=1776130434;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=H0LoEFDakMTPfi/BP2bcz4FMwGYT8QVcG3BuR0hJpVA=;
-        b=p8krxiyID6XzfdZM3Mmzl/TuVoR3yTp8tETHIZPBp2YPzwKuwxOJxglu2olQiFsl1i
-         GZeQSAP0SkurxhdDNNE1OuazVE1MFbf/Mv8jixK9O36bu4I0Gf6lnL7ONDQrS7A2/GUp
-         i6ipeF5pFCrl9S6pL2qImgCv8cNr+IZIMIcoPFe/7lggNLI+/XXEh8pIyFcG/B7PqT9E
-         J73NsGbDb/8Hy08xfD2CSyKWUIBEb8mPfR5CpOeDND3/rQ0phI/s6oqoh+azI5/zPHWl
-         mKejM9BWgw4mjNh1H9YCICBA8Xf4wMieSkHtyojQ5rYUzkJlorTgfl+QGq6bd44MWQ35
-         pXfw==
-X-Forwarded-Encrypted: i=1; AJvYcCVVSrAVtkYAJT2P5Di3xvgUaCjclTnAqUqgXj3CyNSD88uZNthbRiQqGrxdWb7E/pRG9Mg21lsJPuBb@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfIxfDNLHzz7RHRywkKDt+8vBl5ErMUJ8wRam2tRyx1dYuZI/L
-	tzo4RZM4QMkoEaex8ol8O7QtiztNZkjxwgpTckHrmW/cvPgozceMfj1p2P+CibRp0F3Q7bYeRzy
-	w01nRl3cs1mUH3iPZ1Hk1Deu21BDRB58=
-X-Gm-Gg: AeBDieu7AgR7pTWoSeIEAMfYLwfmuyldtmqDBiyYIrhEUDkTBxeHuA7eOgO3UEK6ERr
-	xZDnsBJ3zp1ZEno/evhTpESRwBGezph95aKJmRMwvtKVXAo+zYq3aIIJaeVabwHJOKnxNqGqiN0
-	0SYKH3bbu7w+CfID8o9MYc6iQJxgnF1J94daNtr8U8zHFs096PeALD/wqH3kdPYAGasXBaRSYwd
-	45TWaf7wNGtW2WEbnHr1E+OV0oGR3UVRxTc9N+mcksp6m+P1P8rFzPwz6iyOTs7JhqKLB4AfTcB
-	LPAWdTGTcnKZbv5bFHw+
-X-Received: by 2002:a05:6214:212b:b0:89c:5110:751a with SMTP id
- 6a1803df08f44-8a704ac00f3mr250748606d6.44.1775525633467; Mon, 06 Apr 2026
- 18:33:53 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775574519; x=1776179319;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N4jjEPCUJmZT2sKEYrMwlfVHfjzzKvnFJHfospIU05c=;
+        b=DproaQz8HiPmsBaibo2/vAOf71+f7djQzZKbwZYtwxJQbE+Dbt9zO8jNnT73bw7XOW
+         zP6TC3XJrBebzwf3BS/ar1jkgnic5sYgrvAl2Sw7lovY/sifloqDAm/407FJXDfKUNk0
+         92k7L4nhA+zVoT+h8cjaCG7Cppscgqs/qNi+eEAz2jDaonSFlouqYNCYePJrdzxpOsRi
+         03NYnDXHjh+GJ8fE/BJ1rDulhBDxXTeuG+oc3WtiNiqtderqAliAsaDk4s3Ajp4SWG4h
+         JzuHGdVwxV2MhqpEafjMPtzO1hY1fFoemCzYlvE63cKRXn6YF4RCEARybBK6KfYJUnD7
+         /8Ow==
+X-Forwarded-Encrypted: i=1; AJvYcCWcd4DtVOCGBtjqWBr2LfZYkngKWj7/aFamZzU1lL0DttHLAbglubJMEoxBfkPgeSLN5usXfJXYjw3D@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGMteSCDfcwVaSFr4brZ3+gpjduQquOzIOy7jT7GyBD6HZijWg
+	nJnecaxI+n3l4X7bpxJg3gBVJKX1+B8bsz8ejFbxjv8cgp1KGC7hXeW6
+X-Gm-Gg: AeBDietSbxdUrwYaD/ic8Zs4wpZ/BMcggotiP7AqHJDeCa/5bs8BHqtFbfZikkiMMot
+	K9JWtM16PlSvmVSMbYH3N7yrLgGa4e2f9DmsQc41bNHluhK21G7Z4JKbiwb2tzUg5hNokRCPbPy
+	Ue36rgmcaQvIomNEZz6Ltbdp7SPdmNdM3LfPt+5Hs9D1nh8AtuWTklYBovRns0qI+Ng4Q36mKjk
+	pzyK8ht4yrcbbEWy+IZhLe+P1sQjvc7UJbpDaX1v7C4VLf1CubRgrrPgkhao4lB2tgX1AHR5KT/
+	Ezky4o6HcPOgmHnUMkgK7jhiCnITlnBLMjv+0zy0BkfxBAJWZ+Dd9mYuf6NGr2oUScB6IDzbCtW
+	4tUaGOpCnwLReIXp4KOi5SWUe24LJ9sK9kKyehEQzhpcrcbm1BQ6hMYIzOUc2U57pUB/wvPMW1w
+	dsEF8ELg8TIBN8runAJUhDE3V3MGRyuEw4vqdjf20awTXGB7q+vOa1jPzaKxYlYKI3RUdmdWuEa
+	y1w3RXQ0/MN
+X-Received: by 2002:a05:6000:1446:b0:439:c69f:503a with SMTP id ffacd0b85a97d-43d292d5e8dmr26238497f8f.27.1775574518734;
+        Tue, 07 Apr 2026 08:08:38 -0700 (PDT)
+Received: from dohko.chello.ie (188-141-5-72.dynamic.upc.ie. [188.141.5.72])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e2c54bdsm52056417f8f.16.2026.04.07.08.08.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Apr 2026 08:08:37 -0700 (PDT)
+From: David Carlier <devnexen@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	Simon Horman <horms@kernel.org>,
+	Ilya Dryomov <idryomov@gmail.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Matthieu Baerts <matttbe@kernel.org>,
+	Mat Martineau <martineau@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	Aaron Conole <aconole@redhat.com>,
+	Ilya Maximets <i.maximets@ovn.org>,
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+	Xin Long <lucien.xin@gmail.com>,
+	Jon Maloy <jmaloy@redhat.com>,
+	netdev@vger.kernel.org,
+	linux-wireless@vger.kernel.org,
+	mptcp@lists.linux.dev,
+	dev@openvswitch.org,
+	linux-sctp@vger.kernel.org,
+	tipc-discussion@lists.sourceforge.net,
+	linux-kernel@vger.kernel.org,
+	David Carlier <devnexen@gmail.com>
+Subject: [PATCH v4 net-next] net: use get_random_u{16,32,64}() where appropriate
+Date: Tue,  7 Apr 2026 16:07:58 +0100
+Message-ID: <20260407150758.5889-1-devnexen@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260405154816.4774-1-devnexen@gmail.com>
-In-Reply-To: <20260405154816.4774-1-devnexen@gmail.com>
-From: Julian Calaby <julian.calaby@gmail.com>
-Date: Tue, 7 Apr 2026 11:33:40 +1000
-X-Gm-Features: AQROBzCkX2gE2vUcwz9Vh41Dy86vV6V6vedD5cjTTBBq9Q2y1TRb7sq-3zFQtYQ
-Message-ID: <CAGRGNgUpknQi6PzBWQXeAP0Vh7XjntD_-O4QyjU5tAn8_71=eQ@mail.gmail.com>
-Subject: Re: [PATCH v3 net-next] net: use get_random_u{16,32,64}() where appropriate
-To: David Carlier <devnexen@gmail.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, "David S . Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Simon Horman <horms@kernel.org>, 
-	Ilya Dryomov <idryomov@gmail.com>, Johannes Berg <johannes@sipsolutions.net>, 
-	Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, 
-	Geliang Tang <geliang@kernel.org>, Aaron Conole <aconole@redhat.com>, 
-	Ilya Maximets <i.maximets@ovn.org>, Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, 
-	Xin Long <lucien.xin@gmail.com>, Jon Maloy <jmaloy@redhat.com>, netdev@vger.kernel.org, 
-	ceph-devel@vger.kernel.org, linux-wireless@vger.kernel.org, 
-	mptcp@lists.linux.dev, dev@openvswitch.org, linux-sctp@vger.kernel.org, 
-	tipc-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-1162-lists,linux-sctp=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[lunn.ch,kernel.org,gmail.com,sipsolutions.net,redhat.com,ovn.org,vger.kernel.org,lists.linux.dev,openvswitch.org,lists.sourceforge.net];
+	RCVD_TLS_LAST(0.00)[];
 	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[25];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[24];
+	TAGGED_FROM(0.00)[bounces-1163-lists,linux-sctp=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[devnexen@gmail.com,linux-sctp@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[gmail.com:+];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[juliancalaby@gmail.com,linux-sctp@vger.kernel.org];
-	FREEMAIL_CC(0.00)[kernel.org,davemloft.net,google.com,redhat.com,lunn.ch,gmail.com,sipsolutions.net,ovn.org,vger.kernel.org,lists.linux.dev,openvswitch.org,lists.sourceforge.net];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-sctp,netdev];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 1FBF23A8B8A
+	NEURAL_HAM(-0.00)[-0.984];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 880A23B0C55
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi David,
+Use the typed random integer helpers instead of
+get_random_bytes() when filling a single integer variable.
+The helpers return the value directly, require no pointer
+or size argument, and better express intent.
 
-On Mon, Apr 6, 2026 at 1:50=E2=80=AFAM David Carlier <devnexen@gmail.com> w=
-rote:
->
-> Use the typed random integer helpers instead of
-> get_random_bytes() when filling a single integer variable.
-> The helpers return the value directly, require no pointer
-> or size argument, and better express intent.
->
-> Skipped sites writing into __be16 fields (netdevsim) where
-> a direct assignment would trigger sparse endianness warnings.
+Skipped sites writing into __be16 (netdevsim) and __le64
+(ceph) fields where a direct assignment would trigger
+sparse endianness warnings.
 
-I don't believe that endian swapping significantly affects the
-randomness of the data returned, so either:
+Signed-off-by: David Carlier <devnexen@gmail.com>
+Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
 
-1. Do something to silence sparse (casts?)
-2. Live with the endian swap overhead if they're not in the hot path.
+Notes:
+    Changes v3 -> v4:
+    - Dropped net/ceph/auth_x.c site: client_challenge is __le64,
+      direct assignment triggers sparse endianness warning
+      (Matthieu Baerts)
+    - Added Reviewed-by from Matthieu Baerts for net/mptcp changes
+    
+    v3: https://lore.kernel.org/netdev/20260405154816.4774-1-devnexen@gmail.com/
+    v2: https://lore.kernel.org/netdev/Z/BfE0zn+DJxhBH7@debian/
 
-Other than that,
+ drivers/net/netdevsim/psample.c | 4 ++--
+ net/core/net_namespace.c        | 2 +-
+ net/mac80211/mesh_plink.c       | 2 +-
+ net/mptcp/subflow.c             | 4 ++--
+ net/openvswitch/flow_table.c    | 2 +-
+ net/sctp/sm_make_chunk.c        | 4 ++--
+ net/tipc/node.c                 | 2 +-
+ 7 files changed, 10 insertions(+), 10 deletions(-)
 
-Reviewed-by: Julian Calaby <julian.calaby@gmail.com>
+diff --git a/drivers/net/netdevsim/psample.c b/drivers/net/netdevsim/psample.c
+index 47d24bc64ee4..717d157c3ae2 100644
+--- a/drivers/net/netdevsim/psample.c
++++ b/drivers/net/netdevsim/psample.c
+@@ -94,7 +94,7 @@ static void nsim_dev_psample_md_prepare(const struct nsim_dev_psample *psample,
+ 	if (psample->out_tc_occ_max) {
+ 		u64 out_tc_occ;
+ 
+-		get_random_bytes(&out_tc_occ, sizeof(u64));
++		out_tc_occ = get_random_u64();
+ 		md->out_tc_occ = out_tc_occ & (psample->out_tc_occ_max - 1);
+ 		md->out_tc_occ_valid = 1;
+ 	}
+@@ -102,7 +102,7 @@ static void nsim_dev_psample_md_prepare(const struct nsim_dev_psample *psample,
+ 	if (psample->latency_max) {
+ 		u64 latency;
+ 
+-		get_random_bytes(&latency, sizeof(u64));
++		latency = get_random_u64();
+ 		md->latency = latency & (psample->latency_max - 1);
+ 		md->latency_valid = 1;
+ 	}
+diff --git a/net/core/net_namespace.c b/net/core/net_namespace.c
+index 1057d16d5dd2..deb8b2ec5674 100644
+--- a/net/core/net_namespace.c
++++ b/net/core/net_namespace.c
+@@ -411,7 +411,7 @@ static __net_init int preinit_net(struct net *net, struct user_namespace *user_n
+ 	ref_tracker_dir_init(&net->refcnt_tracker, 128, "net_refcnt");
+ 	ref_tracker_dir_init(&net->notrefcnt_tracker, 128, "net_notrefcnt");
+ 
+-	get_random_bytes(&net->hash_mix, sizeof(u32));
++	net->hash_mix = get_random_u32();
+ 	net->dev_base_seq = 1;
+ 	net->user_ns = user_ns;
+ 
+diff --git a/net/mac80211/mesh_plink.c b/net/mac80211/mesh_plink.c
+index 803106fc3134..7cbab90c8784 100644
+--- a/net/mac80211/mesh_plink.c
++++ b/net/mac80211/mesh_plink.c
+@@ -712,7 +712,7 @@ void mesh_plink_timer(struct timer_list *t)
+ 				"Mesh plink for %pM (retry, timeout): %d %d\n",
+ 				sta->sta.addr, sta->mesh->plink_retries,
+ 				sta->mesh->plink_timeout);
+-			get_random_bytes(&rand, sizeof(u32));
++			rand = get_random_u32();
+ 			sta->mesh->plink_timeout = sta->mesh->plink_timeout +
+ 					     rand % sta->mesh->plink_timeout;
+ 			++sta->mesh->plink_retries;
+diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
+index 5cfe19990f31..1a7736145dbc 100644
+--- a/net/mptcp/subflow.c
++++ b/net/mptcp/subflow.c
+@@ -72,7 +72,7 @@ static void subflow_req_create_thmac(struct mptcp_subflow_request_sock *subflow_
+ 	struct mptcp_sock *msk = subflow_req->msk;
+ 	u8 hmac[SHA256_DIGEST_SIZE];
+ 
+-	get_random_bytes(&subflow_req->local_nonce, sizeof(u32));
++	subflow_req->local_nonce = get_random_u32();
+ 
+ 	subflow_generate_hmac(READ_ONCE(msk->local_key),
+ 			      READ_ONCE(msk->remote_key),
+@@ -1639,7 +1639,7 @@ int __mptcp_subflow_connect(struct sock *sk, const struct mptcp_pm_local *local,
+ 	ssk = sf->sk;
+ 	subflow = mptcp_subflow_ctx(ssk);
+ 	do {
+-		get_random_bytes(&subflow->local_nonce, sizeof(u32));
++		subflow->local_nonce = get_random_u32();
+ 	} while (!subflow->local_nonce);
+ 
+ 	/* if 'IPADDRANY', the ID will be set later, after the routing */
+diff --git a/net/openvswitch/flow_table.c b/net/openvswitch/flow_table.c
+index 61c6a5f77c2e..67d5b8c0fe79 100644
+--- a/net/openvswitch/flow_table.c
++++ b/net/openvswitch/flow_table.c
+@@ -167,7 +167,7 @@ static struct table_instance *table_instance_alloc(int new_size)
+ 
+ 	ti->n_buckets = new_size;
+ 	ti->node_ver = 0;
+-	get_random_bytes(&ti->hash_seed, sizeof(u32));
++	ti->hash_seed = get_random_u32();
+ 
+ 	return ti;
+ }
+diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
+index 2c0017d058d4..de86ac088289 100644
+--- a/net/sctp/sm_make_chunk.c
++++ b/net/sctp/sm_make_chunk.c
+@@ -2727,7 +2727,7 @@ __u32 sctp_generate_tag(const struct sctp_endpoint *ep)
+ 	__u32 x;
+ 
+ 	do {
+-		get_random_bytes(&x, sizeof(__u32));
++		x = get_random_u32();
+ 	} while (x == 0);
+ 
+ 	return x;
+@@ -2738,7 +2738,7 @@ __u32 sctp_generate_tsn(const struct sctp_endpoint *ep)
+ {
+ 	__u32 retval;
+ 
+-	get_random_bytes(&retval, sizeof(__u32));
++	retval = get_random_u32();
+ 	return retval;
+ }
+ 
+diff --git a/net/tipc/node.c b/net/tipc/node.c
+index af442a5ef8f3..97aa970a0d83 100644
+--- a/net/tipc/node.c
++++ b/net/tipc/node.c
+@@ -1275,7 +1275,7 @@ void tipc_node_check_dest(struct net *net, u32 addr,
+ 			goto exit;
+ 
+ 		if_name = strchr(b->name, ':') + 1;
+-		get_random_bytes(&session, sizeof(u16));
++		session = get_random_u16();
+ 		if (!tipc_link_create(net, if_name, b->identity, b->tolerance,
+ 				      b->net_plane, b->mtu, b->priority,
+ 				      b->min_win, b->max_win, session,
+-- 
+2.53.0
 
-Thanks,
-
---=20
-Julian Calaby
-
-Email: julian.calaby@gmail.com
-Profile: http://www.google.com/profiles/julian.calaby/
 
