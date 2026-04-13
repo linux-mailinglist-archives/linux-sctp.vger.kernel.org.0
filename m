@@ -1,177 +1,128 @@
-Return-Path: <linux-sctp+bounces-1178-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1179-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IF+fJxvk3GnBXwkAu9opvQ
-	(envelope-from <linux-sctp+bounces-1178-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Mon, 13 Apr 2026 14:39:55 +0200
+	id YAl5O0AB3Wk3YwkAu9opvQ
+	(envelope-from <linux-sctp+bounces-1179-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Mon, 13 Apr 2026 16:44:16 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 205ED3EC11D
-	for <lists+linux-sctp@lfdr.de>; Mon, 13 Apr 2026 14:39:54 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F7313ED748
+	for <lists+linux-sctp@lfdr.de>; Mon, 13 Apr 2026 16:44:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 08947300ACAF
-	for <lists+linux-sctp@lfdr.de>; Mon, 13 Apr 2026 12:39:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3B4773011BD5
+	for <lists+linux-sctp@lfdr.de>; Mon, 13 Apr 2026 14:32:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D54E3C4566;
-	Mon, 13 Apr 2026 12:39:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FJu4U4hC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 418C33DEFE7;
+	Mon, 13 Apr 2026 14:32:48 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [91.216.245.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 586423C3BE3
-	for <linux-sctp@vger.kernel.org>; Mon, 13 Apr 2026 12:39:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28ADF3DEFE1;
+	Mon, 13 Apr 2026 14:32:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.216.245.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776083990; cv=none; b=RnH4yscbG8INi7C2eRqSFUPb+PncnU4xE8zUqveefrQpI8wMFy9vRsk5T3TifW1Ywv8EqHxdFx7ahIOHRyU/tgeeuXWvvP+EWHpwfMne3Nm5ozure0zPLzb2GCWKr5qp1HjEGDCM84HRvc7phHsvXhvh77TA+IEQ2FcUAMs3sUg=
+	t=1776090768; cv=none; b=SM+5MxPPBGB7wpKRPf66oMJWNyXgJA/UwK/9hSLwXWbz5TJEzGEAPzGCn63o6kO2DuXYBKk+Oh1Ni9evaMsMZnXq9iqPyJmprbUrkICgGiYjS8U12uA4XhKnZLV6qf9Y2Cdh29wVj7qCEryHzlzGsiXtEovWxuPtsAn1meyU4Jw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776083990; c=relaxed/simple;
-	bh=Mb8ynuEVZ9jnH95PjLHoWPiHHqGpMrjofGz0L1SAq14=;
+	s=arc-20240116; t=1776090768; c=relaxed/simple;
+	bh=P+vBb7u7tqmeMcpkdLnZeJuPiZ3o1V7thVIcm9v5nqk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y3OPGujrJ0gBkv0U3lmPLpb7JzSdHBJll7Ld+z2J4Qfhj94C4/No2nnOSdpsfYvz22zVu5iEr+tWp+fkXGN7WZrrEcNk3K5FaKGBtoqGLoY6TAMA4C88XRkqe9Q9gOoBmG7le4dL9RCbAK0t6xVjnafTN8WK5BzpvKjlycLGnK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FJu4U4hC; arc=none smtp.client-ip=74.125.82.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-2d52c7f92b1so3358371eec.0
-        for <linux-sctp@vger.kernel.org>; Mon, 13 Apr 2026 05:39:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776083988; x=1776688788; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gjpp1vRzru8GZlAX0xmlAVC+tq/WF3FlyeoCkEJDGGc=;
-        b=FJu4U4hCO+LbYb5gV7/6gBuhdnxFhK6E7OlCmpzg4CZBg1uZ+S3GuLN3Matehj2z54
-         l/04aZ8teGllth6O1AeqcvNZsABDfKBbPKFL6gO4CAYo0CbF0qlo+IAZW4DTimGMzgj4
-         nCnYxc3A1cmgOphIcB71vcVUoWgqPNSsORhSgpDmvZI5KUq79Buuow1uPU/6TAmb7IHD
-         OEnrPDss3XMVO6wHNYq+yGbNIQYKxcnhm+Zv40BPUwHFZJlGJM0A+J97ADXRAnybiGjT
-         WqwNwoAkmpCnsDZUapZXG9qbbpj3H9Bh80ljEVRzVKs45Sf0p+Fya19oJ8DId3whKESH
-         3oVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776083988; x=1776688788;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Gjpp1vRzru8GZlAX0xmlAVC+tq/WF3FlyeoCkEJDGGc=;
-        b=i5OvazvOwECmAfi7QK5Yxpe+43YwZfjgMHZtQbFEagcaPTdPrSDUuEMeBmvVF9W0yr
-         aw9AHF9Dnar0fBsSN0/DddXXC8a0xp0R06SnwzP/fliFlMP7uyup4ZBMm4sq/5xvMtBG
-         y6qh9YBCs54sq41b2cO/si7Wn03FFkslMrl77ECSlNuKmGAdYJx4csX7VGz5YpRxusJK
-         2E3ScOd57nx//KJ/NkLnO8xb6L/YFXw+C/yQFkgWfmZcQqUo9KNSOclRtTXN3G6KUMS3
-         Xy3gt4w1D7gby2nbKd7Vxuxd4J66DYS41hmWIfA4XchhV7Nc9GI7amWlH7quCocbfPMb
-         hL9w==
-X-Forwarded-Encrypted: i=1; AFNElJ9oPKNiUbiG2jScIcTay43zUVHiwypym48U78VMYOL2CLIhNyTg8BLuqQEZhoRvKEQXJUwqIBTs4mHI@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvSJaKawpRBM+Y0VvM3znuoSzgdRfVpWOs9eWlsxdOZl0Nvyc3
-	zqTux8lefkKEarzcdJNTnhtfpJ2NAYMtZpCQ4osXS2yMHlY1ZAcHedEm
-X-Gm-Gg: AeBDievAufmnLti+2ey91soRq/rAmQXY9+yO0lmd1DRSNFMa/MMwN8iMqc3ZA8LW+bh
-	dohJUch/1IzO0FAG9k7shDN1PrHu9LTs2qzLq0GrpM3kgnfj/429m6QqDr+0sQKLqIJbyMtmBMN
-	HRc/w5FYp8QxmSciCRcIibpv/KNX6J6rW+7sYaLjT3GZyUTGHae7/ou2GMaXFPWwHaJzFamJrJl
-	xnsflSZsL7pavQ9+1KQollmig/s9j8ffUAdba5pPKFIMevJ8AYlNhQSFFTC39Ziotad7Z1gn/oS
-	MRcSZJ0fqyUcPkuxbrXQ7cwoIhB8LIm/KWNttwgxGisF5renIGCnPOgupur83DYivWqifRfzxkg
-	Shw9HqKHAhgDjAZ2jesDMiaw/sZ/tVS80rbBgs4vUVhZd4pklvA0JdmrfTi8ShLHbQeCt7mODLz
-	FL+vRPJL3XywzTFlVoe6FJ2j5tB+Cs4EIETCQAEA==
-X-Received: by 2002:a05:693c:3116:b0:2be:85d4:4a2a with SMTP id 5a478bee46e88-2d5870ac158mr7345736eec.1.1776083988319;
-        Mon, 13 Apr 2026 05:39:48 -0700 (PDT)
-Received: from t14s.localdomain ([177.37.143.168])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2d562db6ac8sm16168701eec.26.2026.04.13.05.39.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Apr 2026 05:39:47 -0700 (PDT)
-Received: by t14s.localdomain (Postfix, from userid 1000)
-	id 5286813FAC0B; Mon, 13 Apr 2026 09:39:45 -0300 (-03)
-Date: Mon, 13 Apr 2026 09:39:45 -0300
-From: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=dWKQa7zthaLAwWfDRmJSUKDjzJt4WrHWNInqQU95nezgsj4wOlzQFtNKVI0EDnNPNK6teg2/4BZtt5EKO4pj+gPAmQ1u0HeEXfxPvGY0MJpk+ltEwq3FNk3xr/PRUQ05TtfpRX6BfdebUCGZ3BnKiTvlLgbx7SSS6zvBa4X79Pw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de; spf=pass smtp.mailfrom=strlen.de; arc=none smtp.client-ip=91.216.245.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=strlen.de
+Received: by Chamillionaire.breakpoint.cc (Postfix, from userid 1003)
+	id 5AB086066A; Mon, 13 Apr 2026 16:23:36 +0200 (CEST)
+Date: Mon, 13 Apr 2026 16:23:31 +0200
+From: Florian Westphal <fw@strlen.de>
 To: Xin Long <lucien.xin@gmail.com>
 Cc: network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
 	davem@davemloft.net, kuba@kernel.org,
 	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Weiming Shi <bestswngs@gmail.com>
-Subject: Re: [PATCH net] sctp: disable BH before calling udp_tunnel_xmit_skb()
-Message-ID: <adzkEQ17BD546rXC@t14s.localdomain>
-References: <c874a8548221dcd56ff03c65ba75a74e6cf99119.1776017727.git.lucien.xin@gmail.com>
+	Simon Horman <horms@kernel.org>,
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+	Yi Chen <yiche@redhat.com>
+Subject: Re: [PATCH net 1/2] netfilter: skip recording stale or retransmitted
+ INIT
+Message-ID: <adz8Y6c-59hlc4xw@strlen.de>
+References: <cover.1775847557.git.lucien.xin@gmail.com>
+ <6e09f9a8d1f13f3ce691c696d3dd7b2a2e6c6184.1775847557.git.lucien.xin@gmail.com>
+ <adqsEmki7ppz9T1g@strlen.de>
+ <CADvbK_f1Cvqx0_-J1jGaT865eWiW2ZHsJT8EkN6kr21j88Y9kQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <c874a8548221dcd56ff03c65ba75a74e6cf99119.1776017727.git.lucien.xin@gmail.com>
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CADvbK_f1Cvqx0_-J1jGaT865eWiW2ZHsJT8EkN6kr21j88Y9kQ@mail.gmail.com>
+X-Spamd-Result: default: False [0.04 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,davemloft.net,kernel.org,google.com,redhat.com,gmail.com];
-	TAGGED_FROM(0.00)[bounces-1178-lists,linux-sctp=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-1179-lists,linux-sctp=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_CC(0.00)[vger.kernel.org,davemloft.net,kernel.org,google.com,redhat.com,gmail.com];
 	MIME_TRACE(0.00)[0:+];
+	DMARC_NA(0.00)[strlen.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MISSING_XM_UA(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[marceloleitner@gmail.com,linux-sctp@vger.kernel.org];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-0.983];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[fw@strlen.de,linux-sctp@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	R_DKIM_NA(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	TAGGED_RCPT(0.00)[linux-sctp];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,t14s.localdomain:mid]
-X-Rspamd-Queue-Id: 205ED3EC11D
+	DBL_BLOCKED_OPENRESOLVER(0.00)[strlen.de:email,strlen.de:mid]
+X-Rspamd-Queue-Id: 8F7313ED748
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Sun, Apr 12, 2026 at 02:15:27PM -0400, Xin Long wrote:
-> udp_tunnel_xmit_skb() / udp_tunnel6_xmit_skb() are expected to run with
-> BH disabled.  After commit 6f1a9140ecda ("add xmit recursion limit to
-> tunnel xmit functions"), on the path:
+Xin Long <lucien.xin@gmail.com> wrote:
+> On Sat, Apr 11, 2026 at 4:16 PM Florian Westphal <fw@strlen.de> wrote:
+> > Xin Long <lucien.xin@gmail.com> wrote:
+> >
+> > > diff --git a/net/netfilter/nf_conntrack_proto_sctp.c b/net/netfilter/nf_conntrack_proto_sctp.c
+> > > index 645d2c43ebf7..7e10fa65cbdd 100644
+> > > --- a/net/netfilter/nf_conntrack_proto_sctp.c
+> > > +++ b/net/netfilter/nf_conntrack_proto_sctp.c
+> > > @@ -466,9 +466,13 @@ int nf_conntrack_sctp_packet(struct nf_conn *ct,
+> > >                       if (!ih)
+> > >                               goto out_unlock;
+> > >
+> > > -                     if (ct->proto.sctp.init[dir] && ct->proto.sctp.init[!dir])
+> > > -                             ct->proto.sctp.init[!dir] = 0;
+> > > -                     ct->proto.sctp.init[dir] = 1;
+> > > +                     /* Do not record INIT matching peer vtag (stale or retransmitted INIT). */
+> > > +                     if (old_state == SCTP_CONNTRACK_NONE ||
+> > > +                         ct->proto.sctp.vtag[!dir] != ih->init_tag) {
+> >
+> > Should    ct->proto.sctp.vtag[!dir] == ih->init_tag case also
+> > set ignore = true?
 > 
->   udp(6)_tunnel_xmit_skb() -> ip(6)tunnel_xmit()
+> It should for a stale INIT, but not for a retransmitted one. At this point,
+> though, we don't reliably distinguish between the two.
 > 
-> dev_xmit_recursion_inc()/dec() must stay balanced on the same CPU.
-> 
-> Without local_bh_disable(), the context may move between CPUs, which can
-> break the inc/dec pairing. This may lead to incorrect recursion level
-> detection and cause packets to be dropped in ip(6)_tunnel_xmit() or
-> __dev_queue_xmit().
-> 
-> Fix it by disabling BH around both IPv4 and IPv6 SCTP UDP xmit paths.
-> 
-> In my testing, after enabling the SCTP over UDP:
-> 
->   # ip net exec ha sysctl -w net.sctp.udp_port=9899
->   # ip net exec ha sysctl -w net.sctp.encap_port=9899
->   # ip net exec hb sysctl -w net.sctp.udp_port=9899
->   # ip net exec hb sysctl -w net.sctp.encap_port=9899
-> 
->   # ip net exec ha iperf3 -s
-> 
-> - without this patch:
-> 
->   # ip net exec hb iperf3 -c 192.168.0.1 --sctp
->   [  5]   0.00-10.00  sec  37.2 MBytes  31.2 Mbits/sec  sender
->   [  5]   0.00-10.00  sec  37.1 MBytes  31.1 Mbits/sec  receiver
-> 
-> - with this patch:
-> 
->   # ip net exec hb iperf3 -c 192.168.0.1 --sctp
->   [  5]   0.00-10.00  sec  3.14 GBytes  2.69 Gbits/sec  sender
->   [  5]   0.00-10.00  sec  3.14 GBytes  2.69 Gbits/sec  receiver
-> 
-> Fixes: 6f1a9140ecda ("add xmit recursion limit to tunnel xmit functions")
-> Fixes: 046c052b475e ("sctp: enable udp tunneling socks")
-> Signed-off-by: Xin Long <lucien.xin@gmail.com>
+> Also, as this patch only aims to prevent updating ct->proto.sctp.init[]
+> (introduced in 8e56b063c865) in this scenario, it’s safer to avoid
+> changing other behavior.
 
-Nice catch!
+Alright. I'm fine with this going in via net directly:
 
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Acked-by: Florian Westphal <fw@strlen.de>
+
 
