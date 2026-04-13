@@ -1,116 +1,112 @@
-Return-Path: <linux-sctp+bounces-1176-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1177-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gBHNKFDj3GnBXwkAu9opvQ
-	(envelope-from <linux-sctp+bounces-1176-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Mon, 13 Apr 2026 14:36:32 +0200
+	id 6OXaBn/j3GnBXwkAu9opvQ
+	(envelope-from <linux-sctp+bounces-1177-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Mon, 13 Apr 2026 14:37:19 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1829E3EC0A2
-	for <lists+linux-sctp@lfdr.de>; Mon, 13 Apr 2026 14:36:32 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 894943EC0B1
+	for <lists+linux-sctp@lfdr.de>; Mon, 13 Apr 2026 14:37:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D232E30078AB
-	for <lists+linux-sctp@lfdr.de>; Mon, 13 Apr 2026 12:36:23 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 80F67300653A
+	for <lists+linux-sctp@lfdr.de>; Mon, 13 Apr 2026 12:37:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90608361666;
-	Mon, 13 Apr 2026 12:36:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 512143B8D6C;
+	Mon, 13 Apr 2026 12:37:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KMHYrx8z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V50yf/Uj"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
+Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6263A1A5B90
-	for <linux-sctp@vger.kernel.org>; Mon, 13 Apr 2026 12:36:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2837C352C29
+	for <linux-sctp@vger.kernel.org>; Mon, 13 Apr 2026 12:37:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776083781; cv=none; b=bZ9/zYp09RZ+GG+RwGFxA0MV2tzBRKHRG4N93g2XfP5dwIn5G/jsw2ny60hihtjIR2J0Qs6zecyJjotfRV3nv7Ut3CPNNJmz4x3VltH2ddSTkInoJBir9nlf/59Cb6y/11uvJp7wFzbg3g08lmJdYI3+JXrPTof2tI8FVCQ4Mtc=
+	t=1776083835; cv=none; b=PJ74kSUjX0Ki1UAfWLSbRC3B0VmJvpmVzEvKXQysoVAQXOhd5IF7vm7abQZyaSLoxsPKhF/tRC1sn1TCYcxDMpFB0wYD+B0dEp5SbzD8JWmQ0Q6wc48i2Yhy81V2E+qIEknu35C01ANoeTnGhWkmxof7ZtDFKn9HyI9ypX0+2ss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776083781; c=relaxed/simple;
-	bh=duDBEuMQO+r39fUBlpMvZykm25SnTiIYgtpUPvcaeHk=;
+	s=arc-20240116; t=1776083835; c=relaxed/simple;
+	bh=BtXUyGAJBLoGMjIfXC8nKb6psyTAKOaBKkJ8gJNx5fw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lb9+cnqs5M6Jla04RM88tBAMH+g9EsGXZfeXv60Epjs1+kr9T8KqChWJYTzuSIdxPNbcoYusQ3DJr3JZQhxbK5WhHvj+g+8zvcBZjWrKs48G2HcZwtptcwsrv2LXYW9ZmHg/hZpOXxM5MXKQPyK6A31RvAKpxfW3Rrc9Hn+WFS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KMHYrx8z; arc=none smtp.client-ip=74.125.82.50
+	 Content-Type:Content-Disposition:In-Reply-To; b=lyEUetRCJPnol4ysikyfOyz/bYf0gXPCptO4Ray8nMps45vtH5X1tcofoebj0qQRGSWMGFv2tDtpQhvKuawGyvX3dUzrr3gm0EPuIrBUpApSZJpgQoM7gopsZ79ge+yRQNheXSMGiEWVUB9JWhGqEY5kE5zuReK4p2mDMF3LBIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V50yf/Uj; arc=none smtp.client-ip=74.125.82.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-1273349c56bso5583357c88.0
-        for <linux-sctp@vger.kernel.org>; Mon, 13 Apr 2026 05:36:20 -0700 (PDT)
+Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-1271195d2a7so5942471c88.0
+        for <linux-sctp@vger.kernel.org>; Mon, 13 Apr 2026 05:37:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776083779; x=1776688579; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=SzjQnFnXmG73dA0+oAWDE1GrYR8ou6+5ae07pUlGoHQ=;
-        b=KMHYrx8z1jkF81Yaty9MXX47Jny2GJguqfnhNz4s1p4k3MHwxz6CPbWmDrSmSAayBG
-         pUs+XvgqqIcYpmSA/f+pVoOsv4YJrPkHxFislzvTl88s17fJT48LAHM+hfx3P8uO/yId
-         6Vy+o2yB8UZiijFp7nwPsxzp05pdBIkRtgLWfLNhB7uheZzJIqq3PB0hWfMZVCPYaJhy
-         E1KK3zeZNF2QboAlh0LJ+Jm0ucO44eUoxb9SnCq6W2ri0oSHW2ytnjE4EcR2S7yvFpTM
-         2rdEfUwNTfeYYPORKcZD8SVUkyZcasftNa2JpIgO7nKSjd2TlcfGBUbmTPKsGsPcqfQZ
-         Amdg==
+        d=gmail.com; s=20251104; t=1776083833; x=1776688633; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=90bOo6XUZoGgDsOa3XWYgMG0p/UBMe//yktmShtDn1U=;
+        b=V50yf/UjDCsIG1brK5C04PGTO78xFsGb74kD4BB0o0lOhaa5VnLs6NylegLU33ydKv
+         AffLsxoUty8Ol1Fcc3Be4QrGbaf5Yzgo0/HcnfMpCTOYIbV+yvY8HM1iqnFeor81InlY
+         Ik4vAXWDcvI050hkmOrT4Z/eKi3Tv9KNBXoZd1PkWJNTE1PWLNPGLWzxuuQsSOo0XSPX
+         LVQEjy88sHBGUEFzRzemNXxalEeq4Ig84vgtAoZxRcckLfVjzBVtmBkYfWicyq1EqU/D
+         Uvbjfg63Qmiu7UpUI31k78cRkqHYckSuXOzJMxoVFd02t6+uPfQyB21wrwnH8RROmq2p
+         tQTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776083779; x=1776688579;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzjQnFnXmG73dA0+oAWDE1GrYR8ou6+5ae07pUlGoHQ=;
-        b=FS5N2b3MMbQSsv0ziRjGfx2u9SRb9G/MjbrbTLapYyengKvnPbM/6rq35rrOon4k4t
-         cGpr1W/KdGW1dhDplMTxVjqNazHqh6CJoQ3WObM10HuE6j1ks/gAe9/tkOJNYwi1U8bw
-         NkHhaBE7tK7OLiI1WkmX0Enep94Qt2KOBclT/3TtyJ14MB9Qrv9UIiXhOT66AAhyYX8q
-         KiLm3j/n4OA3hG1Q3uvJwke44MfJ8iXCZ7OcecYbL7LeQfJcoV19HaREikuNjH0GuF9X
-         BISFFwusRJGEs7/cPgYnYeaBJFVj7qNxjuzD3p648ar4/8v/UPbexywL8xGSUNTg/02z
-         rVXw==
-X-Forwarded-Encrypted: i=1; AFNElJ8D5wqB0r5SCalojD6HuZuJ+DtGPd0eDgxDLRD+aXeEo3r7vNn/6cs7Z37wni8q27CmsAZvAeogmPul@vger.kernel.org
-X-Gm-Message-State: AOJu0YzU7mb22FiqnZvGdFL0+Wi4uAMVtNydon8EhXKTK4yApl36QvNJ
-	nkf3LJxGhuBrPmA/cVCpJP+Rik5mLF44BG/i/ViMxngLsn8VZQHp06bK
-X-Gm-Gg: AeBDievwDRwQpmHqWH6BDQW6zJQs82SxW1+6VfORb97RjfmHMPoGiEtSDc9UIBvxJgQ
-	Ao/Q2H9b8MTR1NcY8yb5YBGhK2L/FtrWsjmH28F0+APvmsjge0k9M0xuk8iXcNYm4umz2cLHzrr
-	KQYn1ZcfDteO+fkD89765i3Xz9yybWoG94TVKQHQf66FjUXQCqxZIvbgLzKtD9jGLCGwNWhBLVb
-	MlM7Hep0oCzScFat6vgbbZ4zTUFv3D62WShXUK1U4duJ2jFE9HobywsC7eMsXqE+jMY/ampyw0U
-	DBCCsaxuN3k64gm60WuIdzSvM3j43293BpRyfjeYzYP99AF1vgVnQBpYQkQsYrzSGH3pZ0gfCRj
-	jKKTJqRF0c/QRUO4WysZmz/LDkyY4CvmpgG1fh4tWQB96JM7sb0VUQjY/3ExlCYYUCFd6lRuE1K
-	vJkTu54rIixV13hX1zu57b/A==
-X-Received: by 2002:a05:7022:389:b0:12b:f8f0:80c7 with SMTP id a92af1059eb24-12c34eed8d6mr6361870c88.21.1776083779414;
-        Mon, 13 Apr 2026 05:36:19 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1776083833; x=1776688633;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=90bOo6XUZoGgDsOa3XWYgMG0p/UBMe//yktmShtDn1U=;
+        b=Z/FMVD14uouukvHsUHKObvMj3zRLmWcU4es22xQ/br8r76vU247QOYB1axJ8BNmMhN
+         YJF4TyZ1xTva6KH3IgCJ4lcWbuTqBPZ1JjBeqBkKJnWnDWqi69mkQyYoUkbiyEXQ96NU
+         xvQAJQ559/n/Ox9QIwISusKhPKXYcZj8l+gVah0a1aoOprkHuN9o8wv/sSddFbCr0wlo
+         QBfK3UoS0vr707d4MHC9H/377nQq4gQmTnS0079fwpMgl1zHzDImHSZMzFB97q8D4aln
+         ZgeKd2/UsCAijx0dyyosm8gS5mTzpWEK7ofyNUa+NkfUwKMXz1fD+MBvt9UbOHutHQNr
+         PExg==
+X-Forwarded-Encrypted: i=1; AFNElJ9A7IfG462yCGZy973SOwE9hdDUsruoowMhF/QMFQhNcYMS8wbJz/WiRUXinOOLHhMDYWyOEGbhnLbs@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJq/60hYSvWHG/oF/Sm1mxjWaAomTZBovCtxc7o3At1SV2ret/
+	AkThm6ofeLHxvpTvrCseaD7pJQLZWe1lLfs4O9zuo5R8SeD7qDhoupMX
+X-Gm-Gg: AeBDietrdyVO2AQDyFMUEbUU7gEsD0c1eKRZgXLR6qza5kA63tToKfxZbpeRahn3S8O
+	h2S3lINWn/131Nvjm6WEmtpmaLLYkGyMMsswayLZnVQbK1sMSRAutxylUbecKDqXKSLBPCEFDa2
+	jT2crpzabZ2XSMVFkjTitb5hfLg8+m7+fT6+7V6jcxDIPYxknnNRkUnfP4suZ0ZUk1WF110kYeh
+	73JPud6f1+aFHFv+lsvwgvqzUC3clLave7KCgq3YptPlWVSUNZ6Jy2vfnYAOsYxlpf10XomErHv
+	EpiE45Q0aZCiBeluBkXfvAKc44peq7kW96FadgKOnYlRfLK1QGaebB/rBvWq/m8Q0DalYbL0rDS
+	7kuO7jClDLPPt1wZvPwZ3brRmUjKFCKRza+nv1SLkEZAV3Sw7/tKXavfHVECHO/zFYPxnOwGfUz
+	3My6IT8iw7PERa3jO8QFYXtwWAPNcptNuX
+X-Received: by 2002:a05:7022:ec2:b0:128:dbbf:fd35 with SMTP id a92af1059eb24-12c34f09a4cmr7189823c88.28.1776083833317;
+        Mon, 13 Apr 2026 05:37:13 -0700 (PDT)
 Received: from t14s.localdomain ([2804:29b8:508a:1537::3a0])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2d940083f49sm3844288eec.13.2026.04.13.05.36.18
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12c34352490sm13109153c88.0.2026.04.13.05.37.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Apr 2026 05:36:18 -0700 (PDT)
+        Mon, 13 Apr 2026 05:37:12 -0700 (PDT)
 Received: by t14s.localdomain (Postfix, from userid 1000)
-	id 489BA13FAC04; Mon, 13 Apr 2026 09:36:16 -0300 (-03)
-Date: Mon, 13 Apr 2026 09:36:16 -0300
+	id 1919113FAC08; Mon, 13 Apr 2026 09:37:10 -0300 (-03)
+Date: Mon, 13 Apr 2026 09:37:10 -0300
 From: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 To: Xin Long <lucien.xin@gmail.com>
 Cc: network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
 	davem@davemloft.net, kuba@kernel.org,
 	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Florian Westphal <fw@strlen.de>,
-	Yi Chen <yiche@redhat.com>
-Subject: Re: [PATCH net 2/2] sctp: discard stale INIT after handshake
- completion
-Message-ID: <adzjQEZ18m5taEzr@t14s.localdomain>
-References: <cover.1775847557.git.lucien.xin@gmail.com>
- <bea8a0dfcc56b9980cb914b54cffa9dd9948ba75.1775847557.git.lucien.xin@gmail.com>
+	Simon Horman <horms@kernel.org>
+Subject: Re: [PATCH net] sctp: fix missing encap_port propagation for GSO
+ fragments
+Message-ID: <adzjdjdll1fi5e6N@t14s.localdomain>
+References: <ea65ed61b3598d8b4940f0170b9aa1762307e6c3.1776017631.git.lucien.xin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <bea8a0dfcc56b9980cb914b54cffa9dd9948ba75.1775847557.git.lucien.xin@gmail.com>
+In-Reply-To: <ea65ed61b3598d8b4940f0170b9aa1762307e6c3.1776017631.git.lucien.xin@gmail.com>
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-1176-lists,linux-sctp=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-1177-lists,linux-sctp=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -118,7 +114,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	MISSING_XM_UA(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
@@ -126,23 +122,26 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-sctp];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[t14s.localdomain:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 1829E3EC0A2
+X-Rspamd-Queue-Id: 894943EC0B1
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Fri, Apr 10, 2026 at 02:59:17PM -0400, Xin Long wrote:
-> After an association reaches ESTABLISHED, the peer’s init_tag is already
-> known from the handshake. Any subsequent INIT with the same init_tag is
-> not a valid restart, but a delayed or duplicate INIT.
+On Sun, Apr 12, 2026 at 02:13:51PM -0400, Xin Long wrote:
+> encap_port in SCTP_INPUT_CB(skb) is used by sctp_vtag_verify() for
+> SCTP-over-UDP processing. In the GSO case, it is only set on the head
+> skb, while fragment skbs leave it 0.
 > 
-> Drop such INIT chunks in sctp_sf_do_unexpected_init() instead of
-> processing them as new association attempts.
+> This results in fragment skbs seeing encap_port == 0, breaking
+> SCTP-over-UDP connections.
 > 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Fix it by propagating encap_port from the head skb cb when initializing
+> fragment skbs in sctp_inq_pop().
+> 
+> Fixes: 046c052b475e ("sctp: enable udp tunneling socks")
 > Signed-off-by: Xin Long <lucien.xin@gmail.com>
 
 Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
