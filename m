@@ -1,52 +1,52 @@
-Return-Path: <linux-sctp+bounces-1180-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1181-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IGSVIv+F3WnvfAkAu9opvQ
-	(envelope-from <linux-sctp+bounces-1180-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Tue, 14 Apr 2026 02:10:39 +0200
+	id UOp/CRWG3WnvfAkAu9opvQ
+	(envelope-from <linux-sctp+bounces-1181-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Tue, 14 Apr 2026 02:11:01 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5B023F45B4
-	for <lists+linux-sctp@lfdr.de>; Tue, 14 Apr 2026 02:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A38123F45C3
+	for <lists+linux-sctp@lfdr.de>; Tue, 14 Apr 2026 02:11:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0929C302172B
-	for <lists+linux-sctp@lfdr.de>; Tue, 14 Apr 2026 00:10:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id ABC9F3048099
+	for <lists+linux-sctp@lfdr.de>; Tue, 14 Apr 2026 00:10:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E88F23FFD;
-	Tue, 14 Apr 2026 00:10:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F39383D561;
+	Tue, 14 Apr 2026 00:10:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nmUIj45N"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nPbnAcas"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5554186A;
-	Tue, 14 Apr 2026 00:10:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0F0428690;
+	Tue, 14 Apr 2026 00:10:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776125435; cv=none; b=T4qwOnDU/MdZknLoN4JxhfdLbZ93g4qacsdBIXq18AoH44snUgWQ15iYwLeOfEJHlXUew22TDVYRqn0agEiTIMx+9qgUiVPxk3kWq9HMe3dFhcygicAFiQ8ynefrqoUryeMntZtImRtA+3yJ8GffiMAP21Myab2MT1NeKkyWDD0=
+	t=1776125436; cv=none; b=UArlhEPsYpFWEFa4GBb0X//+wEDAJThcqL0yLNvLOdtK+SOO08Wallc8Y5Uuwm3iyx0JmBEpG8bC3EJ0sOsqZnhGDv0GKPAD7LugzcjriKe1dq0NHkIF47c5EtFHM2LEWsh2gwzN8f+oPUkzPKRv5sdikmvtViDdvYZZ7leylS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776125435; c=relaxed/simple;
-	bh=odzBk0d1cxJ7qIPUl9GfrbC9f6IsJQUZWUHQdvegsP8=;
+	s=arc-20240116; t=1776125436; c=relaxed/simple;
+	bh=Eu+qBXQ0+iV40Eeis3c36B7eCiVgHHCRrqCby4ACBts=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=umOevmIga7QJKbgpKp2cTeR4tXSp2hTBMvdYytbsPsMJ166ZEFcnr6Pra08Zoa8/IX0EFYKBH6Bh6RR9QSXh338OrM3K/MVFi+XCADAGRXJ8CuDW2eQYNaKi6OnW3nzIrub3O8rhqoyztCwbZnr0Ck0HOcmuvPnXVv7cfRQShlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nmUIj45N; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F00FC2BCAF;
-	Tue, 14 Apr 2026 00:10:35 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=tgSEmyNCV2soI7O3Wo7kUrqiMBN7dfTyfS894bNVYor9Vxl4LckVhe0QidJ8SDnDrSO82m+Zh/rXscacq6C1lzLh59/+lfBoKcth0eguvYET7YIgezeH+1eh++OqXvX/9S7bLttPZ+fCNgKUSRM3E/PhkpzuH1JdhJrebgcI0ek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nPbnAcas; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B1A4C2BCAF;
+	Tue, 14 Apr 2026 00:10:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776125435;
-	bh=odzBk0d1cxJ7qIPUl9GfrbC9f6IsJQUZWUHQdvegsP8=;
+	s=k20201202; t=1776125436;
+	bh=Eu+qBXQ0+iV40Eeis3c36B7eCiVgHHCRrqCby4ACBts=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=nmUIj45NP2n2mJmArsMEHrHgVmgYujiiLpYLiMUDoHtU2kUClUzRhHd7juLnxdl+/
-	 HTLGrLxROYmRrDAMdbl/Cdf3Il5WaFaKsg8keFdhVHGPduaKDZwloqiW4p6fiA/jjh
-	 pSObihhh+L2tBso5rm2/9O0s4xO9bvy+4nDgSyUHBx7VGE1AyagDZG7TBUByyNGmCx
-	 g8UqTs3euIpe7qaETI2hpAY0/LBvZQDKFEtZ8p2ghHipFb72oMgUpjrWZUM4HB6zU7
-	 qrhANMtsyknHvXQs9Z+JYeJYPivITXH44NyK3n66G5LzHk/y2Ds7lvoWeo2UofY5Bo
-	 JIilWWqLfAjvA==
+	b=nPbnAcasW+0mu9IcilWJJZl7EAfcowfRXIEtzMDq4jdQOOv9Rb6DTBBGeLiKTAjt4
+	 wE1hfxtysMRBpsfvrubYeDbaAxyw13ay/TuDkJliEvesq0Qu5Pr/GMlgG+HKsg1V1q
+	 MUJawO929TCu4P1apNR6jEr9Bi1slR4G15IxXuhMmPb8RLqjR9f0qEqP+3CoUvKVBz
+	 f/5kUOKpoJNDvTLkH62hNbhCPWks+An1o4FOWWl3AY5dAO6URplPQXoHVu/7P7/7ex
+	 PhcN5YtocNGUStRvEv8RMprgKxXO6q97K24EQAz7cox2tgcU976G25m+ZQg38H11mj
+	 Ybn+PtOs1bBVQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B9EB33809A0B;
-	Tue, 14 Apr 2026 00:10:07 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02C2C3809A0B;
+	Tue, 14 Apr 2026 00:10:09 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
@@ -55,30 +55,31 @@ List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] sctp: disable BH before calling udp_tunnel_xmit_skb()
+Subject: Re: [PATCH net] sctp: fix missing encap_port propagation for GSO
+ fragments
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <177612540655.609150.13642676010473271907.git-patchwork-notify@kernel.org>
-Date: Tue, 14 Apr 2026 00:10:06 +0000
+ <177612540779.609150.15418632387140324971.git-patchwork-notify@kernel.org>
+Date: Tue, 14 Apr 2026 00:10:07 +0000
 References: 
- <c874a8548221dcd56ff03c65ba75a74e6cf99119.1776017727.git.lucien.xin@gmail.com>
+ <ea65ed61b3598d8b4940f0170b9aa1762307e6c3.1776017631.git.lucien.xin@gmail.com>
 In-Reply-To: 
- <c874a8548221dcd56ff03c65ba75a74e6cf99119.1776017727.git.lucien.xin@gmail.com>
+ <ea65ed61b3598d8b4940f0170b9aa1762307e6c3.1776017631.git.lucien.xin@gmail.com>
 To: Xin Long <lucien.xin@gmail.com>
 Cc: netdev@vger.kernel.org, linux-sctp@vger.kernel.org, davem@davemloft.net,
  kuba@kernel.org, edumazet@google.com, pabeni@redhat.com, horms@kernel.org,
- marcelo.leitner@gmail.com, bestswngs@gmail.com
+ marcelo.leitner@gmail.com
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[vger.kernel.org,davemloft.net,kernel.org,google.com,redhat.com,gmail.com];
-	TAGGED_FROM(0.00)[bounces-1180-lists,linux-sctp=lfdr.de,netdevbpf];
+	TAGGED_FROM(0.00)[bounces-1181-lists,linux-sctp=lfdr.de,netdevbpf];
 	FROM_NEQ_ENVFROM(0.00)[patchwork-bot@kernel.org,linux-sctp@vger.kernel.org];
 	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
@@ -93,13 +94,13 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-sctp];
 	TO_DN_SOME(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: D5B023F45B4
+X-Rspamd-Queue-Id: A38123F45C3
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
@@ -108,20 +109,19 @@ Hello:
 This patch was applied to netdev/net.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Sun, 12 Apr 2026 14:15:27 -0400 you wrote:
-> udp_tunnel_xmit_skb() / udp_tunnel6_xmit_skb() are expected to run with
-> BH disabled.  After commit 6f1a9140ecda ("add xmit recursion limit to
-> tunnel xmit functions"), on the path:
+On Sun, 12 Apr 2026 14:13:51 -0400 you wrote:
+> encap_port in SCTP_INPUT_CB(skb) is used by sctp_vtag_verify() for
+> SCTP-over-UDP processing. In the GSO case, it is only set on the head
+> skb, while fragment skbs leave it 0.
 > 
->   udp(6)_tunnel_xmit_skb() -> ip(6)tunnel_xmit()
-> 
-> dev_xmit_recursion_inc()/dec() must stay balanced on the same CPU.
+> This results in fragment skbs seeing encap_port == 0, breaking
+> SCTP-over-UDP connections.
 > 
 > [...]
 
 Here is the summary with links:
-  - [net] sctp: disable BH before calling udp_tunnel_xmit_skb()
-    https://git.kernel.org/netdev/net/c/2cd7e6971fc2
+  - [net] sctp: fix missing encap_port propagation for GSO fragments
+    https://git.kernel.org/netdev/net/c/bf6f95ae3b8b
 
 You are awesome, thank you!
 -- 
