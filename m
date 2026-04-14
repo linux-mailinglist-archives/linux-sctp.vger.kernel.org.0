@@ -1,128 +1,132 @@
-Return-Path: <linux-sctp+bounces-1179-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1180-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YAl5O0AB3Wk3YwkAu9opvQ
-	(envelope-from <linux-sctp+bounces-1179-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Mon, 13 Apr 2026 16:44:16 +0200
+	id IGSVIv+F3WnvfAkAu9opvQ
+	(envelope-from <linux-sctp+bounces-1180-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Tue, 14 Apr 2026 02:10:39 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F7313ED748
-	for <lists+linux-sctp@lfdr.de>; Mon, 13 Apr 2026 16:44:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D5B023F45B4
+	for <lists+linux-sctp@lfdr.de>; Tue, 14 Apr 2026 02:10:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3B4773011BD5
-	for <lists+linux-sctp@lfdr.de>; Mon, 13 Apr 2026 14:32:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0929C302172B
+	for <lists+linux-sctp@lfdr.de>; Tue, 14 Apr 2026 00:10:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 418C33DEFE7;
-	Mon, 13 Apr 2026 14:32:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E88F23FFD;
+	Tue, 14 Apr 2026 00:10:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nmUIj45N"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [91.216.245.30])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28ADF3DEFE1;
-	Mon, 13 Apr 2026 14:32:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.216.245.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5554186A;
+	Tue, 14 Apr 2026 00:10:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776090768; cv=none; b=SM+5MxPPBGB7wpKRPf66oMJWNyXgJA/UwK/9hSLwXWbz5TJEzGEAPzGCn63o6kO2DuXYBKk+Oh1Ni9evaMsMZnXq9iqPyJmprbUrkICgGiYjS8U12uA4XhKnZLV6qf9Y2Cdh29wVj7qCEryHzlzGsiXtEovWxuPtsAn1meyU4Jw=
+	t=1776125435; cv=none; b=T4qwOnDU/MdZknLoN4JxhfdLbZ93g4qacsdBIXq18AoH44snUgWQ15iYwLeOfEJHlXUew22TDVYRqn0agEiTIMx+9qgUiVPxk3kWq9HMe3dFhcygicAFiQ8ynefrqoUryeMntZtImRtA+3yJ8GffiMAP21Myab2MT1NeKkyWDD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776090768; c=relaxed/simple;
-	bh=P+vBb7u7tqmeMcpkdLnZeJuPiZ3o1V7thVIcm9v5nqk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dWKQa7zthaLAwWfDRmJSUKDjzJt4WrHWNInqQU95nezgsj4wOlzQFtNKVI0EDnNPNK6teg2/4BZtt5EKO4pj+gPAmQ1u0HeEXfxPvGY0MJpk+ltEwq3FNk3xr/PRUQ05TtfpRX6BfdebUCGZ3BnKiTvlLgbx7SSS6zvBa4X79Pw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de; spf=pass smtp.mailfrom=strlen.de; arc=none smtp.client-ip=91.216.245.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=strlen.de
-Received: by Chamillionaire.breakpoint.cc (Postfix, from userid 1003)
-	id 5AB086066A; Mon, 13 Apr 2026 16:23:36 +0200 (CEST)
-Date: Mon, 13 Apr 2026 16:23:31 +0200
-From: Florian Westphal <fw@strlen.de>
-To: Xin Long <lucien.xin@gmail.com>
-Cc: network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org,
-	davem@davemloft.net, kuba@kernel.org,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	Yi Chen <yiche@redhat.com>
-Subject: Re: [PATCH net 1/2] netfilter: skip recording stale or retransmitted
- INIT
-Message-ID: <adz8Y6c-59hlc4xw@strlen.de>
-References: <cover.1775847557.git.lucien.xin@gmail.com>
- <6e09f9a8d1f13f3ce691c696d3dd7b2a2e6c6184.1775847557.git.lucien.xin@gmail.com>
- <adqsEmki7ppz9T1g@strlen.de>
- <CADvbK_f1Cvqx0_-J1jGaT865eWiW2ZHsJT8EkN6kr21j88Y9kQ@mail.gmail.com>
+	s=arc-20240116; t=1776125435; c=relaxed/simple;
+	bh=odzBk0d1cxJ7qIPUl9GfrbC9f6IsJQUZWUHQdvegsP8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=umOevmIga7QJKbgpKp2cTeR4tXSp2hTBMvdYytbsPsMJ166ZEFcnr6Pra08Zoa8/IX0EFYKBH6Bh6RR9QSXh338OrM3K/MVFi+XCADAGRXJ8CuDW2eQYNaKi6OnW3nzIrub3O8rhqoyztCwbZnr0Ck0HOcmuvPnXVv7cfRQShlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nmUIj45N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F00FC2BCAF;
+	Tue, 14 Apr 2026 00:10:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776125435;
+	bh=odzBk0d1cxJ7qIPUl9GfrbC9f6IsJQUZWUHQdvegsP8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=nmUIj45NP2n2mJmArsMEHrHgVmgYujiiLpYLiMUDoHtU2kUClUzRhHd7juLnxdl+/
+	 HTLGrLxROYmRrDAMdbl/Cdf3Il5WaFaKsg8keFdhVHGPduaKDZwloqiW4p6fiA/jjh
+	 pSObihhh+L2tBso5rm2/9O0s4xO9bvy+4nDgSyUHBx7VGE1AyagDZG7TBUByyNGmCx
+	 g8UqTs3euIpe7qaETI2hpAY0/LBvZQDKFEtZ8p2ghHipFb72oMgUpjrWZUM4HB6zU7
+	 qrhANMtsyknHvXQs9Z+JYeJYPivITXH44NyK3n66G5LzHk/y2Ds7lvoWeo2UofY5Bo
+	 JIilWWqLfAjvA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B9EB33809A0B;
+	Tue, 14 Apr 2026 00:10:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADvbK_f1Cvqx0_-J1jGaT865eWiW2ZHsJT8EkN6kr21j88Y9kQ@mail.gmail.com>
-X-Spamd-Result: default: False [0.04 / 15.00];
+Subject: Re: [PATCH net] sctp: disable BH before calling udp_tunnel_xmit_skb()
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177612540655.609150.13642676010473271907.git-patchwork-notify@kernel.org>
+Date: Tue, 14 Apr 2026 00:10:06 +0000
+References: 
+ <c874a8548221dcd56ff03c65ba75a74e6cf99119.1776017727.git.lucien.xin@gmail.com>
+In-Reply-To: 
+ <c874a8548221dcd56ff03c65ba75a74e6cf99119.1776017727.git.lucien.xin@gmail.com>
+To: Xin Long <lucien.xin@gmail.com>
+Cc: netdev@vger.kernel.org, linux-sctp@vger.kernel.org, davem@davemloft.net,
+ kuba@kernel.org, edumazet@google.com, pabeni@redhat.com, horms@kernel.org,
+ marcelo.leitner@gmail.com, bestswngs@gmail.com
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-1179-lists,linux-sctp=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	FREEMAIL_CC(0.00)[vger.kernel.org,davemloft.net,kernel.org,google.com,redhat.com,gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	DMARC_NA(0.00)[strlen.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-1180-lists,linux-sctp=lfdr.de,netdevbpf];
+	FROM_NEQ_ENVFROM(0.00)[patchwork-bot@kernel.org,linux-sctp@vger.kernel.org];
 	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.983];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[fw@strlen.de,linux-sctp@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NO_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
 	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCPT_COUNT_SEVEN(0.00)[10];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-sctp];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[strlen.de:email,strlen.de:mid]
-X-Rspamd-Queue-Id: 8F7313ED748
+	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: D5B023F45B4
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Xin Long <lucien.xin@gmail.com> wrote:
-> On Sat, Apr 11, 2026 at 4:16 PM Florian Westphal <fw@strlen.de> wrote:
-> > Xin Long <lucien.xin@gmail.com> wrote:
-> >
-> > > diff --git a/net/netfilter/nf_conntrack_proto_sctp.c b/net/netfilter/nf_conntrack_proto_sctp.c
-> > > index 645d2c43ebf7..7e10fa65cbdd 100644
-> > > --- a/net/netfilter/nf_conntrack_proto_sctp.c
-> > > +++ b/net/netfilter/nf_conntrack_proto_sctp.c
-> > > @@ -466,9 +466,13 @@ int nf_conntrack_sctp_packet(struct nf_conn *ct,
-> > >                       if (!ih)
-> > >                               goto out_unlock;
-> > >
-> > > -                     if (ct->proto.sctp.init[dir] && ct->proto.sctp.init[!dir])
-> > > -                             ct->proto.sctp.init[!dir] = 0;
-> > > -                     ct->proto.sctp.init[dir] = 1;
-> > > +                     /* Do not record INIT matching peer vtag (stale or retransmitted INIT). */
-> > > +                     if (old_state == SCTP_CONNTRACK_NONE ||
-> > > +                         ct->proto.sctp.vtag[!dir] != ih->init_tag) {
-> >
-> > Should    ct->proto.sctp.vtag[!dir] == ih->init_tag case also
-> > set ignore = true?
-> 
-> It should for a stale INIT, but not for a retransmitted one. At this point,
-> though, we don't reliably distinguish between the two.
-> 
-> Also, as this patch only aims to prevent updating ct->proto.sctp.init[]
-> (introduced in 8e56b063c865) in this scenario, it’s safer to avoid
-> changing other behavior.
+Hello:
 
-Alright. I'm fine with this going in via net directly:
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Acked-by: Florian Westphal <fw@strlen.de>
+On Sun, 12 Apr 2026 14:15:27 -0400 you wrote:
+> udp_tunnel_xmit_skb() / udp_tunnel6_xmit_skb() are expected to run with
+> BH disabled.  After commit 6f1a9140ecda ("add xmit recursion limit to
+> tunnel xmit functions"), on the path:
+> 
+>   udp(6)_tunnel_xmit_skb() -> ip(6)tunnel_xmit()
+> 
+> dev_xmit_recursion_inc()/dec() must stay balanced on the same CPU.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net] sctp: disable BH before calling udp_tunnel_xmit_skb()
+    https://git.kernel.org/netdev/net/c/2cd7e6971fc2
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
