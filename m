@@ -1,51 +1,51 @@
-Return-Path: <linux-sctp+bounces-1185-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1186-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MLrAJzvV4GlymgAAu9opvQ
-	(envelope-from <linux-sctp+bounces-1185-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Thu, 16 Apr 2026 14:25:31 +0200
+	id CMX1D5vW4GlymgAAu9opvQ
+	(envelope-from <linux-sctp+bounces-1186-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Thu, 16 Apr 2026 14:31:23 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76B0240E112
-	for <lists+linux-sctp@lfdr.de>; Thu, 16 Apr 2026 14:25:31 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D413840E371
+	for <lists+linux-sctp@lfdr.de>; Thu, 16 Apr 2026 14:31:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 17DAE302CA7C
-	for <lists+linux-sctp@lfdr.de>; Thu, 16 Apr 2026 12:25:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AC66F3095670
+	for <lists+linux-sctp@lfdr.de>; Thu, 16 Apr 2026 12:30:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C28533B7B91;
-	Thu, 16 Apr 2026 12:25:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E74C23B9D81;
+	Thu, 16 Apr 2026 12:30:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GQGv29sX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aREs4pY9"
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C69337C924;
-	Thu, 16 Apr 2026 12:25:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A13221256C;
+	Thu, 16 Apr 2026 12:30:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776342318; cv=none; b=BxN9ADopjT0HG67ERqv27hTKoTqduufKYyqNQQVEskErZusc7h4cHqQrNDfWE/SFLyKX16g5jXT54Xde2HaMrxPV4Q6gUQOSGC3FPPnSWxfIbdpoGLYoNnXoowfaZAPpalMqUekDmhLyuprL40HoH41iMxukcXlhldI0BRF2E7s=
+	t=1776342653; cv=none; b=BpLC0ibD52CUIy8KbC86N76NvLCW4umShQAcsp44UP6OODHNvLoy0MFi06L6nmNEy6QenxEV0PmCTY0VyLeG9krY1YUEXPYr2ab9KgqSmCtA6FVdLulH6sklAE09duHc311isI68hsXqE4wWz6E+d497/buXWYQhyf5u2mYc8mQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776342318; c=relaxed/simple;
-	bh=gECMS4EGrtN1lWkNcMdqV1cQaJPbxrgRQTXN3zouHSg=;
+	s=arc-20240116; t=1776342653; c=relaxed/simple;
+	bh=0+upWZt1SQSfIz6OgmfLK1joGZgudnQ2lP+Bv+7s1DM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Qdy/3MK0MwfEslDJpUvmQ3NbrxoYe4MuYEDd5I/0hg/Nklg/98f/WeraW+0hZjOYR3ll5HB/lln9Vf/aNZ/P5qvUZTryMZaQMBekQrlZ6d0uvRI+GqT9D3Ogs1R7/zYBLCu6V41SnsfnNkoGkdpGsPaklv/lrlL6JXwJhjAW5P8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GQGv29sX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4797C2BCB3;
-	Thu, 16 Apr 2026 12:25:04 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=uY5j+eRGJwaUdgIOC2wLp7JJWLC8KQMerzLOZh5DMvxrB6t2JpmbgQo4UGJl3ZxmdQG9NKK0xe399S40n2RHiyoBpEp85ydqeSaOEqsvaCTpw1iILu6o9zQb2ZHR7YZXH1zQFt28BRMIAOSMt8WojY9cLwve3nXYQDHjoMWxcpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aREs4pY9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB8D2C2BCAF;
+	Thu, 16 Apr 2026 12:30:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776342318;
-	bh=gECMS4EGrtN1lWkNcMdqV1cQaJPbxrgRQTXN3zouHSg=;
+	s=k20201202; t=1776342653;
+	bh=0+upWZt1SQSfIz6OgmfLK1joGZgudnQ2lP+Bv+7s1DM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=GQGv29sXj5S5z7UPKnXaUJAuD1qc92DQaWs8UXQ6wwBCK62RBOeMuB3RtNcxzLs+n
-	 PPcHL7L8pFqT/h2G0bvvPkUySB8nqp1hX+g8DsxNBEPpxoa8+yXm1bMdZVixBjqxgs
-	 n60V3osh+8lSW6pt2nDmsfqoDHDW6Auv9CDrXKgdtoPlM9Xla54AXl1OSAYSKpcXrA
-	 NmL+fSV7Qk/BTzx5WK8y+vV+U+fxOTS5SiuiemUg0UByoPARoWSlKdZYhXUYnMvTFf
-	 DgJsTYvf1ogHE4V/gC2FO90mA6aK9sVcz0Z1Cm9dDcGVpaCAj1nCKENYb7/YBcL1F4
-	 1oc9q29NjGBrg==
-Message-ID: <1fd72d1b-f5cd-447f-ae11-6f4d4426b8e8@kernel.org>
-Date: Thu, 16 Apr 2026 14:24:57 +0200
+	b=aREs4pY9AFWiyPis1yCUHi655kH6F2cmateO3OS3vwiWh4XGstegazkXh9fTeJRQW
+	 F7PNlGo+5uv4JS1ghUA7GmLt/nGdKTIiz0N3eNo0k9qdgxnlZ6UVo1xvuY/jm0Jsgz
+	 6OXZlHvLM95FlzgQqthFFGhbIejPY5s4jQOos8SHiaMv+4GNWDNJ4NBjKmastJKLl9
+	 B+kLcT7cwceOa9aKNihg3CZG+65E3BtgCcBvAVf5SIS4E47zAqVB8uUKfjkayyutdK
+	 0Jj6v6r/4toyxe6BrveBQ3dEYq/LaiTL2nhXiDsBmOQK54Y4zcD7qDew9ISAzQHpha
+	 d9g1fsIICa3fA==
+Message-ID: <1fba96bd-124d-431d-8de8-78688c248600@kernel.org>
+Date: Thu, 16 Apr 2026 14:30:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -53,8 +53,8 @@ List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 55/61] interconnect: Prefer IS_ERR_OR_NULL over manual
- NULL check
+Subject: Re: [PATCH 01/61] Coccinelle: Prefer IS_ERR_OR_NULL over manual NULL
+ check
 To: Philipp Hahn <phahn-oss@avm.de>, amd-gfx@lists.freedesktop.org,
  apparmor@lists.ubuntu.com, bpf@vger.kernel.org, ceph-devel@vger.kernel.org,
  cocci@inria.fr, dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
@@ -81,9 +81,10 @@ To: Philipp Hahn <phahn-oss@avm.de>, amd-gfx@lists.freedesktop.org,
  ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
  sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
  tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev
-Cc: Georgi Djakov <djakov@kernel.org>
+Cc: Julia Lawall <Julia.Lawall@inria.fr>,
+ Nicolas Palix <nicolas.palix@imag.fr>
 References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
- <20260310-b4-is_err_or_null-v1-55-bd63b656022d@avm.de>
+ <20260310-b4-is_err_or_null-v1-1-bd63b656022d@avm.de>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -129,75 +130,85 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260310-b4-is_err_or_null-v1-55-bd63b656022d@avm.de>
+In-Reply-To: <20260310-b4-is_err_or_null-v1-1-bd63b656022d@avm.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-1185-lists,linux-sctp=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-1186-lists,linux-sctp=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[55];
+	RCPT_COUNT_GT_50(0.00)[56];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-sctp@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-sctp];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[avm.de:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 76B0240E112
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imag.fr:email,avm.de:email,inria.fr:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: D413840E371
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 10/03/2026 12:49, Philipp Hahn wrote:
-> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
-> check.
+On 10/03/2026 12:48, Philipp Hahn wrote:
+> Find and convert uses of IS_ERR() plus NULL check to IS_ERR_OR_NULL().
 > 
-> Semantich change: Previously the code only printed the warning on error,
-> but not when the pointer was NULL. Now the warning is printed in both
-> cases!
-
-NAK, read the code
-
+> There are several cases where `!ptr && WARN_ON[_ONCE](IS_ERR(ptr))` is
+> used:
+> - arch/x86/kernel/callthunks.c:215 WARN_ON_ONCE
+> - drivers/clk/clk.c:4561 WARN_ON_ONCE
+> - drivers/interconnect/core.c:793 WARN_ON
+> - drivers/reset/core.c:718 WARN_ON
+> The change is not 100% semantical equivalent as the warning will now
+> also happen when the pointer is NULL.
 > 
-> Change found with coccinelle.
-> 
-> To: Georgi Djakov <djakov@kernel.org>
-> Cc: linux-pm@vger.kernel.org
+> To: Julia Lawall <Julia.Lawall@inria.fr>
+> To: Nicolas Palix <nicolas.palix@imag.fr>
+> Cc: cocci@inria.fr
 > Cc: linux-kernel@vger.kernel.org
+> 
+> ---
+> drivers/clocksource/mips-gic-timer.c:283 looks suspicious: ret != clk,
+> but Daniel Lezcano verified it as cottect.
+> 
+> There are some cases where the checks are part of a larger expression:
+> - mm/kmemleak.c:1095
+> - mm/kmemleak.c:1155
+> - mm/kmemleak.c:1173
+> - mm/kmemleak.c:1290
+> - mm/kmemleak.c:1328
+> - mm/kmemleak.c:1241
+> - mm/kmemleak.c:1310
+> - mm/kmemleak.c:1258
+> - net/netlink/af_netlink.c:2670
+> Thanks to Julia Lawall for the help to also handle them.
+> 
 > Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
 > ---
->  drivers/interconnect/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  scripts/coccinelle/api/is_err_or_null.cocci | 125 ++++++++++++++++++++++++++++
+>  1 file changed, 125 insertions(+)
 > 
-> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-> index 8569b78a18517b33abeafac091978b25cbc1acc7..22e92b30f73853d5bd2e05b4f52cb5aa22556468 100644
-> --- a/drivers/interconnect/core.c
-> +++ b/drivers/interconnect/core.c
-> @@ -790,7 +790,7 @@ void icc_put(struct icc_path *path)
->  	size_t i;
->  	int ret;
->  
-> -	if (!path || WARN_ON(IS_ERR(path)))
-> +	if (WARN_ON(IS_ERR_OR_NULL(path)))
 
-IS_ERR_OR_NULL is simply discouraged, but beside of code preference, you
-just added bug here. This is clearly not equivalent and you emit warn on
-perfectly valid case!
+Neither this, nor try from 2011, nor any future try should be accepted,
+because it creates impression IS_ERR_OR_NULL is somehow okay. No, it is
+not okay, it is a discouraged pattern leading to less readable and
+maintainable code. We should not have therefore any tools suggesting
+usage of IS_ERR_OR_NULL, because people will be converting poor code
+into that, instead of fixing that poor code.
 
 Best regards,
 Krzysztof
