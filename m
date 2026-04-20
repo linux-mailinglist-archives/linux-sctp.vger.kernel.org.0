@@ -1,207 +1,174 @@
-Return-Path: <linux-sctp+bounces-1191-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1192-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gLx5EjfV5GnZagEAu9opvQ
-	(envelope-from <linux-sctp+bounces-1191-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Sun, 19 Apr 2026 15:14:31 +0200
+	id WIqtKah15WnIkAEAu9opvQ
+	(envelope-from <linux-sctp+bounces-1192-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Mon, 20 Apr 2026 02:39:04 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07E854240D6
-	for <lists+linux-sctp@lfdr.de>; Sun, 19 Apr 2026 15:14:31 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E407B425EFF
+	for <lists+linux-sctp@lfdr.de>; Mon, 20 Apr 2026 02:39:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id F26193011A66
-	for <lists+linux-sctp@lfdr.de>; Sun, 19 Apr 2026 13:14:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F3E42301C58E
+	for <lists+linux-sctp@lfdr.de>; Mon, 20 Apr 2026 00:38:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CD3037C0E2;
-	Sun, 19 Apr 2026 13:14:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 973C121ADC7;
+	Mon, 20 Apr 2026 00:38:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bitbyteword.org header.i=@bitbyteword.org header.b="RF+j7+hH"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SC2OQ2bE"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-yx1-f42.google.com (mail-yx1-f42.google.com [74.125.224.42])
+Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB8837BE6C
-	for <linux-sctp@vger.kernel.org>; Sun, 19 Apr 2026 13:14:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF3C199D8
+	for <linux-sctp@vger.kernel.org>; Mon, 20 Apr 2026 00:38:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776604458; cv=pass; b=P2/glPVYTCJ/sWTWbo6nZiRliq0m+pF5z4++xbtQrz17a++kjxK0f6iicO1T0nkqEIlqDANP7+QuyLvslHrz0v0O5PYRKzpp8nfBwL+5FKXcAu3cmjUyM2N3JGgZw1vpm8ADPDJE9XW/QoUstsMt1D626o7ioZSvzB54J8nS83Q=
+	t=1776645526; cv=pass; b=gNOw8E3KIXRahv0YBan+rVJrqU/a37OJ+dpnf635EjZ9J14wDKqnDXafmCE79WVuRuNQI5X38JTC6zmdv1IHwpP+xPiNqLpYKnPFaalecHZLQzMNDd8lr/WU/FjF/h0T3SxZCM60Tp5sfibkGIZ3Zb5GUZfd4tCs9nJHObKIERc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776604458; c=relaxed/simple;
-	bh=qe/8/rd6eZq24hJL9eY4fBiSEHVVKDLumzkH60jo5p0=;
+	s=arc-20240116; t=1776645526; c=relaxed/simple;
+	bh=V+Xc+gnGUSlatwR6xO+m6P3xuojSJkvgpNiZT2dRtjQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jEbnNLW3XV+buhf7uxXRXkMfEmrtxOmPrD5Zm8M7pzveYAmQJRd/PItEr/ABi6JQdJdWC57uMsTdIKT4LoyqkbcVTPouxxlCkMJFreKHJFcQ6QuCjv6QwKGFOEvp+rFZ+2s1j3bl4mlmy5zve3TQq+7pvAQ9v6oH4vdNTguiPIs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bitbyteword.org; spf=pass smtp.mailfrom=bitbyteword.org; dkim=pass (2048-bit key) header.d=bitbyteword.org header.i=@bitbyteword.org header.b=RF+j7+hH; arc=pass smtp.client-ip=74.125.224.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bitbyteword.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bitbyteword.org
-Received: by mail-yx1-f42.google.com with SMTP id 956f58d0204a3-651b0eb2564so2193167d50.3
-        for <linux-sctp@vger.kernel.org>; Sun, 19 Apr 2026 06:14:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776604455; cv=none;
+	 To:Cc:Content-Type; b=jW3sFelzNWJWe64kSy4/mJmFXcK7ZmcroNYOMiJoJAdTl9mkA7YnaiyF0ZppLRFlP2zm2dMCrQ4hscvItEgoVOFbh3vkHW/GLjp1TnALgtVNqTyudPGHYZFNW5CmyzaUmNYc5SewXNzgk3KGioMgBLZbBUqC8ZEzepr/aWTlKY4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SC2OQ2bE; arc=pass smtp.client-ip=74.125.82.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-12c565dd3a7so1134774c88.1
+        for <linux-sctp@vger.kernel.org>; Sun, 19 Apr 2026 17:38:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776645523; cv=none;
         d=google.com; s=arc-20240605;
-        b=Xj89anbN5XuMFn8ljj9U1Xv8Xix48HK1zyrIHf7n9BHAgSdc8mcutz9WE2zXl7W6+2
-         SKIjYz3a8dN1839GzNJ8jemaFojKMhHbb363CqkrH/Dbm/1usKACJP+IQ9S7ZIWUAbed
-         0w8mtus3iq1btM7rlLLk+dGeP4WoY9NFfOkjP1mbrGqkaoOXureL8OxvB+I5RVguiV2T
-         zHvPm7dOjXItAm98A3gsRtlQmzoJj8zWDS2/Mkuh+Wq53NYxubDGvrADl3+Zn/bcuoCp
-         GcAkM5sEgCeYOKlvfSUy9r06rkSbliSVk7O+ueGq5F9flicz54s6qJmVL3UYI9ihtwS/
-         AIAg==
+        b=gE3UmelMfhve+tL+EqKxyvFklX+05kAVaefuN2QLZpHIZr4kiynV9Jpaaic4cDvFZS
+         H9czxXZ3qgLSE9JWs6PNUCujR4Mn+2SEOQ54cZlWpTArIxhQAJtyJIMYxMTXDpeRCU50
+         0jqCRdsIL+3xRZdWZCFAbwz6AqTwM6Khc48dgpK8n/TpvlXOT4d0F63KDbJF8iH0d3pA
+         yTZEjHQfYsTia0F9rz4k9c7F9NYeL0RTEdJ3RxQgiVj9YIAEbEPmgKgXAo1op45br9My
+         H9GyG/1zgETW3jzIgKv54xgWuPNJ3VGCnshRSeB2OXTsslGQhDXw1fRUUtIu45VHiQ8N
+         szow==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=X+WVMuAIY6fuTgPsvbyDiChtmsWhcTJteNRfYOEl4tw=;
-        fh=JLsPOQubOt7qIExXazrTq17B2R8ucNjZ1NERBg79FJU=;
-        b=ZjqWt8n8gztsWg7zGmSSO+YTx56/+ys3XhquA9oxiFCYdIzG3xnOuL+03sZ0JKCbnJ
-         mgnguqUExPUBSEwfJu9tUPDH2zYh7SK1kmcnSTI9ZXtoBkK/CQXOH8v1EPKqhbIjc1zm
-         xK9DBl+ac5MbsCo7Yk2gF+lwmMyNm5fUFc4lvSf8cOkeCBj+LKqorBAflDSD+ig1SoF9
-         ooATIPYPKC6l75gjgmzqwDQXI5XTnQmaSD5C41EHv12EugmSEAQLpUjDjYx24HUIHJlw
-         Ja/6FWPV0KhVYUG+38Tljpxxopn1uLTBRu2U0PYFzIB1Z9pCNyPN9FtCZHKK0MXkO6ec
-         AWzQ==;
+        bh=v2+NAjo9ccDDaJAJPnPpHZkJNF/Ek3gXxSOX8+9kURU=;
+        fh=CwByzF+hyibwbrahVD/MTf4ZvXATOaBAI/G7bPTtdLY=;
+        b=InNIi32P2IynlxC1QO7tEakVJFWgIeufIeUJ/gNw1Td+2USWlTWX+iZbfg9h9iOVjC
+         NYof7+32uVQgdCDz9G2btb8u1hj6MJTB5DgnDngbJkKTGAAuYkud7N7NUxqJXZMGzvSA
+         RhmGqQvklA+vnfczNywlzl1Z2pH9pWruAQtuJyQsi+tinOvbvnqNxvP52DUgG1kM9WH3
+         OyhXzDbf55/MmNge8b0OH7B/KyUneUYT0l5VqegPCzq8NJb9L+PVFyG35hB/ABitHPce
+         X+zpyqvH+jxaCRZInC0Upxvo1I9ki51TZn2J0qM1/gGzfh29+fyKMtd9Q1LIkrMYH7iC
+         zpmg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bitbyteword.org; s=google; t=1776604455; x=1777209255; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1776645523; x=1777250323; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=X+WVMuAIY6fuTgPsvbyDiChtmsWhcTJteNRfYOEl4tw=;
-        b=RF+j7+hHVxK6KZm7vPd2VqoOm/wjdXQLWhOzfortaWaPcUVwcAQrCs3L0CFMuiRg7q
-         QnfAqyyLg1KJ+FRhOaVPXbDj/1oQAlKqMc8aZVWWLmxNSIvN0DqnMlIAoJn6kuX0b/7J
-         7sPHT3tJByJtn837fhiWKur8kP67w4ITGeKuH61ShAM9KSbiPZhuqcwRf0AI+YYvfUzE
-         nm7TFbEi+qyg5VUzXDZfGrK2suVGd+PyZxZUbRBAHRptfz+N0eKCGeaG7itaOxMnDo4a
-         9pQYTEUA6X1M/ONh/tBNfIzrR7/o898AAKuwOGzc6VJY9VVEJ/2rd2ZdsoDfuP51zO2Z
-         aU3w==
+        bh=v2+NAjo9ccDDaJAJPnPpHZkJNF/Ek3gXxSOX8+9kURU=;
+        b=SC2OQ2bEKiP7e2J5gJMlNDxFxyArBRoEylARrBKCbgT658MNvj6rjA375HmYDgyNOs
+         4qa97ve1+We6RT/G6SF9aWmoS5UBVqxCuVJepopr34Um/Q/FkjRgDXm8Vt9neMc76TPY
+         mzaT1XNdgZaJSPZKuksdDEymoblulTfcl/9ZH3t2RV+uifN4mhh5TL8OiDDbDwIccTii
+         a2If691rDoxTjS1UfVCOUZFBnVSuNHpVJVC4fGmVg1a7PjJyojiZptkidgWEQgx4VK8t
+         KpcNbWqeNSES5qPEd3D63lVctqI4JHdlhj/1DwhGrDNJet0qqLvbqOEYkahQqT8cBFuV
+         ZMsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776604455; x=1777209255;
+        d=1e100.net; s=20251104; t=1776645523; x=1777250323;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=X+WVMuAIY6fuTgPsvbyDiChtmsWhcTJteNRfYOEl4tw=;
-        b=RlSGjCx75OgClaQT0tzCKQAjvQA8LwkPG8ggQ3GQ/15/aDusq1awt+iMhwW6nKqelo
-         1IXXH3fPDRaeiLkzSb/gGWvangM3N9sgpm3Ci36pZ75Zvqjb/0alu/XsZZoORidYObaT
-         D24nlXsSHRta8QbH+YyypyJ1RiWgTMu+8UvDUb+HXDYiotVg4E4Wa9uK5DCwEPG33MdB
-         4rI5kWFqBEU9XpsM2ImJQdQWOtwflGHEMlD9RFaVbeFXy5BjmLJ7bO8pnPRMb+Cf3IUb
-         +Vn5sUQi4Wps/psyMw3DKmvptI79pstME99AIKBgtZkn/Yd0y+3mlaywDvA/UvK14fzL
-         rvNA==
-X-Forwarded-Encrypted: i=1; AFNElJ94hd/RJ6iX5ky/IvONAIpXHtJBBJAOBva4Xq4uTcEt0nlUkzRlT9M7+3OgLP1ru40E86aMN788ND/v@vger.kernel.org
-X-Gm-Message-State: AOJu0YwPhGo9MmQm7kwWEF9dmVgcPlgqHV3E0qEeGPwmWYPRUktm/pL0
-	cfCTdCHNT9VuH1WssYUreWapfha9gUrCnMyNT6DmQsDpJuGpxODvCtz4nrZSJkaQiioQh4VXcbq
-	1oeE7fxYE41LSaNxv/ZAoFq9+g7vdkdECakKkJ6hHaw==
-X-Gm-Gg: AeBDieuB+YeRsJQRMh49ukGA/jiXw5ahcNymrkKUV6y0CA3PpVvq399JKSXAkdp86+v
-	OBXHyrEqOJGvYEgX/yJC7xuJ+6pOjehjHXGJYbE86onQ4aUalW6hZndlKKVJ03L+wZGCfAc5Of9
-	wTXuhfbwPu391ITfuuT1DtnuaA3K65zlMty3GdV165v9pj15wQtRB2ueMghbXzVe/LbOMtDWD/b
-	BpExzeJvVzpuDQzOYm4kZ86q1mOTx/FOs9h/ZdMU7MLgl6PcanenIWxU4WE9zLvjJ1dtiMAOQhY
-	JO+lHr/zadxTMRxr+sTw7ZLsH6mi
-X-Received: by 2002:a05:690e:4811:b0:651:bcc9:50cd with SMTP id
- 956f58d0204a3-653107ccddamr6102177d50.5.1776604455299; Sun, 19 Apr 2026
- 06:14:15 -0700 (PDT)
+        bh=v2+NAjo9ccDDaJAJPnPpHZkJNF/Ek3gXxSOX8+9kURU=;
+        b=a49pC8qdcS8GKa2t6bOzAqGeeoi9CIOeYWwL3FIr3ZNmu2sdX6HcdEsI8CtkxKc5+/
+         nq68aT0ZaX/fJsd/oLibUM46sqI01PL56EkWIQsJhHtg6c+zKytdc41w7Lw1n3HZV0bV
+         +zVif9tb182CodqZcz32j9U9PYDTb0SCDLB+9SLBgG5ayT0EQuTOVNdONsmTfsJ4T2l2
+         d2MpE7kYNqdqd8MQZg6/JpIjp+2BC3FxRN2B3xmSJOmtes13o7xZgpNEDgh/iT4tgopj
+         e4SonWg7Bl4c82XACShGU8vWUI2rIQcNPzynja+iudoYCr4S/8PV2qhPTo1owz6AwQMh
+         e6iA==
+X-Forwarded-Encrypted: i=1; AFNElJ83fR2cdruKdtLcemZ/l2VvVr5AGe/65q37rRAg/ku66bvMYUeP/MGskCFleCgihGvX339LwqXFpxni@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzt9ZwVQOAd0Z/HXzHRPw5I2JypANffUm02aRuUHo9GJrfHiUhK
+	UovLVs/cI7t5kSR4gD6aDkHN3x0MthN48rEmoDhEXxd/Urg9f9sgEzDcLV2BuBQha33m1LVI8SK
+	+Mu5eiCo2frNu+zpQtdokU5IAOaN/XJZHhFYgw9Ev
+X-Gm-Gg: AeBDieu62mVEenImCRtqMpZo8Ck9rgExvPzaSrpZZZrHG/WrcJxFzq3hCIDxNcGqTZL
+	BrEx4HgKC+guQRlZQaiixJ1tWa6eyk8Ydm0CdckuXkMBVqsf7nt05/y1bIKoiJnYFEKQ16q8qN7
+	iSJZhCnkiYjG14zcFI/6JtRFDDeSRIxvsF6cYde8DNKoMVzff2RazsEQXE5F+PxUJKF7pRDBFWj
+	q4ODcM9D3t5dguKihbPwhbZ0SR+hrkNPNjqCxS4RI5HVKzXM40hI3vMO8nx/1WGEB1yOQCBsefa
+	meyAPqyWSyywwpd+3Q6X/YlRA2XakrRMmeyg0SGdISDTGs/wQg5xTRAn7OKACFiRZLWM7lKqPBQ
+	hXobskHNEXLVTaZILX7qyFpD7/7vSHkEfE3mmgqjlkrjgnYUPh0fZXQl8sPi/f8eBlUZnsEotCQ
+	==
+X-Received: by 2002:a05:7022:69a2:b0:128:cedb:33ba with SMTP id
+ a92af1059eb24-12c73f70ebfmr5674965c88.10.1776645522913; Sun, 19 Apr 2026
+ 17:38:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260323160052.17528-1-vineeth@bitbyteword.org> <20260418190456.631df6f3@fedora>
-In-Reply-To: <20260418190456.631df6f3@fedora>
-From: Vineeth Remanan Pillai <vineeth@bitbyteword.org>
-Date: Sun, 19 Apr 2026 09:14:04 -0400
-X-Gm-Features: AQROBzCejbUFLEO14GEr24qqxXnlBQ97NPzS668jjkdcYvI-3kvv1xuemSCQk44
-Message-ID: <CAO7JXPh+__EWsW8fsKi4T+w0jdPxZEfCLQno_ukJk2=d2s0WKA@mail.gmail.com>
-Subject: Re: [PATCH v2 00/19] tracepoint: Avoid double static_branch
- evaluation at guarded call sites
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Dmitry Ilvokhin <d@ilvokhin.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, 
-	Xin Long <lucien.xin@gmail.com>, Jon Maloy <jmaloy@redhat.com>, 
-	Aaron Conole <aconole@redhat.com>, Eelco Chaudron <echaudro@redhat.com>, 
-	Ilya Maximets <i.maximets@ovn.org>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-sctp@vger.kernel.org, tipc-discussion@lists.sourceforge.net, 
-	dev@openvswitch.org, Jiri Pirko <jiri@resnulli.us>, Oded Gabbay <ogabbay@kernel.org>, 
-	Koby Elbaz <koby.elbaz@intel.com>, dri-devel@lists.freedesktop.org, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	"Gautham R. Shenoy" <gautham.shenoy@amd.com>, Huang Rui <ray.huang@amd.com>, 
-	Mario Limonciello <mario.limonciello@amd.com>, Len Brown <lenb@kernel.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, linux-pm@vger.kernel.org, 
-	MyungJoo Ham <myungjoo.ham@samsung.com>, Kyungmin Park <kyungmin.park@samsung.com>, 
-	Chanwoo Choi <cw00.choi@samsung.com>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, linaro-mm-sig@lists.linaro.org, 
-	Eddie James <eajames@linux.ibm.com>, Andrew Jeffery <andrew@codeconstruct.com.au>, 
-	Joel Stanley <joel@jms.id.au>, linux-fsi@lists.ozlabs.org, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Alex Deucher <alexander.deucher@amd.com>, Danilo Krummrich <dakr@kernel.org>, 
-	Matthew Brost <matthew.brost@intel.com>, Philipp Stanner <phasta@kernel.org>, 
-	Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
-	amd-gfx@lists.freedesktop.org, Jiri Kosina <jikos@kernel.org>, 
-	Benjamin Tissoires <bentiss@kernel.org>, linux-input@vger.kernel.org, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-i2c@vger.kernel.org, 
-	Mark Brown <broonie@kernel.org>, Michael Hennerich <michael.hennerich@analog.com>, 
-	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, linux-spi@vger.kernel.org, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K. Petersen" <martin.petersen@oracle.com>, linux-scsi@vger.kernel.org, 
-	Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org, 
-	Thomas Gleixner <tglx@linutronix.de>, Andrew Morton <akpm@linux-foundation.org>, 
-	SeongJae Park <sj@kernel.org>, linux-mm@kvack.org, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <af8d66f928dec3e9fcbee8d4a85b7d5a6b86f515.1776460180.git.lucien.xin@gmail.com>
+In-Reply-To: <af8d66f928dec3e9fcbee8d4a85b7d5a6b86f515.1776460180.git.lucien.xin@gmail.com>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Sun, 19 Apr 2026 17:38:30 -0700
+X-Gm-Features: AQROBzDHytxBlqwozveGT6CDT-CRYyJYH_xWO4Xuf0Xb-n75HwRhJREtNelKaEw
+Message-ID: <CAAVpQUCdXJS_VNNjtq_oiygaMJiFMoaJ2kynRR+aEu=-3aahqQ@mail.gmail.com>
+Subject: Re: [PATCH net] sctp: fix sockets_allocated imbalance after sk_clone()
+To: Xin Long <lucien.xin@gmail.com>
+Cc: network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org, davem@davemloft.net, 
+	kuba@kernel.org, Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	R_DKIM_ALLOW(-0.20)[bitbyteword.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-1191-lists,linux-sctp=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-1192-lists,linux-sctp=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DMARC_NA(0.00)[bitbyteword.org];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[vger.kernel.org,davemloft.net,kernel.org,google.com,redhat.com,gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[infradead.org,ilvokhin.com,kernel.org,efficios.com,redhat.com,kernel.dk,vger.kernel.org,davemloft.net,google.com,iogearbox.net,gmail.com,ovn.org,lists.sourceforge.net,openvswitch.org,resnulli.us,intel.com,lists.freedesktop.org,linaro.org,amd.com,linux.intel.com,samsung.com,lists.linaro.org,linux.ibm.com,codeconstruct.com.au,jms.id.au,lists.ozlabs.org,ffwll.ch,sang-engineering.com,analog.com,hansenpartnership.com,oracle.com,fb.com,suse.com,linutronix.de,linux-foundation.org,kvack.org,alien8.de];
-	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[80];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[vineeth@bitbyteword.org,linux-sctp@vger.kernel.org];
-	DKIM_TRACE(0.00)[bitbyteword.org:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TAGGED_RCPT(0.00)[linux-sctp,renesas];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,goodmis.org:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 07E854240D6
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[kuniyu@google.com,linux-sctp@vger.kernel.org];
+	DKIM_TRACE(0.00)[google.com:+];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-sctp];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: E407B425EFF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Sat, Apr 18, 2026 at 7:05=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org=
-> wrote:
+On Fri, Apr 17, 2026 at 2:09=E2=80=AFPM Xin Long <lucien.xin@gmail.com> wro=
+te:
 >
-> On Mon, 23 Mar 2026 12:00:19 -0400
-> "Vineeth Pillai (Google)" <vineeth@bitbyteword.org> wrote:
+> sk_clone() increments sockets_allocated and sets the socket refcount to 2=
+.
+> SCTP performs additional accounting in sctp_clone_sock(), so the clone-ti=
+me
+> increment must be undone to avoid double counting.
 >
-> >   if (trace_foo_enabled() && cond)
-> >       trace_call__foo(args);   /* calls __do_trace_foo() directly */
+> Note we cannot simply remove the SCTP-side increment, because the SCTP
+> destroy path in sctp_destroy_sock() only decrements sockets_allocated whe=
+n
+> sp->ep is set, which may not be true for all failure paths in
+> sctp_clone_sock().
 >
-> Hi Vineeth,
->
-> Could you rebase this series on top of 7.1-rc1 when it comes out?
-> Several of these patches were accepted already. Obviously drop those.
-> They were the patches that added the feature, and any where the
-> maintainer acked the patch.
->
-> Now that the feature has been accepted, if you post the patch series
-> again after 7.1-rc1 with all the patches that haven't been accepted
-> yet, then the maintainers can simply take them directly. As the feature
-> is now accepted, there's no dependency on it, and they don't need to go
-> through the tracing tree.
->
-Sure, will do. Thanks for merging this feature.
+> Fixes: 16942cf4d3e3 ("sctp: Use sk_clone() in sctp_accept().")
+> Signed-off-by: Xin Long <lucien.xin@gmail.com>
 
-Thanks,
-Vineeth
+Thanks for the fix.
+
+Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+
+I fixed a similar one in 622e8838a298.  We may want to
+perform inc/dec regardless of sp->ep and simplify the code
+once net-next opens.
 
