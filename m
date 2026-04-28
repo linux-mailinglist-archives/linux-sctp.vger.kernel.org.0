@@ -1,101 +1,62 @@
-Return-Path: <linux-sctp+bounces-1198-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1199-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IBAmLOwl7mn0qwAAu9opvQ
-	(envelope-from <linux-sctp+bounces-1198-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Sun, 26 Apr 2026 16:49:16 +0200
+	id mByvNzq/8GnSYAEAu9opvQ
+	(envelope-from <linux-sctp+bounces-1199-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Tue, 28 Apr 2026 16:07:54 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7550146A6E8
-	for <lists+linux-sctp@lfdr.de>; Sun, 26 Apr 2026 16:49:16 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 822014868DD
+	for <lists+linux-sctp@lfdr.de>; Tue, 28 Apr 2026 16:07:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id DDA6530058D7
-	for <lists+linux-sctp@lfdr.de>; Sun, 26 Apr 2026 14:49:09 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id F28A0302901E
+	for <lists+linux-sctp@lfdr.de>; Tue, 28 Apr 2026 14:06:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED7AD369999;
-	Sun, 26 Apr 2026 14:49:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81E3043E49B;
+	Tue, 28 Apr 2026 14:06:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NenE3BRc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h3coAnL6"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9283367F3D
-	for <linux-sctp@vger.kernel.org>; Sun, 26 Apr 2026 14:49:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D0D843E489;
+	Tue, 28 Apr 2026 14:06:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777214942; cv=none; b=l+P9tuy9NPVSsb2/ugpw/ZeRBrIH3I+5mulQvtjVJAWepm/89rvsjPkKP/kK012wBYiweSgB8TzJjJfVvYbkc9ewtTCuMPUQXo33TaLtvBKeRontaTnrqtjiVajVjRzlksoMNHhGP3fFHafl4x1fV9fH/0+1vxSnduk4GqlHwEs=
+	t=1777385209; cv=none; b=m38rfhK1vQhfE1KB+T0HVlhxytvghPwNo8hoSVOeu2vseomJy3koW0kUH/WEOB1Ni/N9qWBRZk42O0tY/4R0RreZy0C00jM2xpEcQBhPTrZ2OwcWsnVngv1lIgFJxKW+aGwGP6Xw3yfMVkjo3U0tsVm4UY1L5OY8cos4vzdA9G4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777214942; c=relaxed/simple;
-	bh=vsm/Vin6fhEHMK5Rg/gfXmdGW6NjOiPfcld3a7a7Zqo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GJnWuwQLrcF90zBPGcHXWcu2NoqPkFOZIKCynJPEWo9KfDzaeDm+fxYhVtLHnZVClqkvAXmX+KlrhSAjZHKuWmZX4OelO3U0sNtJd6mY9dc4rNgT8cEcPaBaHXAB6Nkh9DmUkdiytlo7PikI6CQzjSZvnm44nMd+9gri/KLTIkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NenE3BRc; arc=none smtp.client-ip=209.85.219.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-8acae26e564so113142686d6.2
-        for <linux-sctp@vger.kernel.org>; Sun, 26 Apr 2026 07:49:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777214941; x=1777819741; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZLYe3X7mIdfpi7a+4xLOp68gaR+hsDkG8LtdUaDQjF4=;
-        b=NenE3BRcLW34Jayeyr81Rdt1Zunk2n3OcSKDbKUkSndZ0irM9vsWGeFB2cTG+SK39g
-         f2ZRdW8UlOO/tGmmespooz6WOSBI1CBQoYWX6oLnkpqeEQDp3hcU3LwsU1RNTpd1nI7o
-         /WNuy3zwMo751bQ3AJW7Ij0y8BrNIT0M+Js8Thf89EX03zHW3f0+CLdB9/yweyKi7m0g
-         vcByteO/ISTpDr+pQcDLCovC6WC3LJBMdP8s0IgY2ic+pJg6DowPYqoL60Oyt4qSd3By
-         1AiR1DnQuGNNmmHfmtw55B5QLnq8xQx3vMqTQBjEd7M3mn8C4pJsQ7bXphAUzPtcv88g
-         rE+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777214941; x=1777819741;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ZLYe3X7mIdfpi7a+4xLOp68gaR+hsDkG8LtdUaDQjF4=;
-        b=q1H7KCAWkLjhajNNo7pqoZr38R791tXy3ghxTGvJmpgUX48rdSIGF52+nMyUslyBAX
-         kjsfyuxPzoS/N6AebQ0d+0QxnYUpL9UskaqxCpuSjg4MXL7sfefyUhRZU5HjGnrP71kX
-         iwhLSonSdU5KDzMpHB4n6cfrmw1Qi7sWpf8S4h67RGlJEampzSNm8qDIXsvuJYqYPdPW
-         bPUWQNK/MAYIU3p0G3U5z/2FCSBRgHz7+KSJs/asJR1NuaTr5PZ9zLA6kQC2+pxjBfeF
-         zTR4YDTVeDKMx0V5IiqtQMdHylloa+Bu/Wsps6dNLSQvrCyO/WKUxCUZ72+oQMTPyX5w
-         fsXw==
-X-Forwarded-Encrypted: i=1; AFNElJ/f5IFKAtAbY84f0oX5N/wqq9D+cdv9Qy/yZit/pk5AKvF5nqhBc/jBysAti2gkorRkzYwLoEfga/5t@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZlcoJ+5o43+c6Sgvghkwl3/zWJp/JhL25VsMAX+8I3e1rhlSt
-	eowUYZyWuwsHifs8O42UiOWCHChBiP8tbwD9KP8oK8dD7ofrkeaq6dFY
-X-Gm-Gg: AeBDietkZVRekSkL08Mh0sqCs57r4Dry1pJBlzoeCsEXmqJ1Ited/KVPo6PQPrwG2ll
-	QwfOlew7/1n4oIyIQ8lcJjAAEf3dexULuQX580pJeSMayc1pKNnmhudholY79/bNqqOAmccEyX/
-	1MRrsR6bN5Y43cMnhGzn1Rc2dAV1LfN5sqByRDm/jPdqG/MwefPTWx7Y9V8518rzWFxZUDB+vxS
-	bwrKlv6ElJr3rDILXhhIdTy9dynScLslwnNPJG54HX7HKhLVD4ScrMpepJEPrnQpzG2pRblFFSH
-	z65C1hLdlcydLDkeTzBULc5PTOo1qhOL3ttHBpKi/7K6sNMqvY+dxUzKkJQNqXlhfa1LeFb9+lY
-	n3gJrw1BROJwY33/mKIWo0puG+Vm5g8qsZa0sHHHBL1R0Su5kVatXTp0nUfPcYHYecthV/fNsOV
-	L4GFNgyo5xsRCGsHKd5MqxSd/7rrT3OmYyNLEPcTq/UFAApGeayoydkokt6IPLAh06VUEaLe0ff
-	2JVYCfQWarnvUt+CGLyRHiQTLeX97aeBqTc33JmJ63MfVHdztyH/0uFT33668cak1kKZG/0dxY=
-X-Received: by 2002:ad4:5bef:0:b0:8ac:ae21:46e with SMTP id 6a1803df08f44-8b03a1885ecmr509647676d6.31.1777214940620;
-        Sun, 26 Apr 2026 07:49:00 -0700 (PDT)
-Received: from wsfd-netdev58.anl.eng.rdu2.dc.redhat.com ([66.187.232.140])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8b02aebc655sm232579146d6.48.2026.04.26.07.48.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Apr 2026 07:48:59 -0700 (PDT)
-From: Xin Long <lucien.xin@gmail.com>
-To: network dev <netdev@vger.kernel.org>,
-	netfilter-devel@vger.kernel.org,
-	linux-sctp@vger.kernel.org
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
+	s=arc-20240116; t=1777385209; c=relaxed/simple;
+	bh=MpYhIos3QpHd5ZcbWIvroPNEGS+XcMgFqE/2NWB8hdQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ajOEfEJluMEFGRArGiDfZa2G6GtMP73R9/cnFSUicwSHQ5emUNb4fPq2QtjLYscxTzYqWxXrhqjmWd+3tvJoCqCcxfxQQRFIJOSZQQNW705LoMwCByugEAWyYgaMqOZrAHyWn199QqLUtrMyT3HO2m55P1q2tFtLP9gGprFcbCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h3coAnL6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02431C2BCAF;
+	Tue, 28 Apr 2026 14:06:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777385209;
+	bh=MpYhIos3QpHd5ZcbWIvroPNEGS+XcMgFqE/2NWB8hdQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=h3coAnL6W7rY0i9VOTXWvINjr/QhnH/y7s7vifxvPC9UI/fBCNTTK20YYDXwmrOiP
+	 w0tLPdHhR9yOKvO2F+6BW6nSAghCC6Quvz71joY+6wPurV0SB/q4MjPGOwWd44PoAw
+	 iN2KgLB5zVM3x2msKOXt/n1/r/lvvtw+JbKK4CHaxFJEWptm5dsw7dKwxy6BxCvEZ6
+	 q7DwqgSMaia5es0cRID69Mz1AOCKdUDerz82e4tDAXYlx0qneJn2QsWt/+Nt2byDcv
+	 Q5vBiAnC876ouq/ej19YoOY7PclEf2omu0QMFfZQRlEZugXPJqx6VqocWhwymrNMQ6
+	 tqJOicddsMaOA==
+Date: Tue, 28 Apr 2026 15:06:42 +0100
+From: Simon Horman <horms@kernel.org>
+To: Xin Long <lucien.xin@gmail.com>
+Cc: network dev <netdev@vger.kernel.org>, netfilter-devel@vger.kernel.org,
+	linux-sctp@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
 	Pablo Neira Ayuso <pablo@netfilter.org>,
-	Florian Westphal <fw@strlen.de>,
-	Phil Sutter <phil@nwl.cc>,
+	Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>,
 	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
 	Yi Chen <yiche.cy@gmail.com>
-Subject: [PATCH net v2 2/2] sctp: discard stale INIT after handshake completion
-Date: Sun, 26 Apr 2026 10:46:41 -0400
-Message-ID: <5788c76c1ee122a3ed00189e88dcf9df1fba226c.1777214801.git.lucien.xin@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <cover.1777214801.git.lucien.xin@gmail.com>
+Subject: Re: [PATCH net v2 0/2] sctp: fix a vtag verification failure caused
+ by stale INITs
+Message-ID: <20260428140642.GT900403@horms.kernel.org>
 References: <cover.1777214801.git.lucien.xin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
@@ -103,77 +64,96 @@ List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 7550146A6E8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1777214801.git.lucien.xin@gmail.com>
+X-Rspamd-Queue-Id: 822014868DD
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-1198-lists,linux-sctp=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[davemloft.net,kernel.org,google.com,redhat.com,netfilter.org,strlen.de,nwl.cc,gmail.com];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-1199-lists,linux-sctp=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com];
 	RCPT_COUNT_TWELVE(0.00)[13];
+	FREEMAIL_CC(0.00)[vger.kernel.org,davemloft.net,kernel.org,google.com,redhat.com,netfilter.org,strlen.de,nwl.cc,gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lucienxin@gmail.com,linux-sctp@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-sctp];
-	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[horms@kernel.org,linux-sctp@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+	TAGGED_RCPT(0.00)[linux-sctp];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,sashiko.dev:url,horms.kernel.org:mid]
 
-After an association reaches ESTABLISHED, the peer’s init_tag is already
-known from the handshake. Any subsequent INIT with the same init_tag is
-not a valid restart, but a delayed or duplicate INIT.
+On Sun, Apr 26, 2026 at 10:46:39AM -0400, Xin Long wrote:
+> Similar to Scenario B in commit 8e56b063c865 ( netfilter: handle the
+> connecting collision properly in nf_conntrack_proto_sctp"):
+> 
+> Scenario B: INIT_ACK is delayed until the peer completes its own handshake
+> 
+>   192.168.1.2 > 192.168.1.1: sctp (1) [INIT] [init tag: 3922216408]
+>     192.168.1.1 > 192.168.1.2: sctp (1) [INIT] [init tag: 144230885]
+>     192.168.1.2 > 192.168.1.1: sctp (1) [INIT ACK] [init tag: 3922216408]
+>     192.168.1.1 > 192.168.1.2: sctp (1) [COOKIE ECHO]
+>     192.168.1.2 > 192.168.1.1: sctp (1) [COOKIE ACK]
+>   192.168.1.1 > 192.168.1.2: sctp (1) [INIT ACK] [init tag: 3914796021] *
+> 
+> There is another case:
+> 
+> Scenario F: INIT is delayed until the peer completes its own handshake
+> 
+>   192.168.1.2 > 192.168.1.1: sctp (1) [INIT] [init tag: 3922216408]
+>   (OVS upcall)
+>     192.168.1.1 > 192.168.1.2: sctp (1) [INIT] [init tag: 144230885]
+>     192.168.1.2 > 192.168.1.1: sctp (1) [INIT ACK] [init tag: 3922216408]
+>     192.168.1.1 > 192.168.1.2: sctp (1) [COOKIE ECHO]
+>     192.168.1.2 > 192.168.1.1: sctp (1) [COOKIE ACK]
+>   192.168.1.2 > 192.168.1.1: sctp (1) [INIT] [init tag: 3922216408]
+>   (delayed)
+>   192.168.1.1 > 192.168.1.2: sctp (1) [INIT ACK] [init tag: 3914796021] *
+> 
+> In this case, the delayed INIT (e.g. due to OVS upcall) is recorded by
+> conntrack, which prevents vtag verification from dropping the unexpected
+> INIT-ACK in nf_conntrack_sctp_packet():
+> 
+>   vtag = ct->proto.sctp.vtag[!dir];
+>   if (!ct->proto.sctp.init[!dir] && vtag && vtag != ih->init_tag)
+>           goto out_unlock;
+> 
+> This happens because ct->proto.sctp.init[!dir] is set by the delayed INIT,
+> even though it is stale.
+> 
+> Fix this in two parts:
+> 
+> - In netfilter: Do not record INITs whose init_tag matches the peer vtag,
+>   as they carry no new handshake state in the 1st patch.
+> 
+> - In SCTP: Prevent endpoints from responding to such INITs with INIT-ACK,
+>   ensuring correctness even when middleboxes lack the netfilter fix in
+>   the 2nd patch.
+> 
+> A follow-up selftest for this scenario will be posted in a separate patch
+> by Yi Chen.
 
-Drop such INIT chunks in sctp_sf_do_unexpected_init() instead of
-processing them as new association attempts.
+Hi Xin,
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
----
-v2:
-  - Fix INIT tag comparison by converting the on-wire init_tag to host byte
-    order before comparing it with asoc->peer.i.init_tag.
----
- net/sctp/sm_statefuns.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
-index 7b823d759141..8e89a870780c 100644
---- a/net/sctp/sm_statefuns.c
-+++ b/net/sctp/sm_statefuns.c
-@@ -1556,6 +1556,12 @@ static enum sctp_disposition sctp_sf_do_unexpected_init(
- 	/* Tag the variable length parameters.  */
- 	chunk->param_hdr.v = skb_pull(chunk->skb, sizeof(struct sctp_inithdr));
- 
-+	if (asoc->state >= SCTP_STATE_ESTABLISHED) {
-+		/* Discard INIT matching peer vtag after handshake completion (stale INIT). */
-+		if (ntohl(chunk->subh.init_hdr->init_tag) == asoc->peer.i.init_tag)
-+			return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
-+	}
-+
- 	/* Verify the INIT chunk before processing it. */
- 	err_chunk = NULL;
- 	if (!sctp_verify_init(net, ep, asoc, chunk->chunk_hdr->type,
--- 
-2.47.1
-
+FTR: There is an AI generated review of this patchset available on
+sashiko.dev. I have looked over this and I do not believe the feedback
+there should block progress of this patchset.
 
