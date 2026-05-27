@@ -1,161 +1,170 @@
-Return-Path: <linux-sctp+bounces-1214-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1215-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UFtcOe5jFmpamAcAu9opvQ
-	(envelope-from <linux-sctp+bounces-1214-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Wed, 27 May 2026 05:24:30 +0200
+	id 2H9HARSBFmq7mwcAu9opvQ
+	(envelope-from <linux-sctp+bounces-1215-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Wed, 27 May 2026 07:28:52 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBAE55DEDC8
-	for <lists+linux-sctp@lfdr.de>; Wed, 27 May 2026 05:24:29 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A6C15DF713
+	for <lists+linux-sctp@lfdr.de>; Wed, 27 May 2026 07:28:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 312B2300BC4D
-	for <lists+linux-sctp@lfdr.de>; Wed, 27 May 2026 03:24:26 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 13B86302DE14
+	for <lists+linux-sctp@lfdr.de>; Wed, 27 May 2026 05:28:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDDA136728C;
-	Wed, 27 May 2026 03:24:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jeKOklq/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 673892C11F9;
+	Wed, 27 May 2026 05:28:49 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-pf1-f194.google.com (mail-pf1-f194.google.com [209.85.210.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CB2934B682
-	for <linux-sctp@vger.kernel.org>; Wed, 27 May 2026 03:24:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.194
+Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A092260580;
+	Wed, 27 May 2026 05:28:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779852264; cv=none; b=nKr6WKuQRmO66u4Oe8vwVsxVOawDWztOq4YTnWie2bl5CldoT7ZhdMXgcvkIbN/maNw/ntW4Sl+Vj+0Ty0x3Vhl4d0WsVEdIIDXSbSq8mODScYtCh8DIlslbkN+wnQic7AEI7Zvk9zmx15ajf6Mw0ZnriaD2tOpij9zTvaqf7ss=
+	t=1779859729; cv=none; b=GZJco0XZbYbIQ9WNivuZSAcb2CoRNUXsnoWKAdlCKRahYe+P71x81rEEdC6nUiDoPLpS+MDlbdWDCSDioX1DbySY3QvQX8I+DBqQY0z+Yomat0nlP6Y0UY4iagBuQi2TsA5m14C0WvMnYH2qIX0Y2mkmLeYhlII2IwgMwHh8Y3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779852264; c=relaxed/simple;
-	bh=8JwjeKZVaCntrKAP75csUwWF1GR9z5p9Aj3+IYZ9JKQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ohDA3n4ijuYKFqpB2lJ7hb5bBB7fJupfD8KCIeujZamRxG0wMvobjfqrvQl+5KWNHBxEOySCIAbUQXugxQAkwlXIeZQS//AuxokdGE4+A403EG75Mrp050v0nM/kwbJidIo/y+G7q+2wZLBG4gdESnS1Y2/ICSsCXV0/1Cz585k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jeKOklq/; arc=none smtp.client-ip=209.85.210.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f194.google.com with SMTP id d2e1a72fcca58-82fa8d6425bso5125056b3a.0
-        for <linux-sctp@vger.kernel.org>; Tue, 26 May 2026 20:24:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779852263; x=1780457063; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hl4wPPXh4KR5+kQ81v17qjTdxEHq3gUQeGIpmR+SCMM=;
-        b=jeKOklq/zus7+dRDDWPRhTN3eeSG7AFXo4HE7s2qSPnjQPtNVKQL1rBibEHrcajMdp
-         Eb9T3LYv63H61o1W9McDa+pW+UpQJsn6DuPcOcSzlvMpenfHZ0QKwbSOkvOxNs4LiCdS
-         puBSwH7wbNhnnuqkUIgrLHm6WIDKazm/0QiPjyF4emeb8tWnceQbocz8NujtChJrIzvL
-         6+rynMwOo8FOBEXxs0VNmDqwJEobjYeJLsdyNCpp/ah/Qv/yOvLPBgy3HAlPkN3i4SGc
-         SDSTzP8Je9vb1sg4P8K13n6O589DMYgOjFo1RbA5OKJILJMExO6LpAO82UNnRJLKp5rs
-         KEdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779852263; x=1780457063;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Hl4wPPXh4KR5+kQ81v17qjTdxEHq3gUQeGIpmR+SCMM=;
-        b=WzKAgOgxfDsCEXNkTSIv/QQD0WoU6fLO1rKHH1D1YX0kuBFn4uaLmDp4dLkc+oKc6j
-         h8gtkPsKVTWtDErKlrB4lCsL50ptmnfIT1TfuN42sh9NqGPOdT5r1OFqRlsB4wvGhGor
-         OyXQRP+7LBaNPJ5Gd32M0Cjo/IczbsyoF3f0wN2v6YH63V8kNvGAW1qqhLkkRlOAzdds
-         rNCEGbuou25aBsRTIeTeb0qwBx98pSB0gNChcP7j2zh4vhV4uwTyj0ebS8TbDljvMzF3
-         +Q5EIsVw52OZ/Khk5fczUM71FTT9qR4G1VKSwBozsx5+kp9mrKKqxnaTJ4t1uGI5v2IA
-         B8Ew==
-X-Gm-Message-State: AOJu0YzPWpyDgbIktLZXcC0E9QF2rJdJScL0salABZ+i9T9JxRu9ZTBX
-	XNEe7LV6eKxwjsONSVblqc51xX857TWVzHYYcbY+7DcpdWmCh36BcXeu
-X-Gm-Gg: Acq92OGJfd0vADwu8+0ZL6tlsvjlQELm+2KpeGkBljH4TUu8Ng8+9iKurPX/p7bD1z4
-	Sy+GUpcEIrfgZNiPOne92PjqC3vBYvTIFOhdEbSdFoO7kUeDoLrauH82fFHF32ayDqEpd+vPcx7
-	1VjAbFrhg3OgJtREzQcd2/ghUgxTA9Huog+1Fgd8ps9EJzFAEnaJJFFRAI4LMR0Vv5vyWT+R6hB
-	ibsx5XoZdLrnTeI7T8LnlXv698zYOnnZ8MDoupFBCGDPCrMpNXjioLuKNlL5zvFNUc4Knyi/ubp
-	eNWzBsbxMZvHyrT+bnOiwfE3fYZ9pnV3pjgTIxUBN0e4vBWratzUBvebVVNVZGifKDd8G44kOfG
-	g8FLX8J51A3kxbZSjKYXAXN0o5m04xLGZDI93pvtN3BzViZ+IMjcCiYF42C7VCCKYNDML5NrpWg
-	jLwvf0XrTBtms5LMNHFGmCV3lfylaOCw0BEJxNsAYZyB6F74H23H7NyVT1rJOs
-X-Received: by 2002:a05:6a00:3923:b0:82f:ac48:8342 with SMTP id d2e1a72fcca58-8415f4066camr20956495b3a.24.1779852262723;
-        Tue, 26 May 2026 20:24:22 -0700 (PDT)
-Received: from KIPREYXIAO-MC2.tencent.com ([43.132.141.21])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-841d6eae464sm779763b3a.20.2026.05.26.20.24.20
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 26 May 2026 20:24:22 -0700 (PDT)
-From: Zhenghang Xiao <kipreyyy@gmail.com>
-To: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	Xin Long <lucien.xin@gmail.com>
-Cc: linux-sctp@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Zhenghang Xiao <kipreyyy@gmail.com>
-Subject: [PATCH net] sctp: fix race between sctp_wait_for_connect and peeloff
-Date: Wed, 27 May 2026 11:24:11 +0800
-Message-ID: <20260527032411.60959-1-kipreyyy@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1779859729; c=relaxed/simple;
+	bh=1Vm/oHLYdJCBJKp6w80vvBtR103wVB2NVH+QpJoI+IE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=tM5EaYepxv33rguBKpuj8BuC2fJQgUpkug0zMVSQPhCPBTTAWLfdCvd+RUZmwavvKHFgt+sLa6yrSJjvhf3MRqbQXF07VInb3uS6e93QjcOvIKnWQDV5sZXUqC4Ed/eeJ3BBb9zXrJP4tziKFuQc1uv+MNrX6ek+zgX5ktOZizw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lzu.edu.cn; spf=pass smtp.mailfrom=lzu.edu.cn; arc=none smtp.client-ip=162.243.161.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lzu.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lzu.edu.cn
+Received: from enjou-Legion-Y7000P-2019.coin-barley.ts.net (unknown [172.23.56.36])
+	by app1 (Coremail) with SMTP id ygmowACnwLr_gBZqxlMzAA--.21498S3;
+	Wed, 27 May 2026 13:28:34 +0800 (CST)
+From: Ren Wei <n05ec@lzu.edu.cn>
+To: linux-sctp@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: marcelo.leitner@gmail.com,
+	lucien.xin@gmail.com,
+	davem@davemloft.net,
+	yuantan098@gmail.com,
+	yifanwucs@gmail.com,
+	tomapufckgml@gmail.com,
+	zcliangcn@gmail.com,
+	bird@lzu.edu.cn,
+	xuyq21@lenovo.com,
+	n05ec@lzu.edu.cn
+Subject: [PATCH net 1/1] sctp: stream: rebind out_curr when updating streams
+Date: Wed, 27 May 2026 13:28:26 +0800
+Message-ID: <8049cf6a7d4e62a002397cf289c09ff373b19f7f.1779635498.git.xuyq21@lenovo.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <cover.1779635498.git.xuyq21@lenovo.com>
+References: <cover.1779635498.git.xuyq21@lenovo.com>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-CM-TRANSID:ygmowACnwLr_gBZqxlMzAA--.21498S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7try8uFy5JFWfurWDGr13twb_yoW8uw1xpa
+	9a93yrta4xJF12gr4xCw1rKF15Kr4kAw47KF98Kw1DZr4DJFyFqF17tFZ7JrykGF40vrW2
+	yrn0qwsI9w4UArUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBj1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+	w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+	IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2
+	jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
+	x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWU
+	GwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+	8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kK
+	e7AKxVWUtVW8ZwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8V
+	W8GwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
+	Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7
+	IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
+	6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUd-B_UUUUU=
+X-CM-SenderInfo: zqqvvuo6o23hxhgxhubq/1tbiAQ0ACWoVV86CkwAAsy
+X-Spamd-Result: default: False [0.54 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
-	TAGGED_FROM(0.00)[bounces-1214-lists,linux-sctp=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[kipreyyy@gmail.com,linux-sctp@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_FROM(0.00)[bounces-1215-lists,linux-sctp=lfdr.de];
+	DMARC_NA(0.00)[lzu.edu.cn];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[gmail.com,davemloft.net,lzu.edu.cn,lenovo.com];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[n05ec@lzu.edu.cn,linux-sctp@vger.kernel.org];
+	NEURAL_HAM(-0.00)[-0.779];
+	TO_DN_NONE(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	R_DKIM_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
 	TAGGED_RCPT(0.00)[linux-sctp];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: DBAE55DEDC8
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,lzu.edu.cn:email]
+X-Rspamd-Queue-Id: 3A6C15DF713
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-sctp_wait_for_connect() drops and re-acquires the socket lock while
-waiting for the association to reach ESTABLISHED state. During this
-window, another thread can peeloff the association to a new socket via
-getsockopt(SCTP_SOCKOPT_PEELOFF), changing asoc->base.sk. After
-re-acquiring the old socket lock, sctp_wait_for_connect() returns
-success without noticing the migration — the caller then accesses
-the association under the wrong lock in sctp_datamsg_from_user().
+From: Yuqi Xu <xuyq21@lenovo.com>
 
-Add the same sk != asoc->base.sk check that sctp_wait_for_sndbuf()
-already has, returning an error if the association was migrated while
-we slept.
+sctp_stream_update() replaces the outbound stream table while
+out_curr may still point to the current stream selected for an
+unfinished fragmented message.
 
-Fixes: 668c9beb9020 ("sctp: implement assign_number for sctp_stream_interleave")
-Signed-off-by: Zhenghang Xiao <kipreyyy@gmail.com>
+Remember the current stream id before freeing the old table and
+rebind out_curr after the new table is installed. If that stream
+no longer exists, clear the cached pointer instead.
+
+This keeps the scheduler cursor valid across stream table
+replacement without losing the current stream when it still
+survives the update.
+
+Fixes: 5bbbbe32a431 ("sctp: introduce stream scheduler foundations")
+Cc: stable@kernel.org
+Reported-by: Yuan Tan <yuantan098@gmail.com>
+Reported-by: Yifan Wu <yifanwucs@gmail.com>
+Reported-by: Juefei Pu <tomapufckgml@gmail.com>
+Reported-by: Zhengchuan Liang <zcliangcn@gmail.com>
+Reported-by: Xin Liu <bird@lzu.edu.cn>
+Assisted-by: Codex:GPT-5.4
+Signed-off-by: Yuqi Xu <xuyq21@lenovo.com>
+Signed-off-by: Ren Wei <n05ec@lzu.edu.cn>
 ---
- net/sctp/socket.c | 2 ++
- 1 file changed, 2 insertions(+)
+ net/sctp/stream.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-index 1d2568bb6bc2..66e12fb0c646 100644
---- a/net/sctp/socket.c
-+++ b/net/sctp/socket.c
-@@ -9403,6 +9403,8 @@ static int sctp_wait_for_connect(struct sctp_association *asoc, long *timeo_p)
- 		release_sock(sk);
- 		current_timeo = schedule_timeout(current_timeo);
- 		lock_sock(sk);
-+		if (sk != asoc->base.sk)
-+			goto do_error;
+diff --git a/net/sctp/stream.c b/net/sctp/stream.c
+index c2247793c88b..fcb6c688f61d 100644
+--- a/net/sctp/stream.c
++++ b/net/sctp/stream.c
+@@ -208,6 +208,16 @@ void sctp_stream_clear(struct sctp_stream *stream)
+ void sctp_stream_update(struct sctp_stream *stream, struct sctp_stream *new)
+ {
+ 	const struct sctp_sched_ops *sched = sctp_sched_ops_from_stream(stream);
++	__u16 sid = SCTP_MAX_STREAM;
++
++	/* Preserve the current stream if its sid survives the table swap. */
++	if (stream->out_curr) {
++		for (sid = 0; sid < stream->outcnt; sid++)
++			if (SCTP_SO(stream, sid) == stream->out_curr)
++				break;
++		if (sid == stream->outcnt)
++			sid = SCTP_MAX_STREAM;
++	}
  
- 		*timeo_p = current_timeo;
- 	}
+ 	sched->unsched_all(stream);
+ 	sctp_stream_outq_migrate(stream, new, new->outcnt);
+@@ -217,6 +227,7 @@ void sctp_stream_update(struct sctp_stream *stream, struct sctp_stream *new)
+ 	stream->in  = new->in;
+ 	stream->outcnt = new->outcnt;
+ 	stream->incnt  = new->incnt;
++	stream->out_curr = sid < stream->outcnt ? SCTP_SO(stream, sid) : NULL;
+ 
+ 	sched->sched_all(stream);
+ 
 -- 
-2.50.1 (Apple Git-155)
+2.54.0
 
 
