@@ -1,154 +1,253 @@
-Return-Path: <linux-sctp+bounces-1216-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1217-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yJYZAHaEFmpMnAcAu9opvQ
-	(envelope-from <linux-sctp+bounces-1216-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Wed, 27 May 2026 07:43:18 +0200
+	id yC9QEt5nF2oZEAgAu9opvQ
+	(envelope-from <linux-sctp+bounces-1217-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Wed, 27 May 2026 23:53:34 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EAE65DF882
-	for <lists+linux-sctp@lfdr.de>; Wed, 27 May 2026 07:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DE9D55EA7BF
+	for <lists+linux-sctp@lfdr.de>; Wed, 27 May 2026 23:53:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id A93ED3010BD8
-	for <lists+linux-sctp@lfdr.de>; Wed, 27 May 2026 05:43:16 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 7F2A230582D7
+	for <lists+linux-sctp@lfdr.de>; Wed, 27 May 2026 21:53:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 169EA30CD82;
-	Wed, 27 May 2026 05:43:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83D8B3A6B9A;
+	Wed, 27 May 2026 21:53:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lo2C/cBA"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2073212F89;
-	Wed, 27 May 2026 05:43:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779860594; cv=none; b=DXZDtgWNSH5NvRjiCkEXhITTAfGlU52JDwW/gbJ684ZuEDg/cHDe64/OeBZfFLhJXJywjamQbTxAlmRA6Jj0LRQ2NWRRndtHLo7VKlP5HCppMMfWsAXPZnhddcXVRA56xUWQEW45QZagVD7JfW5desH1cXJlXHHgbN36T8wBo30=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779860594; c=relaxed/simple;
-	bh=dgxnsRzxuzPgCSH5uF9RHAkNP8LhdVIjjpDwb/smPlY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=REgSy4UA2UpFowP+zKyOry5QftUInNfe5CYUu7U3hkNILqeTMNL5YmVoJLeFZSDUiFJNqf32cbAY7Ebo+d/6GQstYLWNVrUaLEf7WM9DmKFZhzWOKOoxxbwWWZW1KhP8k0GsmjstC1VDfAdfDcQKS6Tl4N437wGGVZ6Xna2tviE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lzu.edu.cn; spf=pass smtp.mailfrom=lzu.edu.cn; arc=none smtp.client-ip=162.243.161.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lzu.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lzu.edu.cn
-Received: from enjou-Legion-Y7000P-2019.coin-barley.ts.net (unknown [172.23.56.36])
-	by app3 (Coremail) with SMTP id ywmowAAXVv5ghBZqWSELAA--.26479S3;
-	Wed, 27 May 2026 13:42:59 +0800 (CST)
-From: Ren Wei <n05ec@lzu.edu.cn>
-To: linux-sctp@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: marcelo.leitner@gmail.com,
-	lucien.xin@gmail.com,
-	davem@davemloft.net,
-	yuantan098@gmail.com,
-	yifanwucs@gmail.com,
-	tomapufckgml@gmail.com,
-	zcliangcn@gmail.com,
-	bird@lzu.edu.cn,
-	xuyq21@lenovo.com,
-	n05ec@lzu.edu.cn
-Subject: [PATCH net 1/1] net: sctp: clear current outbound stream on stream teardown
-Date: Wed, 27 May 2026 13:42:51 +0800
-Message-ID: <4d56a975d40611822b2bd44f2f215e3534d76276.1779632544.git.xuyq21@lenovo.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <cover.1779632544.git.xuyq21@lenovo.com>
-References: <cover.1779632544.git.xuyq21@lenovo.com>
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044AB362130
+	for <linux-sctp@vger.kernel.org>; Wed, 27 May 2026 21:53:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779918807; cv=pass; b=fg9m8pi7zLD/gtgyjYe3lM2urkE3ryx5B6PEFUtu9yRQGSevUQqJm8/FTw3KT2tVUePnO9psc8OTti+2h2rGr/U174RimxfX44068IBJr+pEFBlvKflMvm1h05ScRG0nc2TYc+V6eptSR+4XlZTLYJyEvSvLbYItQeUMKve6ucs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779918807; c=relaxed/simple;
+	bh=obIePSmQ9StIZWujUqwDhIiigBKuprK6vbC2wRCvt28=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eV6dGnsUftJLsXfiBPShtMrRp/B7CmjFHGJE9+Zx9fSuFj7TexakxnPPTl8//lXocVI3fTNnKb4JMNUnvDYQmBpjqy+gGfD97TfpJEWy0ZSkooDUmwMJ4ge8PvgrfBBWQq3CMIGXDId+G5FPCIb46vw9zKSVAh1mqH+WTCpyXOY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lo2C/cBA; arc=pass smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-83d5bbef760so5121656b3a.1
+        for <linux-sctp@vger.kernel.org>; Wed, 27 May 2026 14:53:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779918804; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ASYL22suzGdMYhTtL7DSH3SxVZ4Q8Agpa37PGNRE2nrfMrwQh9Hn0mfrHTaFOOHs5Z
+         rQGnVETFv/qDBCF8t+4fcRbPQyxqkP4KR+07VZw3pqwiXM7rwj8QLNrqk3ERRQZe1Tky
+         IGjhlnr0YKMJaJu9hiwG9pnykjGawYG3yLYOU7WxIGtJoAE4c5H3539cez79HzHCVUpV
+         461DvbWRwbpg5i0xA3TntsLG3KEYBuEG9KDJVnJi/jcxlDUBaekBz+3CmJZtwYE2SPTM
+         KVMYWpqr9Pgt4ddgxMOiFAXuP2v5EtXGh9MguRrIZgUFtLnghgs77k48HappJ+XZcUlz
+         rz6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=GyNTDCBxdTK2oUXaYmqMZNuIzrPaxBPOLpkTXgfkXYc=;
+        fh=uWyes7byO7sC7WOkDawhM3RQlvHvXt6tmTu+xlmHXss=;
+        b=eJh+GeSoueuZRjbgLT5GTzVM6Hr3SzhAyv8OPVtPef2qPbeTpaoC81V9EsHzzMYDwN
+         5OM5gXNsVP9ylkHRf8wemLVhycZswRM3UM5zp9PzrMo3OiHsAceBluMnrFHb2oPI2awR
+         6+eZ0iGlbOjeyXFI4C4g0Kjxpjl3K5vqfLQ1JuZS3UtLvv9e4Tqm28bmvfxHL1ys8NNz
+         aG0BtaWB0j+TajIsp2dkBMfgsWUv53KBJ2uCoXZTBsysuLAS456ksXW5ZDYzlAiDcI1g
+         3uCg6WXmPzuaPhZp2PGxpIKEkR6V4mlDeuwh+IhbF9zB3F+w8isNkhuuupIZoa9ZKgti
+         Y+yw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779918804; x=1780523604; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GyNTDCBxdTK2oUXaYmqMZNuIzrPaxBPOLpkTXgfkXYc=;
+        b=Lo2C/cBAY1Mr1ZkN6eNmj/xZcsbyrgB76K3BlhmpSDkGjnOhZb0TxLncPKamUeyHC0
+         gAyqKIkoysRvPeeP0G5X7sb6py41u71aXFWAbAO6vPr+V8LInb4gWFiREHyOb+OF8bvv
+         N3SSi9QDSEU2f0itWkn61jOB77wPVR2mYesSP+d9H5Y0xmgohegNaU/Ep4FPLo4J4xXl
+         GaafplarmdJOKG/1yjZ854FZt+4JW7gYo8yVLt4v2O/nuiu0KAwqIQSaNzjGi41oEb6v
+         BjP49rnhkNW0m2UEpQ1nz/GjwpDWFlhjomwd234EUJrQ/cFnVMImGYQGsPu1pNMjF9+2
+         IwYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779918804; x=1780523604;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=GyNTDCBxdTK2oUXaYmqMZNuIzrPaxBPOLpkTXgfkXYc=;
+        b=VHM6GwBS0lprqo1RHBQR9a60DqSkDM4qorj+rq6YHiS6KmTybpE8co4NN+PrGoAM61
+         /ZXeq2V50EG3y39axr6Ik6SpGqwuz8dRFusAH7fmZfFCaDF51PLVyRall3hLVKDZ2aW0
+         XaBbveae7WEIQUkaOOUuGcJtEdj0++f7TiGAt9Pnq4NNKEsDA5xSbxrLT3TCqmF0NWhz
+         Vl3VT+yLNvItoahxSkCX2UKWLKRxtoQjN9lSBJEDHnKR/KbHptV4vLQudyjG2zCrs1+U
+         Ut5aifXBQg+HF7bSCsvCmRH5GL79LwBUpU0LdNp4hBZKbXJXIEi+HLfBptfzFIIYnoZz
+         HcMw==
+X-Gm-Message-State: AOJu0YzW1CG6LcUfKZHCUsayBb7qIUgrys0cy+JqTp6N2X3c8fysZd8c
+	wewjZKUr/YX3pOqeFw6b7OXz6VL/71tZ0int7jhank450AsVmdz6q0WvLCWuWSIukS3vyLD5dGA
+	PHKkDTxS7PlEoR4n2bwzfc8ufGBg47kc=
+X-Gm-Gg: Acq92OHqANOyIwcPsPAGqxVcBhw61mSkEn9cByYubq+rnetxy6KDvogfnG9KysQGniX
+	uXgKyMy+x1RCUztNNxRIxHYA1o5i1r1KaP4LYEWVlaMXOreJWAgtxOinE09fLrW6O/6XtOU69Gw
+	KILVa0JzU86pbuiNzCJoqeExtogmuvp64fNMQqqlst0u1NhV9w0mww5mzv9Wz/i9R0AEwTE/zul
+	QbNXNV/WmzWf+z+lwtD81ayo6TFT5qp0aOf1+ZYdqOyE8YlbdCGAxqH4U3hu0ISy6p9TXweeiUz
+	E6LiuE8B5WSTjIfbCBmqAvlm9wZvJzsmxbElhGC3mtwMFGWIPh7/Uke9CX808uxb8JE4SVXdW43
+	cG2Na3/UjsYTHBvymSrPSd2XemHhMPnrwoX1pY0yUyINj/YIshg==
+X-Received: by 2002:a05:6a00:849:b0:83e:f228:b112 with SMTP id
+ d2e1a72fcca58-8415f3799aemr23326619b3a.34.1779918804159; Wed, 27 May 2026
+ 14:53:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:ywmowAAXVv5ghBZqWSELAA--.26479S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7tr1fWF4rKw1Dtr1rKFWDXFb_yoW8Wr4Upr
-	ZxC3yftrZ7JFy7CFn7Cw1FvF4rKa18Gay7KF1Fkr1DZw4DGF1aqF1vgrWvqryxCr45uFWY
-	vrn0qwsxKw4Uu37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUB01xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-	w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-	IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E
-	87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
-	8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_
-	JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
-	xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
-	w2AFwI0_Jw0_GFylc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY2
-	0_Gr4l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
-	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2I
-	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
-	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
-	0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUFg4SDUUUU
-X-CM-SenderInfo: zqqvvuo6o23hxhgxhubq/1tbiAQEACWoVV86CvgAAsT
-X-Spamd-Result: default: False [0.54 / 15.00];
+References: <cover.1779635498.git.xuyq21@lenovo.com> <8049cf6a7d4e62a002397cf289c09ff373b19f7f.1779635498.git.xuyq21@lenovo.com>
+In-Reply-To: <8049cf6a7d4e62a002397cf289c09ff373b19f7f.1779635498.git.xuyq21@lenovo.com>
+From: Xin Long <lucien.xin@gmail.com>
+Date: Wed, 27 May 2026 17:53:12 -0400
+X-Gm-Features: AVHnY4JMhqox-4neS28F9_X8UrzmgVKL_rnpOYljH4l3vwJK6pLIZcZmI2V-q-s
+Message-ID: <CADvbK_eOSCO6760yYbSVyn7eCo5a78jMjMomocbR+z4Nqcd=6g@mail.gmail.com>
+Subject: Re: [PATCH net 1/1] sctp: stream: rebind out_curr when updating streams
+To: Ren Wei <n05ec@lzu.edu.cn>
+Cc: linux-sctp@vger.kernel.org, netdev@vger.kernel.org, 
+	marcelo.leitner@gmail.com, davem@davemloft.net, yuantan098@gmail.com, 
+	yifanwucs@gmail.com, tomapufckgml@gmail.com, zcliangcn@gmail.com, 
+	bird@lzu.edu.cn, xuyq21@lenovo.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-1217-lists,linux-sctp=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	TAGGED_FROM(0.00)[bounces-1216-lists,linux-sctp=lfdr.de];
-	DMARC_NA(0.00)[lzu.edu.cn];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,davemloft.net,lzu.edu.cn,lenovo.com];
+	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[gmail.com,davemloft.net,lzu.edu.cn,lenovo.com];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	FROM_NEQ_ENVFROM(0.00)[n05ec@lzu.edu.cn,linux-sctp@vger.kernel.org];
-	NEURAL_HAM(-0.00)[-0.782];
-	TO_DN_NONE(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	R_DKIM_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lucienxin@gmail.com,linux-sctp@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	TAGGED_RCPT(0.00)[linux-sctp];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,lzu.edu.cn:email,lenovo.com:mid,lenovo.com:email]
-X-Rspamd-Queue-Id: 3EAE65DF882
+	RCPT_COUNT_SEVEN(0.00)[11];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,mail.gmail.com:mid,lenovo.com:email]
+X-Rspamd-Queue-Id: DE9D55EA7BF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-From: Yuqi Xu <xuyq21@lenovo.com>
+On Wed, May 27, 2026 at 1:28=E2=80=AFAM Ren Wei <n05ec@lzu.edu.cn> wrote:
+>
+> From: Yuqi Xu <xuyq21@lenovo.com>
+>
+> sctp_stream_update() replaces the outbound stream table while
+> out_curr may still point to the current stream selected for an
+> unfinished fragmented message.
+>
+> Remember the current stream id before freeing the old table and
+> rebind out_curr after the new table is installed. If that stream
+> no longer exists, clear the cached pointer instead.
+>
+> This keeps the scheduler cursor valid across stream table
+> replacement without losing the current stream when it still
+> survives the update.
+>
+> Fixes: 5bbbbe32a431 ("sctp: introduce stream scheduler foundations")
+> Cc: stable@kernel.org
+> Reported-by: Yuan Tan <yuantan098@gmail.com>
+> Reported-by: Yifan Wu <yifanwucs@gmail.com>
+> Reported-by: Juefei Pu <tomapufckgml@gmail.com>
+> Reported-by: Zhengchuan Liang <zcliangcn@gmail.com>
+> Reported-by: Xin Liu <bird@lzu.edu.cn>
+> Assisted-by: Codex:GPT-5.4
+> Signed-off-by: Yuqi Xu <xuyq21@lenovo.com>
+> Signed-off-by: Ren Wei <n05ec@lzu.edu.cn>
+> ---
+>  net/sctp/stream.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/net/sctp/stream.c b/net/sctp/stream.c
+> index c2247793c88b..fcb6c688f61d 100644
+> --- a/net/sctp/stream.c
+> +++ b/net/sctp/stream.c
+> @@ -208,6 +208,16 @@ void sctp_stream_clear(struct sctp_stream *stream)
+>  void sctp_stream_update(struct sctp_stream *stream, struct sctp_stream *=
+new)
+>  {
+>         const struct sctp_sched_ops *sched =3D sctp_sched_ops_from_stream=
+(stream);
+> +       __u16 sid =3D SCTP_MAX_STREAM;
+> +
+> +       /* Preserve the current stream if its sid survives the table swap=
+. */
+> +       if (stream->out_curr) {
+> +               for (sid =3D 0; sid < stream->outcnt; sid++)
+> +                       if (SCTP_SO(stream, sid) =3D=3D stream->out_curr)
+> +                               break;
+> +               if (sid =3D=3D stream->outcnt)
+> +                       sid =3D SCTP_MAX_STREAM;
+> +       }
+>
+>         sched->unsched_all(stream);
+>         sctp_stream_outq_migrate(stream, new, new->outcnt);
+> @@ -217,6 +227,7 @@ void sctp_stream_update(struct sctp_stream *stream, s=
+truct sctp_stream *new)
+>         stream->in  =3D new->in;
+>         stream->outcnt =3D new->outcnt;
+>         stream->incnt  =3D new->incnt;
+> +       stream->out_curr =3D sid < stream->outcnt ? SCTP_SO(stream, sid) =
+: NULL;
+>
+>         sched->sched_all(stream);
+>
+Thanks for the report and patch.
 
-out_curr caches the outbound stream selected for continuing a
-fragmented message. That pointer refers directly to an entry in the
-stream->out table.
+sctp_stream_update() is only called in COOKIE_WAIT state, where
+stream->out_curr is expected to be NULL, since no user data should have
+been sent at or before this state unless the state transitioned backward.
 
-When the stream table is torn down, such as during stream updates for
-association restart handling, the old outbound stream entries are freed
-before a new table is installed. Clear out_curr as part of
-sctp_stream_free() so later dequeue paths never keep following a stale
-stream pointer after the teardown.
+However, there is a corner case in sctp_sf_do_5_2_6_stale(): when a Stale
+Cookie ERROR is received, the association may move from COOKIE_ECHOED back
+to COOKIE_WAIT. If data was already bundled with COOKIE-ECHO to send out,
+this issue can be triggered.
 
-This keeps the lifetime rule local to the stream teardown helper and
-covers every current caller that frees the outbound stream table.
+Updating stream->out_curr here is not a proper fix here, as any transmitted
+data would also remain in the retransmit queue.
 
-Fixes: 5bbbbe32a431 ("sctp: introduce stream scheduler foundations")
-Cc: stable@kernel.org
-Reported-by: Yuan Tan <yuantan098@gmail.com>
-Reported-by: Yifan Wu <yifanwucs@gmail.com>
-Reported-by: Juefei Pu <tomapufckgml@gmail.com>
-Reported-by: Zhengchuan Liang <zcliangcn@gmail.com>
-Reported-by: Xin Liu <bird@lzu.edu.cn>
-Assisted-by: Codex:GPT-5.4
-Signed-off-by: Yuqi Xu <xuyq21@lenovo.com>
-Signed-off-by: Ren Wei <n05ec@lzu.edu.cn>
----
- net/sctp/stream.c | 1 +
- 1 file changed, 1 insertion(+)
+Since this restarts the handshake, negotiated parameters may change, so
+previously queued/sent data should be dropped.
 
-diff --git a/net/sctp/stream.c b/net/sctp/stream.c
-index c2247793c88b..207e0a77f9af 100644
---- a/net/sctp/stream.c
-+++ b/net/sctp/stream.c
-@@ -186,6 +186,7 @@ void sctp_stream_free(struct sctp_stream *stream)
- 	int i;
- 
- 	sched->unsched_all(stream);
-+	stream->out_curr = NULL;
- 	for (i = 0; i < stream->outcnt; i++)
- 		sctp_stream_free_ext(stream, i);
- 	genradix_free(&stream->out);
--- 
-2.54.0
+So you can fix it by purging the outqueue in sctp_sf_do_5_2_6_stale() like:
 
+diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
+index 8e89a870780c..9b23c11cbb9e 100644
+--- a/net/sctp/sm_statefuns.c
++++ b/net/sctp/sm_statefuns.c
+@@ -2598,11 +2598,7 @@ static enum sctp_disposition sctp_sf_do_5_2_6_stale(
+         */
+        sctp_add_cmd_sf(commands, SCTP_CMD_DEL_NON_PRIMARY, SCTP_NULL());
+
+-       /* If we've sent any data bundled with COOKIE-ECHO we will need to
+-        * resend
+-        */
+-       sctp_add_cmd_sf(commands, SCTP_CMD_T1_RETRAN,
+-                       SCTP_TRANSPORT(asoc->peer.primary_path));
++       sctp_add_cmd_sf(commands, SCTP_CMD_PURGE_OUTQUEUE, SCTP_NULL());
+
+        /* Cast away the const modifier, as we want to just
+         * rerun it through as a sideffect.
+
+The userspace would rely on SCTP_SEND_FAILED_EVENT to get notified.
+
+Thanks.
 
