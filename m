@@ -1,191 +1,161 @@
-Return-Path: <linux-sctp+bounces-1213-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1214-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ME9fDVTMFWq6bwcAu9opvQ
-	(envelope-from <linux-sctp+bounces-1213-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Tue, 26 May 2026 18:37:40 +0200
+	id UFtcOe5jFmpamAcAu9opvQ
+	(envelope-from <linux-sctp+bounces-1214-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Wed, 27 May 2026 05:24:30 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33A085D9D17
-	for <lists+linux-sctp@lfdr.de>; Tue, 26 May 2026 18:37:39 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBAE55DEDC8
+	for <lists+linux-sctp@lfdr.de>; Wed, 27 May 2026 05:24:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 500383002B5E
-	for <lists+linux-sctp@lfdr.de>; Tue, 26 May 2026 16:24:18 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 312B2300BC4D
+	for <lists+linux-sctp@lfdr.de>; Wed, 27 May 2026 03:24:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 192063B5847;
-	Tue, 26 May 2026 16:24:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDDA136728C;
+	Wed, 27 May 2026 03:24:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gykugZHo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jeKOklq/"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-qk1-f201.google.com (mail-qk1-f201.google.com [209.85.222.201])
+Received: from mail-pf1-f194.google.com (mail-pf1-f194.google.com [209.85.210.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 998AB390223
-	for <linux-sctp@vger.kernel.org>; Tue, 26 May 2026 16:24:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CB2934B682
+	for <linux-sctp@vger.kernel.org>; Wed, 27 May 2026 03:24:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779812655; cv=none; b=K4exI1wGcg2SEXtNIjDaL78ItKRO8wnyXt1ApKrHYGePFieoE6DMREidwGIU48kWHDBwBgjmVrZ7j70rfF7LxbJ4i5KKsoO7iIZ8yV8biMRc8vjlIj32BjcMArRteWeY4TXtsOMKsa36pfuMJI5RlIBHR6TXtDP4NeMls71qIfc=
+	t=1779852264; cv=none; b=nKr6WKuQRmO66u4Oe8vwVsxVOawDWztOq4YTnWie2bl5CldoT7ZhdMXgcvkIbN/maNw/ntW4Sl+Vj+0Ty0x3Vhl4d0WsVEdIIDXSbSq8mODScYtCh8DIlslbkN+wnQic7AEI7Zvk9zmx15ajf6Mw0ZnriaD2tOpij9zTvaqf7ss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779812655; c=relaxed/simple;
-	bh=CtEKZlYFL8aDfjvz0FjwX5jq5ZaEQyaskrTeMkjM7JU=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=I8gRmFOAfDeqmLFQTGle1W9OKeWq8RMrR3vh9szmnwUbpjoNtE8gnOQaWCaLUW8Ll9R1DBCw00jzbfwsTcoTEh3nkzOVsK/TiN7j3WCnTar9Vd7Pu3KyX0Z7H0sVPhjyqIC0fPLU2wAlD+IcyiuBmpp7hXKlHOTWQI6eF3a8Kj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--bgeffon.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gykugZHo; arc=none smtp.client-ip=209.85.222.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--bgeffon.bounces.google.com
-Received: by mail-qk1-f201.google.com with SMTP id af79cd13be357-914f037b7dfso234605085a.3
-        for <linux-sctp@vger.kernel.org>; Tue, 26 May 2026 09:24:13 -0700 (PDT)
+	s=arc-20240116; t=1779852264; c=relaxed/simple;
+	bh=8JwjeKZVaCntrKAP75csUwWF1GR9z5p9Aj3+IYZ9JKQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ohDA3n4ijuYKFqpB2lJ7hb5bBB7fJupfD8KCIeujZamRxG0wMvobjfqrvQl+5KWNHBxEOySCIAbUQXugxQAkwlXIeZQS//AuxokdGE4+A403EG75Mrp050v0nM/kwbJidIo/y+G7q+2wZLBG4gdESnS1Y2/ICSsCXV0/1Cz585k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jeKOklq/; arc=none smtp.client-ip=209.85.210.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f194.google.com with SMTP id d2e1a72fcca58-82fa8d6425bso5125056b3a.0
+        for <linux-sctp@vger.kernel.org>; Tue, 26 May 2026 20:24:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779812653; x=1780417453; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+RKfc3SD8L9S7pRMEqhVofQlZ8awVFm1p7D7m0PbHu0=;
-        b=gykugZHo7oW3Ig7RKHXEG2hGhwLh2do/l4RNGCNff8FXjU+Ln9JEKFUbpebgCEZpyN
-         LPI/Rz9xnXlrkPyVmxxltbGndAM5swL1I0lMos7fJ2iDRuOVpjz5jl+pOBmFWTSW9Tp+
-         f9IEsQrfe/JS1rUeOx0SMf5xWt8GNOc/QXDQOwDiEOlnoO5IDCdlcC/P8DuIuKYzBNPV
-         +uynHUEZAVfVLwaZT2c3wICxsrQrfSnjrp1OJJCnc1pxCc3cgszrlI7MWLgan8K6Fr84
-         Lg1l24f9z639A2RT/FN9V/df1bHXgwSzRNfvergjAUkvb8MpdzOfyHsHjHIwFOxcstQi
-         p5MA==
+        d=gmail.com; s=20251104; t=1779852263; x=1780457063; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hl4wPPXh4KR5+kQ81v17qjTdxEHq3gUQeGIpmR+SCMM=;
+        b=jeKOklq/zus7+dRDDWPRhTN3eeSG7AFXo4HE7s2qSPnjQPtNVKQL1rBibEHrcajMdp
+         Eb9T3LYv63H61o1W9McDa+pW+UpQJsn6DuPcOcSzlvMpenfHZ0QKwbSOkvOxNs4LiCdS
+         puBSwH7wbNhnnuqkUIgrLHm6WIDKazm/0QiPjyF4emeb8tWnceQbocz8NujtChJrIzvL
+         6+rynMwOo8FOBEXxs0VNmDqwJEobjYeJLsdyNCpp/ah/Qv/yOvLPBgy3HAlPkN3i4SGc
+         SDSTzP8Je9vb1sg4P8K13n6O589DMYgOjFo1RbA5OKJILJMExO6LpAO82UNnRJLKp5rs
+         KEdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779812653; x=1780417453;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1779852263; x=1780457063;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+RKfc3SD8L9S7pRMEqhVofQlZ8awVFm1p7D7m0PbHu0=;
-        b=c0kWzQo1rKug247lOuyc42tjTf7+yDaGv92C5RLYrrE7xdK4z5HxU+b+0EKj2p+/A4
-         s9+uR9QxZhYxvaiaCf1bRrPLi+qbcJcglsRJgbFkKWp3CnbIof5IWhQ25uGnKYCP8R0d
-         TZKPEmcxqzqh3DFyE1D5cfwhEKs/H/Spstv2Te2VDMTUskENXzLi3Th0UveXLY1PFNEG
-         RbiZ9ON8j55o+GW3197YvBl6mJax+ihpEVTePV3WH8w+Ba1J7fUF5a2vDIEOpDy+LFxv
-         ZwNfX2Edu2DEnGQZYmbCNWrxe5HrcaGOs4wY5KjIkgMf5ZdTpb0s0IUiELWByy4OqAje
-         I5jw==
-X-Forwarded-Encrypted: i=1; AFNElJ85te1UsL+xI0RsG0HUxHJNi524nYZu7XaVdt8O/N/BHBQoDKOiuO2DZipKZq5XQmFfXz1yRWV8vEr5@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+UcK8eNgxXF+B5U2iiY9ALjRAwhk5NeHxMf3ZFamtdu2qbU+8
-	hXKTMFY01vaL96cCE34zc7vM4RyAi9H5Haf6x8O74ZhU5tH18ANe/xFylmviaK2D7/RYbJ2rdPJ
-	FjsMJ6VfrNw==
-X-Received: from qkmy24.prod.google.com ([2002:a05:620a:e18:b0:90f:dbd8:afc0])
- (user=bgeffon job=prod-delivery.src-stubby-dispatcher) by 2002:a05:620a:2242:10b0:914:babf:9f59
- with SMTP id af79cd13be357-914babfc9a7mr1745744085a.34.1779812652345; Tue, 26
- May 2026 09:24:12 -0700 (PDT)
-Date: Tue, 26 May 2026 16:23:39 +0000
+        bh=Hl4wPPXh4KR5+kQ81v17qjTdxEHq3gUQeGIpmR+SCMM=;
+        b=WzKAgOgxfDsCEXNkTSIv/QQD0WoU6fLO1rKHH1D1YX0kuBFn4uaLmDp4dLkc+oKc6j
+         h8gtkPsKVTWtDErKlrB4lCsL50ptmnfIT1TfuN42sh9NqGPOdT5r1OFqRlsB4wvGhGor
+         OyXQRP+7LBaNPJ5Gd32M0Cjo/IczbsyoF3f0wN2v6YH63V8kNvGAW1qqhLkkRlOAzdds
+         rNCEGbuou25aBsRTIeTeb0qwBx98pSB0gNChcP7j2zh4vhV4uwTyj0ebS8TbDljvMzF3
+         +Q5EIsVw52OZ/Khk5fczUM71FTT9qR4G1VKSwBozsx5+kp9mrKKqxnaTJ4t1uGI5v2IA
+         B8Ew==
+X-Gm-Message-State: AOJu0YzPWpyDgbIktLZXcC0E9QF2rJdJScL0salABZ+i9T9JxRu9ZTBX
+	XNEe7LV6eKxwjsONSVblqc51xX857TWVzHYYcbY+7DcpdWmCh36BcXeu
+X-Gm-Gg: Acq92OGJfd0vADwu8+0ZL6tlsvjlQELm+2KpeGkBljH4TUu8Ng8+9iKurPX/p7bD1z4
+	Sy+GUpcEIrfgZNiPOne92PjqC3vBYvTIFOhdEbSdFoO7kUeDoLrauH82fFHF32ayDqEpd+vPcx7
+	1VjAbFrhg3OgJtREzQcd2/ghUgxTA9Huog+1Fgd8ps9EJzFAEnaJJFFRAI4LMR0Vv5vyWT+R6hB
+	ibsx5XoZdLrnTeI7T8LnlXv698zYOnnZ8MDoupFBCGDPCrMpNXjioLuKNlL5zvFNUc4Knyi/ubp
+	eNWzBsbxMZvHyrT+bnOiwfE3fYZ9pnV3pjgTIxUBN0e4vBWratzUBvebVVNVZGifKDd8G44kOfG
+	g8FLX8J51A3kxbZSjKYXAXN0o5m04xLGZDI93pvtN3BzViZ+IMjcCiYF42C7VCCKYNDML5NrpWg
+	jLwvf0XrTBtms5LMNHFGmCV3lfylaOCw0BEJxNsAYZyB6F74H23H7NyVT1rJOs
+X-Received: by 2002:a05:6a00:3923:b0:82f:ac48:8342 with SMTP id d2e1a72fcca58-8415f4066camr20956495b3a.24.1779852262723;
+        Tue, 26 May 2026 20:24:22 -0700 (PDT)
+Received: from KIPREYXIAO-MC2.tencent.com ([43.132.141.21])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-841d6eae464sm779763b3a.20.2026.05.26.20.24.20
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 26 May 2026 20:24:22 -0700 (PDT)
+From: Zhenghang Xiao <kipreyyy@gmail.com>
+To: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+	Xin Long <lucien.xin@gmail.com>
+Cc: linux-sctp@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Zhenghang Xiao <kipreyyy@gmail.com>
+Subject: [PATCH net] sctp: fix race between sctp_wait_for_connect and peeloff
+Date: Wed, 27 May 2026 11:24:11 +0800
+Message-ID: <20260527032411.60959-1-kipreyyy@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.54.0.746.g67dd491aae-goog
-Message-ID: <20260526162338.4134776-2-bgeffon@google.com>
-Subject: sctp: COOKIE_ECHO can cause an out-of-bounds read and leak kernel memory
-From: Brian Geffon <bgeffon@google.com>
-To: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc: Xin Long <lucien.xin@gmail.com>, davem@davemloft.net, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, linux-sctp@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-1.16 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MV_CASE(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-1213-lists,linux-sctp=lfdr.de];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
+	TAGGED_FROM(0.00)[bounces-1214-lists,linux-sctp=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[gmail.com,davemloft.net,google.com,kernel.org,redhat.com,vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bgeffon@google.com,linux-sctp@vger.kernel.org];
-	DKIM_TRACE(0.00)[google.com:+];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	NEURAL_HAM(-0.00)[-0.845];
+	FROM_NEQ_ENVFROM(0.00)[kipreyyy@gmail.com,linux-sctp@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-sctp];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 33A085D9D17
+X-Rspamd-Queue-Id: DBAE55DEDC8
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi,
-When a listening SCTP server receives a COOKIE_ECHO chunk, sctp_unpack_cook=
-ie() is called to reconstruct the association. If HMAC is disabled ("none")=
-, the signature check is bypassed, and the server directly processes the ca=
-ched peer INIT chunk (peer_init) stored immediately after the cookie layout=
-:
+sctp_wait_for_connect() drops and re-acquires the socket lock while
+waiting for the association to reach ESTABLISHED state. During this
+window, another thread can peeloff the association to a new socket via
+getsockopt(SCTP_SOCKOPT_PEELOFF), changing asoc->base.sk. After
+re-acquiring the old socket lock, sctp_wait_for_connect() returns
+success without noticing the migration — the caller then accesses
+the association under the wrong lock in sctp_datamsg_from_user().
 
-    peer_init =3D (struct sctp_init_chunk *)(chunk->subh.cookie_hdr + 1);
+Add the same sk != asoc->base.sk check that sctp_wait_for_sndbuf()
+already has, returning an error if the association was migrated while
+we slept.
 
-To parse the optional parameters embedded in this cached peer INIT chunk, s=
-ctp_process_init() uses the sctp_walk_params() macro. This macro blindly tr=
-usts the peer_init->chunk_hdr.length value to determine the loop boundary:
+Fixes: 668c9beb9020 ("sctp: implement assign_number for sctp_stream_interleave")
+Signed-off-by: Zhenghang Xiao <kipreyyy@gmail.com>
+---
+ net/sctp/socket.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-    #define sctp_walk_params(pos, chunk)\
-    _sctp_walk_params((pos), (chunk), ntohs((chunk)->chunk_hdr.length))
+diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+index 1d2568bb6bc2..66e12fb0c646 100644
+--- a/net/sctp/socket.c
++++ b/net/sctp/socket.c
+@@ -9403,6 +9403,8 @@ static int sctp_wait_for_connect(struct sctp_association *asoc, long *timeo_p)
+ 		release_sock(sk);
+ 		current_timeo = schedule_timeout(current_timeo);
+ 		lock_sock(sk);
++		if (sk != asoc->base.sk)
++			goto do_error;
+ 
+ 		*timeo_p = current_timeo;
+ 	}
+-- 
+2.50.1 (Apple Git-155)
 
-However, the kernel does not validate that peer_init->chunk_hdr.length is a=
-ctually within the physical bounds of the received COOKIE_ECHO chunk.
-
-If an attacker injects a forged cookie where peer_init->chunk_hdr.length is=
- inflated (e.g., 65535) while the actual payload is small, the parameter wa=
-lk loop will continue out of bounds. If the walk encounters a parameter of =
-type SCTP_PARAM_STATE_COOKIE, the switch case inside sctp_process_param() p=
-erforms a memory copy directly using the unchecked parameter length:
-
-    case SCTP_PARAM_STATE_COOKIE:
-        asoc->peer.cookie_len =3D
-            ntohs(param.p->length) - sizeof(struct sctp_paramhdr);
-        kfree(asoc->peer.cookie);
-        asoc->peer.cookie =3D kmemdup(param.cookie->body, asoc->peer.cookie=
-_len, gfp);
-
-If param.p->length is also inflated (e.g., 30000), kmemdup() will attempt t=
-o read up to 29,996 bytes from the sk_buff data buffer, which is limited to=
- the actual received packet size. This triggers a KASAN slab-out-of-bounds =
-read or can leak adjacent memory on non-KASAN builds. I do have a working r=
-eproduction of this that allows an unprivledged user to leak kernel memory,=
- I can share it with the maintainers upon request. Because net.sctp.cookie_=
-hmac_alg=3Dnone can be set per-namespace this is fairly easy to reproduce.
-
-The issue was verified on Linux 7.1-rc5. KASAN detected the following slab-=
-out-of-bounds read:
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-BUG: KASAN: slab-out-of-bounds in kmemdup_noprof+0x3b/0x50
-Read of size 29996 at addr ffff88810fa76900 by task repro/666
-CPU: 11 UID: 0 PID: 666 Comm: repro Not tainted 7.1.0-rc5-virtme #1 PREEMPT=
-(lazy)
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1=
-.16.3-2 04/01/2014
-Call Trace:
- <IRQ>
- dump_stack_lvl+0x4d/0x70
- print_report+0x153/0x4c6
- ? kmemdup_noprof+0x3b/0x50
- ? sctp_process_init+0x11f2/0x2bc0
- kasan_report+0xda/0x110
- ? kmemdup_noprof+0x3b/0x50
- kasan_check_range+0x125/0x200
- __asan_memcpy+0x23/0x60
- kmemdup_noprof+0x3b/0x50
- sctp_process_init+0x11f2/0x2bc0
- ? __pfx_sctp_process_init+0x10/0x10
- ? printk+0x9e/0xc0
- ? __pfx_printk+0x10/0x10
- ? sctp_assoc_add_peer+0x1ff/0xd20
- ? sctp_cmp_addr_exact+0x3b/0xb0
- ? sctp_assoc_add_peer+0x2a0/0xd20
- sctp_sf_do_5_1D_ce+0x585/0x1700
-...
 
