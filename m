@@ -1,160 +1,203 @@
-Return-Path: <linux-sctp+bounces-1222-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1223-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OEdoDqcLGGpzbAgAu9opvQ
-	(envelope-from <linux-sctp+bounces-1222-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Thu, 28 May 2026 11:32:23 +0200
+	id 8MysIrlHGGr2iQgAu9opvQ
+	(envelope-from <linux-sctp+bounces-1223-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Thu, 28 May 2026 15:48:41 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 905BC5EFA43
-	for <lists+linux-sctp@lfdr.de>; Thu, 28 May 2026 11:32:21 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 173675F2FB3
+	for <lists+linux-sctp@lfdr.de>; Thu, 28 May 2026 15:48:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B1E7933E1179
-	for <lists+linux-sctp@lfdr.de>; Thu, 28 May 2026 09:14:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A97D2318241D
+	for <lists+linux-sctp@lfdr.de>; Thu, 28 May 2026 13:42:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D878F388878;
-	Thu, 28 May 2026 09:13:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A90553EFFDF;
+	Thu, 28 May 2026 13:42:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o2M6/K0w"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6719377EBA;
-	Thu, 28 May 2026 09:13:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.21.223
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779959597; cv=none; b=NLIcCNmcVHioRrE37gLFMSPQN6Cf0+gCp+d2Ef3JiFSLEhcG0JM2wOivG0O0C1xDHiMxXewvP/TdRhoFyOFw3/2992mrEnU7BbVAgrEKYu0WM1njKZ3kavDvQn4IOkSyahDGeV5PzzlJ0gEDH7OHf29vdznmNEtv6vYdmTJDvpE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779959597; c=relaxed/simple;
-	bh=rkwYo30qpTvqS00hy6/fWw4cQopOehQnCR6wAEP0gNM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YSEYYUwer22lyYbRZ1oZMBwMh4eTm0iOGg2TTnl6wnTXX++SlgRCKRJbptFQYCb6E6YB+hMeO5yauXXR8wfwcSqRVFhyCMtMGSpxC/LHGvwUQZGUIjSPJP1+XzCLG57Tndpz7umsnXeiM5DRBP/avXGdqiy1y0JOiCQJhUJC+hg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lzu.edu.cn; spf=pass smtp.mailfrom=lzu.edu.cn; arc=none smtp.client-ip=206.189.21.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lzu.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lzu.edu.cn
-Received: from [IPV6:fdfe:dcba:9876::1] (unknown [172.23.56.36])
-	by app2 (Coremail) with SMTP id zQmowABnAwsdBxhqRsYRAA--.39415S2;
-	Thu, 28 May 2026 17:13:01 +0800 (CST)
-Message-ID: <602e2a54-f5e2-43a2-95ad-d7f6adb11eeb@lzu.edu.cn>
-Date: Thu, 28 May 2026 17:13:01 +0800
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 540233ABDA8
+	for <linux-sctp@vger.kernel.org>; Thu, 28 May 2026 13:42:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779975725; cv=pass; b=pikwDjKz3FZ0H4xTlR4fUXjjWwr5xDvyMfISRLBtjfV2lGa3oDlgUKEX9HucIikvIrC38rhJIwQzkfErlJCvjKm+t85+tWSxX75z4lzvBREAZFMleC9zeTO66cs/UDqotaz/rgr2O49XUYID8VHiGt+JXVPkNHJLeen8zJFg/wI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779975725; c=relaxed/simple;
+	bh=ech48L+YtHB5+v14LJc84EaiJ02dhLWh5PJBNI19S2Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mET7Eue6yxN9p8oT5Lo6Jp3Y2CZX0HQnMm/vH7ErrVXB+1YUTGa0z2DkWilAtoeQOMZnqe0Kpzo+IXGEKGGF2jsfsmwfqtLvdE7ToPOEyMRp4PKQ9Es8AeDCtWO27UrZsAq9EZODAV+zsikrrCHzmi4GGW/XjcudliXo/N82iKk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=o2M6/K0w; arc=pass smtp.client-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c85625854d3so292118a12.2
+        for <linux-sctp@vger.kernel.org>; Thu, 28 May 2026 06:42:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779975724; cv=none;
+        d=google.com; s=arc-20240605;
+        b=J5t0zczmO3FSMIPZzdwht8NizQrz/bheLnHzsVfaHXUA2A1xCIm4nErdFlsHswqRH+
+         v0s8QVGCArnK3bfCbc9DjCGgJNdImp9509k9dSbxkWwzT4pGxKRxEU+iFepigiNAeIZT
+         /j/KSE/JkOZoe6/7hkLorhpKgOgU0AgSP28tLFTMYFyfJdulJdSnMQ+L1OZbLkPBMwYF
+         wxwsgNZweoMhgKM38ss0yMdlsc0f1EPIjBLaQWpdPjRytBNoAalgAVj6HK5eqXaGG58J
+         3zlILX4M5lM1gKR7XvKfkNLCBQGd+CEn1Ye8oLEa+eErw9uhTyv/ps18VPPyCA8QXwI2
+         CA/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=8R3ZCxKpbNcmdcqfZFVwiYeS0XVSXQ7IH6lz3U+ld0A=;
+        fh=SeFvtY41niyecZpfu0KhpXnfRUwG0hsnRRj06c7SjJ8=;
+        b=fsdeMMZi5hhIIDKp0X9RmJ4NZnvcKetpRQe3p5Np/5+yUN8awaKT0YHwc0QRNt5Lqr
+         VbSEVI5LEuRrPS4EXaXwstqI6BXfWmGzHRFpsq40jztXgcdr3EPBnpUd9IhnkVxqJ+eW
+         uJvrCLtJvVmCgO4k0QBq+UzCK6BVlxk6ucRPK6NbvnQsYN3fQ7u0u0R3AU8evu13m9dW
+         SH1IylALRGP6P8QZwx7UFZ2eYeZetVcGsMyOEfGjthommYtsufoZ8d8iCA2k6prw4+TG
+         j7b2yEThDW/D0/hAjafHzNe9RlTHp5gnVK3HvUnImeAluI0KvCjUjvQjhSTtxhnDQtz4
+         lwdQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779975724; x=1780580524; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8R3ZCxKpbNcmdcqfZFVwiYeS0XVSXQ7IH6lz3U+ld0A=;
+        b=o2M6/K0wNGzWFIc8YpZwTVH162ouWX6u/9u3SFTEfwMTa7LbqwLTDLSENYvRMcnZsM
+         89zAOzaCOFHsMZzlZRbv6biLCsT6pSrlskrdGaRP7y45eEgRJvjWr5tPFIzuueNsRMMC
+         TZiMnXahzyDZ2Pq7yN7YA/d15tpPQVHm2NAboV3RZ9PcbymM6ddmxNIN7+70GxiRDcaT
+         y/05QScHrQgyDl5wLq9tyKokexql6zXYD5WtzTZ1C9E1Fk4RX0UDGeFFswQUKV3jyzWV
+         jVo3B9YtP6PbDcZepCRCVjKq73LhGNThxe/CDPuG/ZSRtvXGE7IiIW62KM9+biDTxhr5
+         380w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779975724; x=1780580524;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=8R3ZCxKpbNcmdcqfZFVwiYeS0XVSXQ7IH6lz3U+ld0A=;
+        b=sg1oairXtbSuwtnZALTJpVUpf/SYhZazjIrIIBLL1qZwoarK8zU91ymbZiSOmzViE4
+         EnpSx3xpSZNm+XTuXZxC7Dq0rvHDDhKEr+liQgLTwq0T6lrwKakaUMVp0JJ/qMVxy81y
+         x/bn+cx6GPSlpN69lIEiqRwfl1EaZbktX2NqrwTsVu944z4Kl3CTWMMPwtkQhedFaU5f
+         O+DFpe0WTBWe8qAn/+9ucv3N3+MqczVE6xa3fSu3R/7WXo9pvO1yuW52xNNz8pdGpFwb
+         A8GkB4OAs01Zme2y2YMGA95ZlRXWzlbkQPL1g0H5ip3AAdxTviJkgfdwsIksOiXD/jE/
+         VZSw==
+X-Forwarded-Encrypted: i=1; AFNElJ/A6HWjHIG7VrX1b5bkKPmh4S6VGa3sxfkWbJtHa0ZG1Ox6AkUiLG+yS8gm9GjWquwY0oKzBspp2qOg@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWF7xCBuox2d8ao3voIlzSYoCDndWeFjHE1n8BQ6DsAMHH4c3p
+	CCX5nQj+wYQjJMvPiayUZwuQEo8r6nuevDn1if1K1ICDRqUrv6aRkGS/kDNEvxabFrkJ29VLbJU
+	B8NdXJdJGHpc89d+1+Zuv8nBH5RtZtPQ=
+X-Gm-Gg: Acq92OGF6EPjodqWcXCB9v96uCMY5RfPfzSaeRB1J58Rbz8KpL1v66c4+WkODb7jEKI
+	A/gkWiWK4sa0m6cPygF/0frlkG8ZGmwqUF5OFj0Q3ntMdh37IvTTx8NTLipZcdJ/JPH3HR1MCu+
+	BuAuvjdiG1yGsFn7SCsviDEWyWyp4Y0JX0+knpPkY0X4ixpX5sDKpyciNiPkLCUAg5NTb4AbA9A
+	ui/CkAjZQhgE+htsKTm//INpPW6eFjWjmHvyGq1QFUlB+XT1MDtVz8g8IPstWEGV2unRxXw6WHD
+	7gx8ooHLD4Txl0Is2+rfOiCr8VkoSYw9yz/wxpwv0Mj84Lgc0Ej+UMDgnjt+KOavJFqC6kBZlf1
+	VId/lyZhEDKGTUxktRaMUtbsPMrOb6yRJOiZBgubJyzZOXcGQoGpKddufD+rOqA==
+X-Received: by 2002:a05:6a21:1bc6:b0:398:6ea8:21d2 with SMTP id
+ adf61e73a8af0-3b328d4c0bamr28789330637.19.1779975723578; Thu, 28 May 2026
+ 06:42:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 1/1] sctp: stream: clear current stream on stream
- teardown
-To: linux-sctp@vger.kernel.org, netdev@vger.kernel.org
-Cc: marcelo.leitner@gmail.com, lucien.xin@gmail.com, davem@davemloft.net,
- yuantan098@gmail.com, yifanwucs@gmail.com, tomapufckgml@gmail.com,
- zcliangcn@gmail.com, bird@lzu.edu.cn, xuyq21@lenovo.com
-References: <cover.1779644468.git.xuyq21@lenovo.com>
- <ad9d7027579442c6c9498e7af84f836747a7620e.1779644468.git.xuyq21@lenovo.com>
-Content-Language: en-US
-From: Ren Wei <n05ec@lzu.edu.cn>
-In-Reply-To: <ad9d7027579442c6c9498e7af84f836747a7620e.1779644468.git.xuyq21@lenovo.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:zQmowABnAwsdBxhqRsYRAA--.39415S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CFy8WFWxXw17Kr47Xr1kXwb_yoW8CryfpF
-	Z7uw4ftF97JFyxGrn7Aw1FqF1Fgw4kJw47KF90kF1DZF4DGFyFqFyvgFWkJr1kCr409r42
-	yrn0q347tw45Aa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9lb7Iv0xC_Cr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
-	cIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2
-	AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v2
-	6r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI
-	0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
-	Yx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
-	WUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWU
-	tVW8ZwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8GwCFx2
-	IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-	6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-	AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-	s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-	1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUzOJ5UUUUU
-X-CM-SenderInfo: zqqvvuo6o23hxhgxhubq/1tbiAQsBCWoX+s4A+wABsx
-X-Spamd-Result: default: False [0.04 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+References: <20260527032411.60959-1-kipreyyy@gmail.com>
+In-Reply-To: <20260527032411.60959-1-kipreyyy@gmail.com>
+From: Xin Long <lucien.xin@gmail.com>
+Date: Thu, 28 May 2026 09:41:51 -0400
+X-Gm-Features: AVHnY4JDED5tqgKLQimcclOHI34tUsvK1WY-SZ9YwxPKLW0EPwRo2z7dpR7qoIk
+Message-ID: <CADvbK_fDMF8sAPcskb_WsL3d+4gSunviSZebsFS-XxQG2HUUCA@mail.gmail.com>
+Subject: Re: [PATCH net] sctp: fix race between sctp_wait_for_connect and peeloff
+To: Zhenghang Xiao <kipreyyy@gmail.com>
+Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, linux-sctp@vger.kernel.org, 
+	netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[gmail.com,davemloft.net,lzu.edu.cn,lenovo.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-1222-lists,linux-sctp=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-1223-lists,linux-sctp=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DMARC_NA(0.00)[lzu.edu.cn];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_RCPT(0.00)[linux-sctp];
-	TO_DN_NONE(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[n05ec@lzu.edu.cn,linux-sctp@vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	NEURAL_HAM(-0.00)[-0.988];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	R_DKIM_NA(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,lzu.edu.cn:mid,lzu.edu.cn:email,lenovo.com:email]
-X-Rspamd-Queue-Id: 905BC5EFA43
+	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[4];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	NEURAL_HAM(-0.00)[-0.999];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lucienxin@gmail.com,linux-sctp@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-sctp];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,sashiko.dev:url]
+X-Rspamd-Queue-Id: 173675F2FB3
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-
-
-On 5/28/26 16:58, Ren Wei wrote:
-> From: Yuqi Xu <xuyq21@lenovo.com>
-> 
-> out_curr caches the outbound stream currently being dequeued. When the
-> stream table is replaced, the old stream entries and their ext state
-> are freed, so keeping out_curr leaves scheduler state pointing at
-> released stream storage.
-> 
-> Clear out_curr in sctp_stream_free(), where the backing stream entries
-> are torn down. This keeps the cached scheduler state aligned with the
-> lifetime of the stream table for stream updates and any other full
-> stream teardown paths.
-> 
-> Fixes: 5bbbbe32a431 ("sctp: introduce stream scheduler foundations")
-> Cc: stable@kernel.org
-> Reported-by: Yuan Tan <yuantan098@gmail.com>
-> Reported-by: Yifan Wu <yifanwucs@gmail.com>
-> Reported-by: Juefei Pu <tomapufckgml@gmail.com>
-> Reported-by: Zhengchuan Liang <zcliangcn@gmail.com>
-> Reported-by: Xin Liu <bird@lzu.edu.cn>
-> Assisted-by: Codex:GPT-5.4
-> Signed-off-by: Yuqi Xu <xuyq21@lenovo.com>
-> Signed-off-by: Ren Wei <n05ec@lzu.edu.cn>
+On Tue, May 26, 2026 at 11:24=E2=80=AFPM Zhenghang Xiao <kipreyyy@gmail.com=
+> wrote:
+>
+> sctp_wait_for_connect() drops and re-acquires the socket lock while
+> waiting for the association to reach ESTABLISHED state. During this
+> window, another thread can peeloff the association to a new socket via
+> getsockopt(SCTP_SOCKOPT_PEELOFF), changing asoc->base.sk. After
+> re-acquiring the old socket lock, sctp_wait_for_connect() returns
+> success without noticing the migration =E2=80=94 the caller then accesses
+> the association under the wrong lock in sctp_datamsg_from_user().
+>
+> Add the same sk !=3D asoc->base.sk check that sctp_wait_for_sndbuf()
+> already has, returning an error if the association was migrated while
+> we slept.
+>
+> Fixes: 668c9beb9020 ("sctp: implement assign_number for sctp_stream_inter=
+leave")
+> Signed-off-by: Zhenghang Xiao <kipreyyy@gmail.com>
 > ---
->  net/sctp/stream.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/net/sctp/stream.c b/net/sctp/stream.c
-> index c2247793c88b..207e0a77f9af 100644
-> --- a/net/sctp/stream.c
-> +++ b/net/sctp/stream.c
-> @@ -186,6 +186,7 @@ void sctp_stream_free(struct sctp_stream *stream)
->  	int i;
->  
->  	sched->unsched_all(stream);
-> +	stream->out_curr = NULL;
->  	for (i = 0; i < stream->outcnt; i++)
->  		sctp_stream_free_ext(stream, i);
->  	genradix_free(&stream->out);
+>  net/sctp/socket.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+> index 1d2568bb6bc2..66e12fb0c646 100644
+> --- a/net/sctp/socket.c
+> +++ b/net/sctp/socket.c
+> @@ -9403,6 +9403,8 @@ static int sctp_wait_for_connect(struct sctp_associ=
+ation *asoc, long *timeo_p)
+>                 release_sock(sk);
+>                 current_timeo =3D schedule_timeout(current_timeo);
+>                 lock_sock(sk);
+> +               if (sk !=3D asoc->base.sk)
+> +                       goto do_error;
+>
+>                 *timeo_p =3D current_timeo;
+>         }
+> --
+> 2.50.1 (Apple Git-155)
+>
 
-We sincerely apologize for the repeated duplicate postings.
+Acked-by: Xin Long <lucien.xin@gmail.com>
 
-We did not manage the posting state carefully on our side and
-ended up sending this series multiple times by mistake. This was
-entirely our fault, and we are sorry for the unnecessary noise
-and disruption.
 
-Please ignore the extra copies.
+Note that the pre-existing issue reported in
+https://sashiko.dev/#/patchset/20260527032411.60959-1-kipreyyy%40gmail.com
 
-Best regards,
-Ren Wei
+I don't think it exists, as the state of any of ep->asocs should not be in
+CLOSED state. sctp_wait_for_connect() can only be triggered by the path
+with sctp_sendmsg_new_asoc() called, not the SCTP_SENDALL path.
 
+The reason why it doesn't return the error from 2nd sctp_wait_for_connect()
+is: there's already user data enqueued at the time, we should return the
+sent length to userspace even if the asoc has been peeled off.
+
+Thanks.
 
