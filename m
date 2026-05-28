@@ -1,202 +1,153 @@
-Return-Path: <linux-sctp+bounces-1218-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1219-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oME0IyppF2rcEAgAu9opvQ
-	(envelope-from <linux-sctp+bounces-1218-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Wed, 27 May 2026 23:59:06 +0200
+	id AP+FAlb1F2ofXggAu9opvQ
+	(envelope-from <linux-sctp+bounces-1219-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Thu, 28 May 2026 09:57:10 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F5135EA804
-	for <lists+linux-sctp@lfdr.de>; Wed, 27 May 2026 23:59:04 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF1F65EE1B5
+	for <lists+linux-sctp@lfdr.de>; Thu, 28 May 2026 09:57:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CBF7C30448B9
-	for <lists+linux-sctp@lfdr.de>; Wed, 27 May 2026 21:59:03 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CDDAB3015E19
+	for <lists+linux-sctp@lfdr.de>; Thu, 28 May 2026 07:51:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76FBE3890F3;
-	Wed, 27 May 2026 21:59:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sNDBSWsV"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B30A732F764;
+	Thu, 28 May 2026 07:51:16 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30346341AD6
-	for <linux-sctp@vger.kernel.org>; Wed, 27 May 2026 21:59:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779919141; cv=pass; b=m92QiRN8ByGTyLjNnBPeCIrc8ErW4VcGSllD/i5exOU86OE9Gki1QbwQope1aCDK5C+U6UMkm75tY04BK09zUfaZ9513ccf4fKVPenmm4eq1jJGEYJkNjWmTcMSa1AMuT6R4zJxZcCeYIZFHkCF8hxbkzYQDTT2KWDJYJyY886A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779919141; c=relaxed/simple;
-	bh=jC31wbituFYGZEW8Zzrrqo2ywlxmr0q5hdPoo2cZcHI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aT4q+1RBSLUxax0tGXT/XclU70CdYPqT8xTABu/QmjtdHg9Ej8sZIXI+TcFJNKvj4LvslxesP4mbRDdtCljdr7dDwX7VLVgW04H1l6SLRo5OAoAGAiDvmv2vBqjmy1Q3SjtMIDnC14I60cS5YIqtN4k8j1RrLdZ0t54CuXAcslU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sNDBSWsV; arc=pass smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-36af4b7840aso2598849a91.3
-        for <linux-sctp@vger.kernel.org>; Wed, 27 May 2026 14:59:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779919139; cv=none;
-        d=google.com; s=arc-20240605;
-        b=P5kDcKhj57ceYIeiEEdiALeEYlrmJwl21+0g6FgpDKU4R/iNOsQN2iYWOM7SaEtdTv
-         91D2bAijH9WFxIhxvvy8vxbe31ayb8dMcG7j77mB67068JHChx/lRMZvgEDyGnOkMAS2
-         xRSwA93T6nH6yjnZoQx+U/cWjSAFPUNlcTSiRcefGWyoQQA7xS3T5krJXE2BaXtuOmRs
-         C512NSVoYJJFo7tNNI9nXMv9rbJnTaG/fUfvXaBfwmm9wwFWxwHmBj7CeOvDCx0iBwHG
-         fIUyBYdGYEzpglt9MgGin9gzV3O78n3IbCPLiE4eOSD6GN+TajLKyFcL83KHjES8hNq5
-         w3fw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Rpo5vbgrRtRDRZwdk6vhAMK5bdc4lItXSamkQ1SeTh0=;
-        fh=uWyes7byO7sC7WOkDawhM3RQlvHvXt6tmTu+xlmHXss=;
-        b=e7vWgTYxiO6nnOs24LZArOD+ESEhjWCSXuvNvSPblT6G1Ymuok+3+ER9HO+KyCmdVn
-         rWNaRCo9jal14HZE7hUx+KoeAeZXoJT/Au5+m4vj2engLi9wDZPJuNtgDd3YvGbDocSO
-         Y6xg6oz4eYQ5nk4T937jD3/Xm2V6RtqX2DMdDPc10chyrECXlf6HVtQx/lwryX1Z2yI0
-         eaaQb89fZlK4o65XoeKyF6/NVE8s2UQGjVHIMNcatdoWThYIx4Vfa2ji7ezE14JGwULU
-         TG1QZhEfVeHvn2dbXDuKF4M62J+zKzQuH9nHMLJG8Xh6z2/h0SMDxUobq9lEOdLuSbUj
-         Xe9g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779919139; x=1780523939; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Rpo5vbgrRtRDRZwdk6vhAMK5bdc4lItXSamkQ1SeTh0=;
-        b=sNDBSWsV8GzXAn3KeLEUgipEe64GCWCsUMNNHq6pF72T+0xosd2JNzswMogNBQ2Ygn
-         kGNqU+WVNNJQrmhTvN+WTLnCq9hXoQ1Zd6ypwpOi3PKInJYSVFNYHJMC2LdTYyz4GPb7
-         A+iz1T8oBj9IxaCpIqdrIwYWHRveADKQRLCr0TKrwBFyWAjfPifpnm1SlNVtMeEgZBxV
-         JQrv6AI3JQmhpBWIlbQPKn8FO4b75g/zIRk0yvaXLezy6peHWpUuLoLbOBTYprb7TsKF
-         QN7ocy6kAAlpALQ5UVAY0HCHYPhI8rYZs4aH/c2L70K8NakNm3C+IxC0LWMRa2IbH2By
-         bSqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779919139; x=1780523939;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Rpo5vbgrRtRDRZwdk6vhAMK5bdc4lItXSamkQ1SeTh0=;
-        b=pdMw2gp0OxOeKzvM4jMc8gGbGDJ3C0oB11qA5nFw9dhJH92zBchQASCLvQSTsZlDq9
-         OCaVyBRFYMOQlA+hzBDacii+i21upJ5GxMRoLaVTe1iDUOs9e3GgklbNBRpnXemgICVc
-         4I9N5WiJ7nYA4lEEUv64/+6d5cvM4kSs7+gghH6Df1O0jmCTcR4eGiVMRm56eKCydcG0
-         d9I+aC4dSEpR1no9a74vT+OT0JywhN9ndy88SLTBf/GowmUpV5ZVy8vJf46mCQ1FCBHi
-         yTsUpMtbF8sCX7TfLiXepKcP5nrpIQWiSahXzjTqA9nKYgMIGJCkZgfPqcKAvvzD50tq
-         wwDQ==
-X-Gm-Message-State: AOJu0YyxTdUoAG7x1Oas2L5wEBhfRZYVV46ty6rEi4bfjLKte3x3vHK6
-	dCIBcLz1k6FX6TCpPDVPVtXB5qGWLXvAn8HkcrLeYNqC9NirTCu4aeek42eUD5/p9Hb+DU/EIU6
-	dYkBkFTsNYBUB9Q3+A5bYar1YOB6wK+8=
-X-Gm-Gg: Acq92OEItacRRyEIlbSM9lwtU6stXlwwPlv5Ql2340gznx0dvgPThzXxqHGXdWYUbXf
-	Kv56g/cZbrTvu1J+KjVn3E4vPdRWtgluEmbIQntBJyHhQ0oYyzA4NN95n58VguJFDZEgjDSbHVD
-	fKiCLGZCLEp60DpvDsRyCjV/3/MmAxWXRwv9Lb4fqbTWDvBcgf1XPsOIhtnIJNp0Vht7oCvS61V
-	TytwFIqJosffT2R6jLo5g4hzXvwj/iQmInVvOO8f86wiK2+J3/Rp40HGCtA3zpD2irt4pQNXGT7
-	2arUJKNPaDbRUDZ+X9I91m4wzZcDgm2GguVKVqxrLKLYh+CVV3unqY9Shge8Ja9pp4mvqcoW6/k
-	f74rl0u8XBzVWGuY19poW7XLAyNyHPnJLNKYH7j+GuWk63Jv3zg==
-X-Received: by 2002:a05:6a20:734c:b0:3b3:1951:48b7 with SMTP id
- adf61e73a8af0-3b328fdb6f0mr25812094637.50.1779919139431; Wed, 27 May 2026
- 14:58:59 -0700 (PDT)
+Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37C922264D6;
+	Thu, 28 May 2026 07:51:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.21.223
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779954676; cv=none; b=bNGPzdmWKNZ914qtx57Xh+9yiJr9r0IrHSjmtq6Au80Z0rGuOkSUR2EPfVzz99cPZIO7ABVoNp27Pj3MI6ItKxHTRa3C5OMfaO0Hl/U0elNlgpkBFAXNwjJ9jGRU6/yhfZtmKDHxIYdBcrxpab75cFHyC+ACscZFz15S6EE1EuY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779954676; c=relaxed/simple;
+	bh=r2D1c5FXKN8hlqqslL74T1FdQl1CQ0hlH77GJDFN7rs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=lCkDGzAR9cIhuRxnfWwh/cvQZVgTrxUgVfjsUAvhdZphC9eV0IXOLHlbrqYqqIDdD9B/HeSPyl0YtD7jTLRxwUR1fSgi99Zj9WeXn1+aeUytO8YuAvL1d4uDNwt2XauWqimUq9p2tEDXtxKPAbY6EqF35Mr/O/Cp5MeVrYoC/Tw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lzu.edu.cn; spf=pass smtp.mailfrom=lzu.edu.cn; arc=none smtp.client-ip=206.189.21.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lzu.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lzu.edu.cn
+Received: from enjou-Legion-Y7000P-2019.coin-barley.ts.net (unknown [172.23.56.36])
+	by app1 (Coremail) with SMTP id ygmowADnB8Lp8xdqUvs3AA--.65312S3;
+	Thu, 28 May 2026 15:51:08 +0800 (CST)
+From: Ren Wei <n05ec@lzu.edu.cn>
+To: linux-sctp@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: marcelo.leitner@gmail.com,
+	lucien.xin@gmail.com,
+	davem@davemloft.net,
+	yuantan098@gmail.com,
+	yifanwucs@gmail.com,
+	tomapufckgml@gmail.com,
+	zcliangcn@gmail.com,
+	bird@lzu.edu.cn,
+	xuyq21@lenovo.com,
+	n05ec@lzu.edu.cn
+Subject: [PATCH net 1/1] sctp: stream: clear out_curr when freeing stream data
+Date: Thu, 28 May 2026 15:51:00 +0800
+Message-ID: <cd2b851530e741d4878ee7db59cba895d70e672a.1779640196.git.xuyq21@lenovo.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <cover.1779640196.git.xuyq21@lenovo.com>
+References: <cover.1779640196.git.xuyq21@lenovo.com>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1779632544.git.xuyq21@lenovo.com> <4d56a975d40611822b2bd44f2f215e3534d76276.1779632544.git.xuyq21@lenovo.com>
-In-Reply-To: <4d56a975d40611822b2bd44f2f215e3534d76276.1779632544.git.xuyq21@lenovo.com>
-From: Xin Long <lucien.xin@gmail.com>
-Date: Wed, 27 May 2026 17:58:47 -0400
-X-Gm-Features: AVHnY4Jdb7aP58sGcuX0n-QoBVJ_RUDZxn4MGj_N74DwHqdhDrKlIcv5hqVog2o
-Message-ID: <CADvbK_dygG8qCDtG_LbsQ0=2PP4muNq2X7TNRqTiUMAoFjg5pA@mail.gmail.com>
-Subject: Re: [PATCH net 1/1] net: sctp: clear current outbound stream on
- stream teardown
-To: Ren Wei <n05ec@lzu.edu.cn>
-Cc: linux-sctp@vger.kernel.org, netdev@vger.kernel.org, 
-	marcelo.leitner@gmail.com, davem@davemloft.net, yuantan098@gmail.com, 
-	yifanwucs@gmail.com, tomapufckgml@gmail.com, zcliangcn@gmail.com, 
-	bird@lzu.edu.cn, xuyq21@lenovo.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:ygmowADnB8Lp8xdqUvs3AA--.65312S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zw4fuF4rKw1xKr1xXrWkJFb_yoW8XFWkpF
+	ZxC3yftrZ7JFyUGr97C34FqFWFkan7G3y7Kr4Fk3WDZws8JF1FqFnYgrWkXryxCr4j9rWY
+	vF1q9wna9w4Uu37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUB01xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+	w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+	IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E
+	87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+	8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+	Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+	xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
+	w2AFwI0_Jw0_GFylc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY2
+	0_Gr4l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2I
+	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
+	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
+	0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUonmRUUUUU
+X-CM-SenderInfo: zqqvvuo6o23hxhgxhubq/1tbiAQEBCWoWqU4TUwAAsT
+X-Spamd-Result: default: False [0.54 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-1218-lists,linux-sctp=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,davemloft.net,lzu.edu.cn,lenovo.com];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	TO_DN_NONE(0.00)[];
+	TAGGED_FROM(0.00)[bounces-1219-lists,linux-sctp=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[gmail.com,davemloft.net,lzu.edu.cn,lenovo.com];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[n05ec@lzu.edu.cn,linux-sctp@vger.kernel.org];
+	R_DKIM_NA(0.00)[];
+	DMARC_DNSFAIL(0.00)[lzu.edu.cn : query timed out];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lucienxin@gmail.com,linux-sctp@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
+	NEURAL_HAM(-0.00)[-0.922];
+	RCPT_COUNT_TWELVE(0.00)[12];
 	TAGGED_RCPT(0.00)[linux-sctp];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,mail.gmail.com:mid,lenovo.com:email]
-X-Rspamd-Queue-Id: 8F5135EA804
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,lzu.edu.cn:email]
+X-Rspamd-Queue-Id: AF1F65EE1B5
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, May 27, 2026 at 1:43=E2=80=AFAM Ren Wei <n05ec@lzu.edu.cn> wrote:
->
-> From: Yuqi Xu <xuyq21@lenovo.com>
->
-> out_curr caches the outbound stream selected for continuing a
-> fragmented message. That pointer refers directly to an entry in the
-> stream->out table.
->
-> When the stream table is torn down, such as during stream updates for
-> association restart handling, the old outbound stream entries are freed
-> before a new table is installed. Clear out_curr as part of
-> sctp_stream_free() so later dequeue paths never keep following a stale
-> stream pointer after the teardown.
->
-> This keeps the lifetime rule local to the stream teardown helper and
-> covers every current caller that frees the outbound stream table.
->
-> Fixes: 5bbbbe32a431 ("sctp: introduce stream scheduler foundations")
-> Cc: stable@kernel.org
-> Reported-by: Yuan Tan <yuantan098@gmail.com>
-> Reported-by: Yifan Wu <yifanwucs@gmail.com>
-> Reported-by: Juefei Pu <tomapufckgml@gmail.com>
-> Reported-by: Zhengchuan Liang <zcliangcn@gmail.com>
-> Reported-by: Xin Liu <bird@lzu.edu.cn>
-> Assisted-by: Codex:GPT-5.4
-> Signed-off-by: Yuqi Xu <xuyq21@lenovo.com>
-> Signed-off-by: Ren Wei <n05ec@lzu.edu.cn>
-> ---
->  net/sctp/stream.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/net/sctp/stream.c b/net/sctp/stream.c
-> index c2247793c88b..207e0a77f9af 100644
-> --- a/net/sctp/stream.c
-> +++ b/net/sctp/stream.c
-> @@ -186,6 +186,7 @@ void sctp_stream_free(struct sctp_stream *stream)
->         int i;
->
->         sched->unsched_all(stream);
-> +       stream->out_curr =3D NULL;
->         for (i =3D 0; i < stream->outcnt; i++)
->                 sctp_stream_free_ext(stream, i);
->         genradix_free(&stream->out);
+From: Yuqi Xu <xuyq21@lenovo.com>
 
-As commented on another patch, purging outqueue will also clear
-stream->out_curr for the corner case via:
+out_curr caches the current outbound stream and points into the
+stream->out storage. Once the stream tables are torn down, that
+pointer is no longer valid and must not survive the teardown.
 
-sctp_outq_teardown() -> sctp_sched_dequeue_done(last_chunk).
+sctp_stream_update() frees the old stream tables before installing
+the new ones. If out_curr still points into the old outbound table,
+later dequeue paths can continue from stale scheduler state instead
+of falling back to the normal queue walk.
 
-so there's no need to do it here.
+Clear out_curr in sctp_stream_free(), which owns the lifetime of the
+stream storage and covers every teardown caller.
 
-Thanks.
+Fixes: 5bbbbe32a431 ("sctp: introduce stream scheduler foundations")
+Cc: stable@kernel.org
+Reported-by: Yuan Tan <yuantan098@gmail.com>
+Reported-by: Yifan Wu <yifanwucs@gmail.com>
+Reported-by: Juefei Pu <tomapufckgml@gmail.com>
+Reported-by: Zhengchuan Liang <zcliangcn@gmail.com>
+Reported-by: Xin Liu <bird@lzu.edu.cn>
+Assisted-by: Codex:GPT-5.4
+Signed-off-by: Yuqi Xu <xuyq21@lenovo.com>
+Signed-off-by: Ren Wei <n05ec@lzu.edu.cn>
+---
+ net/sctp/stream.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/net/sctp/stream.c b/net/sctp/stream.c
+index c2247793c88b..207e0a77f9af 100644
+--- a/net/sctp/stream.c
++++ b/net/sctp/stream.c
+@@ -186,6 +186,7 @@ void sctp_stream_free(struct sctp_stream *stream)
+ 	int i;
+ 
+ 	sched->unsched_all(stream);
++	stream->out_curr = NULL;
+ 	for (i = 0; i < stream->outcnt; i++)
+ 		sctp_stream_free_ext(stream, i);
+ 	genradix_free(&stream->out);
+-- 
+2.54.0
+
 
