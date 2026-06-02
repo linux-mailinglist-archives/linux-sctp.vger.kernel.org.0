@@ -1,238 +1,182 @@
-Return-Path: <linux-sctp+bounces-1226-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1227-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oKuQN9fEHWq9dgkAu9opvQ
-	(envelope-from <linux-sctp+bounces-1226-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Mon, 01 Jun 2026 19:43:51 +0200
+	id wAEOHIYsHmqohgkAu9opvQ
+	(envelope-from <linux-sctp+bounces-1227-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Tue, 02 Jun 2026 03:06:14 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 836ED623639
-	for <lists+linux-sctp@lfdr.de>; Mon, 01 Jun 2026 19:43:51 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F018626C7B
+	for <lists+linux-sctp@lfdr.de>; Tue, 02 Jun 2026 03:06:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id E2027300F75E
-	for <lists+linux-sctp@lfdr.de>; Mon,  1 Jun 2026 17:43:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C0519300E72B
+	for <lists+linux-sctp@lfdr.de>; Tue,  2 Jun 2026 01:06:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70B6C3DD85C;
-	Mon,  1 Jun 2026 17:43:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38DF8330D25;
+	Tue,  2 Jun 2026 01:06:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gGw6H8/2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kfv77ot8"
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 381FE3314B7
-	for <linux-sctp@vger.kernel.org>; Mon,  1 Jun 2026 17:43:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.171
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780335828; cv=pass; b=pAq4zT8Sr4wdRWzOzwNFmaoK6D1cMLmLPPDhSWvk8wM78uTLG1GhXztUklVFFzUC/vEgRwprHAXuvR3bXp9Mau1IBNN6UONsdoFrsJADbK8Mn8wlKk1BCXVaix1KOYt/jPN8e3VCMHlwU21ezJbaQWreAJn91SS8Fou+wctPw4I=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780335828; c=relaxed/simple;
-	bh=vLXM8xPE0000Ywk3cF/Lyt0JOqPAXIsoJJHRt/F9Z34=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=q21lNwy9pFOkj279srt+fpnYP+kKszPV/WvrW8KXtlHBFVrQtjdrRzi5c5+MgpLushYPh5w5ZljP5K9cv8cAsSneQ2kwOELI1JJZeG5+HC9KOsn5itrFR4BmmX01ENhVWONHtOMBuUmdDr1S3nmlc26yoX2PTuhuOi0PW84U8sQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gGw6H8/2; arc=pass smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F27C432F770
+	for <linux-sctp@vger.kernel.org>; Tue,  2 Jun 2026 01:06:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780362370; cv=none; b=F+ZHYGWhKlQON5UPy5RB5gu8SiCPNhAqIvdytJJOUR/LPYSjgu2y7IqUcPF9BeIz3GbzktG1AYTR7/dzMLCqp6QZws26+uQDYCgFP+XeeRAkwnM61n2n0N9E1f+FcssDD2iNaaRv9PkddTUvj156HRxf3RnC6OOSpjn/KkUFy5g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780362370; c=relaxed/simple;
+	bh=SPuNjNp8A0Zl/TJKGXESaD4k1bO4yqVtv1eunXpANEQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Xu+gaQUSqTMwVTp23tiqo+8sbTTw/aD2vHBNDTTZD/rGA4ZA8rxnrpXW8eQZZqFSXvmZZyTJQTABQXuOETs4q3keKH+Zc+0zCArrzEePjEHbidEblSKA2muql8YY5asTFSd78B5r3hKFLt8ba1Tim8fQz9hd2PSWoHcdLGeKHw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kfv77ot8; arc=none smtp.client-ip=209.85.222.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c8584bbbf2cso1552655a12.3
-        for <linux-sctp@vger.kernel.org>; Mon, 01 Jun 2026 10:43:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780335826; cv=none;
-        d=google.com; s=arc-20240605;
-        b=NouUv5omrwwyJFgTsgrMD9GZ8hGRfyFAeu3wkQn/dMODVWXm01PrBzreijlAyYx4WQ
-         3E7riE+eojI7e4+I7JE3oEJZVTHuHGy/NL0EW6j7aVwUk9fN61ebynhPmnKlt16b9ZZS
-         MybN8Puu+G00s5pt3+ZRv6vdoaY8Rm7ckS1q1LROzeXYi9IGnSrcHP86+gNh0T7D/kRX
-         QkabVPCnsDCQKubsH30DtpC+sSh8Sv3a20hxElevCcndhsfyDwXSYYSfktiSf+enbV3o
-         HyxR0e5WNIcH0f4zV2VDDNAPkdws67fesJVxEj88m/N/jz6ey5TBPt6Raxdxkimrj8ys
-         5RKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=if4TjlSwdhnRq7L3EQXAnyNltlbHQkoc1jml1ZVRDpE=;
-        fh=BiLRsbqmQoYDNb3Svn4MvGCPJYjCxvYH6svPM6a1+GA=;
-        b=M3As9zKvoCH90eVxnXJ7vnUeayBJ0vM4/KJo+x/BZ+tP5Ha08ZJM7A4/IHrERbF5AX
-         Fq+kcowrgePGiuZRniQYAaXw87vJjHRHCerT8AfDTrRt/xiEzN7Cv10Ac9ZDCP5EsYV2
-         MlKDkTLWdY7bNFpPnPC//nfLq+bLjK33R04s8nkFCMA+Ql2cNo6njW5TS18l4fCfvLO4
-         05WR/RMbvmVdbfYKdYv4vYEjPHqAZlMFI069yQLLu1rSc1MbaLpamLGc7s5SFZgfkQnC
-         NQQf8jahQOk9S6YlQtCtOxl3fhUdE12L6CjV+zFoH3ujUk+hitCAFjj/JhWnUEbV4atD
-         2odw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-9157b895c57so10618485a.3
+        for <linux-sctp@vger.kernel.org>; Mon, 01 Jun 2026 18:06:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780335826; x=1780940626; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=if4TjlSwdhnRq7L3EQXAnyNltlbHQkoc1jml1ZVRDpE=;
-        b=gGw6H8/28j/FpPFFE4Er8tLQlYSyM811R6b8ATylwloH4ZcC6WlrihThylKH1yhJC9
-         f8Pggjy55j/mKqnRoubYyAvilhBhLVnGqVb40BrnWrFD8H4UftOdN+qPMCOeZMXQLH2o
-         9aH0PrbFT+OuJOdLj049aIwNvGbrX1xIB4snM03EvUhmcT4rWY2B0rxKNd+h1h42GT/K
-         4qL8862O80OO7Ku7FJ2rVtRpFp1vKBxpGpALtiYCzSHNfbSOk6cw3sHyhmVIsfae8WRl
-         xIjwbjJ+NLM7NZE+H8FvGOF4mSpqFH4KKa47a8OmeTyGOuNnsYVvP0hWYpOWWQ4n8Puf
-         IXLA==
+        d=gmail.com; s=20251104; t=1780362368; x=1780967168; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MSDNDfUs/NxbWcXNNg7qyqWhJd8aRin4937n/eP10yc=;
+        b=kfv77ot85zAVXhQ5OH78csxA7j4d+qXUh/UZSGEfj8bt9V4LfkT3DDqkTh0OLELzl1
+         rLJ7yi1InCnB/Qr/C3sKteS3BWWgYnaqQeO9LMg+/NF/p4ixb4A7QG9dVvmPenqxrA8/
+         Wc+8/N5d3bkmzhvJtO5RAYpDpAHWBIX16H+00pWoccaPbgwUF7Qucm4XTiXQLaGMuuRW
+         CdGpNEGlLXkTnWFNKwZrOJTmHiYfDA+kzAysh+ov2qgB0Shkbv4wkTUutLQWeulP+EMb
+         RzI0Rx77Y2jxul1zQzGesIwf671gy5DzrJLh/E77GLfAeytdl1NfyA1UizRq/bWlSvFY
+         P96A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780335826; x=1780940626;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=if4TjlSwdhnRq7L3EQXAnyNltlbHQkoc1jml1ZVRDpE=;
-        b=WpQUpPQ0xW5VUMoXx3bKLS7Q5Tv0yaBRMOUqHX7EqQ2CFL3jdfJdKH2gkG+j9w936T
-         nKbt36rtkrtK1VvvKGwq1NcyROzcEBSDI/JiPhRH1q3gg9FXZ7sEKzLaxDb5mxvXD8Nn
-         Eh3cWI7uIBEQXiNYmgny3kkcaSqBWiolruUK4zxBm0wAgSkwFexQR4knb92ifg6fvXRJ
-         8A1EvTHcOszj10b5q9XedMkQ/yvZS9DXXul5ZPilPPRzbHDeTJvJaADRAXjAJrL4V6Gl
-         00F/4QbWP0s0xVOcOmulg0mlYnd0fsmuHK3WrRNy2bHX32oJC+AffOpql5uZy3WGL3re
-         IBAw==
-X-Gm-Message-State: AOJu0YzfQvZIoIi0v1rLAQFfyalYCWESEFVH1IdFcByhM984wyrVzZq7
-	lNpw0vORRDeZw+IZSeaW7dRf4dqx/fXV8kYNZ2j6uEtxqM72h/rzFyGMpgqHvVJUt58RCPRySS7
-	dW2k0pVk/YAG3rXVHYBwiqczJblWkmRU=
-X-Gm-Gg: Acq92OFmeI+tgZIGRsuGZeUMnp5YJrvGlA7OUguMjblYJU3+86riYU6ZTk9nqObWClG
-	4FjfPCj1A4MwAURRVp33XgvrLCum1fDkmYSbUwZS/773SQgPKhtNOmq05XhO2ggriXoaOGffDht
-	jan6t11cNM2iwBUqQveovH/elNWaZWDab+GSrW9t4WNnxcyttdZ5Q4TNbAIkrqLMU78bpDyUj7s
-	fkoT52BQMyRSSF8JoU6HhojxTe42jpmXuF8qxgVQBxz16Mxx+zbX63mZF3nkOq73XJN1jyWXKYf
-	6s/pn7XjIimA7kgbeHiLWaY7709+eLasKxvmu7lz+IqhnSBS3wI8MpB5BhhFsMo6Kn6W+TC+WwQ
-	03E01yvgoOjDYL3pb
-X-Received: by 2002:a05:6a20:7f99:b0:3b4:7aae:1ee8 with SMTP id
- adf61e73a8af0-3b47aaea4cdmr234461637.14.1780335826407; Mon, 01 Jun 2026
- 10:43:46 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780362368; x=1780967168;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MSDNDfUs/NxbWcXNNg7qyqWhJd8aRin4937n/eP10yc=;
+        b=bvhquTNAGgigK31HCcYOF9vHRHFttKfX1LXKq0PvVE9idf2uRIENU0DthR+ASR7RiX
+         +UBft1uTfEIiWb+irr75ptkYJhzfmY4K1bDC/0FR5Sdj482GSy0mwTsmgHJ0TBIT4XnS
+         l79ep5S9U0yyUra4YETTkMdK1luUL5TTrfp1UburB/WXh/qGaXduy9HMwyJtfGMB5HQN
+         5DJw5TSbK5RJcjlaYdbZcEWZCa3Pn8HfCv3Ha5R5kJgvGWBBMu9wcNy1vPQkda1C0Odn
+         S7UfwOXc4q/gcdmCj/V77I6JLLOxHGto1nTxDi30HfjzkF4dsNrdS4RdH5u6sPOvgtQJ
+         VBoA==
+X-Forwarded-Encrypted: i=1; AFNElJ9UNAGBopjx5HqbP0zHOtyhi/R9CgLVJ3mmOV9MLXH6UZSX41vUhuTxsg+yBgq+SblPzkQPFDqwR2uc@vger.kernel.org
+X-Gm-Message-State: AOJu0YxH8nrQGaTXvjGXPrSxc6I+7J8l2tuJcN1RGdoLvp+aunYUxP0f
+	vcXdDZexi1BtQSTqUbcx26JT0hqhDQUoV+YQYxLjbOt6y9+6kFThUopt
+X-Gm-Gg: Acq92OHIVjPs83mrk7ppXiisp5gc5BJ+pl4j6vAFGMcMFsfqufC1rmZLyj+1v5/XAh+
+	D1dazfECcX+SYzXCzuFT1BuJx4krTCmnrvieDyOxF+oO8oeYGqnCJMYR6YrSzjVPNybezQbaZJU
+	tf1kic7/teMx9ZvYymw2aKN0fU1t03xNyoqeFu08rG/lb5tlkdXBEgndm/VdfyKGYfuAN1vfz6j
+	sM3TE6xi0fCZHR59Gt+V0CXeha+tqnDL9Whjf8EbDzEzaWU0/fA7FnHQkT7xn9l5FIWMrWSEdZR
+	tXNMSiQzgn5izMDbLfRA8zsbi+8S/CINVDbXabeN6DuD1ITJDZw0sV8DDjrCKCO6ay/Be3YthOa
+	efuCuf95yYdLGFB+8XVP6dw0s06h3TkxJqIFsZkb9vY5L42arqvXJ9KCwQbb9mndsMmuDWKIGkw
+	7N0p/QYCn6qW1rRXLqOF3sXJ5nN0G4Htdey5+aeOt86s+8IKR9uN5Rn5PdgNhL+zjF9SZT1kN0G
+	0HUuSgbVDxQo0NNo/6acfGw+1eiavmahY95z2B2BImw3Et6piaz39j0/YbJWQIKQ9UwOrjSZRw5
+	EBbOeJS8JKI=
+X-Received: by 2002:a05:620a:a28b:10b0:915:2404:bfe9 with SMTP id af79cd13be357-9153d96abf4mr1604595085a.9.1780362367772;
+        Mon, 01 Jun 2026 18:06:07 -0700 (PDT)
+Received: from wsfd-netdev58.anl.eng.rdu2.dc.redhat.com ([66.187.232.140])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-9153244de53sm1190856485a.8.2026.06.01.18.06.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Jun 2026 18:06:07 -0700 (PDT)
+From: Xin Long <lucien.xin@gmail.com>
+To: network dev <netdev@vger.kernel.org>,
+	linux-sctp@vger.kernel.org
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+	Brian Geffon <bgeffon@google.com>
+Subject: [PATCH net] sctp: validate cached peer INIT chunk length in COOKIE_ECHO processing
+Date: Mon,  1 Jun 2026 21:06:06 -0400
+Message-ID: <eb60825fa22d6f9e663c7d4dbb69f397b5d34d42.1780362366.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1780113823.git.zzhan461@ucr.edu> <fac6043fa20a2ff68e12958c431836f692c51268.1780113823.git.zzhan461@ucr.edu>
-In-Reply-To: <fac6043fa20a2ff68e12958c431836f692c51268.1780113823.git.zzhan461@ucr.edu>
-From: Xin Long <lucien.xin@gmail.com>
-Date: Mon, 1 Jun 2026 13:43:34 -0400
-X-Gm-Features: AVHnY4IJGYpBMa78OgmnxNoeJQuYyJzvWtUeHhrXHJwWjrmkFwW8vUX_jMUKQ5M
-Message-ID: <CADvbK_cXhGqgEua975KuP+Vu81s7ZjYjE=kTiMrwxcBKLdb0VA@mail.gmail.com>
-Subject: Re: [PATCH net 1/1] sctp: diag: reject stale associations in dump_one path
-To: Ren Wei <n05ec@lzu.edu.cn>
-Cc: linux-sctp@vger.kernel.org, netdev@vger.kernel.org, 
-	marcelo.leitner@gmail.com, davem@davemloft.net, yuantan098@gmail.com, 
-	yifanwucs@gmail.com, tomapufckgml@gmail.com, zcliangcn@gmail.com, 
-	bird@lzu.edu.cn, zzhan461@ucr.edu
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,davemloft.net,lzu.edu.cn,ucr.edu];
-	TAGGED_FROM(0.00)[bounces-1226-lists,linux-sctp=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-1227-lists,linux-sctp=lfdr.de];
+	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[davemloft.net,kernel.org,google.com,redhat.com,gmail.com];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[lucienxin@gmail.com,linux-sctp@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	TAGGED_RCPT(0.00)[linux-sctp];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	FREEMAIL_FROM(0.00)[gmail.com]
-X-Rspamd-Queue-Id: 836ED623639
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 1F018626C7B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Sat, May 30, 2026 at 11:57=E2=80=AFAM Ren Wei <n05ec@lzu.edu.cn> wrote:
->
-> From: Zhao Zhang <zzhan461@ucr.edu>
->
-> The SCTP exact sock_diag lookup can hold a transport reference, block on
-> lock_sock(sk), and then resume after sctp_association_free() has marked
-> the association dead and freed its bind address list.
->
-> When that happens, inet_assoc_attr_size() and
-> inet_diag_msg_sctpasoc_fill() can still dereference association state
-> that is no longer valid for reporting. In particular,
-> inet_diag_msg_sctpasoc_fill() may read an empty bind-address list as a
-> real sctp_sockaddr_entry and trigger an out-of-bounds read from
-> unrelated association memory.
->
-> Reject the association after taking the socket lock if it has been
-> reaped or detached from the endpoint, and report the lookup as stale.
-> This keeps the exact dump-one path from formatting torn association
-> state.
->
-> Fixes: 8f840e47f190 ("sctp: add the sctp_diag.c file")
-> Cc: stable@kernel.org
-> Reported-by: Yuan Tan <yuantan098@gmail.com>
-> Reported-by: Yifan Wu <yifanwucs@gmail.com>
-> Reported-by: Juefei Pu <tomapufckgml@gmail.com>
-> Reported-by: Zhengchuan Liang <zcliangcn@gmail.com>
-> Reported-by: Xin Liu <bird@lzu.edu.cn>
-> Assisted-by: Codex:GPT-5.4
-> Signed-off-by: Zhao Zhang <zzhan461@ucr.edu>
-> Signed-off-by: Ren Wei <n05ec@lzu.edu.cn>
-> ---
->  net/sctp/diag.c | 17 +++++++++--------
->  1 file changed, 9 insertions(+), 8 deletions(-)
->
-> diff --git a/net/sctp/diag.c b/net/sctp/diag.c
-> index 2afb376299fe..d758f5c3e06e 100644
-> --- a/net/sctp/diag.c
-> +++ b/net/sctp/diag.c
-> @@ -266,15 +266,15 @@ static int sctp_sock_dump_one(struct sctp_endpoint =
-*ep, struct sctp_transport *t
->
->         lock_sock(sk);
->
-> -       rep =3D nlmsg_new(inet_assoc_attr_size(sk, assoc), GFP_KERNEL);
-> -       if (!rep) {
-> -               release_sock(sk);
-> -               return -ENOMEM;
-> +       if (ep !=3D assoc->ep || assoc->base.dead) {
-> +               err =3D -ESTALE;
-> +               goto out_unlock;
->         }
->
-> -       if (ep !=3D assoc->ep) {
-> -               err =3D -EAGAIN;
-> -               goto out;
-> +       rep =3D nlmsg_new(inet_assoc_attr_size(sk, assoc), GFP_KERNEL);
-> +       if (!rep) {
-> +               err =3D -ENOMEM;
-> +               goto out_unlock;
->         }
->
->         err =3D inet_sctp_diag_fill(sk, assoc, rep, req, sk_user_ns(NETLI=
-NK_CB(skb).sk),
-> @@ -289,8 +289,9 @@ static int sctp_sock_dump_one(struct sctp_endpoint *e=
-p, struct sctp_transport *t
->         return nlmsg_unicast(sock_net(skb->sk)->diag_nlsk, rep, NETLINK_C=
-B(skb).portid);
->
->  out:
-> -       release_sock(sk);
->         kfree_skb(rep);
-> +out_unlock:
-> +       release_sock(sk);
->         return err;
->  }
->
-> --
-> 2.47.3
->
-Thanks for the fix.
+When a listening SCTP server processes a COOKIE_ECHO chunk, the cached
+peer INIT chunk embedded after the cookie is parsed and its parameters
+are later walked by sctp_process_init() using sctp_walk_params().
 
-Acked-by: Xin Long <lucien.xin@gmail.com>
+However, the chunk header length of this cached INIT chunk was not
+validated against the remaining buffer in the COOKIE_ECHO payload. If
+the length field is inflated, the parameter walk can run beyond the
+actual received data, leading to out-of-bounds reads and potential
+memory corruption during later parameter handling (e.g. STATE_COOKIE
+processing and kmemdup() copies).
 
-Note that the issue reported in
-https://sashiko.dev/#/patchset/fac6043fa20a2ff68e12958c431836f692c51268.178=
-0113823.git.zzhan461%40ucr.edu.
+Add a bounds check in sctp_unpack_cookie() to ensure the cached INIT
+chunk length does not exceed the available data in the COOKIE_ECHO
+buffer before it is used.
 
-I don't think it exists, as sctp_sock_filter() is called via
-sctp_transport_traverse_process() where sctp_transport_get_next() only
-returns primary_path's transport, not each transport.
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Reported-by: Brian Geffon <bgeffon@google.com>
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+---
+ net/sctp/sm_make_chunk.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
+index de86ac088289..85264862fb6b 100644
+--- a/net/sctp/sm_make_chunk.c
++++ b/net/sctp/sm_make_chunk.c
+@@ -1730,6 +1730,7 @@ struct sctp_association *sctp_unpack_cookie(
+ 	struct sctp_signed_cookie *cookie;
+ 	struct sk_buff *skb = chunk->skb;
+ 	struct sctp_cookie *bear_cookie;
++	struct sctp_chunkhdr *ch;
+ 	enum sctp_scope scope;
+ 	unsigned int len;
+ 	ktime_t kt;
+@@ -1759,6 +1760,10 @@ struct sctp_association *sctp_unpack_cookie(
+ 	cookie = chunk->subh.cookie_hdr;
+ 	bear_cookie = &cookie->c;
+ 
++	ch = (struct sctp_chunkhdr *)(bear_cookie + 1);
++	if (ntohs(ch->length) > len - fixed_size)
++		goto malformed;
++
+ 	/* Verify the cookie's MAC, if cookie authentication is enabled. */
+ 	if (sctp_sk(ep->base.sk)->cookie_auth_enable) {
+ 		u8 mac[SHA256_DIGEST_SIZE];
+-- 
+2.47.1
+
 
