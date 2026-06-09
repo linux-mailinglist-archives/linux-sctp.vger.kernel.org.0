@@ -1,207 +1,272 @@
-Return-Path: <linux-sctp+bounces-1246-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1247-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id CVitCn3uJmopngIAu9opvQ
-	(envelope-from <linux-sctp+bounces-1246-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Mon, 08 Jun 2026 18:31:57 +0200
+	id WfGaIJEnKGrU/AIAu9opvQ
+	(envelope-from <linux-sctp+bounces-1247-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Tue, 09 Jun 2026 16:47:45 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 925FF658BBD
-	for <lists+linux-sctp@lfdr.de>; Mon, 08 Jun 2026 18:31:56 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F742661518
+	for <lists+linux-sctp@lfdr.de>; Tue, 09 Jun 2026 16:47:45 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=ibL9kTmg;
-	spf=pass (mail.lfdr.de: domain of "linux-sctp+bounces-1246-lists+linux-sctp=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-sctp+bounces-1246-lists+linux-sctp=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=l30pssQc;
+	spf=pass (mail.lfdr.de: domain of "linux-sctp+bounces-1247-lists+linux-sctp=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-sctp+bounces-1247-lists+linux-sctp=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=gmail.com;
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 40CCD3051594
-	for <lists+linux-sctp@lfdr.de>; Mon,  8 Jun 2026 16:22:41 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 6B3F930C0AC0
+	for <lists+linux-sctp@lfdr.de>; Tue,  9 Jun 2026 14:40:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 359E5348C56;
-	Mon,  8 Jun 2026 16:22:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD2B6344DAD;
+	Tue,  9 Jun 2026 14:39:43 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E62A33A9E1
-	for <linux-sctp@vger.kernel.org>; Mon,  8 Jun 2026 16:22:37 +0000 (UTC)
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780935759; cv=none; b=aqnumiPHVtl3Ik7fEUhlBvCg9X2e8capt6OAvWHSUKtYfHaA1W12+f9hxFKr13QcLg/ZZ/wdWSZz8lrijpb0afQ5S9GwLBDJ6PCeTcKLSIleAgsOrO6ipoeMhmZOqHCqrB4TDcT4AtYdu1YKzSvzspLwUqFdWlUZz1ZyTHAXVb8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780935759; c=relaxed/simple;
-	bh=jFcy7qGszDpviUxuZY4SN2f2XLYRG009KZCZxWTYTDk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EyA/IPp1DmtznzDPK0IoA1+HYSM1e6OEwmJcvBoiGsICpgr+CKg5SzciDc6WIppwDLL9eodFl72NNIa9Ofxsarmd01FCDgwPQqblpvz8mLP7d3K4selTCTIioUgt61QuBV75gmM/DThKzMO3mxaDmH3hpzBCoYaiQoWQZ+gxHM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ibL9kTmg; arc=none smtp.client-ip=209.85.222.173
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-91574384cc2so521065085a.2
-        for <linux-sctp@vger.kernel.org>; Mon, 08 Jun 2026 09:22:37 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79453349CFF
+	for <linux-sctp@vger.kernel.org>; Tue,  9 Jun 2026 14:39:42 +0000 (UTC)
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781015983; cv=pass; b=Z49B8RJKW89K/4NyBN3RtTcho6xr3qpiX5M1+9F8KheLUnJC0noRgWOAqJQlHSfU2J/mv1gR7XRYmoWd/ZUwee+etQ25+GufI6vXLPu3Cc0F3WAk7l8tTm4B43W0rO6FRvBXcbUPLkOXwL8sZ3bMkjsWqFEl0pr8fqPW0jZ5ZvQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781015983; c=relaxed/simple;
+	bh=PNSiV5Yf5IdVIuyS/ICdaQvkxmLwAXZci7kI9aJoLh8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=m+7YhSrslfbZ/2ebS9RYKa2D6iMDoRdKaK5+vKYllFQ7fzEGMwebf5DVwoQwAyd2d3/nxqw9Ni++TarDesme93XQGdIxS+TxannFgL+ZnpONw/4ppQ1mQ1V00OC7dbDHui192qInfKGJgCt0Xr75aCix60KJPjpc+SbksKVpUJ0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l30pssQc; arc=pass smtp.client-ip=209.85.217.49
+Received: by mail-vs1-f49.google.com with SMTP id ada2fe7eead31-6c79d2bb687so4563136137.2
+        for <linux-sctp@vger.kernel.org>; Tue, 09 Jun 2026 07:39:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781015981; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ChX7BAYvMsC5m59VeBECa9JfqsRsBPPb0ztklQyRuNcLDT8SiCQe3FWaTGJOZVMziL
+         NRSh2E22KTrULC3zamC78bydebFeJpgk4vvHu1aq1GRirUPzRefsu+mUr+QJevpO779C
+         map25RpDaJoGVyTwijdTD0pnjcQYJYh2YvV5+2IvqKW+j89SDMuWKWQWGJB22XzTZNBt
+         Td0mXr3EHWbeAZPxxTa/yGzUTEmYXfoE9RwK5WxwwdEbBzKbaE4iqVO6H+gmvZPheFOK
+         ZbbH5UV5WDp6pHuNmALFpAMwIsmqFZO3WD7zQhWRYxpzj1r4HBg38PhEJ6pCM+ekBYtP
+         hxJQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=1WND2J0G9sOe3jmN+FEjetbK0mHlmxsSnOX/VnUT/0c=;
+        fh=iuu7BHluk0AeOE3GXTHyTZ+mfhJ/yTQ2bOzH+m2OEng=;
+        b=FBZPISoOi/dAq75A//S7nDgaO0gnnA89PqLGG+LtcNHCYhiTR122Btk7Zfkto0EYkX
+         bltU+DjTMyX3wQqWDsom/RI2zQJ3q1+o3bdzCR7tAsEli9/ZbDpR0qI4d3frjwpywqVR
+         aDCLrSUMegkTxLULa9HjBee1rrrfzWBgcTXb7S6Am9juNmbxjg9yn3xjmENYU7xbMA8R
+         e0dMGpXFomnM1uy2zFVUgfaG8usjGk9yrBIsF6mWmJpraok2NTlc5zapzq7RolvPPILH
+         ppNZlLB9p/odurhdxEZAAZNrko61L/SEWfTj164oRyTjzM0ff/pTQ5uPzFTK1Q8WhxW9
+         ebhA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780935756; x=1781540556; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yvinHr1mQvwvNvWAosxx0fmHzORHH/aQDJK7llc8tJM=;
-        b=ibL9kTmgsM0+NW/9htvvrjqgoaRAMO1LNxr3WhP/f7qzJ6OoEC59FiD02bgPfULDB6
-         TNIsI8MVk60PTFrhuGZBx0w26TybCtsElCioHSJWrU06S16pTJUNareffudBXZlTiD1L
-         FVOCb+iuJzvKBBjeT2Mxv3FvQzvoEk+yV/KKEd2M2TuvyyW2js0VQkQ24L3HTz9og1mm
-         ciksH9e5koDO51zwnc9Rfi6uXWsQpfcjpTqwU/HlqqpmINV4o5nf3OfJnpjwLaLTzRai
-         Ttlmeiy4A7AeudNmltsfuDJMN1+NlvwewvyBSKcDHdsG/d16mVYn2YwfLkwrEgBqQ6wm
-         TvKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780935756; x=1781540556;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1781015981; x=1781620781; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yvinHr1mQvwvNvWAosxx0fmHzORHH/aQDJK7llc8tJM=;
-        b=mLrFi6alohmtZYvEpFS8GjwRJFOfHZoM6nH5KQm67o9CQvW/R2YM4mIP7HbxR+3GWM
-         5lZq6Qo3roSQVcyIYinobAaEWlj0J2goAcLG5tRc+a8k/JdnpMQIp+tXXr8cKopkwyxw
-         sm/rujXI/x3lg2cLQpz5GNPkl5Q2shqedafasKaxN0ACYT56CROR7eF5jm+0vFBm/9aJ
-         dAV2uIzAIfk6jqakwJ5s4ttfBFyI8wrSlDXxEThbCmKb/gmlvq8GpJAoXM4vzMTl+42W
-         iGz97xdsJcEx/NYAv+YTH+AFPgD+RV9yT2/+6GPKelQhL1xvm5klbr4uvYe2FEHaZI8B
-         sGmw==
-X-Forwarded-Encrypted: i=1; AFNElJ+KaPlsiy9UfVjcM/OgIB3mSaDW57NQdc3hD4j/JBKzhCeQRlpYLi47NV8mDsTlUs1oPOo6bdqEweXJ@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOMAx4ubMHG18h0F4WEpjbRiRea9jXyxmiQp7F2WbtBBh53VP8
-	zI7E3C8SxQV9qk2EL/Y2cr7iWhRQUwpHRA7Oa9tq47XZZEEpFQghKxc9
-X-Gm-Gg: Acq92OHGqwxtq+mo9HUJyhSumuZnI+R1IGcMqFya+8HFF+MOY363YxJThD8b0T90y+G
-	EpMMNJif9ztx9x+ltvA8h0ZeNRdr6zLIY6ZQ6kAAP8sq9vAYp6ObkHgvKcKVMUpNdoj0gwxL/5S
-	MT8K9hyZSUIxVLEJFfNgmXC1JQJf4oYXpUgYrnt4a5rAGHIxoR9qgM7MUO0FMwxeQR0mmCOzHz3
-	vzUOdp+OnRFfv9eCkA5xFh4DMcja5/CP5Q1myYHwcWSMF/z8Ny//kgfdB64QEelFp3Z5EpV8m/N
-	P/2tYTu6f/IVG6XygujL6dO2PctJa5X1LB/oQvHAO9UVp142ivPPYSWgF5ZSImwT2VheWvSL6yY
-	YdmZTHCIykp4n2VVF/PLV6DwfhjZzYV4qA2jQU9oCRDvNfQVdqsN+f1BhgSaxdTC4RoNcV8zcuX
-	8mSEoG+Z1/uYh9m1mL0N9a9cLTYQ79b8kPXnLYS19ghZhT7w4SUo259fUKxVtyEQ==
-X-Received: by 2002:a05:620a:bcb:b0:915:6a2b:626c with SMTP id af79cd13be357-915a9dd11d3mr2539559785a.51.1780935756139;
-        Mon, 08 Jun 2026 09:22:36 -0700 (PDT)
-Received: from i4-gl-tmk5904.ad.psu.edu ([130.203.156.186])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-9159cd62a84sm1382524185a.5.2026.06.08.09.22.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jun 2026 09:22:35 -0700 (PDT)
-From: Yuho Choi <dbgh9129@gmail.com>
-To: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	Xin Long <lucien.xin@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: Simon Horman <horms@kernel.org>,
-	linux-sctp@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Yuho Choi <dbgh9129@gmail.com>
-Subject: [PATCH net v1] sctp: Unwind address notifier registration on failure
-Date: Mon,  8 Jun 2026 12:22:30 -0400
-Message-ID: <20260608162230.46644-1-dbgh9129@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        bh=1WND2J0G9sOe3jmN+FEjetbK0mHlmxsSnOX/VnUT/0c=;
+        b=l30pssQcqS7XZSOQRcOQDq6MApc7uLzJ218AZBZGiW2qYycyOPVHPCPgJt0LSWf8Te
+         HWHeHn4NVxsnIru6aM3mH3gJl7f3MQgFP0UV36ijkomHNX3zXuzl25A+Q9cttM8HW7WI
+         ICsGUFchxqcdmzqw5gLujFxIGoruYBV2afdVLnrRHEkMhwLCl30njxlbADFqLcGQn2I9
+         wsA/9IIv1vVcIbYce71AOxkSSw5mt0Tv23RmFfCHKtt5gRD7FVQkMCoBY8lzCO+kiDfL
+         3EC5bvZOEnryNckwEdeudaYKl7N9Ne6X7d2ijJn4ytLgjbnFu8g/tsIBKrh4RHppUb6K
+         1kkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781015981; x=1781620781;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=1WND2J0G9sOe3jmN+FEjetbK0mHlmxsSnOX/VnUT/0c=;
+        b=F1mUBHygis5uyevQOqTHlY482q/oRnRMIR5Z3M0O5FBYRSUuZ3dfWI2MEWMDlgss8w
+         GZb6ZmhCPtkjJCn8tnio/HTUlkzYpEPWI99vCUlO5BHsyzoAzgLh8ZbG9uPWPfFHP6x+
+         TG7Gil9jLDGxjsvXFoF9P5zyGzQpSAdvLjPKu6rakfFbHJaR2sqrEEePPRQ9g1eIZatD
+         W7XFGwbg2COL6SnJHYs3YveKD6criUCFGHJYO+J6bHnbQdiiwAkVzZrW4LPm9I+MQ2TN
+         HtGdpPD18/fVsfa56k345B9bP9979GLY6HKC/LYPT0SWzn9fRPQtIappcpGDIfMUj2FS
+         oN6A==
+X-Forwarded-Encrypted: i=1; AFNElJ9OKriCihneUMdUuPVribrkby7ThlH+IFRRpBGfSawFugrSAHKJkQOf3oC4r7XHQpHqZE3GSd5VBm0F@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOMpj/hmAN0+SCBydveiobBFsjBSpFuJIY0AwgWLOtS2hfuDw7
+	Yr6/YCK3tMaa/YQbdrqofaU5dNtWZSMsT93WhQWA9JbjyFSSelK/hheJ6DG4C0THvBMqQWX4iAd
+	dCAtxr8vAU1qgQWYAe3rqKmNiz8vu4QM=
+X-Gm-Gg: Acq92OEzFQlXAyQFVG4QyADImKDIJZ7eP42hVfrUPntsrNUnoXkKE+la255QJioZbGO
+	+OTAiE2Nd8XQ8n6onRATqXS6wQWTIhKMvpi3lTM9N8Vo2VTDx3Q4ts2yrAt6Rmn2ti6BfVL4FDs
+	Vt21JgWw9a1lra8Ha6skishN7CO8AGb9pN9Zn1ci7WevJ1M0Nbwowi1QEUCIfydMyG2W+/ZhB2r
+	MdoNHjtn9rS4w2CNFGiaxkc5pyozE4aYAzF1heOhwblmcxdR1IGLqaPRqesykquydo/DQH/FQca
+	tF7vjaSX7CwQDchBo5cB8+qVJgy0O5QyMliyhRSWqqunOqlYzVDCdth8UO1876CAmz99UAx8RlG
+	xX3vvew5G7S+nyxVUhyqmztX4KjOUDi6bDpGYyaOdsMn5m3gsvYuRYI38wGK6LQ==
+X-Received: by 2002:a05:6102:808f:b0:635:420c:9b00 with SMTP id
+ ada2fe7eead31-6fef04ef441mr11500182137.10.1781015981191; Tue, 09 Jun 2026
+ 07:39:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <75af23a89adf881a0895d511775e4770da367cbf.1780873427.git.lucien.xin@gmail.com>
+In-Reply-To: <75af23a89adf881a0895d511775e4770da367cbf.1780873427.git.lucien.xin@gmail.com>
+From: Xin Long <lucien.xin@gmail.com>
+Date: Tue, 9 Jun 2026 10:39:28 -0400
+X-Gm-Features: AVVi8CehU52B2gQ1iDxujzeKYWd2ENrBtjTy07eRVqtndCDKwwFeFWB1om7OI98
+Message-ID: <CADvbK_dxRSLmSgOf798h4OqYZ+01TSUfZ82eCD9JUAROtT_-1A@mail.gmail.com>
+Subject: Re: [PATCH net] sctp: validate embedded INIT chunk and address list
+ lengths in cookie
+To: network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
+Cc: davem@davemloft.net, kuba@kernel.org, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [0.84 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS(0.00)[m:marcelo.leitner@gmail.com,m:lucien.xin@gmail.com,m:davem@davemloft.net,m:edumazet@google.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:horms@kernel.org,m:linux-sctp@vger.kernel.org,m:netdev@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:dbgh9129@gmail.com,m:marceloleitner@gmail.com,m:lucienxin@gmail.com,s:lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-1246-lists,linux-sctp=lfdr.de];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,gmail.com];
-	FORWARDED(0.00)[lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER(0.00)[dbgh9129@gmail.com,linux-sctp@vger.kernel.org];
-	FREEMAIL_TO(0.00)[gmail.com,davemloft.net,google.com,kernel.org,redhat.com];
+	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-1247-lists,linux-sctp=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FREEMAIL_CC(0.00)[davemloft.net,kernel.org,google.com,redhat.com,gmail.com];
+	FORGED_RECIPIENTS(0.00)[m:netdev@vger.kernel.org,m:linux-sctp@vger.kernel.org,m:davem@davemloft.net,m:kuba@kernel.org,m:edumazet@google.com,m:pabeni@redhat.com,m:horms@kernel.org,m:marcelo.leitner@gmail.com,m:marceloleitner@gmail.com,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[lucienxin@gmail.com,linux-sctp@vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[4];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FREEMAIL_FROM(0.00)[gmail.com];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dbgh9129@gmail.com,linux-sctp@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
 	ALIAS_RESOLVED(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lucienxin@gmail.com,linux-sctp@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	TAGGED_RCPT(0.00)[linux-sctp];
-	FROM_HAS_DN(0.00)[]
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sashiko.dev:url,vger.kernel.org:from_smtp,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 925FF658BBD
+X-Rspamd-Queue-Id: 3F742661518
 
-sctp_v4_add_protocol() and sctp_v6_add_protocol() register their
-address notifiers before registering the SCTP protocol handlers. If
-protocol registration fails, the functions return without unregistering
-the notifiers.
-
-Unregister the notifiers on the protocol registration failure paths.
-Also propagate notifier registration failures instead of ignoring them.
-
-Fixes: 827bf12236fb ("[SCTP]: Re-order SCTP initializations to avoid race with sctp_rcv()")
-Fixes: 270637abff0c ("[SCTP]: Fix a race between module load and protosw access")
-Signed-off-by: Yuho Choi <dbgh9129@gmail.com>
----
- net/sctp/ipv6.c     | 10 ++++++++--
- net/sctp/protocol.c | 10 ++++++++--
- 2 files changed, 16 insertions(+), 4 deletions(-)
-
-diff --git a/net/sctp/ipv6.c b/net/sctp/ipv6.c
-index cd15b695607e..ef26878f1282 100644
---- a/net/sctp/ipv6.c
-+++ b/net/sctp/ipv6.c
-@@ -1176,11 +1176,17 @@ void sctp_v6_protosw_exit(void)
- /* Register with inet6 layer. */
- int sctp_v6_add_protocol(void)
+On Sun, Jun 7, 2026 at 7:03=E2=80=AFPM Xin Long <lucien.xin@gmail.com> wrot=
+e:
+>
+> sctp_unpack_cookie() only checked that the embedded INIT chunk length
+> did not exceed the remaining cookie payload, but did not ensure that the
+> INIT chunk is large enough to contain a complete INIT header.
+>
+> A malformed COOKIE_ECHO can therefore carry a truncated INIT chunk whose
+> length field is smaller than sizeof(struct sctp_init_chunk).  Later,
+> sctp_process_init() accesses INIT parameters unconditionally, which may
+> lead to out-of-bounds reads.
+>
+> In addition, raw_addr_list_len is not fully validated against the
+> remaining cookie payload. When cookie authentication is disabled, an
+> attacker can supply an oversized raw_addr_list_len and cause
+> sctp_raw_to_bind_addrs() to read beyond the end of the cookie. The
+> address parser also lacks sufficient bounds checks for parameter headers
+> and lengths, allowing malformed address parameters to trigger
+> out-of-bounds reads.
+>
+> Fix this by:
+>
+> - requiring the embedded INIT chunk length to be at least sizeof(struct
+>   sctp_init_chunk);
+> - validating that the INIT chunk and raw address list together fit
+>   within the cookie payload;
+> - verifying sufficient data exists for each address parameter header and
+>   payload before parsing it.
+>
+> Note that sctp_verify_init() must be called after sctp_unpack_cookie()
+> and before sctp_process_init() when cookie authentication is disabled.
+> This will be addressed in a separate patch.
+>
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Signed-off-by: Xin Long <lucien.xin@gmail.com>
+> ---
+>  net/sctp/bind_addr.c     | 11 ++++++++++-
+>  net/sctp/sm_make_chunk.c |  9 +++++++--
+>  2 files changed, 17 insertions(+), 3 deletions(-)
+>
+> diff --git a/net/sctp/bind_addr.c b/net/sctp/bind_addr.c
+> index 75e3e61d494e..31737f144c7f 100644
+> --- a/net/sctp/bind_addr.c
+> +++ b/net/sctp/bind_addr.c
+> @@ -275,6 +275,16 @@ int sctp_raw_to_bind_addrs(struct sctp_bind_addr *bp=
+, __u8 *raw_addr_list,
+>                 param =3D (struct sctp_paramhdr *)raw_addr_list;
+>                 rawaddr =3D (union sctp_addr_param *)raw_addr_list;
+>
+> +               if (addrs_len < sizeof(*param)) {
+> +                       retval =3D -EINVAL;
+> +                       goto out_err;
+> +               }
+> +               len =3D ntohs(param->length);
+> +               if (addrs_len < len) {
+> +                       retval =3D -EINVAL;
+> +                       goto out_err;
+> +               }
+> +
+>                 af =3D sctp_get_af_specific(param_type2af(param->type));
+>                 if (unlikely(!af) ||
+>                     !af->from_addr_param(&addr, rawaddr, htons(port), 0))=
  {
-+	int ret;
-+
- 	/* Register notifier for inet6 address additions/deletions. */
--	register_inet6addr_notifier(&sctp_inet6addr_notifier);
-+	ret = register_inet6addr_notifier(&sctp_inet6addr_notifier);
-+	if (ret)
-+		return ret;
- 
--	if (inet6_add_protocol(&sctpv6_protocol, IPPROTO_SCTP) < 0)
-+	if (inet6_add_protocol(&sctpv6_protocol, IPPROTO_SCTP) < 0) {
-+		unregister_inet6addr_notifier(&sctp_inet6addr_notifier);
- 		return -EAGAIN;
-+	}
- 
- 	return 0;
- }
-diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
-index 5800e7ee7ea0..6153340f1b45 100644
---- a/net/sctp/protocol.c
-+++ b/net/sctp/protocol.c
-@@ -1263,12 +1263,18 @@ static void sctp_v4_protosw_exit(void)
- 
- static int sctp_v4_add_protocol(void)
- {
-+	int ret;
-+
- 	/* Register notifier for inet address additions/deletions. */
--	register_inetaddr_notifier(&sctp_inetaddr_notifier);
-+	ret = register_inetaddr_notifier(&sctp_inetaddr_notifier);
-+	if (ret)
-+		return ret;
- 
- 	/* Register SCTP with inet layer.  */
--	if (inet_add_protocol(&sctp_protocol, IPPROTO_SCTP) < 0)
-+	if (inet_add_protocol(&sctp_protocol, IPPROTO_SCTP) < 0) {
-+		unregister_inetaddr_notifier(&sctp_inetaddr_notifier);
- 		return -EAGAIN;
-+	}
- 
- 	return 0;
- }
--- 
-2.43.0
+> @@ -291,7 +301,6 @@ int sctp_raw_to_bind_addrs(struct sctp_bind_addr *bp,=
+ __u8 *raw_addr_list,
+>                         goto out_err;
+>
+>  next:
+> -               len =3D ntohs(param->length);
+>                 addrs_len -=3D len;
+>                 raw_addr_list +=3D len;
+>         }
+> diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
+> index 85264862fb6b..1741a9f33d8c 100644
+> --- a/net/sctp/sm_make_chunk.c
+> +++ b/net/sctp/sm_make_chunk.c
+> @@ -1731,8 +1731,8 @@ struct sctp_association *sctp_unpack_cookie(
+>         struct sk_buff *skb =3D chunk->skb;
+>         struct sctp_cookie *bear_cookie;
+>         struct sctp_chunkhdr *ch;
+> +       unsigned int len, chlen;
+>         enum sctp_scope scope;
+> -       unsigned int len;
+>         ktime_t kt;
+>
+>         /* Header size is static data prior to the actual cookie, includi=
+ng
+> @@ -1761,7 +1761,12 @@ struct sctp_association *sctp_unpack_cookie(
+>         bear_cookie =3D &cookie->c;
+>
+>         ch =3D (struct sctp_chunkhdr *)(bear_cookie + 1);
+> -       if (ntohs(ch->length) > len - fixed_size)
+> +       chlen =3D ntohs(ch->length);
+> +       if (chlen < sizeof(struct sctp_init_chunk))
+> +               goto malformed;
+> +       if (chlen > len - fixed_size)
+> +               goto malformed;
+> +       if (bear_cookie->raw_addr_list_len > len - fixed_size - chlen)
+>                 goto malformed;
+>
+>         /* Verify the cookie's MAC, if cookie authentication is enabled. =
+*/
+> --
+> 2.47.1
+>
+Note in:
+https://sashiko.dev/#/patchset/75af23a89adf881a0895d511775e4770da367cbf.178=
+0873427.git.lucien.xin%40gmail.com
 
+- Pre-existing issue 1: as mentioned in the commit message, it will be
+  handled in a separate patch.
+
+- Pre-existing issue 2: I don=E2=80=99t think it causes a problem. Also the=
+ normal
+  address parameter is already 4-byte aligned, so SCTP_PAD4(len) is not
+  needed either.
 
