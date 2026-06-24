@@ -1,180 +1,289 @@
-Return-Path: <linux-sctp+bounces-1284-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1285-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id VhmEHvz7O2oAhggAu9opvQ
-	(envelope-from <linux-sctp+bounces-1284-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Wed, 24 Jun 2026 17:47:08 +0200
+	id 2s7HMgFgPGrRnQgAu9opvQ
+	(envelope-from <linux-sctp+bounces-1285-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Thu, 25 Jun 2026 00:53:53 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F1346BFC41
-	for <lists+linux-sctp@lfdr.de>; Wed, 24 Jun 2026 17:47:08 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B3F36C1D4E
+	for <lists+linux-sctp@lfdr.de>; Thu, 25 Jun 2026 00:53:53 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=kcxXEc95;
-	spf=pass (mail.lfdr.de: domain of "linux-sctp+bounces-1284-lists+linux-sctp=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-sctp+bounces-1284-lists+linux-sctp=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=LUze095b;
+	spf=pass (mail.lfdr.de: domain of "linux-sctp+bounces-1285-lists+linux-sctp=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-sctp+bounces-1285-lists+linux-sctp=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=gmail.com;
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 75C133007B8D
-	for <lists+linux-sctp@lfdr.de>; Wed, 24 Jun 2026 15:47:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B2797302A6FD
+	for <lists+linux-sctp@lfdr.de>; Wed, 24 Jun 2026 22:53:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00A523DA5CC;
-	Wed, 24 Jun 2026 15:47:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 230803B5DEE;
+	Wed, 24 Jun 2026 22:53:17 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F34A83B47E0
-	for <linux-sctp@vger.kernel.org>; Wed, 24 Jun 2026 15:47:02 +0000 (UTC)
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782316025; cv=pass; b=sDzXbz5zh5egYdAc/Imfgh0QF3+bsozpsyS2uvXhn94QRVpPezXXHM7zKwPi/F332FvxUSzR8zNy+0VK92MuaM5yv68AkBtd+ssAZkBVj++gHpdO9TvgSdQXMswc0jiuRMGS7q6UcOV9DC2uq6t4uIRQ5ny5eHv6yEO/3eJgcq4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782316025; c=relaxed/simple;
-	bh=znUxrD+rX+i/jcgUUcYUF+WyNVpxg3869R1rpe5nPjI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hjwMtSwwFzustYb43F512tJz2UXd8N1iv3tSjaISmxeGryKImg53o9ZBeaVJ4uCpPFxVPmleWUu76kpnL3LNoWIBIke5vY2dixsuDQYDkWVyuysD0UY+m01bLQeXq37pPBv3B4Y5aeiv7kaABZ6zzMWcbFuJkihblY1ByvoM7W4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kcxXEc95; arc=pass smtp.client-ip=209.85.215.177
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c892a0ef503so694153a12.2
-        for <linux-sctp@vger.kernel.org>; Wed, 24 Jun 2026 08:47:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782316022; cv=none;
-        d=google.com; s=arc-20240605;
-        b=PWvrNnwnRW3Ys+9XFtIXSJieTS7oIV84GC3I56HcKU+B6HdyVKZqm0OJQvuCEna7tV
-         DXLgqNtGmt+zqjAw6xK39BhEIoZt9hJ2yPYp47mAYfje3Vpofhzi4un4lFpyKH0oH/Co
-         MNdhcjDj6TShJlYNREJI9/IiQyEC+xydsAxf+Y9uK8cE59l4Juz/GWgC79zx7U+Dzhn7
-         Ev+Ts/xyu624kzbaact7RQ6tuD4xQeRXOB3tFMO7bH2nwkmVbMRE+WkUP3PSL4rXermG
-         I5PRfg5elvbgoa0rUFpd43W8jPo7VTMt3qfjuZHe9cwUULCcuRKDvS8WH6hZVudIFL2G
-         4cwQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=8d/r44UUrv5OQGX8QnhBsaeNXrdn7O0arE90X+fL80s=;
-        fh=jh90QAWTPnKhUw8tswE9sb1b9nWzGpCbVBwvMpLpBo8=;
-        b=JYgD9tLYwVM4HilGMI1H5p+aeoYPSHUQ0kElF/9QJhLsBPPcrDtJmBRO13sajR6RuE
-         Kkpb4j4F4W79soXGTtdkbyIsGoevWv/rJIAu7/SQN4T4OwssyzwLrJ+MU1vL3rwTwbcx
-         RscvRDuHrgIbn6AZke6J5i34Xx+icZxfkf99G+jnm6dK/qQaMVYXRQUFSUg6IlaIHV/W
-         DBhdkMSumc9Y8/PdrpXNe88AghUq2QS5qGS2E2uDv3xgB8aFmLij9vGTbgG411ierFZx
-         vinxod7If6hRHGKwc6gBEt+8mMT0geafDeOyil2xx/xHUE4wiEPJie0NFtjBjrhn6Th+
-         sTZg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C82023321BD
+	for <linux-sctp@vger.kernel.org>; Wed, 24 Jun 2026 22:53:14 +0000 (UTC)
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782341597; cv=none; b=MMhWt8jlcuskojrGKmEkEEo5B063TUuTy0NzuYAtlBaAkPHUzdIy+u2h1FFWZ+yFl5jm+p7NwWsQX+d2w8flfNM+8/1G4pHQo5E/w2UAZpcAbCl9wBw3EnOLLoR+tQyOZPccdLFo5Mk5RE+V6l3JT5Gqlppd2B7GVzhIPgrNlP4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782341597; c=relaxed/simple;
+	bh=imRuHVBhKfABF7GDG7+dYgzzSoSRS/FeqP+1jjPolUU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LrxQ0hiCdIZJEJtWKahnF5DCagF/S9S8SA8IDFOGSpM5CgeTrw/231MPJhUgg+XCkRzpSg//ENAtVTiy05VDrSoeq1UGgVRgDOzpnwRCqfeMFoGWkOzF/F3CzYCrrX1GEiVHSIqKfmjr0gwZb0yLWJbvSnBW/h5N0Ugq8xUTKt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LUze095b; arc=none smtp.client-ip=209.85.219.53
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-8dd6e530061so21962906d6.2
+        for <linux-sctp@vger.kernel.org>; Wed, 24 Jun 2026 15:53:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782316022; x=1782920822; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8d/r44UUrv5OQGX8QnhBsaeNXrdn7O0arE90X+fL80s=;
-        b=kcxXEc95NLLp8KsrKMWU+POlguXr6cFInNmY5G6UforbDFASoqOPb7/FxnWMR0frJy
-         sRNgzOMPPWQyx1SlApBJ7cmBRFm4/EzvlNsp+/yX7Z6T32Z871Z5SfqOCxQTDcx5ByAp
-         f+tIweHGmU6jJX3Wae40z5nQ3UXZWr8gHb1MpEwv4baTcIn6ZnXCw0FEZHAY1HFxGS86
-         8OsGcph5SjswZuk2rGOPNeFpRhYtXbDu5s3bjdY6H4gFh/72fJf376iTVLbZjkaY4Fao
-         8em1wB4GCanZunELRts6lOLyas5Vofkdiir51eNMomkCBijE1YX22wZEbrlsGPcoyQdM
-         19Ng==
+        d=gmail.com; s=20251104; t=1782341594; x=1782946394; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ia6bejGY2180aBdl76NYMpgDPjwVDmZWAHJ4Wp5NX0I=;
+        b=LUze095bvJCYaHv1Edi32G/Qp08NVta8Kb/Ss/VLCCq5fGV05s4m4myvognvpeN4Ns
+         t5A41U3Hy6Z+QONFQWNw8k9yWMg+UtnYtJg66LMrlCIeXlLJ69rnVIWiyQ2Cb8Vks2NL
+         JX6KSSGSbAKwrLqVPruttmILsxXHui16/TSqU7X5aSjCS1Tno11fQGbZZOkt5YE+HBr3
+         dlJzt8rk9gTAe+ZQ3gK9V5WjRp+XikqP+tXf0zU6xfhVFmvsdiLsWWfeL/ClwIDBM25e
+         wLToMhnRyAxUSA8sGwyFNd5QIf6Mx1eAB8WyH2kRb934pRjM2eIjna42ZsojqPE9oUlG
+         RWXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782316022; x=1782920822;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=8d/r44UUrv5OQGX8QnhBsaeNXrdn7O0arE90X+fL80s=;
-        b=nW6QBACmC8vaIes+056UIfkZu3/k1KiE5Z+yrHaIIBJOxWQEgDv/5YoLn6+dbBD3vO
-         BKtaLlF2+PuFFfSeXwkB2dGLY6rhnjjCgRp0GmL3tZeJUuNZN1uEb4N1L1nktUaK1FaH
-         7M+mOLFfXAvt3ZxdXUjGg4UyKVCbG6PvEfTB9pnOCucfDS5L/X8BRBsM2gXwJRQsYZOV
-         hn4ZNwFgxzEvxSXe8CBnzV3D1PoeTgD0GHZPIRoUR2lIrjyD1Y2YNHjxQnBHZS/M+kih
-         GLNMxAcBzx4kZ6xNzktLlykayeDpFOvPdxIpLD+QX1wprL7tCqalfSJEx2KKNoxEXX8g
-         TXSA==
-X-Forwarded-Encrypted: i=1; AFNElJ8+2X/8NxckIs6d4C2Ln+3VGZJrCkh2beSq5xVf5nMUC2otSsgQIdkjknzlw5A/T0oqRCdK+IuLlBC2@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzd0rDBnXOl5O4sporPvQZNEholS+kVsFOgHsdeglfGCa1IhUyf
-	pKVdPmZl6RtjwdiS0hCGyX4FXPpxobcMYoqnwF2Sb8edvihVVg6Mo4sXGR89oMHYLSyVzJoF8zT
-	t/gaU8f7S7cUNgEi05z7QGG970g/BFZw=
-X-Gm-Gg: AfdE7cmHipDPrHeOyd+t+WEM13Az1tBHm7BUq19pnM/rSkIWgTWuRxDMw4r8GI73z3k
-	LrnVKUvFSKyCNQgvTbtZXsUhpf76rgy33UdIKMYJqWCpkR/42r9Wl9aDGhIJf6DTSTV7rBxt36b
-	jzikGb+0akho3gGtOn8RWjfTzVk912mi/2Rvg8oiK+YS4LHXzadeQTTOP9oNWN+FOi2/WLPLNnI
-	GO4UAQ8gwSapk1JAEy9jdbMcgA7/ENXHM2XxtequvIzUHbpYqmxIYl+Fa8gwS8sGit+MjjS9zqq
-	L/yDySxrmHhguIVxjdjfTuJQPdq2gslyP/Qwri9TSiF8ZjqtvK1igVosdtWFV5McLhq53aPtOHh
-	HzS84
-X-Received: by 2002:a05:6a00:e88:b0:842:459b:d61b with SMTP id
- d2e1a72fcca58-845a2794eb8mr5393941b3a.32.1782316021875; Wed, 24 Jun 2026
- 08:47:01 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782341594; x=1782946394;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ia6bejGY2180aBdl76NYMpgDPjwVDmZWAHJ4Wp5NX0I=;
+        b=eepChXTRxTCWKIOoLVt7w14S+vdY9kJP8Ro0YkT77fq5QgAtFiEwIhWTRSaN67iroM
+         NKGmg4YV96zERLonSn17sJ1Sq8QLHVgpTSUpNd66h/qvn0aNQ5zPSal7FHM+sd/OGz+g
+         4ARktpQyKvhNx6pxipBccfXqVFtvTWLQbtP9VFxkWXAYj1yrxUps/D9oa/evenloegMG
+         iJOP9BvdTUUsIXY3KpoWCw1IEDns9BPs1KtwlRN3BvcA+MNbOBiezahlIvulJ0mi6D+8
+         j1zfJUWSewWhO+4p6lLDOp5pPvTY+0/D1p6reEhKPjKh15HkZObaypMdELFz1blGmktF
+         Mxgw==
+X-Forwarded-Encrypted: i=1; AHgh+Rp0jJeQmzQFyZOUBfaHiReU8z1yw0k3Dvb3TW/YdjiFhzohtiorDErhtKqDLMFQJc4TrnEgx+oSaO2X@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxj4r8/d5r3fqp93V6qNQ9Kyd1td/CQtrNfv2EOnZ/k8Vp8naJ6
+	n8QzorQM3BrPkVbxPVPeMcpj6jhWiiArLemfXLByLLejbpZ7e3ZWb5Er
+X-Gm-Gg: AfdE7cnPmCQE3Jj3dc6qetmrfizoMdhcXYkEN/TvCFtk5jiHSSyvnmP3qz9pe4QtjYQ
+	Dl38xi1RfNbTxYCI9eKlMFiXhDH0YpeArVxTwWsvNwO5h3alkdbM+940Eg3ylpI1I/xhhLJPjfx
+	6MoQ2478cEJhfZoLsGibTp8qc54iZ9ljH79JBQjMuEzj3yZfsD3nx4KABMsAjXQIuM6TDycS+9F
+	84bQxGBJmI9vp1Dln+LuOXYq7/vjk5SwtkzAoxH77FZ+rH10EEP0JqpVHgu08c0mZWxcyHxfM9C
+	pyJ/tEq97XiiJaKP/Vpt2dCdNOZXuELMuCFImtaTO6IaX73o7WyT88MhPSH4ItzkXL/e/18nxkD
+	+NTGXr3y7ZJ+slMx5QqwB/vxo6rVAUDEuqU44Yc/IeIh8BKqsnfPZoTZazeVmx3VL8dHSmr1RY5
+	7v6EWzdYVWNKPtg7AVufmLzJWZq2iboEtTERB4w87jw6kHxESGr4eK09SqZy8yw1nYq4TTCgz1j
+	MHXyur/hTgbduNpfuxFi0TyReq+tFORDLE3rPJXmdwHD0L3768j5nw=
+X-Received: by 2002:a05:6214:4381:b0:8ce:aace:eaf7 with SMTP id 6a1803df08f44-8e6d6f62ad7mr2950566d6.39.1782341593853;
+        Wed, 24 Jun 2026 15:53:13 -0700 (PDT)
+Received: from wsfd-netdev58.anl.eng.rdu2.dc.redhat.com ([66.187.232.140])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8df81cdf302sm171758536d6.30.2026.06.24.15.53.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jun 2026 15:53:13 -0700 (PDT)
+From: Xin Long <lucien.xin@gmail.com>
+To: network dev <netdev@vger.kernel.org>,
+	linux-sctp@vger.kernel.org
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Subject: [PATCH net v3] sctp: add INIT verification after cookie unpacking
+Date: Wed, 24 Jun 2026 18:53:12 -0400
+Message-ID: <ebcbbac574815b0850f371b4bdb02f2e602b94d3.1782341592.git.lucien.xin@gmail.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1781968162.git.lucien.xin@gmail.com>
-In-Reply-To: <cover.1781968162.git.lucien.xin@gmail.com>
-From: Xin Long <lucien.xin@gmail.com>
-Date: Wed, 24 Jun 2026 11:46:49 -0400
-X-Gm-Features: AVVi8Cc8PzO46k6yEZ6LLOuvoH5XLopWZO-tuRx__W0v_vZgFLXs5tHhAMxdpIk
-Message-ID: <CADvbK_e7806edOZ7xxV-JBdK4hTeFUPwf4=Vt7k=OZF7PWauEA@mail.gmail.com>
-Subject: Re: [PATCH net v2 0/2] sctp: validate INIT in COOKIE-ECHO when auth disabled
-To: network dev <netdev@vger.kernel.org>, linux-sctp@vger.kernel.org
-Cc: davem@davemloft.net, kuba@kernel.org, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-1284-lists,linux-sctp=lfdr.de];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FREEMAIL_CC(0.00)[davemloft.net,kernel.org,google.com,redhat.com,gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-1285-lists,linux-sctp=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:netdev@vger.kernel.org,m:linux-sctp@vger.kernel.org,m:davem@davemloft.net,m:kuba@kernel.org,m:edumazet@google.com,m:pabeni@redhat.com,m:horms@kernel.org,m:marcelo.leitner@gmail.com,m:marceloleitner@gmail.com,s:lists@lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[davemloft.net,kernel.org,google.com,redhat.com,gmail.com];
-	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER(0.00)[lucienxin@gmail.com,linux-sctp@vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lucienxin@gmail.com,linux-sctp@vger.kernel.org];
 	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TAGGED_RCPT(0.00)[linux-sctp];
-	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lucienxin@gmail.com,linux-sctp@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	RCPT_COUNT_SEVEN(0.00)[8];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	FREEMAIL_FROM(0.00)[gmail.com]
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-sctp];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 0F1346BFC41
+X-Rspamd-Queue-Id: 4B3F36C1D4E
 
-On Sat, Jun 20, 2026 at 11:10=E2=80=AFAM Xin Long <lucien.xin@gmail.com> wr=
-ote:
->
-> This series fixes a security gap in SCTP's COOKIE-ECHO handling when
-> cookie authentication is disabled.
->
-> Currently, INIT chunks embedded in cookies are not re-verified after
-> unpacking, creating a vulnerability when cookie_auth_enable=3D0. This
-> series first refactors error handling, then adds the missing validation.
->
-> Changes in v2: see individual patch changelogs for details.
->
-> Xin Long (2):
->   sctp: factor out INIT verification failure handling
->   sctp: add INIT verification after cookie unpacking
->
-I will drop Patch 1/2, and call sctp_sf_pdiscard() for err path in Patch
-2/2 on v3, as it makes more sense to discard the packet if embedded INIT
-chunk validation fails, consistent with malformed cookie handling.
+In SCTP handshake, the INIT chunk is initially processed by the server
+and embedded into the cookie carried in INIT-ACK. The client then
+returns this cookie via COOKIE-ECHO, where the server unpacks it and
+reconstructs the original INIT chunk.
 
->  net/sctp/sm_make_chunk.c |   3 +-
->  net/sctp/sm_statefuns.c  | 220 ++++++++++++++++++++-------------------
->  2 files changed, 117 insertions(+), 106 deletions(-)
->
-> --
-> 2.47.1
->
+When cookie authentication is enabled, the cookie contents are protected
+against tampering, so reusing the unpacked INIT without re-verification
+is safe.
+
+However, when cookie authentication is disabled, the reconstructed INIT
+can no longer be trusted. In this case, the INIT must be explicitly
+validated after unpacking to avoid processing potentially tampered data.
+
+Add sctp_verify_init() checks after cookie unpacking in COOKIE-ECHO
+processing paths (sctp_sf_do_5_1D_ce() and sctp_sf_do_5_2_4_dupcook())
+when cookie_auth_enable is disabled. On failure, the new association is
+freed and the packet is discarded.
+
+Also tighten cookie validation in sctp_unpack_cookie() by verifying the
+embedded chunk type is SCTP_CID_INIT before treating it as an INIT
+chunk.
+
+Finally, update sctp_verify_init() to validate parameter bounds using
+the actual embedded INIT length instead of chunk->chunk_end, since the
+INIT stored in COOKIE-ECHO may not span the entire chunk buffer.
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+---
+v2:
+  - Because of sctp_abort_on_init_err() param change in patch 1/2,
+    pass cid and not chunk.
+  - Use SCTP_PAD4() around ntohs(peer_init->chunk_hdr.length) when
+    checking param.v in sctp_verify_init() to make Sashiko happy.
+v3:
+  - Validate the embedded INIT chunk type in sctp_unpack_cookie(), as
+    noted by Sashiko.
+  - Discard the packet if embedded INIT chunk validation fails,
+    consistent with malformed cookie handling.
+---
+ net/sctp/sm_make_chunk.c |  5 ++++-
+ net/sctp/sm_statefuns.c  | 36 +++++++++++++++++++++++++++++++++---
+ 2 files changed, 37 insertions(+), 4 deletions(-)
+
+diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
+index 41958b8e59fd..8adac9e0cd66 100644
+--- a/net/sctp/sm_make_chunk.c
++++ b/net/sctp/sm_make_chunk.c
+@@ -1761,6 +1761,8 @@ struct sctp_association *sctp_unpack_cookie(
+ 	bear_cookie = &cookie->c;
+ 
+ 	ch = (struct sctp_chunkhdr *)(bear_cookie + 1);
++	if (ch->type != SCTP_CID_INIT)
++		goto malformed;
+ 	chlen = ntohs(ch->length);
+ 	if (chlen < sizeof(struct sctp_init_chunk))
+ 		goto malformed;
+@@ -2298,7 +2300,8 @@ int sctp_verify_init(struct net *net, const struct sctp_endpoint *ep,
+ 	 * VIOLATION error.  We build the ERROR chunk here and let the normal
+ 	 * error handling code build and send the packet.
+ 	 */
+-	if (param.v != (void *)chunk->chunk_end)
++	if (param.v != (void *)peer_init +
++		       SCTP_PAD4(ntohs(peer_init->chunk_hdr.length)))
+ 		return sctp_process_inv_paramlength(asoc, param.p, chunk, errp);
+ 
+ 	/* The only missing mandatory param possible today is
+diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
+index 8e920cef0858..d23d935e128e 100644
+--- a/net/sctp/sm_statefuns.c
++++ b/net/sctp/sm_statefuns.c
+@@ -707,11 +707,12 @@ enum sctp_disposition sctp_sf_do_5_1D_ce(struct net *net,
+ 					 struct sctp_cmd_seq *commands)
+ {
+ 	struct sctp_ulpevent *ev, *ai_ev = NULL, *auth_ev = NULL;
++	struct sctp_chunk *err_chk_p = NULL;
+ 	struct sctp_association *new_asoc;
+ 	struct sctp_init_chunk *peer_init;
+ 	struct sctp_chunk *chunk = arg;
+-	struct sctp_chunk *err_chk_p;
+ 	struct sctp_chunk *repl;
++	enum sctp_cid cid;
+ 	struct sock *sk;
+ 	int error = 0;
+ 
+@@ -785,6 +786,19 @@ enum sctp_disposition sctp_sf_do_5_1D_ce(struct net *net,
+ 		}
+ 	}
+ 
++	peer_init = (struct sctp_init_chunk *)(chunk->subh.cookie_hdr + 1);
++	cid = peer_init->chunk_hdr.type;
++	if (!sctp_sk(sk)->cookie_auth_enable &&
++	    !sctp_verify_init(net, ep, asoc, cid, peer_init, chunk,
++			      &err_chk_p)) {
++		sctp_association_free(new_asoc);
++		if (err_chk_p)
++			sctp_chunk_free(err_chk_p);
++		return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
++	}
++	if (err_chk_p)
++		sctp_chunk_free(err_chk_p);
++
+ 	if (security_sctp_assoc_request(new_asoc, chunk->head_skb ?: chunk->skb)) {
+ 		sctp_association_free(new_asoc);
+ 		return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
+@@ -798,7 +812,6 @@ enum sctp_disposition sctp_sf_do_5_1D_ce(struct net *net,
+ 	/* This is a brand-new association, so these are not yet side
+ 	 * effects--it is safe to run them here.
+ 	 */
+-	peer_init = (struct sctp_init_chunk *)(chunk->subh.cookie_hdr + 1);
+ 	if (!sctp_process_init(new_asoc, chunk,
+ 			       &chunk->subh.cookie_hdr->c.peer_addr,
+ 			       peer_init, GFP_ATOMIC))
+@@ -2215,10 +2228,12 @@ enum sctp_disposition sctp_sf_do_5_2_4_dupcook(
+ 					void *arg,
+ 					struct sctp_cmd_seq *commands)
+ {
++	struct sctp_chunk *err_chk_p = NULL;
+ 	struct sctp_association *new_asoc;
++	struct sctp_init_chunk *peer_init;
+ 	struct sctp_chunk *chunk = arg;
+ 	enum sctp_disposition retval;
+-	struct sctp_chunk *err_chk_p;
++	enum sctp_cid cid;
+ 	int error = 0;
+ 	char action;
+ 
+@@ -2287,6 +2302,21 @@ enum sctp_disposition sctp_sf_do_5_2_4_dupcook(
+ 	switch (action) {
+ 	case 'A': /* Association restart. */
+ 	case 'B': /* Collision case B. */
++		peer_init = (struct sctp_init_chunk *)
++				(chunk->subh.cookie_hdr + 1);
++		cid = peer_init->chunk_hdr.type;
++		if (!sctp_sk(ep->base.sk)->cookie_auth_enable &&
++		    !sctp_verify_init(net, ep, asoc, cid, peer_init, chunk,
++				      &err_chk_p)) {
++			sctp_association_free(new_asoc);
++			if (err_chk_p)
++				sctp_chunk_free(err_chk_p);
++			return sctp_sf_pdiscard(net, ep, asoc, type, arg,
++						commands);
++		}
++		if (err_chk_p)
++			sctp_chunk_free(err_chk_p);
++		fallthrough;
+ 	case 'D': /* Collision case D. */
+ 		/* Update socket peer label if first association. */
+ 		if (security_sctp_assoc_request((struct sctp_association *)asoc,
+-- 
+2.47.1
+
 
