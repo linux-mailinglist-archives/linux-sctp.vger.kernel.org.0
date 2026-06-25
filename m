@@ -1,289 +1,130 @@
-Return-Path: <linux-sctp+bounces-1285-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1286-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 2s7HMgFgPGrRnQgAu9opvQ
-	(envelope-from <linux-sctp+bounces-1285-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Thu, 25 Jun 2026 00:53:53 +0200
+	id vtARM8WMPGo+pQgAu9opvQ
+	(envelope-from <linux-sctp+bounces-1286-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Thu, 25 Jun 2026 04:04:53 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B3F36C1D4E
-	for <lists+linux-sctp@lfdr.de>; Thu, 25 Jun 2026 00:53:53 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23A086C24F2
+	for <lists+linux-sctp@lfdr.de>; Thu, 25 Jun 2026 04:04:53 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=LUze095b;
-	spf=pass (mail.lfdr.de: domain of "linux-sctp+bounces-1285-lists+linux-sctp=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-sctp+bounces-1285-lists+linux-sctp=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=gmail.com;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=iv0Q0Rbx;
+	spf=pass (mail.lfdr.de: domain of "linux-sctp+bounces-1286-lists+linux-sctp=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-sctp+bounces-1286-lists+linux-sctp=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B2797302A6FD
-	for <lists+linux-sctp@lfdr.de>; Wed, 24 Jun 2026 22:53:17 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 32E6C3004F6D
+	for <lists+linux-sctp@lfdr.de>; Thu, 25 Jun 2026 02:01:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 230803B5DEE;
-	Wed, 24 Jun 2026 22:53:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FB27379C53;
+	Thu, 25 Jun 2026 02:01:16 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C82023321BD
-	for <linux-sctp@vger.kernel.org>; Wed, 24 Jun 2026 22:53:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD5E3655C5;
+	Thu, 25 Jun 2026 02:01:15 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782341597; cv=none; b=MMhWt8jlcuskojrGKmEkEEo5B063TUuTy0NzuYAtlBaAkPHUzdIy+u2h1FFWZ+yFl5jm+p7NwWsQX+d2w8flfNM+8/1G4pHQo5E/w2UAZpcAbCl9wBw3EnOLLoR+tQyOZPccdLFo5Mk5RE+V6l3JT5Gqlppd2B7GVzhIPgrNlP4=
+	t=1782352876; cv=none; b=rRRvdJL3ZoIm3b5avsBTnMgq1sctXoooAe/Nhk1XrytZ3or3Q64+7a9mVjVRgLYxjU+XqpG/3ydwikvxc/JKv7RGUwlQSLQWn4gbV8Swi4voDVvaX/85Ak652zLHoiWgCjsBATEuLP42GjdJR8TPfntMbxSN+EoyfXR8CbF8nx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782341597; c=relaxed/simple;
-	bh=imRuHVBhKfABF7GDG7+dYgzzSoSRS/FeqP+1jjPolUU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LrxQ0hiCdIZJEJtWKahnF5DCagF/S9S8SA8IDFOGSpM5CgeTrw/231MPJhUgg+XCkRzpSg//ENAtVTiy05VDrSoeq1UGgVRgDOzpnwRCqfeMFoGWkOzF/F3CzYCrrX1GEiVHSIqKfmjr0gwZb0yLWJbvSnBW/h5N0Ugq8xUTKt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LUze095b; arc=none smtp.client-ip=209.85.219.53
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-8dd6e530061so21962906d6.2
-        for <linux-sctp@vger.kernel.org>; Wed, 24 Jun 2026 15:53:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782341594; x=1782946394; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ia6bejGY2180aBdl76NYMpgDPjwVDmZWAHJ4Wp5NX0I=;
-        b=LUze095bvJCYaHv1Edi32G/Qp08NVta8Kb/Ss/VLCCq5fGV05s4m4myvognvpeN4Ns
-         t5A41U3Hy6Z+QONFQWNw8k9yWMg+UtnYtJg66LMrlCIeXlLJ69rnVIWiyQ2Cb8Vks2NL
-         JX6KSSGSbAKwrLqVPruttmILsxXHui16/TSqU7X5aSjCS1Tno11fQGbZZOkt5YE+HBr3
-         dlJzt8rk9gTAe+ZQ3gK9V5WjRp+XikqP+tXf0zU6xfhVFmvsdiLsWWfeL/ClwIDBM25e
-         wLToMhnRyAxUSA8sGwyFNd5QIf6Mx1eAB8WyH2kRb934pRjM2eIjna42ZsojqPE9oUlG
-         RWXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782341594; x=1782946394;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ia6bejGY2180aBdl76NYMpgDPjwVDmZWAHJ4Wp5NX0I=;
-        b=eepChXTRxTCWKIOoLVt7w14S+vdY9kJP8Ro0YkT77fq5QgAtFiEwIhWTRSaN67iroM
-         NKGmg4YV96zERLonSn17sJ1Sq8QLHVgpTSUpNd66h/qvn0aNQ5zPSal7FHM+sd/OGz+g
-         4ARktpQyKvhNx6pxipBccfXqVFtvTWLQbtP9VFxkWXAYj1yrxUps/D9oa/evenloegMG
-         iJOP9BvdTUUsIXY3KpoWCw1IEDns9BPs1KtwlRN3BvcA+MNbOBiezahlIvulJ0mi6D+8
-         j1zfJUWSewWhO+4p6lLDOp5pPvTY+0/D1p6reEhKPjKh15HkZObaypMdELFz1blGmktF
-         Mxgw==
-X-Forwarded-Encrypted: i=1; AHgh+Rp0jJeQmzQFyZOUBfaHiReU8z1yw0k3Dvb3TW/YdjiFhzohtiorDErhtKqDLMFQJc4TrnEgx+oSaO2X@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxj4r8/d5r3fqp93V6qNQ9Kyd1td/CQtrNfv2EOnZ/k8Vp8naJ6
-	n8QzorQM3BrPkVbxPVPeMcpj6jhWiiArLemfXLByLLejbpZ7e3ZWb5Er
-X-Gm-Gg: AfdE7cnPmCQE3Jj3dc6qetmrfizoMdhcXYkEN/TvCFtk5jiHSSyvnmP3qz9pe4QtjYQ
-	Dl38xi1RfNbTxYCI9eKlMFiXhDH0YpeArVxTwWsvNwO5h3alkdbM+940Eg3ylpI1I/xhhLJPjfx
-	6MoQ2478cEJhfZoLsGibTp8qc54iZ9ljH79JBQjMuEzj3yZfsD3nx4KABMsAjXQIuM6TDycS+9F
-	84bQxGBJmI9vp1Dln+LuOXYq7/vjk5SwtkzAoxH77FZ+rH10EEP0JqpVHgu08c0mZWxcyHxfM9C
-	pyJ/tEq97XiiJaKP/Vpt2dCdNOZXuELMuCFImtaTO6IaX73o7WyT88MhPSH4ItzkXL/e/18nxkD
-	+NTGXr3y7ZJ+slMx5QqwB/vxo6rVAUDEuqU44Yc/IeIh8BKqsnfPZoTZazeVmx3VL8dHSmr1RY5
-	7v6EWzdYVWNKPtg7AVufmLzJWZq2iboEtTERB4w87jw6kHxESGr4eK09SqZy8yw1nYq4TTCgz1j
-	MHXyur/hTgbduNpfuxFi0TyReq+tFORDLE3rPJXmdwHD0L3768j5nw=
-X-Received: by 2002:a05:6214:4381:b0:8ce:aace:eaf7 with SMTP id 6a1803df08f44-8e6d6f62ad7mr2950566d6.39.1782341593853;
-        Wed, 24 Jun 2026 15:53:13 -0700 (PDT)
-Received: from wsfd-netdev58.anl.eng.rdu2.dc.redhat.com ([66.187.232.140])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8df81cdf302sm171758536d6.30.2026.06.24.15.53.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2026 15:53:13 -0700 (PDT)
-From: Xin Long <lucien.xin@gmail.com>
-To: network dev <netdev@vger.kernel.org>,
-	linux-sctp@vger.kernel.org
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Subject: [PATCH net v3] sctp: add INIT verification after cookie unpacking
-Date: Wed, 24 Jun 2026 18:53:12 -0400
-Message-ID: <ebcbbac574815b0850f371b4bdb02f2e602b94d3.1782341592.git.lucien.xin@gmail.com>
-X-Mailer: git-send-email 2.47.1
+	s=arc-20240116; t=1782352876; c=relaxed/simple;
+	bh=5fwKkWOdRgv8AYwCq9cF27hJ4iVT/vs3FPoo28SGqgw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=qezOgj0tR8+/p6Tvv/7BiqnfNixZEgUeSG9T9dqyXUI7b3FIotUk0WbBtmMGh+BWDl/3iHMS+A1ls0Z18gNYcG7++d/4MnrM/c+li6pjVBIiIHGwBu6zlKo98e7yl8A+U7b46hKv0pWGEqupztnu1Sgh1aEnFNu36Nj6K3yL4MY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iv0Q0Rbx; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC2CD1F000E9;
+	Thu, 25 Jun 2026 02:01:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782352875;
+	bh=wW6nsLdslasre0ulUwLa728OsKwT54yRmRh1tbw2mPY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=iv0Q0Rbxg0ZUTDyBLmZyb2PLawiGmkmfRHQGjdUC1w1KVDEkucG4QBVntAYVzdd4X
+	 NLDN6Mh7ZV00EodOw++UgD9YwZ/l5q+8RAXTcQA0KYDu9EVTrd5FSytQSvQds90nxy
+	 W3ynJQao1WBvw2hOAJ2RZFH0xuMbSXMhob+Y1qTdqQw6ish+FodqnmrSdaC0mRSsbW
+	 yB/un86FvEP0aszINcvOYtAFqjl5u1Aa1dfafVmFv5Ggv7V3mLFMKLLIQFTsv2efSu
+	 NawbZsg0jyZ0NbZOQU9BtEq38CwLJjM2LfYs482BTJPhJliqqirK6XzmaFMEKBeSwI
+	 jb9kP+QrtkOIQ==
+Date: Wed, 24 Jun 2026 19:01:14 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Wentao Liang <vulab@iscas.ac.cn>
+Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long
+ <lucien.xin@gmail.com>, "David S . Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>, linux-sctp@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 net-next] sctp: use sctp_auth_shkey_release() in
+ error path for consistency
+Message-ID: <20260624190114.10060932@kernel.org>
+In-Reply-To: <20260622100235.34263-1-vulab@iscas.ac.cn>
+References: <20260622100235.34263-1-vulab@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [-3.66 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FREEMAIL_CC(0.00)[davemloft.net,kernel.org,google.com,redhat.com,gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-1285-lists,linux-sctp=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-1286-lists,linux-sctp=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:netdev@vger.kernel.org,m:linux-sctp@vger.kernel.org,m:davem@davemloft.net,m:kuba@kernel.org,m:edumazet@google.com,m:pabeni@redhat.com,m:horms@kernel.org,m:marcelo.leitner@gmail.com,m:marceloleitner@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[lucienxin@gmail.com,linux-sctp@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:vulab@iscas.ac.cn,m:marcelo.leitner@gmail.com,m:lucien.xin@gmail.com,m:davem@davemloft.net,m:edumazet@google.com,m:pabeni@redhat.com,m:horms@kernel.org,m:linux-sctp@vger.kernel.org,m:netdev@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:marceloleitner@gmail.com,m:lucienxin@gmail.com,s:lists@lfdr.de];
+	FREEMAIL_CC(0.00)[gmail.com,davemloft.net,google.com,redhat.com,kernel.org,vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER(0.00)[kuba@kernel.org,linux-sctp@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lucienxin@gmail.com,linux-sctp@vger.kernel.org];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[kuba@kernel.org,linux-sctp@vger.kernel.org];
+	PRECEDENCE_BULK(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	MID_RHS_MATCH_FROM(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_SEVEN(0.00)[8];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
 	TAGGED_RCPT(0.00)[linux-sctp];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 4B3F36C1D4E
+X-Rspamd-Queue-Id: 23A086C24F2
 
-In SCTP handshake, the INIT chunk is initially processed by the server
-and embedded into the cookie carried in INIT-ACK. The client then
-returns this cookie via COOKIE-ECHO, where the server unpacks it and
-reconstructs the original INIT chunk.
+On Mon, 22 Jun 2026 18:02:35 +0800 Wentao Liang wrote:
+> Use the proper refcount-aware helper sctp_auth_shkey_release() instead
+> of kfree() when freeing cur_key in the error path of sctp_auth_set_key().
+> While both are equivalent in the current code, using the helper maintains
+> abstraction consistency and prevents potential issues if the code is
+> reordered in the future.
 
-When cookie authentication is enabled, the cookie contents are protected
-against tampering, so reusing the unpacked INIT without re-verification
-is safe.
+## Form letter - net-next-closed
 
-However, when cookie authentication is disabled, the reconstructed INIT
-can no longer be trusted. In this case, the INIT must be explicitly
-validated after unpacking to avoid processing potentially tampered data.
+We have already submitted our pull request with net-next material for v7.2,
+and therefore net-next is closed for new drivers, features, code refactoring
+and optimizations. We are currently accepting bug fixes only.
 
-Add sctp_verify_init() checks after cookie unpacking in COOKIE-ECHO
-processing paths (sctp_sf_do_5_1D_ce() and sctp_sf_do_5_2_4_dupcook())
-when cookie_auth_enable is disabled. On failure, the new association is
-freed and the packet is discarded.
+Please repost when net-next reopens after June 29th.
 
-Also tighten cookie validation in sctp_unpack_cookie() by verifying the
-embedded chunk type is SCTP_CID_INIT before treating it as an INIT
-chunk.
+RFC patches sent for review only are obviously welcome at any time.
 
-Finally, update sctp_verify_init() to validate parameter bounds using
-the actual embedded INIT length instead of chunk->chunk_end, since the
-INIT stored in COOKIE-ECHO may not span the entire chunk buffer.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
----
-v2:
-  - Because of sctp_abort_on_init_err() param change in patch 1/2,
-    pass cid and not chunk.
-  - Use SCTP_PAD4() around ntohs(peer_init->chunk_hdr.length) when
-    checking param.v in sctp_verify_init() to make Sashiko happy.
-v3:
-  - Validate the embedded INIT chunk type in sctp_unpack_cookie(), as
-    noted by Sashiko.
-  - Discard the packet if embedded INIT chunk validation fails,
-    consistent with malformed cookie handling.
----
- net/sctp/sm_make_chunk.c |  5 ++++-
- net/sctp/sm_statefuns.c  | 36 +++++++++++++++++++++++++++++++++---
- 2 files changed, 37 insertions(+), 4 deletions(-)
-
-diff --git a/net/sctp/sm_make_chunk.c b/net/sctp/sm_make_chunk.c
-index 41958b8e59fd..8adac9e0cd66 100644
---- a/net/sctp/sm_make_chunk.c
-+++ b/net/sctp/sm_make_chunk.c
-@@ -1761,6 +1761,8 @@ struct sctp_association *sctp_unpack_cookie(
- 	bear_cookie = &cookie->c;
- 
- 	ch = (struct sctp_chunkhdr *)(bear_cookie + 1);
-+	if (ch->type != SCTP_CID_INIT)
-+		goto malformed;
- 	chlen = ntohs(ch->length);
- 	if (chlen < sizeof(struct sctp_init_chunk))
- 		goto malformed;
-@@ -2298,7 +2300,8 @@ int sctp_verify_init(struct net *net, const struct sctp_endpoint *ep,
- 	 * VIOLATION error.  We build the ERROR chunk here and let the normal
- 	 * error handling code build and send the packet.
- 	 */
--	if (param.v != (void *)chunk->chunk_end)
-+	if (param.v != (void *)peer_init +
-+		       SCTP_PAD4(ntohs(peer_init->chunk_hdr.length)))
- 		return sctp_process_inv_paramlength(asoc, param.p, chunk, errp);
- 
- 	/* The only missing mandatory param possible today is
-diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
-index 8e920cef0858..d23d935e128e 100644
---- a/net/sctp/sm_statefuns.c
-+++ b/net/sctp/sm_statefuns.c
-@@ -707,11 +707,12 @@ enum sctp_disposition sctp_sf_do_5_1D_ce(struct net *net,
- 					 struct sctp_cmd_seq *commands)
- {
- 	struct sctp_ulpevent *ev, *ai_ev = NULL, *auth_ev = NULL;
-+	struct sctp_chunk *err_chk_p = NULL;
- 	struct sctp_association *new_asoc;
- 	struct sctp_init_chunk *peer_init;
- 	struct sctp_chunk *chunk = arg;
--	struct sctp_chunk *err_chk_p;
- 	struct sctp_chunk *repl;
-+	enum sctp_cid cid;
- 	struct sock *sk;
- 	int error = 0;
- 
-@@ -785,6 +786,19 @@ enum sctp_disposition sctp_sf_do_5_1D_ce(struct net *net,
- 		}
- 	}
- 
-+	peer_init = (struct sctp_init_chunk *)(chunk->subh.cookie_hdr + 1);
-+	cid = peer_init->chunk_hdr.type;
-+	if (!sctp_sk(sk)->cookie_auth_enable &&
-+	    !sctp_verify_init(net, ep, asoc, cid, peer_init, chunk,
-+			      &err_chk_p)) {
-+		sctp_association_free(new_asoc);
-+		if (err_chk_p)
-+			sctp_chunk_free(err_chk_p);
-+		return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
-+	}
-+	if (err_chk_p)
-+		sctp_chunk_free(err_chk_p);
-+
- 	if (security_sctp_assoc_request(new_asoc, chunk->head_skb ?: chunk->skb)) {
- 		sctp_association_free(new_asoc);
- 		return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
-@@ -798,7 +812,6 @@ enum sctp_disposition sctp_sf_do_5_1D_ce(struct net *net,
- 	/* This is a brand-new association, so these are not yet side
- 	 * effects--it is safe to run them here.
- 	 */
--	peer_init = (struct sctp_init_chunk *)(chunk->subh.cookie_hdr + 1);
- 	if (!sctp_process_init(new_asoc, chunk,
- 			       &chunk->subh.cookie_hdr->c.peer_addr,
- 			       peer_init, GFP_ATOMIC))
-@@ -2215,10 +2228,12 @@ enum sctp_disposition sctp_sf_do_5_2_4_dupcook(
- 					void *arg,
- 					struct sctp_cmd_seq *commands)
- {
-+	struct sctp_chunk *err_chk_p = NULL;
- 	struct sctp_association *new_asoc;
-+	struct sctp_init_chunk *peer_init;
- 	struct sctp_chunk *chunk = arg;
- 	enum sctp_disposition retval;
--	struct sctp_chunk *err_chk_p;
-+	enum sctp_cid cid;
- 	int error = 0;
- 	char action;
- 
-@@ -2287,6 +2302,21 @@ enum sctp_disposition sctp_sf_do_5_2_4_dupcook(
- 	switch (action) {
- 	case 'A': /* Association restart. */
- 	case 'B': /* Collision case B. */
-+		peer_init = (struct sctp_init_chunk *)
-+				(chunk->subh.cookie_hdr + 1);
-+		cid = peer_init->chunk_hdr.type;
-+		if (!sctp_sk(ep->base.sk)->cookie_auth_enable &&
-+		    !sctp_verify_init(net, ep, asoc, cid, peer_init, chunk,
-+				      &err_chk_p)) {
-+			sctp_association_free(new_asoc);
-+			if (err_chk_p)
-+				sctp_chunk_free(err_chk_p);
-+			return sctp_sf_pdiscard(net, ep, asoc, type, arg,
-+						commands);
-+		}
-+		if (err_chk_p)
-+			sctp_chunk_free(err_chk_p);
-+		fallthrough;
- 	case 'D': /* Collision case D. */
- 		/* Update socket peer label if first association. */
- 		if (security_sctp_assoc_request((struct sctp_association *)asoc,
+See: https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#development-cycle
 -- 
-2.47.1
-
+pw-bot: defer
+pv-bot: closed
 
