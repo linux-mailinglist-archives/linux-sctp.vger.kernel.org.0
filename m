@@ -1,98 +1,98 @@
-Return-Path: <linux-sctp+bounces-1300-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1301-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id rQ8KMxqCQmo48wkAu9opvQ
-	(envelope-from <linux-sctp+bounces-1300-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Mon, 29 Jun 2026 16:32:58 +0200
+	id FOvUC8aRQmqj9wkAu9opvQ
+	(envelope-from <linux-sctp+bounces-1301-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Mon, 29 Jun 2026 17:39:50 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABFDE6DC16B
-	for <lists+linux-sctp@lfdr.de>; Mon, 29 Jun 2026 16:32:57 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD1136DCCE8
+	for <lists+linux-sctp@lfdr.de>; Mon, 29 Jun 2026 17:39:49 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=VdMXQgGN;
-	spf=pass (mail.lfdr.de: domain of "linux-sctp+bounces-1300-lists+linux-sctp=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-sctp+bounces-1300-lists+linux-sctp=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=Zz8Q8muc;
+	spf=pass (mail.lfdr.de: domain of "linux-sctp+bounces-1301-lists+linux-sctp=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-sctp+bounces-1301-lists+linux-sctp=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=gmail.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5D6A030488EC
-	for <lists+linux-sctp@lfdr.de>; Mon, 29 Jun 2026 14:23:11 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id EAB91308681D
+	for <lists+linux-sctp@lfdr.de>; Mon, 29 Jun 2026 15:32:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1520A336886;
-	Mon, 29 Jun 2026 14:23:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6765737C936;
+	Mon, 29 Jun 2026 15:31:52 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-ej1-f67.google.com (mail-ej1-f67.google.com [209.85.218.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CDF9356767
-	for <linux-sctp@vger.kernel.org>; Mon, 29 Jun 2026 14:23:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E0B7336EDE
+	for <linux-sctp@vger.kernel.org>; Mon, 29 Jun 2026 15:31:50 +0000 (UTC)
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782742988; cv=pass; b=Qp/t8UNbGaCwhsv2+NpQL1lFtNlmvpq12bEjWk5nwJ4tbUUE5B17rwG7bRmwJszARfXSuUQFGRq+etN1sgcnOnVIy3x2bqQTUfc8irjzQYXrS8hfARaxciGBazBAzBPugmOK07h/pXJ7ENPoPb31MfiG/9HaM3j1gafrzEjasGw=
+	t=1782747112; cv=pass; b=KoeyVJBkVVYm7vbyW+KDJc3ku0HQ+lmvM/X4D8bCS3WZJrm8krstIZpmL4rnRpdvJeHlfQNCbXyI3sCDWZLZabffDWlM+Y++PKyvahoIUrj5IFSIEoT0iPxbTo4GGelg8U5Oja3m/oIFEJjqm1+LEpMewiWDoPAdZGSfOTNTuB0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782742988; c=relaxed/simple;
-	bh=wiXq41bdBk83YHqf1MVi12r95Q6R/cZ8huPoVZGBeBs=;
+	s=arc-20240116; t=1782747112; c=relaxed/simple;
+	bh=dgQq7uOtRk1Fieb4AjgFns8G5xGk1jK0JDbMwPCnVVA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=E1xXCNUxV0wMo9hfTKW99H0aXRat2TcoFfH5Jw3x55HIJyvtSPkddnYNX5zH44sfOXfwoYqzkMPcZK1M3sMIcqWm9/XwKHZ87X/m3fWmy5X3+/G4wbpnUei5xG1+Wf1y9m6f6jc+5Zl1L8P0IdcwDv6IqOYuiMVvXH9dnxH6cY0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VdMXQgGN; arc=pass smtp.client-ip=209.85.210.172
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-847917c3678so287609b3a.1
-        for <linux-sctp@vger.kernel.org>; Mon, 29 Jun 2026 07:23:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782742985; cv=none;
+	 To:Cc:Content-Type; b=mKUZ6IuimsB/9lgGBD7cnZr2zI4yodTl+JVoHmGiUeRYY46gvGyzUQ7lWXyZio/mG7OW6BwlnP7AQz7NZOK44ovsAzl7YOSZuYXd+4XyisM3ZMr5hIsvh9QajvsGkorYNVefhsmuvmwOMBgJz7N+EFP7IV18dzedkGvNjfciqpI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zz8Q8muc; arc=pass smtp.client-ip=209.85.218.67
+Received: by mail-ej1-f67.google.com with SMTP id a640c23a62f3a-c124c3c876aso270347966b.1
+        for <linux-sctp@vger.kernel.org>; Mon, 29 Jun 2026 08:31:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782747109; cv=none;
         d=google.com; s=arc-20260327;
-        b=Awah0e5HVKMQr7HJjpshHeWQtIIbWh9bt1FIOLB1G0fxxV0GB6h88une5ZILRderki
-         hTq+TdmmyTmU6lL4l5o+P0xolpAs8ylThgqRMw7xwHdnQtNJCmvIQGPS6P+/7Jh/Wosr
-         3/H5u6qRiY1fa2OlwA+OyNcl6cMhrej3Ck/Jz4+R30lDvTxsAXoVh1F/9d3wIrlEs+24
-         al6kemusAulH4uMvfL7kGyerybMm45QeOJVHqWAvDbxKsvs1oDSGXmWl02Or5n2R9Pwy
-         Mgy/WgB5xMW1H41XNAyE7Y4Z+i/RSVXw0LTF9d7eJlrqwaJNM2tM4r3xYtDVpJmdzrpE
-         bAyg==
+        b=hQ2wzzMQXSMhqRJAPDwyAugWib3VV3IRbkUrAXjmnc9d5TIh13YT+qAKYVNBiRQ/Sy
+         geKT+ImTE5G5/nBKxCPYAIfmQs4T3Pk4C/BTc+QWtwtyFBcIEkS6P6kxlRkKUh8HHbd5
+         kuhPUtMxUUYqEkEjkha1VBiaDkLGYXBIIiksLWG2epqZDoCg4CkrFbtOAZOOpWC8PEDn
+         XpvGJ5YZT+cSq9P8GgixAmOoh4CEMysdVGwFjy6swfoTbRqyyq03ZGi0eKkmpOGH0L+e
+         bmjQ7//U91K3AgcukvY49oUN/vrgHE6zFHCXoD5VhDhObNkWhEyPRx0BCJONXQarR8+s
+         waSQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=Y0cymoUNheibESxQ4Mfp0MF9t6LNlS01Gf5IRX3wTSo=;
-        fh=5mE9YKyD9LnS41mvu0sAy8CWmtzgSGnPk3QqMF0TRQY=;
-        b=Y4ABjrBdruMjOZx6SjfSP//x1xAl/7tQN/OBqF1kmzwbYPR9x+WBD+IujPX/wE1JL9
-         MPAJyFN/MnB6upzLb6MexV6YA2IZm2IrmOAMe73LMIB2Quwd/E+Z3bX0daNi4ak9JTOM
-         kdJW3ie5f1bZqFs3b57j4FKHc/9PFpOxjqAA8nsxOjk8nZHxYdtPjTbL1vtB3vVGfIkQ
-         /MXIGdmhmFhZ2ZlGq5uBQBjHUpUoU3ujSUt5Zu17kR+upp6PyIzcQ8s19sjmn6h9dJJZ
-         4ndwKIj5KS6HF10hmwbNJKlSclENV22AcE2wkIXFYtJzxf4N9XgNdrTwNt8w//PsF71M
-         seqA==;
+        bh=OfTvysHiKTVLC5lWfMwwQ91YnzE9lVNEHowxJSHj8Q4=;
+        fh=ECKTx8cQ4gGpTJSXbJ2B5ITZ9oLp6ptAOIIGRAAHNLI=;
+        b=LLvWW7hObxUO5G4VDbyzg0QqDdLYDLOnkhYcLej/ltrgAEVsTSfByfeDubNfRPWrmi
+         qxmr9DX7PjzNGhQgZ5z+BbwIPWtFbiJxj+QW+0eC1iNh5JZcsKE8fbxjx/LNUSmPYj+7
+         CxQ34grQcOTEsGQP4lamMv9RsT5iL2WN+yAQUy16p7GE7CdkzEVteAXz4cCirw6tPRBP
+         NIE8VMHnUDgG1HlqJ3eC9hKvtVese8vSxlB16QuAUrqESkuWsHRnO7GiroE1Jcb3Wb6h
+         V5zrmDY/l58p5K4R4jrRsw72gB3NLagbj0e14z8F0bOrmYJYIdHS87YyDn11+LNYE2mC
+         /JIA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782742985; x=1783347785; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782747109; x=1783351909; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Y0cymoUNheibESxQ4Mfp0MF9t6LNlS01Gf5IRX3wTSo=;
-        b=VdMXQgGNdq87zEURJeYmtTrz+9/5t4hCB+f00IjXNGfdAfsqUHYngnt34PZqSjREh0
-         ktcME8C6XemNoCisbyI+B8nMwk8ap3qTcTb62sSol/0zD8NEnLR/Y4C0etrKHs3hPM3Q
-         KbnqR306u2Cq6liKmuD9cWoB5io7zac8CkovdRWgTsjPETnFIEreP0gVLGYktZgPGCJX
-         xDxV/RwMB9QaeNqdJ6MDDy1x9R590QGQ4ipvnUFw4cr1bOaogpImemH62jr7sznzArNz
-         iIhBdl2RIjtzbe8toVxmUsmx41alIbv8R59d1rsrUl1weLd4t7FAYq2SxvWXjkZzzOB6
-         yCNg==
+        bh=OfTvysHiKTVLC5lWfMwwQ91YnzE9lVNEHowxJSHj8Q4=;
+        b=Zz8Q8mucCXSuIJQ0dFhAbQdvwstPbz0TFHGHqcKaADUqX2zFCgtQHbsQmTjD1z7aIm
+         ghy0dU6oeqZjeW0iSPGrtEG+hkWZeDZcVWcgXQmxiAaWD9mcXpsPJC40tBPxTjtg1ZiN
+         zMnlRbUuoA34ejRvP0bSfrgEVw9pp7EMTUb3gSA7DHwHSdhCbkzZstvQSfo14FNH4Exr
+         hqFrNxjKgivv9iBYksNXnEgJJv37FnmbMzZr8qyozup9jdJT2vCCStxDYpO4Ozk8NFhW
+         dSDwIAM/oXuoE8A3D1Ajrmn7GnMMJVaepiGs3qQgiZ+Ubnx6CecBATMyreqHJv8QpDn6
+         3PXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782742985; x=1783347785;
+        d=1e100.net; s=20251104; t=1782747109; x=1783351909;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Y0cymoUNheibESxQ4Mfp0MF9t6LNlS01Gf5IRX3wTSo=;
-        b=coqivZljO76fPl0FBkZ8qZmE3PhGqKK7emP7u4uPhscO4hP/2yISNFLsSPWK/goIdG
-         QMGURuwoBJs44OKAvRPJovjkDuXBrSzLNUCWJ3mZPpLj6ZBMH0ddlZ47ngYdJ5S4U9rr
-         NHnKG4/J+WNy6lzZh5ppUkUTUmOBqUA5yUCx5BKO7XHAvlr2urkAH0MawPe2PDA+diDL
-         C4wiI3eWu21G0Deet7WqWaRfPM7y8bH2L72mUcd7SXHFCoxJlPRMfvUtxX2+stjVlLoE
-         6ZlnN4G6pm/6ptUgHE3zB+3WbqJX9+yXVCuzImdJeLjX3Jwmhlcu6VuUP8tuK8SKSJWI
-         wRBg==
-X-Gm-Message-State: AOJu0YxXscxunNhei5YpLQoSz7IpcfY4kUEx0ZwQSL7PG6a5rwYDVJ3V
-	V8OV7+UxNaIb2SSJDTyQDuM44Kwu4dPhRXFj+60hV20iNILyAP8H7zGuQxQBnNflbZmzsiNc6rC
-	Fabf+VI/D2IpOQBwAbizEeCDqsTL2mnI=
-X-Gm-Gg: AfdE7cmBXeH7jD5yn0ZiQn8ej9aE69HKZ8UB5CxEiqdni67KfXAP7/FTQiDOzz04Tod
-	emQWulguDvcCPgaJcsvizZEmqaDRGjAcWb7F5xwuYcLRT5inuxSAA1yJnvM0vDG9eQnfGBfXqc4
-	MN5Elv9Z3wVj1q5jy2VZXcsRclrm41QF6WW+QwnOTVbLuRoPpzzZUv6O5HlNC4PczJOp/pGqlwV
-	jFCU2G+k0o3R9X/Q9uis49xzwi/QAjcxSMt9+xYhtSW0wcKpL40z8MTVHdaMErBmP/ypIjgKw+g
-	cSs10SUFcvfmkDnRp+FW3Rbq8kTMoJUybyEkAOBtAmdQ16LqmHINonX229xtqmxDp/xN4WLbyr7
-	0eYcxkg==
-X-Received: by 2002:a05:6a00:b53:b0:847:8bd0:1b96 with SMTP id
- d2e1a72fcca58-8478bd026dbmr2120595b3a.23.1782742985236; Mon, 29 Jun 2026
- 07:23:05 -0700 (PDT)
+        bh=OfTvysHiKTVLC5lWfMwwQ91YnzE9lVNEHowxJSHj8Q4=;
+        b=NTmGbciAFag/TVvm8zSKKgssyMyXmnrZeHp+NB629LOKRz/UWbFwLwFUF8y/TdFg7L
+         sxVGBEY2QZW2gyKFSi8gf5V+MI0mhrtBN5o5SaNhSgaUbzlCCR3u1D9/KKc78fz9yV7t
+         N13FzoAf7dRvHXxndXRPcCZBrVh2TBfgfL0mtXj7ukMKyxECWlfp9NqtPonv9YM6pELi
+         GuSi+rV76EdO9Ch1xE+RUgRmHRvG65BjcOn3LxJplh/g9jhcnpVF2pZa7CWV4JZU7tRE
+         43HVvp+lbsjhR5GT/6soMOa3BzQNB5PnrhNJ4myYjoV3XoRYnoai9WqU2PB8QUR+3uqV
+         mQxg==
+X-Forwarded-Encrypted: i=1; AHgh+Rp4dsyL8pdvZO61FuVS1IY2jDaKev9eTsxzczglNRPvw9qXTNBMaCzOpfjySHI+n/tzRTl8AXzrFlOm@vger.kernel.org
+X-Gm-Message-State: AOJu0YwiQpsxzqdC80n5IA59gQWvj4Aoop9nJALmOBGat45m3fdxQxfv
+	DmQPt3JsjrtWn69d8bYvv5tBoY3JYpY73rUEKbD2s8obYfr89jjXcyLbzPQo55MI2WEtbP82rP8
+	609Y0QEj86NShYrbmm/w2RGjOsiUYcgE=
+X-Gm-Gg: AfdE7ckikdZ7+WdLiRDy/5rLJAISLnTWpumxlyYiPnADZJvl3bMd/j22rZ5DHnc6DvT
+	thCmuXxwmr+FjVD0N0rFOS5pzFBrkXahwaX8dsB+MvqV5EfzlOr8u5abbSUPoEu5foHYgAhIeb/
+	HMsV+aExfLqocFjdqdTZAm1LkoFEu4SLbnMcV9IrPeTapARwfd+Ckx9eqGX0C6Rep29aa1VMyVi
+	cLxnR6UCHeFU7360WulTTcGK5HFdTaCd6eL8PpyI0DMAkfMK9KEUgJLlrbqMLFAJJssmlx+6ny4
+	BbhB814=
+X-Received: by 2002:a17:906:6a0f:b0:c12:67e9:bf25 with SMTP id
+ a640c23a62f3a-c1267e9ec2cmr210780766b.42.1782747108817; Mon, 29 Jun 2026
+ 08:31:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -100,19 +100,18 @@ List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <cover.1782585631.git.roxy520tt@gmail.com> <b9f1f02b0780ad6a719e2413f5f0bb8eb7702d94.1782585631.git.roxy520tt@gmail.com>
- <CADvbK_cYeewNprxJ88TdRnCr2QTh1px8vxdqikBovb+dTEtp8Q@mail.gmail.com>
-In-Reply-To: <CADvbK_cYeewNprxJ88TdRnCr2QTh1px8vxdqikBovb+dTEtp8Q@mail.gmail.com>
-From: Xin Long <lucien.xin@gmail.com>
-Date: Mon, 29 Jun 2026 10:22:53 -0400
-X-Gm-Features: AVVi8Cc0LriEm6penJth8F-rFoWHt7QeBo7GRJOclqZWHvFXGZ2zmHrD3gGImbY
-Message-ID: <CADvbK_dn+1qsxgF_LXyBFC+Lep91bCgBDdynx_8c5QnQHp85eA@mail.gmail.com>
+ <CADvbK_cYeewNprxJ88TdRnCr2QTh1px8vxdqikBovb+dTEtp8Q@mail.gmail.com> <CADvbK_dn+1qsxgF_LXyBFC+Lep91bCgBDdynx_8c5QnQHp85eA@mail.gmail.com>
+In-Reply-To: <CADvbK_dn+1qsxgF_LXyBFC+Lep91bCgBDdynx_8c5QnQHp85eA@mail.gmail.com>
+From: tt roxy <roxy520tt@gmail.com>
+Date: Mon, 29 Jun 2026 23:31:35 +0800
+X-Gm-Features: AVVi8CcQjQMp_xcdx0xwS5kqGRWw-qKmoeiNy_pIdDDyyaU1tDfx-MgT7CJLDQo
+Message-ID: <CALMqdkR5M5oTTLS9Cisq6C5kM4byoCL3XHBWKXdq3awD1j3X9w@mail.gmail.com>
 Subject: Re: [PATCH net 1/1] sctp: avoid auth_enable sysctl UAF during netns teardown
-To: Ren Wei <n05ec@lzu.edu.cn>
-Cc: linux-sctp@vger.kernel.org, netdev@vger.kernel.org, 
+To: Xin Long <lucien.xin@gmail.com>
+Cc: Ren Wei <n05ec@lzu.edu.cn>, linux-sctp@vger.kernel.org, netdev@vger.kernel.org, 
 	marcelo.leitner@gmail.com, davem@davemloft.net, edumazet@google.com, 
 	pabeni@redhat.com, horms@kernel.org, matttbe@kernel.org, yuantan098@gmail.com, 
-	yifanwucs@gmail.com, tomapufckgml@gmail.com, bird@lzu.edu.cn, 
-	roxy520tt@gmail.com
+	yifanwucs@gmail.com, tomapufckgml@gmail.com, bird@lzu.edu.cn
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Action: no action
@@ -120,20 +119,21 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FORGED_RECIPIENTS(0.00)[m:lucien.xin@gmail.com,m:n05ec@lzu.edu.cn,m:linux-sctp@vger.kernel.org,m:netdev@vger.kernel.org,m:marcelo.leitner@gmail.com,m:davem@davemloft.net,m:edumazet@google.com,m:pabeni@redhat.com,m:horms@kernel.org,m:matttbe@kernel.org,m:yuantan098@gmail.com,m:yifanwucs@gmail.com,m:tomapufckgml@gmail.com,m:bird@lzu.edu.cn,m:lucienxin@gmail.com,m:marceloleitner@gmail.com,s:lists@lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS(0.00)[m:n05ec@lzu.edu.cn,m:linux-sctp@vger.kernel.org,m:netdev@vger.kernel.org,m:marcelo.leitner@gmail.com,m:davem@davemloft.net,m:edumazet@google.com,m:pabeni@redhat.com,m:horms@kernel.org,m:matttbe@kernel.org,m:yuantan098@gmail.com,m:yifanwucs@gmail.com,m:tomapufckgml@gmail.com,m:bird@lzu.edu.cn,m:roxy520tt@gmail.com,m:marceloleitner@gmail.com,s:lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-1300-lists,linux-sctp=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER(0.00)[lucienxin@gmail.com,linux-sctp@vger.kernel.org];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	FORGED_SENDER(0.00)[roxy520tt@gmail.com,linux-sctp@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-1301-lists,linux-sctp=lfdr.de];
 	RCPT_COUNT_TWELVE(0.00)[14];
+	FORWARDED(0.00)[lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[gmail.com:+];
@@ -141,189 +141,216 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lucienxin@gmail.com,linux-sctp@vger.kernel.org];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,davemloft.net,google.com,redhat.com,kernel.org,lzu.edu.cn];
+	FROM_NEQ_ENVFROM(0.00)[roxy520tt@gmail.com,linux-sctp@vger.kernel.org];
+	FREEMAIL_CC(0.00)[lzu.edu.cn,vger.kernel.org,gmail.com,davemloft.net,google.com,redhat.com,kernel.org];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TAGGED_RCPT(0.00)[linux-sctp];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,lzu.edu.cn:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,vger.kernel.org:from_smtp,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,lzu.edu.cn:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: ABFDE6DC16B
+X-Rspamd-Queue-Id: BD1136DCCE8
 
-On Mon, Jun 29, 2026 at 10:04=E2=80=AFAM Xin Long <lucien.xin@gmail.com> wr=
+On Mon, Jun 29, 2026 at 10:23=E2=80=AFPM Xin Long <lucien.xin@gmail.com> wr=
 ote:
 >
-> On Sun, Jun 28, 2026 at 4:40=E2=80=AFAM Ren Wei <n05ec@lzu.edu.cn> wrote:
+> On Mon, Jun 29, 2026 at 10:04=E2=80=AFAM Xin Long <lucien.xin@gmail.com> =
+wrote:
 > >
-> > From: Zhiling Zou <roxy520tt@gmail.com>
-> >
-> > proc_sctp_do_auth() updates the SCTP control socket after changing
-> > net.sctp.auth_enable.  The handler gets the per-net SCTP state from
-> > ctl->data, so an already opened sysctl file can still target a network
-> > namespace while that namespace is being torn down.
-> >
-> > SCTP unregisters its per-net sysctls from sctp_defaults_exit(), but
-> > sctp_ctrlsock_exit() runs earlier because the control-socket pernet ops
-> > are registered after the defaults ops.  This leaves a teardown window
-> > where auth_enable is still writable after inet_ctl_sock_destroy() has
-> > released net->sctp.ctl_sock, leading to a use-after-free when the sysct=
+> > On Sun, Jun 28, 2026 at 4:40=E2=80=AFAM Ren Wei <n05ec@lzu.edu.cn> wrot=
+e:
+> > >
+> > > From: Zhiling Zou <roxy520tt@gmail.com>
+> > >
+> > > proc_sctp_do_auth() updates the SCTP control socket after changing
+> > > net.sctp.auth_enable.  The handler gets the per-net SCTP state from
+> > > ctl->data, so an already opened sysctl file can still target a networ=
+k
+> > > namespace while that namespace is being torn down.
+> > >
+> > > SCTP unregisters its per-net sysctls from sctp_defaults_exit(), but
+> > > sctp_ctrlsock_exit() runs earlier because the control-socket pernet o=
+ps
+> > > are registered after the defaults ops.  This leaves a teardown window
+> > > where auth_enable is still writable after inet_ctl_sock_destroy() has
+> > > released net->sctp.ctl_sock, leading to a use-after-free when the sys=
+ctl
+> > > handler locks and dereferences the stale socket.
+> > >
+> > > Unregister the per-net SCTP sysctl table before destroying the contro=
 l
-> > handler locks and dereferences the stale socket.
+> > > socket.  Make sctp_sysctl_net_unregister() tolerate a missing header =
+and
+> > > clear the saved pointer so the later defaults exit path and init-erro=
+r
+> > > path can safely share the same unregister helper.
+> > >
+> > > Fixes: 15649fd5415e ("sctp: sysctl: auth_enable: avoid using current-=
+>nsproxy")
+> > > Cc: stable@vger.kernel.org
+> > > Reported-by: Yuan Tan <yuantan098@gmail.com>
+> > > Reported-by: Yifan Wu <yifanwucs@gmail.com>
+> > > Reported-by: Juefei Pu <tomapufckgml@gmail.com>
+> > > Reported-by: Xin Liu <bird@lzu.edu.cn>
+> > > Assisted-by: Codex:gpt-5.4
+> > > Signed-off-by: Zhiling Zou <roxy520tt@gmail.com>
+> > > Signed-off-by: Ren Wei <n05ec@lzu.edu.cn>
+> > > ---
+> > >  net/sctp/protocol.c | 3 +++
+> > >  net/sctp/sysctl.c   | 9 +++++++--
+> > >  2 files changed, 10 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
+> > > index 587b0017a67d..ae381d304bd5 100644
+> > > --- a/net/sctp/protocol.c
+> > > +++ b/net/sctp/protocol.c
+> > > @@ -1457,8 +1457,11 @@ static int __net_init sctp_ctrlsock_init(struc=
+t net *net)
+> > >
+> > >  static void __net_exit sctp_ctrlsock_exit(struct net *net)
+> > >  {
+> > > +       sctp_sysctl_net_unregister(net);
+> > > +
+> > >         /* Free the control endpoint.  */
+> > >         inet_ctl_sock_destroy(net->sctp.ctl_sock);
+> > > +       net->sctp.ctl_sock =3D NULL;
+> > >  }
+> > >
+> > >  static struct pernet_operations sctp_ctrlsock_ops =3D {
+> > > diff --git a/net/sctp/sysctl.c b/net/sctp/sysctl.c
+> > > index 15e7db9a3ab2..fca840484ebf 100644
+> > > --- a/net/sctp/sysctl.c
+> > > +++ b/net/sctp/sysctl.c
+> > > @@ -615,11 +615,16 @@ int sctp_sysctl_net_register(struct net *net)
+> > >
+> > >  void sctp_sysctl_net_unregister(struct net *net)
+> > >  {
+> > > +       struct ctl_table_header *header =3D net->sctp.sysctl_header;
+> > >         const struct ctl_table *table;
+> > >
+> > > -       table =3D net->sctp.sysctl_header->ctl_table_arg;
+> > > -       unregister_net_sysctl_table(net->sctp.sysctl_header);
+> > > +       if (!header)
+> > > +               return;
+> > > +
+> > > +       table =3D header->ctl_table_arg;
+> > > +       unregister_net_sysctl_table(header);
+> > >         kfree(table);
+> > > +       net->sctp.sysctl_header =3D NULL;
+> > >  }
+> > >
+> > >  static struct ctl_table_header *sctp_sysctl_header;
+> > > --
+> > > 2.43.0
+> > >
 > >
-> > Unregister the per-net SCTP sysctl table before destroying the control
-> > socket.  Make sctp_sysctl_net_unregister() tolerate a missing header an=
-d
-> > clear the saved pointer so the later defaults exit path and init-error
-> > path can safely share the same unregister helper.
+> > Please also move sctp_sysctl_net_register() to sctp_ctrlsock_init(), an=
+d call
+> > it AFTER sctp_ctl_sock_init().
 > >
-> > Fixes: 15649fd5415e ("sctp: sysctl: auth_enable: avoid using current->n=
-sproxy")
-> > Cc: stable@vger.kernel.org
-> > Reported-by: Yuan Tan <yuantan098@gmail.com>
-> > Reported-by: Yifan Wu <yifanwucs@gmail.com>
-> > Reported-by: Juefei Pu <tomapufckgml@gmail.com>
-> > Reported-by: Xin Liu <bird@lzu.edu.cn>
-> > Assisted-by: Codex:gpt-5.4
-> > Signed-off-by: Zhiling Zou <roxy520tt@gmail.com>
-> > Signed-off-by: Ren Wei <n05ec@lzu.edu.cn>
-> > ---
-> >  net/sctp/protocol.c | 3 +++
-> >  net/sctp/sysctl.c   | 9 +++++++--
-> >  2 files changed, 10 insertions(+), 2 deletions(-)
+> > This is not just for being symmetric, but also fixes two problems:
 > >
+> > 1. A regression caused by this patch:
+> >
+> > If sctp_v4_protosw_init() or sctp_v6_protosw_init() fails in sctp_init(=
+),
+> > there's no place to call sctp_sysctl_net_unregister() on the err path.
+> >
+> > 2. A pre-existing issue reported by sashiko-gemini:
+> >
+> > > diff --git a/net/sctp/sysctl.c b/net/sctp/sysctl.c
+> > > index 15e7db9a3ab2e..fca840484ebf7 100644
+> > > --- a/net/sctp/sysctl.c
+> > > +++ b/net/sctp/sysctl.c
+> > > @@ -615,11 +615,16 @@ int sctp_sysctl_net_register(struct net *net)
+> > >
+> > > void sctp_sysctl_net_unregister(struct net *net)
+> > > {
+> > > + struct ctl_table_header *header =3D net->sctp.sysctl_header;
+> > > const struct ctl_table *table;
+> > This is a pre-existing issue, but I noticed a potential race condition
+> > during SCTP module initialization related to the sysctls modified here.
+> > During sctp_init(), sctp_defaults_ops registers the sysctls globally be=
+fore
+> > sctp_ctrlsock_ops allocates net->sctp.ctl_sock:
+> > sctp_init() {
+> > ...
+> > status =3D register_pernet_subsys(&sctp_defaults_ops);
+> > if (status)
+> > goto err_register_defaults;
+> > ...
+> > status =3D register_pernet_subsys(&sctp_ctrlsock_ops);
+> > ...
+> > }
+> > If userspace accesses the sysctls in this window, proc_sctp_do_auth() c=
+ould
+> > dereference a NULL pointer since it assumes ctl_sock is ready:
+> > proc_sctp_do_auth() {
+> > ...
+> > struct sock *sk =3D net->sctp.ctl_sock;
+> > net->sctp.auth_enable =3D new_value;
+> > /* Update the value in the control socket */
+> > lock_sock(sk);
+> > ...
+> > }
+> > Can we hit a kernel panic here if the sysctl is modified during automat=
+ic
+> > module loading?
+> > [...]
+> >
+>
+> Also, if you don't mind, please try to address another issue reported
+> in sashiko-gemini:
+>
 > > diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
-> > index 587b0017a67d..ae381d304bd5 100644
+> > index 587b0017a67d5..ae381d304bd53 100644
 > > --- a/net/sctp/protocol.c
 > > +++ b/net/sctp/protocol.c
 > > @@ -1457,8 +1457,11 @@ static int __net_init sctp_ctrlsock_init(struct =
 net *net)
 > >
-> >  static void __net_exit sctp_ctrlsock_exit(struct net *net)
-> >  {
-> > +       sctp_sysctl_net_unregister(net);
-> > +
-> >         /* Free the control endpoint.  */
-> >         inet_ctl_sock_destroy(net->sctp.ctl_sock);
-> > +       net->sctp.ctl_sock =3D NULL;
-> >  }
-> >
-> >  static struct pernet_operations sctp_ctrlsock_ops =3D {
-> > diff --git a/net/sctp/sysctl.c b/net/sctp/sysctl.c
-> > index 15e7db9a3ab2..fca840484ebf 100644
-> > --- a/net/sctp/sysctl.c
-> > +++ b/net/sctp/sysctl.c
-> > @@ -615,11 +615,16 @@ int sctp_sysctl_net_register(struct net *net)
-> >
-> >  void sctp_sysctl_net_unregister(struct net *net)
-> >  {
-> > +       struct ctl_table_header *header =3D net->sctp.sysctl_header;
-> >         const struct ctl_table *table;
-> >
-> > -       table =3D net->sctp.sysctl_header->ctl_table_arg;
-> > -       unregister_net_sysctl_table(net->sctp.sysctl_header);
-> > +       if (!header)
-> > +               return;
-> > +
-> > +       table =3D header->ctl_table_arg;
-> > +       unregister_net_sysctl_table(header);
-> >         kfree(table);
-> > +       net->sctp.sysctl_header =3D NULL;
-> >  }
-> >
-> >  static struct ctl_table_header *sctp_sysctl_header;
-> > --
-> > 2.43.0
-> >
->
-> Please also move sctp_sysctl_net_register() to sctp_ctrlsock_init(), and =
-call
-> it AFTER sctp_ctl_sock_init().
->
-> This is not just for being symmetric, but also fixes two problems:
->
-> 1. A regression caused by this patch:
->
-> If sctp_v4_protosw_init() or sctp_v6_protosw_init() fails in sctp_init(),
-> there's no place to call sctp_sysctl_net_unregister() on the err path.
->
-> 2. A pre-existing issue reported by sashiko-gemini:
->
-> > diff --git a/net/sctp/sysctl.c b/net/sctp/sysctl.c
-> > index 15e7db9a3ab2e..fca840484ebf7 100644
-> > --- a/net/sctp/sysctl.c
-> > +++ b/net/sctp/sysctl.c
-> > @@ -615,11 +615,16 @@ int sctp_sysctl_net_register(struct net *net)
-> >
-> > void sctp_sysctl_net_unregister(struct net *net)
+> > static void __net_exit sctp_ctrlsock_exit(struct net *net)
 > > {
-> > + struct ctl_table_header *header =3D net->sctp.sysctl_header;
-> > const struct ctl_table *table;
-> This is a pre-existing issue, but I noticed a potential race condition
-> during SCTP module initialization related to the sysctls modified here.
-> During sctp_init(), sctp_defaults_ops registers the sysctls globally befo=
-re
-> sctp_ctrlsock_ops allocates net->sctp.ctl_sock:
-> sctp_init() {
-> ...
-> status =3D register_pernet_subsys(&sctp_defaults_ops);
-> if (status)
-> goto err_register_defaults;
-> ...
-> status =3D register_pernet_subsys(&sctp_ctrlsock_ops);
+> This isn't a bug introduced by this patch, but while reviewing the netns
+> teardown sequence, I noticed the SCTP UDP tunnel sockets appear to leak.
+> In sctp_defaults_exit():
+> sctp_defaults_exit() {
+> /* Free the local address list */
+> sctp_free_addr_wq(net);
+> sctp_free_local_addr_list(net);
 > ...
 > }
-> If userspace accesses the sysctls in this window, proc_sctp_do_auth() cou=
-ld
-> dereference a NULL pointer since it assumes ctl_sock is ready:
-> proc_sctp_do_auth() {
-> ...
-> struct sock *sk =3D net->sctp.ctl_sock;
-> net->sctp.auth_enable =3D new_value;
-> /* Update the value in the control socket */
-> lock_sock(sk);
-> ...
-> }
-> Can we hit a kernel panic here if the sysctl is modified during automatic
-> module loading?
+> Should sctp_defaults_exit() call sctp_udp_sock_stop(net) to ensure the
+> UDP tunnel sockets are closed?
+> If a user creates a network namespace, writes to the net.sctp.udp_port sy=
+sctl
+> to allocate the sockets, and then destroys the namespace, could these soc=
+kets
+> remain active and cause a use-after-free of struct net when packets arriv=
+e?
 > [...]
 >
-
-Also, if you don't mind, please try to address another issue reported
-in sashiko-gemini:
-
-> diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
-> index 587b0017a67d5..ae381d304bd53 100644
-> --- a/net/sctp/protocol.c
-> +++ b/net/sctp/protocol.c
-> @@ -1457,8 +1457,11 @@ static int __net_init sctp_ctrlsock_init(struct ne=
-t *net)
+> maybe by adding sctp_udp_sock_stop() in sctp_ctrlsock_exit(), and call it=
+ AFTER
+> sctp_sysctl_net_unregister() in a separate patch.
 >
-> static void __net_exit sctp_ctrlsock_exit(struct net *net)
-> {
-This isn't a bug introduced by this patch, but while reviewing the netns
-teardown sequence, I noticed the SCTP UDP tunnel sockets appear to leak.
-In sctp_defaults_exit():
-sctp_defaults_exit() {
-/* Free the local address list */
-sctp_free_addr_wq(net);
-sctp_free_local_addr_list(net);
-...
-}
-Should sctp_defaults_exit() call sctp_udp_sock_stop(net) to ensure the
-UDP tunnel sockets are closed?
-If a user creates a network namespace, writes to the net.sctp.udp_port sysc=
-tl
-to allocate the sockets, and then destroys the namespace, could these socke=
-ts
-remain active and cause a use-after-free of struct net when packets arrive?
-[...]
+> Thanks.
 
-maybe by adding sctp_udp_sock_stop() in sctp_ctrlsock_exit(), and call it A=
-FTER
-sctp_sysctl_net_unregister() in a separate patch.
+Thanks for the review.
 
-Thanks.
+I addressed both comments in v2. Patch 1 moves the per-net SCTP sysctl
+
+registration after sctp_ctl_sock_init() and keeps the unregister before
+
+destroying the control socket. Patch 2 separately stops the SCTP UDP tunnel
+
+sockets after sysctl unregistration during netns teardown.
+
+I will send the v2 series as a new threaded 0/2, 1/2, 2/2 patch series.
+
+Thanks,
+
+Zhiling
 
