@@ -1,93 +1,98 @@
-Return-Path: <linux-sctp+bounces-1316-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1317-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id W78TN4gSUGqXswIAu9opvQ
-	(envelope-from <linux-sctp+bounces-1316-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Thu, 09 Jul 2026 23:28:40 +0200
+	id a5qSC9JFUGqmvwIAu9opvQ
+	(envelope-from <linux-sctp+bounces-1317-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Fri, 10 Jul 2026 03:07:30 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7903A735D00
-	for <lists+linux-sctp@lfdr.de>; Thu, 09 Jul 2026 23:28:40 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73DAE736784
+	for <lists+linux-sctp@lfdr.de>; Fri, 10 Jul 2026 03:07:29 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=JOB9dDaC;
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=JVNB8gSy;
 	dmarc=pass (policy=none) header.from=gmail.com;
-	spf=pass (mail.lfdr.de: domain of "linux-sctp+bounces-1316-lists+linux-sctp=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-sctp+bounces-1316-lists+linux-sctp=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-sctp+bounces-1317-lists+linux-sctp=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-sctp+bounces-1317-lists+linux-sctp=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id E84DF3016B6F
-	for <lists+linux-sctp@lfdr.de>; Thu,  9 Jul 2026 21:28:39 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5B20B3021EBD
+	for <lists+linux-sctp@lfdr.de>; Fri, 10 Jul 2026 01:07:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C0373BB680;
-	Thu,  9 Jul 2026 21:28:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B9CB1DCB24;
+	Fri, 10 Jul 2026 01:07:25 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A603F1D5160
-	for <linux-sctp@vger.kernel.org>; Thu,  9 Jul 2026 21:28:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EDDE223323
+	for <linux-sctp@vger.kernel.org>; Fri, 10 Jul 2026 01:07:23 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783632518; cv=none; b=JvBEL9qkWCzcSZBSBYopBHZfXLWddguOrTq5PZapoXPEeu4BCtMDCqFtyUkp489XS8Mfhnb+BcobHNO6Keck6nZF0GR18HFZtLCKpLByn8fo4k0Nu0xjxL/GiShfYmhEqwikEdKejtYBZ5i+Qn4NwSBgeIgQW5MHeZqkyu595HQ=
+	t=1783645645; cv=none; b=ZBWhNbDXaS3E3y3v5rYd5Mf3hX0VW1L7USsuHe001094te6c9T2K+OTubNEmKxWCgdOrtqxYogiVFoJ4q8+3zmrW0Dc0zYHbfUTSl47BSc5Xd3O3f183kKOYVsGgcsm1pmxd344+YYNffLpihp6hbKrUPQhngZSyWF9incpZYoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783632518; c=relaxed/simple;
-	bh=RfK4Rc+82FAtWUKvR0czhUym4lsT1kXkCb6HVu1HCxI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lhhyw70oWKqOOzGrOpKvQuNUK4hA3Fgy1NrWSos+gtmmbqAgOPYg4guftqAfLOspzcKzPyuo79buAzVs3nRNSDJKpe8m/26DJdXNNy+UU+/9kH1wkvL+I2Su5Vu6hNjlGitf4CuSqqVYIW3rQdO41fzFejllXvSlbMIf8rueUCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JOB9dDaC; arc=none smtp.client-ip=209.85.222.181
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-922ff615c14so17716285a.3
-        for <linux-sctp@vger.kernel.org>; Thu, 09 Jul 2026 14:28:36 -0700 (PDT)
+	s=arc-20240116; t=1783645645; c=relaxed/simple;
+	bh=/80AeMdn4kk8+3llG/Z1EZupQkn+3RUdjZp2bGBYLQU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sHKRYTI5k6qOQfVJ5c01H05Ym1hjSmKsp/GPB1WKTKdbvM/lvaGzLdSPY3qvoEV6SOBL3uOq67HQBdnp51dqu/rsaMxz8N80sEhH3ENKnCmB7wAuiFkPBDrjM3rVbro3+f8viLxCLyAOJptwxfyUfOIvmMikVr3m8UDIxxNBykU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JVNB8gSy; arc=none smtp.client-ip=209.85.210.178
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8485ef63b68so329112b3a.1
+        for <linux-sctp@vger.kernel.org>; Thu, 09 Jul 2026 18:07:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783632515; x=1784237315; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783645643; x=1784250443; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=UGPBGDpmMCJG1jdmjxc2zGCbnDM99IZvLsk38bHA9OQ=;
-        b=JOB9dDaCekjMUQcPq9Nzb26Xu6j+ZCsuJVfhuuSUF6Yc6UcmtQfw3gB9iXwFc+9DVE
-         YkpwNlZy6B5BevvyGGyO8sCnE9C0yEVcBfpOAwegeAnOlUXW7e71EhE2vX8taReWdMWH
-         dmDxe/XMQRNtme0hH7WU2/CVid7eI8r7gny7cWx2WGUVLlNx0P+lpS6tb4Mmy2TyOMJ/
-         ghy8QvaxCq5xWAamj9H3jrkaSj86Ya2tV1vKe1z8c6XjXcArFv0CWv5e7OFiflhVWvgB
-         8Zfbl4VefWCARFzkJQQPhTvcJJgMd01whC82f6NGK0zuH/28RTymvLHbtgsZu/xp60sd
-         M/cQ==
+        bh=eLuU5HyvYLKGf+ae1L1IKeF030+aNKovcX3x67WIV9M=;
+        b=JVNB8gSy6q4K1SlOdB0PF6OM3Bq3B1p5+x3WpZex0JfboMU8Dr5s2tiDKlyXl5ZSFO
+         oTRw16bzhNKJDltm4iHqk3QXmFB+AhyKA0qDj8klKbz/+pKWlHA3bMwmk2S8mTSj+Y6l
+         UZnyyJj+Ze3alkvB7XfPTEu56lM/RmCFs6IGiE1jFQOXcpGI3MPNOyZySeilf+WJmmoo
+         jA8xR70zpjPMwy8ykQx4wyqiuWtpjQXRIGCcNl7kFqT7N8+B+cye3EVGZG/PzqV1D2xO
+         o5pU4ndfxmR5QlYq6sk6EtqYCdiyl+EkP47AkgtxO1ISTkRKays8Q/DkBP6H75BQD07v
+         z3+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783632515; x=1784237315;
+        d=1e100.net; s=20251104; t=1783645643; x=1784250443;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=UGPBGDpmMCJG1jdmjxc2zGCbnDM99IZvLsk38bHA9OQ=;
-        b=eB3m/UFdfmmbCq7xIXbqgcKl/s0FOo1nghLEIQQC+2W/QRFDDEjsc/iDJtr833tmTY
-         eczKIMyNTdPX8eMpkABQdltmv5h4VeGOXUsxKx4t3Kju0fMOvukfiId16Yc0oaV440VX
-         dK0wNFDzsAKWYxsC7JKOMc0JLWIyFbYZO32KlSk1E3WWpoJLqHKUUbTnvacewZEb8rP0
-         V/+159KR3H8DTEYMVy7FsmL2QhAkBRwsPRqBwVysuFl4l7i5KJuy1c0yxz94xXMJ1oTM
-         AXvctDygF0ODLLIP0rJNg29M080Jao8A6bc5EZjBErTp4Fgwpop7lyozOGgEZPCqmr/3
-         T/Zw==
-X-Forwarded-Encrypted: i=1; AHgh+RqCG/I/kzB0Mp5fDQ33axpA5woJKayeOA9cL9YOntue9Ds7t7ZltSRIzXOJYuE5kxQerdogv3y4X8yV@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFiEMzVwbxE3vUGz2bv3AncRbT7kdSeUyvbwa2YwZxxUD7xPoH
-	0wbf5cU06U+x4X9srM+Vsqv+UP5MrMomypknR81aUN5lFNOsL9IHideB
-X-Gm-Gg: AfdE7cnaIyvyE9pjDU9eUa1tD7ByZdJUVxCgJ+yk3TK7DfqUnmLiASkf2/5cVNBYoNj
-	ll6NiPhofYU0vxHUnqvpnduW6hJTtlBUMIxL9+IjNcbdKrn0Cfzxnhcc+MtsdacFhW3fo4i2HsA
-	+TNGj+uR0bHp9GA5yNRdNgU+XUeF6FKzEzCPYdxxoGA9I28C7S8YNg0SyjKoH1IkoOg3N6Kmp0k
-	bSBK8YuaWfKpNzq+hh0rNcPfbcAmITEcOIzKBV6X/cWQ57hp4hP+UqKwZWhO3HX7yWYyWHVN3KJ
-	TVVT2zZxpmeaoVsNyW+cZydp1vatf28qU4IOoX0r59/7JETgd0Sr0kJXYunERHWy8wbDPaW+op0
-	kokIT7dqBsSCRx6wEO/neBiK6UhaowbViUf+CqcJwe2EO3o/7CezE04NnEEX+9b/YdjODHAuhQE
-	bo8rJlqZV28InJseq3luOWBJ0/gWCF75oo6ruVqFZ4T9LF0bYCjlsrQnCQEHhfQtgDnXMoLCkfu
-	ZKvoaCO2yr0PDld3NfVkqRDHVGXyd09eRip7V80bGgQ1+5+21A807UfaFzeIUeNmg==
-X-Received: by 2002:ac8:5e51:0:b0:516:e10f:7140 with SMTP id d75a77b69052e-51c8b3f9775mr89854991cf.35.1783632515371;
-        Thu, 09 Jul 2026 14:28:35 -0700 (PDT)
-Received: from wsfd-netdev58.anl.eng.rdu2.dc.redhat.com ([66.187.232.140])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51caae206b6sm3237861cf.14.2026.07.09.14.28.33
+        bh=eLuU5HyvYLKGf+ae1L1IKeF030+aNKovcX3x67WIV9M=;
+        b=DdoutNjMHd3cZO44tvOLWmKI689vQy6316T7vXW1+H8kpBiBu5Nt4vFO8ecwrYdzqz
+         TO9P0R/OxHG8J0FkiUbEwEjHuSXEhPF3UuUsXI5OIOvKFSM3yYqriVr0n4+GmYhnm6e7
+         tYhq96QyY9YmOWQvxJ6wALmoeq1y3tbo6uBrFKKKLK78fyXJX7yWGyPCIYEyDPr5d4/O
+         r/3g3LnPf7CvPuXcQnm77yqo83RxEDljj1IHNPQuEPiGsBPF+QYQda0di9/ZfEdGg8nl
+         igRMWxkgJc4ONLmcqZoPPwraKpQu5YUeMCBXHJCpXvyKF3vun9dgVs6OqKptaCok24tB
+         36Xw==
+X-Forwarded-Encrypted: i=1; AHgh+Ro2K7Yhn1LTffQBr1n4ZoMAQJtl99t+cqYZFi4dCyrxYMoOPi5YvCnBjlVtAw+k2FM+6uraPvYTTPUr@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6Q5cLc6bkr6s5yM43CowJyupkxWZLjdCvS+eB47kOD+eYCtKL
+	py76GYVbgbKMnbu/Hno8G23LRSYqLZlivHOO2ZTyfMj2k0MV7HCJNtQQ
+X-Gm-Gg: AfdE7clE5RFz2EQ4jDj/3/XLDgzMC2l+dEPremfZqHygvVL1FofXifbRqWQZZ1RKR7E
+	rDNBdL0i7MaH76WZ1dsJ3lUZj7OooJwlyeB+7YTFrWJvMG9oj/Kl9IDJZ3OHJQa1vqyagq9gJoT
+	WxLDdtl5T57A/GHvSztAK5Qrstj9vHswpd8OtDfHCg/rUx9PyDpYVRll47EN8XOZPE8WByXjIDB
+	VZOoKDYw7rn7K08P0pHqZlvUtzbMI8j5q0khwuuljJ8ADKJKXFNYlqm+vV901ew73sLaJ07bTdX
+	E+GL5CbcgCnctpPrU7hecFVKJ0RZYuG9rrGVneoM+6vsQo8w9Qd04VldInwMoApTMR8KqELd5na
+	/X5ht6xnhuk+2JdALWGRokxshlCojVyZZy4cxG5MF1ARET1DwBqR5H805D2coUBd7PeSvb7isLO
+	p1hBj5Tsg7R5k9MvKAT7ynFGufMc5TvQ==
+X-Received: by 2002:a05:6a00:8c4:b0:848:2f6e:e537 with SMTP id d2e1a72fcca58-8484324633bmr8250058b3a.75.1783645642610;
+        Thu, 09 Jul 2026 18:07:22 -0700 (PDT)
+Received: from LAPTOP-83ECOPAB.localdomain ([167.220.148.19])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8486768c89dsm1197847b3a.17.2026.07.09.18.07.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2026 14:28:34 -0700 (PDT)
-From: Xin Long <lucien.xin@gmail.com>
-To: network dev <netdev@vger.kernel.org>,
-	linux-sctp@vger.kernel.org
-Cc: davem@davemloft.net,
+        Thu, 09 Jul 2026 18:07:22 -0700 (PDT)
+From: "Cen Zhang (Microsoft)" <blbllhy@gmail.com>
+To: marcelo.leitner@gmail.com,
+	lucien.xin@gmail.com,
+	davem@davemloft.net,
+	edumazet@google.com,
 	kuba@kernel.org,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Subject: [PATCH net-next] sctp: replace cb->args[4] with a local variable in sctp_diag_dump()
-Date: Thu,  9 Jul 2026 17:28:33 -0400
-Message-ID: <e0076ec046fbd8a70d4f3facfb701473d08c3ebb.1783632513.git.lucien.xin@gmail.com>
-X-Mailer: git-send-email 2.47.1
+	pabeni@redhat.com
+Cc: horms@kernel.org,
+	linux-sctp@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	AutonomousCodeSecurity@microsoft.com,
+	tgopinath@linux.microsoft.com,
+	kys@microsoft.com,
+	blbllhy@gmail.com
+Subject: [PATCH net v2] sctp: validate stream count in sctp_process_strreset_inreq()
+Date: Thu,  9 Jul 2026 21:07:18 -0400
+Message-ID: <20260710010718.20318-1-blbllhy@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -96,155 +101,112 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FREEMAIL_CC(0.00)[davemloft.net,kernel.org,google.com,redhat.com,gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-1316-lists,linux-sctp=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_SENDER(0.00)[blbllhy@gmail.com,linux-sctp@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,microsoft.com,linux.microsoft.com,gmail.com];
+	TAGGED_FROM(0.00)[bounces-1317-lists,linux-sctp=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:netdev@vger.kernel.org,m:linux-sctp@vger.kernel.org,m:davem@davemloft.net,m:kuba@kernel.org,m:edumazet@google.com,m:pabeni@redhat.com,m:horms@kernel.org,m:marcelo.leitner@gmail.com,m:marceloleitner@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[lucienxin@gmail.com,linux-sctp@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com,davemloft.net,google.com,kernel.org,redhat.com];
+	FORGED_RECIPIENTS(0.00)[m:marcelo.leitner@gmail.com,m:lucien.xin@gmail.com,m:davem@davemloft.net,m:edumazet@google.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:horms@kernel.org,m:linux-sctp@vger.kernel.org,m:netdev@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:AutonomousCodeSecurity@microsoft.com,m:tgopinath@linux.microsoft.com,m:kys@microsoft.com,m:blbllhy@gmail.com,m:marceloleitner@gmail.com,m:lucienxin@gmail.com,s:lists@lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lucienxin@gmail.com,linux-sctp@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[blbllhy@gmail.com,linux-sctp@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TO_DN_NONE(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	ALIAS_RESOLVED(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_SEVEN(0.00)[8];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-sctp];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 7903A735D00
+X-Rspamd-Queue-Id: 73DAE736784
 
-cb->args[4] is currently used as a temporary counter to track the assoc
-index while traversing ep->asocs in sctp_sock_dump(). However, this
-state is only needed locally within a single dump iteration and does not
-need to be preserved across callbacks.
+When processing a RESET_IN_REQUEST from a peer,
+sctp_process_strreset_inreq() derives the stream count from the
+parameter length but does not check whether the resulting
+RESET_OUT_REQUEST would exceed SCTP_MAX_CHUNK_LEN.
 
-Replace cb->args[4] with a local idx variable in sctp_sock_dump(), and
-update cb->args[1] directly when the dump is interrupted due to skb
-space exhaustion.
+The OUT request header (sctp_strreset_outreq, 16 bytes) is 8 bytes
+larger than the IN request header (sctp_strreset_inreq, 8 bytes).
+Generally, the IP payload is bounded to 65535 bytes, so the stream
+list cannot be large enough to trigger the overflow. However, on
+interfaces with MTU > 65535 (e.g., loopback with IPv6 jumbograms), a
+stream list that fits within the incoming IN parameter can cause a
+__u16 overflow in sctp_make_strreset_req() when computing the OUT
+request size, leading to an undersized skb allocation and a kernel
+BUG:
 
-This simplifies the dump state handling and removes the dependency on an
-extra cb->args[] slot, making the traversal logic easier to follow.
+  net/core/skbuff.c:207         skb_panic
+  net/core/skbuff.c:2625        skb_put
+  net/sctp/sm_make_chunk.c:1535 sctp_addto_chunk
+  net/sctp/sm_make_chunk.c:3695 sctp_make_strreset_req
+  net/sctp/stream.c:655         sctp_process_strreset_inreq
 
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
+The local setsockopt path validates the generated reset request size.
+However, for an incoming-only reset, it accounts for the smaller IN
+request even though the peer must generate an OUT request with the same
+stream list. Such a request cannot be completed successfully by the
+peer.
+
+Reject peer IN requests whose corresponding OUT request would exceed
+SCTP_MAX_CHUNK_LEN. Also tighten the local check so it does not send an
+IN request that would require an oversized OUT request from the peer.
+
+Fixes: 7f9d68ac944e ("sctp: implement sender-side procedures for SSN Reset Request Parameter")
+Reported-by: AutonomousCodeSecurity@microsoft.com
+Closes: https://lore.kernel.org/all/20260707203215.2752-1-blbllhy@gmail.com/
+Suggested-by: Xin Long <lucien.xin@gmail.com>
+Signed-off-by: Cen Zhang (Microsoft) <blbllhy@gmail.com>
 ---
- net/sctp/diag.c | 45 ++++++++++++++++++++++-----------------------
- 1 file changed, 22 insertions(+), 23 deletions(-)
+v2: Add the OUT request length check to the send path, as suggested by Xin Long.
 
-diff --git a/net/sctp/diag.c b/net/sctp/diag.c
-index c2a0de2adf6f..a9bb31303613 100644
---- a/net/sctp/diag.c
-+++ b/net/sctp/diag.c
-@@ -299,18 +299,21 @@ static int sctp_sock_dump_one(struct sctp_endpoint *ep, struct sctp_transport *t
- static int sctp_sock_dump(struct sctp_endpoint *ep, struct sctp_transport *tsp, void *p)
- {
- 	struct sctp_comm_param *commp = p;
--	struct sock *sk = ep->base.sk;
-+	struct sock *sk = ep->base.sk, *nsk;
- 	struct sk_buff *skb = commp->skb;
- 	struct netlink_callback *cb = commp->cb;
- 	const struct inet_diag_req_v2 *r = commp->r;
-+	u32 portid = NETLINK_CB(cb->skb).portid;
- 	struct sctp_association *assoc;
--	int err = 0;
-+	int err = 0, idx = 0;
-+
-+	nsk = NETLINK_CB(cb->skb).sk;
+ net/sctp/stream.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/net/sctp/stream.c b/net/sctp/stream.c
+index 5c2fdedea088..34ffe6c945a4 100644
+--- a/net/sctp/stream.c
++++ b/net/sctp/stream.c
+@@ -308,7 +308,8 @@ int sctp_send_reset_streams(struct sctp_association *asoc,
+ 					goto out;
  
- 	lock_sock(sk);
- 	if (ep != tsp->asoc->ep)
- 		goto release;
- 	list_for_each_entry(assoc, &ep->asocs, asocs) {
--		if (cb->args[4] < cb->args[1])
-+		if (idx < cb->args[1])
- 			goto next;
- 
- 		if (r->id.idiag_sport != htons(assoc->base.bind_addr.port) &&
-@@ -320,32 +323,31 @@ static int sctp_sock_dump(struct sctp_endpoint *ep, struct sctp_transport *tsp,
- 		    r->id.idiag_dport)
- 			goto next;
- 
--		if (!cb->args[3] &&
--		    inet_sctp_diag_fill(sk, NULL, skb, r,
--					sk_user_ns(NETLINK_CB(cb->skb).sk),
--					NETLINK_CB(cb->skb).portid,
--					cb->nlh->nlmsg_seq,
--					NLM_F_MULTI, cb->nlh,
--					commp->net_admin) < 0) {
--			err = 1;
--			goto release;
-+		if (!cb->args[3]) {
-+			err = inet_sctp_diag_fill(sk, NULL, skb, r,
-+						  sk_user_ns(nsk), portid,
-+						  cb->nlh->nlmsg_seq,
-+						  NLM_F_MULTI, cb->nlh,
-+						  commp->net_admin);
-+			if (err < 0) {
-+				cb->args[1] = idx;
-+				goto release;
-+			}
+ 			param_len += str_nums * sizeof(__u16) +
+-				     sizeof(struct sctp_strreset_inreq);
++				     (out ? sizeof(struct sctp_strreset_inreq)
++					  : sizeof(struct sctp_strreset_outreq));
  		}
- 		cb->args[3] = 1;
  
--		if (inet_sctp_diag_fill(sk, assoc, skb, r,
--					sk_user_ns(NETLINK_CB(cb->skb).sk),
--					NETLINK_CB(cb->skb).portid,
--					cb->nlh->nlmsg_seq, 0, cb->nlh,
--					commp->net_admin) < 0) {
--			err = 1;
-+		err = inet_sctp_diag_fill(sk, assoc, skb, r, sk_user_ns(nsk),
-+					  portid, cb->nlh->nlmsg_seq, 0,
-+					  cb->nlh, commp->net_admin);
-+		if (err < 0) {
-+			cb->args[1] = idx;
- 			goto release;
- 		}
- next:
--		cb->args[4]++;
-+		idx++;
- 	}
- 	cb->args[1] = 0;
- 	cb->args[3] = 0;
--	cb->args[4] = 0;
- release:
- 	release_sock(sk);
- 	return err;
-@@ -505,14 +507,11 @@ static void sctp_diag_dump(struct sk_buff *skb, struct netlink_callback *cb,
- 	 * 1 : to record the assoc pos of this time's traversal
- 	 * 2 : to record the transport pos of this time's traversal
- 	 * 3 : to mark if we have dumped the ep info of the current asoc
--	 * 4 : to track position within ep->asocs list in sctp_sock_dump()
- 	 */
- 	pos = cb->args[2];
- 	sctp_transport_traverse_process(sctp_sock_filter, sctp_sock_dump,
- 					net, &pos, &commp);
- 	cb->args[2] = pos;
--	cb->args[1] = cb->args[4];
--	cb->args[4] = 0;
- }
+ 		if (param_len > SCTP_MAX_CHUNK_LEN -
+@@ -639,6 +640,9 @@ struct sctp_chunk *sctp_process_strreset_inreq(
  
- static const struct inet_diag_handler sctp_diag_handler = {
+ 	nums = (ntohs(param.p->length) - sizeof(*inreq)) / sizeof(__u16);
+ 	str_p = inreq->list_of_streams;
++	if (nums * sizeof(__u16) + sizeof(struct sctp_strreset_outreq) >
++	    SCTP_MAX_CHUNK_LEN - sizeof(struct sctp_reconf_chunk))
++		goto out;
+ 	for (i = 0; i < nums; i++) {
+ 		if (ntohs(str_p[i]) >= stream->outcnt) {
+ 			result = SCTP_STRRESET_ERR_WRONG_SSN;
 -- 
-2.47.1
+2.53.0
 
 
