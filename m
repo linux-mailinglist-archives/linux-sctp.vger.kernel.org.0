@@ -1,93 +1,64 @@
-Return-Path: <linux-sctp+bounces-1322-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1323-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id Bk7sBrg4UWriAwMAu9opvQ
-	(envelope-from <linux-sctp+bounces-1322-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Fri, 10 Jul 2026 20:23:52 +0200
+	id PlerCi3FUWo0IgMAu9opvQ
+	(envelope-from <linux-sctp+bounces-1323-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Sat, 11 Jul 2026 06:23:09 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7C2173D552
-	for <lists+linux-sctp@lfdr.de>; Fri, 10 Jul 2026 20:23:51 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 559567404CC
+	for <lists+linux-sctp@lfdr.de>; Sat, 11 Jul 2026 06:23:08 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b="TV/7UsOl";
-	dmarc=pass (policy=none) header.from=gmail.com;
-	spf=pass (mail.lfdr.de: domain of "linux-sctp+bounces-1322-lists+linux-sctp=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-sctp+bounces-1322-lists+linux-sctp=lfdr.de@vger.kernel.org";
+	dkim=none;
+	dmarc=none;
+	spf=pass (mail.lfdr.de: domain of "linux-sctp+bounces-1323-lists+linux-sctp=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-sctp+bounces-1323-lists+linux-sctp=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1F8993005673
-	for <lists+linux-sctp@lfdr.de>; Fri, 10 Jul 2026 18:23:48 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 533EB30300D5
+	for <lists+linux-sctp@lfdr.de>; Sat, 11 Jul 2026 04:23:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87B69377EAC;
-	Fri, 10 Jul 2026 18:23:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A735A23BCEE;
+	Sat, 11 Jul 2026 04:23:04 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CA52376A15
-	for <linux-sctp@vger.kernel.org>; Fri, 10 Jul 2026 18:23:45 +0000 (UTC)
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.229.168.213])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D693F1C3F31;
+	Sat, 11 Jul 2026 04:22:58 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783707827; cv=none; b=Nydfsb7ChRFe5v5HN4D8SSOZH1Jq08hJsMaKmsedQmwwmB5aoF+G2sWxDggRJGxw1xSNLhRLho4iuWbSXtk9t6k+oe1Wh7eR/kcRI5cNNIFuGtfqmF6Pean2hN/gk9/jv5asOoDMANuocUPebCLFv7qWLyZX1g7fktJNtieqM5I=
+	t=1783743784; cv=none; b=CekcXMBVWDPxfBe6gGpEi0qFWzqkBTc5IiPRZXzSqIPXz5CC14jmneadm47QtdXZvOREhl+M8RC3sCVU7Ml9YFevdavU/elEzKQtpsll0zWMMbUdo0dfO0vBD2CUXPKvdADm7jroIr9/q5OkRALEA/KnxnLRP520o2EWMgTy/RM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783707827; c=relaxed/simple;
-	bh=OwrnCwQOhMDuGnx9pE7dZOEyMC8AyvBKRK+CfPd0rpA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iorp/oEd5rYNfwCDTUZNUgSUiQc8ffDLqzH86SnB7t7lH2rV2FYlfOcNd5G/LZEH7bjJD4qAb6bbShlfDRx4fOKF1oNyb2q7tA7j/7FPZCVUDzD+M9utMxWTf8N7Nv8u0qZgPSehwFRPKq2tEu7Ie/sTm0nymHxpndaPkA4HJVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TV/7UsOl; arc=none smtp.client-ip=209.85.160.170
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-51c05dcdf49so12759651cf.0
-        for <linux-sctp@vger.kernel.org>; Fri, 10 Jul 2026 11:23:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783707825; x=1784312625; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=4FH0W5s30/m3phVMwbdnAjH+UYTF+M+YW+Mbz2wNV4c=;
-        b=TV/7UsOl7jbzTkFJyVsrev6F4HxcjMyz1QyZ9mh4igcuem6Y/kkMgn03E+A7EdCBbD
-         4zXw5BhLOkPSDBpB5CXlPRx3SrtQs9ODHAdcpHmFgaA8aFOgMPkwRSpm8f9IKQFmOn6O
-         HEXizeyUHHRRGBMw98CXqdb2mFOWA5bpZHjGr+YTXAjTfaq5ktJoRlEswxzRiX05Rvgt
-         KUDe76/WQp3+LBOd4+tFtTbf76VUYOzgQ68YEYWc8TLweXbZzmSwEihGD/OesqOSWDUA
-         H1Ex4M6OfHc9Q6GHo4+gDFmvxPiMod2EA49FqSpyo7JjwHgJRU6gAWG7bc5nfynbGLUl
-         bfng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783707825; x=1784312625;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=4FH0W5s30/m3phVMwbdnAjH+UYTF+M+YW+Mbz2wNV4c=;
-        b=o2DK0M0MxwUIKKaqtFhlrsUPUuHGERAX0QZxHq1so85w81wNdod7vfG8EyMG4ouxLi
-         Dhf6tTOo1kve0975XS5cLTWpz7GwLdbNtfgJFmkYVdEVUOEcsLc/IbWjbI1ilCY9Vzao
-         aaE0vp72D4b8sq/mbs92OMvhsUk+V/2LWfqAFNLIYbCAxaLlLiZI2qXZC0qfazcuujRk
-         bghDIzqaQ0CcdVIpGgoPy1r1tBmVoeXKLLUBJZRZvITHMYGvcuSAXuNyMNK1cLywhhvr
-         0OhiCdRjM99qZUCz/H7mZd5o7GeNjDMTp80np5jxav1D6O9+gY6WZ7g0ygXh2f1Qouzb
-         wyKg==
-X-Forwarded-Encrypted: i=1; AHgh+RoenX2gpxX8Jf7MW24I1b4ZK8q1/e6PxQ9RtpolNdKIB/FbzmSFcL/WbvBvhdmvyn0cCM8aCfKRhZRq@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy4019mJoJ8mw04fE1u/Xij3/dqAEmbtlQKTqP7GGErpN5pKWWY
-	wBh6AAhFAvvLvYZiXA4FLJNcKEhim2AbvhAwvtTQxzPZ3fKw7Um5zuQX
-X-Gm-Gg: AfdE7cmr7hoJ/TmaNi7ioJunXrsIQZPs8VwnXIv/7W2uqvNW/3YXYRh0kekbiQPBSVb
-	wqJfwKT1TfBD0mHmB+iR26510PG1W+HISId9oXQhSPN1geMIRFVGg/E3ZPTqP/1Fp4Xt/EGngcl
-	LtPpBnZuMB5Sz9YjKh6mqsmm7vPCA3RALQpfX1h6xj2fy3aDinJSMqfIKzh2+Id4g047iOr6Z2c
-	M0RM73jhR9u5YkqgS1iqDWodL3MSkYSgXY0aSIAUxRROToLdwJqS3byx4F0wRDPyfa8GFZ7uqSn
-	S8w7/nchH/x+vg6JNKF+e6wcnMont9Xe8xTXvQ9F6KeEmO56kzdf1K5mFeB3WfyHix1CJI4dO++
-	KqoBds5JGi2JpWmtSi5zuW5tW6F5ZUso2Xg0TwAMfO69dftdGCkIhKnGzR09ToeLX5P4r3vCI7q
-	yEhVjmGgekdMbdFA3CWoumAfRP78hadlSZGFScGfn7K3b7ydzwKR3MHczlc1QqOppXHNEHjGb4N
-	tm5VzO6FkBTeVTR0XWMyAF+bEWIWmMciWkEX5Z4udIMlu0Sg1I1OII=
-X-Received: by 2002:a05:622a:10a:b0:51b:fb82:67d1 with SMTP id d75a77b69052e-51cbf12b97amr688881cf.20.1783707825087;
-        Fri, 10 Jul 2026 11:23:45 -0700 (PDT)
-Received: from wsfd-netdev58.anl.eng.rdu2.dc.redhat.com ([66.187.232.140])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51cbd8efab4sm2932851cf.1.2026.07.10.11.23.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jul 2026 11:23:44 -0700 (PDT)
-From: Xin Long <lucien.xin@gmail.com>
-To: network dev <netdev@vger.kernel.org>,
-	linux-sctp@vger.kernel.org
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Subject: [PATCH net] sctp: fix addr_wq_timer race in sctp_free_addr_wq()
-Date: Fri, 10 Jul 2026 14:23:43 -0400
-Message-ID: <5dc95f295bdb5c3f60e880dd9aa5112dc5c071cc.1783707823.git.lucien.xin@gmail.com>
-X-Mailer: git-send-email 2.47.1
+	s=arc-20240116; t=1783743784; c=relaxed/simple;
+	bh=V1P4pcPfLsVACyD0xKcWD72Y/F94QRtp7wRu+6L14js=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=neFlzMHkFgiygvo4K5paPJTB5tO4aLday6st4ZQDeq2jHRD5uRk6cSVdQ1p7YJOD4e3n+2EJVIgKtEQBShbaf04/PuWhg3HQ793jePlxLvpfZVbV9xSRl++djzAFnpCgMOHQAzWxnGu3oE3utIf0P6SNgj5ShnLX+O6c3nZgsYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lzu.edu.cn; spf=pass smtp.mailfrom=lzu.edu.cn; arc=none smtp.client-ip=52.229.168.213
+Received: from enjou-Legion-Y7000P-2019 (unknown [123.114.53.210])
+	by app3 (Coremail) with SMTP id ywmowADX5vkMxVFqVnZFAA--.44345S3;
+	Sat, 11 Jul 2026 12:22:45 +0800 (CST)
+From: Ren Wei <n05ec@lzu.edu.cn>
+To: linux-sctp@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: marcelo.leitner@gmail.com,
+	lucien.xin@gmail.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	matttbe@kernel.org,
+	yuantan098@gmail.com,
+	yifanwucs@gmail.com,
+	tomapufckgml@gmail.com,
+	bird@lzu.edu.cn,
+	tpluszz77@gmail.com,
+	roxy520tt@gmail.com,
+	n05ec@lzu.edu.cn,
+	sashiko-bot@kernel.org
+Subject: [PATCH net v2 1/2] sctp: avoid auth_enable sysctl UAF during netns teardown
+Date: Sat, 11 Jul 2026 12:22:16 +0800
+Message-ID: <2e48ecffe7fa9e983203a22f68e603cd8530c5d1.1782745545.git.roxy520tt@gmail.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <cover.1782745545.git.roxy520tt@gmail.com>
+References: <cover.1782745545.git.roxy520tt@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -95,80 +66,179 @@ List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:ywmowADX5vkMxVFqVnZFAA--.44345S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxGrWktrWrAFyrCry3XryDAwb_yoWrAFy8pa
+	4rWay5tryxJrWrXFs3JF4UKF15KFs7J3srCw1kG3s0kwsrGryrK3W8tayxZF17AFW8CFWf
+	ZF18trW29w4DAFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUB21xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+	w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+	IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E
+	87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+	8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+	Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+	xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
+	w2AFwI0_GFv_Wrylc2xSY4AK67AK6r45MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1s
+	IEY20_GrWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0x
+	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE
+	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
+	kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjTRW9a9UUUUU
+X-CM-SenderInfo: zqqvvuo6o23hxhgxhubq/1tbiAQEFCWpQq1gLpgAAso
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [0.54 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FREEMAIL_CC(0.00)[davemloft.net,kernel.org,google.com,redhat.com,gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-1322-lists,linux-sctp=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:netdev@vger.kernel.org,m:linux-sctp@vger.kernel.org,m:davem@davemloft.net,m:kuba@kernel.org,m:edumazet@google.com,m:pabeni@redhat.com,m:horms@kernel.org,m:marcelo.leitner@gmail.com,m:marceloleitner@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[lucienxin@gmail.com,linux-sctp@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TAGGED_FROM(0.00)[bounces-1323-lists,linux-sctp=lfdr.de];
+	DMARC_NA(0.00)[lzu.edu.cn];
+	FORGED_RECIPIENTS(0.00)[m:linux-sctp@vger.kernel.org,m:netdev@vger.kernel.org,m:marcelo.leitner@gmail.com,m:lucien.xin@gmail.com,m:davem@davemloft.net,m:edumazet@google.com,m:pabeni@redhat.com,m:horms@kernel.org,m:matttbe@kernel.org,m:yuantan098@gmail.com,m:yifanwucs@gmail.com,m:tomapufckgml@gmail.com,m:bird@lzu.edu.cn,m:tpluszz77@gmail.com,m:roxy520tt@gmail.com,m:n05ec@lzu.edu.cn,m:sashiko-bot@kernel.org,m:marceloleitner@gmail.com,m:lucienxin@gmail.com,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[n05ec@lzu.edu.cn,linux-sctp@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[gmail.com,davemloft.net,google.com,redhat.com,kernel.org,lzu.edu.cn];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[n05ec@lzu.edu.cn,linux-sctp@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lucienxin@gmail.com,linux-sctp@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[17];
 	TAGGED_RCPT(0.00)[linux-sctp];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,lzu.edu.cn:from_mime,lzu.edu.cn:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: A7C2173D552
+X-Rspamd-Queue-Id: 559567404CC
 
-sctp_free_addr_wq() previously removed addr_wq_timer using timer_delete()
-while holding addr_wq_lock. However, timer_delete() does not guarantee that
-a currently running timer handler has completed.
+From: Zhiling Zou <roxy520tt@gmail.com>
 
-This allows a race with sctp_addr_wq_timeout_handler(), where the handler
-may still run after addr_waitq has been freed, acquire addr_wq_lock, and
-access freed memory, leading to a use-after-free.
+proc_sctp_do_auth() updates the SCTP control socket after changing
+net.sctp.auth_enable. The handler gets the per-net SCTP state from
+ctl->data, so an already opened sysctl file can still target a network
+namespace while that namespace is being torn down.
 
-Fix this by calling timer_shutdown_sync() before taking addr_wq_lock.  This
-guarantees that any in-flight timer handler has finished and prevents the
-timer from being re-armed during teardown, making subsequent cleanup safe.
+SCTP previously registered its per-net sysctls from sctp_defaults_init(),
+while the control socket is created later from sctp_ctrlsock_init(). This
+exposed a window during initialization where auth_enable was writable
+before net->sctp.ctl_sock existed, and a teardown window where auth_enable
+stayed writable after inet_ctl_sock_destroy() had released the control
+socket.
 
-Fixes: 4db67e808640 ("sctp: Make the address lists per network namespace")
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
+Move the per-net SCTP sysctl registration into sctp_ctrlsock_init() after
+sctp_ctl_sock_init() succeeds, and unregister the sysctl table before
+destroying the control socket in sctp_ctrlsock_exit(). If sysctl
+registration fails after the control socket was created, destroy the
+control socket in the same init path.
+
+Make sctp_sysctl_net_unregister() tolerate a missing header and clear the
+saved pointer so init-error and exit paths can safely share the unregister
+helper.
+
+Fixes: 15649fd5415e ("sctp: sysctl: auth_enable: avoid using current->nsproxy")
+Cc: stable@vger.kernel.org
+Reported-by: Yuan Tan <yuantan098@gmail.com>
+Reported-by: Yifan Wu <yifanwucs@gmail.com>
+Reported-by: Juefei Pu <tomapufckgml@gmail.com>
+Reported-by: Xin Liu <bird@lzu.edu.cn>
+Co-developed-by: Qi Tang <tpluszz77@gmail.com>
+Signed-off-by: Qi Tang <tpluszz77@gmail.com>
+Signed-off-by: Zhiling Zou <roxy520tt@gmail.com>
+Signed-off-by: Ren Wei <n05ec@lzu.edu.cn>
 ---
- net/sctp/protocol.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/sctp/protocol.c | 17 ++++++++++-------
+ net/sctp/sysctl.c   |  9 +++++++--
+ 2 files changed, 17 insertions(+), 9 deletions(-)
 
 diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
-index 587b0017a67d..cf335494bffe 100644
+index 587b0017a67d..f5fe6ddf0d7d 100644
 --- a/net/sctp/protocol.c
 +++ b/net/sctp/protocol.c
-@@ -663,8 +663,9 @@ static void sctp_free_addr_wq(struct net *net)
- 	struct sctp_sockaddr_entry *addrw;
- 	struct sctp_sockaddr_entry *temp;
+@@ -1382,10 +1382,6 @@ static int __net_init sctp_defaults_init(struct net *net)
+ 	net->sctp.l3mdev_accept = 1;
+ #endif
  
-+	timer_shutdown_sync(&net->sctp.addr_wq_timer);
+-	status = sctp_sysctl_net_register(net);
+-	if (status)
+-		goto err_sysctl_register;
+-
+ 	/* Allocate and initialise sctp mibs.  */
+ 	status = init_sctp_mibs(net);
+ 	if (status)
+@@ -1419,8 +1415,6 @@ static int __net_init sctp_defaults_init(struct net *net)
+ 	cleanup_sctp_mibs(net);
+ #endif
+ err_init_mibs:
+-	sctp_sysctl_net_unregister(net);
+-err_sysctl_register:
+ 	return status;
+ }
+ 
+@@ -1435,7 +1429,6 @@ static void __net_exit sctp_defaults_exit(struct net *net)
+ 	net->sctp.proc_net_sctp = NULL;
+ #endif
+ 	cleanup_sctp_mibs(net);
+-	sctp_sysctl_net_unregister(net);
+ }
+ 
+ static struct pernet_operations sctp_defaults_ops = {
+@@ -1451,14 +1444,24 @@ static int __net_init sctp_ctrlsock_init(struct net *net)
+ 	status = sctp_ctl_sock_init(net);
+ 	if (status)
+ 		pr_err("Failed to initialize the SCTP control sock\n");
++	else
++		status = sctp_sysctl_net_register(net);
 +
- 	spin_lock_bh(&net->sctp.addr_wq_lock);
--	timer_delete(&net->sctp.addr_wq_timer);
- 	list_for_each_entry_safe(addrw, temp, &net->sctp.addr_waitq, list) {
- 		list_del(&addrw->list);
- 		kfree(addrw);
++	if (status && net->sctp.ctl_sock) {
++		inet_ctl_sock_destroy(net->sctp.ctl_sock);
++		net->sctp.ctl_sock = NULL;
++	}
+ 
+ 	return status;
+ }
+ 
+ static void __net_exit sctp_ctrlsock_exit(struct net *net)
+ {
++	sctp_sysctl_net_unregister(net);
++
+ 	/* Free the control endpoint.  */
+ 	inet_ctl_sock_destroy(net->sctp.ctl_sock);
++	net->sctp.ctl_sock = NULL;
+ }
+ 
+ static struct pernet_operations sctp_ctrlsock_ops = {
+diff --git a/net/sctp/sysctl.c b/net/sctp/sysctl.c
+index 15e7db9a3ab2..fca840484ebf 100644
+--- a/net/sctp/sysctl.c
++++ b/net/sctp/sysctl.c
+@@ -615,11 +615,16 @@ int sctp_sysctl_net_register(struct net *net)
+ 
+ void sctp_sysctl_net_unregister(struct net *net)
+ {
++	struct ctl_table_header *header = net->sctp.sysctl_header;
+ 	const struct ctl_table *table;
+ 
+-	table = net->sctp.sysctl_header->ctl_table_arg;
+-	unregister_net_sysctl_table(net->sctp.sysctl_header);
++	if (!header)
++		return;
++
++	table = header->ctl_table_arg;
++	unregister_net_sysctl_table(header);
+ 	kfree(table);
++	net->sctp.sysctl_header = NULL;
+ }
+ 
+ static struct ctl_table_header *sctp_sysctl_header;
 -- 
-2.47.1
+2.43.0
 
 
