@@ -1,40 +1,40 @@
-Return-Path: <linux-sctp+bounces-1323-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1324-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id PlerCi3FUWo0IgMAu9opvQ
-	(envelope-from <linux-sctp+bounces-1323-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Sat, 11 Jul 2026 06:23:09 +0200
+	id XBLIMznFUWpAIgMAu9opvQ
+	(envelope-from <linux-sctp+bounces-1324-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Sat, 11 Jul 2026 06:23:21 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 559567404CC
-	for <lists+linux-sctp@lfdr.de>; Sat, 11 Jul 2026 06:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4546F7404D6
+	for <lists+linux-sctp@lfdr.de>; Sat, 11 Jul 2026 06:23:21 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
 	dkim=none;
 	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "linux-sctp+bounces-1323-lists+linux-sctp=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-sctp+bounces-1323-lists+linux-sctp=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-sctp+bounces-1324-lists+linux-sctp=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-sctp+bounces-1324-lists+linux-sctp=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 533EB30300D5
-	for <lists+linux-sctp@lfdr.de>; Sat, 11 Jul 2026 04:23:07 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B3BEB3035F3F
+	for <lists+linux-sctp@lfdr.de>; Sat, 11 Jul 2026 04:23:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A735A23BCEE;
-	Sat, 11 Jul 2026 04:23:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 234572D23A4;
+	Sat, 11 Jul 2026 04:23:06 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.229.168.213])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D693F1C3F31;
-	Sat, 11 Jul 2026 04:22:58 +0000 (UTC)
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.175.55.52])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BD4E21CC5A;
+	Sat, 11 Jul 2026 04:23:02 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783743784; cv=none; b=CekcXMBVWDPxfBe6gGpEi0qFWzqkBTc5IiPRZXzSqIPXz5CC14jmneadm47QtdXZvOREhl+M8RC3sCVU7Ml9YFevdavU/elEzKQtpsll0zWMMbUdo0dfO0vBD2CUXPKvdADm7jroIr9/q5OkRALEA/KnxnLRP520o2EWMgTy/RM=
+	t=1783743786; cv=none; b=cQLr9Eq9pSEQa8YqdyH0Bz0axDwcb4teDMD52GjmmSzJVFoY77xeKBa6Wj47MJktCcFv6EAfYTV+UTiwiokMxvwPrARdh+CJWp+CNRUxpW6LMnly3obqpuqURq5X10WzarACp9v9RaSV3VrPP+BlBvsfacpH2/CmFIUdGm/S5XE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783743784; c=relaxed/simple;
-	bh=V1P4pcPfLsVACyD0xKcWD72Y/F94QRtp7wRu+6L14js=;
+	s=arc-20240116; t=1783743786; c=relaxed/simple;
+	bh=Gouxmcm5kuouDRujJhN/PPdbtWpMwyVbeTWCP8xYus4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=neFlzMHkFgiygvo4K5paPJTB5tO4aLday6st4ZQDeq2jHRD5uRk6cSVdQ1p7YJOD4e3n+2EJVIgKtEQBShbaf04/PuWhg3HQ793jePlxLvpfZVbV9xSRl++djzAFnpCgMOHQAzWxnGu3oE3utIf0P6SNgj5ShnLX+O6c3nZgsYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lzu.edu.cn; spf=pass smtp.mailfrom=lzu.edu.cn; arc=none smtp.client-ip=52.229.168.213
+	 MIME-Version; b=Y/bw4x9hlyipvR/G4hjdfbFkNXBSrlHX71L/l+ehHYkdmpTcXNQ4tS/rc9XJjeyaztoZEhd13iTDOtHpzwkwiRrpyWF3uajq9WWyv4FO2KMAT4i2eTep0k8xt/niSAnqoHkspKd3YwwHU7PL/9ye1gXLdXcLQ0rWY3XHwIBMug4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lzu.edu.cn; spf=pass smtp.mailfrom=lzu.edu.cn; arc=none smtp.client-ip=52.175.55.52
 Received: from enjou-Legion-Y7000P-2019 (unknown [123.114.53.210])
-	by app3 (Coremail) with SMTP id ywmowADX5vkMxVFqVnZFAA--.44345S3;
-	Sat, 11 Jul 2026 12:22:45 +0800 (CST)
+	by app3 (Coremail) with SMTP id ywmowADX5vkMxVFqVnZFAA--.44345S4;
+	Sat, 11 Jul 2026 12:22:47 +0800 (CST)
 From: Ren Wei <n05ec@lzu.edu.cn>
 To: linux-sctp@vger.kernel.org,
 	netdev@vger.kernel.org
@@ -53,9 +53,9 @@ Cc: marcelo.leitner@gmail.com,
 	roxy520tt@gmail.com,
 	n05ec@lzu.edu.cn,
 	sashiko-bot@kernel.org
-Subject: [PATCH net v2 1/2] sctp: avoid auth_enable sysctl UAF during netns teardown
-Date: Sat, 11 Jul 2026 12:22:16 +0800
-Message-ID: <2e48ecffe7fa9e983203a22f68e603cd8530c5d1.1782745545.git.roxy520tt@gmail.com>
+Subject: [PATCH net v2 2/2] sctp: close UDP tunnel sockets during netns teardown
+Date: Sat, 11 Jul 2026 12:22:17 +0800
+Message-ID: <c4eed94096ce6b4f1c9ff1f7f6b59f8de33e8e31.1782745545.git.roxy520tt@gmail.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <cover.1782745545.git.roxy520tt@gmail.com>
 References: <cover.1782745545.git.roxy520tt@gmail.com>
@@ -66,10 +66,10 @@ List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:ywmowADX5vkMxVFqVnZFAA--.44345S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxGrWktrWrAFyrCry3XryDAwb_yoWrAFy8pa
-	4rWay5tryxJrWrXFs3JF4UKF15KFs7J3srCw1kG3s0kwsrGryrK3W8tayxZF17AFW8CFWf
-	ZF18trW29w4DAFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:ywmowADX5vkMxVFqVnZFAA--.44345S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFy7CFWkGrykCF4kKr15urg_yoW8XF4rpF
+	1fGayftFW8J34vqrn3GF48Kr1rCan5G39rCwn8Gw1rArsxGry5Ka40qrW8uF48CFW0kFWa
+	vF1vgr1DKan8AFUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUB21xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
 	w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
 	IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E
@@ -83,7 +83,7 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxGrWktrWrAFyrCry3XryDAwb_yoWrAFy8pa
 	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE
 	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
 	kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjTRW9a9UUUUU
-X-CM-SenderInfo: zqqvvuo6o23hxhgxhubq/1tbiAQEFCWpQq1gLpgAAso
+X-CM-SenderInfo: zqqvvuo6o23hxhgxhubq/1tbiAQAFCWpQq1gLqAAAsn
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [0.54 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -94,7 +94,7 @@ X-Spamd-Result: default: False [0.54 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-1323-lists,linux-sctp=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-1324-lists,linux-sctp=lfdr.de];
 	DMARC_NA(0.00)[lzu.edu.cn];
 	FORGED_RECIPIENTS(0.00)[m:linux-sctp@vger.kernel.org,m:netdev@vger.kernel.org,m:marcelo.leitner@gmail.com,m:lucien.xin@gmail.com,m:davem@davemloft.net,m:edumazet@google.com,m:pabeni@redhat.com,m:horms@kernel.org,m:matttbe@kernel.org,m:yuantan098@gmail.com,m:yifanwucs@gmail.com,m:tomapufckgml@gmail.com,m:bird@lzu.edu.cn,m:tpluszz77@gmail.com,m:roxy520tt@gmail.com,m:n05ec@lzu.edu.cn,m:sashiko-bot@kernel.org,m:marceloleitner@gmail.com,m:lucienxin@gmail.com,s:lists@lfdr.de];
 	FORGED_SENDER(0.00)[n05ec@lzu.edu.cn,linux-sctp@vger.kernel.org];
@@ -115,129 +115,44 @@ X-Spamd-Result: default: False [0.54 / 15.00];
 	ALIAS_RESOLVED(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[17];
 	TAGGED_RCPT(0.00)[linux-sctp];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,lzu.edu.cn:from_mime,lzu.edu.cn:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,lzu.edu.cn:from_mime,lzu.edu.cn:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 559567404CC
+X-Rspamd-Queue-Id: 4546F7404D6
 
 From: Zhiling Zou <roxy520tt@gmail.com>
 
-proc_sctp_do_auth() updates the SCTP control socket after changing
-net.sctp.auth_enable. The handler gets the per-net SCTP state from
-ctl->data, so an already opened sysctl file can still target a network
-namespace while that namespace is being torn down.
+proc_sctp_do_udp_port() starts per-net SCTP UDP tunneling sockets when
+net.sctp.udp_port is set, and stops/restarts them when the sysctl value
+changes. The netns exit path does not stop these sockets, so a namespace
+can be torn down while its SCTP UDP tunnel sockets are still installed.
 
-SCTP previously registered its per-net sysctls from sctp_defaults_init(),
-while the control socket is created later from sctp_ctrlsock_init(). This
-exposed a window during initialization where auth_enable was writable
-before net->sctp.ctl_sock existed, and a teardown window where auth_enable
-stayed writable after inet_ctl_sock_destroy() had released the control
-socket.
+Close the UDP tunnel sockets from sctp_ctrlsock_exit() after unregistering
+the per-net sysctl table. This prevents new sysctl writes from racing in
+while the sockets are being released, and closes the sockets before the
+control socket is destroyed.
 
-Move the per-net SCTP sysctl registration into sctp_ctrlsock_init() after
-sctp_ctl_sock_init() succeeds, and unregister the sysctl table before
-destroying the control socket in sctp_ctrlsock_exit(). If sysctl
-registration fails after the control socket was created, destroy the
-control socket in the same init path.
-
-Make sctp_sysctl_net_unregister() tolerate a missing header and clear the
-saved pointer so init-error and exit paths can safely share the unregister
-helper.
-
-Fixes: 15649fd5415e ("sctp: sysctl: auth_enable: avoid using current->nsproxy")
+Fixes: 046c052b475e ("sctp: enable udp tunneling socks")
 Cc: stable@vger.kernel.org
-Reported-by: Yuan Tan <yuantan098@gmail.com>
-Reported-by: Yifan Wu <yifanwucs@gmail.com>
-Reported-by: Juefei Pu <tomapufckgml@gmail.com>
-Reported-by: Xin Liu <bird@lzu.edu.cn>
-Co-developed-by: Qi Tang <tpluszz77@gmail.com>
-Signed-off-by: Qi Tang <tpluszz77@gmail.com>
+Reported-by: Sashiko <sashiko-bot@kernel.org>
+Closes: https://sashiko.dev/#/patchset/b9f1f02b0780ad6a719e2413f5f0bb8eb7702d94.1782585631.git.roxy520tt%40gmail.com
 Signed-off-by: Zhiling Zou <roxy520tt@gmail.com>
 Signed-off-by: Ren Wei <n05ec@lzu.edu.cn>
 ---
- net/sctp/protocol.c | 17 ++++++++++-------
- net/sctp/sysctl.c   |  9 +++++++--
- 2 files changed, 17 insertions(+), 9 deletions(-)
+ net/sctp/protocol.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
-index 587b0017a67d..f5fe6ddf0d7d 100644
+index f5fe6ddf0d7d..5dbc7e9e8f06 100644
 --- a/net/sctp/protocol.c
 +++ b/net/sctp/protocol.c
-@@ -1382,10 +1382,6 @@ static int __net_init sctp_defaults_init(struct net *net)
- 	net->sctp.l3mdev_accept = 1;
- #endif
- 
--	status = sctp_sysctl_net_register(net);
--	if (status)
--		goto err_sysctl_register;
--
- 	/* Allocate and initialise sctp mibs.  */
- 	status = init_sctp_mibs(net);
- 	if (status)
-@@ -1419,8 +1415,6 @@ static int __net_init sctp_defaults_init(struct net *net)
- 	cleanup_sctp_mibs(net);
- #endif
- err_init_mibs:
--	sctp_sysctl_net_unregister(net);
--err_sysctl_register:
- 	return status;
- }
- 
-@@ -1435,7 +1429,6 @@ static void __net_exit sctp_defaults_exit(struct net *net)
- 	net->sctp.proc_net_sctp = NULL;
- #endif
- 	cleanup_sctp_mibs(net);
--	sctp_sysctl_net_unregister(net);
- }
- 
- static struct pernet_operations sctp_defaults_ops = {
-@@ -1451,14 +1444,24 @@ static int __net_init sctp_ctrlsock_init(struct net *net)
- 	status = sctp_ctl_sock_init(net);
- 	if (status)
- 		pr_err("Failed to initialize the SCTP control sock\n");
-+	else
-+		status = sctp_sysctl_net_register(net);
-+
-+	if (status && net->sctp.ctl_sock) {
-+		inet_ctl_sock_destroy(net->sctp.ctl_sock);
-+		net->sctp.ctl_sock = NULL;
-+	}
- 
- 	return status;
- }
- 
+@@ -1458,6 +1458,7 @@ static int __net_init sctp_ctrlsock_init(struct net *net)
  static void __net_exit sctp_ctrlsock_exit(struct net *net)
  {
-+	sctp_sysctl_net_unregister(net);
-+
+ 	sctp_sysctl_net_unregister(net);
++	sctp_udp_sock_stop(net);
+ 
  	/* Free the control endpoint.  */
  	inet_ctl_sock_destroy(net->sctp.ctl_sock);
-+	net->sctp.ctl_sock = NULL;
- }
- 
- static struct pernet_operations sctp_ctrlsock_ops = {
-diff --git a/net/sctp/sysctl.c b/net/sctp/sysctl.c
-index 15e7db9a3ab2..fca840484ebf 100644
---- a/net/sctp/sysctl.c
-+++ b/net/sctp/sysctl.c
-@@ -615,11 +615,16 @@ int sctp_sysctl_net_register(struct net *net)
- 
- void sctp_sysctl_net_unregister(struct net *net)
- {
-+	struct ctl_table_header *header = net->sctp.sysctl_header;
- 	const struct ctl_table *table;
- 
--	table = net->sctp.sysctl_header->ctl_table_arg;
--	unregister_net_sysctl_table(net->sctp.sysctl_header);
-+	if (!header)
-+		return;
-+
-+	table = header->ctl_table_arg;
-+	unregister_net_sysctl_table(header);
- 	kfree(table);
-+	net->sctp.sysctl_header = NULL;
- }
- 
- static struct ctl_table_header *sctp_sysctl_header;
 -- 
 2.43.0
 
