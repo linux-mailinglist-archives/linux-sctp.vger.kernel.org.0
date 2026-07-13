@@ -1,586 +1,286 @@
-Return-Path: <linux-sctp+bounces-1328-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1332-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id INE1O2THVGp4SwAAu9opvQ
-	(envelope-from <linux-sctp+bounces-1328-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Mon, 13 Jul 2026 13:09:24 +0200
+	id MmSJF+bvVGpNhgAAu9opvQ
+	(envelope-from <linux-sctp+bounces-1332-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Mon, 13 Jul 2026 16:02:14 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 478BA74A28F
-	for <lists+linux-sctp@lfdr.de>; Mon, 13 Jul 2026 13:09:24 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B29E74C0B8
+	for <lists+linux-sctp@lfdr.de>; Mon, 13 Jul 2026 16:02:11 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20201202 header.b=ZQ6yw0ee;
-	spf=pass (mail.lfdr.de: domain of "linux-sctp+bounces-1328-lists+linux-sctp=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-sctp+bounces-1328-lists+linux-sctp=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b="H4n/nlOz";
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=UDB1CXcH;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b="H4n/nlOz";
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=UDB1CXcH;
+	spf=pass (mail.lfdr.de: domain of "linux-sctp+bounces-1332-lists+linux-sctp=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-sctp+bounces-1332-lists+linux-sctp=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=suse.de;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EC1F53032F5F
-	for <lists+linux-sctp@lfdr.de>; Mon, 13 Jul 2026 11:07:55 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 150FB3021D13
+	for <lists+linux-sctp@lfdr.de>; Mon, 13 Jul 2026 14:02:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47D38381EB2;
-	Mon, 13 Jul 2026 11:07:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E239243C076;
+	Mon, 13 Jul 2026 14:01:01 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A20C3769FE;
-	Mon, 13 Jul 2026 11:07:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1C5043B3DD
+	for <linux-sctp@vger.kernel.org>; Mon, 13 Jul 2026 14:00:58 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783940874; cv=none; b=Ooj1zFrROtFYzUYpEF3OXsT4b4pwDTL6xpy2xIlkoRPXPhJ3CoruzmWv1uBHINjdflB8e8w+9k0g7N59WYuIofSqaZbtKhYNhTnSTT2/utd8zUsti+TfOUTA3Q3xvBplrz7P1iyxcAIgxJGsV8Res9uIJyaWsbujrtXyAJQ1JKU=
+	t=1783951261; cv=none; b=sfvbCkqhF8e8bTNjFhz7Ddxt6jSbHUZvUcYF/B/FppZIgn1gAeggOvdwKphraZqpbqorVX7Pl3Y8RgZMYBtMUCVk6glGCHzGuSbX5Y+ozrLuDG+/yMjJX3GJqECeOnbcFRPVyhOY1XZoSjQDNSLUX7BfGwTlMmTHZlmVi7kw9lQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783940874; c=relaxed/simple;
-	bh=v0+MG609dZTjGEN7kUhnpd5ADiTo5bAurAa1W9JmYKs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=IPPgvYqybT5rjR1JgPW7JNaYfhXS+tFHW4wSVahxgmDpuJmxuuxcQPV21YLk3EPdqI19oniOB57TY0OI5/AaIhuqW7M69jXoaJGtZRwJNZhCZlb0ZAPJ6+q1iZFsLx81Uu/AthQDINlEb+hlGoYtXi0nvm5hyDm4XwnG+thDQUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZQ6yw0ee; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E3BACC2BCFA;
-	Mon, 13 Jul 2026 11:07:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1783940873;
-	bh=v0+MG609dZTjGEN7kUhnpd5ADiTo5bAurAa1W9JmYKs=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ZQ6yw0eeoHmWjLiNBiFZuU2WDWuyxUstyByICxagzKh+teIDgseiWHJ3F1nrGXpeD
-	 +GYhYDXrrx2NhCqp5p6AIY1xqnNrSFD26tJi4POSJ187ulOWlmSmj673y8YN9X4Hef
-	 yu/vcyA5rv9Rxn0Ri41GO4jTyT46hck58VXvc8QS8oQYjoyzMsYy2QHYKkQcsfKRqt
-	 K8CCld7X1KIgOM/PQqvRW2QWZ4ctiGub+W3DN7uGiQcSeXq3EtNBYcbW2ah03ZLTw8
-	 tg7mrEy4uQg4l03jxMPl6AKytLkf3DQOVtVeBSZGEP0DuWHQemeqD7cZVh8XMEyLuZ
-	 LGnrpIIvYDEbQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C69C7C44501;
-	Mon, 13 Jul 2026 11:07:53 +0000 (UTC)
-From: Joel Granados <joel.granados@kernel.org>
-Date: Mon, 13 Jul 2026 13:07:44 +0200
-Subject: [PATCH RFC net-next v3 3/3] net: Const qualify network templated
- ctl_tables Arrays
+	s=arc-20240116; t=1783951261; c=relaxed/simple;
+	bh=RRYwRbyEte7BfcMFt3ythO47XNbGmg72CFl/wCmqVnw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dgleTXGSVz3DMaG9eV9phaLMODKFLLvVsKWHQiSbji8VPKLG/yQR24SL4nOjE7XYlpaajSwBbwObQWmfUOjugj09wGb4oPMLuHxshM6t43srGs8HHBF7fLcKDhF4j/WDgbnq0Goa801jVzLdB9YyrqzFz6z5P4na9RSqD1G4h8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=H4n/nlOz; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=UDB1CXcH; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=H4n/nlOz; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=UDB1CXcH; arc=none smtp.client-ip=195.135.223.131
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 88EDB3E14;
+	Mon, 13 Jul 2026 14:00:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1783951256; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vcWXpKMSq59reI46D3PoMFlhf4bMsFOmDLO8bdkAy90=;
+	b=H4n/nlOzSbC6kEf08Mt5PCFch2SnG8tyBuOt05AtDFm3Sezfdg5yX593HaKA6aTuamPcwD
+	htbNFckzP54JbOfP4QSOBVCw/FrvgILSk8fo38hIutmTDtgGvUw8lBAOJFoO8skDLsbz9y
+	32wqjJELZLybOJ5KxnKomeAhyZCck9E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1783951256;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vcWXpKMSq59reI46D3PoMFlhf4bMsFOmDLO8bdkAy90=;
+	b=UDB1CXcHnCErcMegyp3uKFCagjRC+Png4e+SXpAjIKzmoie60e4uuOQZJlcwnWORqsY78F
+	7F2WW9VZXXdIhlCw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1783951256; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vcWXpKMSq59reI46D3PoMFlhf4bMsFOmDLO8bdkAy90=;
+	b=H4n/nlOzSbC6kEf08Mt5PCFch2SnG8tyBuOt05AtDFm3Sezfdg5yX593HaKA6aTuamPcwD
+	htbNFckzP54JbOfP4QSOBVCw/FrvgILSk8fo38hIutmTDtgGvUw8lBAOJFoO8skDLsbz9y
+	32wqjJELZLybOJ5KxnKomeAhyZCck9E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1783951256;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vcWXpKMSq59reI46D3PoMFlhf4bMsFOmDLO8bdkAy90=;
+	b=UDB1CXcHnCErcMegyp3uKFCagjRC+Png4e+SXpAjIKzmoie60e4uuOQZJlcwnWORqsY78F
+	7F2WW9VZXXdIhlCw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 40CF3779AE;
+	Mon, 13 Jul 2026 14:00:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id RWCfDZPvVGoTEQAAD6G6ig
+	(envelope-from <fmancera@suse.de>); Mon, 13 Jul 2026 14:00:51 +0000
+Message-ID: <2256daf4-d03c-4a57-9d72-7a388d823f18@suse.de>
+Date: Mon, 13 Jul 2026 16:00:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 01/13 RFC net-next] net: ipv4: introduce CONFIG_IPV4 to
+ decouple the IPv4 stack
+To: Arnd Bergmann <arnd@arndb.de>, Netdev <netdev@vger.kernel.org>
+Cc: "David S . Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, David Ahern <dsahern@kernel.org>,
+ Simon Horman <horms@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+ Andrew Lunn <andrew+netdev@lunn.ch>,
+ Anthony L Nguyen <anthony.l.nguyen@intel.com>,
+ Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+ Elad Nachman <enachman@marvell.com>, Saeed Mahameed <saeedm@nvidia.com>,
+ Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>,
+ Petr Machata <petrm@nvidia.com>, Edward Cree <ecree.xilinx@gmail.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Arend van Spriel <arend.vanspriel@broadcom.com>,
+ Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+ Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+ Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
+ Chaitanya Kulkarni <kch@nvidia.com>, Saurav Kashyap <skashyap@marvell.com>,
+ Javed Hasan <jhasan@marvell.com>, GR-QLogic-Storage-Upstream@marvell.com,
+ "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Nilesh Javali <njavali@marvell.com>,
+ Manish Rangankar <mrangankar@marvell.com>, Varun Prakash
+ <varun@chelsio.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ David Howells <dhowells@redhat.com>, Marc Dionne <marc.dionne@auristor.com>,
+ Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>,
+ Chuck Lever <cel@kernel.org>, Jeff Layton <jlayton@kernel.org>,
+ NeilBrown <neil@brown.name>, Olga Kornievskaia <okorniev@redhat.com>,
+ Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
+ Marek Lindner <marek.lindner@mailbox.org>,
+ Simon Wunderlich <sw@simonwunderlich.de>,
+ Antonio Quartulli <antonio@mandelbit.com>,
+ Sven Eckelmann <sven@narfation.org>,
+ Nikolay Aleksandrov <razor@blackwall.org>,
+ Pablo Neira Ayuso <pablo@netfilter.org>, Florian Westphal <fw@strlen.de>,
+ Phil Sutter <phil@nwl.cc>, Johannes Berg <johannes@sipsolutions.net>,
+ Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>,
+ Geliang Tang <geliang@kernel.org>, Julian Anastasov <ja@ssi.bg>,
+ Aaron Conole <aconole@redhat.com>, Eelco Chaudron <echaudro@redhat.com>,
+ Ilya Maximets <i.maximets@ovn.org>, Allison Henderson <achender@kernel.org>,
+ Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>,
+ Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+ Xin Long <lucien.xin@gmail.com>, "D. Wythe" <alibuda@linux.alibaba.com>,
+ Dust Li <dust.li@linux.alibaba.com>, Sidraya Jayagond
+ <sidraya@linux.ibm.com>, Wenjia Zhang <wenjia@linux.ibm.com>,
+ Mahanta Jambigi <mjambigi@linux.ibm.com>, Tony Lu
+ <tonylu@linux.alibaba.com>, Wen Gu <guwen@linux.alibaba.com>,
+ Jon Maloy <jmaloy@redhat.com>,
+ Steffen Klassert <steffen.klassert@secunet.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>,
+ Vikas Gupta <vikas.gupta@broadcom.com>,
+ Rajashekar Hudumula <rajashekar.hudumula@broadcom.com>,
+ Justin Chen <justin.chen@broadcom.com>,
+ Bhargava Marreddy <bhargava.marreddy@broadcom.com>,
+ Nicolai Buchwitz <nb@tipi-net.de>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Heiner Kallweit <hkallweit1@gmail.com>, Krzysztof Kozlowski
+ <krzk@kernel.org>, Russell King <rmk+kernel@armlinux.org.uk>,
+ Yao Zi <me@ziyao.cc>, Yanteng Si <siyanteng@cqsoftware.com.cn>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>,
+ Julian Braha <julianbraha@gmail.com>, Joey Lu <a0987203069@gmail.com>,
+ Shangjuan Wei <weishangjuan@eswincomputing.com>,
+ Chen-Yu Tsai <wens@kernel.org>, Inochi Amaoto <inochiama@gmail.com>,
+ "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+ Qingfang Deng <qingfang.deng@linux.dev>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Eric Biggers <ebiggers@kernel.org>,
+ Ethan Nelson-Moore <enelsonmoore@gmail.com>, Ard Biesheuvel
+ <ardb@kernel.org>, Dmitry Safonov <0x7f454c46@gmail.com>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Alyssa Ross <hi@alyssa.is>,
+ linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+ "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+ "open list:NETRONOME ETHERNET DRIVERS" <oss-drivers@corigine.com>,
+ linux-net-drivers@amd.com, linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, linux-wireless@vger.kernel.org,
+ brcm80211@lists.linux.dev, brcm80211-dev-list.pdl@broadcom.com,
+ linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+ target-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+ b.a.t.m.a.n@lists.open-mesh.org,
+ "open list:ETHERNET BRIDGE" <bridge@lists.linux.dev>,
+ netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+ mptcp@lists.linux.dev, lvs-devel@vger.kernel.org, dev@openvswitch.org,
+ rds-devel@oss.oracle.com, linux-sctp@vger.kernel.org,
+ linux-s390@vger.kernel.org,
+ "open list:TIPC NETWORK LAYER" <tipc-discussion@lists.sourceforge.net>
+References: <20260712013941.4570-1-fmancera@suse.de>
+ <20260712013941.4570-2-fmancera@suse.de>
+ <12ffac6a-649a-4e4a-8d12-0b48171e1d95@app.fastmail.com>
+Content-Language: en-US
+From: Fernando Fernandez Mancera <fmancera@suse.de>
+In-Reply-To: <12ffac6a-649a-4e4a-8d12-0b48171e1d95@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260713-jag-net_const_qualify-v3-3-7289fe9eaea6@kernel.org>
-References: <20260713-jag-net_const_qualify-v3-0-7289fe9eaea6@kernel.org>
-In-Reply-To: <20260713-jag-net_const_qualify-v3-0-7289fe9eaea6@kernel.org>
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
- Pablo Neira Ayuso <pablo@netfilter.org>, Florian Westphal <fw@strlen.de>, 
- Phil Sutter <phil@nwl.cc>, 
- Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, 
- Xin Long <lucien.xin@gmail.com>, 
- Steffen Klassert <steffen.klassert@secunet.com>, 
- Herbert Xu <herbert@gondor.apana.org.au>, 
- "D. Wythe" <alibuda@linux.alibaba.com>, Dust Li <dust.li@linux.alibaba.com>, 
- Sidraya Jayagond <sidraya@linux.ibm.com>, 
- Wenjia Zhang <wenjia@linux.ibm.com>, 
- Mahanta Jambigi <mjambigi@linux.ibm.com>, 
- Tony Lu <tonylu@linux.alibaba.com>, Wen Gu <guwen@linux.alibaba.com>, 
- Kuniyuki Iwashima <kuniyu@google.com>, 
- Stefano Garzarella <sgarzare@redhat.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
- linux-sctp@vger.kernel.org, linux-rdma@vger.kernel.org, 
- linux-s390@vger.kernel.org, virtualization@lists.linux.dev, 
- Joel Granados <joel.granados@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=13709;
- i=joel.granados@kernel.org; h=from:subject:message-id;
- bh=v0+MG609dZTjGEN7kUhnpd5ADiTo5bAurAa1W9JmYKs=;
- b=owJ4nAHtARL+kA0DAAoBupfNUreWQU8ByyZiAGpUxwc5IEmEUrK0ky3OGnOlyhZX0IuZs9fuC
- HlMAC2ruSOzdYkBswQAAQoAHRYhBK5HCVcl5jElzssnkLqXzVK3lkFPBQJqVMcHAAoJELqXzVK3
- lkFPcOEL/3gh1ZlNROJQUz2bR/chdON08U8HaJt8WsCxMwDE+poTeX1IiTwASupaM837S7At5q/
- ww9PmHIH91IhAhEDjy0UX+SZVg9i/5rrB120OE1+ca7pAIMYzLCM8fBMCK0Kjk+pL1gyGNnbFmp
- fcz9NIcMD1g1kSqJWoHobyul+LwhO/1SqFCxTajeI7GnivboWXkRsK+47f8fhqiPBNGI9aNg2tE
- xCUdKxDZ9lUcfzlX8svdSbZo3UVOtGTiUASgC0t5jQ8BJqbJsTHpoaVYHf+bZ0SirlouhDJxgNC
- 4uDTllGBaI11paF4zrXNsPkvx59yTsMAxQPUwFjrfOp7QnhLBEaKPL8lXR2GTVIdgjrLB6dn1Ga
- rUb4ybILLIUkvjX0Bem18RanSK8/hNPGPzC17VUiq12g5TenibITX2nHRTZnPVV+4w4nZwlBR5M
- YIffm/BmHkZ09wGAdoV24djw5Ixf4gAPA7u+SrCmbg8mCKApvs4He/5dRqFHBKPtDqLMwH4WFJ6
- bw=
-X-Developer-Key: i=joel.granados@kernel.org; a=openpgp;
- fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
-X-Endpoint-Received: by B4 Relay for joel.granados@kernel.org/default with
- auth_id=239
+X-Spam-Flag: NO
+X-Spam-Score: -1.01
+X-Spam-Level: 
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.66 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[davemloft.net,google.com,kernel.org,redhat.com,nvidia.com,ziepe.ca,lunn.ch,intel.com,marvell.com,gmail.com,foss.st.com,broadcom.com,kernel.dk,lst.de,grimberg.me,hansenpartnership.com,oracle.com,chelsio.com,zeniv.linux.org.uk,suse.cz,auristor.com,brown.name,talpey.com,mailbox.org,simonwunderlich.de,mandelbit.com,narfation.org,blackwall.org,netfilter.org,strlen.de,nwl.cc,sipsolutions.net,ssi.bg,ovn.org,mojatatu.com,resnulli.us,linux.alibaba.com,linux.ibm.com,secunet.com,gondor.apana.org.au,tipi-net.de,armlinux.org.uk,ziyao.cc,cqsoftware.com.cn,bootlin.com,eswincomputing.com,bp.renesas.com,linux.dev,linuxfoundation.org,alyssa.is,vger.kernel.org,lists.osuosl.org,corigine.com,amd.com,st-md-mailman.stormreply.com,lists.infradead.org,lists.linux.dev,lists.open-mesh.org,openvswitch.org,oss.oracle.com,lists.sourceforge.net];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-1328-lists,linux-sctp=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[davemloft.net,google.com,kernel.org,redhat.com,nvidia.com,netfilter.org,strlen.de,nwl.cc,gmail.com,secunet.com,gondor.apana.org.au,linux.alibaba.com,linux.ibm.com];
-	RCPT_COUNT_TWELVE(0.00)[32];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:davem@davemloft.net,m:edumazet@google.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:horms@kernel.org,m:dsahern@kernel.org,m:idosch@nvidia.com,m:pablo@netfilter.org,m:fw@strlen.de,m:phil@nwl.cc,m:marcelo.leitner@gmail.com,m:lucien.xin@gmail.com,m:steffen.klassert@secunet.com,m:herbert@gondor.apana.org.au,m:alibuda@linux.alibaba.com,m:dust.li@linux.alibaba.com,m:sidraya@linux.ibm.com,m:wenjia@linux.ibm.com,m:mjambigi@linux.ibm.com,m:tonylu@linux.alibaba.com,m:guwen@linux.alibaba.com,m:kuniyu@google.com,m:sgarzare@redhat.com,m:netdev@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:netfilter-devel@vger.kernel.org,m:coreteam@netfilter.org,m:linux-sctp@vger.kernel.org,m:linux-rdma@vger.kernel.org,m:linux-s390@vger.kernel.org,m:virtualization@lists.linux.dev,m:joel.granados@kernel.org,m:marceloleitner@gmail.com,m:lucienxin@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER(0.00)[joel.granados@kernel.org,linux-sctp@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-1332-lists,linux-sctp=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
 	TO_DN_SOME(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:arnd@arndb.de,m:netdev@vger.kernel.org,m:davem@davemloft.net,m:edumazet@google.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:dsahern@kernel.org,m:horms@kernel.org,m:idosch@nvidia.com,m:jgg@ziepe.ca,m:leon@kernel.org,m:andrew+netdev@lunn.ch,m:anthony.l.nguyen@intel.com,m:przemyslaw.kitszel@intel.com,m:enachman@marvell.com,m:saeedm@nvidia.com,m:tariqt@nvidia.com,m:mbloch@nvidia.com,m:petrm@nvidia.com,m:ecree.xilinx@gmail.com,m:mcoquelin.stm32@gmail.com,m:alexandre.torgue@foss.st.com,m:arend.vanspriel@broadcom.com,m:miriam.rachel.korenblit@intel.com,m:kbusch@kernel.org,m:axboe@kernel.dk,m:hch@lst.de,m:sagi@grimberg.me,m:kch@nvidia.com,m:skashyap@marvell.com,m:jhasan@marvell.com,m:GR-QLogic-Storage-Upstream@marvell.com,m:James.Bottomley@hansenpartnership.com,m:martin.petersen@oracle.com,m:njavali@marvell.com,m:mrangankar@marvell.com,m:varun@chelsio.com,m:viro@zeniv.linux.org.uk,m:brauner@kernel.org,m:jack@suse.cz,m:dhowells@redhat.com,m:marc.dionne@auristor.com,m
+ :trondmy@kernel.org,m:anna@kernel.org,m:cel@kernel.org,m:jlayton@kernel.org,m:neil@brown.name,m:okorniev@redhat.com,m:Dai.Ngo@oracle.com,m:tom@talpey.com,m:marek.lindner@mailbox.org,m:sw@simonwunderlich.de,m:antonio@mandelbit.com,m:sven@narfation.org,m:razor@blackwall.org,m:pablo@netfilter.org,m:fw@strlen.de,m:phil@nwl.cc,m:johannes@sipsolutions.net,m:matttbe@kernel.org,m:martineau@kernel.org,m:geliang@kernel.org,m:ja@ssi.bg,m:aconole@redhat.com,m:echaudro@redhat.com,m:i.maximets@ovn.org,m:achender@kernel.org,m:jhs@mojatatu.com,m:jiri@resnulli.us,m:marcelo.leitner@gmail.com,m:lucien.xin@gmail.com,m:alibuda@linux.alibaba.com,m:dust.li@linux.alibaba.com,m:sidraya@linux.ibm.com,m:wenjia@linux.ibm.com,m:mjambigi@linux.ibm.com,m:tonylu@linux.alibaba.com,m:guwen@linux.alibaba.com,m:jmaloy@redhat.com,m:steffen.klassert@secunet.com,m:herbert@gondor.apana.org.au,m:vikas.gupta@broadcom.com,m:rajashekar.hudumula@broadcom.com,m:justin.chen@broadcom.com,m:bhargava.marreddy@broadcom.com,m:nb@tipi
+ -net.de,m:florian.fainelli@broadcom.com,m:hkallweit1@gmail.com,m:krzk@kernel.org,m:rmk+kernel@armlinux.org.uk,m:me@ziyao.cc,m:siyanteng@cqsoftware.com.cn,m:maxime.chevallier@bootlin.com,m:julianbraha@gmail.com,m:a0987203069@gmail.com,m:weishangjuan@eswincomputing.com,m:wens@kernel.org,m:inochiama@gmail.com,m:prabhakar.mahadev-lad.rj@bp.renesas.com,s:lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER(0.00)[fmancera@suse.de,linux-sctp@vger.kernel.org];
+	FORWARDED(0.00)[lists@lfdr.de];
+	DKIM_TRACE(0.00)[suse.de:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[joel.granados@kernel.org,linux-sctp@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ALIAS_RESOLVED(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[fmancera@suse.de,linux-sctp@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[134];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-sctp];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	TAGGED_RCPT(0.00)[linux-sctp,netdev,kernel];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 478BA74A28F
+X-Rspamd-Queue-Id: 4B29E74C0B8
 
-Add duplication helpers in the cases where the ctl_table array elements
-are modified after duplication. Helpers return a ctl_table as const
-pointer allowing the const qualification of the static global ctl_table
-array.
+On 7/12/26 1:01 PM, Arnd Bergmann wrote:
+> On Sun, Jul 12, 2026, at 03:38, Fernando Fernandez Mancera wrote:
+>> Historically, the IPv4 protocol has been linked to the core INET
+>> subsystem. Because shared infrastructure like the TCP/UDP engine,
+>> routing or INET hashtables live inside net/ipv4/, it has been impossible
+>> to compile a kernel with only IPv6 support.
+>>
+>> This patch introduces the CONFIG_IPV4 Kconfig symbol, which is set to
+>> 'def_bool y' for now. This does not allow to completely disable the
+>> IPv4 stack yet but it lays the necessary build-system work for that
+>> goal.
+> 
+> I expect this will cause additional (trivial) build regression in the
+> next step when randconfig builds run into obscure corner cases, either
+> with INET=y IPV4=n IPV6=y or with INET=y IPV4=n IPV6=n.
+> 
+> I can probably give your patch (with IPV4 visible or disabled) an
+> early go on the randconfig tree to find these more quickly.
+> If I run into regressions, should I just add more 'depends on IPV4',
+> or do you have other plans?
+> 
 
-Signed-off-by: Joel Granados <joel.granados@kernel.org>
----
- net/core/sysctl_net_core.c        | 38 +++++++++++++++++----------
- net/ipv4/sysctl_net_ipv4.c        | 54 +++++++++++++++++++++++----------------
- net/ipv4/xfrm4_policy.c           | 22 ++++++++++++----
- net/ipv6/xfrm6_policy.c           | 22 ++++++++++++----
- net/netfilter/nf_hooks_lwtunnel.c |  4 +--
- net/smc/smc_sysctl.c              | 26 ++++++++++++++-----
- net/unix/sysctl_net_unix.c        | 21 +++++++++++----
- net/vmw_vsock/af_vsock.c          | 25 +++++++++++++-----
- 8 files changed, 146 insertions(+), 66 deletions(-)
+Yes, I have a job running randconfig and verifying nothing breaks. If 
+something breaks and it isn't core networking stack I would just make 
+the Kconfig symbol depend on IPv4.
 
-diff --git a/net/core/sysctl_net_core.c b/net/core/sysctl_net_core.c
-index b508618bfc12393ba926ebf5a2dd4ea73ef03ee8..eb35da3556f4aa00cecd4582ab94e339d2518506 100644
---- a/net/core/sysctl_net_core.c
-+++ b/net/core/sysctl_net_core.c
-@@ -678,7 +678,7 @@ static struct ctl_table net_core_table[] = {
- 	},
- };
- 
--static struct ctl_table netns_core_table[] = {
-+static const struct ctl_table netns_core_table[] = {
- #if IS_ENABLED(CONFIG_RPS)
- 	{
- 		.procname	= "rps_default_mask",
-@@ -787,26 +787,38 @@ static int __init fb_tunnels_only_for_init_net_sysctl_setup(char *str)
- }
- __setup("fb_tunnels=", fb_tunnels_only_for_init_net_sysctl_setup);
- 
--static __net_init int sysctl_core_net_init(struct net *net)
-+static const struct ctl_table *netns_core_table_dup(struct net *net)
- {
- 	size_t table_size = ARRAY_SIZE(netns_core_table);
- 	struct ctl_table *tbl;
-+	int i;
-+
-+	tbl = kmemdup(netns_core_table, sizeof(netns_core_table), GFP_KERNEL);
-+	if (!tbl)
-+		return NULL;
-+
-+	for (i = 0; i < table_size; ++i) {
-+		if (tbl[i].data == &sysctl_wmem_max)
-+			break;
-+
-+		tbl[i].data += (char *)net - (char *)&init_net;
-+	}
-+	for (; i < table_size; ++i)
-+		tbl[i].mode &= ~0222;
-+
-+	return tbl;
-+}
-+
-+static __net_init int sysctl_core_net_init(struct net *net)
-+{
-+	size_t table_size = ARRAY_SIZE(netns_core_table);
-+	const struct ctl_table *tbl;
- 
- 	tbl = netns_core_table;
- 	if (!net_eq(net, &init_net)) {
--		int i;
--		tbl = kmemdup(tbl, sizeof(netns_core_table), GFP_KERNEL);
-+		tbl = netns_core_table_dup(net);
- 		if (tbl == NULL)
- 			goto err_dup;
--
--		for (i = 0; i < table_size; ++i) {
--			if (tbl[i].data == &sysctl_wmem_max)
--				break;
--
--			tbl[i].data += (char *)net - (char *)&init_net;
--		}
--		for (; i < table_size; ++i)
--			tbl[i].mode &= ~0222;
- 	}
- 
- 	net->core.sysctl_hdr = register_net_sysctl_sz(net, "net/core", tbl, table_size);
-diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
-index ca1180dba1dea9ce72028ba49b7f953da343336b..2f0363bca2a88d68276670cfce6fb04398f82bc5 100644
---- a/net/ipv4/sysctl_net_ipv4.c
-+++ b/net/ipv4/sysctl_net_ipv4.c
-@@ -624,7 +624,7 @@ static struct ctl_table ipv4_table[] = {
- 	},
- };
- 
--static struct ctl_table ipv4_net_table[] = {
-+static const struct ctl_table ipv4_net_table[] = {
- 	{
- 		.procname	= "tcp_max_tw_buckets",
- 		.data		= &init_net.ipv4.tcp_death_row.sysctl_max_tw_buckets,
-@@ -1654,35 +1654,45 @@ static struct ctl_table ipv4_net_table[] = {
- 	},
- };
- 
--static __net_init int ipv4_sysctl_init_net(struct net *net)
-+static const struct ctl_table *ipv4_net_table_dup(struct net *net)
- {
- 	size_t table_size = ARRAY_SIZE(ipv4_net_table);
- 	struct ctl_table *table;
-+	int i;
-+
-+	table = kmemdup(ipv4_net_table, sizeof(ipv4_net_table), GFP_KERNEL);
-+	if (!table)
-+		return NULL;
-+
-+	for (i = 0; i < table_size; i++) {
-+		if (table[i].data) {
-+			/* Update the variables to point into
-+			 * the current struct net
-+			 */
-+			table[i].data += (void *)net - (void *)&init_net;
-+		} else {
-+			/* Entries without data pointer are global;
-+			 * Make them read-only in non-init_net ns
-+			 */
-+			table[i].mode &= ~0222;
-+		}
-+		if (table[i].extra2 >= (void *)&init_net.ipv4 &&
-+		    table[i].extra2 < (void *)(&init_net.ipv4 + 1))
-+			table[i].extra2 += (void *)net - (void *)&init_net;
-+	}
-+	return table;
-+}
-+
-+static __net_init int ipv4_sysctl_init_net(struct net *net)
-+{
-+	size_t table_size = ARRAY_SIZE(ipv4_net_table);
-+	const struct ctl_table *table;
- 
- 	table = ipv4_net_table;
- 	if (!net_eq(net, &init_net)) {
--		int i;
--
--		table = kmemdup(table, sizeof(ipv4_net_table), GFP_KERNEL);
-+		table = ipv4_net_table_dup(net);
- 		if (!table)
- 			goto err_alloc;
--
--		for (i = 0; i < table_size; i++) {
--			if (table[i].data) {
--				/* Update the variables to point into
--				 * the current struct net
--				 */
--				table[i].data += (void *)net - (void *)&init_net;
--			} else {
--				/* Entries without data pointer are global;
--				 * Make them read-only in non-init_net ns
--				 */
--				table[i].mode &= ~0222;
--			}
--			if (table[i].extra2 >= (void *)&init_net.ipv4 &&
--			    table[i].extra2 < (void *)(&init_net.ipv4 + 1))
--				table[i].extra2 += (void *)net - (void *)&init_net;
--		}
- 	}
- 
- 	net->ipv4.ipv4_hdr = register_net_sysctl_sz(net, "net/ipv4", table,
-diff --git a/net/ipv4/xfrm4_policy.c b/net/ipv4/xfrm4_policy.c
-index 58faf1ddd2b151e4569bb6351029718dac37521b..ab7a01029d490416d36482f7a3189f83d6670f42 100644
---- a/net/ipv4/xfrm4_policy.c
-+++ b/net/ipv4/xfrm4_policy.c
-@@ -141,7 +141,7 @@ static const struct xfrm_policy_afinfo xfrm4_policy_afinfo = {
- };
- 
- #ifdef CONFIG_SYSCTL
--static struct ctl_table xfrm4_policy_table[] = {
-+static const struct ctl_table xfrm4_policy_table[] = {
- 	{
- 		.procname       = "xfrm4_gc_thresh",
- 		.data           = &init_net.xfrm.xfrm4_dst_ops.gc_thresh,
-@@ -151,18 +151,30 @@ static struct ctl_table xfrm4_policy_table[] = {
- 	},
- };
- 
--static __net_init int xfrm4_net_sysctl_init(struct net *net)
-+static const struct ctl_table *xfrm4_policy_table_dup(struct net *net)
- {
- 	struct ctl_table *table;
-+
-+	table = kmemdup(xfrm4_policy_table, sizeof(xfrm4_policy_table),
-+			GFP_KERNEL);
-+	if (!table)
-+		return NULL;
-+
-+	table[0].data = &net->xfrm.xfrm4_dst_ops.gc_thresh;
-+
-+	return table;
-+}
-+
-+static __net_init int xfrm4_net_sysctl_init(struct net *net)
-+{
-+	const struct ctl_table *table;
- 	struct ctl_table_header *hdr;
- 
- 	table = xfrm4_policy_table;
- 	if (!net_eq(net, &init_net)) {
--		table = kmemdup(table, sizeof(xfrm4_policy_table), GFP_KERNEL);
-+		table = xfrm4_policy_table_dup(net);
- 		if (!table)
- 			goto err_alloc;
--
--		table[0].data = &net->xfrm.xfrm4_dst_ops.gc_thresh;
- 	}
- 
- 	hdr = register_net_sysctl_sz(net, "net/ipv4", table,
-diff --git a/net/ipv6/xfrm6_policy.c b/net/ipv6/xfrm6_policy.c
-index 125ea9a5b8a082052380b7fd7ed7123f5247d7cc..1e0385b62cde3f6d23382f92bbad5d7fdd09f1ef 100644
---- a/net/ipv6/xfrm6_policy.c
-+++ b/net/ipv6/xfrm6_policy.c
-@@ -186,7 +186,7 @@ static void xfrm6_policy_fini(void)
- }
- 
- #ifdef CONFIG_SYSCTL
--static struct ctl_table xfrm6_policy_table[] = {
-+static const struct ctl_table xfrm6_policy_table[] = {
- 	{
- 		.procname       = "xfrm6_gc_thresh",
- 		.data		= &init_net.xfrm.xfrm6_dst_ops.gc_thresh,
-@@ -196,18 +196,30 @@ static struct ctl_table xfrm6_policy_table[] = {
- 	},
- };
- 
--static int __net_init xfrm6_net_sysctl_init(struct net *net)
-+static const struct ctl_table *xfrm6_policy_table_dup(struct net *net)
- {
- 	struct ctl_table *table;
-+
-+	table = kmemdup(xfrm6_policy_table, sizeof(xfrm6_policy_table),
-+			GFP_KERNEL);
-+	if (!table)
-+		return NULL;
-+
-+	table[0].data = &net->xfrm.xfrm6_dst_ops.gc_thresh;
-+
-+	return table;
-+}
-+
-+static int __net_init xfrm6_net_sysctl_init(struct net *net)
-+{
-+	const struct ctl_table *table;
- 	struct ctl_table_header *hdr;
- 
- 	table = xfrm6_policy_table;
- 	if (!net_eq(net, &init_net)) {
--		table = kmemdup(table, sizeof(xfrm6_policy_table), GFP_KERNEL);
-+		table = xfrm6_policy_table_dup(net);
- 		if (!table)
- 			goto err_alloc;
--
--		table[0].data = &net->xfrm.xfrm6_dst_ops.gc_thresh;
- 	}
- 
- 	hdr = register_net_sysctl_sz(net, "net/ipv6", table,
-diff --git a/net/netfilter/nf_hooks_lwtunnel.c b/net/netfilter/nf_hooks_lwtunnel.c
-index 2d890dd04ff89041e6aec3741f24cdd7bc47d1fe..4e1eef1ba0f1559ca35f024723af551c6c9e7d35 100644
---- a/net/netfilter/nf_hooks_lwtunnel.c
-+++ b/net/netfilter/nf_hooks_lwtunnel.c
-@@ -54,7 +54,7 @@ int nf_hooks_lwtunnel_sysctl_handler(const struct ctl_table *table, int write,
- }
- EXPORT_SYMBOL_GPL(nf_hooks_lwtunnel_sysctl_handler);
- 
--static struct ctl_table nf_lwtunnel_sysctl_table[] = {
-+static const struct ctl_table nf_lwtunnel_sysctl_table[] = {
- 	{
- 		.procname	= "nf_hooks_lwtunnel",
- 		.data		= NULL,
-@@ -66,8 +66,8 @@ static struct ctl_table nf_lwtunnel_sysctl_table[] = {
- 
- static int __net_init nf_lwtunnel_net_init(struct net *net)
- {
-+	const struct ctl_table *table;
- 	struct ctl_table_header *hdr;
--	struct ctl_table *table;
- 
- 	table = nf_lwtunnel_sysctl_table;
- 	if (!net_eq(net, &init_net)) {
-diff --git a/net/smc/smc_sysctl.c b/net/smc/smc_sysctl.c
-index b1efed5462435b1a6f2f59584a4cf47f5f6e1981..09dad48337f6164f5765fa793412bdebf47e61ca 100644
---- a/net/smc/smc_sysctl.c
-+++ b/net/smc/smc_sysctl.c
-@@ -97,7 +97,7 @@ static int proc_smc_hs_ctrl(const struct ctl_table *ctl, int write,
- }
- #endif /* CONFIG_SMC_HS_CTRL_BPF */
- 
--static struct ctl_table smc_table[] = {
-+static const struct ctl_table smc_table[] = {
- 	{
- 		.procname       = "autocorking_size",
- 		.data           = &init_net.smc.sysctl_autocorking_size,
-@@ -195,14 +195,29 @@ static struct ctl_table smc_table[] = {
- #endif /* CONFIG_SMC_HS_CTRL_BPF */
- };
- 
--int __net_init smc_sysctl_net_init(struct net *net)
-+static const struct ctl_table *smc_table_dup(struct net *net)
- {
- 	size_t table_size = ARRAY_SIZE(smc_table);
- 	struct ctl_table *table;
-+	int i;
-+
-+	table = kmemdup(smc_table, sizeof(smc_table), GFP_KERNEL);
-+	if (!table)
-+		return NULL;
-+
-+	for (i = 0; i < table_size; i++)
-+		table[i].data += (void *)net - (void *)&init_net;
-+
-+	return table;
-+}
-+
-+int __net_init smc_sysctl_net_init(struct net *net)
-+{
-+	size_t table_size = ARRAY_SIZE(smc_table);
-+	const struct ctl_table *table;
- 
- 	table = smc_table;
- 	if (!net_eq(net, &init_net)) {
--		int i;
- #if IS_ENABLED(CONFIG_SMC_HS_CTRL_BPF)
- 		struct smc_hs_ctrl *ctrl;
- 
-@@ -214,12 +229,9 @@ int __net_init smc_sysctl_net_init(struct net *net)
- 		rcu_read_unlock();
- #endif /* CONFIG_SMC_HS_CTRL_BPF */
- 
--		table = kmemdup(table, sizeof(smc_table), GFP_KERNEL);
-+		table = smc_table_dup(net);
- 		if (!table)
- 			goto err_alloc;
--
--		for (i = 0; i < table_size; i++)
--			table[i].data += (void *)net - (void *)&init_net;
- 	}
- 
- 	net->smc.smc_hdr = register_net_sysctl_sz(net, "net/smc", table,
-diff --git a/net/unix/sysctl_net_unix.c b/net/unix/sysctl_net_unix.c
-index e02ed6e3955c06b60cf4afb02656df8956f075ba..47660d5726bbd7d812762f4feffa9a0a42499d7d 100644
---- a/net/unix/sysctl_net_unix.c
-+++ b/net/unix/sysctl_net_unix.c
-@@ -13,7 +13,7 @@
- 
- #include "af_unix.h"
- 
--static struct ctl_table unix_table[] = {
-+static const struct ctl_table unix_table[] = {
- 	{
- 		.procname	= "max_dgram_qlen",
- 		.data		= &init_net.unx.sysctl_max_dgram_qlen,
-@@ -23,18 +23,29 @@ static struct ctl_table unix_table[] = {
- 	},
- };
- 
--int __net_init unix_sysctl_register(struct net *net)
-+static const struct ctl_table *unix_table_dup(struct net *net)
- {
- 	struct ctl_table *table;
- 
-+	table = kmemdup(unix_table, sizeof(unix_table), GFP_KERNEL);
-+	if (!table)
-+		return NULL;
-+
-+	table[0].data = &net->unx.sysctl_max_dgram_qlen;
-+
-+	return table;
-+}
-+
-+int __net_init unix_sysctl_register(struct net *net)
-+{
-+	const struct ctl_table *table;
-+
- 	if (net_eq(net, &init_net)) {
- 		table = unix_table;
- 	} else {
--		table = kmemdup(unix_table, sizeof(unix_table), GFP_KERNEL);
-+		table = unix_table_dup(net);
- 		if (!table)
- 			goto err_alloc;
--
--		table[0].data = &net->unx.sysctl_max_dgram_qlen;
- 	}
- 
- 	net->unx.ctl = register_net_sysctl_sz(net, "net/unix", table,
-diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
-index 622dbd0467994428f1a590f559b78d8c17f6ba60..caebef73ea58d2b6043ca3fe3b6872f92fbe9fa6 100644
---- a/net/vmw_vsock/af_vsock.c
-+++ b/net/vmw_vsock/af_vsock.c
-@@ -2899,7 +2899,7 @@ static int vsock_net_child_mode_string(const struct ctl_table *table, int write,
- 	return 0;
- }
- 
--static struct ctl_table vsock_table[] = {
-+static const struct ctl_table vsock_table[] = {
- 	{
- 		.procname	= "ns_mode",
- 		.data		= &init_net.vsock.mode,
-@@ -2925,20 +2925,31 @@ static struct ctl_table vsock_table[] = {
- 	},
- };
- 
--static int __net_init vsock_sysctl_register(struct net *net)
-+static const struct ctl_table *vsock_table_dup(struct net *net)
- {
- 	struct ctl_table *table;
- 
-+	table = kmemdup(vsock_table, sizeof(vsock_table), GFP_KERNEL);
-+	if (!table)
-+		return NULL;
-+
-+	table[0].data = &net->vsock.mode;
-+	table[1].data = &net->vsock.child_ns_mode;
-+	table[2].data = &net->vsock.g2h_fallback;
-+
-+	return table;
-+}
-+
-+static int __net_init vsock_sysctl_register(struct net *net)
-+{
-+	const struct ctl_table *table;
-+
- 	if (net_eq(net, &init_net)) {
- 		table = vsock_table;
- 	} else {
--		table = kmemdup(vsock_table, sizeof(vsock_table), GFP_KERNEL);
-+		table = vsock_table_dup(net);
- 		if (!table)
- 			goto err_alloc;
--
--		table[0].data = &net->vsock.mode;
--		table[1].data = &net->vsock.child_ns_mode;
--		table[2].data = &net->vsock.g2h_fallback;
- 	}
- 
- 	net->vsock.sysctl_hdr = register_net_sysctl_sz(net, "net/vsock", table,
+Then later we will have more time to write a dedicate patch so it does 
+not depend on IPv4.
 
--- 
-2.50.1
+> Should we have some logic to ensure that at least one of IPV4 or
+> IPV6 is enabled? I think this would work
+> 
+> config IPV4
+>        bool "The IPv4 protocol" if IPV6
+>        default INET
+> 
+> which only allows turning IPV4 off if IPV6 has enabled.
+> 
 
+I do wonder, should we? I mean, I didn't try it off but I don't see why 
+we should not allow a pure L2 system..
 
+Thanks,
+Fernando.
 
