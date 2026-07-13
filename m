@@ -1,57 +1,58 @@
-Return-Path: <linux-sctp+bounces-1330-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1331-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id IQe1KHfHVGqFSwAAu9opvQ
-	(envelope-from <linux-sctp+bounces-1330-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Mon, 13 Jul 2026 13:09:43 +0200
+	id OhbKDmnHVGp6SwAAu9opvQ
+	(envelope-from <linux-sctp+bounces-1331-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Mon, 13 Jul 2026 13:09:29 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6042474A2AF
-	for <lists+linux-sctp@lfdr.de>; Mon, 13 Jul 2026 13:09:42 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EACB74A299
+	for <lists+linux-sctp@lfdr.de>; Mon, 13 Jul 2026 13:09:28 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20201202 header.b=OoTPnIF6;
-	spf=pass (mail.lfdr.de: domain of "linux-sctp+bounces-1330-lists+linux-sctp=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-sctp+bounces-1330-lists+linux-sctp=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20201202 header.b="EFjsziI/";
+	spf=pass (mail.lfdr.de: domain of "linux-sctp+bounces-1331-lists+linux-sctp=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-sctp+bounces-1331-lists+linux-sctp=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3D9EF303CE0A
-	for <lists+linux-sctp@lfdr.de>; Mon, 13 Jul 2026 11:07:58 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6C3AE302ACE6
+	for <lists+linux-sctp@lfdr.de>; Mon, 13 Jul 2026 11:07:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E5D93839AE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E6DD3839B9;
 	Mon, 13 Jul 2026 11:07:54 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A33A37A839;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A3B537A83B;
 	Mon, 13 Jul 2026 11:07:54 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783940874; cv=none; b=OyI/YAUarbzGH0KlaQM4b/K4lyUPY6MwuvQqaDmOoAlHZHh+RGuKAh4XGUe6rTgjfP/KlkFhlTQMa0M/oYwjC2+MV+a0mQ1hENCghp+rY+NSloYVZ8hSBiyU1P6ns5uKluT908YKQ6sO6qj928/wGXctd8qUNLKoW4/+q0LcOxk=
+	t=1783940874; cv=none; b=q+fljzfWFhyJI7XJIz9b/W86+7RMqe/5f/9QuYrfE0NG87c4AOj83PvKC8t33DiPDSVR78dupm+uoC+GswTBm6VYJ9aWFzoES7aozhMvDyrEuS3mjIGUxMQHy+07phNX4r3VqnOIYpUc552URu4WFdDm0d6AWfZuOxlD5sgRS5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1783940874; c=relaxed/simple;
-	bh=gFPfNAZb5Emut5tl59jtS1GCSawh67g0IOaptPFibj4=;
+	bh=ZzghU9jdt4BJJ4IlRLVmOi7j3K0cQTWaD4Og3j5Q90U=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GWYRxsUty+wLcsMpnbfHJJWMAUu8+8jg62cmjmBdts+oKht/WX+5IAVEMeG196UjLjXIRY+tevO3TN/vQ4coFP92r16LPo97nj67/Gium+xE7jGhMg7f70WlrjDV0JTq8UDb1EbWEUVw4AXbP2LIOxytiN3ejksN2GhuHynSN8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OoTPnIF6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C59C1C2BCF5;
+	 In-Reply-To:To:Cc; b=YQoQFd2XFc7qWUJKtDLkVLHgXRbiIOr5ziF1HCrfcT/e5eThgQINoJ4uYtnCfjR+yEvVyFFKyaKpnbWwv/juL4oHAWQM+dRVkHaiVUhQGJJywbUYwNPz2TYpeMW0hhgG+O7xRCqBGxBoQrakjj7uhcp5sNNIS+fKD4nS3bL+Dt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EFjsziI/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D6546C2BCF6;
 	Mon, 13 Jul 2026 11:07:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1783940873;
-	bh=gFPfNAZb5Emut5tl59jtS1GCSawh67g0IOaptPFibj4=;
+	bh=ZzghU9jdt4BJJ4IlRLVmOi7j3K0cQTWaD4Og3j5Q90U=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=OoTPnIF6SRLmVMupyhjeUKZcJU6AwKweMwZvPnhmtHyFwjFGZN6LED68Pg9kUqDIh
-	 QnIthYMOQS0FSZyN1buNkwC7IBnD/H8mjUCso0YSIVQgD3rz7hwLyyHbzgQHsM/7et
-	 ZMhrwojxoZ1IP71Bxifb4A/pv98lRSCNrDNqk2b+hWFAtomwindDIrfc8DsdmItmku
-	 9UWDy/4ZhoDm6QwHErqcuP1uhsqGZI4fOzzRpLoXobSgVpMST0T+HlbbsFjoxIVHg/
-	 J3TRolG2lzwG4pisXO7RHNB6bmwRtJM2ALur1waxVeb26jVXjtOo06m7mJb102PZH8
-	 SjIX+F9U8UW0w==
+	b=EFjsziI/mGfueRicxx6aewwFNFseJDdhCJPCOfrOIrKfrRax4V78tKlEx8RgJh0jO
+	 rTwNH2ZiTA5CyiTtWzb8WRrTM7U09LUInFdlk10Mt0aZfcLr3yTMPyEHJnWFRjQoVe
+	 Iq6IuBFtdn+OskqKwYAAtIvZKhGfBaRU6pvWhK8lMu8PTxJ8qG2xOrb2g7vmQKAboM
+	 ALk8NY/eQRc6+Ue81pOkrg/J1NavEUJqTAjTFW/Fv1JUdmdEnz6Cad9ooAMBz4ygR0
+	 FHMtb2m5jvRmxArUPi52YG4yHsTI5PCFex9hFqDZ0iUtNKAnrnKT9FWA3qwxwD4ocm
+	 zFkmPEFe8ocKQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3BBCC44507;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6621C44508;
 	Mon, 13 Jul 2026 11:07:53 +0000 (UTC)
 From: Joel Granados <joel.granados@kernel.org>
-Date: Mon, 13 Jul 2026 13:07:42 +0200
-Subject: [PATCH RFC net-next v3 1/3] net: enforce net sysctl registration
+Date: Mon, 13 Jul 2026 13:07:43 +0200
+Subject: [PATCH RFC net-next v3 2/3] net: Const qualify ctl_tables that
+ kmemdup unconditionally
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
@@ -60,7 +61,7 @@ List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260713-jag-net_const_qualify-v3-1-7289fe9eaea6@kernel.org>
+Message-Id: <20260713-jag-net_const_qualify-v3-2-7289fe9eaea6@kernel.org>
 References: <20260713-jag-net_const_qualify-v3-0-7289fe9eaea6@kernel.org>
 In-Reply-To: <20260713-jag-net_const_qualify-v3-0-7289fe9eaea6@kernel.org>
 To: "David S. Miller" <davem@davemloft.net>, 
@@ -86,19 +87,19 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-s390@vger.kernel.org, virtualization@lists.linux.dev, 
  Joel Granados <joel.granados@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3574;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4380;
  i=joel.granados@kernel.org; h=from:subject:message-id;
- bh=gFPfNAZb5Emut5tl59jtS1GCSawh67g0IOaptPFibj4=;
- b=owJ4nAHtARL+kA0DAAoBupfNUreWQU8ByyZiAGpUxwZskgenDOU98txc57mfzp9zCAPadshX1
- w9t16Ag3hXFGYkBswQAAQoAHRYhBK5HCVcl5jElzssnkLqXzVK3lkFPBQJqVMcGAAoJELqXzVK3
- lkFPFuML/RuQe3IepvdaZwOqXPTFSxjiaQ9bHG5EjMlqTZJymTxUXke4CX6cffYqR8LOCXv/zqI
- Xz6yMTCeEaKdC/KbKlarrXHYnX0dUo/F3SqzxbWAoouVQN77rnoI7iQbY+TDK0GEy2zZONsm95u
- Vf+EfOQeGZuxwgpbCYUR8IBhhpqcVfuF0vI8vaxi7bhmmK30aRoBtLG+WYyHIgf/N7CXmGwRFxC
- yDHVArNMtiBNObUr0CVTFLxn8/BXuAIVrsNttsPGQm6aDvm3AQd87+wUS2otzOefZp82bJUl73e
- IzkI9JlAq/XN9dgNUEPdpolmegObR57+ikTaZzNrILLpVchdIIKBR4cZfPkGGVcjwBnrXrvM9Zy
- kksDs+AIzzP/SDuNq8GseNIMT37Jo/NFsSdfK+eblk8DVjuKx+gEwV7GHjkzZkGe6PEWWgIhT8f
- uCYW4EEdIC4+bpgG8ygVgbaTDyA1+W81V10LuKN5vBvLR6iuqzESCQGH1rg5ryeHGO+tKQvK3f8
- Ig=
+ bh=ZzghU9jdt4BJJ4IlRLVmOi7j3K0cQTWaD4Og3j5Q90U=;
+ b=owJ4nAHtARL+kA0DAAoBupfNUreWQU8ByyZiAGpUxwY+Xw/qHCYC+bjLVFiRD6foyFLDCcWQW
+ QN1TonaLsB1sokBswQAAQoAHRYhBK5HCVcl5jElzssnkLqXzVK3lkFPBQJqVMcGAAoJELqXzVK3
+ lkFP9J8L/34pEjhY6Y3+wj4Y4xpsgpzo3tIv3DUXkdX/CgHwMIaSkss33feZj9x4ackkKdflapk
+ iNGPQizMsKTrRQbW4gOhTUiY43oJIcwSXBppQLP/LRn1B9LO6lHpfFNsTJvBSHPTODJjTmJV6kn
+ TVa1z0IosYw6SZchkWtp6raEKsBpYdaZ4HHCspvvX1/gR1bKWPEwd4h5Ui2bzEHVW5BOpabibAZ
+ VMj1/GM8uIxnLWmFaVaFJt/8uXQtkMEM18NzjvbSzzQeKY0xDuqrLfcwD/inEHzG57fTbj20gRL
+ S9Q7K93rM9W7dOViKAXiO+LRGTAgUff++NilzvVTU/BwNPf96umX9iSRvXn2wXiyWXwS/z8cFKD
+ VQyb/KBl3B5b27jaypo9Uf+rLBAlN29UCXMf9NglZhTS7y7XAbhnO55l1Vvq9Lw6IbVCGpcIlT/
+ hlD+EnE7LtezC2CfYqYIXXqmkXIn+Lix6t8Ml7rJiVDC4J1KxrZ/VBXzEhNibF9+JdUwcg29a96
+ /M=
 X-Developer-Key: i=joel.granados@kernel.org; a=openpgp;
  fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
 X-Endpoint-Received: by B4 Relay for joel.granados@kernel.org/default with
@@ -110,12 +111,12 @@ X-Spamd-Result: default: False [-3.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-1330-lists,linux-sctp=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-1331-lists,linux-sctp=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FREEMAIL_TO(0.00)[davemloft.net,google.com,kernel.org,redhat.com,nvidia.com,netfilter.org,strlen.de,nwl.cc,gmail.com,secunet.com,gondor.apana.org.au,linux.alibaba.com,linux.ibm.com];
 	RCPT_COUNT_TWELVE(0.00)[32];
@@ -134,104 +135,118 @@ X-Spamd-Result: default: False [-3.66 / 15.00];
 	ALIAS_RESOLVED(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TAGGED_RCPT(0.00)[linux-sctp];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 6042474A2AF
+X-Rspamd-Queue-Id: 9EACB74A299
 
-Replace the warning and file permission change with an error when an
-"unsafe" net sysctl registration is detected.
-
-One of the barriers preventing the const qualification of the ctl_tables
-in the net directory is the permission (->mode) change in
-ensure_safe_net_sysctl. This prep commit removes that barrier and
-ensures that the received ctl_table pointer to the net ctl_table
-register function is const.
+Const qualify clt_table arrays in the net directory that always pass a
+memory duplicate to sysctl register. The template would then be in
+.rodata and the kmemdup'ed array would be outside.
 
 Signed-off-by: Joel Granados <joel.granados@kernel.org>
 ---
- include/net/net_namespace.h |  4 ++--
- net/sysctl_net.c            | 24 ++++++++++++------------
- 2 files changed, 14 insertions(+), 14 deletions(-)
+ net/ipv4/devinet.c                      | 2 +-
+ net/ipv6/icmp.c                         | 2 +-
+ net/ipv6/route.c                        | 2 +-
+ net/ipv6/sysctl_net_ipv6.c              | 2 +-
+ net/netfilter/nf_conntrack_standalone.c | 2 +-
+ net/sctp/sysctl.c                       | 2 +-
+ net/xfrm/xfrm_sysctl.c                  | 2 +-
+ 7 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/include/net/net_namespace.h b/include/net/net_namespace.h
-index 80de5e98a66d6c9273aa7c5b9d489b22cef8559a..dca0ec809483bec604f4ca3d99dfea32834af8fa 100644
---- a/include/net/net_namespace.h
-+++ b/include/net/net_namespace.h
-@@ -522,12 +522,12 @@ struct ctl_table;
+diff --git a/net/ipv4/devinet.c b/net/ipv4/devinet.c
+index a35b72662e431661da1672f428cae6bb3110480b..19edc08ae20c4f16d3bcf479dc25022d55cbb5af 100644
+--- a/net/ipv4/devinet.c
++++ b/net/ipv4/devinet.c
+@@ -2798,7 +2798,7 @@ static void devinet_sysctl_unregister(struct in_device *idev)
+ 	neigh_sysctl_unregister(idev->arp_parms);
+ }
+ 
+-static struct ctl_table ctl_forward_entry[] = {
++static const struct ctl_table ctl_forward_entry[] = {
+ 	{
+ 		.procname	= "ip_forward",
+ 		.data		= &ipv4_devconf.data[
+diff --git a/net/ipv6/icmp.c b/net/ipv6/icmp.c
+index efb23807a0262e8d68aa1afc8d96ee94eab89d50..a95b0351824f3237815e43bf8448110070955884 100644
+--- a/net/ipv6/icmp.c
++++ b/net/ipv6/icmp.c
+@@ -1374,7 +1374,7 @@ EXPORT_SYMBOL(icmpv6_err_convert);
+ static u32 icmpv6_errors_extension_mask_all =
+ 	GENMASK_U8(ICMP_ERR_EXT_COUNT - 1, 0);
+ 
+-static struct ctl_table ipv6_icmp_table_template[] = {
++static const struct ctl_table ipv6_icmp_table_template[] = {
+ 	{
+ 		.procname	= "ratelimit",
+ 		.data		= &init_net.ipv6.sysctl.icmpv6_time,
+diff --git a/net/ipv6/route.c b/net/ipv6/route.c
+index a1301334da48c0f911da06ce448a76ecfb0d25cf..96b37c102a634c6715a5fbd1d39ca415302ff859 100644
+--- a/net/ipv6/route.c
++++ b/net/ipv6/route.c
+@@ -6555,7 +6555,7 @@ static int ipv6_sysctl_rtcache_flush(const struct ctl_table *ctl, int write,
+ 	return 0;
+ }
+ 
+-static struct ctl_table ipv6_route_table_template[] = {
++static const struct ctl_table ipv6_route_table_template[] = {
+ 	{
+ 		.procname	=	"max_size",
+ 		.data		=	&init_net.ipv6.sysctl.ip6_rt_max_size,
+diff --git a/net/ipv6/sysctl_net_ipv6.c b/net/ipv6/sysctl_net_ipv6.c
+index d2cd33e2698d5c88df4718c9622dba2d574fa309..1a0a36dcdabc1be961d0ab69e5c93b05c53f46a8 100644
+--- a/net/ipv6/sysctl_net_ipv6.c
++++ b/net/ipv6/sysctl_net_ipv6.c
+@@ -61,7 +61,7 @@ proc_rt6_multipath_hash_fields(const struct ctl_table *table, int write, void *b
+ 	return ret;
+ }
+ 
+-static struct ctl_table ipv6_table_template[] = {
++static const struct ctl_table ipv6_table_template[] = {
+ 	{
+ 		.procname	= "bindv6only",
+ 		.data		= &init_net.ipv6.sysctl.bindv6only,
+diff --git a/net/netfilter/nf_conntrack_standalone.c b/net/netfilter/nf_conntrack_standalone.c
+index be2953c7d702e92031d4bcf7e707741abed0f49c..f4f2d82192d54ed9831b9677743f1139820e5a2e 100644
+--- a/net/netfilter/nf_conntrack_standalone.c
++++ b/net/netfilter/nf_conntrack_standalone.c
+@@ -639,7 +639,7 @@ enum nf_ct_sysctl_index {
+ 	NF_SYSCTL_CT_LAST_SYSCTL,
+ };
+ 
+-static struct ctl_table nf_ct_sysctl_table[] = {
++static const struct ctl_table nf_ct_sysctl_table[] = {
+ 	[NF_SYSCTL_CT_MAX] = {
+ 		.procname	= "nf_conntrack_max",
+ 		.data		= &nf_conntrack_max,
+diff --git a/net/sctp/sysctl.c b/net/sctp/sysctl.c
+index 15e7db9a3ab2e325f3951ac20c067a973a049618..331f45af9c4990d78a10a5c2c4efbcbca21813dc 100644
+--- a/net/sctp/sysctl.c
++++ b/net/sctp/sysctl.c
+@@ -92,7 +92,7 @@ static struct ctl_table sctp_table[] = {
+ #define SCTP_PF_RETRANS_IDX    2
+ #define SCTP_PS_RETRANS_IDX    3
+ 
+-static struct ctl_table sctp_net_table[] = {
++static const struct ctl_table sctp_net_table[] = {
+ 	[SCTP_RTO_MIN_IDX] = {
+ 		.procname	= "rto_min",
+ 		.data		= &init_net.sctp.rto_min,
+diff --git a/net/xfrm/xfrm_sysctl.c b/net/xfrm/xfrm_sysctl.c
+index ca003e8a03760cd8dbb9e9f7cd5a9738eeeb7e71..357152a50faf10e5c33468c034dd1777e0bed079 100644
+--- a/net/xfrm/xfrm_sysctl.c
++++ b/net/xfrm/xfrm_sysctl.c
+@@ -13,7 +13,7 @@ static void __net_init __xfrm_sysctl_init(struct net *net)
+ }
+ 
  #ifdef CONFIG_SYSCTL
- int net_sysctl_init(void);
- struct ctl_table_header *register_net_sysctl_sz(struct net *net, const char *path,
--					     struct ctl_table *table, size_t table_size);
-+					     const struct ctl_table *table, size_t table_size);
- void unregister_net_sysctl_table(struct ctl_table_header *header);
- #else
- static inline int net_sysctl_init(void) { return 0; }
- static inline struct ctl_table_header *register_net_sysctl_sz(struct net *net,
--	const char *path, struct ctl_table *table, size_t table_size)
-+	const char *path, const struct ctl_table *table, size_t table_size)
- {
- 	return NULL;
- }
-diff --git a/net/sysctl_net.c b/net/sysctl_net.c
-index 19e8048241bacb18de853d3b904d0f97fd2fe78a..4714887113d90a191c300c9c49a6317d5609efeb 100644
---- a/net/sysctl_net.c
-+++ b/net/sysctl_net.c
-@@ -114,16 +114,16 @@ __init int net_sysctl_init(void)
- 	goto out;
- }
- 
--/* Verify that sysctls for non-init netns are safe by either:
-+/* Return error when sysctls for non-init netns are unsafe by verifying:
-  * 1) being read-only, or
-  * 2) having a data pointer which points outside of the global kernel/module
-  *    data segment, and rather into the heap where a per-net object was
-  *    allocated.
-  */
--static void ensure_safe_net_sysctl(struct net *net, const char *path,
--				   struct ctl_table *table, size_t table_size)
-+static int ensure_safe_net_sysctl(struct net *net, const char *path,
-+				  const struct ctl_table *table, size_t table_size)
- {
--	struct ctl_table *ent;
-+	const struct ctl_table *ent;
- 
- 	pr_debug("Registering net sysctl (net %p): %s\n", net, path);
- 	ent = table;
-@@ -149,24 +149,24 @@ static void ensure_safe_net_sysctl(struct net *net, const char *path,
- 		else
- 			continue;
- 
--		/* If it is writable and points to kernel/module global
--		 * data, then it's probably a netns leak.
--		 */
-+		/* Warn on netns leak. */
- 		WARN(1, "sysctl %s/%s: data points to %s global data: %ps\n",
--		     path, ent->procname, where, ent->data);
-+			path, ent->procname, where, ent->data);
- 
--		/* Make it "safe" by dropping writable perms */
--		ent->mode &= ~0222;
-+		return -EACCES;
- 	}
-+
-+	return 0;
- }
- 
- struct ctl_table_header *register_net_sysctl_sz(struct net *net,
- 						const char *path,
--						struct ctl_table *table,
-+						const struct ctl_table *table,
- 						size_t table_size)
- {
- 	if (!net_eq(net, &init_net))
--		ensure_safe_net_sysctl(net, path, table, table_size);
-+		if (ensure_safe_net_sysctl(net, path, table, table_size))
-+			return NULL;
- 
- 	return __register_sysctl_table(&net->sysctls, path, table, table_size);
- }
+-static struct ctl_table xfrm_table[] = {
++static const struct ctl_table xfrm_table[] = {
+ 	{
+ 		.procname	= "xfrm_aevent_etime",
+ 		.maxlen		= sizeof(u32),
 
 -- 
 2.50.1
