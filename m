@@ -1,301 +1,305 @@
-Return-Path: <linux-sctp+bounces-1334-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1335-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id vNptFrj+VGpeigAAu9opvQ
-	(envelope-from <linux-sctp+bounces-1334-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Mon, 13 Jul 2026 17:05:28 +0200
+	id EXm5IOcTVWrvjgAAu9opvQ
+	(envelope-from <linux-sctp+bounces-1335-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Mon, 13 Jul 2026 18:35:51 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2D1C74CC5A
-	for <lists+linux-sctp@lfdr.de>; Mon, 13 Jul 2026 17:05:27 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D47FC74DA75
+	for <lists+linux-sctp@lfdr.de>; Mon, 13 Jul 2026 18:35:50 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=mUOJSina;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=soR5R82M;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=QCgcM+Km;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=Qj912vQy;
-	spf=pass (mail.lfdr.de: domain of "linux-sctp+bounces-1334-lists+linux-sctp=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-sctp+bounces-1334-lists+linux-sctp=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=suse.de;
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=YXJ4uImu;
+	spf=pass (mail.lfdr.de: domain of "linux-sctp+bounces-1335-lists+linux-sctp=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-sctp+bounces-1335-lists+linux-sctp=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=gmail.com;
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B31B430AD4FF
-	for <lists+linux-sctp@lfdr.de>; Mon, 13 Jul 2026 14:57:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 624E13034A9F
+	for <lists+linux-sctp@lfdr.de>; Mon, 13 Jul 2026 16:31:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4127C43D4F7;
-	Mon, 13 Jul 2026 14:57:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB529335067;
+	Mon, 13 Jul 2026 16:31:18 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AE8E43746A
-	for <linux-sctp@vger.kernel.org>; Mon, 13 Jul 2026 14:57:26 +0000 (UTC)
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783954649; cv=none; b=YcRE8iB/r/yTXvNJ0wWsN+sgTfwsb0aMhDQw21bEX5wVnU63x3tgHBZlz7MlxM9pIjaK7cvOBsljEsCqseP/xgSvm89Vaz0yyMr8ET11WV++6CBQqCi76wRyCqfYzLrfGEkKTG0dCQGNq71jTDio3yTVk+RZuitHU5dcDKXURP8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783954649; c=relaxed/simple;
-	bh=6ABN5gkGY/3/F9k+Yhjq2Bu4+3LHZvglZfQ52vr+EhU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r+8LAukea/ASaBTHpdj4igUmi//z7CTARoyYXuP6GFAA2F5ICidfWcMisPGrPSu7YRlYVYcj4vNbpilz0qLjy7Ic1UVXN+RwcQmLB7uTi7ivv//2zzSrrSCNeErq1SzuLxU5aylaMyOHAbdH27MjFwviI3BZdn56er1o9I7POo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=mUOJSina; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=soR5R82M; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=QCgcM+Km; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Qj912vQy; arc=none smtp.client-ip=195.135.223.130
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 9421477946;
-	Mon, 13 Jul 2026 14:57:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1783954643; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=w87g+D5SReWeuPg85I2R5REzG6jyR6WyeIEK7Oxt9Lo=;
-	b=mUOJSinalmE2ffsIONe157EXkZKLQiaoGJH7cUzcDCHJsvyT/YUW6QuDQdlluxQU5zFHak
-	5uHtBuxO+EDEO3tY/uW/kT0Q+9CKaedFem3BYOwQZylEsnA3ROaZTnHJoDU9pP31T7KNua
-	FLhrxB64E1UoSdV30u6p/XQXxmFjXAE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1783954643;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=w87g+D5SReWeuPg85I2R5REzG6jyR6WyeIEK7Oxt9Lo=;
-	b=soR5R82MF+Mu62i1L4HAbEIJ6vWZYBeWi31SZE979/ua2yD3lsy6IUUD318V2ruAhjzKga
-	HyBGeXDFxDaXaiAQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1783954642; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=w87g+D5SReWeuPg85I2R5REzG6jyR6WyeIEK7Oxt9Lo=;
-	b=QCgcM+Km5SZY8NOHjlCw3HosC8zS+PF0scHR2IwLdplL87Eaem5ybUMwG87hdA1rjngrmv
-	jfc2mqfXpfb9US5KoGmzJi4CuAqmiNBxt9mvN6apbKj7smPvowzdTcGXq+YNh7slMzW9Ry
-	eebKIgGCE6urB9kYpA+nMZpQoDQl6tw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1783954642;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=w87g+D5SReWeuPg85I2R5REzG6jyR6WyeIEK7Oxt9Lo=;
-	b=Qj912vQywvUs7wBqJ2BfrXiTmJvI4xAWx3e/pTEHECGFv+xcUxTb2o5xyu7np2AqVZnxUQ
-	B7mpilofPRlrSBAw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9F73A779AE;
-	Mon, 13 Jul 2026 14:57:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id jkEmIMX8VGogSgAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Mon, 13 Jul 2026 14:57:09 +0000
-Message-ID: <d126eb95-4f57-43f7-8cde-31f201d3dad0@suse.de>
-Date: Mon, 13 Jul 2026 16:57:02 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1269C3321AA
+	for <linux-sctp@vger.kernel.org>; Mon, 13 Jul 2026 16:31:16 +0000 (UTC)
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783960278; cv=pass; b=YQ5ETuEJEHtkvA0k1Wr6Z/yzKcUronuvT8BC8qqxaiBLzwdQs7NOAthfqNbHhAim6wdJiQFpmhm/89vmxAmNLzILoisx3QX/f76Wl8UfgouDucSehTPsWLWoF5bvpZ0u+FePRVyaiYUQvVyKl1UU1T3YktPmAU+CB0HJUsQ3qOU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783960278; c=relaxed/simple;
+	bh=fMXUadaMlaw3f/HyC+taB9Yf9rBd1Xccd6+qK3lbMYs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AxOXDBTPcMdVckWtuQVoLH6wIVMhLJej4/YWB743fq2CEwjq7hpE2dPK1Ct+CCc+fEfjuFr+VxhritgGMy5PQIzabDVgsJkENoF8qJvpmpC86a1AuItcCW4dI1w7sShKVRjLUStWk3Snbg3xv9FZ9F+39EsG3tzr/ZF3fbZF9zY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YXJ4uImu; arc=pass smtp.client-ip=209.85.210.175
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-848761b5897so1564672b3a.3
+        for <linux-sctp@vger.kernel.org>; Mon, 13 Jul 2026 09:31:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783960276; cv=none;
+        d=google.com; s=arc-20260327;
+        b=GVdnsD+ZKzjgc/BDOKxdK5ZUb6m3TTx319OhjGrSs8khkskgs0kn7HEUmRfDfWCQlc
+         6fehxLqx1L8DJfT7eJn1PO7dipAQTDkHtotM2f0R+3NaRjbJpsl9sNC20//8e1pQ9oDq
+         KymYOU6nVorRjF3dmXl1/rzN028PbCam9w95dr1vFIwk6ewssk+knT/qkae5VR+UTszi
+         kkOwIVyRvSDl6T0JEZZy7kS2jg/IA2B2h22fZCFM13wey6PcXDD3FwvB8dYughih78WE
+         AEkBaSirOQxwQ35lKuAdgXTGXVDOfU/U3VctYFPM8go/rfMn9pQ7kQLj4z2p7SSiikua
+         JepQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=+bwa9pydu/8yllcsYkRiPfAlJFcYCzuXVpbQP5Fdsb0=;
+        fh=1HThs3M8Odt4AmaMv+Inw5eFIR8fTMoNhoo1C/4ea7I=;
+        b=BIuYuGfqlVLfwdOHBbizLxnrH7BzgPZLByBMm9XfzuM4EWlVkAq11IFGj+H+2xUn5U
+         UWOuQE3ox5tOJEOkn/AZRo8c0CYWhe55WAXafcJSU5VKi7su5ZGydjNeDYKFm0DVFWmy
+         T67apx9eQJOlKMBlosZj7wje05neHqlsOf4Qh3K4xAB5cg39jdYgFbwbLrPmbSfqNBac
+         N3jsNkxuZg+KZrr0/aJzRG0qagPTPErDKg5LnyH163pgQpDiQgZQBazZH0MFohvLNouj
+         L6oSxVGL3agJjFYN8d/98jKy+j0sS041sc0wGUTn4+s6XFn5un+zDsIeHeED6YCw3yDT
+         4KVg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783960276; x=1784565076; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=+bwa9pydu/8yllcsYkRiPfAlJFcYCzuXVpbQP5Fdsb0=;
+        b=YXJ4uImudMsY2qGMusnjw5kktyB9diyCRw9uIkmWcd1FAxch9NztvxfZebNdvftv5/
+         zOBw/PxRNVPP9VDtOyp0UiB0QiU9XoQgfL7Nvsh69cPFKPdt99EAxxGdr3+kh7Ng0cWY
+         +hSaum4Srx4nGMsXzCu22WBQvIqOMDH9/7u5CR4fvBPLiszXUZKqm6yJlvUfIgVeSFkQ
+         GF5MOpgxeZtu3eISiIIW5xzWRBx8UwBLyk+mVNd4arh817Am2HpvRoI7eRwnZ0P6TwX6
+         xyFPYDaNodpp9zGI3L1GWn4LfCjyLH3xZ/JrnRtG/f2Nu7nsjk3uc3w/wijQ9XQsN0MN
+         pjnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783960276; x=1784565076;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=+bwa9pydu/8yllcsYkRiPfAlJFcYCzuXVpbQP5Fdsb0=;
+        b=TvtH7KFd4ZkXdJXYunPEAm+/6FmH7e31h5TV1tjI7AZgvQ8Yl+jm3uuUBmHcNMNpTV
+         Njhq18y46D9beh67eHOONPJ1uqestJJRlbV+pUdFN8raSnKEguYSIRy0c+8ajgxoM5G5
+         0NyFzMav9ymThSIkXXf67afX3UmfQsa4ta/yVdiGFSJLfWZ+baOOS+J55FzDRuEqZ0+1
+         bTG1EvOf9Lu7QK5aqlFhhNfPYUWFGHSpmKvTL8RniWYlGRfqoPCR1Nvaa0jKIlZalUkK
+         PiB2QWDdCvVLnK8wfbwnuKky2WkhhulHEP325FepIVXFgNkrL38lyknsSC4hFSDos7CQ
+         WDvw==
+X-Gm-Message-State: AOJu0YzRR3hNNhW2Q0tkCoqRV7AqFoEBc+ZOFaXyVmh5SY+mq3Bydyt9
+	GuXpvMmF+Sy4E1E9DZJPXFdOKOqy+HO9NGbYraGuCMl4nvJMLWvpBXanKdKqUaKyFOrdzW7j9Wg
+	PY1B33LCGMEIdLzylqn4sXNExYG3bGLU=
+X-Gm-Gg: AfdE7clPyWg+EBNVHdctakdpLdfnHmxOe+SQHBSqxRn2rfexxTl124B8T4Zk55W7aCD
+	ztl7rKLgg3jx9Jq1mc7SEVDulNP+u96+reVwwIZ8VftOxm8pVbgO/9n3GDxDh8Pu87C0T4okbza
+	npLOzh5/Fbtj0jap10f4MgO0Irp22A2Gyll19BXv/4u+ghPBY7zsMhNGHswsipAMxVB7l2Ar09W
+	xXqNsS5/vklnCHrlogy/D5lgKHt4anEVVHd8XosaTzGTSW0VTKZM6Su07AQjPkLSr8gtR8h7PgR
+	rwSBA8qYAOYSGUBlRgec8uzAi2FCJJ9xpkpjpa0KExqX3IKjf8t1DHe1xjFP+gi4NcIjrpk=
+X-Received: by 2002:a05:6a00:2d19:b0:845:d274:bf88 with SMTP id
+ d2e1a72fcca58-8488974b08bmr8803485b3a.49.1783960276209; Mon, 13 Jul 2026
+ 09:31:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/13 RFC net-next] net: ipv4: introduce CONFIG_IPV4 to
- decouple the IPv4 stack
-To: Arnd Bergmann <arnd@arndb.de>, Netdev <netdev@vger.kernel.org>
-Cc: "David S . Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, David Ahern <dsahern@kernel.org>,
- Simon Horman <horms@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
- Andrew Lunn <andrew+netdev@lunn.ch>,
- Anthony L Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- Elad Nachman <enachman@marvell.com>, Saeed Mahameed <saeedm@nvidia.com>,
- Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>,
- Petr Machata <petrm@nvidia.com>, Edward Cree <ecree.xilinx@gmail.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Arend van Spriel <arend.vanspriel@broadcom.com>,
- Miri Korenblit <miriam.rachel.korenblit@intel.com>,
- Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
- Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
- Chaitanya Kulkarni <kch@nvidia.com>, Saurav Kashyap <skashyap@marvell.com>,
- Javed Hasan <jhasan@marvell.com>, GR-QLogic-Storage-Upstream@marvell.com,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Nilesh Javali <njavali@marvell.com>,
- Manish Rangankar <mrangankar@marvell.com>, Varun Prakash
- <varun@chelsio.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- David Howells <dhowells@redhat.com>, Marc Dionne <marc.dionne@auristor.com>,
- Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>,
- Chuck Lever <cel@kernel.org>, Jeff Layton <jlayton@kernel.org>,
- NeilBrown <neil@brown.name>, Olga Kornievskaia <okorniev@redhat.com>,
- Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
- Marek Lindner <marek.lindner@mailbox.org>,
- Simon Wunderlich <sw@simonwunderlich.de>,
- Antonio Quartulli <antonio@mandelbit.com>,
- Sven Eckelmann <sven@narfation.org>,
- Nikolay Aleksandrov <razor@blackwall.org>,
- Pablo Neira Ayuso <pablo@netfilter.org>, Florian Westphal <fw@strlen.de>,
- Phil Sutter <phil@nwl.cc>, Johannes Berg <johannes@sipsolutions.net>,
- Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>,
- Geliang Tang <geliang@kernel.org>, Julian Anastasov <ja@ssi.bg>,
- Aaron Conole <aconole@redhat.com>, Eelco Chaudron <echaudro@redhat.com>,
- Ilya Maximets <i.maximets@ovn.org>, Allison Henderson <achender@kernel.org>,
- Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>,
- Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
- Xin Long <lucien.xin@gmail.com>, "D. Wythe" <alibuda@linux.alibaba.com>,
- Dust Li <dust.li@linux.alibaba.com>, Sidraya Jayagond
- <sidraya@linux.ibm.com>, Wenjia Zhang <wenjia@linux.ibm.com>,
- Mahanta Jambigi <mjambigi@linux.ibm.com>, Tony Lu
- <tonylu@linux.alibaba.com>, Wen Gu <guwen@linux.alibaba.com>,
- Jon Maloy <jmaloy@redhat.com>,
- Steffen Klassert <steffen.klassert@secunet.com>,
- Herbert Xu <herbert@gondor.apana.org.au>,
- Vikas Gupta <vikas.gupta@broadcom.com>,
- Rajashekar Hudumula <rajashekar.hudumula@broadcom.com>,
- Justin Chen <justin.chen@broadcom.com>,
- Bhargava Marreddy <bhargava.marreddy@broadcom.com>,
- Nicolai Buchwitz <nb@tipi-net.de>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Heiner Kallweit <hkallweit1@gmail.com>, Krzysztof Kozlowski
- <krzk@kernel.org>, Russell King <rmk+kernel@armlinux.org.uk>,
- Yao Zi <me@ziyao.cc>, Yanteng Si <siyanteng@cqsoftware.com.cn>,
- Maxime Chevallier <maxime.chevallier@bootlin.com>,
- Julian Braha <julianbraha@gmail.com>, Joey Lu <a0987203069@gmail.com>,
- Shangjuan Wei <weishangjuan@eswincomputing.com>,
- Chen-Yu Tsai <wens@kernel.org>, Inochi Amaoto <inochiama@gmail.com>,
- "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- Qingfang Deng <qingfang.deng@linux.dev>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Eric Biggers <ebiggers@kernel.org>,
- Ethan Nelson-Moore <enelsonmoore@gmail.com>, Ard Biesheuvel
- <ardb@kernel.org>, Dmitry Safonov <0x7f454c46@gmail.com>,
- Kuniyuki Iwashima <kuniyu@google.com>, Alyssa Ross <hi@alyssa.is>,
- linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
- "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
- "open list:NETRONOME ETHERNET DRIVERS" <oss-drivers@corigine.com>,
- linux-net-drivers@amd.com, linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, linux-wireless@vger.kernel.org,
- brcm80211@lists.linux.dev, brcm80211-dev-list.pdl@broadcom.com,
- linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
- target-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
- b.a.t.m.a.n@lists.open-mesh.org,
- "open list:ETHERNET BRIDGE" <bridge@lists.linux.dev>,
- netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
- mptcp@lists.linux.dev, lvs-devel@vger.kernel.org, dev@openvswitch.org,
- rds-devel@oss.oracle.com, linux-sctp@vger.kernel.org,
- linux-s390@vger.kernel.org,
- "open list:TIPC NETWORK LAYER" <tipc-discussion@lists.sourceforge.net>
-References: <20260712013941.4570-1-fmancera@suse.de>
- <20260712013941.4570-2-fmancera@suse.de>
- <12ffac6a-649a-4e4a-8d12-0b48171e1d95@app.fastmail.com>
- <2256daf4-d03c-4a57-9d72-7a388d823f18@suse.de>
- <713178ff-0fb2-4f1b-90bc-9841cd42c20e@app.fastmail.com>
-Content-Language: en-US
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-In-Reply-To: <713178ff-0fb2-4f1b-90bc-9841cd42c20e@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Flag: NO
-X-Spam-Level: 
-X-Spam-Score: -0.80
+References: <cover.1782745545.git.roxy520tt@gmail.com> <2e48ecffe7fa9e983203a22f68e603cd8530c5d1.1782745545.git.roxy520tt@gmail.com>
+In-Reply-To: <2e48ecffe7fa9e983203a22f68e603cd8530c5d1.1782745545.git.roxy520tt@gmail.com>
+From: Xin Long <lucien.xin@gmail.com>
+Date: Mon, 13 Jul 2026 12:31:04 -0400
+X-Gm-Features: AUfX_mx1CDo7BZQmglawZqG1NRyl_wnyBCRDQIL0_HxGxENsvWC7vf1qcpO3oJc
+Message-ID: <CADvbK_fCkj-WGok_yV8kGD9w-H=UWCG2TcRqSn5+wEhoAsTohw@mail.gmail.com>
+Subject: Re: [PATCH net v2 1/2] sctp: avoid auth_enable sysctl UAF during
+ netns teardown
+To: Ren Wei <n05ec@lzu.edu.cn>
+Cc: linux-sctp@vger.kernel.org, netdev@vger.kernel.org, 
+	marcelo.leitner@gmail.com, davem@davemloft.net, edumazet@google.com, 
+	pabeni@redhat.com, horms@kernel.org, matttbe@kernel.org, yuantan098@gmail.com, 
+	yifanwucs@gmail.com, tomapufckgml@gmail.com, bird@lzu.edu.cn, 
+	tpluszz77@gmail.com, roxy520tt@gmail.com, sashiko-bot@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FREEMAIL_CC(0.00)[davemloft.net,google.com,kernel.org,redhat.com,nvidia.com,ziepe.ca,lunn.ch,intel.com,marvell.com,gmail.com,foss.st.com,broadcom.com,kernel.dk,lst.de,grimberg.me,hansenpartnership.com,oracle.com,chelsio.com,zeniv.linux.org.uk,suse.cz,auristor.com,brown.name,talpey.com,mailbox.org,simonwunderlich.de,mandelbit.com,narfation.org,blackwall.org,netfilter.org,strlen.de,nwl.cc,sipsolutions.net,ssi.bg,ovn.org,mojatatu.com,resnulli.us,linux.alibaba.com,linux.ibm.com,secunet.com,gondor.apana.org.au,tipi-net.de,armlinux.org.uk,ziyao.cc,cqsoftware.com.cn,bootlin.com,eswincomputing.com,bp.renesas.com,linux.dev,linuxfoundation.org,alyssa.is,vger.kernel.org,lists.osuosl.org,corigine.com,amd.com,st-md-mailman.stormreply.com,lists.infradead.org,lists.linux.dev,lists.open-mesh.org,openvswitch.org,oss.oracle.com,lists.sourceforge.net];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER(0.00)[fmancera@suse.de,linux-sctp@vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-1334-lists,linux-sctp=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS(0.00)[m:n05ec@lzu.edu.cn,m:linux-sctp@vger.kernel.org,m:netdev@vger.kernel.org,m:marcelo.leitner@gmail.com,m:davem@davemloft.net,m:edumazet@google.com,m:pabeni@redhat.com,m:horms@kernel.org,m:matttbe@kernel.org,m:yuantan098@gmail.com,m:yifanwucs@gmail.com,m:tomapufckgml@gmail.com,m:bird@lzu.edu.cn,m:tpluszz77@gmail.com,m:roxy520tt@gmail.com,m:sashiko-bot@kernel.org,m:marceloleitner@gmail.com,s:lists@lfdr.de];
+	TAGGED_FROM(0.00)[bounces-1335-lists,linux-sctp=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:arnd@arndb.de,m:netdev@vger.kernel.org,m:davem@davemloft.net,m:edumazet@google.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:dsahern@kernel.org,m:horms@kernel.org,m:idosch@nvidia.com,m:jgg@ziepe.ca,m:leon@kernel.org,m:andrew+netdev@lunn.ch,m:anthony.l.nguyen@intel.com,m:przemyslaw.kitszel@intel.com,m:enachman@marvell.com,m:saeedm@nvidia.com,m:tariqt@nvidia.com,m:mbloch@nvidia.com,m:petrm@nvidia.com,m:ecree.xilinx@gmail.com,m:mcoquelin.stm32@gmail.com,m:alexandre.torgue@foss.st.com,m:arend.vanspriel@broadcom.com,m:miriam.rachel.korenblit@intel.com,m:kbusch@kernel.org,m:axboe@kernel.dk,m:hch@lst.de,m:sagi@grimberg.me,m:kch@nvidia.com,m:skashyap@marvell.com,m:jhasan@marvell.com,m:GR-QLogic-Storage-Upstream@marvell.com,m:James.Bottomley@hansenpartnership.com,m:martin.petersen@oracle.com,m:njavali@marvell.com,m:mrangankar@marvell.com,m:varun@chelsio.com,m:viro@zeniv.linux.org.uk,m:brauner@kernel.org,m:jack@suse.cz,m:dhowells@redhat.com,m:marc.dionne@auristor.com,m
- :trondmy@kernel.org,m:anna@kernel.org,m:cel@kernel.org,m:jlayton@kernel.org,m:neil@brown.name,m:okorniev@redhat.com,m:Dai.Ngo@oracle.com,m:tom@talpey.com,m:marek.lindner@mailbox.org,m:sw@simonwunderlich.de,m:antonio@mandelbit.com,m:sven@narfation.org,m:razor@blackwall.org,m:pablo@netfilter.org,m:fw@strlen.de,m:phil@nwl.cc,m:johannes@sipsolutions.net,m:matttbe@kernel.org,m:martineau@kernel.org,m:geliang@kernel.org,m:ja@ssi.bg,m:aconole@redhat.com,m:echaudro@redhat.com,m:i.maximets@ovn.org,m:achender@kernel.org,m:jhs@mojatatu.com,m:jiri@resnulli.us,m:marcelo.leitner@gmail.com,m:lucien.xin@gmail.com,m:alibuda@linux.alibaba.com,m:dust.li@linux.alibaba.com,m:sidraya@linux.ibm.com,m:wenjia@linux.ibm.com,m:mjambigi@linux.ibm.com,m:tonylu@linux.alibaba.com,m:guwen@linux.alibaba.com,m:jmaloy@redhat.com,m:steffen.klassert@secunet.com,m:herbert@gondor.apana.org.au,m:vikas.gupta@broadcom.com,m:rajashekar.hudumula@broadcom.com,m:justin.chen@broadcom.com,m:bhargava.marreddy@broadcom.com,m:nb@tipi
- -net.de,m:florian.fainelli@broadcom.com,m:hkallweit1@gmail.com,m:krzk@kernel.org,m:rmk+kernel@armlinux.org.uk,m:me@ziyao.cc,m:siyanteng@cqsoftware.com.cn,m:maxime.chevallier@bootlin.com,m:julianbraha@gmail.com,m:a0987203069@gmail.com,m:weishangjuan@eswincomputing.com,m:wens@kernel.org,m:inochiama@gmail.com,m:prabhakar.mahadev-lad.rj@bp.renesas.com,s:lists@lfdr.de];
-	DKIM_TRACE(0.00)[suse.de:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER(0.00)[lucienxin@gmail.com,linux-sctp@vger.kernel.org];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[fmancera@suse.de,linux-sctp@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCPT_COUNT_GT_50(0.00)[134];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-sctp,netdev,kernel];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lucienxin@gmail.com,linux-sctp@vger.kernel.org];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,davemloft.net,google.com,redhat.com,kernel.org,lzu.edu.cn];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_RCPT(0.00)[linux-sctp];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[]
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid,vger.kernel.org:from_smtp,lzu.edu.cn:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: C2D1C74CC5A
+X-Rspamd-Queue-Id: D47FC74DA75
 
-On 7/13/26 4:22 PM, Arnd Bergmann wrote:
-> On Mon, Jul 13, 2026, at 16:00, Fernando Fernandez Mancera wrote:
->> On 7/12/26 1:01 PM, Arnd Bergmann wrote:
->>> On Sun, Jul 12, 2026, at 03:38, Fernando Fernandez Mancera wrote:
->>>> Historically, the IPv4 protocol has been linked to the core INET
->>>> subsystem. Because shared infrastructure like the TCP/UDP engine,
->>>> routing or INET hashtables live inside net/ipv4/, it has been impossible
->>>> to compile a kernel with only IPv6 support.
->>>>
->>>> This patch introduces the CONFIG_IPV4 Kconfig symbol, which is set to
->>>> 'def_bool y' for now. This does not allow to completely disable the
->>>> IPv4 stack yet but it lays the necessary build-system work for that
->>>> goal.
->>>
->>> I expect this will cause additional (trivial) build regression in the
->>> next step when randconfig builds run into obscure corner cases, either
->>> with INET=y IPV4=n IPV6=y or with INET=y IPV4=n IPV6=n.
->>>
->>> I can probably give your patch (with IPV4 visible or disabled) an
->>> early go on the randconfig tree to find these more quickly.
->>> If I run into regressions, should I just add more 'depends on IPV4',
->>> or do you have other plans?
->>>
->>
->> Yes, I have a job running randconfig and verifying nothing breaks. If
->> something breaks and it isn't core networking stack I would just make
->> the Kconfig symbol depend on IPv4.
->>
->> Then later we will have more time to write a dedicate patch so it does
->> not depend on IPv4.
-> 
-> Ok
-> 
->>> Should we have some logic to ensure that at least one of IPV4 or
->>> IPV6 is enabled? I think this would work
->>>
->>> config IPV4
->>>         bool "The IPv4 protocol" if IPV6
->>>         default INET
->>>
->>> which only allows turning IPV4 off if IPV6 has enabled.
->>>
->>
->> I do wonder, should we? I mean, I didn't try it off but I don't see why
->> we should not allow a pure L2 system..
-> 
-> I expected a pure L2 system to be CONFIG_ETHERNET=y CONFIG_INET=n.
-> 
-> Which user-visible parts of CONFIG_INET would you want keep working
-> when both v4 and v6 are disabled?
-> 
+On Sat, Jul 11, 2026 at 12:22=E2=80=AFAM Ren Wei <n05ec@lzu.edu.cn> wrote:
+>
+> From: Zhiling Zou <roxy520tt@gmail.com>
+>
+> proc_sctp_do_auth() updates the SCTP control socket after changing
+> net.sctp.auth_enable. The handler gets the per-net SCTP state from
+> ctl->data, so an already opened sysctl file can still target a network
+> namespace while that namespace is being torn down.
+>
+> SCTP previously registered its per-net sysctls from sctp_defaults_init(),
+> while the control socket is created later from sctp_ctrlsock_init(). This
+> exposed a window during initialization where auth_enable was writable
+> before net->sctp.ctl_sock existed, and a teardown window where auth_enabl=
+e
+> stayed writable after inet_ctl_sock_destroy() had released the control
+> socket.
+>
+> Move the per-net SCTP sysctl registration into sctp_ctrlsock_init() after
+> sctp_ctl_sock_init() succeeds, and unregister the sysctl table before
+> destroying the control socket in sctp_ctrlsock_exit(). If sysctl
+> registration fails after the control socket was created, destroy the
+> control socket in the same init path.
+>
+> Make sctp_sysctl_net_unregister() tolerate a missing header and clear the
+> saved pointer so init-error and exit paths can safely share the unregiste=
+r
+> helper.
+>
+> Fixes: 15649fd5415e ("sctp: sysctl: auth_enable: avoid using current->nsp=
+roxy")
+> Cc: stable@vger.kernel.org
+> Reported-by: Yuan Tan <yuantan098@gmail.com>
+> Reported-by: Yifan Wu <yifanwucs@gmail.com>
+> Reported-by: Juefei Pu <tomapufckgml@gmail.com>
+> Reported-by: Xin Liu <bird@lzu.edu.cn>
+> Co-developed-by: Qi Tang <tpluszz77@gmail.com>
+> Signed-off-by: Qi Tang <tpluszz77@gmail.com>
+> Signed-off-by: Zhiling Zou <roxy520tt@gmail.com>
+> Signed-off-by: Ren Wei <n05ec@lzu.edu.cn>
+> ---
+>  net/sctp/protocol.c | 17 ++++++++++-------
+>  net/sctp/sysctl.c   |  9 +++++++--
+>  2 files changed, 17 insertions(+), 9 deletions(-)
+>
+> diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
+> index 587b0017a67d..f5fe6ddf0d7d 100644
+> --- a/net/sctp/protocol.c
+> +++ b/net/sctp/protocol.c
+> @@ -1382,10 +1382,6 @@ static int __net_init sctp_defaults_init(struct ne=
+t *net)
+>         net->sctp.l3mdev_accept =3D 1;
+>  #endif
+>
+> -       status =3D sctp_sysctl_net_register(net);
+> -       if (status)
+> -               goto err_sysctl_register;
+> -
+>         /* Allocate and initialise sctp mibs.  */
+>         status =3D init_sctp_mibs(net);
+>         if (status)
+> @@ -1419,8 +1415,6 @@ static int __net_init sctp_defaults_init(struct net=
+ *net)
+>         cleanup_sctp_mibs(net);
+>  #endif
+>  err_init_mibs:
+> -       sctp_sysctl_net_unregister(net);
+> -err_sysctl_register:
+>         return status;
+>  }
+>
+> @@ -1435,7 +1429,6 @@ static void __net_exit sctp_defaults_exit(struct ne=
+t *net)
+>         net->sctp.proc_net_sctp =3D NULL;
+>  #endif
+>         cleanup_sctp_mibs(net);
+> -       sctp_sysctl_net_unregister(net);
+>  }
+>
+>  static struct pernet_operations sctp_defaults_ops =3D {
+> @@ -1451,14 +1444,24 @@ static int __net_init sctp_ctrlsock_init(struct n=
+et *net)
+>         status =3D sctp_ctl_sock_init(net);
+>         if (status)
+>                 pr_err("Failed to initialize the SCTP control sock\n");
+> +       else
+> +               status =3D sctp_sysctl_net_register(net);
+> +
+> +       if (status && net->sctp.ctl_sock) {
+> +               inet_ctl_sock_destroy(net->sctp.ctl_sock);
+> +               net->sctp.ctl_sock =3D NULL;
+> +       }
+I think the Linux style here should be:
 
-Yes, you are right. So I think introducing something as you proposed 
-makes sense. Right now I cannot think about something needed from INET 
-for pure L2.
+        /* Initialize the control inode/socket for handling OOTB packets.  =
+*/
+        status =3D sctp_ctl_sock_init(net);
+        if (status) {
+                pr_err("Failed to initialize the SCTP control sock\n");
+                return status;
+        }
 
-Thank you!
-Fernando.
+        status =3D sctp_sysctl_net_register(net);
+        if (status) {
+                inet_ctl_sock_destroy(net->sctp.ctl_sock);
+                net->sctp.ctl_sock =3D NULL;
+        }
+
+Thanks.
+
+>
+>         return status;
+>  }
+>
+>  static void __net_exit sctp_ctrlsock_exit(struct net *net)
+>  {
+> +       sctp_sysctl_net_unregister(net);
+> +
+>         /* Free the control endpoint.  */
+>         inet_ctl_sock_destroy(net->sctp.ctl_sock);
+> +       net->sctp.ctl_sock =3D NULL;
+>  }
+>
+>  static struct pernet_operations sctp_ctrlsock_ops =3D {
+> diff --git a/net/sctp/sysctl.c b/net/sctp/sysctl.c
+> index 15e7db9a3ab2..fca840484ebf 100644
+> --- a/net/sctp/sysctl.c
+> +++ b/net/sctp/sysctl.c
+> @@ -615,11 +615,16 @@ int sctp_sysctl_net_register(struct net *net)
+>
+>  void sctp_sysctl_net_unregister(struct net *net)
+>  {
+> +       struct ctl_table_header *header =3D net->sctp.sysctl_header;
+>         const struct ctl_table *table;
+>
+> -       table =3D net->sctp.sysctl_header->ctl_table_arg;
+> -       unregister_net_sysctl_table(net->sctp.sysctl_header);
+> +       if (!header)
+> +               return;
+> +
+> +       table =3D header->ctl_table_arg;
+> +       unregister_net_sysctl_table(header);
+>         kfree(table);
+> +       net->sctp.sysctl_header =3D NULL;
+>  }
+>
+>  static struct ctl_table_header *sctp_sysctl_header;
+> --
+> 2.43.0
+>
 
