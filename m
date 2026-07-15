@@ -1,171 +1,254 @@
-Return-Path: <linux-sctp+bounces-1342-lists+linux-sctp=lfdr.de@vger.kernel.org>
+Return-Path: <linux-sctp+bounces-1343-lists+linux-sctp=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-sctp@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 0i50L01RVmo93QAAu9opvQ
-	(envelope-from <linux-sctp+bounces-1342-lists+linux-sctp=lfdr.de@vger.kernel.org>)
-	for <lists+linux-sctp@lfdr.de>; Tue, 14 Jul 2026 17:10:05 +0200
+	id pAtdHZLnVmrkCgEAu9opvQ
+	(envelope-from <linux-sctp+bounces-1343-lists+linux-sctp=lfdr.de@vger.kernel.org>)
+	for <lists+linux-sctp@lfdr.de>; Wed, 15 Jul 2026 03:51:14 +0200
 X-Original-To: lists+linux-sctp@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27898756419
-	for <lists+linux-sctp@lfdr.de>; Tue, 14 Jul 2026 17:10:05 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FB05759F54
+	for <lists+linux-sctp@lfdr.de>; Wed, 15 Jul 2026 03:51:11 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=linutronix.de header.s=2020 header.b=WxcFCLaG;
-	dkim=pass header.d=linutronix.de header.s=2020e header.b=JHtsnZYa;
-	spf=pass (mail.lfdr.de: domain of "linux-sctp+bounces-1342-lists+linux-sctp=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-sctp+bounces-1342-lists+linux-sctp=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=linutronix.de;
+	dkim=none;
+	spf=pass (mail.lfdr.de: domain of "linux-sctp+bounces-1343-lists+linux-sctp=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-sctp+bounces-1343-lists+linux-sctp=lfdr.de@vger.kernel.org";
+	dmarc=none;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 32B30300D622
-	for <lists+linux-sctp@lfdr.de>; Tue, 14 Jul 2026 15:10:04 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3655730158B1
+	for <lists+linux-sctp@lfdr.de>; Wed, 15 Jul 2026 01:51:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A0DE47ECFE;
-	Tue, 14 Jul 2026 15:10:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4DE638239E;
+	Wed, 15 Jul 2026 01:51:09 +0000 (UTC)
 X-Original-To: linux-sctp@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3990B478846;
-	Tue, 14 Jul 2026 15:10:02 +0000 (UTC)
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.76.78.106])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB7BB35DA5B;
+	Wed, 15 Jul 2026 01:50:57 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784041803; cv=none; b=W6fHyBbqjxWz3jS2mhsmEz5NWvSon0eo4vv+i3aeBWFegES6Mbk6GCjjAfi37AYB+4F+p/F+81zAuyEp+6GAzlvP5tVqf2ozf9m96BCW3lqq11uT4NZI449p3gQlqHe4jqy122k5NAsNWFgcNigbjylQ71BAyGZzkR1VMROzvT4=
+	t=1784080266; cv=none; b=FfRGA+8aFsK1n6bW8w+yyWmUwXAA9fo1J3icVLbebHL5pRfv4a9yjdAGbrHjct7e5pRsfq0VnedHFGZUbPCcVy+hbc3xFXKWXll+B7grd9Ik9DudjHjCAFeZxqjgzstohdhBB7Oja9jV+TL8zIsUpzTNq1Wtt98d6sTcEzpVPWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784041803; c=relaxed/simple;
-	bh=eEfmaqmblyqWr0QgB6GVbRkYbGyJt8bWatRVKeD8hoU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mYNDunHBdFt7XhndqH6RaT5gbFCjeSD5rho4+AS2RnmXR1kOJ5wwpLVPFW0NF/s4cf24ol499rhijSpvLX2LkN8RgxP/hT36D5+7d/GiD5np9nXQfV0VX9/ou5fKXasQQR6+yeH3YsdrJsCoHBanzqeMdUNVH7EBEMNjFzfuAgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=WxcFCLaG; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=JHtsnZYa; arc=none smtp.client-ip=193.142.43.55
-Date: Tue, 14 Jul 2026 17:09:57 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1784041799;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Gr0TUUq56lUK+O7gJmjg7IOoSJ19pJ6NQdkj+KRYx3Y=;
-	b=WxcFCLaGGmnAR+5PjupNfSTY5XCm6rv6pT2Ow6yt2unRiXOJ0znYGTSM3FbjLDPjb6BNJL
-	d6nrqloGSSIbLlUk6aeb9HjCg5/TM4Ff0K1NA9cTAFGWs8MKPqQhrb3Ap30zSQq/8+lUiZ
-	JyeOqxMLyjHlLEyGxKcqoTMoUtnncIUEriObAC3x6ZnhIDtI/3Z7LJKLu15hlscEhAAFP7
-	tO7meC2OyPkcGhx/lDS2+5eGPh9CQMiA1QDSXYZdqIVaK8vmo3S/bdroDZIZHc3VkYJWM8
-	n1UAzykv0bwyIjqzwamKjtWcawvv1VSvYuh+cfpIy2HoWpIeffbElMrUmB/dHg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1784041799;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Gr0TUUq56lUK+O7gJmjg7IOoSJ19pJ6NQdkj+KRYx3Y=;
-	b=JHtsnZYa3gOYVJQTmYHnKvC5d2cM+GY5FiTlGWJSWiFvJo4qBKteFunHFkgM95DX0DrAi+
-	JebyxhyZ58KO2TAg==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Kees Cook <kees@kernel.org>
-Cc: linux-atm-general@lists.sourceforge.net, linux-can@vger.kernel.org,
-	linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	Neal Cardwell <ncardwell@google.com>,
-	Oliver Hartkopp <socketcan@hartkopp.net>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Remi Denis-Courmont <courmisch@gmail.com>,
-	Simon Horman <horms@kernel.org>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Xin Long <lucien.xin@gmail.com>, Petr Mladek <pmladek@suse.com>,
-	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Subject: Re: [PATCH net-next] net: Convert %pK back to %p
-Message-ID: <20260714150957.GY4aiPiH@linutronix.de>
-References: <20260706073824.xixrLxoD@linutronix.de>
- <202607090916.7731D36D@keescook>
+	s=arc-20240116; t=1784080266; c=relaxed/simple;
+	bh=IaZpU3KheShkpUqkXBYfwnp2EQm+NbAylhZ4Haw1WTg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=lm89CA0zlR/uFhpDePgF1bwrZHehB1HP35oqEngvpiMNhBZb/tW0wtRU3i9MLWiB9be7oNP8VkVfoVNqpqPPJHgRLLgg4ANLjfz5JGyOlRsTC8s36UMurVmqjrv5FMTjkIm2W2bGL+p/e5K4AxnGtMtP8ogjtbK/GEYRqrK/Ge0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lzu.edu.cn; spf=pass smtp.mailfrom=lzu.edu.cn; arc=none smtp.client-ip=13.76.78.106
+Received: from enjou-Legion-Y7000P-2019 (unknown [123.114.53.210])
+	by app2 (Coremail) with SMTP id zQmowADXcwtp51ZqEkZSAA--.21501S3;
+	Wed, 15 Jul 2026 09:50:43 +0800 (CST)
+From: Ren Wei <n05ec@lzu.edu.cn>
+To: linux-sctp@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: marcelo.leitner@gmail.com,
+	lucien.xin@gmail.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	matttbe@kernel.org,
+	yuantan098@gmail.com,
+	yifanwucs@gmail.com,
+	tomapufckgml@gmail.com,
+	bird@lzu.edu.cn,
+	tpluszz77@gmail.com,
+	roxy520tt@gmail.com,
+	n05ec@lzu.edu.cn,
+	sashiko-bot@kernel.org
+Subject: [PATCH net v3 1/2] sctp: avoid auth_enable sysctl UAF during netns teardown
+Date: Wed, 15 Jul 2026 09:50:10 +0800
+Message-ID: <390cd5e91ed60eea27b0b64d0468301a9e73b808.1784033357.git.roxy520tt@gmail.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <cover.1784033357.git.roxy520tt@gmail.com>
+References: <cover.1784033357.git.roxy520tt@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-sctp@vger.kernel.org
 List-Id: <linux-sctp.vger.kernel.org>
 List-Subscribe: <mailto:linux-sctp+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-sctp+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202607090916.7731D36D@keescook>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zQmowADXcwtp51ZqEkZSAA--.21501S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxGrWktrWrAFyrCry3XryDAwb_yoWrur1Dpa
+	4fWa98tr17JrWrXF1fJF4UKF1rKan7J3srCw1kG34YkwsrGryrK3W8KayxZFnrCFW8CFyr
+	ZF18trW29ws8ZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUB21xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+	w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+	IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+	z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+	Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
+	6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+	vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0E
+	n4kS14v26r4a6rW5MxkIecxEwVAFwVWkMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1s
+	IEY20_GrWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0x
+	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE
+	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
+	kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjTRMxRhDUUUU
+X-CM-SenderInfo: zqqvvuo6o23hxhgxhubq/1tbiAQ0JCWpV8VkJwwAAsR
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.54 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-1342-lists,linux-sctp=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:kees@kernel.org,m:linux-atm-general@lists.sourceforge.net,m:linux-can@vger.kernel.org,m:linux-sctp@vger.kernel.org,m:netdev@vger.kernel.org,m:davem@davemloft.net,m:edumazet@google.com,m:herbert@gondor.apana.org.au,m:kuba@kernel.org,m:kuniyu@google.com,m:mkl@pengutronix.de,m:marcelo.leitner@gmail.com,m:ncardwell@google.com,m:socketcan@hartkopp.net,m:pabeni@redhat.com,m:courmisch@gmail.com,m:horms@kernel.org,m:steffen.klassert@secunet.com,m:willemdebruijn.kernel@gmail.com,m:lucien.xin@gmail.com,m:pmladek@suse.com,m:thomas.weissschuh@linutronix.de,m:marceloleitner@gmail.com,m:willemdebruijnkernel@gmail.com,m:lucienxin@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[bigeasy@linutronix.de,linux-sctp@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[22];
-	RCVD_COUNT_THREE(0.00)[3];
+	TAGGED_FROM(0.00)[bounces-1343-lists,linux-sctp=lfdr.de];
+	DMARC_NA(0.00)[lzu.edu.cn];
+	FORGED_RECIPIENTS(0.00)[m:linux-sctp@vger.kernel.org,m:netdev@vger.kernel.org,m:marcelo.leitner@gmail.com,m:lucien.xin@gmail.com,m:davem@davemloft.net,m:edumazet@google.com,m:pabeni@redhat.com,m:horms@kernel.org,m:matttbe@kernel.org,m:yuantan098@gmail.com,m:yifanwucs@gmail.com,m:tomapufckgml@gmail.com,m:bird@lzu.edu.cn,m:tpluszz77@gmail.com,m:roxy520tt@gmail.com,m:n05ec@lzu.edu.cn,m:sashiko-bot@kernel.org,m:marceloleitner@gmail.com,m:lucienxin@gmail.com,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[n05ec@lzu.edu.cn,linux-sctp@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FREEMAIL_CC(0.00)[lists.sourceforge.net,vger.kernel.org,davemloft.net,google.com,gondor.apana.org.au,kernel.org,pengutronix.de,gmail.com,hartkopp.net,redhat.com,secunet.com,suse.com,linutronix.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bigeasy@linutronix.de,linux-sctp@vger.kernel.org];
-	DKIM_TRACE(0.00)[linutronix.de:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-sctp];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[gmail.com,davemloft.net,google.com,redhat.com,kernel.org,lzu.edu.cn];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,vger.kernel.org:from_smtp,linutronix.de:from_mime,linutronix.de:dkim,linutronix.de:mid]
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[n05ec@lzu.edu.cn,linux-sctp@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	TAGGED_RCPT(0.00)[linux-sctp];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lzu.edu.cn:email,lzu.edu.cn:from_mime,vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 27898756419
+X-Rspamd-Queue-Id: 3FB05759F54
 
-tl;dr: Do the networking folks mind switch it to 0 instead the pointer?
+From: Zhiling Zou <roxy520tt@gmail.com>
 
-On 2026-07-09 09:18:44 [-0700], Kees Cook wrote:
-> On Mon, Jul 06, 2026 at 09:38:24AM +0200, Sebastian Andrzej Siewior wrote:
-> > This is a revert of commit 71338aa7d050c ("net: convert %p usage to
-> > %pK") which is from 2011. Back then the default behaviour for %p was to
-> > print the pointer. The %pK modifier was introduced to be able to control
-> > the behaviour of specific pointer output without changing the behaviour
-> > of %p for everyone. It was dedicated to avoid leaking pointers via
-> > /proc.
-> 
-> Given the policy on bare %p, and that there are so few in this list (15
-> files), how about review those that can just simply be removed or
-> switched to %pS, etc:
-> https://docs.kernel.org/process/deprecated.html#p-format-specifier
+proc_sctp_do_auth() updates the SCTP control socket after changing
+net.sctp.auth_enable. The handler gets the per-net SCTP state from
+ctl->data, so an already opened sysctl file can still target a network
+namespace while that namespace is being torn down.
 
-It is not a new use, but an old one ;)
-The pointers are data pointers of sockets and so on, not code. So using
-%pS will reveal the exact pointers even with hashing enabled (in case
-you think about changing the behaviour for __sprint_symbol() for cases
-where kallsyms fails to resolve the symbol).
+SCTP previously registered its per-net sysctls from sctp_defaults_init(),
+while the control socket is created later from sctp_ctrlsock_init(). This
+exposed a window during initialization where auth_enable was writable
+before net->sctp.ctl_sock existed, and a teardown window where auth_enable
+stayed writable after inet_ctl_sock_destroy() had released the control
+socket.
 
-The things here are "reports" such as /proc/net/icmp where you get
-|# cat /proc/net/icmp
-|  sl  local_address rem_address   st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode ref pointer drops
-|   53: 00000000:C9F2 00000000:0000 07 00000000:00000000 00:00000000 00000000  1000        0 4569 2 000000001145b7f6 0
+Move the per-net SCTP sysctl registration into sctp_ctrlsock_init() after
+sctp_ctl_sock_init() succeeds, and unregister the sysctl table before
+destroying the control socket in sctp_ctrlsock_exit(). If sysctl
+registration fails after the control socket was created, destroy the
+control socket in the same init path.
 
-so this is probably considered as ABI. lsof, lsfd (util-linux) are using
-this file. So I don't think this entry can be removed. These kind of
-files have usually a flexible ABI and are fine with adding new
-attributes but not removing existing ones.
-In this cases we usually put 0 if we remove an entry.
+Make sctp_sysctl_net_unregister() tolerate a missing header and clear the
+saved pointer so init-error and exit paths can safely share the unregister
+helper.
 
-The pointer in icmp has been added int commit c319b4d76b9e5 ("net: ipv4:
-add IPPROTO_ICMP socket kind") and no explanation why. But the order is
-the same as in the tcp or raw file. I traced the tcp pointer inclusion
-back to 2.3.15pre3 with no explanation. It just appeared with bunch of
-other changes so maybe making debug a bit easier.
+Fixes: 15649fd5415e ("sctp: sysctl: auth_enable: avoid using current->nsproxy")
+Cc: stable@vger.kernel.org
+Reported-by: Yuan Tan <yuantan098@gmail.com>
+Reported-by: Yifan Wu <yifanwucs@gmail.com>
+Reported-by: Juefei Pu <tomapufckgml@gmail.com>
+Reported-by: Xin Liu <bird@lzu.edu.cn>
+Co-developed-by: Qi Tang <tpluszz77@gmail.com>
+Signed-off-by: Qi Tang <tpluszz77@gmail.com>
+Signed-off-by: Zhiling Zou <roxy520tt@gmail.com>
+Signed-off-by: Ren Wei <n05ec@lzu.edu.cn>
+---
+Changes in v3:
+- Follow Xin Long's suggestion and return immediately when
+  sctp_ctl_sock_init() fails.
+- Keep per-net SCTP sysctl registration in a separate success path after
+  the control socket has been created.
 
-Anyway, given all this, do the networking folks mind switch it to 0
-instead the pointer? 
+ net/sctp/protocol.c | 20 ++++++++++++--------
+ net/sctp/sysctl.c   |  9 +++++++--
+ 2 files changed, 19 insertions(+), 10 deletions(-)
 
-Sebastian
+diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
+index cf335494bffe..49d9740b1e0f 100644
+--- a/net/sctp/protocol.c
++++ b/net/sctp/protocol.c
+@@ -1383,10 +1383,6 @@ static int __net_init sctp_defaults_init(struct net *net)
+ 	net->sctp.l3mdev_accept = 1;
+ #endif
+ 
+-	status = sctp_sysctl_net_register(net);
+-	if (status)
+-		goto err_sysctl_register;
+-
+ 	/* Allocate and initialise sctp mibs.  */
+ 	status = init_sctp_mibs(net);
+ 	if (status)
+@@ -1420,8 +1416,6 @@ static int __net_init sctp_defaults_init(struct net *net)
+ 	cleanup_sctp_mibs(net);
+ #endif
+ err_init_mibs:
+-	sctp_sysctl_net_unregister(net);
+-err_sysctl_register:
+ 	return status;
+ }
+ 
+@@ -1436,7 +1430,6 @@ static void __net_exit sctp_defaults_exit(struct net *net)
+ 	net->sctp.proc_net_sctp = NULL;
+ #endif
+ 	cleanup_sctp_mibs(net);
+-	sctp_sysctl_net_unregister(net);
+ }
+ 
+ static struct pernet_operations sctp_defaults_ops = {
+@@ -1450,16 +1443,27 @@ static int __net_init sctp_ctrlsock_init(struct net *net)
+ 
+ 	/* Initialize the control inode/socket for handling OOTB packets.  */
+ 	status = sctp_ctl_sock_init(net);
+-	if (status)
++	if (status) {
+ 		pr_err("Failed to initialize the SCTP control sock\n");
++		return status;
++	}
++
++	status = sctp_sysctl_net_register(net);
++	if (status) {
++		inet_ctl_sock_destroy(net->sctp.ctl_sock);
++		net->sctp.ctl_sock = NULL;
++	}
+ 
+ 	return status;
+ }
+ 
+ static void __net_exit sctp_ctrlsock_exit(struct net *net)
+ {
++	sctp_sysctl_net_unregister(net);
++
+ 	/* Free the control endpoint.  */
+ 	inet_ctl_sock_destroy(net->sctp.ctl_sock);
++	net->sctp.ctl_sock = NULL;
+ }
+ 
+ static struct pernet_operations sctp_ctrlsock_ops = {
+diff --git a/net/sctp/sysctl.c b/net/sctp/sysctl.c
+index 15e7db9a3ab2..fca840484ebf 100644
+--- a/net/sctp/sysctl.c
++++ b/net/sctp/sysctl.c
+@@ -615,11 +615,16 @@ int sctp_sysctl_net_register(struct net *net)
+ 
+ void sctp_sysctl_net_unregister(struct net *net)
+ {
++	struct ctl_table_header *header = net->sctp.sysctl_header;
+ 	const struct ctl_table *table;
+ 
+-	table = net->sctp.sysctl_header->ctl_table_arg;
+-	unregister_net_sysctl_table(net->sctp.sysctl_header);
++	if (!header)
++		return;
++
++	table = header->ctl_table_arg;
++	unregister_net_sysctl_table(header);
+ 	kfree(table);
++	net->sctp.sysctl_header = NULL;
+ }
+ 
+ static struct ctl_table_header *sctp_sysctl_header;
+-- 
+2.43.0
+
 
